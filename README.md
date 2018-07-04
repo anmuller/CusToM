@@ -1,5 +1,5 @@
----
-title: 'CusToM: a Matlab toolbox for musculoskeletal simulation'
+## CusToM: a Matlab toolbox for musculoskeletal simulation
+
 tags:
   - motion analysis
   - subject-specific
@@ -7,7 +7,8 @@ tags:
   - dynamics
   - muscle forces
   - ground reaction forces prediction
-authors:
+  
+# Authors:
   - name: Antoine Muller
     orcid: 0000-0003-2606-1429
     affiliation: 1
@@ -26,8 +27,6 @@ affiliations:
  - name: Ecoles de Saint-Cyr Coëtquidan, 56380 Guer, France
    index: 2
 date: 2 July 2018
-bibliography: paper.bib
----
 
 # Summary
 
