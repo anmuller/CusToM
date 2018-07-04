@@ -1,0 +1,11 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  ExternalForcesComputation -> ExternalForcesPrediction;
+  ExternalForcesComputation -> ExternalForces_Zero;
+
+  ExternalForcesComputation [URL="ExternalForcesComputation.html"];
+  ExternalForcesPrediction [URL="ExternalForcesPrediction.html"];
+  ExternalForces_Zero [URL="ExternalForces_Zero.html"];
+  addPlatformForces [URL="addPlatformForces.html"];
+  addPlatformForces_WithoutCoP [URL="addPlatformForces_WithoutCoP.html"];
+}

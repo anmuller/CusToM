@@ -1,0 +1,293 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Upperarm</title>
+  <meta name="keywords" content="Upperarm">
+  <meta name="description" content="Addition of an upper arm model">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="../../../index.html">Functions</a> &gt; <a href="../../index.html">Models</a> &gt; <a href="../index.html">Arm</a> &gt; <a href="index.html">ModelParts</a> &gt; Upperarm.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Functions\Models\Arm\ModelParts&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>Upperarm
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>Addition of an upper arm model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [OsteoArticularModel]= Upperarm(OsteoArticularModel,k,Signe,Mass,AttachmentPoint) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Addition of an upper arm model
+   This upper arm model contains one solid (humerus), exhibits 3 dof for the
+   shoulder
+
+   INPUT
+   - OsteoArticularModel: osteo-articular model of an already existing
+   model (see the Documentation for the structure)
+   - k: homothety coefficient for the geometrical parameters (defined as
+   the subject size in cm divided by 180)
+   - Signe: side of the upper arm model ('R' for right side or 'L' for left side)
+   - Mass: mass of the solids
+   - AttachmentPoint: name of the attachment point of the model on the
+   already existing model (character string)
+   OUTPUT
+   - OsteoArticularModel: new osteo-articular model (see the Documentation
+   for the structure) 
+________________________________________________________
+
+ Licence
+ Toolbox distributed under 3-Clause BSD License
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>	Computation of inertia matrix from radius of gyration</li><li><a href="../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>	Addition of a sister to a solid</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Functions/Models/Arm/Arm.html" class="code" title="function [OsteoArticularModel]= Arm(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)">Arm</a>	Addition of an arm model</li><li><a href="../../../../Functions/Models/Arm/ArmWithoutPronation.html" class="code" title="function [OsteoArticularModel]= ArmWithoutPronation(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)">ArmWithoutPronation</a>	Addition of an arm model</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [OsteoArticularModel]= Upperarm(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)</a>
+0002 <span class="comment">% Addition of an upper arm model</span>
+0003 <span class="comment">%   This upper arm model contains one solid (humerus), exhibits 3 dof for the</span>
+0004 <span class="comment">%   shoulder</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   INPUT</span>
+0007 <span class="comment">%   - OsteoArticularModel: osteo-articular model of an already existing</span>
+0008 <span class="comment">%   model (see the Documentation for the structure)</span>
+0009 <span class="comment">%   - k: homothety coefficient for the geometrical parameters (defined as</span>
+0010 <span class="comment">%   the subject size in cm divided by 180)</span>
+0011 <span class="comment">%   - Signe: side of the upper arm model ('R' for right side or 'L' for left side)</span>
+0012 <span class="comment">%   - Mass: mass of the solids</span>
+0013 <span class="comment">%   - AttachmentPoint: name of the attachment point of the model on the</span>
+0014 <span class="comment">%   already existing model (character string)</span>
+0015 <span class="comment">%   OUTPUT</span>
+0016 <span class="comment">%   - OsteoArticularModel: new osteo-articular model (see the Documentation</span>
+0017 <span class="comment">%   for the structure)</span>
+0018 <span class="comment">%________________________________________________________</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% Licence</span>
+0021 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
+0022 <span class="comment">%________________________________________________________</span>
+0023 list_solid={<span class="string">'Shoulder_J1'</span> <span class="string">'Shoulder_J2'</span> <span class="string">'Humerus'</span>};
+0024 
+0025 <span class="comment">%% Choose right or left arm</span>
+0026 <span class="keyword">if</span> Signe == <span class="string">'R'</span>
+0027 Mirror=[1 0 0; 0 1 0; 0 0 1];
+0028 <span class="keyword">else</span>
+0029     <span class="keyword">if</span> Signe == <span class="string">'L'</span>
+0030     Mirror=[1 0 0; 0 1 0; 0 0 -1];
+0031     <span class="keyword">end</span>
+0032 <span class="keyword">end</span>
+0033 
+0034 <span class="comment">%% solid numbering incremation</span>
+0035 
+0036 s=size(OsteoArticularModel,2)+1;  <span class="comment">%#ok&lt;NASGU&gt; % number of the first solid</span>
+0037 <span class="keyword">for</span> i=1:size(list_solid,2)      <span class="comment">% each solid numbering: s_&quot;nom du solide&quot;</span>
+0038     <span class="keyword">if</span> i==1
+0039         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s;'</span>))
+0040     <span class="keyword">else</span>
+0041         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s_'</span>,list_solid{i-1},<span class="string">'+1;'</span>))
+0042     <span class="keyword">end</span>
+0043 <span class="keyword">end</span>
+0044 
+0045 <span class="comment">% find the number of the mother from the attachment point: 'attachment_pt'</span>
+0046 <span class="keyword">if</span> ~numel(AttachmentPoint)
+0047     s_mother=0;
+0048     pos_attachment_pt=[0 0 0]';
+0049 <span class="keyword">else</span>
+0050     test=0;
+0051     <span class="keyword">for</span> i=1:numel(OsteoArticularModel)
+0052         <span class="keyword">for</span> j=1:size(OsteoArticularModel(i).anat_position,1)
+0053             <span class="keyword">if</span> strcmp(AttachmentPoint,OsteoArticularModel(i).anat_position{j,1})
+0054                s_mother=i;
+0055                pos_attachment_pt=OsteoArticularModel(i).anat_position{j,2}+OsteoArticularModel(s_mother).c;
+0056                test=1;
+0057                <span class="keyword">break</span>
+0058             <span class="keyword">end</span>
+0059         <span class="keyword">end</span>
+0060         <span class="keyword">if</span> i==numel(OsteoArticularModel) &amp;&amp; test==0
+0061             error([AttachmentPoint <span class="string">' is no existent'</span>])        
+0062         <span class="keyword">end</span>       
+0063     <span class="keyword">end</span>
+0064     <span class="keyword">if</span> OsteoArticularModel(s_mother).child == 0      <span class="comment">% if the mother don't have any child</span>
+0065         OsteoArticularModel(s_mother).child = eval([<span class="string">'s_'</span> list_solid{1}]);    <span class="comment">% the child of this mother is this solid</span>
+0066     <span class="keyword">else</span>
+0067         [OsteoArticularModel]=<a href="../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval([<span class="string">'s_'</span> list_solid{1}]));   <span class="comment">% recherche de la dernière soeur</span>
+0068     <span class="keyword">end</span>
+0069 <span class="keyword">end</span>
+0070 
+0071 <span class="comment">%%                      Node Definition</span>
+0072 
+0073 <span class="comment">% ------------------------- Humerus ---------------------------------------</span>
+0074 
+0075 <span class="comment">% Node positions</span>
+0076 Humerus_ghJointNode = (k*[0 0.1674 0])*Mirror;
+0077 Humerus_ElbowJointNode = (k*[0 -0.1674 0])*Mirror;
+0078 osim2antoine=[k (Humerus_ghJointNode(2)-Humerus_ElbowJointNode(2))/0.2904 k];
+0079 Humerus_RadiusJointNode = (k*[0 -0.1674 0.0191])*Mirror;
+0080 Humerus_UlnaJointNode = (k*[0 -0.1674 -0.0191])*Mirror;
+0081 Humerus_Brachioradialis = (k*[-0.006 -0.209 -0.007])*Mirror; <span class="comment">%in local frame gh Murray2001</span>
+0082 <span class="comment">% Humerus_Biceps = (k*[0.025 0.009 0.006])*Mirror; %in local frame gh Murray2001</span>
+0083 Humerus_BicepsL_via2 = (osim2antoine.*[0.02131 0.01793 0.01028])*Mirror;  <span class="comment">%in local frame OSIMarm26</span>
+0084 Humerus_BicepsL_via3 = (osim2antoine.*[0.02378 -0.00511 0.01201])*Mirror;  <span class="comment">%in local frame OSIMarm26</span>
+0085 Humerus_BicepsL_via4 = (osim2antoine.*[0.01345 -0.02827 0.00136])*Mirror;  <span class="comment">%in local frame OSIMarm26</span>
+0086 Humerus_BicepsL_via5 = (osim2antoine.*[0.01068 -0.07736 -0.00165])*Mirror;  <span class="comment">%in local frame OSIMarm26</span>
+0087 Humerus_BicepsL_via6 = (osim2antoine.*[0.01703 -0.12125 0.00024])*Mirror;  <span class="comment">%in local frame OSIMarm26</span>
+0088 Humerus_BicepsS_via2 = (osim2antoine.*[0.01117 -0.07576 -0.01101])*Mirror;  <span class="comment">%in local frame OSIMarm26</span>
+0089 Humerus_BicepsS_via3 = (osim2antoine.*[0.01703 -0.12125 -0.01079])*Mirror;  <span class="comment">%in local frame OSIMarm26</span>
+0090 Humerus_Biceps_via7 = (osim2antoine.*[0.0228 -0.1754 -0.0063])*Mirror;  <span class="comment">%in local frame OSIMarm26</span>
+0091 
+0092 Humerus_ECRL = (k*[-0.005 -0.260 -0.002])*Mirror; <span class="comment">%in local frame gh Murray2001</span>
+0093 <span class="comment">% Humerus_Brachialis = (k*[0.008 -0.184 -0.013])*Mirror; %in local frame gh Murray2001</span>
+0094 Humerus_Brachialis = (k*[0.0068 -0.1739 -0.0036])*Mirror; <span class="comment">%in local frame OSIMarm26</span>
+0095 Humerus_PronatorTeres = (k*[0.003 -0.270 -0.051])*Mirror; <span class="comment">%in local frame gh Murray2001</span>
+0096 
+0097 <span class="comment">% Humerus_Triceps = (k*[-0.004 -0.039 -0.006])*Mirror; %in local frame gh Murray2001</span>
+0098 Humerus_TricepsLg_via1 = (osim2antoine.*[-0.02714 -0.11441 -0.00664])*Mirror;  <span class="comment">%in local frame OSIMarm26</span>
+0099 Humerus_TricepsLat_o = (osim2antoine.*[-0.00599 -0.12646 0.00428])*Mirror;     <span class="comment">%in local frame OSIMarm26</span>
+0100 Humerus_TricepsLat_via1 = (osim2antoine.*[-0.02344 -0.14528 0.00928])*Mirror;  <span class="comment">%in local frame OSIMarm26</span>
+0101 Humerus_TricepsMed_o = (osim2antoine.*[-0.00838 -0.13695 -0.00906])*Mirror;    <span class="comment">%in local frame OSIMarm26</span>
+0102 Humerus_TricepsMed_via1 = (osim2antoine.*[-0.02601 -0.15139 -0.0108])*Mirror;  <span class="comment">%in local frame OSIMarm26</span>
+0103 Humerus_Triceps_via2 = (osim2antoine.*[-0.03184 -0.22637 -0.01217])*Mirror; <span class="comment">%in local frame OSIMarm26</span>
+0104 Humerus_Triceps_via3 = (osim2antoine.*[-0.01743 -0.26757 -0.01208])*Mirror; <span class="comment">%in local frame OSIMarm26</span>
+0105 
+0106 <span class="comment">%%              Definition of anatomical landmarks</span>
+0107 
+0108 Humerus_position_set = {<span class="keyword">...</span>
+0109     [Signe <span class="string">'HUM'</span>], k*Mirror*[0 -0.1674 -0.05]'; <span class="keyword">...</span>
+0110     [Signe <span class="string">'Humerus_RadiusJointNode'</span>], Humerus_RadiusJointNode'; <span class="keyword">...</span>
+0111     [Signe <span class="string">'Humerus_UlnaJointNode'</span>], Humerus_UlnaJointNode'; <span class="keyword">...</span>
+0112     [Signe <span class="string">'Humerus_ElbowJointNode'</span>], Humerus_ElbowJointNode'; <span class="keyword">...</span>
+0113     [Signe <span class="string">'Humerus_ghJointNode'</span>], Humerus_ghJointNode'; <span class="keyword">...</span>
+0114 <span class="comment">%     [Signe 'Humerus_Brachioradialis_o'], (Humerus_Brachioradialis+Humerus_ghJointNode)'; ...</span>
+0115     [Signe <span class="string">'Humerus_Brachioradialis_o'</span>], Humerus_RadiusJointNode'+[0 0.07 0]'; <span class="keyword">...</span>
+0116     <span class="keyword">...</span><span class="comment">[Signe 'Humerus_Biceps'], (Humerus_Biceps+Humerus_ghJointNode)'; ...</span>
+0117     [Signe <span class="string">'Humerus_BicepsL_via2'</span>], (Humerus_BicepsL_via2+Humerus_ghJointNode)';
+0118     [Signe <span class="string">'Humerus_BicepsL_via3'</span>], (Humerus_BicepsL_via3+Humerus_ghJointNode)';
+0119     [Signe <span class="string">'Humerus_BicepsL_via4'</span>], (Humerus_BicepsL_via4+Humerus_ghJointNode)';
+0120     [Signe <span class="string">'Humerus_BicepsL_via5'</span>], (Humerus_BicepsL_via5+Humerus_ghJointNode)';
+0121     [Signe <span class="string">'Humerus_BicepsL_via6'</span>], (Humerus_BicepsL_via6+Humerus_ghJointNode)';
+0122     [Signe <span class="string">'Humerus_BicepsS_via2'</span>], (Humerus_BicepsS_via2+Humerus_ghJointNode)';
+0123     [Signe <span class="string">'Humerus_BicepsS_via3'</span>], (Humerus_BicepsS_via3+Humerus_ghJointNode)';
+0124     [Signe <span class="string">'Humerus_Biceps_via7'</span>], (Humerus_Biceps_via7+Humerus_ghJointNode)';
+0125     <span class="keyword">...</span>
+0126 <span class="comment">%     [Signe 'Humerus_ECRL_o'], (Humerus_ECRL+Humerus_ghJointNode)'; ...</span>
+0127     [Signe <span class="string">'Humerus_ECRL_o'</span>], Humerus_RadiusJointNode'+[0 0.03 0]'; <span class="keyword">...</span>
+0128     [Signe <span class="string">'Humerus_Brachialis_o'</span>], (Humerus_Brachialis+Humerus_ghJointNode)'; <span class="keyword">...</span>
+0129 <span class="comment">%     [Signe 'Humerus_PronatorTeres_o'], (Humerus_PronatorTeres+Humerus_ghJointNode)'; ...</span>
+0130     [Signe <span class="string">'Humerus_PronatorTeres_o'</span>], Humerus_UlnaJointNode'+[0 0.02 0.01]'; <span class="keyword">...</span>
+0131     <span class="keyword">...</span>
+0132     <span class="keyword">...</span><span class="comment">[Signe 'Humerus_Triceps_o'], (Humerus_Triceps+Humerus_ghJointNode)'; ...</span>
+0133     [Signe <span class="string">'Humerus_TricepsLg_via1'</span>], (Humerus_TricepsLg_via1+Humerus_ghJointNode)';
+0134     [Signe <span class="string">'Humerus_TricepsLat_o'</span>], (Humerus_TricepsLat_o+Humerus_ghJointNode)'; 
+0135     [Signe <span class="string">'Humerus_TricepsLat_via1'</span>], (Humerus_TricepsLat_via1+Humerus_ghJointNode)'; 
+0136     [Signe <span class="string">'Humerus_TricepsMed_o'</span>], (Humerus_TricepsMed_o+Humerus_ghJointNode)'; 
+0137     [Signe <span class="string">'Humerus_TricepsMed_via1'</span>], (Humerus_TricepsMed_via1+Humerus_ghJointNode)'; 
+0138     [Signe <span class="string">'Humerus_Triceps_via2'</span>], (Humerus_Triceps_via2+Humerus_ghJointNode)';
+0139     [Signe <span class="string">'Humerus_Triceps_via3'</span>], (Humerus_Triceps_via3+Humerus_ghJointNode)';
+0140     [Signe <span class="string">'Humerus_Triceps_via4'</span>], Humerus_ElbowJointNode' + k*[-0.028 0 0]';<span class="keyword">...</span>
+0141     };
+0142 
+0143 <span class="comment">%%                     Scaling inertial parameters</span>
+0144 
+0145     <span class="comment">%% [&quot;Adjustments to McConville et al. and Young et al. body segment inertial parameters&quot;] R. Dumas</span>
+0146     <span class="comment">% ------------------------- Humerus ---------------------------------------</span>
+0147     Length_Humerus=norm(Humerus_ghJointNode-Humerus_ElbowJointNode);
+0148     [I_Humerus]=<a href="../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>([31 14 32 6 5 2], Mass.UpperArm_Mass, [0 0 0], Length_Humerus, Signe);  
+0149 
+0150                 <span class="comment">%% &quot;Human_model&quot; structure generation</span>
+0151 
+0152 num_solid=0;
+0153 <span class="comment">%% Humerus</span>
+0154     <span class="comment">% Shoulder_J1</span>
+0155     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0156     name=list_solid{num_solid}; <span class="comment">% name of the solid</span>
+0157     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0158     OsteoArticularModel(incr_solid).name=[Signe name];    <span class="comment">% name of the solid ('R' or 'L' in prefix)</span>
+0159     OsteoArticularModel(incr_solid).sister=0;                       <span class="comment">% sister : defined as an input of the function</span>
+0160     OsteoArticularModel(incr_solid).child=s_Shoulder_J2;                 
+0161     OsteoArticularModel(incr_solid).mother=s_mother;                       <span class="comment">% mother : defined as an input of the function</span>
+0162     OsteoArticularModel(incr_solid).a=[0 1 0]';                          <span class="comment">% rotation /x</span>
+0163     OsteoArticularModel(incr_solid).joint=1;
+0164     <span class="keyword">if</span> Signe == <span class="string">'R'</span>
+0165         OsteoArticularModel(incr_solid).limit_inf=-pi/2;                           <span class="comment">% inferior joint biomechanical stop</span>
+0166         OsteoArticularModel(incr_solid).limit_sup=pi;                              <span class="comment">% superior joint biomechanical stop</span>
+0167     <span class="keyword">else</span>
+0168         OsteoArticularModel(incr_solid).limit_inf=-pi;                       <span class="comment">% inferior joint biomechanical stop</span>
+0169         OsteoArticularModel(incr_solid).limit_sup=pi/2;                      <span class="comment">% superior joint biomechanical stop</span>
+0170     <span class="keyword">end</span>
+0171     OsteoArticularModel(incr_solid).m=0;                                 <span class="comment">% reference mass</span>
+0172     OsteoArticularModel(incr_solid).b=pos_attachment_pt;                 <span class="comment">% attachment point with respect to the parent's frame</span>
+0173     OsteoArticularModel(incr_solid).I=zeros(3,3);                        <span class="comment">% reference inertia matrix</span>
+0174     OsteoArticularModel(incr_solid).c=[0 0 0]';                          <span class="comment">% center of mass location in the local frame</span>
+0175     OsteoArticularModel(incr_solid).calib_k_constraint=[];   
+0176     OsteoArticularModel(incr_solid).u=[];                          <span class="comment">% fixed rotation with respect to u axis of theta angle</span>
+0177     OsteoArticularModel(incr_solid).theta=[];
+0178     OsteoArticularModel(incr_solid).KinematicsCut=[];              <span class="comment">% kinematic cut</span>
+0179     OsteoArticularModel(incr_solid).ClosedLoop=[];                 <span class="comment">% if this solid close a closed-loop chain : {number of solid i on which is attached this solid ; attachement point (local frame of solid i}</span>
+0180     OsteoArticularModel(incr_solid).linear_constraint=[];
+0181     OsteoArticularModel(incr_solid).Visual=0;
+0182 
+0183     <span class="comment">% Shoulder_J2</span>
+0184     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0185     name=list_solid{num_solid}; <span class="comment">% name of the solid</span>
+0186     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0187     OsteoArticularModel(incr_solid).name=[Signe name];  
+0188     OsteoArticularModel(incr_solid).sister=0;                
+0189     OsteoArticularModel(incr_solid).child=s_Humerus;                   
+0190     OsteoArticularModel(incr_solid).mother=s_Shoulder_J1;           
+0191     OsteoArticularModel(incr_solid).a=[1 0 0]'; 
+0192     OsteoArticularModel(incr_solid).joint=1;
+0193     <span class="keyword">if</span> Signe == <span class="string">'R'</span>
+0194         OsteoArticularModel(incr_solid).limit_inf=-pi;                     <span class="comment">% inferior joint biomechanical stop</span>
+0195         OsteoArticularModel(incr_solid).limit_sup=pi/2;                    <span class="comment">% superior joint biomechanical stop</span>
+0196     <span class="keyword">else</span>
+0197         OsteoArticularModel(incr_solid).limit_inf=-pi/2;                   <span class="comment">% inferior joint biomechanical stop</span>
+0198         OsteoArticularModel(incr_solid).limit_sup=pi;                      <span class="comment">% superior joint biomechanical stop</span>
+0199     <span class="keyword">end</span>
+0200     OsteoArticularModel(incr_solid).m=0;                 
+0201     OsteoArticularModel(incr_solid).b=[0 0 0]';  
+0202     OsteoArticularModel(incr_solid).I=zeros(3,3);
+0203     OsteoArticularModel(incr_solid).c=[0 0 0]';
+0204     OsteoArticularModel(incr_solid).Visual=0;
+0205 
+0206     <span class="comment">% Humerus</span>
+0207     num_solid=num_solid+1;         <span class="comment">% number of the solid ...</span>
+0208     name=list_solid{num_solid}; <span class="comment">% name of the solid</span>
+0209     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0210     OsteoArticularModel(incr_solid).name=[Signe name];
+0211     OsteoArticularModel(incr_solid).sister=0;    
+0212     OsteoArticularModel(incr_solid).child=0;
+0213     OsteoArticularModel(incr_solid).mother=s_Shoulder_J2;
+0214     OsteoArticularModel(incr_solid).a=[0 1 0]';
+0215     OsteoArticularModel(incr_solid).joint=1;
+0216     OsteoArticularModel(incr_solid).limit_inf=-2*pi/3;
+0217     OsteoArticularModel(incr_solid).limit_sup=2*pi/3;
+0218     OsteoArticularModel(incr_solid).m=Mass.UpperArm_Mass;
+0219     OsteoArticularModel(incr_solid).b=[0 0 0]';
+0220     OsteoArticularModel(incr_solid).I=[I_Humerus(1) I_Humerus(4) I_Humerus(5); I_Humerus(4) I_Humerus(2) I_Humerus(6); I_Humerus(5) I_Humerus(6) I_Humerus(3)];
+0221     OsteoArticularModel(incr_solid).c=-Humerus_ghJointNode';
+0222     OsteoArticularModel(incr_solid).anat_position=Humerus_position_set;
+0223     OsteoArticularModel(incr_solid).Visual=1;
+0224     OsteoArticularModel(incr_solid).L={[Signe <span class="string">'Humerus_ghJointNode'</span>];[Signe <span class="string">'Humerus_ElbowJointNode'</span>]};
+0225     
+0226     <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

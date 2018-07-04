@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Rodrigues</title>
+  <meta name="keywords" content="Rodrigues">
+  <meta name="description" content="Computation of the Rodrigues equation">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">Functions</a> &gt; <a href="index.html">AlgoMathsModel</a> &gt; Rodrigues.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Functions\AlgoMathsModel&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>Rodrigues
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Computation of the Rodrigues equation</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function R = Rodrigues(a,q) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Computation of the Rodrigues equation
+
+   INPUT
+   - a: axis of rotation
+   - q: rotation angle
+   OUTPUT
+   - R: rotation matrix
+________________________________________________________
+
+ Licence
+ Toolbox distributed under 3-Clause BSD License
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="distance_point.html" class="code" title="function [L,Typ] = distance_point(Point1,Bone1,Point2,Bone2,Human_model,q)">distance_point</a>	Computation of the distance between two points</li><li><a href="../../Functions/Animation/ForwardKinematicsAnimation.html" class="code" title="function [Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation(Human_model,Markers_set,Muscles,q,j,muscles_anim,mod_marker_anim,solid_inertia_anim)">ForwardKinematicsAnimation</a>	Computation of a forward kinematics step for the animation</li><li><a href="../../Functions/Calibration/Dynamics/DynCalibOptimization.html" class="code" title="function [Human_model] = DynCalibOptimization(ModelParameters, AnalysisParameters, BiomechanicalModel)">DynCalibOptimization</a>	Calibration of the inertial parameters</li><li><a href="../../Functions/Calibration/Dynamics/distance_point_anthropo.html" class="code" title="function [L] = distance_point_anthropo(Point1,Bone1,Human_model,q,s)">distance_point_anthropo</a>	Computation of the distance between a point and the center of mass of a solid</li><li><a href="../../Functions/Calibration/Geometrical/GeometricalCalibration.html" class="code" title="function [Human_model_calib, calib_parameters, Markers_set] = GeometricalCalibration(OsteoArticularModel, Markers_set, AnalysisParameters)">GeometricalCalibration</a>	Calibration of the geometrical parameters</li><li><a href="../../Functions/Calibration/Geometrical/Symbolic_ForwardKinematicsCoupure_A.html" class="code" title="function [Human_model,Markers_set,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,j,Q,k,p_adapt,alpha,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop)">Symbolic_ForwardKinematicsCoupure_A</a>	Computation of a symbolic forward kinematics</li><li><a href="../../Functions/DataImport/InputDataImport/ImportKinect.html" class="code" title="function [real_markers, nb_frame, Firstframe, Lastframe,f]=ImportKinect(filename, list_markers, varargin)">ImportKinect</a>	Extraction of experimental data from a Kinect</li><li><a href="../../Functions/Dynamics/ForwardAllKinematics.html" class="code" title="function [Human_model] = ForwardAllKinematics(Human_model,j)">ForwardAllKinematics</a>	Computation of spacial position, velocity and acceleration for each solid</li><li><a href="../../Functions/Dynamics/InverseDynamics.html" class="code" title="function []=InverseDynamics(AnalysisParameters)">InverseDynamics</a>	Computation of the inverse dynamics step</li><li><a href="../../Functions/ExternalForces/ExternalForcesPrediction.html" class="code" title="function [ExternalForcesComputationResults] = ExternalForcesPrediction(filename, AnalysisParameters, BiomechanicalModel, ModelParameters)">ExternalForcesPrediction</a>	Prediction of ground reaction forces</li><li><a href="../../Functions/ExternalForces/Prediction/ForwardAllKinematicsPrediction.html" class="code" title="function [Human_model,Prediction] = ForwardAllKinematicsPrediction(Human_model,Prediction,j)">ForwardAllKinematicsPrediction</a>	Computation of spacial position, velocity and acceleration for each solid used for the prediction of ground reaction forces</li><li><a href="../../Functions/Interface/ForwardKinematicsAnimation_Interf.html" class="code" title="function [Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation_Interf(Human_model,Markers_set,Muscles,q,j,muscles_anim,mod_marker_anim,RPelvis)">ForwardKinematicsAnimation_Interf</a>	Computation of a forward kinematics step for the interface</li><li><a href="../../Functions/Interface/PlotModel.html" class="code" title="function [OsteoArticularModel,Markers,EnableModel] = PlotModel(ModelParameters,ax,seg_anim,muscles_anim,mod_marker_anim,exp_marker_anim,external_forces_anim,external_forces_pred,Anim)">PlotModel</a>	Plotting model for graphic interface</li><li><a href="../../Functions/Kinematics/Symbolic_ForwardKinematicsCoupure.html" class="code" title="function [Human_model,Markers_set,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure(Human_model,Markers_set,j,q,k,p_adapt,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop)">Symbolic_ForwardKinematicsCoupure</a>	Computation of a symbolic forward kinematics</li><li><a href="../../Functions/Models/Leg/ModelParts/ShankFoot.html" class="code" title="function [OsteoArticularModel]= ShankFoot(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)">ShankFoot</a>	Addition of a shank/foot model</li><li><a href="../../Functions/MuscleForces/ForwardKinematicsPoint.html" class="code" title="function [p] = ForwardKinematicsPoint(Human_model,num_solid_repere,num_solid,num_point,q)">ForwardKinematicsPoint</a>	Computation of the position of a point according to a reference solid</li><li><a href="../../Functions/MuscleForces/ForwardKinematicsR.html" class="code" title="function [Human_model]=ForwardKinematicsR(Human_model,j,q)">ForwardKinematicsR</a>	Computation of a forward kinematics step to obtained all matrix rotation</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function R = Rodrigues(a,q)</a>
+0002 <span class="comment">% Computation of the Rodrigues equation</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - a: axis of rotation</span>
+0006 <span class="comment">%   - q: rotation angle</span>
+0007 <span class="comment">%   OUTPUT</span>
+0008 <span class="comment">%   - R: rotation matrix</span>
+0009 <span class="comment">%________________________________________________________</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% Licence</span>
+0012 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
+0013 <span class="comment">%________________________________________________________</span>
+0014 
+0015 <span class="keyword">if</span> isequal(size(a),[0 0]) || isequal(size(q),[0 0])
+0016     R=eye(3);
+0017 <span class="keyword">else</span>
+0018     ap=[0 -a(3) a(2);<span class="keyword">...</span>
+0019          a(3) 0 -a(1);<span class="keyword">...</span>
+0020         -a(2) a(1) 0];
+0021     R=[1 0 0;0 1 0;0 0 1]+ap*sin(q)+ap*ap*(1-cos(q));
+0022 <span class="keyword">end</span>
+0023 
+0024 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,14 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  ModelGeneration -> ArmSegMass;
+  ModelGeneration -> LegSegMass;
+  ModelGeneration -> TrunkSegMass;
+  ModelGeneration -> WholeBodySegMass;
+
+  ArmSegMass [URL="ArmSegMass.html"];
+  LegSegMass [URL="LegSegMass.html"];
+  ModelGeneration [URL="ModelGeneration.html"];
+  NoModel [URL="NoModel.html"];
+  TrunkSegMass [URL="TrunkSegMass.html"];
+  WholeBodySegMass [URL="WholeBodySegMass.html"];
+}

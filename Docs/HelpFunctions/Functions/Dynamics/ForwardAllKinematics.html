@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ForwardAllKinematics</title>
+  <meta name="keywords" content="ForwardAllKinematics">
+  <meta name="description" content="Computation of spacial position, velocity and acceleration for each solid">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">Functions</a> &gt; <a href="index.html">Dynamics</a> &gt; ForwardAllKinematics.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Functions\Dynamics&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>ForwardAllKinematics
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Computation of spacial position, velocity and acceleration for each solid</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Human_model] = ForwardAllKinematics(Human_model,j) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Computation of spacial position, velocity and acceleration for each solid
+
+   INPUT
+   - Human_model: osteo-articular model (see the Documentation for the
+   structure) 
+   - j: current solid
+   OUTPUT
+   - Human_model: osteo-articular model with additional computations (see
+   the Documentation for the structure)  
+________________________________________________________
+
+ Licence
+ Toolbox distributed under 3-Clause BSD License
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>	Computation of the Rodrigues equation</li><li><a href="ForwardAllKinematics.html" class="code" title="function [Human_model] = ForwardAllKinematics(Human_model,j)">ForwardAllKinematics</a>	Computation of spacial position, velocity and acceleration for each solid</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Functions/Calibration/Dynamics/DynCalibOptimization_costfunction1.html" class="code" title="function [y] = DynCalibOptimization_costfunction1(X,Human_model,frame_opti,q,dq,ddq,p_pelvis,r_pelvis,v0,w,dv0,dw,BW,H,external_forces,g,nbframe)">DynCalibOptimization_costfunction1</a>	Cost function for the inertial calibration</li><li><a href="ForwardAllKinematics.html" class="code" title="function [Human_model] = ForwardAllKinematics(Human_model,j)">ForwardAllKinematics</a>	Computation of spacial position, velocity and acceleration for each solid</li><li><a href="InverseDynamics.html" class="code" title="function []=InverseDynamics(AnalysisParameters)">InverseDynamics</a>	Computation of the inverse dynamics step</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Human_model] = ForwardAllKinematics(Human_model,j)</a>
+0002 <span class="comment">% Computation of spacial position, velocity and acceleration for each solid</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the</span>
+0006 <span class="comment">%   structure)</span>
+0007 <span class="comment">%   - j: current solid</span>
+0008 <span class="comment">%   OUTPUT</span>
+0009 <span class="comment">%   - Human_model: osteo-articular model with additional computations (see</span>
+0010 <span class="comment">%   the Documentation for the structure)</span>
+0011 <span class="comment">%________________________________________________________</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% Licence</span>
+0014 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
+0015 <span class="comment">%________________________________________________________</span>
+0016 
+0017 <span class="keyword">if</span> j==0
+0018     <span class="keyword">return</span>;
+0019 <span class="keyword">end</span>
+0020 
+0021 <span class="comment">%%</span>
+0022 <span class="keyword">if</span> j~=1
+0023     i=Human_model(j).mother;
+0024     <span class="comment">%% Position et Orientation</span>
+0025     Human_model(j).p=Human_model(i).R*Human_model(j).b+Human_model(i).p;
+0026     Human_model(j).R=Human_model(i).R*<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).a,Human_model(j).q)*<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).u,Human_model(j).theta);
+0027     <span class="comment">%% Vitesse spatiale</span>
+0028     sw=Human_model(i).R*Human_model(j).a;
+0029     sv=cross(Human_model(j).p,sw);
+0030     Human_model(j).w=Human_model(i).w+sw*Human_model(j).dq;
+0031     Human_model(j).v0=Human_model(i).v0+sv*Human_model(j).dq; 
+0032     <span class="comment">%% Accélération spatiale</span>
+0033     dsv=cross(Human_model(i).w,sv)+cross(Human_model(i).v0,sw);
+0034     dsw=cross(Human_model(i).w,sw);
+0035     Human_model(j).dw=Human_model(i).dw+dsw*Human_model(j).dq+sw*Human_model(j).ddq;
+0036     Human_model(j).dv0=Human_model(i).dv0+dsv*Human_model(j).dq+sv*Human_model(j).ddq;
+0037     Human_model(j).sw=sw;
+0038     Human_model(j).sv=sv;
+0039 <span class="keyword">end</span>
+0040 Human_model=<a href="ForwardAllKinematics.html" class="code" title="function [Human_model] = ForwardAllKinematics(Human_model,j)">ForwardAllKinematics</a>(Human_model,Human_model(j).sister);
+0041 Human_model=<a href="ForwardAllKinematics.html" class="code" title="function [Human_model] = ForwardAllKinematics(Human_model,j)">ForwardAllKinematics</a>(Human_model,Human_model(j).child);
+0042 
+0043 <span class="keyword">end</span>
+0044</pre></div>
+<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

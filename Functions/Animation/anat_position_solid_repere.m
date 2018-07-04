@@ -1,0 +1,32 @@
+function [Human_model] = anat_position_solid_repere(Human_model,i)
+% Identification of anatomical positions where other solids are fixed
+%  
+%   INPUT
+%   - Human_model: osteo-articular model (see the Documentation for the
+%   structure) 
+%   - i: current solid
+%   OUTPUT
+%   - Human_model: osteo-articular model with additional computations (see
+%   the Documentation for the structure)
+%________________________________________________________
+%
+% Licence
+% Toolbox distributed under 3-Clause BSD License
+%________________________________________________________
+
+if i == 0 % bout de chaine
+    return;
+end
+
+j=Human_model(i).mother; % number of the mother
+if j == 0 % initialization : first time this function is called
+    Human_model(i).pos_solid_visual=[]; % init of a new domain    
+end
+if (j ~= 0) && (Human_model(j).Visual ~= 0) 
+    Human_model(j).pos_solid_visual = [Human_model(j).pos_solid_visual Human_model(i).b];
+end
+
+[Human_model] = anat_position_solid_repere(Human_model,Human_model(i).child);
+[Human_model] = anat_position_solid_repere(Human_model,Human_model(i).sister);
+
+end

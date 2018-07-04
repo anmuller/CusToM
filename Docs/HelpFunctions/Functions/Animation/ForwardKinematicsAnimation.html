@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ForwardKinematicsAnimation</title>
+  <meta name="keywords" content="ForwardKinematicsAnimation">
+  <meta name="description" content="Computation of a forward kinematics step for the animation">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">Functions</a> &gt; <a href="index.html">Animation</a> &gt; ForwardKinematicsAnimation.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Functions\Animation&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>ForwardKinematicsAnimation
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Computation of a forward kinematics step for the animation</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation(Human_model,Markers_set,Muscles,q,j,muscles_anim,mod_marker_anim,solid_inertia_anim) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Computation of a forward kinematics step for the animation
+
+   INPUT
+   - Human_model: osteo-articular model (see the Documentation for the
+   structure) 
+   - Markers_set: set of markers (see the Documentation for the structure)
+   - Muscles: set of muscles (see the Documentation for the structure)
+   - q: vector of joint coordinates
+   - j: current solid
+   - muscles_anim: representation of the muscles (0 or 1)
+   - mod_marker_anim: representation of the model markers (0 or 1)
+   - solid_inertia_anim: representation of the stadium solids (0 or 1)
+   OUTPUT
+   - Human_model: osteo-articular model (see the Documentation for the
+   structure) 
+   - Muscles: set of muscles (see the Documentation for the structure)
+   - Markers_set: set of markers (see the Documentation for the structure)
+________________________________________________________
+
+ Licence
+ Toolbox distributed under 3-Clause BSD License
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>	Computation of the Rodrigues equation</li><li><a href="ForwardKinematicsAnimation.html" class="code" title="function [Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation(Human_model,Markers_set,Muscles,q,j,muscles_anim,mod_marker_anim,solid_inertia_anim)">ForwardKinematicsAnimation</a>	Computation of a forward kinematics step for the animation</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="Animate.html" class="code" title="function [] = Animate(ModelParameters, AnimateParameters, varargin)">Animate</a>	Generation of an animation</li><li><a href="ForwardKinematicsAnimation.html" class="code" title="function [Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation(Human_model,Markers_set,Muscles,q,j,muscles_anim,mod_marker_anim,solid_inertia_anim)">ForwardKinematicsAnimation</a>	Computation of a forward kinematics step for the animation</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation(Human_model,Markers_set,Muscles,q,j,muscles_anim,mod_marker_anim,solid_inertia_anim)</a>
+0002 <span class="comment">% Computation of a forward kinematics step for the animation</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the</span>
+0006 <span class="comment">%   structure)</span>
+0007 <span class="comment">%   - Markers_set: set of markers (see the Documentation for the structure)</span>
+0008 <span class="comment">%   - Muscles: set of muscles (see the Documentation for the structure)</span>
+0009 <span class="comment">%   - q: vector of joint coordinates</span>
+0010 <span class="comment">%   - j: current solid</span>
+0011 <span class="comment">%   - muscles_anim: representation of the muscles (0 or 1)</span>
+0012 <span class="comment">%   - mod_marker_anim: representation of the model markers (0 or 1)</span>
+0013 <span class="comment">%   - solid_inertia_anim: representation of the stadium solids (0 or 1)</span>
+0014 <span class="comment">%   OUTPUT</span>
+0015 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the</span>
+0016 <span class="comment">%   structure)</span>
+0017 <span class="comment">%   - Muscles: set of muscles (see the Documentation for the structure)</span>
+0018 <span class="comment">%   - Markers_set: set of markers (see the Documentation for the structure)</span>
+0019 <span class="comment">%________________________________________________________</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% Licence</span>
+0022 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
+0023 <span class="comment">%________________________________________________________</span>
+0024 
+0025 <span class="keyword">if</span> j == 0 
+0026     <span class="keyword">return</span>;
+0027 <span class="keyword">end</span>
+0028 
+0029 i=Human_model(j).mother; <span class="comment">% number (ident) of mother</span>
+0030 <span class="keyword">if</span> i == 0
+0031     Human_model(j).p = zeros(3,1);
+0032     Human_model(j).R = eye(3,3);
+0033     Human_model(j).pos_pts_anim=[]; <span class="comment">% initialization of a new domain</span>
+0034 <span class="keyword">else</span>
+0035     <span class="keyword">if</span> Human_model(j).joint == 1    <span class="comment">% liaison pivot</span>
+0036         Human_model(j).p = Human_model(i).R * Human_model(j).b + Human_model(i).p;
+0037         Human_model(j).R = Human_model(i).R * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).a,q(j)) * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).u,Human_model(j).theta);
+0038     <span class="keyword">end</span>
+0039     <span class="keyword">if</span> Human_model(j).joint == 2    <span class="comment">% liaison glissière</span>
+0040         Human_model(j).p = Human_model(i).R * (Human_model(j).b + q(j)*Human_model(j).a) + Human_model(i).p;
+0041         Human_model(j).R = Human_model(i).R * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).u,Human_model(j).theta);
+0042     <span class="keyword">end</span>
+0043 <span class="keyword">end</span>
+0044 
+0045 <span class="comment">% Calcul de la position de chaque point</span>
+0046 <span class="keyword">if</span> Human_model(j).Visual == 1
+0047     Human_model(j).pos_pts_anim = [Human_model(j).pos_pts_anim Human_model(j).p]; <span class="comment">% segment local coordinate frame</span>
+0048     Human_model(j).pos_pts_anim = [Human_model(j).pos_pts_anim (Human_model(j).R * Human_model(j).c + Human_model(j).p)]; <span class="comment">% position of center of mass</span>
+0049     <span class="keyword">for</span> n = 1:size(Human_model(j).pos_solid_visual,2)
+0050         Human_model(j).pos_pts_anim = [Human_model(j).pos_pts_anim (Human_model(j).R * Human_model(j).pos_solid_visual(:,n) + Human_model(j).p)]; <span class="comment">% other points</span>
+0051     <span class="keyword">end</span>
+0052     <span class="comment">% markers (if there is a solid at chain’s extremity with center of mass</span>
+0053     <span class="comment">% at the same location as origin)</span>
+0054     <span class="keyword">if</span> (Human_model(j).child == 0 &amp;&amp; min(Human_model(j).c == [0 0 0]') ~= 0)
+0055         <span class="keyword">for</span> m=1:numel(Markers_set)
+0056             <span class="keyword">if</span> Markers_set(m).exist &amp;&amp; Markers_set(m).num_solid == j
+0057                 Human_model(j).pos_pts_anim = [Human_model(j).pos_pts_anim (Human_model(j).R * (Human_model(j).c + Human_model(j).anat_position{Markers_set(m).num_markers,2}) + Human_model(j).p)];
+0058             <span class="keyword">end</span>
+0059         <span class="keyword">end</span>
+0060     <span class="keyword">end</span>
+0061 <span class="keyword">end</span>
+0062 <span class="keyword">if</span> solid_inertia_anim
+0063     <span class="comment">% Computation of cylinders origins</span>
+0064     <span class="keyword">for</span> n=1:numel(Human_model)
+0065         <span class="keyword">for</span> b=1:numel(Human_model(n).N_Bone) <span class="comment">% pour chaque point de chaque solide</span>
+0066             <span class="keyword">if</span> Human_model(n).N_Bone(b,1) == j <span class="comment">% if the considered point belongs to solid j: compute its position</span>
+0067                 Human_model(n).pos_cylinder_anim(:,b) = (Human_model(j).R * (Human_model(j).c + Human_model(j).anat_position{Human_model(n).N_Point(b,1),2}) + Human_model(j).p);
+0068             <span class="keyword">end</span>
+0069         <span class="keyword">end</span>
+0070     <span class="keyword">end</span>
+0071 <span class="keyword">end</span>
+0072 <span class="comment">% mod_marker</span>
+0073 <span class="keyword">if</span> mod_marker_anim
+0074     <span class="keyword">for</span> m=1:numel(Markers_set)
+0075         <span class="keyword">if</span> Markers_set(m).exist &amp;&amp; Markers_set(m).num_solid == j
+0076             Markers_set(m).pos_anim = (Human_model(j).R * (Human_model(j).c + Human_model(j).anat_position{Markers_set(m).num_markers,2}) + Human_model(j).p);
+0077         <span class="keyword">end</span>        
+0078     <span class="keyword">end</span>
+0079 <span class="keyword">end</span>
+0080 <span class="comment">% position of muscular points</span>
+0081 <span class="keyword">if</span> muscles_anim
+0082     <span class="keyword">for</span> m=1:numel(Muscles) <span class="comment">% for each muscle</span>
+0083         <span class="keyword">if</span> Muscles(m).exist
+0084             <span class="keyword">for</span> num_pts = 1:numel(Muscles(m).num_solid) <span class="comment">% for each point associated to the muscle m</span>
+0085                 <span class="keyword">if</span> Muscles(m).num_solid(num_pts,1) == j
+0086                         Muscles(m).pos_pts(:,num_pts) = (Human_model(j).R * (Human_model(j).c + Human_model(j).anat_position{Muscles(m).num_markers(num_pts,1),2}) + Human_model(j).p);
+0087                 <span class="keyword">end</span>
+0088             <span class="keyword">end</span> 
+0089         <span class="keyword">end</span>
+0090     <span class="keyword">end</span>
+0091 <span class="keyword">end</span>
+0092 
+0093 [Human_model, Muscles, Markers_set]=<a href="ForwardKinematicsAnimation.html" class="code" title="function [Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation(Human_model,Markers_set,Muscles,q,j,muscles_anim,mod_marker_anim,solid_inertia_anim)">ForwardKinematicsAnimation</a>(Human_model,Markers_set,Muscles,q,Human_model(j).sister,muscles_anim,mod_marker_anim,solid_inertia_anim);
+0094 [Human_model, Muscles, Markers_set]=<a href="ForwardKinematicsAnimation.html" class="code" title="function [Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation(Human_model,Markers_set,Muscles,q,j,muscles_anim,mod_marker_anim,solid_inertia_anim)">ForwardKinematicsAnimation</a>(Human_model,Markers_set,Muscles,q,Human_model(j).child,muscles_anim,mod_marker_anim,solid_inertia_anim);
+0095 
+0096 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,11 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+
+  Foot [URL="Foot.html"];
+  FootBallJoint [URL="FootBallJoint.html"];
+  FootWithoutPronation [URL="FootWithoutPronation.html"];
+  Shank [URL="Shank.html"];
+  ShankBallJoint [URL="ShankBallJoint.html"];
+  ShankFoot [URL="ShankFoot.html"];
+  Thigh [URL="Thigh.html"];
+}

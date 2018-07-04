@@ -1,0 +1,8 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+
+  Kinect [URL="Kinect.html"];
+  M2S [URL="M2S.html"];
+  M2S_Manutention [URL="M2S_Manutention.html"];
+  M2S_VR [URL="M2S_VR.html"];
+}

@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of MomentArmsComputation</title>
+  <meta name="keywords" content="MomentArmsComputation">
+  <meta name="description" content="Computation of the moment arms matrix">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">Functions</a> &gt; <a href="index.html">MuscleForces</a> &gt; MomentArmsComputation.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Functions\MuscleForces&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>MomentArmsComputation
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Computation of the moment arms matrix</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Moment_Arms,C] = MomentArmsComputation(Human_model,Muscles) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Computation of the moment arms matrix
+
+   INPUT
+   - Human_model: osteo-articular model (see the Documentation for the structure)
+   - Muscles: set of muscles (see the Documentation for the structure)
+   OUTPUT
+   - Moment_Arms: moment arms matrix
+   - C: muscular coupling matrix
+________________________________________________________
+
+ Licence
+ Toolbox distributed under 3-Clause BSD License
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="Muscle_length.html" class="code" title="function [Lmt] = Muscle_length(Human_model,Muscles,q,m)">Muscle_length</a>	Computation of the muscle/tendon length</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Functions/Calibration/CalibrateModelGeneration.html" class="code" title="function [] = CalibrateModelGeneration(ModelParameters,AnalysisParameters)">CalibrateModelGeneration</a>	Generation of the calibrated musculoskeletal model</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Moment_Arms,C] = MomentArmsComputation(Human_model,Muscles)</a>
+0002 <span class="comment">% Computation of the moment arms matrix</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the structure)</span>
+0006 <span class="comment">%   - Muscles: set of muscles (see the Documentation for the structure)</span>
+0007 <span class="comment">%   OUTPUT</span>
+0008 <span class="comment">%   - Moment_Arms: moment arms matrix</span>
+0009 <span class="comment">%   - C: muscular coupling matrix</span>
+0010 <span class="comment">%________________________________________________________</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Licence</span>
+0013 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
+0014 <span class="comment">%________________________________________________________</span>
+0015 
+0016 <span class="comment">% Initialisation of joint coordinate vector array</span>
+0017 q = sym(<span class="string">'q'</span>,[numel(Human_model)-6,1],<span class="string">'real'</span>); <span class="comment">% nb de ddl</span>
+0018 
+0019 <span class="comment">%% Computation of moment arms</span>
+0020 Moment_Arms=cell(numel(q),numel(Muscles));
+0021 C = zeros(numel(q));
+0022 <span class="keyword">for</span> m=1:numel(Muscles) <span class="comment">% for each muscle</span>
+0023     <span class="keyword">if</span> Muscles(m).exist <span class="comment">% if this muscle exist on the model</span>
+0024         <span class="comment">% Compute muscle length</span>
+0025         L = <a href="Muscle_length.html" class="code" title="function [Lmt] = Muscle_length(Human_model,Muscles,q,m)">Muscle_length</a>(Human_model,Muscles,q,m);
+0026         <span class="comment">% derivative with respect to qi</span>
+0027         <span class="keyword">for</span> n=1:(numel(Human_model)-6) <span class="comment">% pour chaque qi</span>
+0028             R1 = -diff(L,q(n));
+0029             R1 = simplify(R1);
+0030             <span class="comment">% Generation moment arms matrix</span>
+0031             <span class="keyword">if</span> R1 == 0
+0032                 Moment_Arms{n,m} = 0;
+0033             <span class="keyword">else</span>
+0034                 Moment_Arms{n,m} = matlabFunction(R1,<span class="string">'Vars'</span>,{q});
+0035                 <span class="comment">% Computation of muscular coupling matrix</span>
+0036                 <span class="keyword">for</span> k=1:(numel(Human_model)-6) <span class="comment">% for each qi</span>
+0037                     <span class="keyword">if</span> C(n,k)~= 1 <span class="comment">% We already have a muscular coupling with another muscle</span>
+0038                         dR = diff(R1,q(k));
+0039                         dR = simplify(dR);
+0040                         <span class="keyword">if</span> dR ~= 0
+0041                             C(n,k)=1; C(k,n)=1;
+0042                         <span class="keyword">end</span>
+0043                     <span class="keyword">end</span>
+0044                 <span class="keyword">end</span>
+0045             <span class="keyword">end</span>
+0046         <span class="keyword">end</span>
+0047     <span class="keyword">end</span>
+0048 <span class="keyword">end</span>
+0049 
+0050 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>
