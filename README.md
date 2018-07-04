@@ -1,31 +1,23 @@
 ## CusToM: a Matlab toolbox for musculoskeletal simulation
 
 tags:
-  - motion analysis
-  - subject-specific
-  - kinematics
-  - dynamics
-  - muscle forces
-  - ground reaction forces prediction
+  - Motion analysis
+  - Subject-specific
+  - Kinematics
+  - Dynamics
+  - Muscle forces
+  - Ground reaction forces prediction
   
 # Authors:
-  - name: Antoine Muller
-    orcid: 0000-0003-2606-1429
-    affiliation: 1
-  - name: Charles Pontonnier
-    orcid: 0000-0003-1140-3772
-    affiliation: "1, 2"    
-  - name: Pierre Puchaud
-    orcid: 0000-0002-9335-630X
-    affiliation: "1, 2"        
-  - name: Georges Dumont
-    orcid: 0000-0002-0709-0921
-    affiliation: 1
+  - Antoine Muller (1)
+  - Charles Pontonnier (1,2)
+  - Pierre Puchaud (1,2)      
+  - Georges Dumont (1)
+	
 affiliations:
- - name: Univ Rennes, CNRS, Inria, IRISA - UMR 6074, F-35000 Rennes, France
-   index: 1
- - name: Ecoles de Saint-Cyr Coëtquidan, 56380 Guer, France
-   index: 2
+ - (1) Univ Rennes, CNRS, Inria, IRISA - UMR 6074, F-35000 Rennes, France
+ - (2) Ecoles de Saint-Cyr Coëtquidan, 56380 Guer, France
+   
 date: 2 July 2018
 
 # Summary
