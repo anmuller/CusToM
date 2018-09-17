@@ -66,7 +66,7 @@ end
 
 % ------------------------- Pelvis ----------------------------------------
 
-Center of mass location with respect to the reference frame
+% Center of mass location with respect to the reference frame
 CoM_Pelvis = k*[0.038 -0.050 0];
 
 % Node locations
