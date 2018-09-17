@@ -71,7 +71,7 @@ end
 
 % --------------------------- Foot ----------------------------------------
 
-Center of mass location with respect to the reference frame
+% Center of mass location with respect to the reference frame
 MetatarsalJoint2Node = (k*[0 -0.0725 0.015])*Mirror;
 MalleousLateralNode = (k*[0.065 0.053 0.025])*Mirror;
 CoM_Foot=0.5*(MetatarsalJoint2Node-MalleousLateralNode)+MalleousLateralNode;

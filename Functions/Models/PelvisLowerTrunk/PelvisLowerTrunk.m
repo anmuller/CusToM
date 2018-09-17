@@ -65,7 +65,7 @@ end
 
 % ------------------------- L5 --------------------------------------------
 
-Center of mass location with respect to the reference frame
+% Center of mass location with respect to the reference frame
 CoM_L5 = k*[0.051 0.009 0];
 
 % Node locations
@@ -75,7 +75,7 @@ Lenght_L5=norm(L5_L4JointNode-L5_SacrumJointNode); %#ok<NASGU>
 
 % ------------------------- L4 --------------------------------------------
 
-Center of mass location with respect to the reference frame
+% Center of mass location with respect to the reference frame
 CoM_L4 = k*[0.056 0.044 0];
 
 % Node locations
@@ -85,7 +85,7 @@ Lenght_L4=norm(L4_L3JointNode-L4_L5JointNode); %#ok<NASGU>
 
 % ------------------------- L3 --------------------------------------------
 
-Center of mass location with respect to the reference frame
+% Center of mass location with respect to the reference frame
 CoM_L3 = k*[0.051 0.079 0];
 
 % Node locations
@@ -95,7 +95,7 @@ Lenght_L3=norm(L3_L2JointNode-L3_L4JointNode); %#ok<NASGU>
 
 % ------------------------- L2 --------------------------------------------
 
-Center of mass location with respect to the reference frame
+% Center of mass location with respect to the reference frame
 CoM_L2 = k*[0.043 0.110 0];
 
 % Node locations
@@ -105,7 +105,7 @@ Lenght_L2=norm(L2_L1JointNode-L2_L3JointNode); %#ok<NASGU>
 
 % ------------------------- L1 --------------------------------------------
 
-Center of mass location with respect to the reference frame
+% Center of mass location with respect to the reference frame
 CoM_L1 = k*[0.031 0.139 0];
 
 % Node locations

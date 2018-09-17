@@ -70,7 +70,7 @@ end
 
 % ------------------------- Thorax ----------------------------------------
 
-Center of mass location with respect to the reference frame
+% Center of mass location with respect to the reference frame
 CoM_Thorax = k*[0.060 0.303 0];
 
 % Node locations
