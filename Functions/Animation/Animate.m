@@ -150,7 +150,7 @@ for f=f_affich
     end
     
     %% Vectors of external forces issued from experimental data (Vecteurs efforts extérieurs issus de données expérimentales)
-    if external_force_anim
+    if external_force_pred
         extern_forces_f = external_forces_pred(f).Visual;
         color_vect = 1-([53 210 55]/255);
         for nb_f=1:size(extern_forces_f,2)
