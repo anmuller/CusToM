@@ -90,7 +90,7 @@ Examples are both detailed in the [CusToM Documentation](https://github.com/anmu
 
 ### 1. External forces prediction on a side-step motion <a name="Tuto1"></a>
 
-![alt text](https://github.com/anmuller/CusToM/blob/master/Docs/Examples/Tuto1.gif)
+![alt text](https://github.com/anmuller/CusToM/blob/master/Examples/Tuto1.gif)
 
 The first example is a side-step motion. It is extracted from a database currently being developed for population characterization. The objective of the tutorial is to compare measured and predicted external forces.
 
@@ -99,7 +99,7 @@ alt="Tutorial#1" width="240" height="180" border="10" /></a>
 
 ### 2. Kinematics analysis of a pick-and-place motion realized in virtual environment <a name="Tuto2"></a>
 
-![alt text](https://github.com/anmuller/CusToM/blob/master/Docs/Examples/Tuto2.gif)
+![alt text](https://github.com/anmuller/CusToM/blob/master/Examples/Tuto2.gif)
 
 The second example is a pick-and-place motion realized in a virtual environment with an haptic device. The task is similar to the ones analyzed in. Here since no direct measurement of the external forces was made, the study focused only on kinematics features.
 
@@ -108,7 +108,7 @@ alt="Tutorial#2" width="240" height="180" border="10" /></a>
 
 ### 3. Lower limbs muscle forces estimation on a cycling motion <a name="Tuto3"></a>
 
-![alt text](https://github.com/anmuller/CusToM/blob/master/Docs/Examples/Tuto3.gif)
+![alt text](https://github.com/anmuller/CusToM/blob/master/Examples/Tuto3.gif)
 
 This third example consisted in linking the symmetry, the performance and the health during a cycling motion. The muscular symmetry is analyzed by the motion analysis containing an inverse kinematics step, an inverse dynamics step and a muscle forces estimation step. The markers set used is that called Marker_set2 in CusToM. External forces applied on each foot were measured with two mobile platforms located on pedals.
 
