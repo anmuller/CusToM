@@ -14,6 +14,10 @@ function [external_forces_pred] = addForces_Prediction_frame_par_frame(X,externa
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 nb=numel(Prediction);
 

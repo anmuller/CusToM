@@ -12,6 +12,10 @@ function [Vq] = InterpnVector(X,V,Xq)
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 %% find the position in the table of data
 Xqn = numel(Xq);

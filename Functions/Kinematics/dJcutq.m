@@ -11,6 +11,10 @@ function [Jcutq] = dJcutq(Jcutcut,Jcutq)
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 for i=2:size(Jcutcut,1)
     Jcutq(i,:) = Jcutq(i,:) + Jcutcut(i,1:i-1)*Jcutq(1:i-1,:);

@@ -28,6 +28,10 @@ function [y] = DynCalibOptimization_costfunction1(X,Human_model,frame_opti,q,dq,
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 %% Actualisation du modèle à partir de X
 num_i=0;

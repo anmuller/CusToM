@@ -15,6 +15,10 @@ function [external_forces] = addPlatformForces_WithoutCoP(external_forces, Solid
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 nb_frame=numel(external_forces);
 

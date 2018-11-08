@@ -16,6 +16,10 @@ function [Markers_set]=VerifMarkersOnModel(Human_model,Markers_set)
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 markers_ex=cell(0);
 for i=1:numel(Markers_set)
     test=0;

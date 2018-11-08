@@ -16,6 +16,10 @@ function [L] = distance_point_anthropo(Point1,Bone1,Human_model,q,s)
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 % si les points appartiennent au même solide
 % if all points belong to the same solid

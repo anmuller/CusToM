@@ -1,4 +1,4 @@
-function [MuscleForcesComputationResults] = ForcesComputationMusIC(filename, BiomechanicalModel)
+function [MuscleForcesComputationResults] = ForcesComputationMusIC(filename, BiomechanicalModel, AnalysisParameters)
 % Computation of the muscle forces estimation step by using the MusIC method
 %
 %	Associated publications :
@@ -18,13 +18,25 @@ function [MuscleForcesComputationResults] = ForcesComputationMusIC(filename, Bio
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
+
+if ~isfield(BiomechanicalModel,['MusICDatabase_' char(AnalysisParameters.Muscles.Costfunction) num2str(AnalysisParameters.Muscles.CostfunctionOptions) '_' num2str(AnalysisParameters.Muscles.DatabaseDensity(1)) '_' num2str(AnalysisParameters.Muscles.DatabaseDensity(2))])
+    disp('MusIC Database Generation ...')
+    eval(['[BiomechanicalModel.MusICDatabase_' char(AnalysisParameters.Muscles.Costfunction) num2str(AnalysisParameters.Muscles.CostfunctionOptions) '_' num2str(AnalysisParameters.Muscles.DatabaseDensity(1)) '_' num2str(AnalysisParameters.Muscles.DatabaseDensity(2)) '] = MusICDatabaseGeneration(BiomechanicalModel.OsteoArticularModel, BiomechanicalModel.Muscles, BiomechanicalModel.MuscularCoupling, BiomechanicalModel.MomentArms, AnalysisParameters);']) 
+    disp('... MusIC Database Generation done')
+    save('BiomechanicalModel','BiomechanicalModel');
+end
+
 disp(['Forces Computation (' filename ') ...'])
 
 %% Loading variables
 Moment_Arms = BiomechanicalModel.MomentArms;
 Muscles = BiomechanicalModel.Muscles;
 C = BiomechanicalModel.MuscularCoupling;
-Database = BiomechanicalModel.MusICDatabase;
+Database = eval(['BiomechanicalModel.MusICDatabase_' char(AnalysisParameters.Muscles.Costfunction) num2str(AnalysisParameters.Muscles.CostfunctionOptions) '_' num2str(AnalysisParameters.Muscles.DatabaseDensity(1)) '_' num2str(AnalysisParameters.Muscles.DatabaseDensity(2))]);
 load([filename '/InverseKinematicsResults']) %#ok<LOAD>
 q = InverseKinematicsResults.JointCoordinates;
 load([filename '/InverseDynamicsResults']) %#ok<LOAD>

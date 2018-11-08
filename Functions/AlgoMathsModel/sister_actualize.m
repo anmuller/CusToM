@@ -13,6 +13,10 @@ function [Human_model]=sister_actualize(Human_model,j,i)
 %
 % Licence
 % Toolbox distributed under 3-Clause BSD License
+%________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
 %________________________________________________________  
 
 if Human_model(j).sister == 0

@@ -1,4 +1,4 @@
-function [Lmt] = Muscle_length(Human_model,Muscles,q,m)
+function [Lmt] = Muscle_length(Human_model,Muscles,q)
 % Computation of the muscle/tendon length
 %   
 %   INPUT
@@ -14,13 +14,18 @@ function [Lmt] = Muscle_length(Human_model,Muscles,q,m)
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
+
 Lmt = 0;
-for p=1:(numel(Muscles(m).path)-1)
+for p=1:(numel(Muscles.path)-1)
     % distance between p and p+1 point
-    M_Bone = Muscles(m).num_solid(p); % number of the solid which contains this position
-    M_pos = Muscles(m).num_markers(p); % number of the anatomical landmark in this solid
-    N_Bone = Muscles(m).num_solid(p+1);
-    N_pos = Muscles(m).num_markers(p+1);
+    M_Bone = Muscles.num_solid(p); % number of the solid which contains this position
+    M_pos = Muscles.num_markers(p); % number of the anatomical landmark in this solid
+    N_Bone = Muscles.num_solid(p+1);
+    N_pos = Muscles.num_markers(p+1);
     Lmt = Lmt + distance_point(M_pos,M_Bone,N_pos,N_Bone,Human_model,q);
 end
 

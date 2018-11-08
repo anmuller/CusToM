@@ -23,6 +23,10 @@ function [error] = CostFunctionSymbolicCalib(q,k,Human_model,real_markers,f,list
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 for c=1:max([Human_model.KinematicsCut])
     [Rcut(:,:,c),pcut(:,:,c)]=...

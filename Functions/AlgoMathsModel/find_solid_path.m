@@ -14,6 +14,10 @@ function [solid_path]=find_solid_path(Human_model,i,k,solid_path)
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 if i==1
     solid_path = 1;

@@ -15,6 +15,10 @@ function [Human_model,f,t]=InverseDynamicsSolid(Human_model,external_forces,g,j)
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 if j==0
     f=[0 0 0]';

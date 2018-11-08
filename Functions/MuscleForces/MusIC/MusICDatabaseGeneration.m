@@ -15,6 +15,10 @@ function [Database] = MusICDatabaseGeneration(Human_model, Muscles, C, Moment_Ar
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 %% Parameters of the database
 C_database = 100; % Nm, reference couples
@@ -35,6 +39,7 @@ warning('off','all')
 list_art = find(any(C,2)); % list of joints containing one muscle
 tic
 parfor i = 1:numel(list_art) % subdatabase i
+    list_coupling = [];
     art = list_art(i);
     art_mus = []; % list of muscles which actuate this joint
     for p=1:nb_muscles

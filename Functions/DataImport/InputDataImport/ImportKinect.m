@@ -15,6 +15,10 @@ function [real_markers, nb_frame, Firstframe, Lastframe,f]=ImportKinect(filename
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 %% Liste des articulations dans la hiérarchie de la Kinect
 

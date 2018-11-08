@@ -17,6 +17,10 @@ function [real_markers, nb_frame, Firstframe, Lastframe,f] = Get_real_markers(fi
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 % Data extraction
 [real_markers, nb_frame, Firstframe, Lastframe, f] = AnalysisParameters.General.InputData(filename, list_markers, AnalysisParameters.General.InputDataOptions);

@@ -12,6 +12,10 @@ function [k]=NbSolidUpstream(Human_model,j,k)
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 i=Human_model(j).mother;
 

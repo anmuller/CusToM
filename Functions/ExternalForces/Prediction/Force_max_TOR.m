@@ -15,6 +15,10 @@ function Cpi = Force_max_TOR(pz,vp,Mass, zcrit, vcrit)
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 prop=0.4;
 

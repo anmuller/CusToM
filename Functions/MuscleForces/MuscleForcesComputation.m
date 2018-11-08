@@ -14,6 +14,10 @@ function [] = MuscleForcesComputation(AnalysisParameters)
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 load('BiomechanicalModel.mat'); %#ok<LOAD>
 
 for i = 1:numel(AnalysisParameters.filename)
@@ -21,7 +25,7 @@ for i = 1:numel(AnalysisParameters.filename)
     if AnalysisParameters.Muscles.Method == 1
         [MuscleForcesComputationResults] = ForcesComputationOpti(filename, BiomechanicalModel, AnalysisParameters); %#ok<NASGU>
     elseif AnalysisParameters.Muscles.Method == 2
-        [MuscleForcesComputationResults] = ForcesComputationMusIC(filename, BiomechanicalModel); %#ok<NASGU>
+        [MuscleForcesComputationResults] = ForcesComputationMusIC(filename, BiomechanicalModel, AnalysisParameters); %#ok<NASGU>
     end
     save([filename '/MuscleForcesComputationResults'],'MuscleForcesComputationResults');
 end

@@ -15,6 +15,10 @@ function [ExperimentalData, InverseKinematicResults] = InverseKinematicsOpti(fil
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 %% Loading useful files
 if ~exist(filename,'dir')

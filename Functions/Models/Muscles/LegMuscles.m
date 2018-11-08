@@ -17,6 +17,10 @@ function [Muscles]=LegMuscles(Muscles,Signe)
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 if strcmp(Signe,'Right')
     Signe = 'R';
 else

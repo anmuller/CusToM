@@ -12,6 +12,10 @@ function [Io] = Huygens(OG,Ig,m)
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 Io=Ig+m*[OG(2)^2 + OG(3)^2 -OG(1)*OG(2) -OG(1)*OG(3);-OG(1)*OG(2) OG(1)^2+OG(3)^2 -OG(2)*OG(3);-OG(1)*OG(3) -OG(2)*OG(3) OG(1)^2+OG(2)^2];
 

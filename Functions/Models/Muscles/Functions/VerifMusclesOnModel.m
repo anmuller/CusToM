@@ -16,6 +16,10 @@ function [Muscles]=VerifMusclesOnModel(Human_model,Muscles)
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 muscles_ex=cell(0);
 for i=1:numel(Muscles) % for each muscle
     test=zeros(size(Muscles(i).path,1),1);

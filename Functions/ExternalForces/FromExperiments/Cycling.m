@@ -14,6 +14,10 @@ function [ExternalForcesComputationResults] = Cycling(filename, BiomechanicalMod
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 % Nom des fichiers d'entrée (name of input files)
 filenamePF1 = 'JOTH_Fin_PD';

@@ -1,4 +1,4 @@
-function [Moment_Arms,C] = MomentArmsComputation(Human_model,Muscles)
+function [Moment_Arms_sub,C] = MomentArmsComputation(Human_model,Muscles)
 % Computation of the moment arms matrix
 %
 %   INPUT
@@ -12,39 +12,53 @@ function [Moment_Arms,C] = MomentArmsComputation(Human_model,Muscles)
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+% Modification : Pierre Puchaud 
+%________________________________________________________
+Nb_q = numel(Human_model)-6;
+Nb_m = numel(Muscles);
 
-% Initialisation of joint coordinate vector array
-q = sym('q',[numel(Human_model)-6,1],'real'); % nb de ddl
+% Compute muscle length
+q = sym('q',[Nb_q,1],'real'); % nb de degrees of freedom
+L = sym(zeros(Nb_m,1));
+for i_m=1:Nb_m % for each muscle
+    if Muscles(i_m).exist% if this muscle exist on the model
+        % compute the length of the muscle
+        L(i_m) = Muscle_length(Human_model,Muscles(i_m),q);
+    end
+end
 
 %% Computation of moment arms
-Moment_Arms=cell(numel(q),numel(Muscles));
-C = zeros(numel(q));
-for m=1:numel(Muscles) % for each muscle
-    if Muscles(m).exist % if this muscle exist on the model
-        % Compute muscle length
-        L = Muscle_length(Human_model,Muscles,q,m);
-        % derivative with respect to qi
-        for n=1:(numel(Human_model)-6) % pour chaque qi
-            R1 = -diff(L,q(n));
-            R1 = simplify(R1);
-            % Generation moment arms matrix
-            if R1 == 0
-                Moment_Arms{n,m} = 0;
-            else
-                Moment_Arms{n,m} = matlabFunction(R1,'Vars',{q});
-                % Computation of muscular coupling matrix
-                for k=1:(numel(Human_model)-6) % for each qi
-                    if C(n,k)~= 1 % We already have a muscular coupling with another muscle
-                        dR = diff(R1,q(k));
-                        dR = simplify(dR);
-                        if dR ~= 0
-                            C(n,k)=1; C(k,n)=1;
-                        end
-                    end
-                end
-            end
-        end
+R=-jacobian(L,q)';
+R=R(:);
+sizeMA_Lin=Nb_q*Nb_m;
+sizeMA_Sub=[Nb_q Nb_m];
+Moment_Arms_lin=cell(sizeMA_Lin,1);
+Moment_Arms_sub=cell(sizeMA_Sub);
+
+parfor ii=1:sizeMA_Lin %parfor, to process faster.
+    if R(ii)==0
+    Moment_Arms_lin{ii} = 0;    
+    else
+    Moment_Arms_lin{ii} = matlabFunction(simplify(R(ii)),'Vars',{q});
     end
+end
+% Reordering the matrix
+for ii=1:sizeMA_Lin %subscript indexing
+    [I,J]=ind2sub(sizeMA_Sub,ii);
+    Moment_Arms_sub{I,J}=Moment_Arms_lin{ii};
+end
+
+%% Computation of muscular coupling matrix
+sizeCSub=[Nb_q Nb_q];
+C = zeros(sizeCSub);
+dR = jacobian(R,q);
+for ii=1:Nb_q
+    ind = find(dR(:,ii)~=0);
+    [I,~]=ind2sub(sizeMA_Sub,ind); % corresponding indexing
+    C(ii,I)=1; C(I,ii)=1;
 end
 
 end

@@ -17,6 +17,10 @@ function [Prediction]=verif_Prediction_Humanmodel(Human_model,Prediction)
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 prediction_ex=cell(0);
 for i=1:numel(Prediction)

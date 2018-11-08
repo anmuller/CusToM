@@ -18,6 +18,10 @@ function [Human_model] = DynCalibOptimization(ModelParameters, AnalysisParameter
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 %% Variables
 Human_model = BiomechanicalModel.OsteoArticularModel;

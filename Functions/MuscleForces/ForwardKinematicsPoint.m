@@ -16,6 +16,10 @@ function [p] = ForwardKinematicsPoint(Human_model,num_solid_repere,num_solid,num
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 % Initialisation
 Human_model(num_solid_repere).p = zeros(3,1);
 Human_model(num_solid_repere).R = eye(3);

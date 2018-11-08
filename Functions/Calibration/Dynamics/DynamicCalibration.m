@@ -31,6 +31,10 @@ function [BiomechanicalModel] = DynamicCalibration(ModelParameters,AnalysisParam
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 %% Chgt du fichier à traiter
 %% Change the name of the file to deal with

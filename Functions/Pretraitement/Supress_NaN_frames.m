@@ -12,6 +12,10 @@ function [real_markers, nb_frames]=Supress_NaN_frames(real_markers)
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 %% Detection of frames to delete
 Marqueur_absent=[];

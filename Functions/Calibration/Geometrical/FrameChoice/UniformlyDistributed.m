@@ -13,6 +13,10 @@ function [frame_calib] =  UniformlyDistributed(nb_frame_calib, real_markers, var
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 nb_frame = size(real_markers(1).position,1);
 frame_calib=floor(1:nb_frame/nb_frame_calib:nb_frame);

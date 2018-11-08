@@ -18,6 +18,10 @@ function [L,Typ] = distance_point(Point1,Bone1,Point2,Bone2,Human_model,q)
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 if Bone1 == Bone2
     A=Human_model(Bone1).anat_position{Point1,2};

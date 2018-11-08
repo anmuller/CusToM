@@ -23,6 +23,10 @@ function [error] = ErrorMarkersCalib(q,k,Human_model,real_markers,f,list_markers
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 list_function=cell(max([Human_model.KinematicsCut]),1);
     for c=1:max([Human_model.KinematicsCut])

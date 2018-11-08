@@ -17,6 +17,10 @@ function []=InverseDynamics(AnalysisParameters)
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 for num_fil = 1:numel(AnalysisParameters.filename)
     filename = AnalysisParameters.filename{num_fil}(1:end-4);

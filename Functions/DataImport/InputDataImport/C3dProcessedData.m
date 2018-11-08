@@ -17,6 +17,10 @@ function [real_markers, nb_frame, Firstframe, Lastframe, f, list_missing_markers
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 warning('off', 'btk:ReadAcquisition');
 h = btkReadAcquisition([char(filename) '.c3d']);

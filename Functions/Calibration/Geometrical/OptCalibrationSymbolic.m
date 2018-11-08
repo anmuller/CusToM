@@ -23,6 +23,10 @@ function [error] = OptCalibrationSymbolic(q,k,Human_model,real_markers,nb_frame,
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
     error=0;
     for f=1:nb_frame    % somme des erreurs pour chacune des frames sélectionnées (sum of reconstruction error for a set of selected frames)

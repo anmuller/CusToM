@@ -27,6 +27,10 @@ function [Human_model,Markers_set,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoo
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 if nargin<10
     p_ClosedLoop={};

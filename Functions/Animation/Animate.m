@@ -12,6 +12,10 @@ function [] = Animate(ModelParameters, AnimateParameters, varargin)
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 filename = AnimateParameters.filename(1:end-4);
 

@@ -17,6 +17,10 @@ function [F,mu] = KKT_projection(F0,Fmax,R,C,pos_active_set,pos_passive_set,epsi
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 n = numel(F0); % nb of muscles
 nca = size(pos_active_set,1); % nb of active constraints
 

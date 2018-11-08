@@ -10,6 +10,10 @@ function w_wedged=wedge(w)
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 w_wedged=[0 -w(3) w(2);w(3) 0 -w(1);-w(2) w(1) 0];
 end

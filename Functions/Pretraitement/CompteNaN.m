@@ -11,6 +11,10 @@ function [real_markers]=CompteNaN(real_markers,champ)
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 newfield = [champ '_NaN'];
  for i=1:numel(real_markers)
      real_markers(i).(newfield) = isnan(real_markers(i).(champ));

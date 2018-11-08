@@ -15,6 +15,10 @@ function [frame_calib] = Clustering(nb_frame_calib, real_markers, list_markers)
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 nb_frame = size(real_markers(1).position,1);
 

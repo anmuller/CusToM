@@ -23,6 +23,10 @@ function [ExternalForcesComputationResults] = ExternalForcesPrediction(filename,
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 disp(['External Forces Prediction (' filename ') ...'])
 

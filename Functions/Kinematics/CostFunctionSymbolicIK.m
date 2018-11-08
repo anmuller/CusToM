@@ -19,6 +19,10 @@ function [error] = CostFunctionSymbolicIK(q,nb_cut,real_markers,f,list_function,
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 for c=1:nb_cut
 	[Rcut(:,:,c),pcut(:,:,c)]=list_function{c}(q,pcut,Rcut);
 end

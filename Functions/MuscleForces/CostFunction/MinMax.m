@@ -19,12 +19,16 @@ function [Fopt] = MinMax(F0, Aeq, beq, Fmin, Fmax, fmincon_options, ~, Fmaxbis, 
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 % cost fucntion
 cost_function = @(F) F(1);
 % optimization
 Aeqbis=[zeros(size(Aeq,1),1) Aeq];
-Fopt_inter = fmincon(cost_function,[1;F0],[],[],Aeqbis,beq,[0;Fmin],[Inf;Fmax],@(F) constraint_minmax(F,Fmaxbis),fmincon_options); %#ok<AGROW>
+Fopt_inter = fmincon(cost_function,[1;F0],[],[],Aeqbis,beq,[0;Fmin],[Inf;Fmax],@(F) constraint_minmax(F,Fmaxbis),fmincon_options);
 Fopt=Fopt_inter(2:end,:);
         
 end

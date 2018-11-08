@@ -27,6 +27,10 @@ A_norm,b_norm]=SymbolicFunctionGeneration_A(Human_model, Markers_set)
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 %% liste des marqueurs à partir du modèle (Markers list from the model)
 list_markers={};

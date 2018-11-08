@@ -11,6 +11,10 @@ function yp=derivee2(h,y)
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 k=size(y);%Size of vector y (or of matrix i y is a matrix)
 n=k(1);% Numbre of samples

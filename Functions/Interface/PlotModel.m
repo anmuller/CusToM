@@ -26,6 +26,10 @@ function [OsteoArticularModel,Markers,EnableModel] = PlotModel(ModelParameters,a
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 %% Lines width
 size_bones = 4;

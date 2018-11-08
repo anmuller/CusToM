@@ -24,6 +24,10 @@ function [Fopt] = PolynomialFunction(F0, Aeq, beq, Fmin, Fmax, fmincon_options, 
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 % Cost function
 cost_function = @(F) sum((F./Fmaxbis).^(options));

@@ -12,6 +12,10 @@ function [c,ceq] = ClosedLoop(q,nb_ClosedLoop) %#ok<*INUSL>
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 c=[];
 
 nb_eq=0; % initialization of the number of equations

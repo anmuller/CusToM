@@ -20,6 +20,10 @@ function [] = CalibrateModelGeneration(ModelParameters,AnalysisParameters)
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 %% Anthropometric model generation
 disp('Anthropometric Model Generation ...')
@@ -57,12 +61,11 @@ if numel(BiomechanicalModel.Muscles)
     disp('... Moment Arms Computation done');
 end
 
-%% Génération de la base de données pour le calcul des efforts musculaires avec la méthode MusIC
-%% Generation of the data base for computation of muscular forces by using MusIc method
+%% Generation of the data base for computation of muscular forces by using MusIC method
 
-if numel(BiomechanicalModel.Muscles)
+if numel(BiomechanicalModel.Muscles) && AnalysisParameters.Muscles.Method == 2
     disp('MusIC Database Generation ...')
-    [BiomechanicalModel.MusICDatabase] = MusICDatabaseGeneration(BiomechanicalModel.OsteoArticularModel, BiomechanicalModel.Muscles, BiomechanicalModel.MuscularCoupling, BiomechanicalModel.MomentArms, AnalysisParameters); %#ok<STRNU> % préciser la méthode d'optimisation
+    eval(['[BiomechanicalModel.MusICDatabase_' char(AnalysisParameters.Muscles.Costfunction) num2str(AnalysisParameters.Muscles.CostfunctionOptions) '_' num2str(AnalysisParameters.Muscles.DatabaseDensity(1)) '_' num2str(AnalysisParameters.Muscles.DatabaseDensity(2)) '] = MusICDatabaseGeneration(BiomechanicalModel.OsteoArticularModel, BiomechanicalModel.Muscles, BiomechanicalModel.MuscularCoupling, BiomechanicalModel.MomentArms, AnalysisParameters);']) 
     disp('... MusIC Database Generation done')
 end
 

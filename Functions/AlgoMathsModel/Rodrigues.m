@@ -11,6 +11,10 @@ function R = Rodrigues(a,q)
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 if isequal(size(a),[0 0]) || isequal(size(q),[0 0])
     R=eye(3);

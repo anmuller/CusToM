@@ -19,6 +19,10 @@ function [error] = ErrorMarkersIK(q,nb_cut,real_markers,f,list_markers,Rcut,pcut
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 list_function=cell(nb_cut,1);
 for c=1:nb_cut
     list_function{c}=str2func(sprintf('f%dcut',c));

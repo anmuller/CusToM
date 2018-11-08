@@ -21,6 +21,10 @@ function [Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation_Interf(H
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 if j == 0 
     return;
 end

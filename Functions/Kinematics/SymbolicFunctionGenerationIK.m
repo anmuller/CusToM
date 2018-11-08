@@ -18,7 +18,14 @@ function [Human_model,Jacob,nbClosedLoop]=SymbolicFunctionGenerationIK(Human_mod
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
-
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
+%
+% Modification : Pierre Puchaud 2018
+% Jacobian matrix generation more efficient.
+%
 %% list of markers from the model
 list_markers={};
 for i=1:numel(Markers_set)
@@ -70,195 +77,99 @@ E = [Markers_set.exist]';
 ind_mk = find(E==1);
 
 pos_root =find([Human_model.mother]==0);
-ind_s = find(1:numel(Human_model)~=pos_root);
+ind_s = 1:numel(Human_model)~=pos_root;
 
 ind_Kcut = find(cellfun(@isempty,{Human_model.KinematicsCut} )==0);
 
+Nb_q = numel(Human_model)-1;
+Nb_mk=numel(list_markers);
+Nb_dir_mk=3*Nb_mk;
+
+% Array of marker functions for each direction of space x,y,z 
+f=sym(zeros(Nb_dir_mk,1));
+for ii=1:Nb_mk
+    iie = ind_mk(ii);
+    for jj=1:3
+        ind = sub2ind([3 Nb_mk],jj,ii);
+        f(ind) = Markers_set(iie).position_symbolic(jj);
+    end
+end
 
 % Jfq
-indexesNumericJfq = [];
-nonNumericJfq = [];
-Jfq = zeros(3*numel(list_markers),numel(Human_model)-1);
-for ii=1:length(ind_mk) % each marker
-    m = ind_mk(ii);
-    for i_s=1:length(ind_s) % each solid
-       num_s=ind_s(i_s);
-       for p=1:3
-            f = Markers_set(m).position_symbolic(p);
-            df = diff(f,q(num_s));
-            if df == 0
-                Jfq(3*(ii-1)+p,i_s) = 0;
-            elseif df == 1
-                Jfq(3*(ii-1)+p,i_s) = 1;
-            else
-                indexesNumericJfq = [indexesNumericJfq (i_s-1)*size(Jfq,1)+3*(ii-1)+p];
-                nonNumericJfq = [nonNumericJfq df];
-            end
-        end 
-    end
-end
-nonNumericJfq = matlabFunction(nonNumericJfq, 'Vars', {q,pcut,Rcut});
+Jfq_sym = jacobian(f,q(ind_s));
+
+Jfq =zeros(Nb_dir_mk,Nb_q);
+% idx=Jfq_sym(:)==0;
+% Jfq(idx)=0;
+idx=Jfq_sym(:)==1;
+Jfq(idx)=1;
+
+indexesNumericJfq = find(Jfq_sym~=0 & Jfq_sym~=1)';
+nonNumericJfq = matlabFunction(Jfq_sym(indexesNumericJfq), 'Vars', {q,pcut,Rcut});
 
 % Jfcut
-indexesNumericJfcut = [];
-nonNumericJfcut = [];
-Jfcut = zeros(3*numel(list_markers),12*size(pcut,3));
-for ii=1:length(ind_mk)
-    m = ind_mk(ii);
-    for p=1:3 % x / y / z
-        for h=1:size(pcut,3) % for each cut
-            for l = 1:3 % pcut
-                f = Markers_set(m).position_symbolic(p);
-                df = diff(f,pcut(l,:,h));
-                if df == 0
-                    Jfcut(3*(ii-1)+p,12*(h-1)+l) = 0;
-                elseif df == 1
-                    Jfcut(3*(ii-1)+p,12*(h-1)+l) = 1;
-                else
-                    indexesNumericJfcut = [indexesNumericJfcut (12*(h-1)+l-1)*size(Jfcut,1)+3*(ii-1)+p];
-                    nonNumericJfcut = [nonNumericJfcut df];
-                end
-            end
-            for l=1:3
-                for ll=1:3
-                    f = Markers_set(m).position_symbolic(p);
-                    df = diff(f,Rcut(l,ll,h));
-                    if df == 0
-                        Jfcut(3*(ii-1)+p,12*(h-1)+3+3*(l-1)+ll) = 0;
-                    elseif df == 1
-                        Jfcut(3*(ii-1)+p,12*(h-1)+3+3*(l-1)+ll) = 1;
-                    else
-                        indexesNumericJfcut = [indexesNumericJfcut (12*(h-1)+3+3*(l-1)+ll-1)*size(Jfcut,1)+3*(ii-1)+p];
-                        nonNumericJfcut = [nonNumericJfcut df];
-                    end
-                end
-            end
-        end
-    end
+Nb_cut = size(pcut,3);
+Nb_param_1cut= 12; %3 coordinates in translations, 9 in rotations
+Nb_param_cut = Nb_param_1cut*Nb_cut;
+
+% kinematic cuts parameters
+param=[pcut,permute(Rcut,[2,1,3])];
+
+Jfcut_sym = jacobian(f,param(:));
+
+Jfcut = zeros(Nb_dir_mk,Nb_param_cut);
+% idx=Jfcut_sym(:)==0;
+% Jfcut(idx)=0;
+idx=Jfcut_sym(:)==1;
+Jfcut(idx)=1;
+
+indexesNumericJfcut = find(Jfcut_sym~=0 & Jfcut_sym~=1)';
+nonNumericJfcut = matlabFunction(Jfcut_sym(indexesNumericJfcut), 'Vars', {q,pcut,Rcut});
+
+% Fonctions pcut and Rcut for kinematic cut indices
+fcut=sym(zeros(Nb_param_1cut,Nb_cut));
+num_cut = [Human_model(ind_Kcut).KinematicsCut];
+for ii=1:Nb_cut
+    i_cut=ind_Kcut(ii);
+    fpcut = [Human_model(i_cut).p];
+    fpcut = fpcut(:);
+    
+    fRcut = [Human_model(i_cut).R];
+    fRcut = permute(fRcut,[2,1,3]);
+    fRcut = fRcut(:);
+    fcut(:,num_cut(ii))=[fpcut;fRcut]; % ordered by the number of the cut
 end
-nonNumericJfcut = matlabFunction(nonNumericJfcut, 'Vars', {q,pcut,Rcut});
+fcut=fcut(:);
 
 % Jcutq
-indexesNumericJcutq = [];
-nonNumericJcutq = [];
-Jcutq = zeros(12*size(pcut,3),numel(Human_model)-1);
-num_s = 0;
-for s=1:numel(Human_model) % for each solid
-    if s ~= pos_root
-        num_s = num_s+1;
-        for hh=1:numel(Human_model) %  for each cut solid
-            if size(Human_model(hh).KinematicsCut) ~= 0
-                h = Human_model(hh).KinematicsCut; % number of the cut
-                for l = 1:3 % pcut (3 termes)
-                    df = diff(Human_model(hh).p(l,:),q(s));
-                    if df == 0
-                        Jcutq(12*(h-1)+l,num_s) = 0;
-                    elseif df == 1
-                        Jcutq(12*(h-1)+l,num_s) = 1;
-                    else
-                        indexesNumericJcutq = [indexesNumericJcutq (num_s-1)*size(Jcutq,1)+12*(h-1)+l];
-                        nonNumericJcutq = [nonNumericJcutq df];
-                    end
-                end
-                for l=1:3 % Rcut (9 terms)
-                    for ll=1:3
-                        df=diff(Human_model(hh).R(l,ll),q(s));
-                        if df == 0
-                            Jcutq(12*(h-1)+3+3*(l-1)+ll,num_s) = 0;
-                        elseif df == 1
-                            Jcutq(12*(h-1)+3+3*(l-1)+ll,num_s) = 1;
-                        else
-                            indexesNumericJcutq = [indexesNumericJcutq (num_s-1)*size(Jcutq,1)+12*(h-1)+3+3*(l-1)+ll];
-                            nonNumericJcutq = [nonNumericJcutq df];
-                        end
-                    end
-                end
-            end
-        end
-    end
-end
-nonNumericJcutq = matlabFunction(nonNumericJcutq, 'Vars', {q,pcut,Rcut});
+Jcutq_sym=jacobian(fcut,q(ind_s));
+
+Jcutq = zeros(Nb_param_cut,Nb_q); 
+% idx=Jcutq_sym(:)==0;
+% Jcutq(idx)=0;
+idx=Jcutq_sym(:)==1;
+Jcutq(idx)=1;
+
+indexesNumericJcutq=find(Jcutq_sym~=0 & Jcutq_sym~=1);
+nonNumericJcutq = matlabFunction(Jcutq_sym(indexesNumericJcutq), 'Vars', {q,pcut,Rcut});
 
 % Jcutcut
-indexesNumericJcutcut = [];
-nonNumericJcutcut = [];
-Jcutcut = zeros(12*size(pcut,3),12*size(pcut,3));
-for hh1=1:numel(Human_model) % for each cut solid
-    if size(Human_model(hh1).KinematicsCut) ~= 0
-        h1 = Human_model(hh1).KinematicsCut; % number of the cut
-        % derivative with respect to each cut
-        for hh2=1:numel(Human_model) % for each cut solid
-            if size(Human_model(hh2).KinematicsCut) ~= 0
-                h2 = Human_model(hh2).KinematicsCut; % number of the cut
-                for l1 = 1:3 % pcut1 (3 terms)
-                    for l2 = 1:3 % pcut2
-                        if h1 == h2 && l1 == l2  % derivative = 1
-                            Jcutcut(12*(h1-1)+l1,12*(h2-1)+l2) = 1;
-                        else
-                            df = diff(Human_model(hh1).p(l1,:),pcut(l2,:,h2));
-                            if df == 0
-                                Jcutcut(12*(h1-1)+l1,12*(h2-1)+l2) = 0;
-                            elseif df == 1
-                                Jcutcut(12*(h1-1)+l1,12*(h2-1)+l2) = 1;
-                            else
-                                indexesNumericJcutcut = [indexesNumericJcutcut (12*(h2-1)+l2-1)*size(Jcutcut,1)+12*(h1-1)+l1];
-                                nonNumericJcutcut = [nonNumericJcutcut df];
-                            end
-                        end
-                    end
-                    for l2=1:3 % Rcut2
-                        for ll2=1:3
-                            df = diff(Human_model(hh1).p(l1,:),Rcut(l2,ll2,h2));
-                            if df == 0
-                                Jcutcut(12*(h1-1)+l1,12*(h2-1)+3+3*(l2-1)+ll2) = 0;
-                            elseif  df == 1
-                                Jcutcut(12*(h1-1)+l1,12*(h2-1)+3+3*(l2-1)+ll2) = 1;
-                            else
-                                indexesNumericJcutcut = [indexesNumericJcutcut (12*(h2-1)+3+3*(l2-1)+ll2-1)*size(Jcutcut,1)+12*(h1-1)+l1];
-                                nonNumericJcutcut = [nonNumericJcutcut df];
-                            end
-                        end
-                    end
-                end
-                for l1 = 1:3 % Rcut1 (9 terms)
-                    for ll1 = 1:3
-                        for l2 = 1:3 % pcut2
-                            df = diff(Human_model(hh1).R(l1,ll1),pcut(l2,:,h2));
-                            if df == 0
-                                Jcutcut(12*(h1-1)+3+3*(l1-1)+ll1,12*(h2-1)+l2) = 0;
-                            elseif df == 1
-                                Jcutcut(12*(h1-1)+3+3*(l1-1)+ll1,12*(h2-1)+l2) = 1;
-                            else
-                                indexesNumericJcutcut = [indexesNumericJcutcut (12*(h2-1)+l2-1)*size(Jcutcut,1)+12*(h1-1)+3+3*(l1-1)+ll1];
-                                nonNumericJcutcut = [nonNumericJcutcut df];
-                            end
-                        end
-                        for l2=1:3 % Rcut2
-                            for ll2=1:3
-                                if h1 == h2 && l1 == l2 && ll1 == ll2 % derivative = 1
-                                    Jcutcut(12*(h1-1)+3+3*(l1-1)+ll1,12*(h2-1)+3+3*(l2-1)+ll2) = 1;
-                                else
-                                    df = diff(Human_model(hh1).R(l1,ll1),Rcut(l2,ll2,h2));
-                                    if df == 0
-                                        Jcutcut(12*(h1-1)+3+3*(l1-1)+ll1,12*(h2-1)+3+3*(l2-1)+ll2) = 0;
-                                    elseif df == 1
-                                        Jcutcut(12*(h1-1)+3+3*(l1-1)+ll1,12*(h2-1)+3+3*(l2-1)+ll2) = 1;
-                                    else
-                                        indexesNumericJcutcut = [indexesNumericJcutcut (12*(h2-1)+3+3*(l2-1)+ll2-1)*size(Jcutcut,1)+12*(h1-1)+3+3*(l1-1)+ll1];
-                                        nonNumericJcutcut = [nonNumericJcutcut df];
-                                    end
-                                end
-                            end
-                        end
-                    end
-                end
-            end
-        end
-    end
-end
-nonNumericJcutcut = matlabFunction(nonNumericJcutcut, 'Vars', {q,pcut,Rcut});
+Jcutcut_sym=jacobian(fcut,param(:));
 
-%% Matrix Jacobian data save
+Jcutcut = eye(Nb_param_cut,Nb_param_cut);
+% Diagonal terms are the derivatives of themselves 
+% dy/dy=1
+% idx=Jcutcut_sym(:)==0;
+% Jcutcut(idx)=0;
+idx=Jcutcut_sym(:)==1;
+Jcutcut(idx)=1;
+
+indexesNumericJcutcut=find(Jcutcut_sym~=0 & Jcutcut_sym~=1);
+if ~isempty(indexesNumericJcutcut)
+    nonNumericJcutcut = matlabFunction(Jcutcut_sym(indexesNumericJcutcut), 'Vars', {q,pcut,Rcut});
+end
+
+%% Sauvegarde des données relatives à la matrice Jacobienne
 Jacob.Jfq = Jfq;
 Jacob.indexesNumericJfq = indexesNumericJfq;
 Jacob.nonNumericJfq = nonNumericJfq;
@@ -272,7 +183,7 @@ Jacob.Jcutcut = Jcutcut;
 Jacob.indexesNumericJcutcut = indexesNumericJcutcut;
 Jacob.nonNumericJcutcut = nonNumericJcutcut;
 
-%% Function generation for each marker and each cut solid
+%% Création des fonctions pour chaque marqueurs et chaque solide de coupure
 
 for ii=1:length(ind_mk)
     m = ind_mk(ii);
@@ -280,7 +191,7 @@ for ii=1:length(ind_mk)
 end
 
 % Cut solid
-for ii=1:length(ind_Kcut) % solid i
+for ii=1:length(ind_Kcut) % solide i
     i_Kc = ind_Kcut(ii);
     matlabFunction(Human_model(i_Kc).R,Human_model(i_Kc).p,'File',['Symbolic_function/f' num2str(Human_model(i_Kc).KinematicsCut) 'cut.m'],...
         'Outputs',{['R' num2str(num2str(Human_model(i_Kc).KinematicsCut)) 'cut' ],['p' num2str(num2str(Human_model(i_Kc).KinematicsCut)) 'cut' ]},...;

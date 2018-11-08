@@ -16,6 +16,10 @@ function [Human_model,b1,b2]=InverseDynamicsSolid_lin(Human_model,g,j,b1,b2)
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 if j==0
     return;

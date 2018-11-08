@@ -13,6 +13,10 @@ function [Human_model] = anat_position_solid_repere(Human_model,i)
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 if i == 0 % bout de chaine
     return;

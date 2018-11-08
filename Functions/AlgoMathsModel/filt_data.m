@@ -12,6 +12,10 @@ function [data]=filt_data(data,f,f_mocap)
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 for i=1:size(data,2)
     data(:,i)=filtrage_data(data(:,i),f,f_mocap);
