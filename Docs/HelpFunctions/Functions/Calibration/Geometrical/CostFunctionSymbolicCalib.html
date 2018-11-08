@@ -50,6 +50,10 @@ ________________________________________________________
 
  Licence
  Toolbox distributed under 3-Clause BSD License
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
 ________________________________________________________</pre></div>
 
 <!-- crossreference -->
@@ -90,24 +94,28 @@ This function is called by:
 0023 <span class="comment">% Licence</span>
 0024 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
 0025 <span class="comment">%________________________________________________________</span>
-0026 
-0027 <span class="keyword">for</span> c=1:max([Human_model.KinematicsCut])
-0028     [Rcut(:,:,c),pcut(:,:,c)]=<span class="keyword">...</span>
-0029         list_function{c}(Pelvis_position,Pelvis_rotation,q,k,pcut,Rcut);
-0030 <span class="keyword">end</span>
-0031 
-0032 nb_mk=numel(list_function_markers);
-0033 
-0034 e=zeros(nb_mk,1);
-0035 <span class="keyword">for</span> m=1:nb_mk
-0036     e(m,1)= norm(list_function_markers{m}<span class="keyword">...</span>
-0037         (Pelvis_position,Pelvis_rotation,q,k,<span class="keyword">...</span>
-0038         pcut,Rcut) - real_markers(m).position(f,:)') ;    
-0039 <span class="keyword">end</span>
-0040 
-0041 W=eye(nb_mk); <span class="comment">%Weighted markers each markers are weighted by one</span>
-0042 error=e'*W*e;
-0043 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0028 <span class="comment">% Georges Dumont</span>
+0029 <span class="comment">%________________________________________________________</span>
+0030 
+0031 <span class="keyword">for</span> c=1:max([Human_model.KinematicsCut])
+0032     [Rcut(:,:,c),pcut(:,:,c)]=<span class="keyword">...</span>
+0033         list_function{c}(Pelvis_position,Pelvis_rotation,q,k,pcut,Rcut);
+0034 <span class="keyword">end</span>
+0035 
+0036 nb_mk=numel(list_function_markers);
+0037 
+0038 e=zeros(nb_mk,1);
+0039 <span class="keyword">for</span> m=1:nb_mk
+0040     e(m,1)= norm(list_function_markers{m}<span class="keyword">...</span>
+0041         (Pelvis_position,Pelvis_rotation,q,k,<span class="keyword">...</span>
+0042         pcut,Rcut) - real_markers(m).position(f,:)') ;    
+0043 <span class="keyword">end</span>
+0044 
+0045 W=eye(nb_mk); <span class="comment">%Weighted markers each markers are weighted by one</span>
+0046 error=e'*W*e;
+0047 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 07-Nov-2018 15:15:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

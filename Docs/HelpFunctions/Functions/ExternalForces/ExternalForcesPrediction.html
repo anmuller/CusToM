@@ -50,6 +50,10 @@ ________________________________________________________
 
  Licence
  Toolbox distributed under 3-Clause BSD License
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
 ________________________________________________________</pre></div>
 
 <!-- crossreference -->
@@ -90,385 +94,389 @@ This function is called by:
 0023 <span class="comment">% Licence</span>
 0024 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
 0025 <span class="comment">%________________________________________________________</span>
-0026 
-0027 disp([<span class="string">'External Forces Prediction ('</span> filename <span class="string">') ...'</span>])
-0028 
-0029 <span class="comment">%% Chargement des variables</span>
-0030 Human_model = BiomechanicalModel.OsteoArticularModel;
-0031 load([filename <span class="string">'/InverseKinematicsResults.mat'</span>]); <span class="comment">%#ok&lt;LOAD&gt;</span>
-0032 q = InverseKinematicsResults.JointCoordinates';
-0033 q6dof = InverseKinematicsResults.FreeJointCoordinates';
-0034 load([filename <span class="string">'/ExperimentalData.mat'</span>]); <span class="comment">%#ok&lt;LOAD&gt;</span>
-0035 time = ExperimentalData.Time;
-0036 
-0037 freq=1/time(2);
-0038 
-0039 <span class="comment">%% Création de la structure Prédiction contenant les points de contact</span>
-0040 <span class="comment">%% Creation of a structure to add contact points</span>
-0041 <span class="keyword">for</span> i=1:numel(AnalysisParameters.Prediction.ContactPoint)
-0042     Prediction(i).points_prediction_efforts = AnalysisParameters.Prediction.ContactPoint{i};
-0043 <span class="keyword">end</span>
-0044 Prediction=<a href="../../Functions/ExternalForces/Prediction/verif_Prediction_Humanmodel.html" class="code" title="function [Prediction]=verif_Prediction_Humanmodel(Human_model,Prediction)">verif_Prediction_Humanmodel</a>(Human_model,Prediction);
-0045 NbPointsPrediction = numel(Prediction);
-0046 
-0047 <span class="comment">%% Gravité (gravity)</span>
-0048 g=[0 0 -9.81]';
-0049 
-0050 <span class="comment">%% On enlève la liaison 6 ddl ajoutée par la cinématique inverse</span>
-0051 <span class="comment">%% get rid of the 6DOF joint</span>
-0052 Human_model=Human_model(1:(numel(Human_model)-6));
+0026 <span class="comment">%</span>
+0027 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0028 <span class="comment">% Georges Dumont</span>
+0029 <span class="comment">%________________________________________________________</span>
+0030 
+0031 disp([<span class="string">'External Forces Prediction ('</span> filename <span class="string">') ...'</span>])
+0032 
+0033 <span class="comment">%% Chargement des variables</span>
+0034 Human_model = BiomechanicalModel.OsteoArticularModel;
+0035 load([filename <span class="string">'/InverseKinematicsResults.mat'</span>]); <span class="comment">%#ok&lt;LOAD&gt;</span>
+0036 q = InverseKinematicsResults.JointCoordinates';
+0037 q6dof = InverseKinematicsResults.FreeJointCoordinates';
+0038 load([filename <span class="string">'/ExperimentalData.mat'</span>]); <span class="comment">%#ok&lt;LOAD&gt;</span>
+0039 time = ExperimentalData.Time;
+0040 
+0041 freq=1/time(2);
+0042 
+0043 <span class="comment">%% Création de la structure Prédiction contenant les points de contact</span>
+0044 <span class="comment">%% Creation of a structure to add contact points</span>
+0045 <span class="keyword">for</span> i=1:numel(AnalysisParameters.Prediction.ContactPoint)
+0046     Prediction(i).points_prediction_efforts = AnalysisParameters.Prediction.ContactPoint{i};
+0047 <span class="keyword">end</span>
+0048 Prediction=<a href="../../Functions/ExternalForces/Prediction/verif_Prediction_Humanmodel.html" class="code" title="function [Prediction]=verif_Prediction_Humanmodel(Human_model,Prediction)">verif_Prediction_Humanmodel</a>(Human_model,Prediction);
+0049 NbPointsPrediction = numel(Prediction);
+0050 
+0051 <span class="comment">%% Gravité (gravity)</span>
+0052 g=[0 0 -9.81]';
 0053 
-0054 <span class="comment">%% Définition des vitesses / accélérations articulaires</span>
-0055 <span class="comment">% Speed and acceleration for every joint</span>
-0056 dt=1/freq;
-0057 dq=<a href="../../Functions/AlgoMathsModel/derivee2.html" class="code" title="function yp=derivee2(h,y)">derivee2</a>(dt,q);  <span class="comment">% vitesses</span>
-0058 ddq=<a href="../../Functions/AlgoMathsModel/derivee2.html" class="code" title="function yp=derivee2(h,y)">derivee2</a>(dt,dq);  <span class="comment">% accélérations</span>
-0059 
-0060 nbframe=size(q,1);
-0061 
-0062 <span class="comment">%% Définition des données cinématiques du pelvis</span>
-0063 <span class="comment">% (position / vitesse / accélération / orientation / vitesse angulaire / accélération angulaire)</span>
-0064 <span class="comment">% Kinematical data for Pelvis (Position/speed/acceleration/angles/angular speed/angular acceleration)</span>
+0054 <span class="comment">%% On enlève la liaison 6 ddl ajoutée par la cinématique inverse</span>
+0055 <span class="comment">%% get rid of the 6DOF joint</span>
+0056 Human_model=Human_model(1:(numel(Human_model)-6));
+0057 
+0058 <span class="comment">%% Définition des vitesses / accélérations articulaires</span>
+0059 <span class="comment">% Speed and acceleration for every joint</span>
+0060 dt=1/freq;
+0061 dq=<a href="../../Functions/AlgoMathsModel/derivee2.html" class="code" title="function yp=derivee2(h,y)">derivee2</a>(dt,q);  <span class="comment">% vitesses</span>
+0062 ddq=<a href="../../Functions/AlgoMathsModel/derivee2.html" class="code" title="function yp=derivee2(h,y)">derivee2</a>(dt,dq);  <span class="comment">% accélérations</span>
+0063 
+0064 nbframe=size(q,1);
 0065 
-0066 p_pelvis=q6dof(:,1:3);  <span class="comment">% frame i : p_pelvis(i,:)</span>
-0067 r_pelvis=cell(size(q6dof,1),1);
-0068 <span class="keyword">for</span> i=1:size(q6dof,1)
-0069     r_pelvis{i}=<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([1 0 0]',q6dof(i,4))*<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([0 1 0]',q6dof(i,5))*<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([0 0 1]',q6dof(i,6)); <span class="comment">% matrice de rotation en fonction des rotations successives (x,y,z) : frame i : r_pelvis{i}</span>
-0070 <span class="keyword">end</span>
-0071 
-0072 <span class="comment">%dR</span>
-0073 dR=zeros(3,3,nbframe);
-0074 <span class="keyword">for</span> ligne=1:3
-0075     <span class="keyword">for</span> colonne=1:3
-0076         dR(ligne,colonne,:)=<a href="../../Functions/AlgoMathsModel/derivee2.html" class="code" title="function yp=derivee2(h,y)">derivee2</a>(dt,cell2mat(cellfun(@(b) b(ligne,colonne),r_pelvis,<span class="string">'UniformOutput'</span>,false)));
-0077         dR(ligne,colonne,:)=<a href="../../Functions/AlgoMathsModel/derivee2.html" class="code" title="function yp=derivee2(h,y)">derivee2</a>(dt,cell2mat(cellfun(@(b) b(ligne,colonne),r_pelvis,<span class="string">'UniformOutput'</span>,false)));
-0078         dR(ligne,colonne,:)=<a href="../../Functions/AlgoMathsModel/derivee2.html" class="code" title="function yp=derivee2(h,y)">derivee2</a>(dt,cell2mat(cellfun(@(b) b(ligne,colonne),r_pelvis,<span class="string">'UniformOutput'</span>,false)));
-0079     <span class="keyword">end</span>
-0080 <span class="keyword">end</span>
-0081 w=zeros(nbframe,3);
-0082 <span class="keyword">for</span> i=1:nbframe
-0083     wmat=dR(:,:,i)*r_pelvis{i}';
-0084     w(i,:)=[wmat(3,2),wmat(1,3),wmat(2,1)];
-0085 <span class="keyword">end</span>
-0086 
-0087 <span class="comment">% v0</span>
-0088 v=<a href="../../Functions/AlgoMathsModel/derivee2.html" class="code" title="function yp=derivee2(h,y)">derivee2</a>(dt,p_pelvis);
-0089 vw=zeros(nbframe,3);
-0090 <span class="keyword">for</span> i=1:nbframe
-0091     vw(i,:)=cross(p_pelvis(i,:),w(i,:));
-0092 <span class="keyword">end</span>
-0093 v0=v+vw;
-0094 
-0095 <span class="comment">% dv0</span>
-0096 dv0=<a href="../../Functions/AlgoMathsModel/derivee2.html" class="code" title="function yp=derivee2(h,y)">derivee2</a>(dt,v0);
-0097 
-0098 <span class="comment">% dw</span>
-0099 dw=<a href="../../Functions/AlgoMathsModel/derivee2.html" class="code" title="function yp=derivee2(h,y)">derivee2</a>(dt,w);
-0100 
-0101 <span class="comment">%% Initialisations des différents efforts et leur stockage</span>
-0102 <span class="keyword">for</span> f=1:nbframe
-0103     <span class="keyword">for</span> n=1:numel(Human_model)
-0104         external_forces_pred(f).fext(n).fext=zeros(3,2);
-0105         <span class="comment">%external_forces_pred_opti(n).fext=zeros(3,2); % decommenter lors de l'usage de l'optimisation non-linéaire (uncomment this line if using non-linear optimisation)</span>
-0106     <span class="keyword">end</span>
-0107 <span class="keyword">end</span>
-0108 
-0109 <span class="keyword">for</span> pred = 1:NbPointsPrediction
-0110     Prediction(pred).efforts_max=zeros(nbframe,3);
-0111     Prediction(pred).efforts = zeros(nbframe,1);
-0112 <span class="keyword">end</span>
-0113 Fx=zeros(NbPointsPrediction,nbframe);
-0114 Fy=zeros(NbPointsPrediction,nbframe);
-0115 Fz=zeros(NbPointsPrediction,nbframe);
-0116 
-0117 <span class="comment">% Detect(1).points_prediction_efforts='Rfootenlair';</span>
-0118 <span class="comment">% Detect(2).points_prediction_efforts='Lfootenlair';</span>
-0119 <span class="comment">% Detect(1).exist=0;</span>
-0120 <span class="comment">% Detect(2).exist=0;</span>
-0121 <span class="comment">% for f=1:nbframe</span>
-0122 <span class="comment">%     Detect(find(strcmp({Detect.points_prediction_efforts},'Rfootenlair'))).ptsdetect(f)=0; %#ok&lt;FNDSB&gt;</span>
-0123 <span class="comment">%     Detect(find(strcmp({Detect.points_prediction_efforts},'Lfootenlair'))).ptsdetect(f)=0; %#ok&lt;FNDSB&gt;</span>
-0124 <span class="comment">% end</span>
-0125 
-0126 <span class="comment">%% Paramètres de l'optimisation fmincon pour probleme non-lineaire, minimisation des X^n</span>
-0127 <span class="comment">%% Parameters of fmincon for non linear optimisation of X^n</span>
-0128 <span class="comment">% X0= 1*ones(3*numel(Prediction),1);</span>
-0129 <span class="comment">% A=[];</span>
-0130 <span class="comment">% b=[];</span>
-0131 <span class="comment">% lb=-ones(3*numel(Prediction),1);</span>
-0132 <span class="comment">% lb(2*numel(Prediction)+1:3*numel(Prediction))=0;</span>
-0133 <span class="comment">% ub=ones(3*numel(Prediction),1);</span>
-0134 <span class="comment">%</span>
-0135 <span class="comment">% %options = optimoptions(@fmincon,'Algorithm','sqp','Display','off','GradObj','off','PlotFcns',@optimplotfval,'GradConstr','off','TolFun',1e-6,'TolX',1e-6);</span>
-0136 <span class="comment">% options = optimoptions(@fmincon,'Algorithm','sqp','Display','off','GradObj','off','GradConstr','off','TolFun',1e-6,'TolX',1e-6);</span>
-0137 
-0138 <span class="comment">%% Paramètres de l'optimisation fmincon pour probleme lineaire</span>
-0139 X0= 1*zeros(3*NbPointsPrediction,1);
-0140 lb=-ones(3*NbPointsPrediction,1);
-0141 lb(2*NbPointsPrediction+1:3*NbPointsPrediction)=0;
-0142 ub=ones(3*NbPointsPrediction,1);
-0143 lb_init=lb; ub_init=ub;
-0144 
-0145 options = optimoptions(@fmincon,<span class="string">'Algorithm'</span>,<span class="string">'sqp'</span>,<span class="string">'Display'</span>,<span class="string">'off'</span>,<span class="string">'GradObj'</span>,<span class="string">'off'</span>,<span class="string">'GradConstr'</span>,<span class="string">'off'</span>,<span class="string">'TolFun'</span>,1e-6,<span class="string">'TolX'</span>,1e-6);
-0146 
-0147 <span class="comment">%% Calcul frame par frame</span>
-0148 h = waitbar(0,[<span class="string">'External Forces Prediction ('</span> filename <span class="string">')'</span>]);
-0149 <span class="keyword">for</span> i=1:nbframe
-0150     <span class="comment">%attribution à chaque articulation de la position/vitesse/accélération (position/speed/acceleration for each joint)</span>
-0151     Human_model(1).p=p_pelvis(i,:)';
-0152     Human_model(1).R=r_pelvis{i};
-0153     Human_model(1).v0=v0(i,:)';
-0154     Human_model(1).w=w(i,:)';
-0155     Human_model(1).dv0=dv0(i,:)';
-0156     Human_model(1).dw=dw(i,:)';
-0157     <span class="keyword">for</span> j=2:numel(Human_model)
-0158         Human_model(j).q=q(i,j); <span class="comment">%#ok&lt;*SAGROW&gt;</span>
-0159         Human_model(j).dq=dq(i,j);
-0160         Human_model(j).ddq=ddq(i,j);
-0161     <span class="keyword">end</span>
-0162     <span class="comment">% Calcul positions / vitesses / accélération de chaque solide (computation of position/speed/acceleration for each solid)</span>
-0163     [Human_model,Prediction] = <a href="../../Functions/ExternalForces/Prediction/ForwardAllKinematicsPrediction.html" class="code" title="function [Human_model,Prediction] = ForwardAllKinematicsPrediction(Human_model,Prediction,j)">ForwardAllKinematicsPrediction</a>(Human_model,Prediction,1); 
-0164 <span class="comment">%     cptG=0;</span>
-0165 <span class="comment">%     cptD=0;</span>
-0166     <span class="comment">%% Calcul des efforts maximaux disponibles (computation of maximum available effort)</span>
-0167     <span class="keyword">for</span> pred = 1:numel(Prediction)
-0168         Prediction(pred).px(i)=Prediction(pred).pos_anim(1);
-0169         Prediction(pred).py(i)=Prediction(pred).pos_anim(2);
-0170         Prediction(pred).pz(i)=Prediction(pred).pos_anim(3);
-0171         Prediction(pred).vitesse_temps(i)=sqrt(Prediction(pred).vitesse(1,:)^2+Prediction(pred).vitesse(2,:)^2+Prediction(pred).vitesse(3,:)^2); <span class="comment">% Recuperation de la norme de la vitesse (repère monde)</span>
-0172             Cpi = <a href="../../Functions/ExternalForces/Prediction/Force_max_TOR.html" class="code" title="function Cpi = Force_max_TOR(pz,vp,Mass, zcrit, vcrit)">Force_max_TOR</a>(Prediction(pred).pz(i),Prediction(pred).vitesse_temps(i),ModelParameters.Mass, AnalysisParameters.Prediction.PositionThreshold  , AnalysisParameters.Prediction.VelocityThreshold);
-0173             Fx(pred,i)=Cpi;
-0174             Fy(pred,i)=Cpi;
-0175             Fz(pred,i)=Cpi;
-0176             Prediction(pred).efforts_max(i,1)=Cpi; <span class="comment">%Fx</span>
-0177             Prediction(pred).efforts_max(i,2)=Cpi; <span class="comment">%Fy</span>
-0178             Prediction(pred).efforts_max(i,3)=Cpi; <span class="comment">%Fz</span>
-0179     <span class="keyword">end</span>
-0180     Fmax=[Fx(:,i)' Fy(:,i)' Fz(:,i)'];
-0181     
-0182     <span class="comment">%% Optimisation directe</span>
-0183     <span class="comment">%% Linearisation de la condition dynamique</span>
-0184     <span class="comment">%% Direct optimisation by linearization of the dynamical condition.</span>
-0185     A=zeros(6,3*numel(Prediction));
-0186     b1=[0 0 0]';
-0187     b2=[0 0 0]';
-0188     
-0189     [~,b1,b2]=<a href="../../Functions/ExternalForces/Prediction/InverseDynamicsSolid_lin.html" class="code" title="function [Human_model,b1,b2]=InverseDynamicsSolid_lin(Human_model,g,j,b1,b2)">InverseDynamicsSolid_lin</a>(Human_model,g,1,b1,b2);
-0190     bf=b1;
-0191     bt=b2+cross(-p_pelvis(i,:)',b1); <span class="comment">%on ramene les couples au niveau du pelvis (torques are expressed at pelvis point)</span>
-0192     b=[bf' bt']';
-0193     
-0194     <span class="keyword">for</span> k = 1:numel(Prediction)
-0195         <span class="comment">% calcul des efforts</span>
-0196         A(1,k)=Prediction(k).efforts_max(i,1);
-0197         A(2,k+numel(Prediction))=Prediction(k).efforts_max(i,2);
-0198         A(3,k+2*numel(Prediction))=Prediction(k).efforts_max(i,3);
-0199         <span class="comment">% calcul des moments</span>
-0200         A(4,k+numel(Prediction))=-(Prediction(k).pz(i)-p_pelvis(i,3))*Prediction(k).efforts_max(i,2); <span class="comment">%-pz*beta</span>
-0201         A(4,k+2*numel(Prediction))=(Prediction(k).py(i)-p_pelvis(i,2))*Prediction(k).efforts_max(i,3); <span class="comment">%py*gamma</span>
-0202         A(5,k)=(Prediction(k).pz(i)-p_pelvis(i,3))*Prediction(k).efforts_max(i,1); <span class="comment">%pz*alpha</span>
-0203         A(5,k+2*numel(Prediction))=-(Prediction(k).px(i)-p_pelvis(i,1))*Prediction(k).efforts_max(i,3); <span class="comment">%-px*gamma</span>
-0204         A(6,k)=-(Prediction(k).py(i)-p_pelvis(i,2))*Prediction(k).efforts_max(i,1); <span class="comment">%-py*alpha</span>
-0205         A(6,k+numel(Prediction))=(Prediction(k).px(i)-p_pelvis(i,1))*Prediction(k).efforts_max(i,2); <span class="comment">%px*beta</span>
-0206     <span class="keyword">end</span>
-0207     
-0208     
-0209     <span class="comment">%% Prise en compte du frottement: Pour chaque ponctuelle, |Fx|&lt;0.5|Fz| et |Fy|&lt;0.5|Fz|</span>
-0210     <span class="comment">%% taking friction into account for every point to point link, |Fx|&lt;0.5|Fz| et |Fy|&lt;0.5|Fz|</span>
-0211     Afric=zeros(4*numel(Prediction),3*numel(Prediction));
-0212     bfric=zeros(4*numel(Prediction),1);
-0213     
-0214     coef_friction = AnalysisParameters.Prediction.FrictionCoef;
-0215 
-0216     <span class="keyword">for</span> k = 1:(numel(Prediction))
-0217         Afric(k,k)=1*Prediction(k).efforts_max(i,1);
-0218         Afric(k+numel(Prediction),k+numel(Prediction))=1*Prediction(k).efforts_max(i,2);
-0219         Afric(k,k+2*numel(Prediction))=-coef_friction*Prediction(k).efforts_max(i,3);
-0220         Afric(k+numel(Prediction),k+2*numel(Prediction))=-coef_friction*Prediction(k).efforts_max(i,2);
-0221         Afric(k+2*numel(Prediction),k)=-1*Prediction(k).efforts_max(i,1);
-0222         Afric(k+3*numel(Prediction),k+numel(Prediction))=-1*Prediction(k).efforts_max(i,2);
-0223         Afric(k+2*numel(Prediction),k+2*numel(Prediction))=-coef_friction*Prediction(k).efforts_max(i,3);
-0224         Afric(k+3*numel(Prediction),k+2*numel(Prediction))=-coef_friction*Prediction(k).efforts_max(i,3);
-0225     <span class="keyword">end</span>
-0226     
-0227     <span class="comment">%% Minimisation de la somme des efforts normalisés pour chaque ponctuelle,</span>
-0228     <span class="comment">% tout en respectant la dynamique et les frottements</span>
-0229     <span class="comment">%% Minimizing sum of normalized efforts for each punctual joint while respecting dynamical equations and friction</span>
-0230     X = fmincon(@(X) sum(X.^2),X0,Afric,bfric,A,b,lb,ub,[],options);
-0231     
-0232     <span class="comment">%% Optimisation de la prochaine minimisation</span>
-0233     lb=max(X-0.45,lb_init); <span class="comment">%expérimentalement, les bornes ne varient pas de plus ou moins 0.45 (experimentaly, boundaries vary not more than 0.45)</span>
-0234     ub=min(X+0.45,ub_init);
-0235 
-0236     X0=X; <span class="comment">%d'une frame à l'autre, on change très peu de position, donc de valeur d'effort (</span>
-0237     
-0238     <span class="comment">%% Récupération des forces finales, stockées d'abord dans Prediction (Final forces storage without prediction)</span>
-0239     <span class="keyword">for</span> k = 1:numel(Prediction)
-0240         Prediction(k).efforts(i,1)=X(k)*Prediction(k).efforts_max(i,1);
-0241         Prediction(k).efforts(i,2)=X(k+numel(Prediction))*Prediction(k).efforts_max(i,2);
-0242         Prediction(k).efforts(i,3)=X(k+2*numel(Prediction))*Prediction(k).efforts_max(i,1);
-0243     <span class="keyword">end</span>
-0244     
-0245     <span class="comment">%% Optimisation non linéaire</span>
-0246     <span class="comment">% Non utilisée car la linéaire marche bien</span>
-0247     <span class="comment">%</span>
-0248     <span class="comment">%     X = fmincon(@(X) sum(X.^2),X0,A,b,[],[],lb,ub,@(X) respect_dynamique(X,Human_model,Prediction,Fmax,external_forces_pred_opti,i),options);</span>
-0249     <span class="comment">%     X0=X;</span>
-0250     <span class="comment">%     tic</span>
-0251     <span class="comment">%     [~,ceq(:,i)]=respect_dynamique(X,Human_model,Prediction,Fmax,external_forces_pred_opti,i);</span>
-0252     
-0253     <span class="comment">%% Calcul des efforts extérieurs tels qu’utilisés par la suite pour la dynamique</span>
-0254     <span class="comment">%% Computation of external forces for use with dynamics</span>
-0255     external_forces_pred=<a href="../../Functions/ExternalForces/Prediction/addForces_Prediction_frame_par_frame.html" class="code" title="function [external_forces_pred] = addForces_Prediction_frame_par_frame(X,external_forces_pred,Prediction,Fmax,f)">addForces_Prediction_frame_par_frame</a>(X,external_forces_pred,Prediction,Fmax,i);
+0066 <span class="comment">%% Définition des données cinématiques du pelvis</span>
+0067 <span class="comment">% (position / vitesse / accélération / orientation / vitesse angulaire / accélération angulaire)</span>
+0068 <span class="comment">% Kinematical data for Pelvis (Position/speed/acceleration/angles/angular speed/angular acceleration)</span>
+0069 
+0070 p_pelvis=q6dof(:,1:3);  <span class="comment">% frame i : p_pelvis(i,:)</span>
+0071 r_pelvis=cell(size(q6dof,1),1);
+0072 <span class="keyword">for</span> i=1:size(q6dof,1)
+0073     r_pelvis{i}=<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([1 0 0]',q6dof(i,4))*<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([0 1 0]',q6dof(i,5))*<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([0 0 1]',q6dof(i,6)); <span class="comment">% matrice de rotation en fonction des rotations successives (x,y,z) : frame i : r_pelvis{i}</span>
+0074 <span class="keyword">end</span>
+0075 
+0076 <span class="comment">%dR</span>
+0077 dR=zeros(3,3,nbframe);
+0078 <span class="keyword">for</span> ligne=1:3
+0079     <span class="keyword">for</span> colonne=1:3
+0080         dR(ligne,colonne,:)=<a href="../../Functions/AlgoMathsModel/derivee2.html" class="code" title="function yp=derivee2(h,y)">derivee2</a>(dt,cell2mat(cellfun(@(b) b(ligne,colonne),r_pelvis,<span class="string">'UniformOutput'</span>,false)));
+0081         dR(ligne,colonne,:)=<a href="../../Functions/AlgoMathsModel/derivee2.html" class="code" title="function yp=derivee2(h,y)">derivee2</a>(dt,cell2mat(cellfun(@(b) b(ligne,colonne),r_pelvis,<span class="string">'UniformOutput'</span>,false)));
+0082         dR(ligne,colonne,:)=<a href="../../Functions/AlgoMathsModel/derivee2.html" class="code" title="function yp=derivee2(h,y)">derivee2</a>(dt,cell2mat(cellfun(@(b) b(ligne,colonne),r_pelvis,<span class="string">'UniformOutput'</span>,false)));
+0083     <span class="keyword">end</span>
+0084 <span class="keyword">end</span>
+0085 w=zeros(nbframe,3);
+0086 <span class="keyword">for</span> i=1:nbframe
+0087     wmat=dR(:,:,i)*r_pelvis{i}';
+0088     w(i,:)=[wmat(3,2),wmat(1,3),wmat(2,1)];
+0089 <span class="keyword">end</span>
+0090 
+0091 <span class="comment">% v0</span>
+0092 v=<a href="../../Functions/AlgoMathsModel/derivee2.html" class="code" title="function yp=derivee2(h,y)">derivee2</a>(dt,p_pelvis);
+0093 vw=zeros(nbframe,3);
+0094 <span class="keyword">for</span> i=1:nbframe
+0095     vw(i,:)=cross(p_pelvis(i,:),w(i,:));
+0096 <span class="keyword">end</span>
+0097 v0=v+vw;
+0098 
+0099 <span class="comment">% dv0</span>
+0100 dv0=<a href="../../Functions/AlgoMathsModel/derivee2.html" class="code" title="function yp=derivee2(h,y)">derivee2</a>(dt,v0);
+0101 
+0102 <span class="comment">% dw</span>
+0103 dw=<a href="../../Functions/AlgoMathsModel/derivee2.html" class="code" title="function yp=derivee2(h,y)">derivee2</a>(dt,w);
+0104 
+0105 <span class="comment">%% Initialisations des différents efforts et leur stockage</span>
+0106 <span class="keyword">for</span> f=1:nbframe
+0107     <span class="keyword">for</span> n=1:numel(Human_model)
+0108         external_forces_pred(f).fext(n).fext=zeros(3,2);
+0109         <span class="comment">%external_forces_pred_opti(n).fext=zeros(3,2); % decommenter lors de l'usage de l'optimisation non-linéaire (uncomment this line if using non-linear optimisation)</span>
+0110     <span class="keyword">end</span>
+0111 <span class="keyword">end</span>
+0112 
+0113 <span class="keyword">for</span> pred = 1:NbPointsPrediction
+0114     Prediction(pred).efforts_max=zeros(nbframe,3);
+0115     Prediction(pred).efforts = zeros(nbframe,1);
+0116 <span class="keyword">end</span>
+0117 Fx=zeros(NbPointsPrediction,nbframe);
+0118 Fy=zeros(NbPointsPrediction,nbframe);
+0119 Fz=zeros(NbPointsPrediction,nbframe);
+0120 
+0121 <span class="comment">% Detect(1).points_prediction_efforts='Rfootenlair';</span>
+0122 <span class="comment">% Detect(2).points_prediction_efforts='Lfootenlair';</span>
+0123 <span class="comment">% Detect(1).exist=0;</span>
+0124 <span class="comment">% Detect(2).exist=0;</span>
+0125 <span class="comment">% for f=1:nbframe</span>
+0126 <span class="comment">%     Detect(find(strcmp({Detect.points_prediction_efforts},'Rfootenlair'))).ptsdetect(f)=0; %#ok&lt;FNDSB&gt;</span>
+0127 <span class="comment">%     Detect(find(strcmp({Detect.points_prediction_efforts},'Lfootenlair'))).ptsdetect(f)=0; %#ok&lt;FNDSB&gt;</span>
+0128 <span class="comment">% end</span>
+0129 
+0130 <span class="comment">%% Paramètres de l'optimisation fmincon pour probleme non-lineaire, minimisation des X^n</span>
+0131 <span class="comment">%% Parameters of fmincon for non linear optimisation of X^n</span>
+0132 <span class="comment">% X0= 1*ones(3*numel(Prediction),1);</span>
+0133 <span class="comment">% A=[];</span>
+0134 <span class="comment">% b=[];</span>
+0135 <span class="comment">% lb=-ones(3*numel(Prediction),1);</span>
+0136 <span class="comment">% lb(2*numel(Prediction)+1:3*numel(Prediction))=0;</span>
+0137 <span class="comment">% ub=ones(3*numel(Prediction),1);</span>
+0138 <span class="comment">%</span>
+0139 <span class="comment">% %options = optimoptions(@fmincon,'Algorithm','sqp','Display','off','GradObj','off','PlotFcns',@optimplotfval,'GradConstr','off','TolFun',1e-6,'TolX',1e-6);</span>
+0140 <span class="comment">% options = optimoptions(@fmincon,'Algorithm','sqp','Display','off','GradObj','off','GradConstr','off','TolFun',1e-6,'TolX',1e-6);</span>
+0141 
+0142 <span class="comment">%% Paramètres de l'optimisation fmincon pour probleme lineaire</span>
+0143 X0= 1*zeros(3*NbPointsPrediction,1);
+0144 lb=-ones(3*NbPointsPrediction,1);
+0145 lb(2*NbPointsPrediction+1:3*NbPointsPrediction)=0;
+0146 ub=ones(3*NbPointsPrediction,1);
+0147 lb_init=lb; ub_init=ub;
+0148 
+0149 options = optimoptions(@fmincon,<span class="string">'Algorithm'</span>,<span class="string">'sqp'</span>,<span class="string">'Display'</span>,<span class="string">'off'</span>,<span class="string">'GradObj'</span>,<span class="string">'off'</span>,<span class="string">'GradConstr'</span>,<span class="string">'off'</span>,<span class="string">'TolFun'</span>,1e-6,<span class="string">'TolX'</span>,1e-6);
+0150 
+0151 <span class="comment">%% Calcul frame par frame</span>
+0152 h = waitbar(0,[<span class="string">'External Forces Prediction ('</span> filename <span class="string">')'</span>]);
+0153 <span class="keyword">for</span> i=1:nbframe
+0154     <span class="comment">%attribution à chaque articulation de la position/vitesse/accélération (position/speed/acceleration for each joint)</span>
+0155     Human_model(1).p=p_pelvis(i,:)';
+0156     Human_model(1).R=r_pelvis{i};
+0157     Human_model(1).v0=v0(i,:)';
+0158     Human_model(1).w=w(i,:)';
+0159     Human_model(1).dv0=dv0(i,:)';
+0160     Human_model(1).dw=dw(i,:)';
+0161     <span class="keyword">for</span> j=2:numel(Human_model)
+0162         Human_model(j).q=q(i,j); <span class="comment">%#ok&lt;*SAGROW&gt;</span>
+0163         Human_model(j).dq=dq(i,j);
+0164         Human_model(j).ddq=ddq(i,j);
+0165     <span class="keyword">end</span>
+0166     <span class="comment">% Calcul positions / vitesses / accélération de chaque solide (computation of position/speed/acceleration for each solid)</span>
+0167     [Human_model,Prediction] = <a href="../../Functions/ExternalForces/Prediction/ForwardAllKinematicsPrediction.html" class="code" title="function [Human_model,Prediction] = ForwardAllKinematicsPrediction(Human_model,Prediction,j)">ForwardAllKinematicsPrediction</a>(Human_model,Prediction,1); 
+0168 <span class="comment">%     cptG=0;</span>
+0169 <span class="comment">%     cptD=0;</span>
+0170     <span class="comment">%% Calcul des efforts maximaux disponibles (computation of maximum available effort)</span>
+0171     <span class="keyword">for</span> pred = 1:numel(Prediction)
+0172         Prediction(pred).px(i)=Prediction(pred).pos_anim(1);
+0173         Prediction(pred).py(i)=Prediction(pred).pos_anim(2);
+0174         Prediction(pred).pz(i)=Prediction(pred).pos_anim(3);
+0175         Prediction(pred).vitesse_temps(i)=sqrt(Prediction(pred).vitesse(1,:)^2+Prediction(pred).vitesse(2,:)^2+Prediction(pred).vitesse(3,:)^2); <span class="comment">% Recuperation de la norme de la vitesse (repère monde)</span>
+0176             Cpi = <a href="../../Functions/ExternalForces/Prediction/Force_max_TOR.html" class="code" title="function Cpi = Force_max_TOR(pz,vp,Mass, zcrit, vcrit)">Force_max_TOR</a>(Prediction(pred).pz(i),Prediction(pred).vitesse_temps(i),ModelParameters.Mass, AnalysisParameters.Prediction.PositionThreshold  , AnalysisParameters.Prediction.VelocityThreshold);
+0177             Fx(pred,i)=Cpi;
+0178             Fy(pred,i)=Cpi;
+0179             Fz(pred,i)=Cpi;
+0180             Prediction(pred).efforts_max(i,1)=Cpi; <span class="comment">%Fx</span>
+0181             Prediction(pred).efforts_max(i,2)=Cpi; <span class="comment">%Fy</span>
+0182             Prediction(pred).efforts_max(i,3)=Cpi; <span class="comment">%Fz</span>
+0183     <span class="keyword">end</span>
+0184     Fmax=[Fx(:,i)' Fy(:,i)' Fz(:,i)'];
+0185     
+0186     <span class="comment">%% Optimisation directe</span>
+0187     <span class="comment">%% Linearisation de la condition dynamique</span>
+0188     <span class="comment">%% Direct optimisation by linearization of the dynamical condition.</span>
+0189     A=zeros(6,3*numel(Prediction));
+0190     b1=[0 0 0]';
+0191     b2=[0 0 0]';
+0192     
+0193     [~,b1,b2]=<a href="../../Functions/ExternalForces/Prediction/InverseDynamicsSolid_lin.html" class="code" title="function [Human_model,b1,b2]=InverseDynamicsSolid_lin(Human_model,g,j,b1,b2)">InverseDynamicsSolid_lin</a>(Human_model,g,1,b1,b2);
+0194     bf=b1;
+0195     bt=b2+cross(-p_pelvis(i,:)',b1); <span class="comment">%on ramene les couples au niveau du pelvis (torques are expressed at pelvis point)</span>
+0196     b=[bf' bt']';
+0197     
+0198     <span class="keyword">for</span> k = 1:numel(Prediction)
+0199         <span class="comment">% calcul des efforts</span>
+0200         A(1,k)=Prediction(k).efforts_max(i,1);
+0201         A(2,k+numel(Prediction))=Prediction(k).efforts_max(i,2);
+0202         A(3,k+2*numel(Prediction))=Prediction(k).efforts_max(i,3);
+0203         <span class="comment">% calcul des moments</span>
+0204         A(4,k+numel(Prediction))=-(Prediction(k).pz(i)-p_pelvis(i,3))*Prediction(k).efforts_max(i,2); <span class="comment">%-pz*beta</span>
+0205         A(4,k+2*numel(Prediction))=(Prediction(k).py(i)-p_pelvis(i,2))*Prediction(k).efforts_max(i,3); <span class="comment">%py*gamma</span>
+0206         A(5,k)=(Prediction(k).pz(i)-p_pelvis(i,3))*Prediction(k).efforts_max(i,1); <span class="comment">%pz*alpha</span>
+0207         A(5,k+2*numel(Prediction))=-(Prediction(k).px(i)-p_pelvis(i,1))*Prediction(k).efforts_max(i,3); <span class="comment">%-px*gamma</span>
+0208         A(6,k)=-(Prediction(k).py(i)-p_pelvis(i,2))*Prediction(k).efforts_max(i,1); <span class="comment">%-py*alpha</span>
+0209         A(6,k+numel(Prediction))=(Prediction(k).px(i)-p_pelvis(i,1))*Prediction(k).efforts_max(i,2); <span class="comment">%px*beta</span>
+0210     <span class="keyword">end</span>
+0211     
+0212     
+0213     <span class="comment">%% Prise en compte du frottement: Pour chaque ponctuelle, |Fx|&lt;0.5|Fz| et |Fy|&lt;0.5|Fz|</span>
+0214     <span class="comment">%% taking friction into account for every point to point link, |Fx|&lt;0.5|Fz| et |Fy|&lt;0.5|Fz|</span>
+0215     Afric=zeros(4*numel(Prediction),3*numel(Prediction));
+0216     bfric=zeros(4*numel(Prediction),1);
+0217     
+0218     coef_friction = AnalysisParameters.Prediction.FrictionCoef;
+0219 
+0220     <span class="keyword">for</span> k = 1:(numel(Prediction))
+0221         Afric(k,k)=1*Prediction(k).efforts_max(i,1);
+0222         Afric(k+numel(Prediction),k+numel(Prediction))=1*Prediction(k).efforts_max(i,2);
+0223         Afric(k,k+2*numel(Prediction))=-coef_friction*Prediction(k).efforts_max(i,3);
+0224         Afric(k+numel(Prediction),k+2*numel(Prediction))=-coef_friction*Prediction(k).efforts_max(i,2);
+0225         Afric(k+2*numel(Prediction),k)=-1*Prediction(k).efforts_max(i,1);
+0226         Afric(k+3*numel(Prediction),k+numel(Prediction))=-1*Prediction(k).efforts_max(i,2);
+0227         Afric(k+2*numel(Prediction),k+2*numel(Prediction))=-coef_friction*Prediction(k).efforts_max(i,3);
+0228         Afric(k+3*numel(Prediction),k+2*numel(Prediction))=-coef_friction*Prediction(k).efforts_max(i,3);
+0229     <span class="keyword">end</span>
+0230     
+0231     <span class="comment">%% Minimisation de la somme des efforts normalisés pour chaque ponctuelle,</span>
+0232     <span class="comment">% tout en respectant la dynamique et les frottements</span>
+0233     <span class="comment">%% Minimizing sum of normalized efforts for each punctual joint while respecting dynamical equations and friction</span>
+0234     X = fmincon(@(X) sum(X.^2),X0,Afric,bfric,A,b,lb,ub,[],options);
+0235     
+0236     <span class="comment">%% Optimisation de la prochaine minimisation</span>
+0237     lb=max(X-0.45,lb_init); <span class="comment">%expérimentalement, les bornes ne varient pas de plus ou moins 0.45 (experimentaly, boundaries vary not more than 0.45)</span>
+0238     ub=min(X+0.45,ub_init);
+0239 
+0240     X0=X; <span class="comment">%d'une frame à l'autre, on change très peu de position, donc de valeur d'effort (</span>
+0241     
+0242     <span class="comment">%% Récupération des forces finales, stockées d'abord dans Prediction (Final forces storage without prediction)</span>
+0243     <span class="keyword">for</span> k = 1:numel(Prediction)
+0244         Prediction(k).efforts(i,1)=X(k)*Prediction(k).efforts_max(i,1);
+0245         Prediction(k).efforts(i,2)=X(k+numel(Prediction))*Prediction(k).efforts_max(i,2);
+0246         Prediction(k).efforts(i,3)=X(k+2*numel(Prediction))*Prediction(k).efforts_max(i,1);
+0247     <span class="keyword">end</span>
+0248     
+0249     <span class="comment">%% Optimisation non linéaire</span>
+0250     <span class="comment">% Non utilisée car la linéaire marche bien</span>
+0251     <span class="comment">%</span>
+0252     <span class="comment">%     X = fmincon(@(X) sum(X.^2),X0,A,b,[],[],lb,ub,@(X) respect_dynamique(X,Human_model,Prediction,Fmax,external_forces_pred_opti,i),options);</span>
+0253     <span class="comment">%     X0=X;</span>
+0254     <span class="comment">%     tic</span>
+0255     <span class="comment">%     [~,ceq(:,i)]=respect_dynamique(X,Human_model,Prediction,Fmax,external_forces_pred_opti,i);</span>
 0256     
-0257     <span class="comment">%% Distinction utilisation Kinect ou modèle normal: on ne recherche les efforts que sous les pieds</span>
-0258     <span class="comment">%% distinction between Kinect or normal model: just look for effort under the feet</span>
-0259 <span class="comment">%     if Parameters.Markers_set(1)==4</span>
-0260 
-0261 <span class="comment">%         Solid_name1='RShank';</span>
-0262 <span class="comment">%         SolidR=find(strcmp({Human_model.name},Solid_name1));   % numéro de ce solide (solid number)</span>
-0263 <span class="comment">%</span>
-0264 <span class="comment">%         Solid_name2='LShank';</span>
-0265 <span class="comment">%         SolidL=find(strcmp({Human_model.name},Solid_name2));   % numéro de ce solide (solid number)</span>
-0266 <span class="comment">%     else</span>
-0267 <span class="comment">%         Solid_name1='RFoot';</span>
-0268 <span class="comment">%         SolidR=find(strcmp({Human_model.name},Solid_name1));   % numéro de ce solide (solid number)</span>
-0269 <span class="comment">%</span>
-0270 <span class="comment">%         Solid_name2='LFoot';</span>
-0271 <span class="comment">%         SolidL=find(strcmp({Human_model.name},Solid_name2));   % numéro de ce solide (solid number)</span>
-0272 <span class="comment">%     end</span>
-0273     
-0274     <span class="comment">%% Stockage des forces (forces storage)</span>
-0275 
-0276 <span class="comment">%     force_pied_droit_pred(i).Fx=external_forces_pred(i).fext(SolidR).fext(1,1);</span>
-0277 <span class="comment">%     force_pied_droit_pred(i).Fy=external_forces_pred(i).fext(SolidR).fext(2,1);</span>
-0278 <span class="comment">%     force_pied_droit_pred(i).Fz=external_forces_pred(i).fext(SolidR).fext(3,1);</span>
-0279 <span class="comment">%     force_pied_droit_pred(i).Mx=external_forces_pred(i).fext(SolidR).fext(1,2);</span>
-0280 <span class="comment">%     force_pied_droit_pred(i).My=external_forces_pred(i).fext(SolidR).fext(2,2);</span>
-0281 <span class="comment">%     force_pied_droit_pred(i).Mz=external_forces_pred(i).fext(SolidR).fext(3,2);</span>
-0282 <span class="comment">%</span>
-0283 <span class="comment">%     force_pied_gauche_pred(i).Fx=external_forces_pred(i).fext(SolidL).fext(1,1);</span>
-0284 <span class="comment">%     force_pied_gauche_pred(i).Fy=external_forces_pred(i).fext(SolidL).fext(2,1);</span>
-0285 <span class="comment">%     force_pied_gauche_pred(i).Fz=external_forces_pred(i).fext(SolidL).fext(3,1);</span>
-0286 <span class="comment">%     force_pied_gauche_pred(i).Mx=external_forces_pred(i).fext(SolidL).fext(1,2);</span>
-0287 <span class="comment">%     force_pied_gauche_pred(i).My=external_forces_pred(i).fext(SolidL).fext(2,2);</span>
-0288 <span class="comment">%     force_pied_gauche_pred(i).Mz=external_forces_pred(i).fext(SolidL).fext(3,2);</span>
-0289   
-0290     waitbar(i/nbframe)
-0291 <span class="keyword">end</span>
-0292 
-0293 close(h)
-0294 disp([<span class="string">'... External Forces Prediction ('</span> filename <span class="string">') done'</span>])
-0295 
-0296 <span class="comment">%% Donnees filtrees comme la plateforme (filtered data)</span>
-0297 <span class="comment">%     f_mocap=1/time(2);</span>
-0298 <span class="comment">%</span>
-0299 <span class="comment">%     force_pied_droit_pred_filt.Fx=filt_data([force_pied_droit_pred.Fx]',5,f_mocap);</span>
-0300 <span class="comment">%     force_pied_droit_pred_filt.Fy=filt_data([force_pied_droit_pred.Fy]',5,f_mocap);</span>
-0301 <span class="comment">%     force_pied_droit_pred_filt.Fz=filt_data([force_pied_droit_pred.Fz]',5,f_mocap);</span>
-0302 <span class="comment">%     force_pied_droit_pred_filt.Mx=filt_data([force_pied_droit_pred.Mx]',5,f_mocap);</span>
-0303 <span class="comment">%     force_pied_droit_pred_filt.My=filt_data([force_pied_droit_pred.My]',5,f_mocap);</span>
-0304 <span class="comment">%     force_pied_droit_pred_filt.Mz=filt_data([force_pied_droit_pred.Mz]',5,f_mocap);</span>
-0305 <span class="comment">%</span>
-0306 <span class="comment">%     force_pied_gauche_pred_filt.Fx=filt_data([force_pied_gauche_pred.Fx]',5,f_mocap);</span>
-0307 <span class="comment">%     force_pied_gauche_pred_filt.Fy=filt_data([force_pied_gauche_pred.Fy]',5,f_mocap);</span>
-0308 <span class="comment">%     force_pied_gauche_pred_filt.Fz=filt_data([force_pied_gauche_pred.Fz]',5,f_mocap);</span>
-0309 <span class="comment">%     force_pied_gauche_pred_filt.Mx=filt_data([force_pied_gauche_pred.Mx]',5,f_mocap);</span>
-0310 <span class="comment">%     force_pied_gauche_pred_filt.My=filt_data([force_pied_gauche_pred.My]',5,f_mocap);</span>
-0311 <span class="comment">%     force_pied_gauche_pred_filt.Mz=filt_data([force_pied_gauche_pred.Mz]',5,f_mocap);</span>
-0312 <span class="comment">%</span>
-0313 <span class="comment">%     for f=1:numel(time)</span>
-0314 <span class="comment">%         external_forces_pred(f).fext(SolidR).fext(1,1)=force_pied_droit_pred_filt.Fx(f);</span>
-0315 <span class="comment">%         external_forces_pred(f).fext(SolidR).fext(2,1)=force_pied_droit_pred_filt.Fy(f);</span>
-0316 <span class="comment">%         external_forces_pred(f).fext(SolidR).fext(3,1)=force_pied_droit_pred_filt.Fz(f);</span>
-0317 <span class="comment">%         external_forces_pred(f).fext(SolidR).fext(1,2)=force_pied_droit_pred_filt.Mx(f);</span>
-0318 <span class="comment">%         external_forces_pred(f).fext(SolidR).fext(2,2)=force_pied_droit_pred_filt.My(f);</span>
-0319 <span class="comment">%         external_forces_pred(f).fext(SolidR).fext(3,2)=force_pied_droit_pred_filt.Mz(f);</span>
-0320 <span class="comment">%</span>
-0321 <span class="comment">%         external_forces_pred(f).fext(SolidL).fext(1,1)=force_pied_gauche_pred_filt.Fx(f);</span>
-0322 <span class="comment">%         external_forces_pred(f).fext(SolidL).fext(2,1)=force_pied_gauche_pred_filt.Fy(f);</span>
-0323 <span class="comment">%         external_forces_pred(f).fext(SolidL).fext(3,1)=force_pied_gauche_pred_filt.Fz(f);</span>
-0324 <span class="comment">%         external_forces_pred(f).fext(SolidL).fext(1,2)=force_pied_gauche_pred_filt.Mx(f);</span>
-0325 <span class="comment">%         external_forces_pred(f).fext(SolidL).fext(2,2)=force_pied_gauche_pred_filt.My(f);</span>
-0326 <span class="comment">%         external_forces_pred(f).fext(SolidL).fext(3,2)=force_pied_gauche_pred_filt.Mz(f);</span>
-0327 <span class="comment">%     end</span>
-0328 
-0329 <span class="comment">%% Filtrage des données</span>
-0330 
-0331 <span class="keyword">if</span> AnalysisParameters.Prediction.FilterActive
-0332     f_cut = AnalysisParameters.Prediction.FilterCutOff;
-0333     <span class="comment">% Conversion sous la forme d'une matrice (conversion into a matrix)</span>
-0334     <span class="keyword">for</span> i=1:numel(external_forces_pred)
-0335         <span class="keyword">for</span> j=1:numel(external_forces_pred(i).fext)
-0336             PredictionFx(i,j) = external_forces_pred(i).fext(j).fext(1,1);
-0337             PredictionFy(i,j) = external_forces_pred(i).fext(j).fext(2,1);
-0338             PredictionFz(i,j) = external_forces_pred(i).fext(j).fext(3,1);
-0339             PredictionMx(i,j) = external_forces_pred(i).fext(j).fext(1,2);
-0340             PredictionMy(i,j) = external_forces_pred(i).fext(j).fext(2,2);
-0341             PredictionMz(i,j) = external_forces_pred(i).fext(j).fext(3,2);
-0342         <span class="keyword">end</span>
-0343     <span class="keyword">end</span>
-0344     <span class="comment">% Filtrage</span>
-0345     PredictionFiltFx = <a href="../../Functions/AlgoMathsModel/filt_data.html" class="code" title="function [data]=filt_data(data,f,f_mocap)">filt_data</a>(PredictionFx,f_cut,freq);
-0346     PredictionFiltFy = <a href="../../Functions/AlgoMathsModel/filt_data.html" class="code" title="function [data]=filt_data(data,f,f_mocap)">filt_data</a>(PredictionFy,f_cut,freq);
-0347     PredictionFiltFz = <a href="../../Functions/AlgoMathsModel/filt_data.html" class="code" title="function [data]=filt_data(data,f,f_mocap)">filt_data</a>(PredictionFz,f_cut,freq);
-0348     PredictionFiltMx = <a href="../../Functions/AlgoMathsModel/filt_data.html" class="code" title="function [data]=filt_data(data,f,f_mocap)">filt_data</a>(PredictionMx,f_cut,freq);
-0349     PredictionFiltMy = <a href="../../Functions/AlgoMathsModel/filt_data.html" class="code" title="function [data]=filt_data(data,f,f_mocap)">filt_data</a>(PredictionMy,f_cut,freq);
-0350     PredictionFiltMz = <a href="../../Functions/AlgoMathsModel/filt_data.html" class="code" title="function [data]=filt_data(data,f,f_mocap)">filt_data</a>(PredictionMz,f_cut,freq);
-0351     <span class="comment">% Remise sous la forme d'une structure (utilisée pour la dynamique inverse) (definition of a structure used for inverse dynamics)</span>
-0352     <span class="keyword">for</span> i=1:numel(external_forces_pred)
-0353         <span class="keyword">for</span> j=1:numel(external_forces_pred(i).fext)
-0354             external_forces_pred(i).fext(j).fext(1,1)=PredictionFiltFx(i,j);
-0355             external_forces_pred(i).fext(j).fext(2,1)=PredictionFiltFy(i,j);
-0356             external_forces_pred(i).fext(j).fext(3,1)=PredictionFiltFz(i,j);
-0357             external_forces_pred(i).fext(j).fext(1,2)=PredictionFiltMx(i,j);
-0358             external_forces_pred(i).fext(j).fext(2,2)=PredictionFiltMy(i,j);
-0359             external_forces_pred(i).fext(j).fext(3,2)=PredictionFiltMz(i,j);
-0360         <span class="keyword">end</span>
-0361     <span class="keyword">end</span>
-0362 <span class="keyword">end</span>
-0363 
-0364 <span class="comment">%% Pour animation (for animation purpose)</span>
-0365 
-0366 <span class="keyword">if</span> ~any(strcmp(<span class="string">'Visual'</span>,fieldnames(external_forces_pred)))
-0367     external_forces_pred(1).Visual=[];
-0368 <span class="keyword">end</span>
-0369 <span class="keyword">for</span> f=1:numel(external_forces_pred) <span class="comment">% pour chaque frame (for every frame)</span>
-0370     <span class="keyword">for</span> i=unique([Prediction.num_solid]) <span class="comment">% pour chaque solide (for every solid)</span>
-0371         T = external_forces_pred(f).fext(i).fext;
-0372         <span class="comment">% Position du centre de pression</span>
-0373         CoP = cross(T(:,1),T(:,2))/(norm(T(:,1))^2);
-0374         CoP = CoP - (CoP(3)/T(3,1))*T(:,1); <span class="comment">% point sur l'axe avec z=0</span>
-0375         <span class="comment">% Remplissage de la structure external_forces</span>
-0376         external_forces_pred(f).Visual = [external_forces_pred(f).Visual [CoP;T(:,1)]];
-0377     <span class="keyword">end</span>
-0378 <span class="keyword">end</span>
-0379 
-0380 <span class="comment">%% Récupération des données dans une matrice (extraction of data)</span>
-0381 
-0382 <span class="comment">% for f=1:numel(external_forces_pred)</span>
-0383 <span class="comment">%     EffortsPred1(:,f) = external_forces_pred(f).Visual(:,1); %#ok&lt;*SAGROW&gt;</span>
-0384 <span class="comment">%     EffortsPred2(:,f) = external_forces_pred(f).Visual(:,2);</span>
-0385 <span class="comment">% end</span>
-0386 <span class="comment">% for i=1:numel(EffortsPred1)</span>
-0387 <span class="comment">%     if isnan(EffortsPred1(i))</span>
-0388 <span class="comment">%         EffortsPred1(i)=0;</span>
-0389 <span class="comment">%     end</span>
-0390 <span class="comment">% end</span>
-0391 <span class="comment">% for i=1:numel(EffortsPred2)</span>
-0392 <span class="comment">%     if isnan(EffortsPred2(i))</span>
-0393 <span class="comment">%         EffortsPred2(i)=0;</span>
-0394 <span class="comment">%     end</span>
-0395 <span class="comment">% end</span>
-0396 
-0397 <span class="comment">%% Sauvegarde des données (data saving)</span>
-0398 
-0399 <span class="keyword">if</span> exist([filename <span class="string">'/ExternalForcesComputationResults.mat'</span>],<span class="string">'file'</span>)
-0400     load([filename <span class="string">'/ExternalForcesComputationResults.mat'</span>]);
-0401 <span class="keyword">end</span>
-0402 ExternalForcesComputationResults.ExternalForcesPrediction = external_forces_pred;
-0403 
-0404 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0257     <span class="comment">%% Calcul des efforts extérieurs tels qu’utilisés par la suite pour la dynamique</span>
+0258     <span class="comment">%% Computation of external forces for use with dynamics</span>
+0259     external_forces_pred=<a href="../../Functions/ExternalForces/Prediction/addForces_Prediction_frame_par_frame.html" class="code" title="function [external_forces_pred] = addForces_Prediction_frame_par_frame(X,external_forces_pred,Prediction,Fmax,f)">addForces_Prediction_frame_par_frame</a>(X,external_forces_pred,Prediction,Fmax,i);
+0260     
+0261     <span class="comment">%% Distinction utilisation Kinect ou modèle normal: on ne recherche les efforts que sous les pieds</span>
+0262     <span class="comment">%% distinction between Kinect or normal model: just look for effort under the feet</span>
+0263 <span class="comment">%     if Parameters.Markers_set(1)==4</span>
+0264 
+0265 <span class="comment">%         Solid_name1='RShank';</span>
+0266 <span class="comment">%         SolidR=find(strcmp({Human_model.name},Solid_name1));   % numéro de ce solide (solid number)</span>
+0267 <span class="comment">%</span>
+0268 <span class="comment">%         Solid_name2='LShank';</span>
+0269 <span class="comment">%         SolidL=find(strcmp({Human_model.name},Solid_name2));   % numéro de ce solide (solid number)</span>
+0270 <span class="comment">%     else</span>
+0271 <span class="comment">%         Solid_name1='RFoot';</span>
+0272 <span class="comment">%         SolidR=find(strcmp({Human_model.name},Solid_name1));   % numéro de ce solide (solid number)</span>
+0273 <span class="comment">%</span>
+0274 <span class="comment">%         Solid_name2='LFoot';</span>
+0275 <span class="comment">%         SolidL=find(strcmp({Human_model.name},Solid_name2));   % numéro de ce solide (solid number)</span>
+0276 <span class="comment">%     end</span>
+0277     
+0278     <span class="comment">%% Stockage des forces (forces storage)</span>
+0279 
+0280 <span class="comment">%     force_pied_droit_pred(i).Fx=external_forces_pred(i).fext(SolidR).fext(1,1);</span>
+0281 <span class="comment">%     force_pied_droit_pred(i).Fy=external_forces_pred(i).fext(SolidR).fext(2,1);</span>
+0282 <span class="comment">%     force_pied_droit_pred(i).Fz=external_forces_pred(i).fext(SolidR).fext(3,1);</span>
+0283 <span class="comment">%     force_pied_droit_pred(i).Mx=external_forces_pred(i).fext(SolidR).fext(1,2);</span>
+0284 <span class="comment">%     force_pied_droit_pred(i).My=external_forces_pred(i).fext(SolidR).fext(2,2);</span>
+0285 <span class="comment">%     force_pied_droit_pred(i).Mz=external_forces_pred(i).fext(SolidR).fext(3,2);</span>
+0286 <span class="comment">%</span>
+0287 <span class="comment">%     force_pied_gauche_pred(i).Fx=external_forces_pred(i).fext(SolidL).fext(1,1);</span>
+0288 <span class="comment">%     force_pied_gauche_pred(i).Fy=external_forces_pred(i).fext(SolidL).fext(2,1);</span>
+0289 <span class="comment">%     force_pied_gauche_pred(i).Fz=external_forces_pred(i).fext(SolidL).fext(3,1);</span>
+0290 <span class="comment">%     force_pied_gauche_pred(i).Mx=external_forces_pred(i).fext(SolidL).fext(1,2);</span>
+0291 <span class="comment">%     force_pied_gauche_pred(i).My=external_forces_pred(i).fext(SolidL).fext(2,2);</span>
+0292 <span class="comment">%     force_pied_gauche_pred(i).Mz=external_forces_pred(i).fext(SolidL).fext(3,2);</span>
+0293   
+0294     waitbar(i/nbframe)
+0295 <span class="keyword">end</span>
+0296 
+0297 close(h)
+0298 disp([<span class="string">'... External Forces Prediction ('</span> filename <span class="string">') done'</span>])
+0299 
+0300 <span class="comment">%% Donnees filtrees comme la plateforme (filtered data)</span>
+0301 <span class="comment">%     f_mocap=1/time(2);</span>
+0302 <span class="comment">%</span>
+0303 <span class="comment">%     force_pied_droit_pred_filt.Fx=filt_data([force_pied_droit_pred.Fx]',5,f_mocap);</span>
+0304 <span class="comment">%     force_pied_droit_pred_filt.Fy=filt_data([force_pied_droit_pred.Fy]',5,f_mocap);</span>
+0305 <span class="comment">%     force_pied_droit_pred_filt.Fz=filt_data([force_pied_droit_pred.Fz]',5,f_mocap);</span>
+0306 <span class="comment">%     force_pied_droit_pred_filt.Mx=filt_data([force_pied_droit_pred.Mx]',5,f_mocap);</span>
+0307 <span class="comment">%     force_pied_droit_pred_filt.My=filt_data([force_pied_droit_pred.My]',5,f_mocap);</span>
+0308 <span class="comment">%     force_pied_droit_pred_filt.Mz=filt_data([force_pied_droit_pred.Mz]',5,f_mocap);</span>
+0309 <span class="comment">%</span>
+0310 <span class="comment">%     force_pied_gauche_pred_filt.Fx=filt_data([force_pied_gauche_pred.Fx]',5,f_mocap);</span>
+0311 <span class="comment">%     force_pied_gauche_pred_filt.Fy=filt_data([force_pied_gauche_pred.Fy]',5,f_mocap);</span>
+0312 <span class="comment">%     force_pied_gauche_pred_filt.Fz=filt_data([force_pied_gauche_pred.Fz]',5,f_mocap);</span>
+0313 <span class="comment">%     force_pied_gauche_pred_filt.Mx=filt_data([force_pied_gauche_pred.Mx]',5,f_mocap);</span>
+0314 <span class="comment">%     force_pied_gauche_pred_filt.My=filt_data([force_pied_gauche_pred.My]',5,f_mocap);</span>
+0315 <span class="comment">%     force_pied_gauche_pred_filt.Mz=filt_data([force_pied_gauche_pred.Mz]',5,f_mocap);</span>
+0316 <span class="comment">%</span>
+0317 <span class="comment">%     for f=1:numel(time)</span>
+0318 <span class="comment">%         external_forces_pred(f).fext(SolidR).fext(1,1)=force_pied_droit_pred_filt.Fx(f);</span>
+0319 <span class="comment">%         external_forces_pred(f).fext(SolidR).fext(2,1)=force_pied_droit_pred_filt.Fy(f);</span>
+0320 <span class="comment">%         external_forces_pred(f).fext(SolidR).fext(3,1)=force_pied_droit_pred_filt.Fz(f);</span>
+0321 <span class="comment">%         external_forces_pred(f).fext(SolidR).fext(1,2)=force_pied_droit_pred_filt.Mx(f);</span>
+0322 <span class="comment">%         external_forces_pred(f).fext(SolidR).fext(2,2)=force_pied_droit_pred_filt.My(f);</span>
+0323 <span class="comment">%         external_forces_pred(f).fext(SolidR).fext(3,2)=force_pied_droit_pred_filt.Mz(f);</span>
+0324 <span class="comment">%</span>
+0325 <span class="comment">%         external_forces_pred(f).fext(SolidL).fext(1,1)=force_pied_gauche_pred_filt.Fx(f);</span>
+0326 <span class="comment">%         external_forces_pred(f).fext(SolidL).fext(2,1)=force_pied_gauche_pred_filt.Fy(f);</span>
+0327 <span class="comment">%         external_forces_pred(f).fext(SolidL).fext(3,1)=force_pied_gauche_pred_filt.Fz(f);</span>
+0328 <span class="comment">%         external_forces_pred(f).fext(SolidL).fext(1,2)=force_pied_gauche_pred_filt.Mx(f);</span>
+0329 <span class="comment">%         external_forces_pred(f).fext(SolidL).fext(2,2)=force_pied_gauche_pred_filt.My(f);</span>
+0330 <span class="comment">%         external_forces_pred(f).fext(SolidL).fext(3,2)=force_pied_gauche_pred_filt.Mz(f);</span>
+0331 <span class="comment">%     end</span>
+0332 
+0333 <span class="comment">%% Filtrage des données</span>
+0334 
+0335 <span class="keyword">if</span> AnalysisParameters.Prediction.FilterActive
+0336     f_cut = AnalysisParameters.Prediction.FilterCutOff;
+0337     <span class="comment">% Conversion sous la forme d'une matrice (conversion into a matrix)</span>
+0338     <span class="keyword">for</span> i=1:numel(external_forces_pred)
+0339         <span class="keyword">for</span> j=1:numel(external_forces_pred(i).fext)
+0340             PredictionFx(i,j) = external_forces_pred(i).fext(j).fext(1,1);
+0341             PredictionFy(i,j) = external_forces_pred(i).fext(j).fext(2,1);
+0342             PredictionFz(i,j) = external_forces_pred(i).fext(j).fext(3,1);
+0343             PredictionMx(i,j) = external_forces_pred(i).fext(j).fext(1,2);
+0344             PredictionMy(i,j) = external_forces_pred(i).fext(j).fext(2,2);
+0345             PredictionMz(i,j) = external_forces_pred(i).fext(j).fext(3,2);
+0346         <span class="keyword">end</span>
+0347     <span class="keyword">end</span>
+0348     <span class="comment">% Filtrage</span>
+0349     PredictionFiltFx = <a href="../../Functions/AlgoMathsModel/filt_data.html" class="code" title="function [data]=filt_data(data,f,f_mocap)">filt_data</a>(PredictionFx,f_cut,freq);
+0350     PredictionFiltFy = <a href="../../Functions/AlgoMathsModel/filt_data.html" class="code" title="function [data]=filt_data(data,f,f_mocap)">filt_data</a>(PredictionFy,f_cut,freq);
+0351     PredictionFiltFz = <a href="../../Functions/AlgoMathsModel/filt_data.html" class="code" title="function [data]=filt_data(data,f,f_mocap)">filt_data</a>(PredictionFz,f_cut,freq);
+0352     PredictionFiltMx = <a href="../../Functions/AlgoMathsModel/filt_data.html" class="code" title="function [data]=filt_data(data,f,f_mocap)">filt_data</a>(PredictionMx,f_cut,freq);
+0353     PredictionFiltMy = <a href="../../Functions/AlgoMathsModel/filt_data.html" class="code" title="function [data]=filt_data(data,f,f_mocap)">filt_data</a>(PredictionMy,f_cut,freq);
+0354     PredictionFiltMz = <a href="../../Functions/AlgoMathsModel/filt_data.html" class="code" title="function [data]=filt_data(data,f,f_mocap)">filt_data</a>(PredictionMz,f_cut,freq);
+0355     <span class="comment">% Remise sous la forme d'une structure (utilisée pour la dynamique inverse) (definition of a structure used for inverse dynamics)</span>
+0356     <span class="keyword">for</span> i=1:numel(external_forces_pred)
+0357         <span class="keyword">for</span> j=1:numel(external_forces_pred(i).fext)
+0358             external_forces_pred(i).fext(j).fext(1,1)=PredictionFiltFx(i,j);
+0359             external_forces_pred(i).fext(j).fext(2,1)=PredictionFiltFy(i,j);
+0360             external_forces_pred(i).fext(j).fext(3,1)=PredictionFiltFz(i,j);
+0361             external_forces_pred(i).fext(j).fext(1,2)=PredictionFiltMx(i,j);
+0362             external_forces_pred(i).fext(j).fext(2,2)=PredictionFiltMy(i,j);
+0363             external_forces_pred(i).fext(j).fext(3,2)=PredictionFiltMz(i,j);
+0364         <span class="keyword">end</span>
+0365     <span class="keyword">end</span>
+0366 <span class="keyword">end</span>
+0367 
+0368 <span class="comment">%% Pour animation (for animation purpose)</span>
+0369 
+0370 <span class="keyword">if</span> ~any(strcmp(<span class="string">'Visual'</span>,fieldnames(external_forces_pred)))
+0371     external_forces_pred(1).Visual=[];
+0372 <span class="keyword">end</span>
+0373 <span class="keyword">for</span> f=1:numel(external_forces_pred) <span class="comment">% pour chaque frame (for every frame)</span>
+0374     <span class="keyword">for</span> i=unique([Prediction.num_solid]) <span class="comment">% pour chaque solide (for every solid)</span>
+0375         T = external_forces_pred(f).fext(i).fext;
+0376         <span class="comment">% Position du centre de pression</span>
+0377         CoP = cross(T(:,1),T(:,2))/(norm(T(:,1))^2);
+0378         CoP = CoP - (CoP(3)/T(3,1))*T(:,1); <span class="comment">% point sur l'axe avec z=0</span>
+0379         <span class="comment">% Remplissage de la structure external_forces</span>
+0380         external_forces_pred(f).Visual = [external_forces_pred(f).Visual [CoP;T(:,1)]];
+0381     <span class="keyword">end</span>
+0382 <span class="keyword">end</span>
+0383 
+0384 <span class="comment">%% Récupération des données dans une matrice (extraction of data)</span>
+0385 
+0386 <span class="comment">% for f=1:numel(external_forces_pred)</span>
+0387 <span class="comment">%     EffortsPred1(:,f) = external_forces_pred(f).Visual(:,1); %#ok&lt;*SAGROW&gt;</span>
+0388 <span class="comment">%     EffortsPred2(:,f) = external_forces_pred(f).Visual(:,2);</span>
+0389 <span class="comment">% end</span>
+0390 <span class="comment">% for i=1:numel(EffortsPred1)</span>
+0391 <span class="comment">%     if isnan(EffortsPred1(i))</span>
+0392 <span class="comment">%         EffortsPred1(i)=0;</span>
+0393 <span class="comment">%     end</span>
+0394 <span class="comment">% end</span>
+0395 <span class="comment">% for i=1:numel(EffortsPred2)</span>
+0396 <span class="comment">%     if isnan(EffortsPred2(i))</span>
+0397 <span class="comment">%         EffortsPred2(i)=0;</span>
+0398 <span class="comment">%     end</span>
+0399 <span class="comment">% end</span>
+0400 
+0401 <span class="comment">%% Sauvegarde des données (data saving)</span>
+0402 
+0403 <span class="keyword">if</span> exist([filename <span class="string">'/ExternalForcesComputationResults.mat'</span>],<span class="string">'file'</span>)
+0404     load([filename <span class="string">'/ExternalForcesComputationResults.mat'</span>]);
+0405 <span class="keyword">end</span>
+0406 ExternalForcesComputationResults.ExternalForcesPrediction = external_forces_pred;
+0407 
+0408 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 07-Nov-2018 15:15:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

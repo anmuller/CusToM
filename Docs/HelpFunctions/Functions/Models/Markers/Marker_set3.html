@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Marker_set3</title>
+  <meta name="keywords" content="Marker_set3">
+  <meta name="description" content="Definition of the markers set used in the M2S with VR glasses">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">Functions</a> &gt; <a href="../index.html">Models</a> &gt; <a href="index.html">Markers</a> &gt; Marker_set3.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Functions\Models\Markers&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>Marker_set3
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Definition of the markers set used in the M2S with VR glasses</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [Markers]=Marker_set3(nb_markers_hand) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Definition of the markers set used in the M2S with VR glasses
+
+   INPUT
+   - nb_markers_hand: number of markers used on each hand
+   OUTPUT
+   - Markers: set of markers (see the Documentation for the structure) 
+________________________________________________________
+
+ Licence
+ Toolbox distributed under 3-Clause BSD License
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [s]=Hand_markers_1(s,Signe)</a></li><li><a href="#_sub2" class="code">function [s]=Hand_markers_2(s,Signe)</a></li><li><a href="#_sub3" class="code">function [s]=Hand_markers_3(s,Signe)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Markers]=Marker_set3(nb_markers_hand)</a>
+0002 <span class="comment">% Definition of the markers set used in the M2S with VR glasses</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - nb_markers_hand: number of markers used on each hand</span>
+0006 <span class="comment">%   OUTPUT</span>
+0007 <span class="comment">%   - Markers: set of markers (see the Documentation for the structure)</span>
+0008 <span class="comment">%________________________________________________________</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Licence</span>
+0011 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
+0012 <span class="comment">%________________________________________________________</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0015 <span class="comment">% Georges Dumont</span>
+0016 <span class="comment">%________________________________________________________</span>
+0017 s=cell(0);
+0018 
+0019 <span class="comment">% Trunk</span>
+0020 s=[s;{<span class="string">'STRN'</span> <span class="string">'STRN'</span> {<span class="string">'Off'</span>;<span class="string">'On'</span>;<span class="string">'Off'</span>};<span class="string">'CLAV'</span> <span class="string">'CLAV'</span> {<span class="string">'On'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};<span class="string">'T10'</span> <span class="string">'T10'</span> {<span class="string">'Off'</span>;<span class="string">'On'</span>;<span class="string">'Off'</span>};<span class="keyword">...</span>
+0021     <span class="string">'C7'</span> <span class="string">'C7'</span> {<span class="string">'On'</span>;<span class="string">'On'</span>;<span class="string">'Off'</span>};<span class="string">'RSHO'</span> <span class="string">'RSHO'</span> {<span class="string">'On'</span>;<span class="string">'Off'</span>;<span class="string">'On'</span>};<span class="string">'LSHO'</span> <span class="string">'LSHO'</span> {<span class="string">'On'</span>;<span class="string">'Off'</span>;<span class="string">'On'</span>};<span class="string">'RFWT'</span> <span class="string">'RFWT'</span> {<span class="string">'On'</span>;<span class="string">'Off'</span>;<span class="string">'On'</span>};<span class="keyword">...</span>
+0022     <span class="string">'LFWT'</span> <span class="string">'LFWT'</span> {<span class="string">'On'</span>;<span class="string">'Off'</span>;<span class="string">'On'</span>};<span class="string">'RBWT'</span> <span class="string">'RBWT'</span> {<span class="string">'On'</span>;<span class="string">'Off'</span>;<span class="string">'On'</span>};<span class="string">'LBWT'</span> <span class="string">'LBWT'</span> {<span class="string">'On'</span>;<span class="string">'Off'</span>;<span class="string">'On'</span>};<span class="keyword">...</span>
+0023 <span class="comment">%     'RFHD' 'RFHD' {'Off';'Off';'On'};'LFHD' 'LFHD' {'Off';'Off';'On'};'RBHD' 'RBHD' {'Off';'On';'On'};'LBHD' 'LBHD' {'Off';'On';'On'};...</span>
+0024     <span class="string">'GLASS1'</span> <span class="string">'GLASS1'</span> {<span class="string">'On'</span>;<span class="string">'Off'</span>;<span class="string">'On'</span>};<span class="string">'GLASS2'</span> <span class="string">'GLASS2'</span> {<span class="string">'On'</span>;<span class="string">'Off'</span>;<span class="string">'On'</span>};<span class="string">'GLASS3'</span> <span class="string">'GLASS3'</span> {<span class="string">'On'</span>;<span class="string">'Off'</span>;<span class="string">'On'</span>};<span class="string">'GLASS4'</span> <span class="string">'GLASS4'</span> {<span class="string">'On'</span>;<span class="string">'Off'</span>;<span class="string">'On'</span>}}<span class="keyword">...</span>
+0025     ];
+0026 
+0027 <span class="comment">% Side={'R';'L'};</span>
+0028 <span class="comment">% Leg</span>
+0029 <span class="comment">% for i=1:2</span>
+0030 <span class="comment">%     Signe=Side{i};</span>
+0031 <span class="comment">%     s=[s;{[Signe 'KNE'] [Signe 'KNE'] {'Off';'Off';'On'};[Signe 'ANE'] [Signe 'ANE'] {'Off';'On';'Off'};[Signe 'ANI'] [Signe 'ANI'] {'Off';'Off';'Off'};...</span>
+0032 <span class="comment">%         [Signe 'KNI'] [Signe 'KNI'] {'Off';'On';'On'};[Signe 'HEE'] [Signe 'HEE'] {'Off';'On';'Off'};[Signe 'TAR'] [Signe 'TAR'] {'Off';'On';'On'};...</span>
+0033 <span class="comment">%         [Signe 'TOE'] [Signe 'TOE'] {'Off';'Off';'Off'};...</span>
+0034 <span class="comment">%         [Signe 'TARI'] [Signe 'TARI'] {'Off';'On';'On'};</span>
+0035 <span class="comment">%         }]; %#ok&lt;AGROW&gt;</span>
+0036 <span class="comment">% end</span>
+0037 
+0038 <span class="comment">% Arm</span>
+0039 
+0040     Signe=<span class="string">'R'</span>;
+0041     s=[s;{[Signe <span class="string">'HUM'</span>] [Signe <span class="string">'HUM'</span>] {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};[Signe <span class="string">'RAD'</span>] [Signe <span class="string">'RAD'</span>] {<span class="string">'On'</span>;<span class="string">'On'</span>;<span class="string">'Off'</span>};<span class="keyword">...</span>
+0042         [Signe <span class="string">'WRA'</span>] [Signe <span class="string">'WRA'</span>] {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};[Signe <span class="string">'WRB'</span>] [Signe <span class="string">'WRB'</span>] {<span class="string">'Off'</span>;<span class="string">'On'</span>;<span class="string">'Off'</span>}}]; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0043     eval([<span class="string">'s=Hand_markers_'</span> num2str(nb_markers_hand) <span class="string">'(s,Signe);'</span>])
+0044 
+0045 
+0046 Markers=struct(<span class="string">'name'</span>,{s{:,1}}',<span class="string">'anat_position'</span>,{s{:,2}}',<span class="string">'calib_dir'</span>,{s{:,3}}'); <span class="comment">%#ok&lt;CCAT1&gt;</span>
+0047 
+0048 <span class="keyword">end</span>
+0049 <a name="_sub1" href="#_subfunctions" class="code">function [s]=Hand_markers_1(s,Signe)   </a><span class="comment">%#ok&lt;DEFNU&gt;</span>
+0050 <span class="comment">% 1 marqueur sur la main</span>
+0051     s=[s;{[Signe <span class="string">'CAR'</span>] [Signe <span class="string">'CAR1'</span>] {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>}}];   
+0052 <span class="keyword">end</span>
+0053 <a name="_sub2" href="#_subfunctions" class="code">function [s]=Hand_markers_2(s,Signe)   </a><span class="comment">%#ok&lt;DEFNU&gt;</span>
+0054 <span class="comment">% 2 marqueurs sur la main</span>
+0055     s=[s;{[Signe <span class="string">'CAR'</span>] [Signe <span class="string">'CAR2'</span>] {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};[Signe <span class="string">'OHAND'</span>] [Signe <span class="string">'OHAND'</span>] {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>}}];    
+0056 <span class="keyword">end</span>    
+0057 <a name="_sub3" href="#_subfunctions" class="code">function [s]=Hand_markers_3(s,Signe)   </a><span class="comment">%#ok&lt;DEFNU&gt;</span>
+0058 <span class="comment">% 3 marqueurs sur la main</span>
+0059     s=[s;{[Signe <span class="string">'CAR'</span>] [Signe <span class="string">'CAR3'</span>] {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};[Signe <span class="string">'IDX3'</span>] [Signe <span class="string">'IDX3'</span>] {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};[Signe <span class="string">'PNK3'</span>] [Signe <span class="string">'PNK3'</span>] {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>}}];    
+0060 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 07-Nov-2018 15:15:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

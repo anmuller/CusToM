@@ -46,6 +46,10 @@ ________________________________________________________
 
  Licence
  Toolbox distributed under 3-Clause BSD License
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
 ________________________________________________________</pre></div>
 
 <!-- crossreference -->
@@ -84,21 +88,25 @@ This function is called by:
 0019 <span class="comment">% Licence</span>
 0020 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
 0021 <span class="comment">%________________________________________________________</span>
-0022 
-0023 <span class="comment">% cost fucntion</span>
-0024 cost_function = @(F) F(1);
-0025 <span class="comment">% optimization</span>
-0026 Aeqbis=[zeros(size(Aeq,1),1) Aeq];
-0027 Fopt_inter = fmincon(cost_function,[1;F0],[],[],Aeqbis,beq,[0;Fmin],[Inf;Fmax],@(F) <a href="#_sub1" class="code" title="subfunction [g,h] = constraint_minmax(F,Fmax)">constraint_minmax</a>(F,Fmaxbis),fmincon_options); <span class="comment">%#ok&lt;AGROW&gt;</span>
-0028 Fopt=Fopt_inter(2:<span class="keyword">end</span>,:);
-0029         
-0030 <span class="keyword">end</span>
-0031 
-0032 <a name="_sub1" href="#_subfunctions" class="code">function [g,h] = constraint_minmax(F,Fmax)</a>
-0033     <span class="comment">% Constraint for min/max optimization</span>
-0034     g=F(2:end)./Fmax-F(1);
-0035     h=[];
-0036 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0024 <span class="comment">% Georges Dumont</span>
+0025 <span class="comment">%________________________________________________________</span>
+0026 
+0027 <span class="comment">% cost fucntion</span>
+0028 cost_function = @(F) F(1);
+0029 <span class="comment">% optimization</span>
+0030 Aeqbis=[zeros(size(Aeq,1),1) Aeq];
+0031 Fopt_inter = fmincon(cost_function,[1;F0],[],[],Aeqbis,beq,[0;Fmin],[Inf;Fmax],@(F) <a href="#_sub1" class="code" title="subfunction [g,h] = constraint_minmax(F,Fmax)">constraint_minmax</a>(F,Fmaxbis),fmincon_options);
+0032 Fopt=Fopt_inter(2:<span class="keyword">end</span>,:);
+0033         
+0034 <span class="keyword">end</span>
+0035 
+0036 <a name="_sub1" href="#_subfunctions" class="code">function [g,h] = constraint_minmax(F,Fmax)</a>
+0037     <span class="comment">% Constraint for min/max optimization</span>
+0038     g=F(2:end)./Fmax-F(1);
+0039     h=[];
+0040 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 07-Nov-2018 15:15:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

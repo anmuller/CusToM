@@ -41,6 +41,10 @@ ________________________________________________________
 
  Licence
  Toolbox distributed under 3-Clause BSD License
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
 ________________________________________________________</pre></div>
 
 <!-- crossreference -->
@@ -72,64 +76,68 @@ This function is called by:
 0014 <span class="comment">% Licence</span>
 0015 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
 0016 <span class="comment">%________________________________________________________</span>
-0017 nb_f = size(filename,1);
-0018 
-0019 <span class="keyword">if</span> nb_f==1 <span class="comment">%% if one c3d for geoemtrical calibration</span>
-0020    [real_markers, ~, ~, ~,~] = <a href="../../Functions/DataImport/Get_real_markers.html" class="code" title="function [real_markers, nb_frame, Firstframe, Lastframe,f] = Get_real_markers(filename,list_markers, AnalysisParameters)">Get_real_markers</a>(filename,list_markers, AnalysisParameters);
-0021     
-0022 <span class="keyword">else</span> <span class="comment">%% Concatenation of c3d files for geometrical calibration only</span>
-0023     real_markers=struct();
-0024     <span class="keyword">for</span> i=1:numel(filename)
-0025         
-0026         <span class="keyword">if</span> i==1
-0027             [real_markers, ~, ~, ~,f] = <a href="../../Functions/DataImport/Get_real_markers.html" class="code" title="function [real_markers, nb_frame, Firstframe, Lastframe,f] = Get_real_markers(filename,list_markers, AnalysisParameters)">Get_real_markers</a>(filename{i},list_markers, AnalysisParameters);
-0028             periode=1/f;
-0029         <span class="keyword">else</span>
-0030             [real_markers_inter, ~ , Firstframe_inter, Lastframe_inter]=<a href="../../Functions/DataImport/Get_real_markers.html" class="code" title="function [real_markers, nb_frame, Firstframe, Lastframe,f] = Get_real_markers(filename,list_markers, AnalysisParameters)">Get_real_markers</a>(filename{i},list_markers, AnalysisParameters);
-0031 
-0032             fields = fieldnames(real_markers_inter);
-0033             fields = setdiff(fields,{<span class="string">'name'</span>,<span class="string">'time'</span>});
-0034             nb_fields = length(fields);
-0035             
-0036             <span class="keyword">for</span> i_m=1:numel(real_markers_inter)
-0037                 <span class="keyword">if</span> strcmp(real_markers(i_m).name,real_markers_inter(i_m).name)
-0038                     
-0039                     <span class="comment">% Concatenation of marker position</span>
-0040                     <span class="keyword">for</span> i_field = 1:nb_fields
-0041                         cur_field=fields{i_field};
-0042                         real_markers(i_m).(cur_field)  = [real_markers(i_m).(cur_field) ; real_markers_inter(i_m).(cur_field)];
-0043                     <span class="keyword">end</span>
-0044                     <span class="comment">% Extension of time vector array</span>
-0045                     <span class="keyword">if</span> i_m==1
-0046                         nb_frame_inter = Lastframe_inter-Firstframe_inter+1;
-0047                         x1 = real_markers(i_m).time(end)+1*periode;
-0048                         x2 = real_markers(i_m).time(end)+(Lastframe_inter-Firstframe_inter+1)*periode;
-0049                         
-0050                         real_markers(i_m).time=[real_markers(i_m).time;linspace(x1,x2,nb_frame_inter)'];
-0051                     <span class="keyword">else</span>
-0052                         real_markers(i_m).time=real_markers(1).time;
-0053                     <span class="keyword">end</span>
-0054                 <span class="keyword">else</span>
-0055                     disp(<span class="string">'pas même de nom de marqueur dans les différents .c3d!!'</span>)
-0056                     <span class="keyword">break</span>
-0057                 <span class="keyword">end</span>
-0058             <span class="keyword">end</span>
-0059             
-0060             <span class="comment">% NbFrame</span>
-0061             nb_frames = size(real_markers(i_m).position,1); <span class="comment">%#ok&lt;NASGU&gt;</span>
-0062             <span class="comment">% FirstFrame</span>
-0063             Firstframe = []; <span class="comment">%#ok&lt;NASGU&gt;</span>
-0064             <span class="comment">% LastFrame</span>
-0065             Lastframe = []; <span class="comment">%#ok&lt;NASGU&gt;</span>
-0066         <span class="keyword">end</span>
-0067     <span class="keyword">end</span>
-0068 <span class="keyword">end</span>
-0069 
-0070 <span class="comment">%%%%%%%%%%%%% We delete frames with NaN before any pretreating %%%%%%%%%%%%%%%%%%%%%%%</span>
-0071 [real_markers, nb_frames] = <a href="Supress_NaN_frames.html" class="code" title="function [real_markers, nb_frames]=Supress_NaN_frames(real_markers)">Supress_NaN_frames</a>(real_markers);
-0072 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0019 <span class="comment">% Georges Dumont</span>
+0020 <span class="comment">%________________________________________________________</span>
+0021 nb_f = size(filename,1);
+0022 
+0023 <span class="keyword">if</span> nb_f==1 <span class="comment">%% if one c3d for geoemtrical calibration</span>
+0024    [real_markers, ~, ~, ~,~] = <a href="../../Functions/DataImport/Get_real_markers.html" class="code" title="function [real_markers, nb_frame, Firstframe, Lastframe,f] = Get_real_markers(filename,list_markers, AnalysisParameters)">Get_real_markers</a>(filename,list_markers, AnalysisParameters);
+0025     
+0026 <span class="keyword">else</span> <span class="comment">%% Concatenation of c3d files for geometrical calibration only</span>
+0027     real_markers=struct();
+0028     <span class="keyword">for</span> i=1:numel(filename)
+0029         
+0030         <span class="keyword">if</span> i==1
+0031             [real_markers, ~, ~, ~,f] = <a href="../../Functions/DataImport/Get_real_markers.html" class="code" title="function [real_markers, nb_frame, Firstframe, Lastframe,f] = Get_real_markers(filename,list_markers, AnalysisParameters)">Get_real_markers</a>(filename{i},list_markers, AnalysisParameters);
+0032             periode=1/f;
+0033         <span class="keyword">else</span>
+0034             [real_markers_inter, ~ , Firstframe_inter, Lastframe_inter]=<a href="../../Functions/DataImport/Get_real_markers.html" class="code" title="function [real_markers, nb_frame, Firstframe, Lastframe,f] = Get_real_markers(filename,list_markers, AnalysisParameters)">Get_real_markers</a>(filename{i},list_markers, AnalysisParameters);
+0035 
+0036             fields = fieldnames(real_markers_inter);
+0037             fields = setdiff(fields,{<span class="string">'name'</span>,<span class="string">'time'</span>});
+0038             nb_fields = length(fields);
+0039             
+0040             <span class="keyword">for</span> i_m=1:numel(real_markers_inter)
+0041                 <span class="keyword">if</span> strcmp(real_markers(i_m).name,real_markers_inter(i_m).name)
+0042                     
+0043                     <span class="comment">% Concatenation of marker position</span>
+0044                     <span class="keyword">for</span> i_field = 1:nb_fields
+0045                         cur_field=fields{i_field};
+0046                         real_markers(i_m).(cur_field)  = [real_markers(i_m).(cur_field) ; real_markers_inter(i_m).(cur_field)];
+0047                     <span class="keyword">end</span>
+0048                     <span class="comment">% Extension of time vector array</span>
+0049                     <span class="keyword">if</span> i_m==1
+0050                         nb_frame_inter = Lastframe_inter-Firstframe_inter+1;
+0051                         x1 = real_markers(i_m).time(end)+1*periode;
+0052                         x2 = real_markers(i_m).time(end)+(Lastframe_inter-Firstframe_inter+1)*periode;
+0053                         
+0054                         real_markers(i_m).time=[real_markers(i_m).time;linspace(x1,x2,nb_frame_inter)'];
+0055                     <span class="keyword">else</span>
+0056                         real_markers(i_m).time=real_markers(1).time;
+0057                     <span class="keyword">end</span>
+0058                 <span class="keyword">else</span>
+0059                     disp(<span class="string">'pas même de nom de marqueur dans les différents .c3d!!'</span>)
+0060                     <span class="keyword">break</span>
+0061                 <span class="keyword">end</span>
+0062             <span class="keyword">end</span>
+0063             
+0064             <span class="comment">% NbFrame</span>
+0065             nb_frames = size(real_markers(i_m).position,1); <span class="comment">%#ok&lt;NASGU&gt;</span>
+0066             <span class="comment">% FirstFrame</span>
+0067             Firstframe = []; <span class="comment">%#ok&lt;NASGU&gt;</span>
+0068             <span class="comment">% LastFrame</span>
+0069             Lastframe = []; <span class="comment">%#ok&lt;NASGU&gt;</span>
+0070         <span class="keyword">end</span>
+0071     <span class="keyword">end</span>
+0072 <span class="keyword">end</span>
 0073 
-0074 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0074 <span class="comment">%%%%%%%%%%%%% We delete frames with NaN before any pretreating %%%%%%%%%%%%%%%%%%%%%%%</span>
+0075 [real_markers, nb_frames] = <a href="Supress_NaN_frames.html" class="code" title="function [real_markers, nb_frames]=Supress_NaN_frames(real_markers)">Supress_NaN_frames</a>(real_markers);
+0076 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0077 
+0078 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 07-Nov-2018 15:15:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

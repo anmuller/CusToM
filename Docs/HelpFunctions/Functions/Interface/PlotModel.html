@@ -53,6 +53,10 @@ ________________________________________________________
 
  Licence
  Toolbox distributed under 3-Clause BSD License
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
 ________________________________________________________</pre></div>
 
 <!-- crossreference -->
@@ -96,119 +100,123 @@ This function is called by:
 0026 <span class="comment">% Licence</span>
 0027 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
 0028 <span class="comment">%________________________________________________________</span>
-0029 
-0030 <span class="comment">%% Lines width</span>
-0031 size_bones = 4;
-0032 size_muscles = 1;
-0033 size_markers = 20; 
-0034 <span class="keyword">if</span> isfield(Anim,<span class="string">'CoefLineWidth'</span>)
-0035     size_bones = size_bones*Anim.CoefLineWidth;
-0036     size_muscles = size_muscles*Anim.CoefLineWidth;
-0037     <span class="keyword">if</span> size_muscles &lt; 0.5
-0038         size_muscles = 0.5;
-0039     <span class="keyword">end</span>
-0040     size_markers = size_markers*Anim.CoefLineWidth;
-0041 <span class="keyword">end</span>
-0042 
-0043 <span class="comment">%% Loading or generation of the model</span>
-0044 <span class="keyword">if</span> Anim.ModelChoice <span class="comment">% only a view to generate the model</span>
-0045     [OsteoArticularModel, Markers, Muscles, EnableModel] = <a href="../../Functions/Models/ModelGeneration.html" class="code" title="function [OsteoArticularModel, Markers, Muscles, EnableModel] = ModelGeneration(ModelParameters)">ModelGeneration</a>(ModelParameters);
-0046     [Markers]=<a href="../../Functions/Models/Markers/Functions/VerifMarkersOnModel.html" class="code" title="function [Markers_set]=VerifMarkersOnModel(Human_model,Markers_set)">VerifMarkersOnModel</a>(OsteoArticularModel,Markers);
-0047 <span class="keyword">else</span>
-0048     load(<span class="string">'BiomechanicalModel.mat'</span>); <span class="comment">%#ok&lt;LOAD&gt;</span>
-0049     OsteoArticularModel = BiomechanicalModel.OsteoArticularModel;
-0050     Markers = BiomechanicalModel.Markers;
-0051     Muscles = BiomechanicalModel.Muscles;
-0052 <span class="keyword">end</span>
-0053 
-0054 <span class="comment">%% Position and orientation of the pelvis</span>
-0055 [OsteoArticularModel] = <a href="../../Functions/Animation/anat_position_solid_repere.html" class="code" title="function [Human_model] = anat_position_solid_repere(Human_model,i)">anat_position_solid_repere</a>(OsteoArticularModel,find(~[OsteoArticularModel.mother]));
-0056 <span class="keyword">if</span> Anim.ModelChoice <span class="comment">% only a view to generate the model</span>
-0057     RPelvis = <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([0 1 0],-110*pi/180);
-0058 <span class="keyword">else</span>
-0059     RPelvis = eye(3);
-0060 <span class="keyword">end</span>
-0061 <span class="keyword">if</span> isfield(Anim,<span class="string">'q'</span>)
-0062     q = Anim.q;
-0063 <span class="keyword">else</span>
-0064     q = zeros(numel(OsteoArticularModel),1);
-0065 <span class="keyword">end</span>
-0066 
-0067 <span class="comment">%% Forward kinematics</span>
-0068 [Human_model_bis,Muscles_bis, Markers_set_bis]=<a href="ForwardKinematicsAnimation_Interf.html" class="code" title="function [Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation_Interf(Human_model,Markers_set,Muscles,q,j,muscles_anim,mod_marker_anim,RPelvis)">ForwardKinematicsAnimation_Interf</a>(OsteoArticularModel,Markers,Muscles,q,find(~[OsteoArticularModel.mother]),muscles_anim,mod_marker_anim,RPelvis);
-0069 
-0070 <span class="comment">%% Segments visualization</span>
-0071 <span class="keyword">if</span> seg_anim
-0072     <span class="keyword">for</span> j=find([Human_model_bis.Visual])
-0073         pts=Human_model_bis(j).pos_pts_anim;
-0074         <span class="keyword">for</span> np=1:size(pts,2)
-0075             <span class="keyword">for</span> npb=np:size(pts,2)
-0076                 plot3(ax,pts(1,[np npb]),pts(2,[np npb]),pts(3,[np npb]),<span class="string">'Color'</span>,0.4*[1 1 1],<span class="string">'LineWidth'</span>,size_bones);
-0077             <span class="keyword">end</span>
-0078         <span class="keyword">end</span>
-0079     <span class="keyword">end</span>
-0080 <span class="keyword">end</span>
-0081 
-0082 <span class="comment">%% Muscles visualization</span>
-0083 <span class="keyword">if</span> muscles_anim
-0084     <span class="comment">% color (according to the activation)</span>
-0085     <span class="keyword">if</span> Anim.ModelChoice <span class="comment">% constant color</span>
-0086         color_mus = ones(numel(Muscles_bis),1)*[1 0 0];
-0087     <span class="keyword">else</span>
-0088         color0 = [0.9 0.9 0.9];
-0089         color1 = [1 0 0];
-0090         color_mus = color0 + Anim.A*(color1 - color0);
-0091     <span class="keyword">end</span>
-0092     <span class="keyword">for</span> mu = 1:numel(Muscles_bis)
-0093         <span class="keyword">if</span> Muscles_bis(mu).exist
-0094             <span class="keyword">for</span> nb_pts = 1:(size(Muscles_bis(mu).pos_pts,2)-1)
-0095                 plot3(ax,Muscles_bis(mu).pos_pts(1,[nb_pts nb_pts+1]),Muscles_bis(mu).pos_pts(2,[nb_pts nb_pts+1]),Muscles_bis(mu).pos_pts(3,[nb_pts nb_pts+1]),<span class="string">'Color'</span>,color_mus(mu,:),<span class="string">'LineWidth'</span>,size_muscles);
-0096             <span class="keyword">end</span>
-0097         <span class="keyword">end</span>
-0098     <span class="keyword">end</span>
-0099 <span class="keyword">end</span>
-0100 
-0101 <span class="comment">%% Model markers visualization</span>
-0102 <span class="keyword">if</span> mod_marker_anim
-0103     <span class="keyword">for</span> marker = 1:numel(Markers_set_bis)
-0104         <span class="keyword">if</span> Markers_set_bis(marker).exist
-0105             scatter3(ax,Markers_set_bis(marker).pos_anim(1,:),Markers_set_bis(marker).pos_anim(2,:),Markers_set_bis(marker).pos_anim(3,:),size_markers,<span class="string">'filled'</span>,<span class="string">'MarkerFaceColor'</span>,[255 102 0]/255)
-0106         <span class="keyword">end</span>
-0107     <span class="keyword">end</span>
-0108 <span class="keyword">end</span>
-0109 
-0110 <span class="comment">%% Experimental markers visualization</span>
-0111 <span class="keyword">if</span> exp_marker_anim
-0112     <span class="keyword">for</span> marker = 1:numel(Anim.real_markers)
-0113         scatter3(ax,Anim.real_markers(marker).position_f(1),Anim.real_markers(marker).position_f(2),Anim.real_markers(marker).position_f(3),20,<span class="string">'filled'</span>,<span class="string">'MarkerFaceColor'</span>,[0 153 255]/255)
-0114     <span class="keyword">end</span>
-0115 <span class="keyword">end</span>
-0116 
-0117 <span class="comment">%% External forces</span>
-0118 <span class="keyword">if</span> external_forces_anim
-0119     coef_f_visual=(ModelParameters.Mass*9.81);
-0120     color_vect = [53 210 55]/255;
-0121     <span class="keyword">for</span> nb_f=1:size(Anim.external_forces,2)
-0122         plot3(ax,[Anim.external_forces(1,nb_f), Anim.external_forces(1,nb_f) + Anim.external_forces(4,nb_f)/coef_f_visual],<span class="keyword">...</span>
-0123             [Anim.external_forces(2,nb_f), Anim.external_forces(2,nb_f) + Anim.external_forces(5,nb_f)/coef_f_visual],<span class="keyword">...</span>
-0124             [Anim.external_forces(3,nb_f), Anim.external_forces(3,nb_f) + Anim.external_forces(6,nb_f)/coef_f_visual],<span class="keyword">...</span>
-0125             <span class="string">'color'</span>, color_vect, <span class="string">'LineWidth'</span>, 2);
-0126     <span class="keyword">end</span>
-0127 <span class="keyword">end</span>
-0128 
-0129 <span class="comment">%% Predicted external forces</span>
-0130 <span class="keyword">if</span> external_forces_pred
-0131     coef_f_visual=(ModelParameters.Mass*9.81);
-0132     color_vect = 1-([53 210 55]/255);
-0133     <span class="keyword">for</span> nb_f=1:size(Anim.external_forces_pred,2)
-0134         plot3(ax,[Anim.external_forces_pred(1,nb_f), Anim.external_forces_pred(1,nb_f) + Anim.external_forces_pred(4,nb_f)/coef_f_visual],<span class="keyword">...</span>
-0135             [Anim.external_forces_pred(2,nb_f), Anim.external_forces_pred(2,nb_f) + Anim.external_forces_pred(5,nb_f)/coef_f_visual],<span class="keyword">...</span>
-0136             [Anim.external_forces_pred(3,nb_f), Anim.external_forces_pred(3,nb_f) + Anim.external_forces_pred(6,nb_f)/coef_f_visual],<span class="keyword">...</span>
-0137             <span class="string">'color'</span>, color_vect, <span class="string">'LineWidth'</span>, 2);
-0138     <span class="keyword">end</span>
-0139 <span class="keyword">end</span>
-0140 
-0141 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0029 <span class="comment">%</span>
+0030 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0031 <span class="comment">% Georges Dumont</span>
+0032 <span class="comment">%________________________________________________________</span>
+0033 
+0034 <span class="comment">%% Lines width</span>
+0035 size_bones = 4;
+0036 size_muscles = 1;
+0037 size_markers = 20; 
+0038 <span class="keyword">if</span> isfield(Anim,<span class="string">'CoefLineWidth'</span>)
+0039     size_bones = size_bones*Anim.CoefLineWidth;
+0040     size_muscles = size_muscles*Anim.CoefLineWidth;
+0041     <span class="keyword">if</span> size_muscles &lt; 0.5
+0042         size_muscles = 0.5;
+0043     <span class="keyword">end</span>
+0044     size_markers = size_markers*Anim.CoefLineWidth;
+0045 <span class="keyword">end</span>
+0046 
+0047 <span class="comment">%% Loading or generation of the model</span>
+0048 <span class="keyword">if</span> Anim.ModelChoice <span class="comment">% only a view to generate the model</span>
+0049     [OsteoArticularModel, Markers, Muscles, EnableModel] = <a href="../../Functions/Models/ModelGeneration.html" class="code" title="function [OsteoArticularModel, Markers, Muscles, EnableModel] = ModelGeneration(ModelParameters)">ModelGeneration</a>(ModelParameters);
+0050     [Markers]=<a href="../../Functions/Models/Markers/Functions/VerifMarkersOnModel.html" class="code" title="function [Markers_set]=VerifMarkersOnModel(Human_model,Markers_set)">VerifMarkersOnModel</a>(OsteoArticularModel,Markers);
+0051 <span class="keyword">else</span>
+0052     load(<span class="string">'BiomechanicalModel.mat'</span>); <span class="comment">%#ok&lt;LOAD&gt;</span>
+0053     OsteoArticularModel = BiomechanicalModel.OsteoArticularModel;
+0054     Markers = BiomechanicalModel.Markers;
+0055     Muscles = BiomechanicalModel.Muscles;
+0056 <span class="keyword">end</span>
+0057 
+0058 <span class="comment">%% Position and orientation of the pelvis</span>
+0059 [OsteoArticularModel] = <a href="../../Functions/Animation/anat_position_solid_repere.html" class="code" title="function [Human_model] = anat_position_solid_repere(Human_model,i)">anat_position_solid_repere</a>(OsteoArticularModel,find(~[OsteoArticularModel.mother]));
+0060 <span class="keyword">if</span> Anim.ModelChoice <span class="comment">% only a view to generate the model</span>
+0061     RPelvis = <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([0 1 0],-110*pi/180);
+0062 <span class="keyword">else</span>
+0063     RPelvis = eye(3);
+0064 <span class="keyword">end</span>
+0065 <span class="keyword">if</span> isfield(Anim,<span class="string">'q'</span>)
+0066     q = Anim.q;
+0067 <span class="keyword">else</span>
+0068     q = zeros(numel(OsteoArticularModel),1);
+0069 <span class="keyword">end</span>
+0070 
+0071 <span class="comment">%% Forward kinematics</span>
+0072 [Human_model_bis,Muscles_bis, Markers_set_bis]=<a href="ForwardKinematicsAnimation_Interf.html" class="code" title="function [Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation_Interf(Human_model,Markers_set,Muscles,q,j,muscles_anim,mod_marker_anim,RPelvis)">ForwardKinematicsAnimation_Interf</a>(OsteoArticularModel,Markers,Muscles,q,find(~[OsteoArticularModel.mother]),muscles_anim,mod_marker_anim,RPelvis);
+0073 
+0074 <span class="comment">%% Segments visualization</span>
+0075 <span class="keyword">if</span> seg_anim
+0076     <span class="keyword">for</span> j=find([Human_model_bis.Visual])
+0077         pts=Human_model_bis(j).pos_pts_anim;
+0078         <span class="keyword">for</span> np=1:size(pts,2)
+0079             <span class="keyword">for</span> npb=np:size(pts,2)
+0080                 plot3(ax,pts(1,[np npb]),pts(2,[np npb]),pts(3,[np npb]),<span class="string">'Color'</span>,0.4*[1 1 1],<span class="string">'LineWidth'</span>,size_bones);
+0081             <span class="keyword">end</span>
+0082         <span class="keyword">end</span>
+0083     <span class="keyword">end</span>
+0084 <span class="keyword">end</span>
+0085 
+0086 <span class="comment">%% Muscles visualization</span>
+0087 <span class="keyword">if</span> muscles_anim
+0088     <span class="comment">% color (according to the activation)</span>
+0089     <span class="keyword">if</span> Anim.ModelChoice <span class="comment">% constant color</span>
+0090         color_mus = ones(numel(Muscles_bis),1)*[1 0 0];
+0091     <span class="keyword">else</span>
+0092         color0 = [0.9 0.9 0.9];
+0093         color1 = [1 0 0];
+0094         color_mus = color0 + Anim.A*(color1 - color0);
+0095     <span class="keyword">end</span>
+0096     <span class="keyword">for</span> mu = 1:numel(Muscles_bis)
+0097         <span class="keyword">if</span> Muscles_bis(mu).exist
+0098             <span class="keyword">for</span> nb_pts = 1:(size(Muscles_bis(mu).pos_pts,2)-1)
+0099                 plot3(ax,Muscles_bis(mu).pos_pts(1,[nb_pts nb_pts+1]),Muscles_bis(mu).pos_pts(2,[nb_pts nb_pts+1]),Muscles_bis(mu).pos_pts(3,[nb_pts nb_pts+1]),<span class="string">'Color'</span>,color_mus(mu,:),<span class="string">'LineWidth'</span>,size_muscles);
+0100             <span class="keyword">end</span>
+0101         <span class="keyword">end</span>
+0102     <span class="keyword">end</span>
+0103 <span class="keyword">end</span>
+0104 
+0105 <span class="comment">%% Model markers visualization</span>
+0106 <span class="keyword">if</span> mod_marker_anim
+0107     <span class="keyword">for</span> marker = 1:numel(Markers_set_bis)
+0108         <span class="keyword">if</span> Markers_set_bis(marker).exist
+0109             scatter3(ax,Markers_set_bis(marker).pos_anim(1,:),Markers_set_bis(marker).pos_anim(2,:),Markers_set_bis(marker).pos_anim(3,:),size_markers,<span class="string">'filled'</span>,<span class="string">'MarkerFaceColor'</span>,[255 102 0]/255)
+0110         <span class="keyword">end</span>
+0111     <span class="keyword">end</span>
+0112 <span class="keyword">end</span>
+0113 
+0114 <span class="comment">%% Experimental markers visualization</span>
+0115 <span class="keyword">if</span> exp_marker_anim
+0116     <span class="keyword">for</span> marker = 1:numel(Anim.real_markers)
+0117         scatter3(ax,Anim.real_markers(marker).position_f(1),Anim.real_markers(marker).position_f(2),Anim.real_markers(marker).position_f(3),20,<span class="string">'filled'</span>,<span class="string">'MarkerFaceColor'</span>,[0 153 255]/255)
+0118     <span class="keyword">end</span>
+0119 <span class="keyword">end</span>
+0120 
+0121 <span class="comment">%% External forces</span>
+0122 <span class="keyword">if</span> external_forces_anim
+0123     coef_f_visual=(ModelParameters.Mass*9.81);
+0124     color_vect = [53 210 55]/255;
+0125     <span class="keyword">for</span> nb_f=1:size(Anim.external_forces,2)
+0126         plot3(ax,[Anim.external_forces(1,nb_f), Anim.external_forces(1,nb_f) + Anim.external_forces(4,nb_f)/coef_f_visual],<span class="keyword">...</span>
+0127             [Anim.external_forces(2,nb_f), Anim.external_forces(2,nb_f) + Anim.external_forces(5,nb_f)/coef_f_visual],<span class="keyword">...</span>
+0128             [Anim.external_forces(3,nb_f), Anim.external_forces(3,nb_f) + Anim.external_forces(6,nb_f)/coef_f_visual],<span class="keyword">...</span>
+0129             <span class="string">'color'</span>, color_vect, <span class="string">'LineWidth'</span>, 2);
+0130     <span class="keyword">end</span>
+0131 <span class="keyword">end</span>
+0132 
+0133 <span class="comment">%% Predicted external forces</span>
+0134 <span class="keyword">if</span> external_forces_pred
+0135     coef_f_visual=(ModelParameters.Mass*9.81);
+0136     color_vect = 1-([53 210 55]/255);
+0137     <span class="keyword">for</span> nb_f=1:size(Anim.external_forces_pred,2)
+0138         plot3(ax,[Anim.external_forces_pred(1,nb_f), Anim.external_forces_pred(1,nb_f) + Anim.external_forces_pred(4,nb_f)/coef_f_visual],<span class="keyword">...</span>
+0139             [Anim.external_forces_pred(2,nb_f), Anim.external_forces_pred(2,nb_f) + Anim.external_forces_pred(5,nb_f)/coef_f_visual],<span class="keyword">...</span>
+0140             [Anim.external_forces_pred(3,nb_f), Anim.external_forces_pred(3,nb_f) + Anim.external_forces_pred(6,nb_f)/coef_f_visual],<span class="keyword">...</span>
+0141             <span class="string">'color'</span>, color_vect, <span class="string">'LineWidth'</span>, 2);
+0142     <span class="keyword">end</span>
+0143 <span class="keyword">end</span>
+0144 
+0145 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 07-Nov-2018 15:15:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

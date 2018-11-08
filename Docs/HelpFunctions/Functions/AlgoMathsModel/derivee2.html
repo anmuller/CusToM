@@ -38,6 +38,10 @@ ________________________________________________________
 
  Licence
  Toolbox distributed under 3-Clause BSD License
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
 ________________________________________________________</pre></div>
 
 <!-- crossreference -->
@@ -66,15 +70,19 @@ This function is called by:
 0011 <span class="comment">% Licence</span>
 0012 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
 0013 <span class="comment">%________________________________________________________</span>
-0014 
-0015 k=size(y);<span class="comment">%Size of vector y (or of matrix i y is a matrix)</span>
-0016 n=k(1);<span class="comment">% Numbre of samples</span>
-0017 <span class="keyword">for</span> i=1:k(2)
-0018     yp(1,i)=(-y(3,i)+4*y(2,i)-3*y(1,i))/(2*h); <span class="comment">% for the first term a forward 2nd order difference is used</span>
-0019     yp(n,i)=(3*y(n,i)-4*y(n-1,i)+y(n-2,i))/(2*h); <span class="comment">% for the last terme, a backward 2nd order differenece is used</span>
-0020     yp(2:n-1,i) = (y(3:n,i)-y(1:n-2,i))/(2*h);<span class="comment">% for other terms, a 2nd order difference is used</span>
-0021 <span class="keyword">end</span>
-0022 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0016 <span class="comment">% Georges Dumont</span>
+0017 <span class="comment">%________________________________________________________</span>
+0018 
+0019 k=size(y);<span class="comment">%Size of vector y (or of matrix i y is a matrix)</span>
+0020 n=k(1);<span class="comment">% Numbre of samples</span>
+0021 <span class="keyword">for</span> i=1:k(2)
+0022     yp(1,i)=(-y(3,i)+4*y(2,i)-3*y(1,i))/(2*h); <span class="comment">% for the first term a forward 2nd order difference is used</span>
+0023     yp(n,i)=(3*y(n,i)-4*y(n-1,i)+y(n-2,i))/(2*h); <span class="comment">% for the last terme, a backward 2nd order differenece is used</span>
+0024     yp(2:n-1,i) = (y(3:n,i)-y(1:n-2,i))/(2*h);<span class="comment">% for other terms, a 2nd order difference is used</span>
+0025 <span class="keyword">end</span>
+0026 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 07-Nov-2018 15:15:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

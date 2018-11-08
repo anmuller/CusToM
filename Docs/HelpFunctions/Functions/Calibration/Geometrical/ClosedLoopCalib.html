@@ -44,6 +44,10 @@ ________________________________________________________
 
  Licence
  Toolbox distributed under 3-Clause BSD License
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
 ________________________________________________________</pre></div>
 
 <!-- crossreference -->
@@ -78,38 +82,42 @@ This function is called by:
 0017 <span class="comment">% Licence</span>
 0018 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
 0019 <span class="comment">%________________________________________________________</span>
-0020 
-0021 c=[];
-0022 
-0023 nb_eq=0; <span class="comment">% initialisation du nb d'équation (initialization of the number of equations)</span>
-0024 <span class="keyword">if</span> nb_ClosedLoop == 0   <span class="comment">% si il n'y a pas de boucle fermée --&gt; pas de contrainte non linéaire (no closed loop and no non linear constraint)</span>
-0025     ceq=[];
-0026 <span class="keyword">else</span>
-0027     ceq=zeros(nb_ClosedLoop*9,1);
-0028     <span class="keyword">for</span> i=1:nb_ClosedLoop
-0029     
-0030     eval([<span class="string">'[R,p] = fCL'</span> num2str(i) <span class="string">'(Pelvis_position,Pelvis_rotation,q,k,pcut,Rcut);'</span>])  
-0031     
-0032     <span class="keyword">for</span> z=1:3
-0033     nb_eq=nb_eq+1; <span class="comment">% incrémentation du nombre d'équations (incrementation of the number of equations)</span>
-0034     ceq(nb_eq,1)=p(z); 
-0035     <span class="keyword">end</span>
-0036     
-0037     <span class="keyword">for</span> z=1:3
-0038     nb_eq=nb_eq+1; <span class="comment">% incrémentation du nombre d'équations (incrementation of the number of equations)</span>
-0039     ceq(nb_eq,1)=R(z,z)-1; 
-0040     <span class="keyword">end</span>
-0041     
+0020 <span class="comment">%</span>
+0021 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0022 <span class="comment">% Georges Dumont</span>
+0023 <span class="comment">%________________________________________________________</span>
+0024 
+0025 c=[];
+0026 
+0027 nb_eq=0; <span class="comment">% initialisation du nb d'équation (initialization of the number of equations)</span>
+0028 <span class="keyword">if</span> nb_ClosedLoop == 0   <span class="comment">% si il n'y a pas de boucle fermée --&gt; pas de contrainte non linéaire (no closed loop and no non linear constraint)</span>
+0029     ceq=[];
+0030 <span class="keyword">else</span>
+0031     ceq=zeros(nb_ClosedLoop*9,1);
+0032     <span class="keyword">for</span> i=1:nb_ClosedLoop
+0033     
+0034     eval([<span class="string">'[R,p] = fCL'</span> num2str(i) <span class="string">'(Pelvis_position,Pelvis_rotation,q,k,pcut,Rcut);'</span>])  
+0035     
+0036     <span class="keyword">for</span> z=1:3
+0037     nb_eq=nb_eq+1; <span class="comment">% incrémentation du nombre d'équations (incrementation of the number of equations)</span>
+0038     ceq(nb_eq,1)=p(z); 
+0039     <span class="keyword">end</span>
+0040     
+0041     <span class="keyword">for</span> z=1:3
 0042     nb_eq=nb_eq+1; <span class="comment">% incrémentation du nombre d'équations (incrementation of the number of equations)</span>
-0043     ceq(nb_eq,1)=R(1,2); 
-0044     nb_eq=nb_eq+1; <span class="comment">% incrémentation du nombre d'équations (incrementation of the number of equations)</span>
-0045     ceq(nb_eq,1)=R(1,3); 
+0043     ceq(nb_eq,1)=R(z,z)-1; 
+0044     <span class="keyword">end</span>
+0045     
 0046     nb_eq=nb_eq+1; <span class="comment">% incrémentation du nombre d'équations (incrementation of the number of equations)</span>
-0047     ceq(nb_eq,1)=R(2,3);   
-0048     <span class="keyword">end</span>   
-0049 <span class="keyword">end</span>
-0050 
-0051 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0047     ceq(nb_eq,1)=R(1,2); 
+0048     nb_eq=nb_eq+1; <span class="comment">% incrémentation du nombre d'équations (incrementation of the number of equations)</span>
+0049     ceq(nb_eq,1)=R(1,3); 
+0050     nb_eq=nb_eq+1; <span class="comment">% incrémentation du nombre d'équations (incrementation of the number of equations)</span>
+0051     ceq(nb_eq,1)=R(2,3);   
+0052     <span class="keyword">end</span>   
+0053 <span class="keyword">end</span>
+0054 
+0055 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 07-Nov-2018 15:15:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

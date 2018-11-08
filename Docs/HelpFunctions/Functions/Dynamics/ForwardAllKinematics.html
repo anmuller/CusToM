@@ -40,6 +40,10 @@ ________________________________________________________
 
  Licence
  Toolbox distributed under 3-Clause BSD License
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
 ________________________________________________________</pre></div>
 
 <!-- crossreference -->
@@ -70,35 +74,39 @@ This function is called by:
 0013 <span class="comment">% Licence</span>
 0014 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
 0015 <span class="comment">%________________________________________________________</span>
-0016 
-0017 <span class="keyword">if</span> j==0
-0018     <span class="keyword">return</span>;
-0019 <span class="keyword">end</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0018 <span class="comment">% Georges Dumont</span>
+0019 <span class="comment">%________________________________________________________</span>
 0020 
-0021 <span class="comment">%%</span>
-0022 <span class="keyword">if</span> j~=1
-0023     i=Human_model(j).mother;
-0024     <span class="comment">%% Position et Orientation</span>
-0025     Human_model(j).p=Human_model(i).R*Human_model(j).b+Human_model(i).p;
-0026     Human_model(j).R=Human_model(i).R*<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).a,Human_model(j).q)*<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).u,Human_model(j).theta);
-0027     <span class="comment">%% Vitesse spatiale</span>
-0028     sw=Human_model(i).R*Human_model(j).a;
-0029     sv=cross(Human_model(j).p,sw);
-0030     Human_model(j).w=Human_model(i).w+sw*Human_model(j).dq;
-0031     Human_model(j).v0=Human_model(i).v0+sv*Human_model(j).dq; 
-0032     <span class="comment">%% Accélération spatiale</span>
-0033     dsv=cross(Human_model(i).w,sv)+cross(Human_model(i).v0,sw);
-0034     dsw=cross(Human_model(i).w,sw);
-0035     Human_model(j).dw=Human_model(i).dw+dsw*Human_model(j).dq+sw*Human_model(j).ddq;
-0036     Human_model(j).dv0=Human_model(i).dv0+dsv*Human_model(j).dq+sv*Human_model(j).ddq;
-0037     Human_model(j).sw=sw;
-0038     Human_model(j).sv=sv;
-0039 <span class="keyword">end</span>
-0040 Human_model=<a href="ForwardAllKinematics.html" class="code" title="function [Human_model] = ForwardAllKinematics(Human_model,j)">ForwardAllKinematics</a>(Human_model,Human_model(j).sister);
-0041 Human_model=<a href="ForwardAllKinematics.html" class="code" title="function [Human_model] = ForwardAllKinematics(Human_model,j)">ForwardAllKinematics</a>(Human_model,Human_model(j).child);
-0042 
+0021 <span class="keyword">if</span> j==0
+0022     <span class="keyword">return</span>;
+0023 <span class="keyword">end</span>
+0024 
+0025 <span class="comment">%%</span>
+0026 <span class="keyword">if</span> j~=1
+0027     i=Human_model(j).mother;
+0028     <span class="comment">%% Position et Orientation</span>
+0029     Human_model(j).p=Human_model(i).R*Human_model(j).b+Human_model(i).p;
+0030     Human_model(j).R=Human_model(i).R*<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).a,Human_model(j).q)*<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).u,Human_model(j).theta);
+0031     <span class="comment">%% Vitesse spatiale</span>
+0032     sw=Human_model(i).R*Human_model(j).a;
+0033     sv=cross(Human_model(j).p,sw);
+0034     Human_model(j).w=Human_model(i).w+sw*Human_model(j).dq;
+0035     Human_model(j).v0=Human_model(i).v0+sv*Human_model(j).dq; 
+0036     <span class="comment">%% Accélération spatiale</span>
+0037     dsv=cross(Human_model(i).w,sv)+cross(Human_model(i).v0,sw);
+0038     dsw=cross(Human_model(i).w,sw);
+0039     Human_model(j).dw=Human_model(i).dw+dsw*Human_model(j).dq+sw*Human_model(j).ddq;
+0040     Human_model(j).dv0=Human_model(i).dv0+dsv*Human_model(j).dq+sv*Human_model(j).ddq;
+0041     Human_model(j).sw=sw;
+0042     Human_model(j).sv=sv;
 0043 <span class="keyword">end</span>
-0044</pre></div>
-<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0044 Human_model=<a href="ForwardAllKinematics.html" class="code" title="function [Human_model] = ForwardAllKinematics(Human_model,j)">ForwardAllKinematics</a>(Human_model,Human_model(j).sister);
+0045 Human_model=<a href="ForwardAllKinematics.html" class="code" title="function [Human_model] = ForwardAllKinematics(Human_model,j)">ForwardAllKinematics</a>(Human_model,Human_model(j).child);
+0046 
+0047 <span class="keyword">end</span>
+0048</pre></div>
+<hr><address>Generated on Wed 07-Nov-2018 15:15:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

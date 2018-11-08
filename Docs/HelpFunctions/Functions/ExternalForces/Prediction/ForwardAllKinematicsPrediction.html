@@ -43,6 +43,10 @@ ________________________________________________________
 
  Licence
  Toolbox distributed under 3-Clause BSD License
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
 ________________________________________________________</pre></div>
 
 <!-- crossreference -->
@@ -76,43 +80,47 @@ This function is called by:
 0016 <span class="comment">% Licence</span>
 0017 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
 0018 <span class="comment">%________________________________________________________</span>
-0019 
-0020 <span class="keyword">if</span> j==0
-0021     <span class="keyword">return</span>;
-0022 <span class="keyword">end</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0021 <span class="comment">% Georges Dumont</span>
+0022 <span class="comment">%________________________________________________________</span>
 0023 
-0024 <span class="comment">%%</span>
-0025 <span class="keyword">if</span> j~=1
-0026     i=Human_model(j).mother;
-0027     <span class="comment">%% Position et Orientation</span>
-0028     Human_model(j).p=Human_model(i).R*Human_model(j).b+Human_model(i).p;
-0029     Human_model(j).R=Human_model(i).R*<a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).a,Human_model(j).q)*<a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).u,Human_model(j).theta);
-0030     <span class="comment">%% Vitesse spatiale</span>
-0031     sw=Human_model(i).R*Human_model(j).a;
-0032     sv=cross(Human_model(j).p,sw);
-0033     Human_model(j).w=Human_model(i).w+sw*Human_model(j).dq;
-0034     Human_model(j).v0=Human_model(i).v0+sv*Human_model(j).dq;
-0035     <span class="comment">%% Accélération spatiale</span>
-0036     dsv=cross(Human_model(i).w,sv)+cross(Human_model(i).v0,sw);
-0037     dsw=cross(Human_model(i).w,sw);
-0038     Human_model(j).dw=Human_model(i).dw+dsw*Human_model(j).dq+sw*Human_model(j).ddq;
-0039     Human_model(j).dv0=Human_model(i).dv0+dsv*Human_model(j).dq+sv*Human_model(j).ddq;
-0040     Human_model(j).sw=sw;
-0041     Human_model(j).sv=sv;
-0042     <span class="comment">%% Position et vitesse des points de contact avec l'extérieur</span>
-0043     <span class="keyword">for</span> m=1:numel(Prediction)
-0044         <span class="keyword">if</span> Prediction(m).exist &amp;&amp; Prediction(m).num_solid == j
-0045             Prediction(m).pos_anim = (Human_model(j).R * (Human_model(j).c + Human_model(j).anat_position{Prediction(m).num_markers,2}) + Human_model(j).p);
-0046             Prediction(m).vitesse = Human_model(j).v0 + cross(Human_model(j).w,Prediction(m).pos_anim); <span class="comment">% calcul de la vitesse</span>
-0047         <span class="keyword">end</span>
-0048     <span class="keyword">end</span>
-0049 <span class="keyword">end</span>
-0050 
-0051 [Human_model,Prediction]=<a href="ForwardAllKinematicsPrediction.html" class="code" title="function [Human_model,Prediction] = ForwardAllKinematicsPrediction(Human_model,Prediction,j)">ForwardAllKinematicsPrediction</a>(Human_model,Prediction,Human_model(j).sister);
-0052 [Human_model,Prediction]=<a href="ForwardAllKinematicsPrediction.html" class="code" title="function [Human_model,Prediction] = ForwardAllKinematicsPrediction(Human_model,Prediction,j)">ForwardAllKinematicsPrediction</a>(Human_model,Prediction,Human_model(j).child);
-0053 
-0054 <span class="keyword">end</span>
-0055</pre></div>
-<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0024 <span class="keyword">if</span> j==0
+0025     <span class="keyword">return</span>;
+0026 <span class="keyword">end</span>
+0027 
+0028 <span class="comment">%%</span>
+0029 <span class="keyword">if</span> j~=1
+0030     i=Human_model(j).mother;
+0031     <span class="comment">%% Position et Orientation</span>
+0032     Human_model(j).p=Human_model(i).R*Human_model(j).b+Human_model(i).p;
+0033     Human_model(j).R=Human_model(i).R*<a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).a,Human_model(j).q)*<a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).u,Human_model(j).theta);
+0034     <span class="comment">%% Vitesse spatiale</span>
+0035     sw=Human_model(i).R*Human_model(j).a;
+0036     sv=cross(Human_model(j).p,sw);
+0037     Human_model(j).w=Human_model(i).w+sw*Human_model(j).dq;
+0038     Human_model(j).v0=Human_model(i).v0+sv*Human_model(j).dq;
+0039     <span class="comment">%% Accélération spatiale</span>
+0040     dsv=cross(Human_model(i).w,sv)+cross(Human_model(i).v0,sw);
+0041     dsw=cross(Human_model(i).w,sw);
+0042     Human_model(j).dw=Human_model(i).dw+dsw*Human_model(j).dq+sw*Human_model(j).ddq;
+0043     Human_model(j).dv0=Human_model(i).dv0+dsv*Human_model(j).dq+sv*Human_model(j).ddq;
+0044     Human_model(j).sw=sw;
+0045     Human_model(j).sv=sv;
+0046     <span class="comment">%% Position et vitesse des points de contact avec l'extérieur</span>
+0047     <span class="keyword">for</span> m=1:numel(Prediction)
+0048         <span class="keyword">if</span> Prediction(m).exist &amp;&amp; Prediction(m).num_solid == j
+0049             Prediction(m).pos_anim = (Human_model(j).R * (Human_model(j).c + Human_model(j).anat_position{Prediction(m).num_markers,2}) + Human_model(j).p);
+0050             Prediction(m).vitesse = Human_model(j).v0 + cross(Human_model(j).w,Prediction(m).pos_anim); <span class="comment">% calcul de la vitesse</span>
+0051         <span class="keyword">end</span>
+0052     <span class="keyword">end</span>
+0053 <span class="keyword">end</span>
+0054 
+0055 [Human_model,Prediction]=<a href="ForwardAllKinematicsPrediction.html" class="code" title="function [Human_model,Prediction] = ForwardAllKinematicsPrediction(Human_model,Prediction,j)">ForwardAllKinematicsPrediction</a>(Human_model,Prediction,Human_model(j).sister);
+0056 [Human_model,Prediction]=<a href="ForwardAllKinematicsPrediction.html" class="code" title="function [Human_model,Prediction] = ForwardAllKinematicsPrediction(Human_model,Prediction,j)">ForwardAllKinematicsPrediction</a>(Human_model,Prediction,Human_model(j).child);
+0057 
+0058 <span class="keyword">end</span>
+0059</pre></div>
+<hr><address>Generated on Wed 07-Nov-2018 15:15:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

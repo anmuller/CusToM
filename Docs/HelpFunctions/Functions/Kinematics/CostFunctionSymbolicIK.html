@@ -46,6 +46,10 @@ ________________________________________________________
 
  Licence
  Toolbox distributed under 3-Clause BSD License
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
 ________________________________________________________</pre></div>
 
 <!-- crossreference -->
@@ -82,16 +86,20 @@ This function is called by:
 0019 <span class="comment">% Licence</span>
 0020 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
 0021 <span class="comment">%________________________________________________________</span>
-0022 <span class="keyword">for</span> c=1:nb_cut
-0023     [Rcut(:,:,c),pcut(:,:,c)]=list_function{c}(q,pcut,Rcut);
-0024 <span class="keyword">end</span>
-0025 
-0026 error=0;
-0027 <span class="keyword">for</span> m=1:numel(list_function_markers)
-0028     error = error + norm(list_function_markers{m}(q,pcut,Rcut) - real_markers(m).position(f,:)')^2;
-0029 <span class="keyword">end</span>
-0030 
-0031 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0024 <span class="comment">% Georges Dumont</span>
+0025 <span class="comment">%________________________________________________________</span>
+0026 <span class="keyword">for</span> c=1:nb_cut
+0027     [Rcut(:,:,c),pcut(:,:,c)]=list_function{c}(q,pcut,Rcut);
+0028 <span class="keyword">end</span>
+0029 
+0030 error=0;
+0031 <span class="keyword">for</span> m=1:numel(list_function_markers)
+0032     error = error + norm(list_function_markers{m}(q,pcut,Rcut) - real_markers(m).position(f,:)')^2;
+0033 <span class="keyword">end</span>
+0034 
+0035 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 07-Nov-2018 15:15:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

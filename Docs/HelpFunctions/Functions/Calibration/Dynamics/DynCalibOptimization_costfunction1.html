@@ -55,6 +55,10 @@ ________________________________________________________
 
  Licence
  Toolbox distributed under 3-Clause BSD License
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
 ________________________________________________________</pre></div>
 
 <!-- crossreference -->
@@ -100,59 +104,63 @@ This function is called by:
 0028 <span class="comment">% Licence</span>
 0029 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
 0030 <span class="comment">%________________________________________________________</span>
-0031 
-0032 <span class="comment">%% Actualisation du modèle à partir de X</span>
-0033 num_i=0;
-0034 <span class="keyword">for</span> i=1:numel(Human_model)
-0035     <span class="keyword">if</span> numel(Human_model(i).L) ~= 0 <span class="comment">% Pour les solides possédant le champ « L ». For solids with « L », indicating that a stadium solid is associated</span>
-0036         num_i=num_i+1;
-0037         [Masse,Zc,Ix,Iy,Iz]=<a href="DynParametersComputation.html" class="code" title="function [Masse,Zc,Ix,Iy,Iz] = DynParametersComputation(D,r0,t0,r1,t1,h)">DynParametersComputation</a>(1000,X(4*(num_i-1)+1),X(4*(num_i-1)+3),X(4*(num_i-1)+2),X(4*(num_i-1)+4),Human_model(i).ParamAnthropo.h);
-0038         <span class="comment">% Masse</span>
-0039         Human_model(i).m=Masse;
-0040         <span class="comment">% Centre de masse</span>
-0041         <span class="keyword">if</span> Human_model(i).ParamAnthropo.Typ == 1
-0042             DeltaZc = (Zc - Human_model(i).ParamAnthropo.Zc);
-0043         <span class="keyword">else</span>
-0044             DeltaZc = -(Zc - Human_model(i).ParamAnthropo.Zc);
-0045         <span class="keyword">end</span>
-0046         Cy=Human_model(i).c(2) + DeltaZc;
-0047         Human_model(i).c(2) = Cy;
-0048         <span class="comment">% Inertie</span>
-0049         Human_model(i).I = [Ix 0 0; 0 Iy 0; 0 0 Iz]; <span class="comment">% - [Masse*Cy*Cy 0 0;0 0 0;0 0 Masse*Cy*Cy]; % on déplace la matrice d'inertie en G</span>
-0050     <span class="keyword">end</span>
-0051 <span class="keyword">end</span>
-0052 
-0053 <span class="comment">%% Dynamique inverse</span>
-0054 <span class="comment">%% Inverse dynamics</span>
-0055 f6dof=zeros(3,nbframe);
-0056 t6dof0=zeros(3,nbframe);
-0057 t6dof=t6dof0;
-0058 <span class="keyword">for</span> i=frame_opti
-0059     <span class="comment">% attribution à chaque articulation de la position/vitesse/accélération</span>
-0060     <span class="comment">% setting position/speed/acceleration to each joint</span>
-0061     Human_model(1).p=p_pelvis(i,:)';
-0062     Human_model(1).R=r_pelvis{i};
-0063     Human_model(1).v0=v0(i,:)';
-0064     Human_model(1).w=w(i,:)';
-0065     Human_model(1).dv0=dv0(i,:)';
-0066     Human_model(1).dw=dw(i,:)';    
-0067     <span class="keyword">for</span> j=2:numel(Human_model)
-0068         Human_model(j).q=q(i,j); <span class="comment">%#ok&lt;*SAGROW&gt;</span>
-0069         Human_model(j).dq=dq(i,j);
-0070         Human_model(j).ddq=ddq(i,j);
-0071     <span class="keyword">end</span>
-0072     Human_model = <a href="../../../Functions/Dynamics/ForwardAllKinematics.html" class="code" title="function [Human_model] = ForwardAllKinematics(Human_model,j)">ForwardAllKinematics</a>(Human_model,1);
-0073     [Human_model,f6dof(:,i),t6dof0(:,i)]=<a href="../../../Functions/Dynamics/InverseDynamicsSolid.html" class="code" title="function [Human_model,f,t]=InverseDynamicsSolid(Human_model,external_forces,g,j)">InverseDynamicsSolid</a>(Human_model,external_forces(i).fext,g,1);
-0074     <span class="comment">% Calcul des efforts au niveau de la liaison 6DoF (transport du moment)</span>
-0075     t6dof(:,i) = t6dof0(:,i) + cross(f6dof(:,i),p_pelvis(i,:)'); 
-0076 <span class="keyword">end</span>
-0077 
-0078 <span class="comment">%% Calcul de la fonction de cout</span>
-0079 <span class="comment">%% Computation of the cost function</span>
-0080 
-0081 y=(sum(sum(abs(f6dof(:,frame_opti)./BW).^2))+sum(sum(abs(t6dof(:,frame_opti)./(BW*H)).^2)))/numel(frame_opti);
-0082 
-0083 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0031 <span class="comment">%</span>
+0032 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0033 <span class="comment">% Georges Dumont</span>
+0034 <span class="comment">%________________________________________________________</span>
+0035 
+0036 <span class="comment">%% Actualisation du modèle à partir de X</span>
+0037 num_i=0;
+0038 <span class="keyword">for</span> i=1:numel(Human_model)
+0039     <span class="keyword">if</span> numel(Human_model(i).L) ~= 0 <span class="comment">% Pour les solides possédant le champ « L ». For solids with « L », indicating that a stadium solid is associated</span>
+0040         num_i=num_i+1;
+0041         [Masse,Zc,Ix,Iy,Iz]=<a href="DynParametersComputation.html" class="code" title="function [Masse,Zc,Ix,Iy,Iz] = DynParametersComputation(D,r0,t0,r1,t1,h)">DynParametersComputation</a>(1000,X(4*(num_i-1)+1),X(4*(num_i-1)+3),X(4*(num_i-1)+2),X(4*(num_i-1)+4),Human_model(i).ParamAnthropo.h);
+0042         <span class="comment">% Masse</span>
+0043         Human_model(i).m=Masse;
+0044         <span class="comment">% Centre de masse</span>
+0045         <span class="keyword">if</span> Human_model(i).ParamAnthropo.Typ == 1
+0046             DeltaZc = (Zc - Human_model(i).ParamAnthropo.Zc);
+0047         <span class="keyword">else</span>
+0048             DeltaZc = -(Zc - Human_model(i).ParamAnthropo.Zc);
+0049         <span class="keyword">end</span>
+0050         Cy=Human_model(i).c(2) + DeltaZc;
+0051         Human_model(i).c(2) = Cy;
+0052         <span class="comment">% Inertie</span>
+0053         Human_model(i).I = [Ix 0 0; 0 Iy 0; 0 0 Iz]; <span class="comment">% - [Masse*Cy*Cy 0 0;0 0 0;0 0 Masse*Cy*Cy]; % on déplace la matrice d'inertie en G</span>
+0054     <span class="keyword">end</span>
+0055 <span class="keyword">end</span>
+0056 
+0057 <span class="comment">%% Dynamique inverse</span>
+0058 <span class="comment">%% Inverse dynamics</span>
+0059 f6dof=zeros(3,nbframe);
+0060 t6dof0=zeros(3,nbframe);
+0061 t6dof=t6dof0;
+0062 <span class="keyword">for</span> i=frame_opti
+0063     <span class="comment">% attribution à chaque articulation de la position/vitesse/accélération</span>
+0064     <span class="comment">% setting position/speed/acceleration to each joint</span>
+0065     Human_model(1).p=p_pelvis(i,:)';
+0066     Human_model(1).R=r_pelvis{i};
+0067     Human_model(1).v0=v0(i,:)';
+0068     Human_model(1).w=w(i,:)';
+0069     Human_model(1).dv0=dv0(i,:)';
+0070     Human_model(1).dw=dw(i,:)';    
+0071     <span class="keyword">for</span> j=2:numel(Human_model)
+0072         Human_model(j).q=q(i,j); <span class="comment">%#ok&lt;*SAGROW&gt;</span>
+0073         Human_model(j).dq=dq(i,j);
+0074         Human_model(j).ddq=ddq(i,j);
+0075     <span class="keyword">end</span>
+0076     Human_model = <a href="../../../Functions/Dynamics/ForwardAllKinematics.html" class="code" title="function [Human_model] = ForwardAllKinematics(Human_model,j)">ForwardAllKinematics</a>(Human_model,1);
+0077     [Human_model,f6dof(:,i),t6dof0(:,i)]=<a href="../../../Functions/Dynamics/InverseDynamicsSolid.html" class="code" title="function [Human_model,f,t]=InverseDynamicsSolid(Human_model,external_forces,g,j)">InverseDynamicsSolid</a>(Human_model,external_forces(i).fext,g,1);
+0078     <span class="comment">% Calcul des efforts au niveau de la liaison 6DoF (transport du moment)</span>
+0079     t6dof(:,i) = t6dof0(:,i) + cross(f6dof(:,i),p_pelvis(i,:)'); 
+0080 <span class="keyword">end</span>
+0081 
+0082 <span class="comment">%% Calcul de la fonction de cout</span>
+0083 <span class="comment">%% Computation of the cost function</span>
+0084 
+0085 y=(sum(sum(abs(f6dof(:,frame_opti)./BW).^2))+sum(sum(abs(t6dof(:,frame_opti)./(BW*H)).^2)))/numel(frame_opti);
+0086 
+0087 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 07-Nov-2018 15:15:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

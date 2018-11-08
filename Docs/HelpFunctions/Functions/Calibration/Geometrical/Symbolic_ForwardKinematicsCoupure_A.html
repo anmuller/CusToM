@@ -54,6 +54,10 @@ ________________________________________________________
 
  Licence
  Toolbox distributed under 3-Clause BSD License
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
 ________________________________________________________</pre></div>
 
 <!-- crossreference -->
@@ -99,127 +103,131 @@ This function is called by:
 0028 <span class="comment">% Licence</span>
 0029 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
 0030 <span class="comment">%________________________________________________________</span>
-0031 
-0032 <span class="keyword">if</span> nargin&lt;12
-0033     p_ClosedLoop={};
-0034     R_ClosedLoop={};
-0035 <span class="keyword">end</span>
-0036 
-0037 <span class="comment">%%</span>
-0038 <span class="keyword">if</span> j==0
-0039     <span class="keyword">return</span>;
-0040 <span class="keyword">end</span>
-0041 
-0042 <span class="comment">%%</span>
-0043 <span class="keyword">if</span> Human_model(j).mother ~= 0
-0044     i=Human_model(j).mother;
-0045     
-0046     <span class="comment">% regarder combien il y a de mères avant (sans coupure) (how many Mothers/antecedent without finding a cut)</span>
-0047     num_solid=<a href="../../../Functions/AlgoMathsModel/NbSolidUpstream.html" class="code" title="function [k]=NbSolidUpstream(Human_model,j,k)">NbSolidUpstream</a>(Human_model,j,1);
-0048     
-0049     <span class="comment">% angle = alpha*qi si exist(linear_constraint) sinon angle=qj</span>
-0050     <span class="keyword">if</span> size(Human_model(j).linear_constraint) == [0 0]  <span class="comment">% si coordonnée articulaire fonction linéaire d'une autre coordonnée articulaire (if an articular coordinate if function of another one)</span>
-0051         q=Q(j);
-0052     <span class="keyword">else</span>
-0053         q=Human_model(j).linear_constraint(2)*Q(Human_model(j).linear_constraint(1)); <span class="comment">% qj=alpha*q</span>
-0054     <span class="keyword">end</span>
-0055     
-0056     <span class="comment">%Axe</span>
-0057     <span class="comment">%On fait varier la position de ces axes selon</span>
-0058     <span class="keyword">if</span> ~isfield(Human_model,<span class="string">'v'</span>) || isempty(Human_model(j).v)
-0059         axe = Human_model(j).a;
-0060     <span class="keyword">else</span>
-0061         <span class="comment">%Angles</span>
-0062         alpha_j=alpha(2*j-1:2*j);
-0063         <span class="comment">% Nouvel axe</span>
-0064         axe = <a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).v(:,2),alpha_j(2))*<a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).v(:,1),alpha_j(1))*Human_model(j).a;
-0065     <span class="keyword">end</span>
-0066    
-0067    
-0068    
-0069     <span class="comment">% si c'est supérieur à 10 : alors on coupe --&gt; position de la mère picoupure, rotation de la mère : Ricoupure</span>
-0070     <span class="comment">% If &gt; 10, then proceed to a cut in the chain =&gt; position of the Mother picoupure, rotation of the Mother Ricoupure</span>
-0071     <span class="keyword">if</span> num_solid &gt; 6 <span class="comment">% mother : coupure</span>
-0072        Human_model(i).KinematicsCut=num_cut;
-0073        
-0074        
-0075         eval([<span class="string">'p'</span> num2str(num_cut) <span class="string">'cut = sym([''p'' num2str(num_cut) ''cut''], [3 1]);'</span>])
-0076         eval([<span class="string">'R'</span> num2str(num_cut) <span class="string">'cut = sym([''R'' num2str(num_cut) ''cut''], [3 3]);'</span>])
-0077         <span class="keyword">for</span> zz=1:3   <span class="comment">% décalaration des variables de coupure</span>
-0078             eval([<span class="string">'assume(p'</span> num2str(num_cut) <span class="string">'cut('</span> num2str(zz) <span class="string">',1),''real'');'</span>])
-0079             <span class="keyword">for</span> z=1:3
-0080                 eval([<span class="string">'assume(R'</span> num2str(num_cut) <span class="string">'cut('</span> num2str(zz) <span class="string">','</span> num2str(z) <span class="string">'),''real'');'</span>])
-0081             <span class="keyword">end</span>
-0082         <span class="keyword">end</span>
-0083             <span class="keyword">if</span> Human_model(j).joint == 1    <span class="comment">% liaison pivot (pin joint)</span>
-0084 <span class="comment">%        Human_model(j).p=eval(['R' num2str(num_cut) 'cut'])*(k(i)*Human_model(j).b)+eval(['p' num2str(num_cut) 'cut']); % position du repère (reference frame position)</span>
-0085        Human_model(j).p=eval([<span class="string">'R'</span> num2str(num_cut) <span class="string">'cut'</span>])*(k(i)*Human_model(j).b)+eval([<span class="string">'p'</span> num2str(num_cut) <span class="string">'cut'</span>]); <span class="comment">% position du repère (reference frame position)</span>
-0086        Human_model(j).R=eval([<span class="string">'R'</span> num2str(num_cut) <span class="string">'cut'</span>])*<a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(axe,q)*<a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).u,Human_model(j).theta); <span class="comment">% orientation du repère (reference frame orientation)</span>
-0087             <span class="keyword">end</span>
-0088             <span class="keyword">if</span> Human_model(j).joint == 2    <span class="comment">% liaison glissière (slide joint)</span>
-0089 <span class="comment">%        Human_model(j).p=eval(['R' num2str(num_cut) 'cut'])*(k(i)*Human_model(j).b + angle*Human_model(j).a)+eval(['p' num2str(num_cut) 'cut']);</span>
-0090        Human_model(j).p=eval([<span class="string">'R'</span> num2str(num_cut) <span class="string">'cut'</span>])*(k(i)*Human_model(j).b + q*axe)+eval([<span class="string">'p'</span> num2str(num_cut) <span class="string">'cut'</span>]);         
-0091        Human_model(j).R=eval([<span class="string">'R'</span> num2str(num_cut) <span class="string">'cut'</span>])*<a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).u,Human_model(j).theta);         
-0092             <span class="keyword">end</span>
-0093        num_cut=num_cut+1; <span class="comment">% incrémentation du numéro de coupure</span>
-0094     <span class="keyword">else</span>   
-0095             <span class="keyword">if</span> Human_model(j).joint == 1    <span class="comment">% liaison pivot (pin joint)</span>
-0096 <span class="comment">%         Human_model(j).p=Human_model(i).R*(k(i)*Human_model(j).b)+Human_model(i).p; % position du repère</span>
-0097         Human_model(j).p=Human_model(i).R*(k(i)*Human_model(j).b)+Human_model(i).p; <span class="comment">% position du repère</span>
-0098 <span class="comment">%         Human_model(j).R=Human_model(i).R*Rodrigues(Human_model(j).a,angle)*Rodrigues(Human_model(j).u,Human_model(j).theta); % orientation du repère</span>
-0099         Human_model(j).R=Human_model(i).R*<a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(axe,q)*<a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).u,Human_model(j).theta); <span class="comment">% orientation du repère</span>
-0100             <span class="keyword">end</span>
-0101             <span class="keyword">if</span> Human_model(j).joint == 2    <span class="comment">% liaison glissière (slide joint)</span>
-0102 <span class="comment">%         Human_model(j).p = Human_model(i).R *( k(i)*Human_model(j).b + angle* Human_model(j).a) + Human_model(i).p;</span>
-0103         Human_model(j).p = Human_model(i).R *( k(i)*Human_model(j).b + q* axe ) + Human_model(i).p;
-0104         <span class="comment">% l'orientation de l'axe de rotation dépend de a, et d'une</span>
-0105         <span class="comment">% variation d'orientation</span>
-0106         Human_model(j).R = Human_model(i).R * <a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>( Human_model(j).u , Human_model(j).theta );
-0107             <span class="keyword">end</span>
-0108     <span class="keyword">end</span>
-0109     
-0110     <span class="comment">% Si fermeture de boucle</span>
-0111     <span class="keyword">if</span> size(Human_model(j).ClosedLoop) ~= [0 0] <span class="comment">%#ok&lt;BDSCA&gt;</span>
-0112         <span class="comment">% on trouve le solide et la position du point où il y a eu la coupure</span>
-0113         <span class="comment">% Finding the solid and the point’s position where the cut was performed</span>
-0114         name=Human_model(j).ClosedLoop;
-0115         test=0;
-0116         <span class="keyword">for</span> pp=1:numel(Human_model)
-0117             <span class="keyword">for</span> kk=1:size(Human_model(pp).anat_position,1)
-0118                 <span class="keyword">if</span> strcmp(name,Human_model(pp).anat_position(kk,1))
-0119                     num_solid=pp;
-0120                     num_markers=kk;
-0121                     test=1;
-0122                     <span class="keyword">break</span>
-0123                 <span class="keyword">end</span>
-0124             <span class="keyword">end</span>
-0125             <span class="keyword">if</span> test == 1
-0126                 <span class="keyword">break</span>
-0127             <span class="keyword">end</span>
-0128         <span class="keyword">end</span>
-0129         [solid_path]=<a href="../../../Functions/AlgoMathsModel/find_solid_path.html" class="code" title="function [solid_path]=find_solid_path(Human_model,i,k,solid_path)">find_solid_path</a>(Human_model,j,num_solid);
-0130         s = Human_model(num_solid).c + Human_model(num_solid).anat_position{num_markers,2}; <span class="comment">% position par rapport à l'articulation du solide parent de la boucle fermée</span>
-0131         [Human_model,p_ClosedLoop{numClosedLoop},R_ClosedLoop{numClosedLoop}] = ForwardKinematics_ClosedLoop(Human_model,1,s,solid_path,[0 0 0]',eye(3),Q,k);
-0132         numClosedLoop=numClosedLoop+1;
-0133     <span class="keyword">end</span>
-0134     
-0135 <span class="keyword">end</span>
-0136 
-0137 <span class="comment">%% Calcul de la position des marqueurs (computation of markers position)</span>
-0138 <span class="keyword">for</span> m=1:numel(Markers_set)
-0139     <span class="keyword">if</span> Markers_set(m).exist
-0140         <span class="keyword">if</span> Markers_set(m).num_solid == j
-0141             Markers_set(m).position_symbolic=( Human_model(j).p + <span class="keyword">...</span>
-0142                                     Human_model(j).R*(k(j)*( Human_model(j).c + Human_model(Markers_set(m).num_solid).anat_position{Markers_set(m).num_markers,2} + <span class="keyword">...</span>
-0143                                     p_adapt(sum([Markers_set(1:m).exist]),:)') ) );
-0144         <span class="keyword">end</span>
-0145     <span class="keyword">end</span>
-0146 <span class="keyword">end</span>
-0147 
-0148 [Human_model,Markers_set,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop]=<a href="Symbolic_ForwardKinematicsCoupure_A.html" class="code" title="function [Human_model,Markers_set,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,j,Q,k,p_adapt,alpha,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop)">Symbolic_ForwardKinematicsCoupure_A</a>(Human_model,Markers_set,Human_model(j).sister,Q,k,p_adapt,alpha,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop);
-0149 [Human_model,Markers_set,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop]=<a href="Symbolic_ForwardKinematicsCoupure_A.html" class="code" title="function [Human_model,Markers_set,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,j,Q,k,p_adapt,alpha,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop)">Symbolic_ForwardKinematicsCoupure_A</a>(Human_model,Markers_set,Human_model(j).child,Q,k,p_adapt,alpha,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop);
-0150 
-0151 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0031 <span class="comment">%</span>
+0032 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0033 <span class="comment">% Georges Dumont</span>
+0034 <span class="comment">%________________________________________________________</span>
+0035 
+0036 <span class="keyword">if</span> nargin&lt;12
+0037     p_ClosedLoop={};
+0038     R_ClosedLoop={};
+0039 <span class="keyword">end</span>
+0040 
+0041 <span class="comment">%%</span>
+0042 <span class="keyword">if</span> j==0
+0043     <span class="keyword">return</span>;
+0044 <span class="keyword">end</span>
+0045 
+0046 <span class="comment">%%</span>
+0047 <span class="keyword">if</span> Human_model(j).mother ~= 0
+0048     i=Human_model(j).mother;
+0049     
+0050     <span class="comment">% regarder combien il y a de mères avant (sans coupure) (how many Mothers/antecedent without finding a cut)</span>
+0051     num_solid=<a href="../../../Functions/AlgoMathsModel/NbSolidUpstream.html" class="code" title="function [k]=NbSolidUpstream(Human_model,j,k)">NbSolidUpstream</a>(Human_model,j,1);
+0052     
+0053     <span class="comment">% angle = alpha*qi si exist(linear_constraint) sinon angle=qj</span>
+0054     <span class="keyword">if</span> size(Human_model(j).linear_constraint) == [0 0]  <span class="comment">% si coordonnée articulaire fonction linéaire d'une autre coordonnée articulaire (if an articular coordinate if function of another one)</span>
+0055         q=Q(j);
+0056     <span class="keyword">else</span>
+0057         q=Human_model(j).linear_constraint(2)*Q(Human_model(j).linear_constraint(1)); <span class="comment">% qj=alpha*q</span>
+0058     <span class="keyword">end</span>
+0059     
+0060     <span class="comment">%Axe</span>
+0061     <span class="comment">%On fait varier la position de ces axes selon</span>
+0062     <span class="keyword">if</span> ~isfield(Human_model,<span class="string">'v'</span>) || isempty(Human_model(j).v)
+0063         axe = Human_model(j).a;
+0064     <span class="keyword">else</span>
+0065         <span class="comment">%Angles</span>
+0066         alpha_j=alpha(2*j-1:2*j);
+0067         <span class="comment">% Nouvel axe</span>
+0068         axe = <a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).v(:,2),alpha_j(2))*<a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).v(:,1),alpha_j(1))*Human_model(j).a;
+0069     <span class="keyword">end</span>
+0070    
+0071    
+0072    
+0073     <span class="comment">% si c'est supérieur à 10 : alors on coupe --&gt; position de la mère picoupure, rotation de la mère : Ricoupure</span>
+0074     <span class="comment">% If &gt; 10, then proceed to a cut in the chain =&gt; position of the Mother picoupure, rotation of the Mother Ricoupure</span>
+0075     <span class="keyword">if</span> num_solid &gt; 6 <span class="comment">% mother : coupure</span>
+0076        Human_model(i).KinematicsCut=num_cut;
+0077        
+0078        
+0079         eval([<span class="string">'p'</span> num2str(num_cut) <span class="string">'cut = sym([''p'' num2str(num_cut) ''cut''], [3 1]);'</span>])
+0080         eval([<span class="string">'R'</span> num2str(num_cut) <span class="string">'cut = sym([''R'' num2str(num_cut) ''cut''], [3 3]);'</span>])
+0081         <span class="keyword">for</span> zz=1:3   <span class="comment">% décalaration des variables de coupure</span>
+0082             eval([<span class="string">'assume(p'</span> num2str(num_cut) <span class="string">'cut('</span> num2str(zz) <span class="string">',1),''real'');'</span>])
+0083             <span class="keyword">for</span> z=1:3
+0084                 eval([<span class="string">'assume(R'</span> num2str(num_cut) <span class="string">'cut('</span> num2str(zz) <span class="string">','</span> num2str(z) <span class="string">'),''real'');'</span>])
+0085             <span class="keyword">end</span>
+0086         <span class="keyword">end</span>
+0087             <span class="keyword">if</span> Human_model(j).joint == 1    <span class="comment">% liaison pivot (pin joint)</span>
+0088 <span class="comment">%        Human_model(j).p=eval(['R' num2str(num_cut) 'cut'])*(k(i)*Human_model(j).b)+eval(['p' num2str(num_cut) 'cut']); % position du repère (reference frame position)</span>
+0089        Human_model(j).p=eval([<span class="string">'R'</span> num2str(num_cut) <span class="string">'cut'</span>])*(k(i)*Human_model(j).b)+eval([<span class="string">'p'</span> num2str(num_cut) <span class="string">'cut'</span>]); <span class="comment">% position du repère (reference frame position)</span>
+0090        Human_model(j).R=eval([<span class="string">'R'</span> num2str(num_cut) <span class="string">'cut'</span>])*<a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(axe,q)*<a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).u,Human_model(j).theta); <span class="comment">% orientation du repère (reference frame orientation)</span>
+0091             <span class="keyword">end</span>
+0092             <span class="keyword">if</span> Human_model(j).joint == 2    <span class="comment">% liaison glissière (slide joint)</span>
+0093 <span class="comment">%        Human_model(j).p=eval(['R' num2str(num_cut) 'cut'])*(k(i)*Human_model(j).b + angle*Human_model(j).a)+eval(['p' num2str(num_cut) 'cut']);</span>
+0094        Human_model(j).p=eval([<span class="string">'R'</span> num2str(num_cut) <span class="string">'cut'</span>])*(k(i)*Human_model(j).b + q*axe)+eval([<span class="string">'p'</span> num2str(num_cut) <span class="string">'cut'</span>]);         
+0095        Human_model(j).R=eval([<span class="string">'R'</span> num2str(num_cut) <span class="string">'cut'</span>])*<a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).u,Human_model(j).theta);         
+0096             <span class="keyword">end</span>
+0097        num_cut=num_cut+1; <span class="comment">% incrémentation du numéro de coupure</span>
+0098     <span class="keyword">else</span>   
+0099             <span class="keyword">if</span> Human_model(j).joint == 1    <span class="comment">% liaison pivot (pin joint)</span>
+0100 <span class="comment">%         Human_model(j).p=Human_model(i).R*(k(i)*Human_model(j).b)+Human_model(i).p; % position du repère</span>
+0101         Human_model(j).p=Human_model(i).R*(k(i)*Human_model(j).b)+Human_model(i).p; <span class="comment">% position du repère</span>
+0102 <span class="comment">%         Human_model(j).R=Human_model(i).R*Rodrigues(Human_model(j).a,angle)*Rodrigues(Human_model(j).u,Human_model(j).theta); % orientation du repère</span>
+0103         Human_model(j).R=Human_model(i).R*<a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(axe,q)*<a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).u,Human_model(j).theta); <span class="comment">% orientation du repère</span>
+0104             <span class="keyword">end</span>
+0105             <span class="keyword">if</span> Human_model(j).joint == 2    <span class="comment">% liaison glissière (slide joint)</span>
+0106 <span class="comment">%         Human_model(j).p = Human_model(i).R *( k(i)*Human_model(j).b + angle* Human_model(j).a) + Human_model(i).p;</span>
+0107         Human_model(j).p = Human_model(i).R *( k(i)*Human_model(j).b + q* axe ) + Human_model(i).p;
+0108         <span class="comment">% l'orientation de l'axe de rotation dépend de a, et d'une</span>
+0109         <span class="comment">% variation d'orientation</span>
+0110         Human_model(j).R = Human_model(i).R * <a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>( Human_model(j).u , Human_model(j).theta );
+0111             <span class="keyword">end</span>
+0112     <span class="keyword">end</span>
+0113     
+0114     <span class="comment">% Si fermeture de boucle</span>
+0115     <span class="keyword">if</span> size(Human_model(j).ClosedLoop) ~= [0 0] <span class="comment">%#ok&lt;BDSCA&gt;</span>
+0116         <span class="comment">% on trouve le solide et la position du point où il y a eu la coupure</span>
+0117         <span class="comment">% Finding the solid and the point’s position where the cut was performed</span>
+0118         name=Human_model(j).ClosedLoop;
+0119         test=0;
+0120         <span class="keyword">for</span> pp=1:numel(Human_model)
+0121             <span class="keyword">for</span> kk=1:size(Human_model(pp).anat_position,1)
+0122                 <span class="keyword">if</span> strcmp(name,Human_model(pp).anat_position(kk,1))
+0123                     num_solid=pp;
+0124                     num_markers=kk;
+0125                     test=1;
+0126                     <span class="keyword">break</span>
+0127                 <span class="keyword">end</span>
+0128             <span class="keyword">end</span>
+0129             <span class="keyword">if</span> test == 1
+0130                 <span class="keyword">break</span>
+0131             <span class="keyword">end</span>
+0132         <span class="keyword">end</span>
+0133         [solid_path]=<a href="../../../Functions/AlgoMathsModel/find_solid_path.html" class="code" title="function [solid_path]=find_solid_path(Human_model,i,k,solid_path)">find_solid_path</a>(Human_model,j,num_solid);
+0134         s = Human_model(num_solid).c + Human_model(num_solid).anat_position{num_markers,2}; <span class="comment">% position par rapport à l'articulation du solide parent de la boucle fermée</span>
+0135         [Human_model,p_ClosedLoop{numClosedLoop},R_ClosedLoop{numClosedLoop}] = ForwardKinematics_ClosedLoop(Human_model,1,s,solid_path,[0 0 0]',eye(3),Q,k);
+0136         numClosedLoop=numClosedLoop+1;
+0137     <span class="keyword">end</span>
+0138     
+0139 <span class="keyword">end</span>
+0140 
+0141 <span class="comment">%% Calcul de la position des marqueurs (computation of markers position)</span>
+0142 <span class="keyword">for</span> m=1:numel(Markers_set)
+0143     <span class="keyword">if</span> Markers_set(m).exist
+0144         <span class="keyword">if</span> Markers_set(m).num_solid == j
+0145             Markers_set(m).position_symbolic=( Human_model(j).p + <span class="keyword">...</span>
+0146                                     Human_model(j).R*(k(j)*( Human_model(j).c + Human_model(Markers_set(m).num_solid).anat_position{Markers_set(m).num_markers,2} + <span class="keyword">...</span>
+0147                                     p_adapt(sum([Markers_set(1:m).exist]),:)') ) );
+0148         <span class="keyword">end</span>
+0149     <span class="keyword">end</span>
+0150 <span class="keyword">end</span>
+0151 
+0152 [Human_model,Markers_set,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop]=<a href="Symbolic_ForwardKinematicsCoupure_A.html" class="code" title="function [Human_model,Markers_set,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,j,Q,k,p_adapt,alpha,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop)">Symbolic_ForwardKinematicsCoupure_A</a>(Human_model,Markers_set,Human_model(j).sister,Q,k,p_adapt,alpha,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop);
+0153 [Human_model,Markers_set,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop]=<a href="Symbolic_ForwardKinematicsCoupure_A.html" class="code" title="function [Human_model,Markers_set,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,j,Q,k,p_adapt,alpha,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop)">Symbolic_ForwardKinematicsCoupure_A</a>(Human_model,Markers_set,Human_model(j).child,Q,k,p_adapt,alpha,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop);
+0154 
+0155 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 07-Nov-2018 15:15:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

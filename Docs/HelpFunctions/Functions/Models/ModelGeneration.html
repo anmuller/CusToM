@@ -50,13 +50,17 @@ ________________________________________________________
 
  Licence
  Toolbox distributed under 3-Clause BSD License
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
 ________________________________________________________</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="ArmSegMass.html" class="code" title="function [Humerus_Mass, Forearm_Mass, Hand_Mass]= ArmSegMass(Arm_Mass)">ArmSegMass</a>	Arm mass distribution between each segment</li><li><a href="LegSegMass.html" class="code" title="function [Thigh_Mass, Shank_Mass, Foot_Mass]= LegSegMass(Leg_Mass)">LegSegMass</a>	Leg mass distribution between each segment</li><li><a href="../../Functions/Models/Markers/Functions/VerifMarkersOnModel.html" class="code" title="function [Markers_set]=VerifMarkersOnModel(Human_model,Markers_set)">VerifMarkersOnModel</a>	Verification that each marker is correctly defined on the osteo-articular model</li><li><a href="../../Functions/Models/Muscles/Functions/VerifMusclesOnModel.html" class="code" title="function [Muscles]=VerifMusclesOnModel(Human_model,Muscles)">VerifMusclesOnModel</a>	Verification that each muscle is correctly defined on the osteo-articular model</li><li><a href="TrunkSegMass.html" class="code" title="function [Pelvis_Mass, LowerTrunk_Mass, UpperTrunk_Mass, Skull_Mass]= TrunkSegMass(Trunk_Mass)">TrunkSegMass</a>	Trunk mass distribution between each segment</li><li><a href="WholeBodySegMass.html" class="code" title="function [Trunk_Mass, Arm_Mass, Leg_Mass]= WholeBodySegMass(BodyMass)">WholeBodySegMass</a>	Whole body mass distribution between each body part</li></ul>
+<li><a href="../../Functions/Models/Markers/Functions/VerifMarkersOnModel.html" class="code" title="function [Markers_set]=VerifMarkersOnModel(Human_model,Markers_set)">VerifMarkersOnModel</a>	Verification that each marker is correctly defined on the osteo-articular model</li><li><a href="../../Functions/Models/Muscles/Functions/VerifMusclesOnModel.html" class="code" title="function [Muscles]=VerifMusclesOnModel(Human_model,Muscles)">VerifMusclesOnModel</a>	Verification that each muscle is correctly defined on the osteo-articular model</li><li><a href="../../Functions/Models/Osteoarticular/ArmSegMass.html" class="code" title="function [Humerus_Mass, Forearm_Mass, Hand_Mass]= ArmSegMass(Arm_Mass)">ArmSegMass</a>	Arm mass distribution between each segment</li><li><a href="../../Functions/Models/Osteoarticular/LegSegMass.html" class="code" title="function [Thigh_Mass, Shank_Mass, Foot_Mass]= LegSegMass(Leg_Mass)">LegSegMass</a>	Leg mass distribution between each segment</li><li><a href="../../Functions/Models/Osteoarticular/TrunkSegMass.html" class="code" title="function [Pelvis_Mass, LowerTrunk_Mass, UpperTrunk_Mass, Skull_Mass]= TrunkSegMass(Trunk_Mass)">TrunkSegMass</a>	Trunk mass distribution between each segment</li><li><a href="../../Functions/Models/Osteoarticular/WholeBodySegMass.html" class="code" title="function [Trunk_Mass, Arm_Mass, Leg_Mass]= WholeBodySegMass(BodyMass)">WholeBodySegMass</a>	Whole body mass distribution between each body part</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 <li><a href="../../Functions/Calibration/CalibrateModelGeneration.html" class="code" title="function [] = CalibrateModelGeneration(ModelParameters,AnalysisParameters)">CalibrateModelGeneration</a>	Generation of the calibrated musculoskeletal model</li><li><a href="../../Functions/Interface/PlotModel.html" class="code" title="function [OsteoArticularModel,Markers,EnableModel] = PlotModel(ModelParameters,ax,seg_anim,muscles_anim,mod_marker_anim,exp_marker_anim,external_forces_anim,external_forces_pred,Anim)">PlotModel</a>	Plotting model for graphic interface</li></ul>
@@ -92,100 +96,104 @@ This function is called by:
 0023 <span class="comment">% Licence</span>
 0024 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
 0025 <span class="comment">%________________________________________________________</span>
-0026 
-0027 <span class="comment">% Initialisation</span>
-0028 OsteoArticularModel=[];
-0029 
-0030 <span class="comment">% Scaling coefficient from subject size and model size</span>
-0031 k=ModelParameters.Size/1.80;
-0032 
-0033 <span class="comment">% distribution of global subject mass in the different segments of the body</span>
-0034 [Mass.Trunk_Mass, Mass.Arm_Mass, Mass.Leg_Mass]= <a href="WholeBodySegMass.html" class="code" title="function [Trunk_Mass, Arm_Mass, Leg_Mass]= WholeBodySegMass(BodyMass)">WholeBodySegMass</a>(ModelParameters.Mass);
-0035 [Mass.Pelvis_Mass, Mass.LowerTrunk_Mass, Mass.UpperTrunk_Mass, Mass.Skull_Mass]= <a href="TrunkSegMass.html" class="code" title="function [Pelvis_Mass, LowerTrunk_Mass, UpperTrunk_Mass, Skull_Mass]= TrunkSegMass(Trunk_Mass)">TrunkSegMass</a>(Mass.Trunk_Mass);
-0036 [Mass.Thigh_Mass, Mass.Shank_Mass, Mass.Foot_Mass]= <a href="LegSegMass.html" class="code" title="function [Thigh_Mass, Shank_Mass, Foot_Mass]= LegSegMass(Leg_Mass)">LegSegMass</a>(Mass.Leg_Mass);
-0037 [Mass.UpperArm_Mass, Mass.Forearm_Mass, Mass.Hand_Mass]= <a href="ArmSegMass.html" class="code" title="function [Humerus_Mass, Forearm_Mass, Hand_Mass]= ArmSegMass(Arm_Mass)">ArmSegMass</a>(Mass.Arm_Mass);
-0038 
-0039 EnableModel = zeros(6,1);
-0040 
-0041 <span class="comment">%% Pelvis / LowerTrunk</span>
-0042 [OsteoArticularModel] = ModelParameters.PelvisLowerTrunk(OsteoArticularModel,k,Mass,[]);
-0043     
-0044 <span class="comment">%% UpperTrunk</span>
-0045 <span class="keyword">try</span>
-0046     [OsteoArticularModel] = ModelParameters.UpperTrunk(OsteoArticularModel,k,Mass,<span class="string">'LowerTrunk_UpperTrunkNode'</span>);
-0047 <span class="keyword">catch</span>
-0048     EnableModel(1) = 1;
-0049 <span class="keyword">end</span>
-0050 
-0051 <span class="comment">%% Head</span>
-0052 <span class="keyword">try</span>
-0053     [OsteoArticularModel]= ModelParameters.Head(OsteoArticularModel,k,Mass,<span class="string">'NeckNode'</span>);
-0054 <span class="keyword">catch</span>
-0055     EnableModel(2) = 1;
-0056 <span class="keyword">end</span>
-0057 
-0058 <span class="comment">%% Right leg</span>
-0059 <span class="keyword">try</span>
-0060     [OsteoArticularModel]= ModelParameters.RightLeg(OsteoArticularModel,k,<span class="string">'R'</span>,Mass,<span class="string">'Pelvis_HipJointRightNode'</span>);
-0061 <span class="keyword">catch</span>
-0062     EnableModel(3) = 1;
-0063 <span class="keyword">end</span>
-0064 
-0065 <span class="comment">%% Left leg</span>
-0066 <span class="keyword">try</span>
-0067     [OsteoArticularModel]= ModelParameters.LeftLeg(OsteoArticularModel,k,<span class="string">'L'</span>,Mass,<span class="string">'Pelvis_HipJointLeftNode'</span>);
-0068 <span class="keyword">catch</span>
-0069     EnableModel(4) = 1;
-0070 <span class="keyword">end</span>
-0071 
-0072 <span class="comment">%% Right arm</span>
-0073 <span class="keyword">try</span>
-0074     [OsteoArticularModel]= ModelParameters.RightArm(OsteoArticularModel,k,<span class="string">'R'</span>,Mass,<span class="string">'Thorax_ShoulderRightNode'</span>);
-0075 <span class="keyword">catch</span>
-0076     EnableModel(5) = 1;
-0077 <span class="keyword">end</span>    
-0078 
-0079 <span class="comment">%% Left arm</span>
-0080 <span class="keyword">try</span>
-0081     [OsteoArticularModel]= ModelParameters.LeftArm(OsteoArticularModel,k,<span class="string">'L'</span>,Mass,<span class="string">'Thorax_ShoulderLeftNode'</span>);
-0082 <span class="keyword">catch</span>
-0083     EnableModel(6) = 1;
-0084 <span class="keyword">end</span>
-0085 
-0086 <span class="comment">%% Markers</span>
-0087 [Markers] = ModelParameters.Markers(ModelParameters.MarkersOptions);
-0088 
-0089 <span class="comment">% We remove markers</span>
-0090 [Markers] = <a href="#_sub1" class="code" title="subfunction [Markers_set]=Remove_markers(Markers_set,Markers_set_missing_markers)">Remove_markers</a>(Markers,ModelParameters.MarkersRemoved);
-0091 
-0092 <span class="comment">% Checking if markers are on the model</span>
-0093 [Markers] = <a href="../../Functions/Models/Markers/Functions/VerifMarkersOnModel.html" class="code" title="function [Markers_set]=VerifMarkersOnModel(Human_model,Markers_set)">VerifMarkersOnModel</a>(OsteoArticularModel,Markers);
-0094 
-0095 <span class="comment">%% Muscles</span>
-0096 <span class="keyword">if</span> numel(ModelParameters.Muscles)
-0097     <span class="comment">% Initialisation</span>
-0098     Muscles = struct(<span class="string">'name'</span>,[],<span class="string">'f0'</span>,[],<span class="string">'l0'</span>,[],<span class="string">'Kt'</span>,[],<span class="string">'ls'</span>,[],<span class="string">'alpha0'</span>,[],<span class="string">'path'</span>,[]);Muscles(1) = [];
-0099 
-0100     <span class="comment">% add muscle sets</span>
-0101     <span class="keyword">for</span> i = 1:numel(ModelParameters.Muscles)
-0102         Muscles = ModelParameters.Muscles{i}(Muscles,ModelParameters.MusclesOptions{i});
-0103     <span class="keyword">end</span>
-0104 
-0105     <span class="comment">% Checking if muscles are on the model</span>
-0106     Muscles = <a href="../../Functions/Models/Muscles/Functions/VerifMusclesOnModel.html" class="code" title="function [Muscles]=VerifMusclesOnModel(Human_model,Muscles)">VerifMusclesOnModel</a>(OsteoArticularModel,Muscles);
-0107 <span class="keyword">else</span>
-0108     Muscles = [];
-0109 <span class="keyword">end</span>
-0110 
-0111 <span class="keyword">end</span>
-0112 
-0113 <a name="_sub1" href="#_subfunctions" class="code">function [Markers_set]=Remove_markers(Markers_set,Markers_set_missing_markers)</a>
-0114     [~,I,~]=intersect({Markers_set.name}',Markers_set_missing_markers);
-0115     Markers_set(I)=[];
-0116 <span class="keyword">end</span>
-0117 
-0118 
-0119</pre></div>
-<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0028 <span class="comment">% Georges Dumont</span>
+0029 <span class="comment">%________________________________________________________</span>
+0030 
+0031 <span class="comment">% Initialisation</span>
+0032 OsteoArticularModel=[];
+0033 
+0034 <span class="comment">% Scaling coefficient from subject size and model size</span>
+0035 k=ModelParameters.Size/1.80;
+0036 
+0037 <span class="comment">% distribution of global subject mass in the different segments of the body</span>
+0038 [Mass.Trunk_Mass, Mass.Arm_Mass, Mass.Leg_Mass]= <a href="../../Functions/Models/Osteoarticular/WholeBodySegMass.html" class="code" title="function [Trunk_Mass, Arm_Mass, Leg_Mass]= WholeBodySegMass(BodyMass)">WholeBodySegMass</a>(ModelParameters.Mass);
+0039 [Mass.Pelvis_Mass, Mass.LowerTrunk_Mass, Mass.UpperTrunk_Mass, Mass.Skull_Mass]= <a href="../../Functions/Models/Osteoarticular/TrunkSegMass.html" class="code" title="function [Pelvis_Mass, LowerTrunk_Mass, UpperTrunk_Mass, Skull_Mass]= TrunkSegMass(Trunk_Mass)">TrunkSegMass</a>(Mass.Trunk_Mass);
+0040 [Mass.Thigh_Mass, Mass.Shank_Mass, Mass.Foot_Mass]= <a href="../../Functions/Models/Osteoarticular/LegSegMass.html" class="code" title="function [Thigh_Mass, Shank_Mass, Foot_Mass]= LegSegMass(Leg_Mass)">LegSegMass</a>(Mass.Leg_Mass);
+0041 [Mass.UpperArm_Mass, Mass.Forearm_Mass, Mass.Hand_Mass]= <a href="../../Functions/Models/Osteoarticular/ArmSegMass.html" class="code" title="function [Humerus_Mass, Forearm_Mass, Hand_Mass]= ArmSegMass(Arm_Mass)">ArmSegMass</a>(Mass.Arm_Mass);
+0042 
+0043 EnableModel = zeros(6,1);
+0044 
+0045 <span class="comment">%% Pelvis / LowerTrunk</span>
+0046 [OsteoArticularModel] = ModelParameters.PelvisLowerTrunk(OsteoArticularModel,k,Mass,[]);
+0047     
+0048 <span class="comment">%% UpperTrunk</span>
+0049 <span class="keyword">try</span>
+0050     [OsteoArticularModel] = ModelParameters.UpperTrunk(OsteoArticularModel,k,Mass,<span class="string">'LowerTrunk_UpperTrunkNode'</span>);
+0051 <span class="keyword">catch</span>
+0052     EnableModel(1) = 1;
+0053 <span class="keyword">end</span>
+0054 
+0055 <span class="comment">%% Head</span>
+0056 <span class="keyword">try</span>
+0057     [OsteoArticularModel]= ModelParameters.Head(OsteoArticularModel,k,Mass,<span class="string">'NeckNode'</span>);
+0058 <span class="keyword">catch</span>
+0059     EnableModel(2) = 1;
+0060 <span class="keyword">end</span>
+0061 
+0062 <span class="comment">%% Right leg</span>
+0063 <span class="keyword">try</span>
+0064     [OsteoArticularModel]= ModelParameters.RightLeg(OsteoArticularModel,k,<span class="string">'R'</span>,Mass,<span class="string">'Pelvis_HipJointRightNode'</span>);
+0065 <span class="keyword">catch</span>
+0066     EnableModel(3) = 1;
+0067 <span class="keyword">end</span>
+0068 
+0069 <span class="comment">%% Left leg</span>
+0070 <span class="keyword">try</span>
+0071     [OsteoArticularModel]= ModelParameters.LeftLeg(OsteoArticularModel,k,<span class="string">'L'</span>,Mass,<span class="string">'Pelvis_HipJointLeftNode'</span>);
+0072 <span class="keyword">catch</span>
+0073     EnableModel(4) = 1;
+0074 <span class="keyword">end</span>
+0075 
+0076 <span class="comment">%% Right arm</span>
+0077 <span class="keyword">try</span>
+0078     [OsteoArticularModel]= ModelParameters.RightArm(OsteoArticularModel,k,<span class="string">'R'</span>,Mass,<span class="string">'Thorax_ShoulderRightNode'</span>);
+0079 <span class="keyword">catch</span>
+0080     EnableModel(5) = 1;
+0081 <span class="keyword">end</span>    
+0082 
+0083 <span class="comment">%% Left arm</span>
+0084 <span class="keyword">try</span>
+0085     [OsteoArticularModel]= ModelParameters.LeftArm(OsteoArticularModel,k,<span class="string">'L'</span>,Mass,<span class="string">'Thorax_ShoulderLeftNode'</span>);
+0086 <span class="keyword">catch</span>
+0087     EnableModel(6) = 1;
+0088 <span class="keyword">end</span>
+0089 
+0090 <span class="comment">%% Markers</span>
+0091 [Markers] = ModelParameters.Markers(ModelParameters.MarkersOptions);
+0092 
+0093 <span class="comment">% We remove markers</span>
+0094 [Markers] = <a href="#_sub1" class="code" title="subfunction [Markers_set]=Remove_markers(Markers_set,Markers_set_missing_markers)">Remove_markers</a>(Markers,ModelParameters.MarkersRemoved);
+0095 
+0096 <span class="comment">% Checking if markers are on the model</span>
+0097 [Markers] = <a href="../../Functions/Models/Markers/Functions/VerifMarkersOnModel.html" class="code" title="function [Markers_set]=VerifMarkersOnModel(Human_model,Markers_set)">VerifMarkersOnModel</a>(OsteoArticularModel,Markers);
+0098 
+0099 <span class="comment">%% Muscles</span>
+0100 <span class="keyword">if</span> numel(ModelParameters.Muscles)
+0101     <span class="comment">% Initialisation</span>
+0102     Muscles = struct(<span class="string">'name'</span>,[],<span class="string">'f0'</span>,[],<span class="string">'l0'</span>,[],<span class="string">'Kt'</span>,[],<span class="string">'ls'</span>,[],<span class="string">'alpha0'</span>,[],<span class="string">'path'</span>,[]);Muscles(1) = [];
+0103 
+0104     <span class="comment">% add muscle sets</span>
+0105     <span class="keyword">for</span> i = 1:numel(ModelParameters.Muscles)
+0106         Muscles = ModelParameters.Muscles{i}(Muscles,ModelParameters.MusclesOptions{i});
+0107     <span class="keyword">end</span>
+0108 
+0109     <span class="comment">% Checking if muscles are on the model</span>
+0110     Muscles = <a href="../../Functions/Models/Muscles/Functions/VerifMusclesOnModel.html" class="code" title="function [Muscles]=VerifMusclesOnModel(Human_model,Muscles)">VerifMusclesOnModel</a>(OsteoArticularModel,Muscles);
+0111 <span class="keyword">else</span>
+0112     Muscles = [];
+0113 <span class="keyword">end</span>
+0114 
+0115 <span class="keyword">end</span>
+0116 
+0117 <a name="_sub1" href="#_subfunctions" class="code">function [Markers_set]=Remove_markers(Markers_set,Markers_set_missing_markers)</a>
+0118     [~,I,~]=intersect({Markers_set.name}',Markers_set_missing_markers);
+0119     Markers_set(I)=[];
+0120 <span class="keyword">end</span>
+0121 
+0122 
+0123</pre></div>
+<hr><address>Generated on Wed 07-Nov-2018 15:15:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

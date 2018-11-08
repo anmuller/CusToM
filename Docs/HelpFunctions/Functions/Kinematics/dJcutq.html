@@ -38,6 +38,10 @@ ________________________________________________________
 
  Licence
  Toolbox distributed under 3-Clause BSD License
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
 ________________________________________________________</pre></div>
 
 <!-- crossreference -->
@@ -66,12 +70,16 @@ This function is called by:
 0011 <span class="comment">% Licence</span>
 0012 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
 0013 <span class="comment">%________________________________________________________</span>
-0014 
-0015 <span class="keyword">for</span> i=2:size(Jcutcut,1)
-0016     Jcutq(i,:) = Jcutq(i,:) + Jcutcut(i,1:i-1)*Jcutq(1:i-1,:);
-0017 <span class="keyword">end</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0016 <span class="comment">% Georges Dumont</span>
+0017 <span class="comment">%________________________________________________________</span>
 0018 
-0019 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0019 <span class="keyword">for</span> i=2:size(Jcutcut,1)
+0020     Jcutq(i,:) = Jcutq(i,:) + Jcutcut(i,1:i-1)*Jcutq(1:i-1,:);
+0021 <span class="keyword">end</span>
+0022 
+0023 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 07-Nov-2018 15:15:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

@@ -43,6 +43,10 @@ ________________________________________________________
 
  Licence
  Toolbox distributed under 3-Clause BSD License
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
 ________________________________________________________</pre></div>
 
 <!-- crossreference -->
@@ -76,37 +80,41 @@ This function is called by:
 0016 <span class="comment">% Licence</span>
 0017 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
 0018 <span class="comment">%________________________________________________________</span>
-0019 muscles_ex=cell(0);
-0020 <span class="keyword">for</span> i=1:numel(Muscles) <span class="comment">% for each muscle</span>
-0021     test=zeros(size(Muscles(i).path,1),1);
-0022     <span class="keyword">for</span> p=1:size(Muscles(i).path,1) <span class="comment">% for each points used by the muscle</span>
-0023         name=Muscles(i).path{p,1};
-0024         <span class="keyword">for</span> j=1:numel(Human_model)
-0025             <span class="keyword">for</span> k=1:size(Human_model(j).anat_position,1)
-0026                 <span class="keyword">if</span> strcmp(name,Human_model(j).anat_position(k,1))
-0027                     Muscles(i).num_solid(p,1)=j;
-0028                     Muscles(i).num_markers(p,1)=k;
-0029                     test(p,1)=1;
-0030                 <span class="keyword">end</span>
-0031             <span class="keyword">end</span>
-0032             <span class="keyword">if</span> min(test) == 1
-0033                 Muscles(i).exist=1;
-0034                 <span class="keyword">break</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0021 <span class="comment">% Georges Dumont</span>
+0022 <span class="comment">%________________________________________________________</span>
+0023 muscles_ex=cell(0);
+0024 <span class="keyword">for</span> i=1:numel(Muscles) <span class="comment">% for each muscle</span>
+0025     test=zeros(size(Muscles(i).path,1),1);
+0026     <span class="keyword">for</span> p=1:size(Muscles(i).path,1) <span class="comment">% for each points used by the muscle</span>
+0027         name=Muscles(i).path{p,1};
+0028         <span class="keyword">for</span> j=1:numel(Human_model)
+0029             <span class="keyword">for</span> k=1:size(Human_model(j).anat_position,1)
+0030                 <span class="keyword">if</span> strcmp(name,Human_model(j).anat_position(k,1))
+0031                     Muscles(i).num_solid(p,1)=j;
+0032                     Muscles(i).num_markers(p,1)=k;
+0033                     test(p,1)=1;
+0034                 <span class="keyword">end</span>
 0035             <span class="keyword">end</span>
-0036         <span class="keyword">end</span>
-0037     <span class="keyword">end</span>
-0038     <span class="keyword">if</span> min(test) == 0
-0039         muscles_ex{end+1,1}=Muscles(i).name; <span class="comment">%#ok&lt;AGROW&gt;</span>
-0040         Muscles(i).exist=0;
-0041     <span class="keyword">end</span> 
-0042 
-0043 <span class="keyword">end</span>
-0044 <span class="keyword">if</span> numel(muscles_ex) ~= 0
-0045     warning(<span class="string">'No existent muscles: '</span>)
-0046     disp(muscles_ex)
+0036             <span class="keyword">if</span> min(test) == 1
+0037                 Muscles(i).exist=1;
+0038                 <span class="keyword">break</span>
+0039             <span class="keyword">end</span>
+0040         <span class="keyword">end</span>
+0041     <span class="keyword">end</span>
+0042     <span class="keyword">if</span> min(test) == 0
+0043         muscles_ex{end+1,1}=Muscles(i).name; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0044         Muscles(i).exist=0;
+0045     <span class="keyword">end</span> 
+0046 
 0047 <span class="keyword">end</span>
-0048 
-0049 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0048 <span class="keyword">if</span> numel(muscles_ex) ~= 0
+0049     warning(<span class="string">'No existent muscles: '</span>)
+0050     disp(muscles_ex)
+0051 <span class="keyword">end</span>
+0052 
+0053 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 07-Nov-2018 15:15:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

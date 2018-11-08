@@ -48,6 +48,10 @@ ________________________________________________________
 
  Licence
  Toolbox distributed under 3-Clause BSD License
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
 ________________________________________________________</pre></div>
 
 <!-- crossreference -->
@@ -86,27 +90,31 @@ This function is called by:
 0021 <span class="comment">% Licence</span>
 0022 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
 0023 <span class="comment">%________________________________________________________</span>
-0024 <span class="keyword">if</span> numel(varargin)
-0025     BiomechanicalModel = varargin{1};
-0026 <span class="keyword">else</span>
-0027     load(<span class="string">'BiomechanicalModel.mat'</span>); <span class="comment">%#ok&lt;LOAD&gt;</span>
-0028 <span class="keyword">end</span>
-0029 
-0030 <span class="comment">% Inverse kinematics</span>
-0031 <span class="keyword">for</span> i = 1:numel(AnalysisParameters.filename)
-0032     filename = AnalysisParameters.filename{i}(1:end-4);
-0033     <span class="keyword">if</span> AnalysisParameters.IK.Method == 1
-0034         [ExperimentalData, InverseKinematicsResults] = <a href="InverseKinematicsOpti.html" class="code" title="function [ExperimentalData, InverseKinematicResults] = InverseKinematicsOpti(filename,AnalysisParameters,BiomechanicalModel)">InverseKinematicsOpti</a>(filename,AnalysisParameters,BiomechanicalModel); <span class="comment">%#ok&lt;ASGLU&gt; % Optimization method</span>
-0035     <span class="keyword">elseif</span> AnalysisParameters.IK.Method == 2
-0036         [ExperimentalData, InverseKinematicsResults] = <a href="InverseKinematicsLM.html" class="code" title="function [ExperimentalData, InverseKinematicResults] = InverseKinematicsLM(filename,AnalysisParameters,BiomechanicalModel)">InverseKinematicsLM</a>(filename,AnalysisParameters,BiomechanicalModel); <span class="comment">%#ok&lt;ASGLU&gt; % Levenberg-Marquardt algorithm</span>
-0037     <span class="keyword">end</span>
-0038 
-0039     <span class="comment">% Save data</span>
-0040     save([filename <span class="string">'/ExperimentalData'</span>],<span class="string">'ExperimentalData'</span>);
-0041     save([filename <span class="string">'/InverseKinematicsResults'</span>],<span class="string">'InverseKinematicsResults'</span>);
-0042 <span class="keyword">end</span>
-0043 
-0044 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0024 <span class="comment">%</span>
+0025 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0026 <span class="comment">% Georges Dumont</span>
+0027 <span class="comment">%________________________________________________________</span>
+0028 <span class="keyword">if</span> numel(varargin)
+0029     BiomechanicalModel = varargin{1};
+0030 <span class="keyword">else</span>
+0031     load(<span class="string">'BiomechanicalModel.mat'</span>); <span class="comment">%#ok&lt;LOAD&gt;</span>
+0032 <span class="keyword">end</span>
+0033 
+0034 <span class="comment">% Inverse kinematics</span>
+0035 <span class="keyword">for</span> i = 1:numel(AnalysisParameters.filename)
+0036     filename = AnalysisParameters.filename{i}(1:end-4);
+0037     <span class="keyword">if</span> AnalysisParameters.IK.Method == 1
+0038         [ExperimentalData, InverseKinematicsResults] = <a href="InverseKinematicsOpti.html" class="code" title="function [ExperimentalData, InverseKinematicResults] = InverseKinematicsOpti(filename,AnalysisParameters,BiomechanicalModel)">InverseKinematicsOpti</a>(filename,AnalysisParameters,BiomechanicalModel); <span class="comment">%#ok&lt;ASGLU&gt; % Optimization method</span>
+0039     <span class="keyword">elseif</span> AnalysisParameters.IK.Method == 2
+0040         [ExperimentalData, InverseKinematicsResults] = <a href="InverseKinematicsLM.html" class="code" title="function [ExperimentalData, InverseKinematicResults] = InverseKinematicsLM(filename,AnalysisParameters,BiomechanicalModel)">InverseKinematicsLM</a>(filename,AnalysisParameters,BiomechanicalModel); <span class="comment">%#ok&lt;ASGLU&gt; % Levenberg-Marquardt algorithm</span>
+0041     <span class="keyword">end</span>
+0042 
+0043     <span class="comment">% Save data</span>
+0044     save([filename <span class="string">'/ExperimentalData'</span>],<span class="string">'ExperimentalData'</span>);
+0045     save([filename <span class="string">'/InverseKinematicsResults'</span>],<span class="string">'InverseKinematicsResults'</span>);
+0046 <span class="keyword">end</span>
+0047 
+0048 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 07-Nov-2018 15:15:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

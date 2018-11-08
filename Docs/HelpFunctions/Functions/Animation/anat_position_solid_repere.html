@@ -40,6 +40,10 @@ ________________________________________________________
 
  Licence
  Toolbox distributed under 3-Clause BSD License
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
 ________________________________________________________</pre></div>
 
 <!-- crossreference -->
@@ -70,23 +74,27 @@ This function is called by:
 0013 <span class="comment">% Licence</span>
 0014 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
 0015 <span class="comment">%________________________________________________________</span>
-0016 
-0017 <span class="keyword">if</span> i == 0 <span class="comment">% bout de chaine</span>
-0018     <span class="keyword">return</span>;
-0019 <span class="keyword">end</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0018 <span class="comment">% Georges Dumont</span>
+0019 <span class="comment">%________________________________________________________</span>
 0020 
-0021 j=Human_model(i).mother; <span class="comment">% number of the mother</span>
-0022 <span class="keyword">if</span> j == 0 <span class="comment">% initialization : first time this function is called</span>
-0023     Human_model(i).pos_solid_visual=[]; <span class="comment">% init of a new domain</span>
-0024 <span class="keyword">end</span>
-0025 <span class="keyword">if</span> (j ~= 0) &amp;&amp; (Human_model(j).Visual ~= 0) 
-0026     Human_model(j).pos_solid_visual = [Human_model(j).pos_solid_visual Human_model(i).b];
-0027 <span class="keyword">end</span>
-0028 
-0029 [Human_model] = <a href="anat_position_solid_repere.html" class="code" title="function [Human_model] = anat_position_solid_repere(Human_model,i)">anat_position_solid_repere</a>(Human_model,Human_model(i).child);
-0030 [Human_model] = <a href="anat_position_solid_repere.html" class="code" title="function [Human_model] = anat_position_solid_repere(Human_model,i)">anat_position_solid_repere</a>(Human_model,Human_model(i).sister);
-0031 
-0032 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0021 <span class="keyword">if</span> i == 0 <span class="comment">% bout de chaine</span>
+0022     <span class="keyword">return</span>;
+0023 <span class="keyword">end</span>
+0024 
+0025 j=Human_model(i).mother; <span class="comment">% number of the mother</span>
+0026 <span class="keyword">if</span> j == 0 <span class="comment">% initialization : first time this function is called</span>
+0027     Human_model(i).pos_solid_visual=[]; <span class="comment">% init of a new domain</span>
+0028 <span class="keyword">end</span>
+0029 <span class="keyword">if</span> (j ~= 0) &amp;&amp; (Human_model(j).Visual ~= 0) 
+0030     Human_model(j).pos_solid_visual = [Human_model(j).pos_solid_visual Human_model(i).b];
+0031 <span class="keyword">end</span>
+0032 
+0033 [Human_model] = <a href="anat_position_solid_repere.html" class="code" title="function [Human_model] = anat_position_solid_repere(Human_model,i)">anat_position_solid_repere</a>(Human_model,Human_model(i).child);
+0034 [Human_model] = <a href="anat_position_solid_repere.html" class="code" title="function [Human_model] = anat_position_solid_repere(Human_model,i)">anat_position_solid_repere</a>(Human_model,Human_model(i).sister);
+0035 
+0036 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 07-Nov-2018 15:15:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

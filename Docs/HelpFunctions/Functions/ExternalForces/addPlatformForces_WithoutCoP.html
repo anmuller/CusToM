@@ -42,6 +42,10 @@ ________________________________________________________
 
  Licence
  Toolbox distributed under 3-Clause BSD License
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
 ________________________________________________________</pre></div>
 
 <!-- crossreference -->
@@ -74,78 +78,82 @@ This function is called by:
 0015 <span class="comment">% Licence</span>
 0016 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
 0017 <span class="comment">%________________________________________________________</span>
-0018 
-0019 nb_frame=numel(external_forces);
-0020 
-0021 <span class="comment">%% Calcul de l'effort résultant (computation of resulting forces)</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0020 <span class="comment">% Georges Dumont</span>
+0021 <span class="comment">%________________________________________________________</span>
 0022 
-0023 FR0=zeros(nb_frame,3);
-0024 <span class="keyword">if</span> iscell(p) == 1 <span class="comment">% plateforme mobile (mobile plateform)</span>
-0025     <span class="keyword">for</span> i=1:nb_frame
-0026        FR0(i,:)=(R{i}*F(i,1:3)')';    
-0027     <span class="keyword">end</span>
-0028 <span class="keyword">else</span>  <span class="comment">% plateforme fixe</span>
+0023 nb_frame=numel(external_forces);
+0024 
+0025 <span class="comment">%% Calcul de l'effort résultant (computation of resulting forces)</span>
+0026 
+0027 FR0=zeros(nb_frame,3);
+0028 <span class="keyword">if</span> iscell(p) == 1 <span class="comment">% plateforme mobile (mobile plateform)</span>
 0029     <span class="keyword">for</span> i=1:nb_frame
-0030        FR0(i,:)=(R*F(i,1:3)')';    
+0030        FR0(i,:)=(R{i}*F(i,1:3)')';    
 0031     <span class="keyword">end</span>
-0032 <span class="keyword">end</span>
-0033 
-0034 <span class="comment">%% Calcul du moment au point 0</span>
-0035 
-0036 <span class="comment">% Utilisation du moment à l'origine de la plateforme (Moment expressed at origin of the platform frame)</span>
-0037     <span class="comment">% Moment obtenu avec la plate-forme : M(O)=M(I)+OI^F   (Mp0 = Mp + CoP0 ^ F)</span>
-0038     Mp=zeros(nb_frame,3);
-0039     Mp0=zeros(nb_frame,3);
-0040     <span class="keyword">if</span> iscell(p) == 1 <span class="comment">% plateforme mobile (mobile platform)</span>
-0041         <span class="keyword">for</span> i=1:nb_frame
-0042             Mp(i,:)=(R{i}*F(i,4:6)')';
-0043             Mp0(i,:)=Mp(i,:) + cross(p{i}',FR0(i,:));
-0044         <span class="keyword">end</span>
-0045     <span class="keyword">else</span>
-0046         <span class="keyword">for</span> i=1:nb_frame
-0047             Mp(i,:)=(R*F(i,4:6)')';
-0048             Mp0(i,:)=Mp(i,:) + cross(p',FR0(i,:));
-0049         <span class="keyword">end</span>
-0050     <span class="keyword">end</span>        
-0051     
-0052 <span class="comment">%% Modification de &quot;external_forces&quot;</span>
-0053 
-0054 <span class="keyword">for</span> i=1:nb_frame    
-0055    external_forces(i).fext(Solid).fext=external_forces(i).fext(Solid).fext + [FR0(i,:)' Mp0(i,:)'];    
-0056 <span class="keyword">end</span>
+0032 <span class="keyword">else</span>  <span class="comment">% plateforme fixe</span>
+0033     <span class="keyword">for</span> i=1:nb_frame
+0034        FR0(i,:)=(R*F(i,1:3)')';    
+0035     <span class="keyword">end</span>
+0036 <span class="keyword">end</span>
+0037 
+0038 <span class="comment">%% Calcul du moment au point 0</span>
+0039 
+0040 <span class="comment">% Utilisation du moment à l'origine de la plateforme (Moment expressed at origin of the platform frame)</span>
+0041     <span class="comment">% Moment obtenu avec la plate-forme : M(O)=M(I)+OI^F   (Mp0 = Mp + CoP0 ^ F)</span>
+0042     Mp=zeros(nb_frame,3);
+0043     Mp0=zeros(nb_frame,3);
+0044     <span class="keyword">if</span> iscell(p) == 1 <span class="comment">% plateforme mobile (mobile platform)</span>
+0045         <span class="keyword">for</span> i=1:nb_frame
+0046             Mp(i,:)=(R{i}*F(i,4:6)')';
+0047             Mp0(i,:)=Mp(i,:) + cross(p{i}',FR0(i,:));
+0048         <span class="keyword">end</span>
+0049     <span class="keyword">else</span>
+0050         <span class="keyword">for</span> i=1:nb_frame
+0051             Mp(i,:)=(R*F(i,4:6)')';
+0052             Mp0(i,:)=Mp(i,:) + cross(p',FR0(i,:));
+0053         <span class="keyword">end</span>
+0054     <span class="keyword">end</span>        
+0055     
+0056 <span class="comment">%% Modification de &quot;external_forces&quot;</span>
 0057 
-0058 <span class="comment">%% Ajout d'un domaine pour le visuel (adding a visual domain)</span>
-0059 
-0060 <span class="comment">% on initialise le domaine Visual si il n'existe pas encore</span>
-0061 <span class="keyword">if</span> ~any(strcmp(<span class="string">'Visual'</span>,fieldnames(external_forces)))
-0062     external_forces(1).Visual=[];
-0063 <span class="keyword">end</span>
-0064 
-0065 <span class="comment">% on ajoute un vecteur 6x1 dans le domaine Visual : point d'origine et point d'arrivé du vecteur force</span>
-0066 <span class="comment">% adding a 6x1 vector in the visual domain:  origin and end points of force vector</span>
-0067 <span class="comment">% for i=1:numel(external_forces) % pour chaque frame</span>
-0068 <span class="comment">%     if iscell(p) == 1 % plateforme mobile</span>
-0069 <span class="comment">%         pt_origin=p{i}+R{i}*CoP(i,:)';</span>
-0070 <span class="comment">%     else</span>
-0071 <span class="comment">%         pt_origin=p+R*CoP(i,:)';</span>
-0072 <span class="comment">%     end</span>
-0073 <span class="comment">%     pt_end=FR0(i,:)';</span>
-0074 <span class="comment">%     external_forces(i).Visual = [external_forces(i).Visual [pt_origin;pt_end]];</span>
-0075 <span class="comment">% end</span>
-0076 <span class="keyword">for</span> i=1:numel(external_forces) <span class="comment">% pour chaque frame</span>
-0077     <span class="keyword">if</span> iscell(p) == 1 <span class="comment">% plateforme mobile</span>
-0078         pt_origin = p{i};
-0079     <span class="keyword">else</span>
-0080         CoP = cross(F(i,1:3)',F(i,4:6)')/(norm(F(i,1:3))^2);
-0081         CoP = CoP - (CoP(3)/F(i,3))*F(i,1:3)'; <span class="comment">% point sur l'axe avec z=0;</span>
-0082         pt_origin=p+R*CoP;
-0083     <span class="keyword">end</span>
-0084     pt_end=FR0(i,:)';
-0085     external_forces(i).Visual = [external_forces(i).Visual [pt_origin;pt_end]];
-0086 <span class="keyword">end</span>
-0087 
-0088 
-0089 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0058 <span class="keyword">for</span> i=1:nb_frame    
+0059    external_forces(i).fext(Solid).fext=external_forces(i).fext(Solid).fext + [FR0(i,:)' Mp0(i,:)'];    
+0060 <span class="keyword">end</span>
+0061 
+0062 <span class="comment">%% Ajout d'un domaine pour le visuel (adding a visual domain)</span>
+0063 
+0064 <span class="comment">% on initialise le domaine Visual si il n'existe pas encore</span>
+0065 <span class="keyword">if</span> ~any(strcmp(<span class="string">'Visual'</span>,fieldnames(external_forces)))
+0066     external_forces(1).Visual=[];
+0067 <span class="keyword">end</span>
+0068 
+0069 <span class="comment">% on ajoute un vecteur 6x1 dans le domaine Visual : point d'origine et point d'arrivé du vecteur force</span>
+0070 <span class="comment">% adding a 6x1 vector in the visual domain:  origin and end points of force vector</span>
+0071 <span class="comment">% for i=1:numel(external_forces) % pour chaque frame</span>
+0072 <span class="comment">%     if iscell(p) == 1 % plateforme mobile</span>
+0073 <span class="comment">%         pt_origin=p{i}+R{i}*CoP(i,:)';</span>
+0074 <span class="comment">%     else</span>
+0075 <span class="comment">%         pt_origin=p+R*CoP(i,:)';</span>
+0076 <span class="comment">%     end</span>
+0077 <span class="comment">%     pt_end=FR0(i,:)';</span>
+0078 <span class="comment">%     external_forces(i).Visual = [external_forces(i).Visual [pt_origin;pt_end]];</span>
+0079 <span class="comment">% end</span>
+0080 <span class="keyword">for</span> i=1:numel(external_forces) <span class="comment">% pour chaque frame</span>
+0081     <span class="keyword">if</span> iscell(p) == 1 <span class="comment">% plateforme mobile</span>
+0082         pt_origin = p{i};
+0083     <span class="keyword">else</span>
+0084         CoP = cross(F(i,1:3)',F(i,4:6)')/(norm(F(i,1:3))^2);
+0085         CoP = CoP - (CoP(3)/F(i,3))*F(i,1:3)'; <span class="comment">% point sur l'axe avec z=0;</span>
+0086         pt_origin=p+R*CoP;
+0087     <span class="keyword">end</span>
+0088     pt_end=FR0(i,:)';
+0089     external_forces(i).Visual = [external_forces(i).Visual [pt_origin;pt_end]];
+0090 <span class="keyword">end</span>
+0091 
+0092 
+0093 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 07-Nov-2018 15:15:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

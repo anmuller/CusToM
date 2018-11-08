@@ -53,6 +53,10 @@ ________________________________________________________
 
  Licence
  Toolbox distributed under 3-Clause BSD License
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
 ________________________________________________________</pre></div>
 
 <!-- crossreference -->
@@ -97,241 +101,245 @@ This function is called by:
 0027 <span class="comment">% Licence</span>
 0028 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
 0029 <span class="comment">%________________________________________________________</span>
-0030 
-0031 <span class="comment">%% liste des marqueurs à partir du modèle (Markers list from the model)</span>
-0032 list_markers={};
-0033 <span class="keyword">for</span> i=1:numel(Markers_set)
-0034     <span class="keyword">if</span> Markers_set(i).exist
-0035         list_markers=[list_markers;Markers_set(i).name]; <span class="comment">%#ok&lt;AGROW&gt;</span>
-0036     <span class="keyword">end</span>
-0037 <span class="keyword">end</span>
-0038 nb_markers=size(list_markers,1);
-0039 
-0040 <span class="comment">%% initialisation des variables (initialisation of variables)</span>
-0041 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
-0042 <span class="comment">% Coordonnées articulaires</span>
-0043 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
-0044 q = sym(<span class="string">'q'</span>, [numel(Human_model) 1]);  <span class="comment">%initialisation de q (nb de solides -1 (pelvis))</span>
-0045 assume(q,<span class="string">'real'</span>)
-0046 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
-0047 <span class="comment">% facteurs d'homothétie (homothetic factors)</span>
-0048 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
-0049 ind=1:numel(Human_model);
-0050 ind_k = unique([Markers_set.num_solid]);
-0051 nb_k= length(ind_k);
-0052 k_map=zeros(numel(Human_model));
-0053 <span class="keyword">for</span> i=1:nb_k
-0054 k_map(ind_k(i),ind_k(i))=1;
-0055 <span class="keyword">end</span>
-0056 k_map=orth(k_map); <span class="comment">%Noyau de A dans le système d'equation linéaire A*K=K (Kernal of A matrix)</span>
-0057 [~,V]=setdiff(ind,ind_k);
-0058 k_map(V,nb_k+1)=1;
-0059 
-0060 <span class="comment">% k_map=zeros(numel(Human_model),length(ind_k)+1);</span>
-0061 <span class="comment">% for i=1:length(ind_k)</span>
-0062 <span class="comment">% k_map(ind_k(i),i)=1;</span>
-0063 <span class="comment">% end</span>
-0064 <span class="comment">% [~,V]=setdiff(ind,ind_k);</span>
-0065 <span class="comment">% k_map(V,length(ind_k)+1)=1;</span>
-0066 
-0067 k_sym = sym(<span class="string">'k_sym'</span>, [nb_k 1]);  <span class="comment">%initialisation de k (nb de solides)</span>
-0068 assume(k_sym,<span class="string">'real'</span>);
-0069 
-0070 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
-0071 <span class="comment">% déplacement des marqueurs p (displacement of markers p)</span>
-0072 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
-0073 list_dir={};
-0074 <span class="keyword">for</span> i=1:numel(Markers_set)
-0075     <span class="keyword">if</span> Markers_set(i).exist
-0076         <span class="keyword">try</span>
-0077             list_dir=[list_dir;Markers_set(i).calib_dir];
-0078         <span class="keyword">catch</span>
-0079             list_dir=[list_dir;Markers_set(i).calib_dir'];
-0080         <span class="keyword">end</span>
-0081     <span class="keyword">end</span>
-0082 <span class="keyword">end</span>
-0083 list_dir=strcmp(list_dir,<span class="string">'On'</span>);
-0084 [ind_m] = find(list_dir==1);
-0085 nb_p = length(ind_m);
-0086 <span class="comment">% nb_markers_dir=size(list_dir,1);</span>
-0087 <span class="comment">% p_map=zeros(nb_markers_dir,length(ind_m));</span>
-0088 <span class="comment">%</span>
-0089 <span class="comment">% for i=1:length(ind_m)</span>
-0090 <span class="comment">% p_map(ind_m(i),i)=1;</span>
-0091 <span class="comment">% end</span>
-0092 p_map=zeros(length(list_dir),length(list_dir));
-0093 <span class="keyword">for</span> i=1:nb_p
-0094 p_map(ind_m(i),ind_m(i))=1;
-0095 <span class="keyword">end</span>
-0096 p_map=orth(p_map); <span class="comment">% Noyau de A dans le système d'equation linéaire A*P=P</span>
-0097 
-0098 p_adapt_sym = sym(<span class="string">'p_adapt_sym'</span>,[nb_p 1]);  <span class="comment">% déplacement des marqueurs lors de la calibration (Markers displacement due to calibration)</span>
-0099 assume(p_adapt_sym,<span class="string">'real'</span>);
-0100 
-0101 <span class="comment">% Rotation orientation du pelvis (position and orientation of pelvis)</span>
-0102 pPelvis = sym(<span class="string">'pPelvis'</span>, [3 1]);
-0103 RPelvis = sym(<span class="string">'RPelvis'</span>, [3 3]);
+0030 <span class="comment">%</span>
+0031 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0032 <span class="comment">% Georges Dumont</span>
+0033 <span class="comment">%________________________________________________________</span>
+0034 
+0035 <span class="comment">%% liste des marqueurs à partir du modèle (Markers list from the model)</span>
+0036 list_markers={};
+0037 <span class="keyword">for</span> i=1:numel(Markers_set)
+0038     <span class="keyword">if</span> Markers_set(i).exist
+0039         list_markers=[list_markers;Markers_set(i).name]; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0040     <span class="keyword">end</span>
+0041 <span class="keyword">end</span>
+0042 nb_markers=size(list_markers,1);
+0043 
+0044 <span class="comment">%% initialisation des variables (initialisation of variables)</span>
+0045 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0046 <span class="comment">% Coordonnées articulaires</span>
+0047 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0048 q = sym(<span class="string">'q'</span>, [numel(Human_model) 1]);  <span class="comment">%initialisation de q (nb de solides -1 (pelvis))</span>
+0049 assume(q,<span class="string">'real'</span>)
+0050 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0051 <span class="comment">% facteurs d'homothétie (homothetic factors)</span>
+0052 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0053 ind=1:numel(Human_model);
+0054 ind_k = unique([Markers_set.num_solid]);
+0055 nb_k= length(ind_k);
+0056 k_map=zeros(numel(Human_model));
+0057 <span class="keyword">for</span> i=1:nb_k
+0058 k_map(ind_k(i),ind_k(i))=1;
+0059 <span class="keyword">end</span>
+0060 k_map=orth(k_map); <span class="comment">%Noyau de A dans le système d'equation linéaire A*K=K (Kernal of A matrix)</span>
+0061 [~,V]=setdiff(ind,ind_k);
+0062 k_map(V,nb_k+1)=1;
+0063 
+0064 <span class="comment">% k_map=zeros(numel(Human_model),length(ind_k)+1);</span>
+0065 <span class="comment">% for i=1:length(ind_k)</span>
+0066 <span class="comment">% k_map(ind_k(i),i)=1;</span>
+0067 <span class="comment">% end</span>
+0068 <span class="comment">% [~,V]=setdiff(ind,ind_k);</span>
+0069 <span class="comment">% k_map(V,length(ind_k)+1)=1;</span>
+0070 
+0071 k_sym = sym(<span class="string">'k_sym'</span>, [nb_k 1]);  <span class="comment">%initialisation de k (nb de solides)</span>
+0072 assume(k_sym,<span class="string">'real'</span>);
+0073 
+0074 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0075 <span class="comment">% déplacement des marqueurs p (displacement of markers p)</span>
+0076 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0077 list_dir={};
+0078 <span class="keyword">for</span> i=1:numel(Markers_set)
+0079     <span class="keyword">if</span> Markers_set(i).exist
+0080         <span class="keyword">try</span>
+0081             list_dir=[list_dir;Markers_set(i).calib_dir];
+0082         <span class="keyword">catch</span>
+0083             list_dir=[list_dir;Markers_set(i).calib_dir'];
+0084         <span class="keyword">end</span>
+0085     <span class="keyword">end</span>
+0086 <span class="keyword">end</span>
+0087 list_dir=strcmp(list_dir,<span class="string">'On'</span>);
+0088 [ind_m] = find(list_dir==1);
+0089 nb_p = length(ind_m);
+0090 <span class="comment">% nb_markers_dir=size(list_dir,1);</span>
+0091 <span class="comment">% p_map=zeros(nb_markers_dir,length(ind_m));</span>
+0092 <span class="comment">%</span>
+0093 <span class="comment">% for i=1:length(ind_m)</span>
+0094 <span class="comment">% p_map(ind_m(i),i)=1;</span>
+0095 <span class="comment">% end</span>
+0096 p_map=zeros(length(list_dir),length(list_dir));
+0097 <span class="keyword">for</span> i=1:nb_p
+0098 p_map(ind_m(i),ind_m(i))=1;
+0099 <span class="keyword">end</span>
+0100 p_map=orth(p_map); <span class="comment">% Noyau de A dans le système d'equation linéaire A*P=P</span>
+0101 
+0102 p_adapt_sym = sym(<span class="string">'p_adapt_sym'</span>,[nb_p 1]);  <span class="comment">% déplacement des marqueurs lors de la calibration (Markers displacement due to calibration)</span>
+0103 assume(p_adapt_sym,<span class="string">'real'</span>);
 0104 
-0105 assume(pPelvis,<span class="string">'real'</span>);
-0106 assume(RPelvis,<span class="string">'real'</span>);
-0107 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
-0108 <span class="comment">% Angles associés (associated angles)</span>
-0109 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
-0110 nb_alpha =0;
-0111 <span class="keyword">if</span> isfield(Human_model,<span class="string">'v'</span>)
-0112     limit_alpha = [];
-0113     ind_alpha=zeros(0,0);
-0114     ind_nalpha=zeros(0,0);
-0115     test = 0;
-0116     <span class="keyword">for</span> i=1:numel(Human_model)
-0117         <span class="keyword">if</span> ~isempty(Human_model(i).v)
-0118             test = 1;
-0119             nb_alpha = nb_alpha + size(Human_model(i).v,2); <span class="comment">%Compte</span>
-0120             ind_alpha= [ind_alpha,i*2-1:i*2];
-0121             limit_alpha = [limit_alpha; Human_model(i).limit_alpha];
-0122         <span class="keyword">else</span>
-0123             ind_nalpha = [ind_nalpha,i*2-1:i*2];
-0124         <span class="keyword">end</span>
-0125     <span class="keyword">end</span>
-0126     alpha_map = eye(2*numel(Human_model),2*numel(Human_model));
-0127     alpha_map(:,ind_nalpha)=[];
-0128     <span class="comment">% alpha_map = zeros(2*numel(Human_model),2*numel(Human_model));</span>
-0129     <span class="comment">% for i=1:nb_alpha</span>
-0130     <span class="comment">% alpha_map(ind_alpha(i),ind_alpha(i))=1;</span>
-0131     <span class="comment">% end</span>
-0132     <span class="comment">% alpha_map=orth(alpha_map); %Noyau de A dans le système d'equation linéaire A*ALPHA=ALPHA;</span>
-0133     
-0134     alpha_sym = sym(<span class="string">'alpha'</span>, [nb_alpha 1]);  <span class="comment">%initialiation de q (nb de solides -1 (pelvis))</span>
-0135     assume(alpha_sym,<span class="string">'real'</span>);
-0136     
-0137 <span class="comment">%     limit_alpha = [Human_model.limit_alpha]';</span>
-0138     <span class="keyword">if</span> test
-0139         limit_alpha_sup = limit_alpha(:,2);
-0140         limit_alpha_inf = limit_alpha(:,1);
-0141     <span class="keyword">else</span>
-0142         alpha_map=[];
-0143         alpha_sym=[];
-0144         limit_alpha_inf=[];
-0145         limit_alpha_sup=[];
-0146     <span class="keyword">end</span>
-0147 <span class="keyword">else</span>
-0148     alpha_map=[];
-0149     alpha_sym=[];
-0150     limit_alpha_inf=[];
-0151     limit_alpha_sup=[];
-0152 <span class="keyword">end</span>
-0153 
-0154 <span class="comment">%% toutes les variables</span>
-0155 var_sym = [k_sym;p_adapt_sym;alpha_sym];
-0156 <span class="comment">%% Normalisation des variables</span>
-0157 <span class="comment">% limites : 0.8&lt;k&lt;1.2 et déplacement max de 5 cm pour chaque marqueur dans chaque direction</span>
-0158 <span class="comment">% et limites angulaire pour alpha</span>
-0159 <span class="comment">% On veut faire varier toutes les variables seulement entre -1 et 1 lors de</span>
-0160 <span class="comment">% l'optimisation</span>
-0161 <span class="comment">%% variable normalization within boundaries (0.8&lt;k&lt;1.2) and max displacement of 5cm for each marker in each direction and angular limits for alpha</span>
-0162 <span class="comment">% all variables should vary only between-1 and +1 during optimisation process</span>
-0163 
-0164 limit_inf_calib=[0.8*ones([nb_k 1]) ; -0.05*ones([nb_p 1]) ; limit_alpha_inf];
-0165 limit_sup_calib=[1.2*ones([nb_k 1]) ;  0.05*ones([nb_p 1]) ; limit_alpha_sup];
-0166 
-0167 <span class="comment">%Normaliser Variables toutes les variables sont normalisés entre -1 et 1 de</span>
-0168 <span class="comment">%sorte que l'optimisation fasse varier les variables de la même manière.</span>
-0169 <span class="comment">% All variables are normalized between -1 and +1 to ensure same weight for every variable</span>
-0170 <span class="comment">% a'= 2*(a-a_min)/(a_max-a_min)-1</span>
-0171 <span class="comment">% Mise sous forme matricielle A'=AX+b (under a matrix form A'=AX+b)</span>
-0172 taille =nb_k+nb_p+nb_alpha;
-0173 A_norm = eye(taille);
-0174 <span class="keyword">for</span> ii=1:taille
-0175 A_norm(ii,ii) = 2*A_norm(ii,ii)/( limit_sup_calib(ii) - limit_inf_calib(ii));
-0176 <span class="keyword">end</span>
-0177 b_norm(:,1) = -2*limit_inf_calib(:)./( limit_sup_calib(:) - limit_inf_calib(:) )-ones(taille,1);
-0178 var_unnormalized = A_norm\(var_sym - b_norm);
-0179 
-0180 
-0181 <span class="comment">%% Optimized variables are put back in the initial global set of variables</span>
-0182 
-0183 k=k_map*[var_unnormalized(1:nb_k);1];
+0105 <span class="comment">% Rotation orientation du pelvis (position and orientation of pelvis)</span>
+0106 pPelvis = sym(<span class="string">'pPelvis'</span>, [3 1]);
+0107 RPelvis = sym(<span class="string">'RPelvis'</span>, [3 3]);
+0108 
+0109 assume(pPelvis,<span class="string">'real'</span>);
+0110 assume(RPelvis,<span class="string">'real'</span>);
+0111 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0112 <span class="comment">% Angles associés (associated angles)</span>
+0113 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0114 nb_alpha =0;
+0115 <span class="keyword">if</span> isfield(Human_model,<span class="string">'v'</span>)
+0116     limit_alpha = [];
+0117     ind_alpha=zeros(0,0);
+0118     ind_nalpha=zeros(0,0);
+0119     test = 0;
+0120     <span class="keyword">for</span> i=1:numel(Human_model)
+0121         <span class="keyword">if</span> ~isempty(Human_model(i).v)
+0122             test = 1;
+0123             nb_alpha = nb_alpha + size(Human_model(i).v,2); <span class="comment">%Compte</span>
+0124             ind_alpha= [ind_alpha,i*2-1:i*2];
+0125             limit_alpha = [limit_alpha; Human_model(i).limit_alpha];
+0126         <span class="keyword">else</span>
+0127             ind_nalpha = [ind_nalpha,i*2-1:i*2];
+0128         <span class="keyword">end</span>
+0129     <span class="keyword">end</span>
+0130     alpha_map = eye(2*numel(Human_model),2*numel(Human_model));
+0131     alpha_map(:,ind_nalpha)=[];
+0132     <span class="comment">% alpha_map = zeros(2*numel(Human_model),2*numel(Human_model));</span>
+0133     <span class="comment">% for i=1:nb_alpha</span>
+0134     <span class="comment">% alpha_map(ind_alpha(i),ind_alpha(i))=1;</span>
+0135     <span class="comment">% end</span>
+0136     <span class="comment">% alpha_map=orth(alpha_map); %Noyau de A dans le système d'equation linéaire A*ALPHA=ALPHA;</span>
+0137     
+0138     alpha_sym = sym(<span class="string">'alpha'</span>, [nb_alpha 1]);  <span class="comment">%initialiation de q (nb de solides -1 (pelvis))</span>
+0139     assume(alpha_sym,<span class="string">'real'</span>);
+0140     
+0141 <span class="comment">%     limit_alpha = [Human_model.limit_alpha]';</span>
+0142     <span class="keyword">if</span> test
+0143         limit_alpha_sup = limit_alpha(:,2);
+0144         limit_alpha_inf = limit_alpha(:,1);
+0145     <span class="keyword">else</span>
+0146         alpha_map=[];
+0147         alpha_sym=[];
+0148         limit_alpha_inf=[];
+0149         limit_alpha_sup=[];
+0150     <span class="keyword">end</span>
+0151 <span class="keyword">else</span>
+0152     alpha_map=[];
+0153     alpha_sym=[];
+0154     limit_alpha_inf=[];
+0155     limit_alpha_sup=[];
+0156 <span class="keyword">end</span>
+0157 
+0158 <span class="comment">%% toutes les variables</span>
+0159 var_sym = [k_sym;p_adapt_sym;alpha_sym];
+0160 <span class="comment">%% Normalisation des variables</span>
+0161 <span class="comment">% limites : 0.8&lt;k&lt;1.2 et déplacement max de 5 cm pour chaque marqueur dans chaque direction</span>
+0162 <span class="comment">% et limites angulaire pour alpha</span>
+0163 <span class="comment">% On veut faire varier toutes les variables seulement entre -1 et 1 lors de</span>
+0164 <span class="comment">% l'optimisation</span>
+0165 <span class="comment">%% variable normalization within boundaries (0.8&lt;k&lt;1.2) and max displacement of 5cm for each marker in each direction and angular limits for alpha</span>
+0166 <span class="comment">% all variables should vary only between-1 and +1 during optimisation process</span>
+0167 
+0168 limit_inf_calib=[0.8*ones([nb_k 1]) ; -0.05*ones([nb_p 1]) ; limit_alpha_inf];
+0169 limit_sup_calib=[1.2*ones([nb_k 1]) ;  0.05*ones([nb_p 1]) ; limit_alpha_sup];
+0170 
+0171 <span class="comment">%Normaliser Variables toutes les variables sont normalisés entre -1 et 1 de</span>
+0172 <span class="comment">%sorte que l'optimisation fasse varier les variables de la même manière.</span>
+0173 <span class="comment">% All variables are normalized between -1 and +1 to ensure same weight for every variable</span>
+0174 <span class="comment">% a'= 2*(a-a_min)/(a_max-a_min)-1</span>
+0175 <span class="comment">% Mise sous forme matricielle A'=AX+b (under a matrix form A'=AX+b)</span>
+0176 taille =nb_k+nb_p+nb_alpha;
+0177 A_norm = eye(taille);
+0178 <span class="keyword">for</span> ii=1:taille
+0179 A_norm(ii,ii) = 2*A_norm(ii,ii)/( limit_sup_calib(ii) - limit_inf_calib(ii));
+0180 <span class="keyword">end</span>
+0181 b_norm(:,1) = -2*limit_inf_calib(:)./( limit_sup_calib(:) - limit_inf_calib(:) )-ones(taille,1);
+0182 var_unnormalized = A_norm\(var_sym - b_norm);
+0183 
 0184 
-0185 p_adapt=p_map*var_unnormalized(nb_k+1:nb_k+nb_p);
-0186 p_adapt_mat=reshape(p_adapt,3,nb_markers)';
-0187 
-0188 alpha=alpha_map*var_unnormalized(nb_k+nb_p+1:taille);
-0189 
-0190 
-0191 <span class="comment">%% détermination des fonctions symbolique pour chaque position de repère</span>
-0192 <span class="comment">%% Computation of symbolic functions for markers and cuts</span>
+0185 <span class="comment">%% Optimized variables are put back in the initial global set of variables</span>
+0186 
+0187 k=k_map*[var_unnormalized(1:nb_k);1];
+0188 
+0189 p_adapt=p_map*var_unnormalized(nb_k+1:nb_k+nb_p);
+0190 p_adapt_mat=reshape(p_adapt,3,nb_markers)';
+0191 
+0192 alpha=alpha_map*var_unnormalized(nb_k+nb_p+1:taille);
 0193 
-0194 s_root=find([Human_model.mother]==0); <span class="comment">% numéro du solide root (Number of root solid)</span>
-0195 
-0196 <span class="comment">% initialisation de la position et de la rotation du pelvis (setting initial position and rotation for pelvis)</span>
-0197 Human_model(s_root).p=pPelvis;
-0198 Human_model(s_root).R=RPelvis;
+0194 
+0195 <span class="comment">%% détermination des fonctions symbolique pour chaque position de repère</span>
+0196 <span class="comment">%% Computation of symbolic functions for markers and cuts</span>
+0197 
+0198 s_root=find([Human_model.mother]==0); <span class="comment">% numéro du solide root (Number of root solid)</span>
 0199 
-0200 <span class="comment">% Calcul de la position de chaque marqueurs de façon symbolique (computation of markers position under a symbolic form)</span>
-0201 [Human_model,Markers_set,~,~,p_ClosedLoop,R_ClosedLoop]=<a href="Symbolic_ForwardKinematicsCoupure_A.html" class="code" title="function [Human_model,Markers_set,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,j,Q,k,p_adapt,alpha,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop)">Symbolic_ForwardKinematicsCoupure_A</a>(Human_model,Markers_set,s_root,q,k,p_adapt_mat,alpha,1,1);
-0202 
-0203 <span class="comment">% position et rotation des solides servant de coupure (position and rotation of solids defining the cuts)</span>
-0204 <span class="keyword">for</span> ii=1:max([Human_model.KinematicsCut])
-0205     eval([<span class="string">'p'</span> num2str(ii) <span class="string">'cut = sym([''p'' num2str(ii) ''cut''], [3 1]);'</span>])
-0206     eval([<span class="string">'R'</span> num2str(ii) <span class="string">'cut = sym([''R'' num2str(ii) ''cut''], [3 3]);'</span>])
-0207         <span class="keyword">for</span> i=1:3
-0208             eval([<span class="string">'assume(p'</span> num2str(ii) <span class="string">'cut('</span> num2str(i) <span class="string">',1),''real'');'</span>])
-0209             <span class="keyword">for</span> z=1:3
-0210                 eval([<span class="string">'assume(R'</span> num2str(ii) <span class="string">'cut('</span> num2str(i) <span class="string">','</span> num2str(z) <span class="string">'),''real'');'</span>])
-0211             <span class="keyword">end</span>
-0212         <span class="keyword">end</span>   
-0213         pcut(:,:,ii)=eval([<span class="string">'p'</span> num2str(ii) <span class="string">'cut'</span>]);
-0214         Rcut(:,:,ii)=eval([<span class="string">'R'</span> num2str(ii) <span class="string">'cut'</span>]);
-0215 <span class="keyword">end</span>
-0216 
-0217 <span class="comment">%% création des fonctions pour chaque marqueur et chaque solide de coupure</span>
-0218 <span class="comment">%% computation, i-under a symbolic expression, for every marker and every solid</span>
-0219 
-0220 <span class="comment">% Création du dossier &quot;Symbolic_function&quot;</span>
-0221 <span class="keyword">if</span> exist([cd <span class="string">'/Symbolic_function'</span>])~=7 <span class="comment">%#ok&lt;EXIST&gt;</span>
-0222     mkdir(<span class="string">'Symbolic_function'</span>)
-0223 <span class="keyword">end</span>
-0224 
-0225 <span class="comment">% marqueurs % trop long avec les nouvelles variables</span>
-0226 <span class="keyword">for</span> i=1:numel(Markers_set)
-0227    <span class="keyword">if</span> Markers_set(i).exist
-0228        matlabFunction(Markers_set(i).position_symbolic,<span class="string">'file'</span>,[<span class="string">'Symbolic_function/'</span> Markers_set(i).name <span class="string">'_Position.m'</span>],<span class="string">'vars'</span>,{pPelvis,RPelvis,q,var_sym,pcut,Rcut});
-0229    <span class="keyword">end</span>
-0230 <span class="keyword">end</span>
-0231 
-0232 <span class="comment">% % marqueurs</span>
-0233 <span class="comment">% E = [Markers_set.exist]';</span>
-0234 <span class="comment">% ind = find(E==1);</span>
-0235 <span class="comment">% parfor ii=1:length(ind)</span>
-0236 <span class="comment">%     x = ind(ii);</span>
-0237 <span class="comment">%     matlabFunction(Markers_set(x).position_symbolic,'file',['Symbolic_function/' Markers_set(x).name '_Position.m'],'vars',{pPelvis,RPelvis,q,k,p_adapt,alpha,pcut,Rcut});</span>
-0238 <span class="comment">% end</span>
-0239 <span class="comment">% poolobj = gcp('nocreate');</span>
-0240 <span class="comment">% delete(poolobj);</span>
-0241 
-0242 <span class="comment">% solide(s) de coupure (Solids where cuts are performed)</span>
-0243 <span class="keyword">for</span> i=1:numel(Human_model)  <span class="comment">% solide i</span>
-0244     <span class="keyword">if</span> size(Human_model(i).KinematicsCut) ~= 0
-0245         matlabFunction(Human_model(i).R,Human_model(i).p,<span class="string">'File'</span>,[<span class="string">'Symbolic_function/f'</span> num2str(Human_model(i).KinematicsCut) <span class="string">'cut.m'</span>],<span class="keyword">...</span>
-0246             <span class="string">'Outputs'</span>,{[<span class="string">'R'</span> num2str(num2str(Human_model(i).KinematicsCut)) <span class="string">'cut'</span> ],[<span class="string">'p'</span> num2str(num2str(Human_model(i).KinematicsCut)) <span class="string">'cut'</span> ]},<span class="keyword">...</span><span class="comment">;</span>
-0247             <span class="string">'vars'</span>,{pPelvis,RPelvis,q,var_sym,pcut,Rcut});
-0248     <span class="keyword">end</span>
-0249 <span class="keyword">end</span>
-0250 <span class="comment">% boucle(s) fermée(s) (Closed loops)</span>
-0251 <span class="keyword">for</span> i=1:numel(p_ClosedLoop)
-0252     matlabFunction(R_ClosedLoop{i},p_ClosedLoop{i},<span class="string">'File'</span>,[<span class="string">'Symbolic_function/fCL'</span> num2str(i) <span class="string">'.m'</span>],<span class="keyword">...</span>
-0253             <span class="string">'Outputs'</span>,{<span class="string">'R'</span>,<span class="string">'p'</span>},<span class="string">'vars'</span>,{pPelvis,RPelvis,q,var_sym,pcut,Rcut});   
-0254 <span class="keyword">end</span>
-0255 nbClosedLoop=numel(p_ClosedLoop);
-0256 
-0257 <span class="keyword">end</span>
-0258 
-0259 
+0200 <span class="comment">% initialisation de la position et de la rotation du pelvis (setting initial position and rotation for pelvis)</span>
+0201 Human_model(s_root).p=pPelvis;
+0202 Human_model(s_root).R=RPelvis;
+0203 
+0204 <span class="comment">% Calcul de la position de chaque marqueurs de façon symbolique (computation of markers position under a symbolic form)</span>
+0205 [Human_model,Markers_set,~,~,p_ClosedLoop,R_ClosedLoop]=<a href="Symbolic_ForwardKinematicsCoupure_A.html" class="code" title="function [Human_model,Markers_set,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,j,Q,k,p_adapt,alpha,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop)">Symbolic_ForwardKinematicsCoupure_A</a>(Human_model,Markers_set,s_root,q,k,p_adapt_mat,alpha,1,1);
+0206 
+0207 <span class="comment">% position et rotation des solides servant de coupure (position and rotation of solids defining the cuts)</span>
+0208 <span class="keyword">for</span> ii=1:max([Human_model.KinematicsCut])
+0209     eval([<span class="string">'p'</span> num2str(ii) <span class="string">'cut = sym([''p'' num2str(ii) ''cut''], [3 1]);'</span>])
+0210     eval([<span class="string">'R'</span> num2str(ii) <span class="string">'cut = sym([''R'' num2str(ii) ''cut''], [3 3]);'</span>])
+0211         <span class="keyword">for</span> i=1:3
+0212             eval([<span class="string">'assume(p'</span> num2str(ii) <span class="string">'cut('</span> num2str(i) <span class="string">',1),''real'');'</span>])
+0213             <span class="keyword">for</span> z=1:3
+0214                 eval([<span class="string">'assume(R'</span> num2str(ii) <span class="string">'cut('</span> num2str(i) <span class="string">','</span> num2str(z) <span class="string">'),''real'');'</span>])
+0215             <span class="keyword">end</span>
+0216         <span class="keyword">end</span>   
+0217         pcut(:,:,ii)=eval([<span class="string">'p'</span> num2str(ii) <span class="string">'cut'</span>]);
+0218         Rcut(:,:,ii)=eval([<span class="string">'R'</span> num2str(ii) <span class="string">'cut'</span>]);
+0219 <span class="keyword">end</span>
+0220 
+0221 <span class="comment">%% création des fonctions pour chaque marqueur et chaque solide de coupure</span>
+0222 <span class="comment">%% computation, i-under a symbolic expression, for every marker and every solid</span>
+0223 
+0224 <span class="comment">% Création du dossier &quot;Symbolic_function&quot;</span>
+0225 <span class="keyword">if</span> exist([cd <span class="string">'/Symbolic_function'</span>])~=7 <span class="comment">%#ok&lt;EXIST&gt;</span>
+0226     mkdir(<span class="string">'Symbolic_function'</span>)
+0227 <span class="keyword">end</span>
+0228 
+0229 <span class="comment">% marqueurs % trop long avec les nouvelles variables</span>
+0230 <span class="keyword">for</span> i=1:numel(Markers_set)
+0231    <span class="keyword">if</span> Markers_set(i).exist
+0232        matlabFunction(Markers_set(i).position_symbolic,<span class="string">'file'</span>,[<span class="string">'Symbolic_function/'</span> Markers_set(i).name <span class="string">'_Position.m'</span>],<span class="string">'vars'</span>,{pPelvis,RPelvis,q,var_sym,pcut,Rcut});
+0233    <span class="keyword">end</span>
+0234 <span class="keyword">end</span>
+0235 
+0236 <span class="comment">% % marqueurs</span>
+0237 <span class="comment">% E = [Markers_set.exist]';</span>
+0238 <span class="comment">% ind = find(E==1);</span>
+0239 <span class="comment">% parfor ii=1:length(ind)</span>
+0240 <span class="comment">%     x = ind(ii);</span>
+0241 <span class="comment">%     matlabFunction(Markers_set(x).position_symbolic,'file',['Symbolic_function/' Markers_set(x).name '_Position.m'],'vars',{pPelvis,RPelvis,q,k,p_adapt,alpha,pcut,Rcut});</span>
+0242 <span class="comment">% end</span>
+0243 <span class="comment">% poolobj = gcp('nocreate');</span>
+0244 <span class="comment">% delete(poolobj);</span>
+0245 
+0246 <span class="comment">% solide(s) de coupure (Solids where cuts are performed)</span>
+0247 <span class="keyword">for</span> i=1:numel(Human_model)  <span class="comment">% solide i</span>
+0248     <span class="keyword">if</span> size(Human_model(i).KinematicsCut) ~= 0
+0249         matlabFunction(Human_model(i).R,Human_model(i).p,<span class="string">'File'</span>,[<span class="string">'Symbolic_function/f'</span> num2str(Human_model(i).KinematicsCut) <span class="string">'cut.m'</span>],<span class="keyword">...</span>
+0250             <span class="string">'Outputs'</span>,{[<span class="string">'R'</span> num2str(num2str(Human_model(i).KinematicsCut)) <span class="string">'cut'</span> ],[<span class="string">'p'</span> num2str(num2str(Human_model(i).KinematicsCut)) <span class="string">'cut'</span> ]},<span class="keyword">...</span><span class="comment">;</span>
+0251             <span class="string">'vars'</span>,{pPelvis,RPelvis,q,var_sym,pcut,Rcut});
+0252     <span class="keyword">end</span>
+0253 <span class="keyword">end</span>
+0254 <span class="comment">% boucle(s) fermée(s) (Closed loops)</span>
+0255 <span class="keyword">for</span> i=1:numel(p_ClosedLoop)
+0256     matlabFunction(R_ClosedLoop{i},p_ClosedLoop{i},<span class="string">'File'</span>,[<span class="string">'Symbolic_function/fCL'</span> num2str(i) <span class="string">'.m'</span>],<span class="keyword">...</span>
+0257             <span class="string">'Outputs'</span>,{<span class="string">'R'</span>,<span class="string">'p'</span>},<span class="string">'vars'</span>,{pPelvis,RPelvis,q,var_sym,pcut,Rcut});   
+0258 <span class="keyword">end</span>
+0259 nbClosedLoop=numel(p_ClosedLoop);
 0260 
-0261 
+0261 <span class="keyword">end</span>
 0262 
 0263 
-0264</pre></div>
-<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0264 
+0265 
+0266 
+0267 
+0268</pre></div>
+<hr><address>Generated on Wed 07-Nov-2018 15:15:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

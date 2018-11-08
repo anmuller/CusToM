@@ -39,6 +39,10 @@ ________________________________________________________
 
  Licence
  Toolbox distributed under 3-Clause BSD License
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
 ________________________________________________________</pre></div>
 
 <!-- crossreference -->
@@ -68,37 +72,41 @@ This function is called by:
 0012 <span class="comment">% Licence</span>
 0013 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
 0014 <span class="comment">%________________________________________________________</span>
-0015 c=[];
-0016 
-0017 nb_eq=0; <span class="comment">% initialization of the number of equations</span>
-0018 <span class="keyword">if</span> nb_ClosedLoop == 0   <span class="comment">% if there is no closed loop --&gt; no non-linear constraint</span>
-0019     ceq=[];
-0020 <span class="keyword">else</span>    
-0021     ceq=zeros(nb_ClosedLoop*9,1); <span class="comment">% number of equations = number of closed loop * 9 (9 terms in the rotation matrix)</span>
-0022     <span class="keyword">for</span> i=1:nb_ClosedLoop
-0023     
-0024     eval([<span class="string">'[R,p] = fCL'</span> num2str(i) <span class="string">'(q);'</span>])  
-0025     
-0026     <span class="keyword">for</span> z=1:3
-0027     nb_eq=nb_eq+1; <span class="comment">% number of equations incrementation</span>
-0028     ceq(nb_eq,1)=p(z); 
-0029     <span class="keyword">end</span>
-0030     
-0031     <span class="keyword">for</span> z=1:3
-0032     nb_eq=nb_eq+1; <span class="comment">% number of equations incrementation</span>
-0033     ceq(nb_eq,1)=R(z,z)-1; 
-0034     <span class="keyword">end</span>
-0035     
+0015 <span class="comment">%</span>
+0016 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0017 <span class="comment">% Georges Dumont</span>
+0018 <span class="comment">%________________________________________________________</span>
+0019 c=[];
+0020 
+0021 nb_eq=0; <span class="comment">% initialization of the number of equations</span>
+0022 <span class="keyword">if</span> nb_ClosedLoop == 0   <span class="comment">% if there is no closed loop --&gt; no non-linear constraint</span>
+0023     ceq=[];
+0024 <span class="keyword">else</span>    
+0025     ceq=zeros(nb_ClosedLoop*9,1); <span class="comment">% number of equations = number of closed loop * 9 (9 terms in the rotation matrix)</span>
+0026     <span class="keyword">for</span> i=1:nb_ClosedLoop
+0027     
+0028     eval([<span class="string">'[R,p] = fCL'</span> num2str(i) <span class="string">'(q);'</span>])  
+0029     
+0030     <span class="keyword">for</span> z=1:3
+0031     nb_eq=nb_eq+1; <span class="comment">% number of equations incrementation</span>
+0032     ceq(nb_eq,1)=p(z); 
+0033     <span class="keyword">end</span>
+0034     
+0035     <span class="keyword">for</span> z=1:3
 0036     nb_eq=nb_eq+1; <span class="comment">% number of equations incrementation</span>
-0037     ceq(nb_eq,1)=R(1,2); 
-0038     nb_eq=nb_eq+1; <span class="comment">% number of equations incrementation</span>
-0039     ceq(nb_eq,1)=R(1,3); 
+0037     ceq(nb_eq,1)=R(z,z)-1; 
+0038     <span class="keyword">end</span>
+0039     
 0040     nb_eq=nb_eq+1; <span class="comment">% number of equations incrementation</span>
-0041     ceq(nb_eq,1)=R(2,3);   
-0042     <span class="keyword">end</span>   
-0043 <span class="keyword">end</span>
-0044 
-0045 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0041     ceq(nb_eq,1)=R(1,2); 
+0042     nb_eq=nb_eq+1; <span class="comment">% number of equations incrementation</span>
+0043     ceq(nb_eq,1)=R(1,3); 
+0044     nb_eq=nb_eq+1; <span class="comment">% number of equations incrementation</span>
+0045     ceq(nb_eq,1)=R(2,3);   
+0046     <span class="keyword">end</span>   
+0047 <span class="keyword">end</span>
+0048 
+0049 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 07-Nov-2018 15:15:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

@@ -50,6 +50,10 @@ ________________________________________________________
 
  Licence
  Toolbox distributed under 3-Clause BSD License
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
 ________________________________________________________</pre></div>
 
 <!-- crossreference -->
@@ -90,12 +94,16 @@ This function is called by:
 0023 <span class="comment">% Licence</span>
 0024 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
 0025 <span class="comment">%________________________________________________________</span>
-0026 
-0027     error=0;
-0028     <span class="keyword">for</span> f=1:nb_frame    <span class="comment">% somme des erreurs pour chacune des frames sélectionnées (sum of reconstruction error for a set of selected frames)</span>
-0029         error = error + <a href="CostFunctionSymbolicCalib.html" class="code" title="function [error] = CostFunctionSymbolicCalib(q,k,Human_model,real_markers,f,list_function,list_function_markers,Pelvis_position,Pelvis_rotation,Rcut,pcut)">CostFunctionSymbolicCalib</a>(q(:,f),k,Human_model,real_markers,f,list_function,list_function_markers,Pelvis_position{f},Pelvis_rotation{f},Rcut,pcut);   
-0030     <span class="keyword">end</span>
-0031 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0028 <span class="comment">% Georges Dumont</span>
+0029 <span class="comment">%________________________________________________________</span>
+0030 
+0031     error=0;
+0032     <span class="keyword">for</span> f=1:nb_frame    <span class="comment">% somme des erreurs pour chacune des frames sélectionnées (sum of reconstruction error for a set of selected frames)</span>
+0033         error = error + <a href="CostFunctionSymbolicCalib.html" class="code" title="function [error] = CostFunctionSymbolicCalib(q,k,Human_model,real_markers,f,list_function,list_function_markers,Pelvis_position,Pelvis_rotation,Rcut,pcut)">CostFunctionSymbolicCalib</a>(q(:,f),k,Human_model,real_markers,f,list_function,list_function_markers,Pelvis_position{f},Pelvis_rotation{f},Rcut,pcut);   
+0034     <span class="keyword">end</span>
+0035 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 07-Nov-2018 15:15:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

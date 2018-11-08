@@ -39,6 +39,10 @@ ________________________________________________________
 
  Licence
  Toolbox distributed under 3-Clause BSD License
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
 ________________________________________________________</pre></div>
 
 <!-- crossreference -->
@@ -68,29 +72,33 @@ This function is called by:
 0012 <span class="comment">% Licence</span>
 0013 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
 0014 <span class="comment">%________________________________________________________</span>
-0015 
-0016 <span class="comment">%% Detection of frames to delete</span>
-0017 Marqueur_absent=[];
-0018 nb_frame_origin = size(real_markers(1).position,1);
-0019 [real_markers]=<a href="CompteNaN.html" class="code" title="function [real_markers]=CompteNaN(real_markers,champ)">CompteNaN</a>(real_markers,<span class="string">'position_c3d'</span>);
-0020 <span class="keyword">for</span> i_mk = 1:numel(real_markers)
-0021     <span class="keyword">if</span> ~isempty(real_markers(i_mk).position_c3d_NaN_detail)
-0022         Marqueur_absent=[Marqueur_absent;real_markers(i_mk).position_c3d_NaN_detail];
-0023     <span class="keyword">end</span>
-0024 <span class="keyword">end</span>
-0025 Marqueur_absent=sort(Marqueur_absent); <span class="comment">% All the frames with a missing marker in c3d data.</span>
-0026 
-0027 <span class="comment">%% Deletion of the frames</span>
-0028 <span class="keyword">for</span> ii_mk= 1:numel(real_markers)
-0029         index = true( 1 , size(real_markers(ii_mk).position,1) );
-0030         index(Marqueur_absent')=false;
-0031         real_markers(ii_mk).position=real_markers(ii_mk).position(index,:);
-0032 <span class="keyword">end</span>
-0033 nb_frames = size(real_markers(ii_mk).position,1);
-0034 
-0035 <span class="comment">% disp([ num2str(length(Marqueur_absent)) '/' num2str(nb_frame_origin) ' deleted frames'])</span>
-0036 
-0037 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0017 <span class="comment">% Georges Dumont</span>
+0018 <span class="comment">%________________________________________________________</span>
+0019 
+0020 <span class="comment">%% Detection of frames to delete</span>
+0021 Marqueur_absent=[];
+0022 nb_frame_origin = size(real_markers(1).position,1);
+0023 [real_markers]=<a href="CompteNaN.html" class="code" title="function [real_markers]=CompteNaN(real_markers,champ)">CompteNaN</a>(real_markers,<span class="string">'position_c3d'</span>);
+0024 <span class="keyword">for</span> i_mk = 1:numel(real_markers)
+0025     <span class="keyword">if</span> ~isempty(real_markers(i_mk).position_c3d_NaN_detail)
+0026         Marqueur_absent=[Marqueur_absent;real_markers(i_mk).position_c3d_NaN_detail];
+0027     <span class="keyword">end</span>
+0028 <span class="keyword">end</span>
+0029 Marqueur_absent=sort(Marqueur_absent); <span class="comment">% All the frames with a missing marker in c3d data.</span>
+0030 
+0031 <span class="comment">%% Deletion of the frames</span>
+0032 <span class="keyword">for</span> ii_mk= 1:numel(real_markers)
+0033         index = true( 1 , size(real_markers(ii_mk).position,1) );
+0034         index(Marqueur_absent')=false;
+0035         real_markers(ii_mk).position=real_markers(ii_mk).position(index,:);
+0036 <span class="keyword">end</span>
+0037 nb_frames = size(real_markers(ii_mk).position,1);
+0038 
+0039 <span class="comment">% disp([ num2str(length(Marqueur_absent)) '/' num2str(nb_frame_origin) ' deleted frames'])</span>
+0040 
+0041 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 07-Nov-2018 15:15:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

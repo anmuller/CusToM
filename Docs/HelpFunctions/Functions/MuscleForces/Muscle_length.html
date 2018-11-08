@@ -24,7 +24,7 @@
 <div class="box"><strong>Computation of the muscle/tendon length</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="box"><strong>function [Lmt] = Muscle_length(Human_model,Muscles,q,m) </strong></div>
+<div class="box"><strong>function [Lmt] = Muscle_length(Human_model,Muscles,q) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 <div class="fragment"><pre class="comment"> Computation of the muscle/tendon length
@@ -41,6 +41,10 @@ ________________________________________________________
 
  Licence
  Toolbox distributed under 3-Clause BSD License
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
 ________________________________________________________</pre></div>
 
 <!-- crossreference -->
@@ -50,13 +54,13 @@ This function calls:
 <li><a href="../../Functions/AlgoMathsModel/distance_point.html" class="code" title="function [L,Typ] = distance_point(Point1,Bone1,Point2,Bone2,Human_model,q)">distance_point</a>	Computation of the distance between two points</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="MomentArmsComputation.html" class="code" title="function [Moment_Arms,C] = MomentArmsComputation(Human_model,Muscles)">MomentArmsComputation</a>	Computation of the moment arms matrix</li></ul>
+<li><a href="MomentArmsComputation.html" class="code" title="function [Moment_Arms_sub,C] = MomentArmsComputation(Human_model,Muscles)">MomentArmsComputation</a>	Computation of the moment arms matrix</li></ul>
 <!-- crossreference -->
 
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Lmt] = Muscle_length(Human_model,Muscles,q,m)</a>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Lmt] = Muscle_length(Human_model,Muscles,q)</a>
 0002 <span class="comment">% Computation of the muscle/tendon length</span>
 0003 <span class="comment">%</span>
 0004 <span class="comment">%   INPUT</span>
@@ -72,18 +76,23 @@ This function is called by:
 0014 <span class="comment">% Licence</span>
 0015 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
 0016 <span class="comment">%________________________________________________________</span>
-0017 Lmt = 0;
-0018 <span class="keyword">for</span> p=1:(numel(Muscles(m).path)-1)
-0019     <span class="comment">% distance between p and p+1 point</span>
-0020     M_Bone = Muscles(m).num_solid(p); <span class="comment">% number of the solid which contains this position</span>
-0021     M_pos = Muscles(m).num_markers(p); <span class="comment">% number of the anatomical landmark in this solid</span>
-0022     N_Bone = Muscles(m).num_solid(p+1);
-0023     N_pos = Muscles(m).num_markers(p+1);
-0024     Lmt = Lmt + <a href="../../Functions/AlgoMathsModel/distance_point.html" class="code" title="function [L,Typ] = distance_point(Point1,Bone1,Point2,Bone2,Human_model,q)">distance_point</a>(M_pos,M_Bone,N_pos,N_Bone,Human_model,q);
-0025 <span class="keyword">end</span>
-0026 
-0027 <span class="keyword">end</span>
-0028</pre></div>
-<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0019 <span class="comment">% Georges Dumont</span>
+0020 <span class="comment">%________________________________________________________</span>
+0021 
+0022 Lmt = 0;
+0023 <span class="keyword">for</span> p=1:(numel(Muscles.path)-1)
+0024     <span class="comment">% distance between p and p+1 point</span>
+0025     M_Bone = Muscles.num_solid(p); <span class="comment">% number of the solid which contains this position</span>
+0026     M_pos = Muscles.num_markers(p); <span class="comment">% number of the anatomical landmark in this solid</span>
+0027     N_Bone = Muscles.num_solid(p+1);
+0028     N_pos = Muscles.num_markers(p+1);
+0029     Lmt = Lmt + <a href="../../Functions/AlgoMathsModel/distance_point.html" class="code" title="function [L,Typ] = distance_point(Point1,Bone1,Point2,Bone2,Human_model,q)">distance_point</a>(M_pos,M_Bone,N_pos,N_Bone,Human_model,q);
+0030 <span class="keyword">end</span>
+0031 
+0032 <span class="keyword">end</span>
+0033</pre></div>
+<hr><address>Generated on Wed 07-Nov-2018 15:15:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

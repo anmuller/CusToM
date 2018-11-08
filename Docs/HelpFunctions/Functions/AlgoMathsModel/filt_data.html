@@ -39,6 +39,10 @@ ________________________________________________________
 
  Licence
  Toolbox distributed under 3-Clause BSD License
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
 ________________________________________________________</pre></div>
 
 <!-- crossreference -->
@@ -70,33 +74,37 @@ This function is called by:
 0012 <span class="comment">% Licence</span>
 0013 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
 0014 <span class="comment">%________________________________________________________</span>
-0015 
-0016 <span class="keyword">for</span> i=1:size(data,2)
-0017     data(:,i)=<a href="#_sub1" class="code" title="subfunction [datafilt]=filtrage_data(data,f,f_mocap)">filtrage_data</a>(data(:,i),f,f_mocap);
-0018 <span class="keyword">end</span>
-0019 <span class="keyword">end</span>
-0020 
-0021 <a name="_sub1" href="#_subfunctions" class="code">function [datafilt]=filtrage_data(data,f,f_mocap)</a>
-0022 <span class="comment">%% filtre</span>
-0023 <span class="comment">% data : vector</span>
-0024 init=data(1);
-0025 data_inter=data-init;
-0026 datafilt=<a href="#_sub2" class="code" title="subfunction [y]=filtre(data,f,f_mocap)">filtre</a>(data_inter,f,f_mocap);
-0027 datafilt=datafilt+init;
-0028 
-0029 <span class="keyword">end</span>
-0030 
-0031 <a name="_sub2" href="#_subfunctions" class="code">function [y]=filtre(data,f,f_mocap)</a>
-0032 <span class="comment">%% fonction filtre</span>
-0033 
-0034 Wn=f/(f_mocap/2); <span class="comment">% f=100Hz (/2) et fréquence d'échantillonnage : 5Hz</span>
-0035 <span class="comment">% Wn=2/50; % f=100Hz (/2) et fréquence d'échantillonnage : 5Hz</span>
-0036 
-0037 [b,a] = butter(4,Wn,<span class="string">'low'</span>);
-0038 y=filtfilt(b,a,data);
-0039 
-0040 <span class="keyword">end</span>
-0041</pre></div>
-<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0017 <span class="comment">% Georges Dumont</span>
+0018 <span class="comment">%________________________________________________________</span>
+0019 
+0020 <span class="keyword">for</span> i=1:size(data,2)
+0021     data(:,i)=<a href="#_sub1" class="code" title="subfunction [datafilt]=filtrage_data(data,f,f_mocap)">filtrage_data</a>(data(:,i),f,f_mocap);
+0022 <span class="keyword">end</span>
+0023 <span class="keyword">end</span>
+0024 
+0025 <a name="_sub1" href="#_subfunctions" class="code">function [datafilt]=filtrage_data(data,f,f_mocap)</a>
+0026 <span class="comment">%% filtre</span>
+0027 <span class="comment">% data : vector</span>
+0028 init=data(1);
+0029 data_inter=data-init;
+0030 datafilt=<a href="#_sub2" class="code" title="subfunction [y]=filtre(data,f,f_mocap)">filtre</a>(data_inter,f,f_mocap);
+0031 datafilt=datafilt+init;
+0032 
+0033 <span class="keyword">end</span>
+0034 
+0035 <a name="_sub2" href="#_subfunctions" class="code">function [y]=filtre(data,f,f_mocap)</a>
+0036 <span class="comment">%% fonction filtre</span>
+0037 
+0038 Wn=f/(f_mocap/2); <span class="comment">% f=100Hz (/2) et fréquence d'échantillonnage : 5Hz</span>
+0039 <span class="comment">% Wn=2/50; % f=100Hz (/2) et fréquence d'échantillonnage : 5Hz</span>
+0040 
+0041 [b,a] = butter(4,Wn,<span class="string">'low'</span>);
+0042 y=filtfilt(b,a,data);
+0043 
+0044 <span class="keyword">end</span>
+0045</pre></div>
+<hr><address>Generated on Wed 07-Nov-2018 15:15:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

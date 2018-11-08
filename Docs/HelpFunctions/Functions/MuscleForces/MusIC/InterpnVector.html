@@ -39,6 +39,10 @@ ________________________________________________________
 
  Licence
  Toolbox distributed under 3-Clause BSD License
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
 ________________________________________________________</pre></div>
 
 <!-- crossreference -->
@@ -48,7 +52,7 @@ This function calls:
 <li><a href="cartprod.html" class="code" title="function X = cartprod(varargin)">cartprod</a>	CARTPROD Cartesian product of multiple sets.</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="ForcesComputationMusIC.html" class="code" title="function [MuscleForcesComputationResults] = ForcesComputationMusIC(filename, BiomechanicalModel)">ForcesComputationMusIC</a>	Computation of the muscle forces estimation step by using the MusIC method</li></ul>
+<li><a href="ForcesComputationMusIC.html" class="code" title="function [MuscleForcesComputationResults] = ForcesComputationMusIC(filename, BiomechanicalModel, AnalysisParameters)">ForcesComputationMusIC</a>	Computation of the muscle forces estimation step by using the MusIC method</li></ul>
 <!-- crossreference -->
 
 
@@ -68,36 +72,40 @@ This function is called by:
 0012 <span class="comment">% Licence</span>
 0013 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
 0014 <span class="comment">%________________________________________________________</span>
-0015 
-0016 <span class="comment">%% find the position in the table of data</span>
-0017 Xqn = numel(Xq);
-0018 Position = cell(Xqn,1);
-0019 Pourcent = cell(Xqn,1);
-0020 <span class="keyword">for</span> i=1:Xqn
-0021     DiffVec = X{i,1}-Xq(i,1);
-0022     pos_sup = max(find(DiffVec&gt;=0,1),2);
-0023     <span class="keyword">if</span> isempty(pos_sup)
-0024         pos_sup = numel(X{i,1});
-0025     <span class="keyword">end</span>
-0026     <span class="comment">% position</span>
-0027     Position{i,1} = [pos_sup-1 pos_sup];
-0028     <span class="comment">% percentage of placement with respect to their neighbors</span>
-0029     pourcent_inf = (Xq(i,1) - X{i,1}(pos_sup-1))/(DiffVec(pos_sup)-DiffVec(pos_sup-1));
-0030     Pourcent{i,1} = [1-pourcent_inf pourcent_inf];
-0031 <span class="keyword">end</span>
-0032 
-0033 <span class="comment">%% Linear interpolation computation</span>
-0034 
-0035 list_points = num2cell(<a href="cartprod.html" class="code" title="function X = cartprod(varargin)">cartprod</a>(Position{:})); <span class="comment">% points list</span>
-0036 list_pourcent = <a href="cartprod.html" class="code" title="function X = cartprod(varargin)">cartprod</a>(Pourcent{:});
-0037 
-0038 ZPoints = zeros(size(list_points,1),numel(V{1}));
-0039 <span class="keyword">for</span> i=1:size(ZPoints,1)
-0040     ZPoints(i,:) = V{list_points{i,:}}';
-0041 <span class="keyword">end</span>
-0042 Vq = ZPoints'*prod(list_pourcent,2);
-0043 
-0044 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0017 <span class="comment">% Georges Dumont</span>
+0018 <span class="comment">%________________________________________________________</span>
+0019 
+0020 <span class="comment">%% find the position in the table of data</span>
+0021 Xqn = numel(Xq);
+0022 Position = cell(Xqn,1);
+0023 Pourcent = cell(Xqn,1);
+0024 <span class="keyword">for</span> i=1:Xqn
+0025     DiffVec = X{i,1}-Xq(i,1);
+0026     pos_sup = max(find(DiffVec&gt;=0,1),2);
+0027     <span class="keyword">if</span> isempty(pos_sup)
+0028         pos_sup = numel(X{i,1});
+0029     <span class="keyword">end</span>
+0030     <span class="comment">% position</span>
+0031     Position{i,1} = [pos_sup-1 pos_sup];
+0032     <span class="comment">% percentage of placement with respect to their neighbors</span>
+0033     pourcent_inf = (Xq(i,1) - X{i,1}(pos_sup-1))/(DiffVec(pos_sup)-DiffVec(pos_sup-1));
+0034     Pourcent{i,1} = [1-pourcent_inf pourcent_inf];
+0035 <span class="keyword">end</span>
+0036 
+0037 <span class="comment">%% Linear interpolation computation</span>
+0038 
+0039 list_points = num2cell(<a href="cartprod.html" class="code" title="function X = cartprod(varargin)">cartprod</a>(Position{:})); <span class="comment">% points list</span>
+0040 list_pourcent = <a href="cartprod.html" class="code" title="function X = cartprod(varargin)">cartprod</a>(Pourcent{:});
+0041 
+0042 ZPoints = zeros(size(list_points,1),numel(V{1}));
+0043 <span class="keyword">for</span> i=1:size(ZPoints,1)
+0044     ZPoints(i,:) = V{list_points{i,:}}';
+0045 <span class="keyword">end</span>
+0046 Vq = ZPoints'*prod(list_pourcent,2);
+0047 
+0048 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 07-Nov-2018 15:15:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

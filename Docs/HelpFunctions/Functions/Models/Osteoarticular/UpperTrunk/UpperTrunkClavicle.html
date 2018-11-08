@@ -1,0 +1,431 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of UpperTrunkClavicle</title>
+  <meta name="keywords" content="UpperTrunkClavicle">
+  <meta name="description" content="Addition of an upper trunk model">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="../../../index.html">Functions</a> &gt; <a href="../../index.html">Models</a> &gt; <a href="../index.html">Osteoarticular</a> &gt; <a href="index.html">UpperTrunk</a> &gt; UpperTrunkClavicle.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for Functions\Models\Osteoarticular\UpperTrunk&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>UpperTrunkClavicle
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>Addition of an upper trunk model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [OsteoArticularModel]= UpperTrunkClavicle(OsteoArticularModel,k,Mass,AttachmentPoint) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Addition of an upper trunk model
+   This upper trunk model contains 3 solids (thorax, right clavicle and
+   left clavicle), exhibits 3 dof for lower trunk / upper trunk joint, 3
+   dof for each upper trunk / clavicle joint
+
+    Based on:
+    - Damsgaard, M., Rasmussen, J., Christensen, S. T., Surma, E., &amp; De Zee, M., 2006.
+     Analysis of musculoskeletal systems in the AnyBody Modeling System. Simulation Modelling Practice and Theory, 14(8), 1100-1111.
+
+   INPUT
+   - OsteoArticularModel: osteo-articular model of an already existing
+   model (see the Documentation for the structure)
+   - k: homothety coefficient for the geometrical parameters (defined as
+   the subject size in cm divided by 180)
+   - Mass: mass of the solids
+   - AttachmentPoint: name of the attachment point of the model on the
+   already existing model (character string)
+   OUTPUT
+   - OsteoArticularModel: new osteo-articular model (see the Documentation
+   for the structure) 
+________________________________________________________
+
+ Licence
+ Toolbox distributed under 3-Clause BSD License
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Functions/AlgoMathsModel/distance_point.html" class="code" title="function [L,Typ] = distance_point(Point1,Bone1,Point2,Bone2,Human_model,q)">distance_point</a>	Computation of the distance between two points</li><li><a href="../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>	Computation of inertia matrix from radius of gyration</li><li><a href="../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>	Addition of a sister to a solid</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [OsteoArticularModel]= UpperTrunkClavicle(OsteoArticularModel,k,Mass,AttachmentPoint)</a>
+0002 <span class="comment">% Addition of an upper trunk model</span>
+0003 <span class="comment">%   This upper trunk model contains 3 solids (thorax, right clavicle and</span>
+0004 <span class="comment">%   left clavicle), exhibits 3 dof for lower trunk / upper trunk joint, 3</span>
+0005 <span class="comment">%   dof for each upper trunk / clavicle joint</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%    Based on:</span>
+0008 <span class="comment">%    - Damsgaard, M., Rasmussen, J., Christensen, S. T., Surma, E., &amp; De Zee, M., 2006.</span>
+0009 <span class="comment">%     Analysis of musculoskeletal systems in the AnyBody Modeling System. Simulation Modelling Practice and Theory, 14(8), 1100-1111.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%   INPUT</span>
+0012 <span class="comment">%   - OsteoArticularModel: osteo-articular model of an already existing</span>
+0013 <span class="comment">%   model (see the Documentation for the structure)</span>
+0014 <span class="comment">%   - k: homothety coefficient for the geometrical parameters (defined as</span>
+0015 <span class="comment">%   the subject size in cm divided by 180)</span>
+0016 <span class="comment">%   - Mass: mass of the solids</span>
+0017 <span class="comment">%   - AttachmentPoint: name of the attachment point of the model on the</span>
+0018 <span class="comment">%   already existing model (character string)</span>
+0019 <span class="comment">%   OUTPUT</span>
+0020 <span class="comment">%   - OsteoArticularModel: new osteo-articular model (see the Documentation</span>
+0021 <span class="comment">%   for the structure)</span>
+0022 <span class="comment">%________________________________________________________</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% Licence</span>
+0025 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
+0026 <span class="comment">%________________________________________________________</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0029 <span class="comment">% Georges Dumont</span>
+0030 <span class="comment">%________________________________________________________</span>
+0031 list_solid={<span class="string">'UpperTrunk_J1'</span> <span class="string">'UpperTrunk_J2'</span> <span class="string">'Thorax'</span> <span class="keyword">...</span>
+0032         <span class="string">'RClavicle_J1'</span> <span class="string">'RClavicle_J2'</span> <span class="string">'RClavicle'</span> <span class="keyword">...</span>
+0033         <span class="string">'LClavicle_J1'</span> <span class="string">'LClavicle_J2'</span> <span class="string">'LClavicle'</span>};
+0034  
+0035 <span class="comment">%% solid numbering incremation</span>
+0036 
+0037 s=size(OsteoArticularModel,2)+1;  <span class="comment">%#ok&lt;NASGU&gt; % number of the first solid</span>
+0038 <span class="keyword">for</span> i=1:size(list_solid,2)      <span class="comment">% each solid numbering: s_&quot;nom du solide&quot;</span>
+0039     <span class="keyword">if</span> i==1
+0040         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s;'</span>))
+0041     <span class="keyword">else</span>
+0042         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s_'</span>,list_solid{i-1},<span class="string">'+1;'</span>))
+0043     <span class="keyword">end</span>
+0044 <span class="keyword">end</span>  
+0045     
+0046 <span class="comment">% find the number of the mother from the attachment point: 'attachment_pt'</span>
+0047 <span class="keyword">if</span> ~numel(AttachmentPoint)
+0048     s_mother=0;
+0049     pos_attachment_pt=[0 0 0]';
+0050 <span class="keyword">else</span>
+0051     test=0;
+0052     <span class="keyword">for</span> i=1:numel(OsteoArticularModel)
+0053         <span class="keyword">for</span> j=1:size(OsteoArticularModel(i).anat_position,1)
+0054             <span class="keyword">if</span> strcmp(AttachmentPoint,OsteoArticularModel(i).anat_position{j,1})
+0055                s_mother=i;
+0056                pos_attachment_pt=OsteoArticularModel(i).anat_position{j,2}+OsteoArticularModel(s_mother).c;
+0057                test=1;
+0058                <span class="keyword">break</span>
+0059             <span class="keyword">end</span>
+0060         <span class="keyword">end</span>
+0061         <span class="keyword">if</span> i==numel(OsteoArticularModel) &amp;&amp; test==0
+0062             error([AttachmentPoint <span class="string">' is no existent'</span>])        
+0063         <span class="keyword">end</span>       
+0064     <span class="keyword">end</span>
+0065     <span class="keyword">if</span> OsteoArticularModel(s_mother).child == 0      <span class="comment">% if the mother don't have any child</span>
+0066         OsteoArticularModel(s_mother).child = eval([<span class="string">'s_'</span> list_solid{1}]);    <span class="comment">% the child of this mother is this solid</span>
+0067     <span class="keyword">else</span>
+0068         [OsteoArticularModel]=<a href="../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval([<span class="string">'s_'</span> list_solid{1}]));   <span class="comment">% recherche de la dernière soeur</span>
+0069     <span class="keyword">end</span>
+0070 <span class="keyword">end</span>    
+0071 
+0072 
+0073 <span class="comment">%%                     Definition of anatomical landmarks</span>
+0074 
+0075 <span class="comment">% ------------------------- Thorax ----------------------------------------</span>
+0076 
+0077 <span class="comment">% Center of mass location with respect to the reference frame</span>
+0078 CoM_Thorax = k*[0.060 0.303 0];
+0079 
+0080 <span class="comment">% Node locations</span>
+0081 Thorax_T12L1JointNode = k*[0.022 0.154 0] - CoM_Thorax;
+0082 Thorax_C1HatNode = k*[0.026 0.6 0] - CoM_Thorax;
+0083 Thorax_T1C5 = k*[0.013 0.462 0] - CoM_Thorax;
+0084 Thorax_scjJointRightNode = k*[0.0010 0.1240 0.0207]-Thorax_T12L1JointNode;
+0085 Thorax_scjJointLeftNode = k*[0.0010 0.1240 -0.0207]-Thorax_T12L1JointNode;
+0086 Thorax_ShoulderRightNode=k*[-0.0408 0.1099 0.1929]-Thorax_T12L1JointNode;
+0087 Thorax_ShoulderLeftNode=k*[-0.0408 0.1099 -0.1929]-Thorax_T12L1JointNode;
+0088 Thorax_scjJointCenter=k*[0 0.1240 0]-Thorax_T12L1JointNode; <span class="comment">%#ok&lt;NASGU&gt;</span>
+0089 NeckNode=Thorax_C1HatNode;
+0090 
+0091 Thorax_osim2antoine = [k k Thorax_ShoulderRightNode(3)/0.17]; <span class="comment">% scaling coef based on shoulder width</span>
+0092 <span class="comment">% RThorax_Triceps = ([-0.05365 -0.01373 0.14723]-[-0.017545 -0.007 0.17]).*Thorax_osim2antoine; % in the frame osimarm26</span>
+0093 <span class="comment">% LThorax_Triceps = ([-0.05365 -0.01373 -0.14723]-[-0.017545 -0.007 -0.17]).*Thorax_osim2antoine; % in the frame osimarm26</span>
+0094 <span class="comment">% RThorax_BicepsL_o = ([-0.039235 0.00347 0.14795]-[-0.017545 -0.007 0.17]).*Thorax_osim2antoine; % in the frame osimarm26</span>
+0095 <span class="comment">% LThorax_BicepsL_o = ([-0.039235 0.00347 -0.14795]-[-0.017545 -0.007 -0.17]).*Thorax_osim2antoine; % in the frame osimarm26</span>
+0096 <span class="comment">% RThorax_BicepsL_via1 = ([-0.028945 0.01391 0.15639]-[-0.017545 -0.007 0.17]).*Thorax_osim2antoine; % in the frame osimarm26;</span>
+0097 <span class="comment">% LThorax_BicepsL_via1 = ([-0.028945 0.01391 -0.15639]-[-0.017545 -0.007 -0.17]).*Thorax_osim2antoine; % in the frame osimarm26;</span>
+0098 <span class="comment">% RThorax_BicepsS_o = ([0.004675 -0.01231 0.13475]-[-0.017545 -0.007 0.17]).*Thorax_osim2antoine; % in the frame osimarm26</span>
+0099 <span class="comment">% LThorax_BicepsS_o = ([0.004675 -0.01231 -0.13475]-[-0.017545 -0.007 -0.17]).*Thorax_osim2antoine; % in the frame osimarm26</span>
+0100 <span class="comment">% RThorax_BicepsS_via1 = ([-0.007075 -0.04004 0.14507]-[-0.017545 -0.007 0.17]).*Thorax_osim2antoine; % in the frame osimarm26;</span>
+0101 <span class="comment">% LThorax_BicepsS_via1 = ([-0.007075 -0.04004 -0.14507]-[-0.017545 -0.007 -0.17]).*Thorax_osim2antoine; % in the frame osimarm26;</span>
+0102 
+0103 RThorax_Triceps = ([-0.05365 -0.01373 0.14723]).*Thorax_osim2antoine; <span class="comment">% in the frame osimarm26</span>
+0104 LThorax_Triceps = ([-0.05365 -0.01373 -0.14723]).*Thorax_osim2antoine; <span class="comment">% in the frame osimarm26</span>
+0105 RThorax_BicepsL_o = ([-0.039235 0.00347 0.14795]).*Thorax_osim2antoine; <span class="comment">% in the frame osimarm26</span>
+0106 LThorax_BicepsL_o = ([-0.039235 0.00347 -0.14795]).*Thorax_osim2antoine; <span class="comment">% in the frame osimarm26</span>
+0107 RThorax_BicepsL_via1 = ([-0.028945 0.01391 0.15639]).*Thorax_osim2antoine; <span class="comment">% in the frame osimarm26;</span>
+0108 LThorax_BicepsL_via1 = ([-0.028945 0.01391 -0.15639]).*Thorax_osim2antoine; <span class="comment">% in the frame osimarm26;</span>
+0109 RThorax_BicepsS_o = ([0.004675 -0.01231 0.13475]).*Thorax_osim2antoine; <span class="comment">% in the frame osimarm26</span>
+0110 LThorax_BicepsS_o = ([0.004675 -0.01231 -0.13475]).*Thorax_osim2antoine; <span class="comment">% in the frame osimarm26</span>
+0111 RThorax_BicepsS_via1 = ([-0.007075 -0.04004 0.14507]).*Thorax_osim2antoine; <span class="comment">% in the frame osimarm26;</span>
+0112 LThorax_BicepsS_via1 = ([-0.007075 -0.04004 -0.14507]).*Thorax_osim2antoine; <span class="comment">% in the frame osimarm26;</span>
+0113 
+0114 <span class="comment">%% Definition of anatomical landmarks (with respect to the center of mass of the solid)</span>
+0115 
+0116 Thorax_position_set= {<span class="keyword">...</span>
+0117     <span class="string">'STRN'</span>, k*[0.095 -0.055 0]'; <span class="keyword">...</span>
+0118     <span class="string">'CLAV'</span>, k*[0.01 0.13 0]'; <span class="keyword">...</span>
+0119     <span class="string">'T10'</span>, k*[-0.12 -0.115 0]'; <span class="keyword">...</span>
+0120     <span class="string">'T8'</span>, k*[-0.13 -0.05 0]'; <span class="keyword">...</span>
+0121     <span class="string">'T12'</span>, k*[-0.10 -0.175 0]'; <span class="keyword">...</span>
+0122     <span class="string">'C7'</span>, k*[-0.105 0.165 0]'; <span class="keyword">...</span>
+0123     <span class="string">'NeckNode'</span>, NeckNode'; <span class="keyword">...</span>
+0124     <span class="string">'Thorax_T1C5'</span>, Thorax_T1C5'; <span class="keyword">...</span>
+0125     <span class="string">'Thorax_scjJointRightNode'</span>, Thorax_scjJointRightNode'; <span class="keyword">...</span>
+0126     <span class="string">'Thorax_scjJointLeftNode'</span>, Thorax_scjJointLeftNode'; <span class="keyword">...</span>
+0127     <span class="string">'Thorax_T12L1JointNode'</span>, Thorax_T12L1JointNode'; <span class="keyword">...</span>
+0128     };
+0129     
+0130 RClavicle_position_set= {<span class="keyword">...</span><span class="comment">    </span>
+0131     <span class="string">'RSHO'</span>, k*[-0.0416 0.1707 0.1853]'-Thorax_T12L1JointNode'-Thorax_scjJointRightNode'; <span class="keyword">...</span>
+0132     <span class="string">'CLAVD'</span>, k*[0.005 0.02 0.07]'; <span class="keyword">...</span>
+0133     <span class="string">'Thorax_ShoulderRightNode'</span>, Thorax_ShoulderRightNode'-Thorax_scjJointRightNode'; <span class="keyword">...</span>
+0134     <span class="string">'RThorax_Triceps_o'</span>,RThorax_Triceps'-Thorax_scjJointRightNode'+Thorax_scjJointCenter';<span class="keyword">...</span>
+0135     <span class="string">'LThorax_Triceps_o'</span>,LThorax_Triceps'-Thorax_scjJointRightNode'+Thorax_scjJointCenter';<span class="keyword">...</span>
+0136     <span class="string">'RThorax_BicepsL_o'</span>,RThorax_BicepsL_o'-Thorax_scjJointRightNode'+Thorax_scjJointCenter';<span class="keyword">...</span>
+0137     <span class="string">'LThorax_BicepsL_o'</span>,LThorax_BicepsL_o'-Thorax_scjJointRightNode'+Thorax_scjJointCenter';<span class="keyword">...</span>
+0138     <span class="string">'RThorax_BicepsL_via1'</span>,RThorax_BicepsL_via1'-Thorax_scjJointRightNode'+Thorax_scjJointCenter';<span class="keyword">...</span>
+0139     <span class="string">'LThorax_BicepsL_via1'</span>,LThorax_BicepsL_via1'-Thorax_scjJointRightNode'+Thorax_scjJointCenter';<span class="keyword">...</span>
+0140     <span class="string">'RThorax_BicepsS_o'</span>,RThorax_BicepsS_o'-Thorax_scjJointRightNode'+Thorax_scjJointCenter';<span class="keyword">...</span>
+0141     <span class="string">'LThorax_BicepsS_o'</span>,LThorax_BicepsS_o'-Thorax_scjJointRightNode'+Thorax_scjJointCenter';<span class="keyword">...</span>
+0142     <span class="string">'RThorax_BicepsS_via1'</span>,RThorax_BicepsS_via1'-Thorax_scjJointRightNode'+Thorax_scjJointCenter';<span class="keyword">...</span>
+0143     <span class="string">'LThorax_BicepsS_via1'</span>,LThorax_BicepsS_via1'-Thorax_scjJointRightNode'+Thorax_scjJointCenter';<span class="keyword">...</span>
+0144     };
+0145 
+0146 LClavicle_position_set= {<span class="keyword">...</span>
+0147     <span class="string">'LSHO'</span>, k*[-0.0416 0.1707 -0.1853]'-Thorax_T12L1JointNode'-Thorax_scjJointLeftNode'; <span class="keyword">...</span>
+0148     <span class="string">'CLAVG'</span>, k*[0.005 0.02 -0.07]'; <span class="keyword">...</span>
+0149     <span class="string">'Thorax_ShoulderLeftNode'</span>, Thorax_ShoulderLeftNode'-Thorax_scjJointLeftNode'; <span class="keyword">...</span>
+0150     };
+0151 
+0152 <span class="comment">%%                     Scaling inertial parameters</span>
+0153 
+0154 <span class="comment">% longueur entre 'Pelvis_L5JointNode' et 'Thorax_T1C5'</span>
+0155 Lpts={<span class="string">'Pelvis_L5JointNode'</span>;<span class="string">'LowerTrunk_UpperTrunkNode'</span>};
+0156 <span class="keyword">for</span> pp=1:2
+0157     test=0;
+0158     <span class="keyword">for</span> i=1:numel(OsteoArticularModel)
+0159         <span class="keyword">for</span> j=1:size(OsteoArticularModel(i).anat_position,1)
+0160             <span class="keyword">if</span> strcmp(Lpts{pp},OsteoArticularModel(i).anat_position{j,1})
+0161                Lpts{pp,2}=i; <span class="comment">% solid number</span>
+0162                Lpts{pp,3}=j; <span class="comment">% number of the anatomical landmarks</span>
+0163                test=1;
+0164                <span class="keyword">break</span>
+0165             <span class="keyword">end</span>
+0166         <span class="keyword">end</span>
+0167         <span class="keyword">if</span> i==numel(OsteoArticularModel) &amp;&amp; test==0
+0168             error([Lpts{pp} <span class="string">' is no existent'</span>])        
+0169         <span class="keyword">end</span>       
+0170     <span class="keyword">end</span>
+0171 <span class="keyword">end</span>
+0172 Lenght_Thorax = <a href="../../../../Functions/AlgoMathsModel/distance_point.html" class="code" title="function [L,Typ] = distance_point(Point1,Bone1,Point2,Bone2,Human_model,q)">distance_point</a>(Lpts{1,3},Lpts{1,2},Lpts{2,3},Lpts{2,2},OsteoArticularModel,zeros(numel(OsteoArticularModel),1)) <span class="keyword">...</span>
+0173     +norm(Thorax_T12L1JointNode-Thorax_T1C5);
+0174 
+0175     <span class="comment">%% [&quot;Adjustments to McConville et al. and Young et al. body segment inertial parameters&quot;] R. Dumas</span>
+0176     <span class="comment">% ------------------------- Thorax ----------------------------------------</span>
+0177     [I_Thorax]=<a href="../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>([27 25 28 18 2 4*1i], Mass.UpperTrunk_Mass, [0 0 0], Lenght_Thorax);
+0178 
+0179                     <span class="comment">%% %% &quot;Human_model&quot; structure generation</span>
+0180  
+0181 num_solid=0;
+0182 <span class="comment">%% Thorax</span>
+0183     <span class="comment">% UpperTrunk_J1</span>
+0184     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0185     name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0186     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0187     OsteoArticularModel(incr_solid).name=name;               <span class="comment">% solid name</span>
+0188     OsteoArticularModel(incr_solid).sister=0;                
+0189     OsteoArticularModel(incr_solid).child=s_UpperTrunk_J2;                   
+0190     OsteoArticularModel(incr_solid).mother=s_mother;           
+0191     OsteoArticularModel(incr_solid).a=[0 0 1]'; 
+0192     OsteoArticularModel(incr_solid).joint=1;  
+0193     OsteoArticularModel(incr_solid).limit_inf=-0.2;
+0194     OsteoArticularModel(incr_solid).limit_sup=0.2;
+0195     OsteoArticularModel(incr_solid).linear_constraint=[];
+0196     OsteoArticularModel(incr_solid).Visual=0;
+0197     OsteoArticularModel(incr_solid).b=pos_attachment_pt;
+0198     OsteoArticularModel(incr_solid).c=[0 0 0]';
+0199     OsteoArticularModel(incr_solid).m=0;                 
+0200     OsteoArticularModel(incr_solid).I=zeros(3,3);
+0201 
+0202     <span class="comment">% UpperTrunk_J2</span>
+0203     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0204     name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0205     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0206     OsteoArticularModel(incr_solid).name=name;               <span class="comment">% solid name</span>
+0207     OsteoArticularModel(incr_solid).sister=0;                
+0208     OsteoArticularModel(incr_solid).child=s_Thorax;                   
+0209     OsteoArticularModel(incr_solid).mother=s_UpperTrunk_J1;           
+0210     OsteoArticularModel(incr_solid).a=[1 0 0]';
+0211     OsteoArticularModel(incr_solid).joint=1;
+0212     OsteoArticularModel(incr_solid).limit_inf=-0.2;
+0213     OsteoArticularModel(incr_solid).limit_sup=0.2;
+0214     OsteoArticularModel(incr_solid).linear_constraint=[];
+0215     OsteoArticularModel(incr_solid).Visual=0;
+0216     OsteoArticularModel(incr_solid).b=[0 0 0]';  
+0217     OsteoArticularModel(incr_solid).c=[0 0 0]';
+0218     OsteoArticularModel(incr_solid).m=0;                 
+0219     OsteoArticularModel(incr_solid).I=zeros(3,3);
+0220 
+0221     <span class="comment">% Thorax</span>
+0222     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0223     name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0224     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0225     OsteoArticularModel(incr_solid).name=name;               <span class="comment">% solid name</span>
+0226     OsteoArticularModel(incr_solid).sister=0;                
+0227     OsteoArticularModel(incr_solid).child=s_RClavicle_J1;                   
+0228     OsteoArticularModel(incr_solid).mother=s_UpperTrunk_J2;           
+0229     OsteoArticularModel(incr_solid).a=[0 1 0]';    
+0230     OsteoArticularModel(incr_solid).joint=1;
+0231     OsteoArticularModel(incr_solid).limit_inf=-0.2;
+0232     OsteoArticularModel(incr_solid).limit_sup=0.2;
+0233     OsteoArticularModel(incr_solid).Visual=1;
+0234     OsteoArticularModel(incr_solid).calib_k_constraint=[];
+0235     OsteoArticularModel(incr_solid).b=[0 0 0]';  
+0236     OsteoArticularModel(incr_solid).c=-Thorax_T12L1JointNode';
+0237     OsteoArticularModel(incr_solid).m=Mass.UpperTrunk_Mass;                 
+0238     OsteoArticularModel(incr_solid).I=[I_Thorax(1) I_Thorax(4) I_Thorax(5); I_Thorax(4) I_Thorax(2) I_Thorax(6); I_Thorax(5) I_Thorax(6) I_Thorax(3)];
+0239     OsteoArticularModel(incr_solid).anat_position=Thorax_position_set;
+0240     OsteoArticularModel(incr_solid).L={<span class="string">'Pelvis_LowerTrunkNode'</span>;<span class="string">'Thorax_T1C5'</span>};
+0241     
+0242     <span class="comment">%% Rclavicle</span>
+0243     <span class="comment">% RClavicle_J1</span>
+0244     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0245     name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0246     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0247     OsteoArticularModel(incr_solid).name=name;               <span class="comment">% solid name</span>
+0248     OsteoArticularModel(incr_solid).sister=s_LClavicle_J1;              
+0249     OsteoArticularModel(incr_solid).child=s_RClavicle_J2;                   
+0250     OsteoArticularModel(incr_solid).mother=s_Thorax;           
+0251     OsteoArticularModel(incr_solid).a=[0 0 1]';
+0252     OsteoArticularModel(incr_solid).joint=1;
+0253     OsteoArticularModel(incr_solid).limit_inf=-pi/2;
+0254     OsteoArticularModel(incr_solid).limit_sup=pi/2;
+0255     OsteoArticularModel(incr_solid).Visual=0;
+0256     OsteoArticularModel(incr_solid).m=0;                 
+0257     OsteoArticularModel(incr_solid).b=Thorax_scjJointRightNode';  
+0258     OsteoArticularModel(incr_solid).I=zeros(3,3);
+0259     OsteoArticularModel(incr_solid).c=[0 0 0]';
+0260     
+0261     <span class="comment">% RClavicle_J2</span>
+0262     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0263     name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0264     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0265     OsteoArticularModel(incr_solid).name=name;               <span class="comment">% solid name</span>
+0266     OsteoArticularModel(incr_solid).sister=0;              
+0267     OsteoArticularModel(incr_solid).child=s_RClavicle;                   
+0268     OsteoArticularModel(incr_solid).mother=s_RClavicle_J1;           
+0269     OsteoArticularModel(incr_solid).a=[1 0 0]';
+0270     OsteoArticularModel(incr_solid).joint=1;
+0271     OsteoArticularModel(incr_solid).limit_inf=-pi/2;
+0272     OsteoArticularModel(incr_solid).limit_sup=pi/2;
+0273     OsteoArticularModel(incr_solid).Visual=0;
+0274     OsteoArticularModel(incr_solid).m=0;                 
+0275     OsteoArticularModel(incr_solid).b=[0 0 0]';  
+0276     OsteoArticularModel(incr_solid).I=zeros(3,3);
+0277     OsteoArticularModel(incr_solid).c=[0 0 0]';
+0278     
+0279     <span class="comment">% RClavicle</span>
+0280     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0281     name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0282     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0283     OsteoArticularModel(incr_solid).name=name;               <span class="comment">% solid name</span>
+0284     OsteoArticularModel(incr_solid).sister=0;                
+0285     OsteoArticularModel(incr_solid).child=0;                   
+0286     OsteoArticularModel(incr_solid).mother=s_RClavicle_J2;           
+0287     OsteoArticularModel(incr_solid).a=[0 1 0]';    
+0288     OsteoArticularModel(incr_solid).joint=1;
+0289     OsteoArticularModel(incr_solid).limit_inf=-pi/2;
+0290     OsteoArticularModel(incr_solid).limit_sup=pi/2;
+0291     OsteoArticularModel(incr_solid).Visual=1;
+0292     OsteoArticularModel(incr_solid).calib_k_constraint=s_Thorax;
+0293     OsteoArticularModel(incr_solid).m=0;                 
+0294     OsteoArticularModel(incr_solid).b=[0 0 0]';  
+0295     OsteoArticularModel(incr_solid).I=zeros(3,3);
+0296     OsteoArticularModel(incr_solid).c=[0 0 0]';
+0297     OsteoArticularModel(incr_solid).anat_position=RClavicle_position_set;
+0298 
+0299     <span class="comment">%% Lclavicle</span>
+0300     <span class="comment">% LClavicle_J1</span>
+0301     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0302     name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0303     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0304     OsteoArticularModel(incr_solid).name=name;               <span class="comment">% solid name</span>
+0305     OsteoArticularModel(incr_solid).sister=0;              
+0306     OsteoArticularModel(incr_solid).child=s_LClavicle_J2;                   
+0307     OsteoArticularModel(incr_solid).mother=s_Thorax;           
+0308     OsteoArticularModel(incr_solid).a=[0 0 1]';
+0309     OsteoArticularModel(incr_solid).joint=1;
+0310     OsteoArticularModel(incr_solid).limit_inf=-pi/2;
+0311     OsteoArticularModel(incr_solid).limit_sup=pi/2;
+0312     OsteoArticularModel(incr_solid).Visual=0;
+0313     OsteoArticularModel(incr_solid).m=0;                 
+0314     OsteoArticularModel(incr_solid).b=Thorax_scjJointLeftNode';  
+0315     OsteoArticularModel(incr_solid).I=zeros(3,3);
+0316     OsteoArticularModel(incr_solid).c=[0 0 0]';
+0317     
+0318     <span class="comment">% LClavicle_J2</span>
+0319     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0320     name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0321     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0322     OsteoArticularModel(incr_solid).name=name;               <span class="comment">% solid name</span>
+0323     OsteoArticularModel(incr_solid).sister=0;              
+0324     OsteoArticularModel(incr_solid).child=s_LClavicle;                   
+0325     OsteoArticularModel(incr_solid).mother=s_LClavicle_J1;           
+0326     OsteoArticularModel(incr_solid).a=[1 0 0]';
+0327     OsteoArticularModel(incr_solid).joint=1;
+0328     OsteoArticularModel(incr_solid).limit_inf=-pi/2;
+0329     OsteoArticularModel(incr_solid).limit_sup=pi/2;
+0330     OsteoArticularModel(incr_solid).Visual=0;
+0331     OsteoArticularModel(incr_solid).m=0;                 
+0332     OsteoArticularModel(incr_solid).b=[0 0 0]';  
+0333     OsteoArticularModel(incr_solid).I=zeros(3,3);
+0334     OsteoArticularModel(incr_solid).c=[0 0 0]';
+0335     
+0336     <span class="comment">% LClavicle</span>
+0337     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0338     name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0339     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0340     OsteoArticularModel(incr_solid).name=name;               <span class="comment">% solid name</span>
+0341     OsteoArticularModel(incr_solid).sister=0;                
+0342     OsteoArticularModel(incr_solid).child=0;                   
+0343     OsteoArticularModel(incr_solid).mother=s_LClavicle_J2;           
+0344     OsteoArticularModel(incr_solid).a=[0 1 0]';    
+0345     OsteoArticularModel(incr_solid).joint=1;
+0346     OsteoArticularModel(incr_solid).limit_inf=-pi/2;
+0347     OsteoArticularModel(incr_solid).limit_sup=pi/2;
+0348     OsteoArticularModel(incr_solid).Visual=1;
+0349     OsteoArticularModel(incr_solid).calib_k_constraint=s_Thorax;
+0350     OsteoArticularModel(incr_solid).m=0;                 
+0351     OsteoArticularModel(incr_solid).b=[0 0 0]';  
+0352     OsteoArticularModel(incr_solid).I=zeros(3,3);
+0353     OsteoArticularModel(incr_solid).c=[0 0 0]';
+0354     OsteoArticularModel(incr_solid).anat_position=LClavicle_position_set;
+0355 
+0356 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 07-Nov-2018 15:15:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

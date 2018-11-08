@@ -47,13 +47,17 @@ ________________________________________________________
 
  Licence
  Toolbox distributed under 3-Clause BSD License
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
 ________________________________________________________</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="../../Functions/Calibration/Dynamics/DynamicCalibration.html" class="code" title="function [BiomechanicalModel] = DynamicCalibration(ModelParameters,AnalysisParameters, BiomechanicalModel)">DynamicCalibration</a>	Calibration of the inertial parameters</li><li><a href="../../Functions/Calibration/Geometrical/GeometricalCalibration.html" class="code" title="function [Human_model_calib, calib_parameters, Markers_set] = GeometricalCalibration(OsteoArticularModel, Markers_set, AnalysisParameters)">GeometricalCalibration</a>	Calibration of the geometrical parameters</li><li><a href="../../Functions/Kinematics/Add6dof.html" class="code" title="function [Human_model] = Add6dof(Human_model)">Add6dof</a>	Addition of a 6 dof joint</li><li><a href="../../Functions/Kinematics/SymbolicFunctionGenerationIK.html" class="code" title="function [Human_model,Jacob,nbClosedLoop]=SymbolicFunctionGenerationIK(Human_model,Markers_set)">SymbolicFunctionGenerationIK</a>	Computation of function used in the inverse kinematics step</li><li><a href="../../Functions/Models/ModelGeneration.html" class="code" title="function [OsteoArticularModel, Markers, Muscles, EnableModel] = ModelGeneration(ModelParameters)">ModelGeneration</a>	Generation of the anthropometric model</li><li><a href="../../Functions/MuscleForces/MomentArmsComputation.html" class="code" title="function [Moment_Arms,C] = MomentArmsComputation(Human_model,Muscles)">MomentArmsComputation</a>	Computation of the moment arms matrix</li><li><a href="../../Functions/MuscleForces/MusIC/MusICDatabaseGeneration.html" class="code" title="function [Database] = MusICDatabaseGeneration(Human_model, Muscles, C, Moment_Arms, AnalysisParameters)">MusICDatabaseGeneration</a>	Generation of the database used in the MusIC method</li></ul>
+<li><a href="../../Functions/Calibration/Dynamics/DynamicCalibration.html" class="code" title="function [BiomechanicalModel] = DynamicCalibration(ModelParameters,AnalysisParameters, BiomechanicalModel)">DynamicCalibration</a>	Calibration of the inertial parameters</li><li><a href="../../Functions/Calibration/Geometrical/GeometricalCalibration.html" class="code" title="function [Human_model_calib, calib_parameters, Markers_set] = GeometricalCalibration(OsteoArticularModel, Markers_set, AnalysisParameters)">GeometricalCalibration</a>	Calibration of the geometrical parameters</li><li><a href="../../Functions/Kinematics/Add6dof.html" class="code" title="function [Human_model] = Add6dof(Human_model)">Add6dof</a>	Addition of a 6 dof joint</li><li><a href="../../Functions/Kinematics/SymbolicFunctionGenerationIK.html" class="code" title="function [Human_model,Jacob,nbClosedLoop]=SymbolicFunctionGenerationIK(Human_model,Markers_set)">SymbolicFunctionGenerationIK</a>	Computation of function used in the inverse kinematics step</li><li><a href="../../Functions/Models/ModelGeneration.html" class="code" title="function [OsteoArticularModel, Markers, Muscles, EnableModel] = ModelGeneration(ModelParameters)">ModelGeneration</a>	Generation of the anthropometric model</li><li><a href="../../Functions/MuscleForces/MomentArmsComputation.html" class="code" title="function [Moment_Arms_sub,C] = MomentArmsComputation(Human_model,Muscles)">MomentArmsComputation</a>	Computation of the moment arms matrix</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 <li><a href="../../Functions/Main.html" class="code" title="">Main</a>	Main script of the Toolbox</li></ul>
@@ -84,55 +88,58 @@ This function is called by:
 0020 <span class="comment">% Licence</span>
 0021 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
 0022 <span class="comment">%________________________________________________________</span>
-0023 
-0024 <span class="comment">%% Anthropometric model generation</span>
-0025 disp(<span class="string">'Anthropometric Model Generation ...'</span>)
-0026 [BiomechanicalModel.OsteoArticularModel, BiomechanicalModel.Markers, BiomechanicalModel.Muscles] = <a href="../../Functions/Models/ModelGeneration.html" class="code" title="function [OsteoArticularModel, Markers, Muscles, EnableModel] = ModelGeneration(ModelParameters)">ModelGeneration</a>(ModelParameters);
-0027 disp(<span class="string">'... Anthropometric Model Generation done'</span>)
-0028 
-0029 <span class="comment">%% Geometrical calibration</span>
-0030 <span class="keyword">if</span> AnalysisParameters.CalibIK.Active
-0031     disp(<span class="string">'Geometrical Calibration ...'</span>)
-0032     [BiomechanicalModel.OsteoArticularModel, BiomechanicalModel.GeometricalCalibration, BiomechanicalModel.Markers] = <a href="../../Functions/Calibration/Geometrical/GeometricalCalibration.html" class="code" title="function [Human_model_calib, calib_parameters, Markers_set] = GeometricalCalibration(OsteoArticularModel, Markers_set, AnalysisParameters)">GeometricalCalibration</a>(BiomechanicalModel.OsteoArticularModel, BiomechanicalModel.Markers, AnalysisParameters);
-0033     disp(<span class="string">'... Geometrical Calibration done'</span>)
-0034 <span class="keyword">end</span>
-0035 
-0036 <span class="comment">%% Symbolic functions</span>
-0037 disp(<span class="string">'Preliminary Computations ...'</span>)
-0038 [BiomechanicalModel.OsteoArticularModel] = <a href="../../Functions/Kinematics/Add6dof.html" class="code" title="function [Human_model] = Add6dof(Human_model)">Add6dof</a>(BiomechanicalModel.OsteoArticularModel);
-0039 [BiomechanicalModel.OsteoArticularModel, BiomechanicalModel.Jacob] = <a href="../../Functions/Kinematics/SymbolicFunctionGenerationIK.html" class="code" title="function [Human_model,Jacob,nbClosedLoop]=SymbolicFunctionGenerationIK(Human_model,Markers_set)">SymbolicFunctionGenerationIK</a>(BiomechanicalModel.OsteoArticularModel,BiomechanicalModel.Markers);
-0040 disp(<span class="string">'... Preliminary Computations done'</span>)
-0041 
-0042 <span class="comment">%% Inertial calibration</span>
-0043 <span class="keyword">if</span> AnalysisParameters.CalibID.Active
-0044     disp(<span class="string">'Dynamic Calibration ...'</span>)
-0045     [BiomechanicalModel] = <a href="../../Functions/Calibration/Dynamics/DynamicCalibration.html" class="code" title="function [BiomechanicalModel] = DynamicCalibration(ModelParameters,AnalysisParameters, BiomechanicalModel)">DynamicCalibration</a>(ModelParameters,AnalysisParameters, BiomechanicalModel);
-0046     disp(<span class="string">'... Dynamic Calibration done'</span>)
-0047 <span class="keyword">end</span>
-0048 
-0049 <span class="comment">%% Muscular calibration</span>
-0050 <span class="comment">% To do</span>
-0051 
-0052 <span class="comment">%% Moment arms matrix et muscular coupling</span>
-0053 
-0054 <span class="keyword">if</span> numel(BiomechanicalModel.Muscles)
-0055     disp(<span class="string">'Moment Arms Computation ...'</span>)
-0056     [BiomechanicalModel.MomentArms,BiomechanicalModel.MuscularCoupling] = <a href="../../Functions/MuscleForces/MomentArmsComputation.html" class="code" title="function [Moment_Arms,C] = MomentArmsComputation(Human_model,Muscles)">MomentArmsComputation</a>(BiomechanicalModel.OsteoArticularModel,BiomechanicalModel.Muscles);
-0057     disp(<span class="string">'... Moment Arms Computation done'</span>);
-0058 <span class="keyword">end</span>
-0059 
-0060 <span class="comment">%% Génération de la base de données pour le calcul des efforts musculaires avec la méthode MusIC</span>
-0061 <span class="comment">%% Generation of the data base for computation of muscular forces by using MusIc method</span>
-0062 
-0063 <span class="keyword">if</span> numel(BiomechanicalModel.Muscles)
-0064     disp(<span class="string">'MusIC Database Generation ...'</span>)
-0065     [BiomechanicalModel.MusICDatabase] = <a href="../../Functions/MuscleForces/MusIC/MusICDatabaseGeneration.html" class="code" title="function [Database] = MusICDatabaseGeneration(Human_model, Muscles, C, Moment_Arms, AnalysisParameters)">MusICDatabaseGeneration</a>(BiomechanicalModel.OsteoArticularModel, BiomechanicalModel.Muscles, BiomechanicalModel.MuscularCoupling, BiomechanicalModel.MomentArms, AnalysisParameters); <span class="comment">%#ok&lt;STRNU&gt; % préciser la méthode d'optimisation</span>
-0066     disp(<span class="string">'... MusIC Database Generation done'</span>)
-0067 <span class="keyword">end</span>
-0068 
-0069 save(<span class="string">'BiomechanicalModel'</span>,<span class="string">'BiomechanicalModel'</span>);
-0070 
-0071 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0025 <span class="comment">% Georges Dumont</span>
+0026 <span class="comment">%________________________________________________________</span>
+0027 
+0028 <span class="comment">%% Anthropometric model generation</span>
+0029 disp(<span class="string">'Anthropometric Model Generation ...'</span>)
+0030 [BiomechanicalModel.OsteoArticularModel, BiomechanicalModel.Markers, BiomechanicalModel.Muscles] = <a href="../../Functions/Models/ModelGeneration.html" class="code" title="function [OsteoArticularModel, Markers, Muscles, EnableModel] = ModelGeneration(ModelParameters)">ModelGeneration</a>(ModelParameters);
+0031 disp(<span class="string">'... Anthropometric Model Generation done'</span>)
+0032 
+0033 <span class="comment">%% Geometrical calibration</span>
+0034 <span class="keyword">if</span> AnalysisParameters.CalibIK.Active
+0035     disp(<span class="string">'Geometrical Calibration ...'</span>)
+0036     [BiomechanicalModel.OsteoArticularModel, BiomechanicalModel.GeometricalCalibration, BiomechanicalModel.Markers] = <a href="../../Functions/Calibration/Geometrical/GeometricalCalibration.html" class="code" title="function [Human_model_calib, calib_parameters, Markers_set] = GeometricalCalibration(OsteoArticularModel, Markers_set, AnalysisParameters)">GeometricalCalibration</a>(BiomechanicalModel.OsteoArticularModel, BiomechanicalModel.Markers, AnalysisParameters);
+0037     disp(<span class="string">'... Geometrical Calibration done'</span>)
+0038 <span class="keyword">end</span>
+0039 
+0040 <span class="comment">%% Symbolic functions</span>
+0041 disp(<span class="string">'Preliminary Computations ...'</span>)
+0042 [BiomechanicalModel.OsteoArticularModel] = <a href="../../Functions/Kinematics/Add6dof.html" class="code" title="function [Human_model] = Add6dof(Human_model)">Add6dof</a>(BiomechanicalModel.OsteoArticularModel);
+0043 [BiomechanicalModel.OsteoArticularModel, BiomechanicalModel.Jacob] = <a href="../../Functions/Kinematics/SymbolicFunctionGenerationIK.html" class="code" title="function [Human_model,Jacob,nbClosedLoop]=SymbolicFunctionGenerationIK(Human_model,Markers_set)">SymbolicFunctionGenerationIK</a>(BiomechanicalModel.OsteoArticularModel,BiomechanicalModel.Markers);
+0044 disp(<span class="string">'... Preliminary Computations done'</span>)
+0045 
+0046 <span class="comment">%% Inertial calibration</span>
+0047 <span class="keyword">if</span> AnalysisParameters.CalibID.Active
+0048     disp(<span class="string">'Dynamic Calibration ...'</span>)
+0049     [BiomechanicalModel] = <a href="../../Functions/Calibration/Dynamics/DynamicCalibration.html" class="code" title="function [BiomechanicalModel] = DynamicCalibration(ModelParameters,AnalysisParameters, BiomechanicalModel)">DynamicCalibration</a>(ModelParameters,AnalysisParameters, BiomechanicalModel);
+0050     disp(<span class="string">'... Dynamic Calibration done'</span>)
+0051 <span class="keyword">end</span>
+0052 
+0053 <span class="comment">%% Muscular calibration</span>
+0054 <span class="comment">% To do</span>
+0055 
+0056 <span class="comment">%% Moment arms matrix et muscular coupling</span>
+0057 
+0058 <span class="keyword">if</span> numel(BiomechanicalModel.Muscles)
+0059     disp(<span class="string">'Moment Arms Computation ...'</span>)
+0060     [BiomechanicalModel.MomentArms,BiomechanicalModel.MuscularCoupling] = <a href="../../Functions/MuscleForces/MomentArmsComputation.html" class="code" title="function [Moment_Arms_sub,C] = MomentArmsComputation(Human_model,Muscles)">MomentArmsComputation</a>(BiomechanicalModel.OsteoArticularModel,BiomechanicalModel.Muscles);
+0061     disp(<span class="string">'... Moment Arms Computation done'</span>);
+0062 <span class="keyword">end</span>
+0063 
+0064 <span class="comment">%% Generation of the data base for computation of muscular forces by using MusIC method</span>
+0065 
+0066 <span class="keyword">if</span> numel(BiomechanicalModel.Muscles) &amp;&amp; AnalysisParameters.Muscles.Method == 2
+0067     disp(<span class="string">'MusIC Database Generation ...'</span>)
+0068     eval([<span class="string">'[BiomechanicalModel.MusICDatabase_'</span> char(AnalysisParameters.Muscles.Costfunction) num2str(AnalysisParameters.Muscles.CostfunctionOptions) <span class="string">'_'</span> num2str(AnalysisParameters.Muscles.DatabaseDensity(1)) <span class="string">'_'</span> num2str(AnalysisParameters.Muscles.DatabaseDensity(2)) <span class="string">'] = MusICDatabaseGeneration(BiomechanicalModel.OsteoArticularModel, BiomechanicalModel.Muscles, BiomechanicalModel.MuscularCoupling, BiomechanicalModel.MomentArms, AnalysisParameters);'</span>]) 
+0069     disp(<span class="string">'... MusIC Database Generation done'</span>)
+0070 <span class="keyword">end</span>
+0071 
+0072 save(<span class="string">'BiomechanicalModel'</span>,<span class="string">'BiomechanicalModel'</span>);
+0073 
+0074 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 07-Nov-2018 15:15:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

@@ -45,7 +45,16 @@ ________________________________________________________
 
  Licence
  Toolbox distributed under 3-Clause BSD License
-________________________________________________________</pre></div>
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________
+
+ Modification : Pierre Puchaud 2018
+ Jacobian matrix generation more efficient.
+
+% list of markers from the model</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
@@ -80,291 +89,202 @@ This function is called by:
 0018 <span class="comment">% Licence</span>
 0019 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
 0020 <span class="comment">%________________________________________________________</span>
-0021 
-0022 <span class="comment">%% list of markers from the model</span>
-0023 list_markers={};
-0024 <span class="keyword">for</span> i=1:numel(Markers_set)
-0025     <span class="keyword">if</span> Markers_set(i).exist
-0026         list_markers=[list_markers;Markers_set(i).name]; <span class="comment">%#ok&lt;AGROW&gt;</span>
-0027     <span class="keyword">end</span>
-0028 <span class="keyword">end</span>
-0029 
-0030 <span class="comment">%% variables initialization</span>
-0031 q = sym(<span class="string">'q'</span>, [numel(Human_model) 1]);  <span class="comment">% joint coordinates initialization (number of solids - 1 (pelvis))</span>
-0032 assume(q,<span class="string">'real'</span>)
-0033 
-0034 k=ones(numel(Human_model),1);
-0035 p_adapt=zeros(sum([Markers_set.exist]),3);
-0036 pPelvis=zeros(3,1);
-0037 RPelvis=eye(3,3);
-0038 
-0039 <span class="comment">%% Symbolic function generation for each coordinate frame position</span>
-0040 s_root=find([Human_model.mother]==0); <span class="comment">% number of the root solid</span>
-0041 
-0042 <span class="comment">% initialization of the pelvis position and rotation</span>
-0043 Human_model(s_root).p=pPelvis;
-0044 Human_model(s_root).R=RPelvis;
+0021 <span class="comment">%</span>
+0022 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0023 <span class="comment">% Georges Dumont</span>
+0024 <span class="comment">%________________________________________________________</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% Modification : Pierre Puchaud 2018</span>
+0027 <span class="comment">% Jacobian matrix generation more efficient.</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%% list of markers from the model</span>
+0030 list_markers={};
+0031 <span class="keyword">for</span> i=1:numel(Markers_set)
+0032     <span class="keyword">if</span> Markers_set(i).exist
+0033         list_markers=[list_markers;Markers_set(i).name]; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0034     <span class="keyword">end</span>
+0035 <span class="keyword">end</span>
+0036 
+0037 <span class="comment">%% variables initialization</span>
+0038 q = sym(<span class="string">'q'</span>, [numel(Human_model) 1]);  <span class="comment">% joint coordinates initialization (number of solids - 1 (pelvis))</span>
+0039 assume(q,<span class="string">'real'</span>)
+0040 
+0041 k=ones(numel(Human_model),1);
+0042 p_adapt=zeros(sum([Markers_set.exist]),3);
+0043 pPelvis=zeros(3,1);
+0044 RPelvis=eye(3,3);
 0045 
-0046 <span class="comment">% Computation of the symbolic markers position</span>
-0047 [Human_model,Markers_set,~,~,p_ClosedLoop,R_ClosedLoop]=<a href="Symbolic_ForwardKinematicsCoupure.html" class="code" title="function [Human_model,Markers_set,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure(Human_model,Markers_set,j,q,k,p_adapt,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop)">Symbolic_ForwardKinematicsCoupure</a>(Human_model,Markers_set,s_root,q,k,p_adapt,1,1);
+0046 <span class="comment">%% Symbolic function generation for each coordinate frame position</span>
+0047 s_root=find([Human_model.mother]==0); <span class="comment">% number of the root solid</span>
 0048 
-0049 <span class="comment">% position and rotation of the solids used as cuts</span>
-0050 <span class="keyword">for</span> ii=1:max([Human_model.KinematicsCut])
-0051     eval([<span class="string">'p'</span> num2str(ii) <span class="string">'cut = sym([''p'' num2str(ii) ''cut''], [3 1]);'</span>])
-0052     eval([<span class="string">'R'</span> num2str(ii) <span class="string">'cut = sym([''R'' num2str(ii) ''cut''], [3 3]);'</span>])
-0053     <span class="keyword">for</span> i=1:3
-0054         eval([<span class="string">'assume(p'</span> num2str(ii) <span class="string">'cut('</span> num2str(i) <span class="string">',1),''real'');'</span>])
-0055         <span class="keyword">for</span> z=1:3
-0056             eval([<span class="string">'assume(R'</span> num2str(ii) <span class="string">'cut('</span> num2str(i) <span class="string">','</span> num2str(z) <span class="string">'),''real'');'</span>])
-0057         <span class="keyword">end</span>
-0058     <span class="keyword">end</span>
-0059     pcut(:,:,ii)=eval([<span class="string">'p'</span> num2str(ii) <span class="string">'cut'</span>]); <span class="comment">%#ok&lt;AGROW&gt;</span>
-0060     Rcut(:,:,ii)=eval([<span class="string">'R'</span> num2str(ii) <span class="string">'cut'</span>]); <span class="comment">%#ok&lt;AGROW&gt;</span>
-0061 <span class="keyword">end</span>
-0062 
-0063 <span class="comment">% &quot;Symbolic_function&quot; folder generation</span>
-0064 <span class="keyword">if</span> exist([cd <span class="string">'/Symbolic_function'</span>])~=7 <span class="comment">%#ok&lt;EXIST&gt;</span>
-0065     mkdir(<span class="string">'Symbolic_function'</span>)
-0066 <span class="keyword">end</span>
-0067 
-0068 <span class="comment">%% Jacobian matrix computation (thanks to several matrix)</span>
-0069 E = [Markers_set.exist]';
-0070 ind_mk = find(E==1);
-0071 
-0072 pos_root =find([Human_model.mother]==0);
-0073 ind_s = find(1:numel(Human_model)~=pos_root);
+0049 <span class="comment">% initialization of the pelvis position and rotation</span>
+0050 Human_model(s_root).p=pPelvis;
+0051 Human_model(s_root).R=RPelvis;
+0052 
+0053 <span class="comment">% Computation of the symbolic markers position</span>
+0054 [Human_model,Markers_set,~,~,p_ClosedLoop,R_ClosedLoop]=<a href="Symbolic_ForwardKinematicsCoupure.html" class="code" title="function [Human_model,Markers_set,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure(Human_model,Markers_set,j,q,k,p_adapt,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop)">Symbolic_ForwardKinematicsCoupure</a>(Human_model,Markers_set,s_root,q,k,p_adapt,1,1);
+0055 
+0056 <span class="comment">% position and rotation of the solids used as cuts</span>
+0057 <span class="keyword">for</span> ii=1:max([Human_model.KinematicsCut])
+0058     eval([<span class="string">'p'</span> num2str(ii) <span class="string">'cut = sym([''p'' num2str(ii) ''cut''], [3 1]);'</span>])
+0059     eval([<span class="string">'R'</span> num2str(ii) <span class="string">'cut = sym([''R'' num2str(ii) ''cut''], [3 3]);'</span>])
+0060     <span class="keyword">for</span> i=1:3
+0061         eval([<span class="string">'assume(p'</span> num2str(ii) <span class="string">'cut('</span> num2str(i) <span class="string">',1),''real'');'</span>])
+0062         <span class="keyword">for</span> z=1:3
+0063             eval([<span class="string">'assume(R'</span> num2str(ii) <span class="string">'cut('</span> num2str(i) <span class="string">','</span> num2str(z) <span class="string">'),''real'');'</span>])
+0064         <span class="keyword">end</span>
+0065     <span class="keyword">end</span>
+0066     pcut(:,:,ii)=eval([<span class="string">'p'</span> num2str(ii) <span class="string">'cut'</span>]); <span class="comment">%#ok&lt;AGROW&gt;</span>
+0067     Rcut(:,:,ii)=eval([<span class="string">'R'</span> num2str(ii) <span class="string">'cut'</span>]); <span class="comment">%#ok&lt;AGROW&gt;</span>
+0068 <span class="keyword">end</span>
+0069 
+0070 <span class="comment">% &quot;Symbolic_function&quot; folder generation</span>
+0071 <span class="keyword">if</span> exist([cd <span class="string">'/Symbolic_function'</span>])~=7 <span class="comment">%#ok&lt;EXIST&gt;</span>
+0072     mkdir(<span class="string">'Symbolic_function'</span>)
+0073 <span class="keyword">end</span>
 0074 
-0075 ind_Kcut = find(cellfun(@isempty,{Human_model.KinematicsCut} )==0);
-0076 
-0077 
-0078 <span class="comment">% Jfq</span>
-0079 indexesNumericJfq = [];
-0080 nonNumericJfq = [];
-0081 Jfq = zeros(3*numel(list_markers),numel(Human_model)-1);
-0082 <span class="keyword">for</span> ii=1:length(ind_mk) <span class="comment">% each marker</span>
-0083     m = ind_mk(ii);
-0084     <span class="keyword">for</span> i_s=1:length(ind_s) <span class="comment">% each solid</span>
-0085        num_s=ind_s(i_s);
-0086        <span class="keyword">for</span> p=1:3
-0087             f = Markers_set(m).position_symbolic(p);
-0088             df = diff(f,q(num_s));
-0089             <span class="keyword">if</span> df == 0
-0090                 Jfq(3*(ii-1)+p,i_s) = 0;
-0091             <span class="keyword">elseif</span> df == 1
-0092                 Jfq(3*(ii-1)+p,i_s) = 1;
-0093             <span class="keyword">else</span>
-0094                 indexesNumericJfq = [indexesNumericJfq (i_s-1)*size(Jfq,1)+3*(ii-1)+p];
-0095                 nonNumericJfq = [nonNumericJfq df];
-0096             <span class="keyword">end</span>
-0097         <span class="keyword">end</span> 
-0098     <span class="keyword">end</span>
-0099 <span class="keyword">end</span>
-0100 nonNumericJfq = matlabFunction(nonNumericJfq, <span class="string">'Vars'</span>, {q,pcut,Rcut});
-0101 
-0102 <span class="comment">% Jfcut</span>
-0103 indexesNumericJfcut = [];
-0104 nonNumericJfcut = [];
-0105 Jfcut = zeros(3*numel(list_markers),12*size(pcut,3));
-0106 <span class="keyword">for</span> ii=1:length(ind_mk)
-0107     m = ind_mk(ii);
-0108     <span class="keyword">for</span> p=1:3 <span class="comment">% x / y / z</span>
-0109         <span class="keyword">for</span> h=1:size(pcut,3) <span class="comment">% for each cut</span>
-0110             <span class="keyword">for</span> l = 1:3 <span class="comment">% pcut</span>
-0111                 f = Markers_set(m).position_symbolic(p);
-0112                 df = diff(f,pcut(l,:,h));
-0113                 <span class="keyword">if</span> df == 0
-0114                     Jfcut(3*(ii-1)+p,12*(h-1)+l) = 0;
-0115                 <span class="keyword">elseif</span> df == 1
-0116                     Jfcut(3*(ii-1)+p,12*(h-1)+l) = 1;
-0117                 <span class="keyword">else</span>
-0118                     indexesNumericJfcut = [indexesNumericJfcut (12*(h-1)+l-1)*size(Jfcut,1)+3*(ii-1)+p];
-0119                     nonNumericJfcut = [nonNumericJfcut df];
-0120                 <span class="keyword">end</span>
-0121             <span class="keyword">end</span>
-0122             <span class="keyword">for</span> l=1:3
-0123                 <span class="keyword">for</span> ll=1:3
-0124                     f = Markers_set(m).position_symbolic(p);
-0125                     df = diff(f,Rcut(l,ll,h));
-0126                     <span class="keyword">if</span> df == 0
-0127                         Jfcut(3*(ii-1)+p,12*(h-1)+3+3*(l-1)+ll) = 0;
-0128                     <span class="keyword">elseif</span> df == 1
-0129                         Jfcut(3*(ii-1)+p,12*(h-1)+3+3*(l-1)+ll) = 1;
-0130                     <span class="keyword">else</span>
-0131                         indexesNumericJfcut = [indexesNumericJfcut (12*(h-1)+3+3*(l-1)+ll-1)*size(Jfcut,1)+3*(ii-1)+p];
-0132                         nonNumericJfcut = [nonNumericJfcut df];
-0133                     <span class="keyword">end</span>
-0134                 <span class="keyword">end</span>
-0135             <span class="keyword">end</span>
-0136         <span class="keyword">end</span>
-0137     <span class="keyword">end</span>
-0138 <span class="keyword">end</span>
-0139 nonNumericJfcut = matlabFunction(nonNumericJfcut, <span class="string">'Vars'</span>, {q,pcut,Rcut});
-0140 
-0141 <span class="comment">% Jcutq</span>
-0142 indexesNumericJcutq = [];
-0143 nonNumericJcutq = [];
-0144 Jcutq = zeros(12*size(pcut,3),numel(Human_model)-1);
-0145 num_s = 0;
-0146 <span class="keyword">for</span> s=1:numel(Human_model) <span class="comment">% for each solid</span>
-0147     <span class="keyword">if</span> s ~= pos_root
-0148         num_s = num_s+1;
-0149         <span class="keyword">for</span> hh=1:numel(Human_model) <span class="comment">%  for each cut solid</span>
-0150             <span class="keyword">if</span> size(Human_model(hh).KinematicsCut) ~= 0
-0151                 h = Human_model(hh).KinematicsCut; <span class="comment">% number of the cut</span>
-0152                 <span class="keyword">for</span> l = 1:3 <span class="comment">% pcut (3 termes)</span>
-0153                     df = diff(Human_model(hh).p(l,:),q(s));
-0154                     <span class="keyword">if</span> df == 0
-0155                         Jcutq(12*(h-1)+l,num_s) = 0;
-0156                     <span class="keyword">elseif</span> df == 1
-0157                         Jcutq(12*(h-1)+l,num_s) = 1;
-0158                     <span class="keyword">else</span>
-0159                         indexesNumericJcutq = [indexesNumericJcutq (num_s-1)*size(Jcutq,1)+12*(h-1)+l];
-0160                         nonNumericJcutq = [nonNumericJcutq df];
-0161                     <span class="keyword">end</span>
-0162                 <span class="keyword">end</span>
-0163                 <span class="keyword">for</span> l=1:3 <span class="comment">% Rcut (9 terms)</span>
-0164                     <span class="keyword">for</span> ll=1:3
-0165                         df=diff(Human_model(hh).R(l,ll),q(s));
-0166                         <span class="keyword">if</span> df == 0
-0167                             Jcutq(12*(h-1)+3+3*(l-1)+ll,num_s) = 0;
-0168                         <span class="keyword">elseif</span> df == 1
-0169                             Jcutq(12*(h-1)+3+3*(l-1)+ll,num_s) = 1;
-0170                         <span class="keyword">else</span>
-0171                             indexesNumericJcutq = [indexesNumericJcutq (num_s-1)*size(Jcutq,1)+12*(h-1)+3+3*(l-1)+ll];
-0172                             nonNumericJcutq = [nonNumericJcutq df];
-0173                         <span class="keyword">end</span>
-0174                     <span class="keyword">end</span>
-0175                 <span class="keyword">end</span>
-0176             <span class="keyword">end</span>
-0177         <span class="keyword">end</span>
-0178     <span class="keyword">end</span>
-0179 <span class="keyword">end</span>
-0180 nonNumericJcutq = matlabFunction(nonNumericJcutq, <span class="string">'Vars'</span>, {q,pcut,Rcut});
-0181 
-0182 <span class="comment">% Jcutcut</span>
-0183 indexesNumericJcutcut = [];
-0184 nonNumericJcutcut = [];
-0185 Jcutcut = zeros(12*size(pcut,3),12*size(pcut,3));
-0186 <span class="keyword">for</span> hh1=1:numel(Human_model) <span class="comment">% for each cut solid</span>
-0187     <span class="keyword">if</span> size(Human_model(hh1).KinematicsCut) ~= 0
-0188         h1 = Human_model(hh1).KinematicsCut; <span class="comment">% number of the cut</span>
-0189         <span class="comment">% derivative with respect to each cut</span>
-0190         <span class="keyword">for</span> hh2=1:numel(Human_model) <span class="comment">% for each cut solid</span>
-0191             <span class="keyword">if</span> size(Human_model(hh2).KinematicsCut) ~= 0
-0192                 h2 = Human_model(hh2).KinematicsCut; <span class="comment">% number of the cut</span>
-0193                 <span class="keyword">for</span> l1 = 1:3 <span class="comment">% pcut1 (3 terms)</span>
-0194                     <span class="keyword">for</span> l2 = 1:3 <span class="comment">% pcut2</span>
-0195                         <span class="keyword">if</span> h1 == h2 &amp;&amp; l1 == l2  <span class="comment">% derivative = 1</span>
-0196                             Jcutcut(12*(h1-1)+l1,12*(h2-1)+l2) = 1;
-0197                         <span class="keyword">else</span>
-0198                             df = diff(Human_model(hh1).p(l1,:),pcut(l2,:,h2));
-0199                             <span class="keyword">if</span> df == 0
-0200                                 Jcutcut(12*(h1-1)+l1,12*(h2-1)+l2) = 0;
-0201                             <span class="keyword">elseif</span> df == 1
-0202                                 Jcutcut(12*(h1-1)+l1,12*(h2-1)+l2) = 1;
-0203                             <span class="keyword">else</span>
-0204                                 indexesNumericJcutcut = [indexesNumericJcutcut (12*(h2-1)+l2-1)*size(Jcutcut,1)+12*(h1-1)+l1];
-0205                                 nonNumericJcutcut = [nonNumericJcutcut df];
-0206                             <span class="keyword">end</span>
-0207                         <span class="keyword">end</span>
-0208                     <span class="keyword">end</span>
-0209                     <span class="keyword">for</span> l2=1:3 <span class="comment">% Rcut2</span>
-0210                         <span class="keyword">for</span> ll2=1:3
-0211                             df = diff(Human_model(hh1).p(l1,:),Rcut(l2,ll2,h2));
-0212                             <span class="keyword">if</span> df == 0
-0213                                 Jcutcut(12*(h1-1)+l1,12*(h2-1)+3+3*(l2-1)+ll2) = 0;
-0214                             <span class="keyword">elseif</span>  df == 1
-0215                                 Jcutcut(12*(h1-1)+l1,12*(h2-1)+3+3*(l2-1)+ll2) = 1;
-0216                             <span class="keyword">else</span>
-0217                                 indexesNumericJcutcut = [indexesNumericJcutcut (12*(h2-1)+3+3*(l2-1)+ll2-1)*size(Jcutcut,1)+12*(h1-1)+l1];
-0218                                 nonNumericJcutcut = [nonNumericJcutcut df];
-0219                             <span class="keyword">end</span>
-0220                         <span class="keyword">end</span>
-0221                     <span class="keyword">end</span>
-0222                 <span class="keyword">end</span>
-0223                 <span class="keyword">for</span> l1 = 1:3 <span class="comment">% Rcut1 (9 terms)</span>
-0224                     <span class="keyword">for</span> ll1 = 1:3
-0225                         <span class="keyword">for</span> l2 = 1:3 <span class="comment">% pcut2</span>
-0226                             df = diff(Human_model(hh1).R(l1,ll1),pcut(l2,:,h2));
-0227                             <span class="keyword">if</span> df == 0
-0228                                 Jcutcut(12*(h1-1)+3+3*(l1-1)+ll1,12*(h2-1)+l2) = 0;
-0229                             <span class="keyword">elseif</span> df == 1
-0230                                 Jcutcut(12*(h1-1)+3+3*(l1-1)+ll1,12*(h2-1)+l2) = 1;
-0231                             <span class="keyword">else</span>
-0232                                 indexesNumericJcutcut = [indexesNumericJcutcut (12*(h2-1)+l2-1)*size(Jcutcut,1)+12*(h1-1)+3+3*(l1-1)+ll1];
-0233                                 nonNumericJcutcut = [nonNumericJcutcut df];
-0234                             <span class="keyword">end</span>
-0235                         <span class="keyword">end</span>
-0236                         <span class="keyword">for</span> l2=1:3 <span class="comment">% Rcut2</span>
-0237                             <span class="keyword">for</span> ll2=1:3
-0238                                 <span class="keyword">if</span> h1 == h2 &amp;&amp; l1 == l2 &amp;&amp; ll1 == ll2 <span class="comment">% derivative = 1</span>
-0239                                     Jcutcut(12*(h1-1)+3+3*(l1-1)+ll1,12*(h2-1)+3+3*(l2-1)+ll2) = 1;
-0240                                 <span class="keyword">else</span>
-0241                                     df = diff(Human_model(hh1).R(l1,ll1),Rcut(l2,ll2,h2));
-0242                                     <span class="keyword">if</span> df == 0
-0243                                         Jcutcut(12*(h1-1)+3+3*(l1-1)+ll1,12*(h2-1)+3+3*(l2-1)+ll2) = 0;
-0244                                     <span class="keyword">elseif</span> df == 1
-0245                                         Jcutcut(12*(h1-1)+3+3*(l1-1)+ll1,12*(h2-1)+3+3*(l2-1)+ll2) = 1;
-0246                                     <span class="keyword">else</span>
-0247                                         indexesNumericJcutcut = [indexesNumericJcutcut (12*(h2-1)+3+3*(l2-1)+ll2-1)*size(Jcutcut,1)+12*(h1-1)+3+3*(l1-1)+ll1];
-0248                                         nonNumericJcutcut = [nonNumericJcutcut df];
-0249                                     <span class="keyword">end</span>
-0250                                 <span class="keyword">end</span>
-0251                             <span class="keyword">end</span>
-0252                         <span class="keyword">end</span>
-0253                     <span class="keyword">end</span>
-0254                 <span class="keyword">end</span>
-0255             <span class="keyword">end</span>
-0256         <span class="keyword">end</span>
-0257     <span class="keyword">end</span>
-0258 <span class="keyword">end</span>
-0259 nonNumericJcutcut = matlabFunction(nonNumericJcutcut, <span class="string">'Vars'</span>, {q,pcut,Rcut});
-0260 
-0261 <span class="comment">%% Matrix Jacobian data save</span>
-0262 Jacob.Jfq = Jfq;
-0263 Jacob.indexesNumericJfq = indexesNumericJfq;
-0264 Jacob.nonNumericJfq = nonNumericJfq;
-0265 Jacob.Jfcut = Jfcut;
-0266 Jacob.indexesNumericJfcut = indexesNumericJfcut;
-0267 Jacob.nonNumericJfcut = nonNumericJfcut;
-0268 Jacob.Jcutq = Jcutq;
-0269 Jacob.indexesNumericJcutq = indexesNumericJcutq;
-0270 Jacob.nonNumericJcutq = nonNumericJcutq;
-0271 Jacob.Jcutcut = Jcutcut;
-0272 Jacob.indexesNumericJcutcut = indexesNumericJcutcut;
-0273 Jacob.nonNumericJcutcut = nonNumericJcutcut;
-0274 
-0275 <span class="comment">%% Function generation for each marker and each cut solid</span>
-0276 
-0277 <span class="keyword">for</span> ii=1:length(ind_mk)
-0278     m = ind_mk(ii);
-0279     matlabFunction(Markers_set(m).position_symbolic,<span class="string">'file'</span>,[<span class="string">'Symbolic_function/'</span> Markers_set(m).name <span class="string">'_Position.m'</span>],<span class="string">'vars'</span>,{q,pcut,Rcut});
-0280 <span class="keyword">end</span>
-0281 
-0282 <span class="comment">% Cut solid</span>
-0283 <span class="keyword">for</span> ii=1:length(ind_Kcut) <span class="comment">% solid i</span>
-0284     i_Kc = ind_Kcut(ii);
-0285     matlabFunction(Human_model(i_Kc).R,Human_model(i_Kc).p,<span class="string">'File'</span>,[<span class="string">'Symbolic_function/f'</span> num2str(Human_model(i_Kc).KinematicsCut) <span class="string">'cut.m'</span>],<span class="keyword">...</span>
-0286         <span class="string">'Outputs'</span>,{[<span class="string">'R'</span> num2str(num2str(Human_model(i_Kc).KinematicsCut)) <span class="string">'cut'</span> ],[<span class="string">'p'</span> num2str(num2str(Human_model(i_Kc).KinematicsCut)) <span class="string">'cut'</span> ]},<span class="keyword">...</span><span class="comment">;</span>
-0287         <span class="string">'vars'</span>,{q,pcut,Rcut});
-0288 <span class="keyword">end</span>
-0289 <span class="comment">% Closed loops</span>
-0290 <span class="keyword">for</span> i=1:numel(p_ClosedLoop)
-0291     matlabFunction(R_ClosedLoop{i},p_ClosedLoop{i},<span class="string">'File'</span>,[<span class="string">'Symbolic_function/fCL'</span> num2str(i) <span class="string">'.m'</span>],<span class="keyword">...</span>
-0292         <span class="string">'Outputs'</span>,{<span class="string">'R'</span>,<span class="string">'p'</span>},<span class="string">'vars'</span>,{q});
-0293 <span class="keyword">end</span>
-0294 nbClosedLoop=numel(p_ClosedLoop);
-0295 
-0296 <span class="comment">%We delete p and R fields</span>
-0297 Human_model = rmfield(Human_model, <span class="string">'p'</span>);
-0298 Human_model = rmfield(Human_model, <span class="string">'R'</span>);
-0299 
-0300 <span class="keyword">end</span>
-0301 
-0302 
-0303 
-0304 
-0305</pre></div>
-<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0075 <span class="comment">%% Jacobian matrix computation (thanks to several matrix)</span>
+0076 E = [Markers_set.exist]';
+0077 ind_mk = find(E==1);
+0078 
+0079 pos_root =find([Human_model.mother]==0);
+0080 ind_s = 1:numel(Human_model)~=pos_root;
+0081 
+0082 ind_Kcut = find(cellfun(@isempty,{Human_model.KinematicsCut} )==0);
+0083 
+0084 Nb_q = numel(Human_model)-1;
+0085 Nb_mk=numel(list_markers);
+0086 Nb_dir_mk=3*Nb_mk;
+0087 
+0088 <span class="comment">% Array of marker functions for each direction of space x,y,z</span>
+0089 f=sym(zeros(Nb_dir_mk,1));
+0090 <span class="keyword">for</span> ii=1:Nb_mk
+0091     iie = ind_mk(ii);
+0092     <span class="keyword">for</span> jj=1:3
+0093         ind = sub2ind([3 Nb_mk],jj,ii);
+0094         f(ind) = Markers_set(iie).position_symbolic(jj);
+0095     <span class="keyword">end</span>
+0096 <span class="keyword">end</span>
+0097 
+0098 <span class="comment">% Jfq</span>
+0099 Jfq_sym = jacobian(f,q(ind_s));
+0100 
+0101 Jfq =zeros(Nb_dir_mk,Nb_q);
+0102 <span class="comment">% idx=Jfq_sym(:)==0;</span>
+0103 <span class="comment">% Jfq(idx)=0;</span>
+0104 idx=Jfq_sym(:)==1;
+0105 Jfq(idx)=1;
+0106 
+0107 indexesNumericJfq = find(Jfq_sym~=0 &amp; Jfq_sym~=1)';
+0108 nonNumericJfq = matlabFunction(Jfq_sym(indexesNumericJfq), <span class="string">'Vars'</span>, {q,pcut,Rcut});
+0109 
+0110 <span class="comment">% Jfcut</span>
+0111 Nb_cut = size(pcut,3);
+0112 Nb_param_1cut= 12; <span class="comment">%3 coordinates in translations, 9 in rotations</span>
+0113 Nb_param_cut = Nb_param_1cut*Nb_cut;
+0114 
+0115 <span class="comment">% kinematic cuts parameters</span>
+0116 param=[pcut,permute(Rcut,[2,1,3])];
+0117 
+0118 Jfcut_sym = jacobian(f,param(:));
+0119 
+0120 Jfcut = zeros(Nb_dir_mk,Nb_param_cut);
+0121 <span class="comment">% idx=Jfcut_sym(:)==0;</span>
+0122 <span class="comment">% Jfcut(idx)=0;</span>
+0123 idx=Jfcut_sym(:)==1;
+0124 Jfcut(idx)=1;
+0125 
+0126 indexesNumericJfcut = find(Jfcut_sym~=0 &amp; Jfcut_sym~=1)';
+0127 nonNumericJfcut = matlabFunction(Jfcut_sym(indexesNumericJfcut), <span class="string">'Vars'</span>, {q,pcut,Rcut});
+0128 
+0129 <span class="comment">% Fonctions pcut and Rcut for kinematic cut indices</span>
+0130 fcut=sym(zeros(Nb_param_1cut,Nb_cut));
+0131 num_cut = [Human_model(ind_Kcut).KinematicsCut];
+0132 <span class="keyword">for</span> ii=1:Nb_cut
+0133     i_cut=ind_Kcut(ii);
+0134     fpcut = [Human_model(i_cut).p];
+0135     fpcut = fpcut(:);
+0136     
+0137     fRcut = [Human_model(i_cut).R];
+0138     fRcut = permute(fRcut,[2,1,3]);
+0139     fRcut = fRcut(:);
+0140     fcut(:,num_cut(ii))=[fpcut;fRcut]; <span class="comment">% ordered by the number of the cut</span>
+0141 <span class="keyword">end</span>
+0142 fcut=fcut(:);
+0143 
+0144 <span class="comment">% Jcutq</span>
+0145 Jcutq_sym=jacobian(fcut,q(ind_s));
+0146 
+0147 Jcutq = zeros(Nb_param_cut,Nb_q); 
+0148 <span class="comment">% idx=Jcutq_sym(:)==0;</span>
+0149 <span class="comment">% Jcutq(idx)=0;</span>
+0150 idx=Jcutq_sym(:)==1;
+0151 Jcutq(idx)=1;
+0152 
+0153 indexesNumericJcutq=find(Jcutq_sym~=0 &amp; Jcutq_sym~=1);
+0154 nonNumericJcutq = matlabFunction(Jcutq_sym(indexesNumericJcutq), <span class="string">'Vars'</span>, {q,pcut,Rcut});
+0155 
+0156 <span class="comment">% Jcutcut</span>
+0157 Jcutcut_sym=jacobian(fcut,param(:));
+0158 
+0159 Jcutcut = eye(Nb_param_cut,Nb_param_cut);
+0160 <span class="comment">% Diagonal terms are the derivatives of themselves</span>
+0161 <span class="comment">% dy/dy=1</span>
+0162 <span class="comment">% idx=Jcutcut_sym(:)==0;</span>
+0163 <span class="comment">% Jcutcut(idx)=0;</span>
+0164 idx=Jcutcut_sym(:)==1;
+0165 Jcutcut(idx)=1;
+0166 
+0167 indexesNumericJcutcut=find(Jcutcut_sym~=0 &amp; Jcutcut_sym~=1);
+0168 <span class="keyword">if</span> ~isempty(indexesNumericJcutcut)
+0169     nonNumericJcutcut = matlabFunction(Jcutcut_sym(indexesNumericJcutcut), <span class="string">'Vars'</span>, {q,pcut,Rcut});
+0170 <span class="keyword">end</span>
+0171 
+0172 <span class="comment">%% Sauvegarde des données relatives à la matrice Jacobienne</span>
+0173 Jacob.Jfq = Jfq;
+0174 Jacob.indexesNumericJfq = indexesNumericJfq;
+0175 Jacob.nonNumericJfq = nonNumericJfq;
+0176 Jacob.Jfcut = Jfcut;
+0177 Jacob.indexesNumericJfcut = indexesNumericJfcut;
+0178 Jacob.nonNumericJfcut = nonNumericJfcut;
+0179 Jacob.Jcutq = Jcutq;
+0180 Jacob.indexesNumericJcutq = indexesNumericJcutq;
+0181 Jacob.nonNumericJcutq = nonNumericJcutq;
+0182 Jacob.Jcutcut = Jcutcut;
+0183 Jacob.indexesNumericJcutcut = indexesNumericJcutcut;
+0184 Jacob.nonNumericJcutcut = nonNumericJcutcut;
+0185 
+0186 <span class="comment">%% Création des fonctions pour chaque marqueurs et chaque solide de coupure</span>
+0187 
+0188 <span class="keyword">for</span> ii=1:length(ind_mk)
+0189     m = ind_mk(ii);
+0190     matlabFunction(Markers_set(m).position_symbolic,<span class="string">'file'</span>,[<span class="string">'Symbolic_function/'</span> Markers_set(m).name <span class="string">'_Position.m'</span>],<span class="string">'vars'</span>,{q,pcut,Rcut});
+0191 <span class="keyword">end</span>
+0192 
+0193 <span class="comment">% Cut solid</span>
+0194 <span class="keyword">for</span> ii=1:length(ind_Kcut) <span class="comment">% solide i</span>
+0195     i_Kc = ind_Kcut(ii);
+0196     matlabFunction(Human_model(i_Kc).R,Human_model(i_Kc).p,<span class="string">'File'</span>,[<span class="string">'Symbolic_function/f'</span> num2str(Human_model(i_Kc).KinematicsCut) <span class="string">'cut.m'</span>],<span class="keyword">...</span>
+0197         <span class="string">'Outputs'</span>,{[<span class="string">'R'</span> num2str(num2str(Human_model(i_Kc).KinematicsCut)) <span class="string">'cut'</span> ],[<span class="string">'p'</span> num2str(num2str(Human_model(i_Kc).KinematicsCut)) <span class="string">'cut'</span> ]},<span class="keyword">...</span><span class="comment">;</span>
+0198         <span class="string">'vars'</span>,{q,pcut,Rcut});
+0199 <span class="keyword">end</span>
+0200 <span class="comment">% Closed loops</span>
+0201 <span class="keyword">for</span> i=1:numel(p_ClosedLoop)
+0202     matlabFunction(R_ClosedLoop{i},p_ClosedLoop{i},<span class="string">'File'</span>,[<span class="string">'Symbolic_function/fCL'</span> num2str(i) <span class="string">'.m'</span>],<span class="keyword">...</span>
+0203         <span class="string">'Outputs'</span>,{<span class="string">'R'</span>,<span class="string">'p'</span>},<span class="string">'vars'</span>,{q});
+0204 <span class="keyword">end</span>
+0205 nbClosedLoop=numel(p_ClosedLoop);
+0206 
+0207 <span class="comment">%We delete p and R fields</span>
+0208 Human_model = rmfield(Human_model, <span class="string">'p'</span>);
+0209 Human_model = rmfield(Human_model, <span class="string">'R'</span>);
+0210 
+0211 <span class="keyword">end</span>
+0212 
+0213 
+0214 
+0215 
+0216</pre></div>
+<hr><address>Generated on Wed 07-Nov-2018 15:15:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

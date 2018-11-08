@@ -42,6 +42,10 @@ ________________________________________________________
 
  Licence
  Toolbox distributed under 3-Clause BSD License
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
 ________________________________________________________</pre></div>
 
 <!-- crossreference -->
@@ -76,62 +80,66 @@ This function is called by:
 0015 <span class="comment">% Licence</span>
 0016 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
 0017 <span class="comment">%________________________________________________________</span>
-0018 
-0019 <span class="keyword">if</span> r0 ~= 0
-0020     a = (r1-r0)/r0;
-0021     <span class="keyword">if</span> t0 ~= 0
-0022         b=(t1-t0)/t0;
-0023         <span class="comment">% Masse</span>
-0024         Masse = D*h*r0*(4*t0*<a href="#_sub1" class="code" title="subfunction val=F1(a,b)">F1</a>(a,b) + pi*r0*<a href="#_sub1" class="code" title="subfunction val=F1(a,b)">F1</a>(a,a));
-0025         <span class="comment">% Position du centre de masse</span>
-0026         Zc=D*h^2*(4*r0*t0*<a href="#_sub2" class="code" title="subfunction val=F2(a,b)">F2</a>(a,b)+pi*r0^2*<a href="#_sub2" class="code" title="subfunction val=F2(a,b)">F2</a>(a,a))/Masse;
-0027         <span class="comment">% Inertie</span>
-0028         intz2Adz=4*r0*t0*<a href="#_sub3" class="code" title="subfunction val=F3(a,b)">F3</a>(a,b) + pi*r0^2*<a href="#_sub3" class="code" title="subfunction val=F3(a,b)">F3</a>(a, a) ;
-0029         intJxdz=4*r0*t0^3*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(a,b)/3 + pi*r0^4*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(a, a)/4;
-0030         intJydz=4*r0*t0^3*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(a,b)/3 + pi*r0^2*t0^2*<a href="#_sub5" class="code" title="subfunction val=F5(a,b)">F5</a>(a,b) + 8*r0^3*t0*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(b,a)/3 + pi*r0^4*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(a,a)/4;
-0031         Iz=D*h*(4*r0*t0^3*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(a,b)/3 + pi*r0^2*t0^2*<a href="#_sub5" class="code" title="subfunction val=F5(a,b)">F5</a>(a,b) + 4*r0^3*t0*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(b,a) + pi*r0^4*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(a,a)/2); 
-0032     <span class="keyword">else</span>
-0033         Masse = D*h*r0*(pi*r0*<a href="#_sub1" class="code" title="subfunction val=F1(a,b)">F1</a>(a,a));
-0034         Zc=D*h^2*(pi*r0^2*<a href="#_sub2" class="code" title="subfunction val=F2(a,b)">F2</a>(a,a))/Masse;
-0035         intz2Adz= pi*r0^2*<a href="#_sub3" class="code" title="subfunction val=F3(a,b)">F3</a>(a,a) ;
-0036         intJxdz=pi*r0^4*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(a,a)/4;
-0037         intJydz= pi*r0^4*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(a,a)/4;
-0038         Iz=D*h*(pi*r0^4*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(a,a)/2); 
-0039     <span class="keyword">end</span>
-0040     <span class="comment">% Inertie</span>
-0041     Ix0=D*h*intJxdz+D*h^3*intz2Adz;
-0042     Ix=Ix0-Masse*Zc^2;
-0043     Iy0=D*h*intJydz+D*h^3*intz2Adz;
-0044     Iy=Iy0-Masse*Zc^2;
-0045 <span class="keyword">else</span>
-0046     Masse = 0;
-0047     Zc = 3*h/4;
-0048     Ix = 0;
-0049     Iy = 0;
-0050     Iz = 0;
-0051 <span class="keyword">end</span>
-0052 
-0053 <span class="keyword">end</span>
-0054 
-0055 <a name="_sub1" href="#_subfunctions" class="code">function val=F1(a,b)</a>
-0056 val=1 + (a+b)/2 + (a*b)/3;
+0018 <span class="comment">%</span>
+0019 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0020 <span class="comment">% Georges Dumont</span>
+0021 <span class="comment">%________________________________________________________</span>
+0022 
+0023 <span class="keyword">if</span> r0 ~= 0
+0024     a = (r1-r0)/r0;
+0025     <span class="keyword">if</span> t0 ~= 0
+0026         b=(t1-t0)/t0;
+0027         <span class="comment">% Masse</span>
+0028         Masse = D*h*r0*(4*t0*<a href="#_sub1" class="code" title="subfunction val=F1(a,b)">F1</a>(a,b) + pi*r0*<a href="#_sub1" class="code" title="subfunction val=F1(a,b)">F1</a>(a,a));
+0029         <span class="comment">% Position du centre de masse</span>
+0030         Zc=D*h^2*(4*r0*t0*<a href="#_sub2" class="code" title="subfunction val=F2(a,b)">F2</a>(a,b)+pi*r0^2*<a href="#_sub2" class="code" title="subfunction val=F2(a,b)">F2</a>(a,a))/Masse;
+0031         <span class="comment">% Inertie</span>
+0032         intz2Adz=4*r0*t0*<a href="#_sub3" class="code" title="subfunction val=F3(a,b)">F3</a>(a,b) + pi*r0^2*<a href="#_sub3" class="code" title="subfunction val=F3(a,b)">F3</a>(a, a) ;
+0033         intJxdz=4*r0*t0^3*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(a,b)/3 + pi*r0^4*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(a, a)/4;
+0034         intJydz=4*r0*t0^3*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(a,b)/3 + pi*r0^2*t0^2*<a href="#_sub5" class="code" title="subfunction val=F5(a,b)">F5</a>(a,b) + 8*r0^3*t0*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(b,a)/3 + pi*r0^4*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(a,a)/4;
+0035         Iz=D*h*(4*r0*t0^3*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(a,b)/3 + pi*r0^2*t0^2*<a href="#_sub5" class="code" title="subfunction val=F5(a,b)">F5</a>(a,b) + 4*r0^3*t0*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(b,a) + pi*r0^4*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(a,a)/2); 
+0036     <span class="keyword">else</span>
+0037         Masse = D*h*r0*(pi*r0*<a href="#_sub1" class="code" title="subfunction val=F1(a,b)">F1</a>(a,a));
+0038         Zc=D*h^2*(pi*r0^2*<a href="#_sub2" class="code" title="subfunction val=F2(a,b)">F2</a>(a,a))/Masse;
+0039         intz2Adz= pi*r0^2*<a href="#_sub3" class="code" title="subfunction val=F3(a,b)">F3</a>(a,a) ;
+0040         intJxdz=pi*r0^4*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(a,a)/4;
+0041         intJydz= pi*r0^4*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(a,a)/4;
+0042         Iz=D*h*(pi*r0^4*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(a,a)/2); 
+0043     <span class="keyword">end</span>
+0044     <span class="comment">% Inertie</span>
+0045     Ix0=D*h*intJxdz+D*h^3*intz2Adz;
+0046     Ix=Ix0-Masse*Zc^2;
+0047     Iy0=D*h*intJydz+D*h^3*intz2Adz;
+0048     Iy=Iy0-Masse*Zc^2;
+0049 <span class="keyword">else</span>
+0050     Masse = 0;
+0051     Zc = 3*h/4;
+0052     Ix = 0;
+0053     Iy = 0;
+0054     Iz = 0;
+0055 <span class="keyword">end</span>
+0056 
 0057 <span class="keyword">end</span>
 0058 
-0059 <a name="_sub2" href="#_subfunctions" class="code">function val=F2(a,b)</a>
-0060 val=1/2 + (a+b)/3 + (a*b)/4;
+0059 <a name="_sub1" href="#_subfunctions" class="code">function val=F1(a,b)</a>
+0060 val=1 + (a+b)/2 + (a*b)/3;
 0061 <span class="keyword">end</span>
 0062 
-0063 <a name="_sub3" href="#_subfunctions" class="code">function val=F3(a,b)</a>
-0064 val=1/3 + (a+b)/4 + (a*b)/5;
+0063 <a name="_sub2" href="#_subfunctions" class="code">function val=F2(a,b)</a>
+0064 val=1/2 + (a+b)/3 + (a*b)/4;
 0065 <span class="keyword">end</span>
 0066 
-0067 <a name="_sub4" href="#_subfunctions" class="code">function val=F4(a,b)</a>
-0068 val = 1 + (a + 3*b)/2 + (3*a*b + 3*b^2)/3 + (3*a*b^2+ b^3)/4 + (a*b^3)/5;
+0067 <a name="_sub3" href="#_subfunctions" class="code">function val=F3(a,b)</a>
+0068 val=1/3 + (a+b)/4 + (a*b)/5;
 0069 <span class="keyword">end</span>
 0070 
-0071 <a name="_sub5" href="#_subfunctions" class="code">function val=F5(a,b)</a>
-0072 val= 1+ (2*a+ 2*b)/2 + (a^2 + 4*a*b + b^2)/3 + 2*a*b*(a + b)/4 + (a^2*b^2)/5; 
-0073 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Tue 03-Jul-2018 16:25:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0071 <a name="_sub4" href="#_subfunctions" class="code">function val=F4(a,b)</a>
+0072 val = 1 + (a + 3*b)/2 + (3*a*b + 3*b^2)/3 + (3*a*b^2+ b^3)/4 + (a*b^3)/5;
+0073 <span class="keyword">end</span>
+0074 
+0075 <a name="_sub5" href="#_subfunctions" class="code">function val=F5(a,b)</a>
+0076 val= 1+ (2*a+ 2*b)/2 + (a^2 + 4*a*b + b^2)/3 + 2*a*b*(a + b)/4 + (a^2*b^2)/5; 
+0077 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 07-Nov-2018 15:15:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>
