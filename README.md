@@ -16,7 +16,7 @@ tags:
 	
 affiliations:
  - (1) Univ Rennes, CNRS, Inria, IRISA - UMR 6074, F-35000 Rennes, France
- - (2) Ecoles de Saint-Cyr Coëtquidan, 56380 Guer, France
+ - (2) Centre de Recherche des Ecoles de St-Cyr Coëtquidan, 56380 Guer, France
    
 date: 2 July 2018
 
