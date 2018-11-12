@@ -17,10 +17,6 @@ function [real_markers, nb_frame, Firstframe, Lastframe, f, list_missing_markers
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
-%
-% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
-% Georges Dumont
-%________________________________________________________
 
 warning('off', 'btk:ReadAcquisition');
 h = btkReadAcquisition([char(filename) '.c3d']);
@@ -46,7 +42,10 @@ list_m_table=cell(1,1);
 % possibles avec tous les préfixes disponibles dans le c3d.
 % Creation of a table with all combinations of marker names 
 % with all the prefixes available in the c3d. 
+if isfield(prefixInfo, 'SUBJECTS')
 nb_pref=length(prefixInfo.children.SUBJECTS.children.NAMES.info.values)+1;
+else nb_pref=1;
+end
 prefix=cell(1,3);
 for i_pref=1:nb_pref
     if i_pref==nb_pref
