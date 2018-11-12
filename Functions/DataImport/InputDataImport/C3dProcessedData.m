@@ -17,6 +17,10 @@ function [real_markers, nb_frame, Firstframe, Lastframe, f, list_missing_markers
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 warning('off', 'btk:ReadAcquisition');
 h = btkReadAcquisition([char(filename) '.c3d']);
@@ -64,7 +68,7 @@ end
 %     for j=1:size(list_markers,1)
 %         i=1;
 %         while strcmp(ListMarkersName{i},strcat(prefix{i_pref},list_markers{j})) == 0 && strcmp(ListMarkersName{i},list_markers{j}) == 0 ... % on cherche la position du jième marqueur de la liste dans le C3d
-%% Looking for position of j-iest marker of the list within C3D
+% Looking for position of j-iest marker of the list within C3D
 %             i=i+1;
 %         end
 %         % lorsqu'on la trouvée on créé une structure avec son nom et sa position (matrice nbframe x 3)
