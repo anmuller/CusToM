@@ -3,6 +3,15 @@ function [Markers]=Marker_set5(varargin)
 %
 %   OUTPUT
 %   - Markers: set of markers (see the Documentation for the structure) 
+%________________________________________________________
+%
+% Licence
+% Toolbox distributed under 3-Clause BSD License
+%________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 s=cell(0);
 
