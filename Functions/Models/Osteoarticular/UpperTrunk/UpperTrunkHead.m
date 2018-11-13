@@ -23,6 +23,10 @@ function [OsteoArticularModel]=UpperTrunkHead(OsteoArticularModel,k,Mass,Attachm
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 list_solid={'UpperTrunk_J1' 'UpperTrunk_J2' 'ThoraxHead'};
     
 %% solid numbering incremation

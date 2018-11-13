@@ -22,6 +22,10 @@ function [OsteoArticularModel]= Pelvis(OsteoArticularModel,k,Mass,AttachmentPoin
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 list_solid={'PelvisSacrum'};
     
 %% solid numbering incremation

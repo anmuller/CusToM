@@ -23,6 +23,10 @@ function [OsteoArticularModel]= Skull(OsteoArticularModel,k,Mass,AttachmentPoint
 % Licence
 % Toolbox distributed under 3-Clause BSD License
 %________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 list_solid={'ThoraxSkull_J1' 'ThoraxSkull_J2' 'Skull'};
        
 %% solid numbering incremation
