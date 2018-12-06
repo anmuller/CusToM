@@ -21,7 +21,7 @@
 load('ModelParameters.mat');
 load('AnalysisParameters.mat');
 
-if ~exist('BiomechanicalModel.mat','file')
+if ~exist(fullfile(pwd,'BiomechanicalModel.mat'),'file')
     CalibrateModelGeneration(ModelParameters,AnalysisParameters);
 end
 
