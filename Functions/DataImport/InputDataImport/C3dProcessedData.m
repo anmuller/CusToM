@@ -46,7 +46,7 @@ list_m_table=cell(1,1);
 % possibles avec tous les préfixes disponibles dans le c3d.
 % Creation of a table with all combinations of marker names 
 % with all the prefixes available in the c3d. 
-if isfield(prefixInfo, 'SUBJECTS')
+if isfield(prefixInfo.children, 'SUBJECTS')
 nb_pref=length(prefixInfo.children.SUBJECTS.children.NAMES.info.values)+1;
 else nb_pref=1;
 end
@@ -57,7 +57,7 @@ for i_pref=1:nb_pref
     else
     prefix{i_pref} = [prefixInfo.children.SUBJECTS.children.NAMES.info.values{i_pref} '_'];
     end
-    for j=1:size(list_markers,1)
+    for j=1:length(list_markers)
         list_m_table{i_pref,j} = list_markers{j};
         list_m_bis{i_pref,j} = strcat(prefix{i_pref},list_markers{j}); % toutes les combinaisons de noms de marqueurs possibles (all combinations of possible markers names)
     end
