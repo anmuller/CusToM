@@ -76,7 +76,7 @@ You need to create a copy on a local directory on your machine to use CusToM. Ob
 
 After downloading the main folder and placing it in a relevant location, the installation only consists in running the Installation file. It checks if you have a compatible version of Matlab, if the needed toolboxes are installed. The function will also add the Functions folder of CusToM to your current path.
  
-CusToM was implemented and tested with the Matlab 2018a version.  Here is a list of toolboxes which appear to be used in CusToM:
+CusToM was implemented and tested with the Matlab 2018a version. Authors can not guarantee that the code could be run on previous versions. Here is a list of toolboxes which appear to be used in CusToM:
 * Symbolic Matlab Toolbox
 * Optimization Toolbox
 * Parallel Computing Toolbox.
@@ -114,6 +114,8 @@ This third example consisted in linking the symmetry, the performance and the he
 
 <a href="http://www.youtube.com/watch?v=foL7PEI8P9o" target="_blank"><img src="https://img.youtube.com/vi/foL7PEI8P9o/0.jpg" 
 alt="Tutorial#3" width="240" height="180" border="10" /></a>
+
+### Extra tutorials could be find on the [workshop repository](https://github.com/cpontonn/CusToM-Workshop).
 
 # Citing CusToM <a name="Cite"></a>
 
