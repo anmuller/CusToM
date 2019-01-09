@@ -7,6 +7,7 @@
 
 # Table of contents
 - [Authors](#Authors)
+- [Statement of Need](#StatementofNeed)
 - [Summary](#Summary)  
 - [Installation instructions](#Installationinstructions)
 - [Data processing examples](#Dataprocessingexamples)
@@ -14,7 +15,8 @@
 - [Contributing](#Contributing)  
 - [Code of conduct](#CodeOfConduct)  
 - [License](#License)
-- [Acknowledgements](#Acknowledgements)  
+- [Acknowledgements](#Acknowledgements)
+- [Bibliography](#Bibliography)
 
 Tags:
   - Motion analysis
@@ -37,32 +39,49 @@ Tags:
    
 date: 2 July 2018
 
+# Statement of Need <a name="StatementofNeed"></a>
+
+Inverse dynamics based musculoskeletal analysis aims at calculating biomechanical quantities to understand motion from joint kinematics to muscle forces.
+Generic models generally based on cadaveric templates are used as an input. 
+These generic models are based on three layers modelisation. 
+The first one is geometrical defining the polyarticulated rigid body system and the kinematic joints. 
+The inertial layer defines mass, centers of mass position and inertia matrix of rigid body of the polyarticulated system. 
+And, the muscle layer defines the muscle paths and force generation behaviours of muscles. 
+This generic models are then calibrated through multiple calibration steps to be subject-specific base on motion capture data. 
+Finally the subject-specific model is used to understand recorded motions of the subject.
+
+However, musculoskeletal simulation requires high computational cost. Editing and assembling features to modify generic models. 
+Subject-specific calibrations and multiple simulations are required to compute subject-specific quantities on recorded trials. 
+And current available musculoskeletal softwares are heavy and requires expertise like SIMM (MusculoGraphics, Inc., Santa Rosa, CA), Anybody (Anybody Technology, Aalborg, Denmark) and OpenSim OpenSim (Simtk, Stanford, CA). 
+Moreover, SIMM and Anybody are commercial softwares and, OpenSim is a freely available software but main algorithms source codes are not available. 
+That's why, there was a need in developping a complete open-source software for musculoskeletal simulation. 
+The source code was developped with Matlab to allow many researchers to understand and contribute to the code.
+
 # Summary <a name="Summary"></a>
 
 Customizable Toolbox for Musculoskeletal simulation (CusToM) is a MATLAB toolbox aimed 
-at performing inverse dynamics based musculoskeletal analyzes [@Erdemir2007]. This type 
+at performing inverse dynamics based musculoskeletal analyzes (Erdemir et al., 2007). This type 
 of analysis is essential to access mechanical quantities of human motion in different 
 fields such as clinics, ergonomics and sports. CusToM exhibits several features. It 
 can generate a personalized musculoskeletal model, and can solve from motion capture 
 data inverse kinematics, external forces estimation, inverse dynamics and muscle forces
- estimation problems as in various musculoskeletal simulation software [@Damsgaard2006]
- [@Delp2007].
+ estimation problems as in various musculoskeletal simulation software (Damsgaard et al. 2006, Delp et al. 2007).
 
 According to user choices, the musculoskeletal model generation is achieved thanks to 
-libraries containing pre-registered models [@Muller2015b]. These models consist of body
+libraries containing pre-registered models (Muller et al. 2015). These. These models consist of body
 parts osteoarticular models, set of markers or set of muscles to be combined together.
 From an anthropometric based model, the geometric, inertial and muscular parameters are 
-calibrated to fit the size and mass of the subject to be analyzed [@Muller2015a] 
-[@Muller2017] [@Muller2017c]. Then, from motion capture data (extracted from a 
-c3d file thanks to [@Barre2014]), the inverse kinematics step computes joint 
-coordinates trajectories against time [@Lu1999]. Then, joint torques are computed 
-thanks to an inverse dynamics step [@featherstone2008]. To this end, external forces 
+calibrated to fit the size and mass of the subject to be analyzed (Muller et al. 2016) (Muller, Pontonnier, and Dumont 2017) (A. Muller et al. 2017). 
+Then, from motion capture data (extracted from a 
+c3d file thanks to (Barre and Armand 2014)), the inverse kinematics step computes joint 
+coordinates trajectories against time (Lu and O’connor 1999). Then, joint torques are computed 
+thanks to an inverse dynamics step (Featherstone, 2008). To this end, external forces 
 applied to the subject have to be known. They may be directly extracted from 
 experimental data (as platform forces) or be estimated from motion data by using 
-the equations of motion in an optimization scheme [@Fluit2014]. Last, muscle forces 
+the equations of motion in an optimization scheme (Fluit et al, 2008). Last, muscle forces 
 are estimated. It consists in finding a repartition of muscle forces respecting the 
 joint torques and representing the central nervous system strategy 
-[@Crowninshield1978] [@Muller2017a] [@Muller2018].
+(Crowninshield 1978) (Antoine Muller et al. 2017) (Muller, Pontonnier, and Dumont 2018).
 
 For a large set of musculoskeletal models and motion data, CusToM can easily performs all of the analyzes described above. CusToM has been created as a modular tool to let the user being as free and autonomous as possible. The osteoarticular models, set of markers and set of muscles are defined as bricks customizable and adaptable with each other. The design or the modification of a musculoskeletal model is simplified thanks to this modularity. Following the same idea, some methods are defined as adaptable bricks. Testing new cost functions in the optimization schemes, changing performance criteria or creating alternative motion analysis methods can be done in a relatively easy way.
 
@@ -76,10 +95,12 @@ You need to create a copy on a local directory on your machine to use CusToM. Ob
 
 After downloading the main folder and placing it in a relevant location, the installation only consists in running the Installation file. It checks if you have a compatible version of Matlab, if the needed toolboxes are installed. The function will also add the Functions folder of CusToM to your current path.
  
-CusToM was implemented and tested with the Matlab 2018a version. Authors can not guarantee that the code could be run on previous versions. Here is a list of toolboxes which appear to be used in CusToM:
+CusToM was implemented and tested with the Matlab 2018a version on Windows 10. Authors can not guarantee that the code could be run on previous versions. Here is a list of toolboxes which appear to be used in CusToM:
 * Symbolic Matlab Toolbox
 * Optimization Toolbox
 * Parallel Computing Toolbox.
+
+CusToM was not developped on MacosX and Linux. For MacosX, it could be necessary to download the source files of BTK and to compile and install BTK accordingly with your device. You would need to download [btk-core-0.3.0\_src.zip](https://code.google.com/archive/p/b-tk/downloads).
 
 # Data processing examples <a name="Dataprocessingexamples"></a>
 
@@ -139,3 +160,32 @@ CusToM is provided under: [![License](https://img.shields.io/badge/License-3_Cla
 
 We acknowledge contributions from Diane Haering, Félix Demore, Marvin Chauwin, Claire Livet, Lancelot Barthe and Amaury Dalla Monta.
 
+# Bibliography <a name="Bibliography"></a>
+
+Barre, Arnaud, and Stéphane Armand. 2014. “Biomechanical Toolkit: Open-Source Framework to Visualize and Process Biomechanical Data.” Computer Methods and Pro- grams in Biomedicine 114 (1). Elsevier:80–87. https://doi.org/10.1016/j.cmpb.2014.01. 012.
+
+Crowninshield, Roy D. 1978. “Use of Optimization Techniques to Predict Muscle Forces.” Journal of Biomechanical Engineering 100 (2). American Society of Mechanical Engineers:88–92. https://doi.org/10.1115/1.3426197.
+
+Damsgaard, M., J. Rasmussen, S. T. Christensen, E. Surma, and M. de Zee. 2006. “Analysis of musculoskeletal systems in the AnyBody Modeling System.” Simulation Modelling Practice and Theory 14 (8):1100–1111. https://doi.org/10.1016/j.simpat.2006. 09.001.
+
+Delp, S. L., F. C Anderson, A. S Arnold, P. Loan, A. Habib, C. T. John, E. Guendelman, and D. G. Thelen. 2007. “OpenSim: Open source to create and analyze dynamic simu- lations of movement.” IEEE Transactions on Bio-Medical Engineering 54 (11):1940–50. https://doi.org/10.1109/TBME.2007.901024.
+
+Erdemir, A., S. McLean, W. Herzog, and A. J. van den Bogert. 2007. “Model-based estimation of muscle forces exerted during movements.” Clinical Biomechanics 22 (2):131– 54. https://doi.org/10.1016/j.clinbiomech.2006.09.005.
+
+Featherstone, R., 2008. Rigid Body Dynamics Algorithms, Constraints.
+
+Fluit, R., M. S. Andersen, S. Kolk, N. Verdonschot, and H. F. J. M. Koopman. 2014. “Pre- diction of ground reaction forces and moments during various activities of daily living.”Journal of Biomechanics 47 (10). Elsevier:2321–9. https://doi.org/10.1016/j.jbiomech. 2014.04.030.
+
+Lu, T. W., and J. J. O’connor. 1999. “Bone position estimation from skin marker co- ordinates using global optimisation with joint constraints.” Journal of Biomechanics 32 (2):129–34. https://doi.org/10.1016/S0021-9290(98)00158-4.
+
+Muller, A., C. Germain, C. Pontonnier, and G. Dumont. 2016. “A simple method to calibrate kinematical invariants: application to overhead throwing.” In Proceedings of the 33rd International Society of Biomechanics in Sports.
+
+Muller, A., D. Haering, C. Pontonnier, and G. Dumont. 2017. “Non-invasive techniques for musculoskeletal model calibration.” In Proceedings of the 23ème Congrès Français de Mécanique.
+
+Muller, A., C. Pontonnier, and G. Dumont. 2017. “Uncertainty propagation in multibody human model dynamics.” Multibody System Dynamics 40 (2):177–92. https://doi.org/10. 1007/s11044-017-9566-7.
+
+Muller, A., C. Pontonnier, C. Germain, and G. Dumont. 2015. “Dealing with modularity of multibody models.” In Proceedings of the 40ème Congrès de La Société de Biomé- canique, Computer Methods in Biomechanics and Biomedical Engineering, 18:2008–9. sup1. https://doi.org/10.1080/10255842.2015.1069599.
+
+Muller, Antoine, Félix Demore, Charles Pontonnier, and Georges Dumont. 2017. “MusIC Makes the Muscles Work Together.” In XVI International Symposium on Computer Simulation in Biomechanics, 2.
+
+Muller, Antoine, Charles Pontonnier, and Georges Dumont. 2018. “The Music Method: A Fast and Quasi-Optimal Solution to the Muscle Forces Estimation Problem.” Computer Methods in Biomechanics and Biomedical Engineering 21 (2). Taylor & Francis:149–60. https://doi.org/10.1080/10255842.2018.1429596
