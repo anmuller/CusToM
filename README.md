@@ -162,7 +162,7 @@ We acknowledge contributions from Diane Haering, Félix Demore, Marvin Chauwin, C
 
 # Bibliography <a name="Bibliography"></a>
 
-Barre, Arnaud, and Stéphane Armand. 2014. “Biomechanical Toolkit: Open-Source Framework to Visualize and Process Biomechanical Data.” Computer Methods and Pro- grams in Biomedicine 114 (1). Elsevier:80–87. https://doi.org/10.1016/j.cmpb.2014.01. 012.
+Barre, A., and S. Armand. 2014. “Biomechanical Toolkit: Open-Source Framework to Visualize and Process Biomechanical Data.” Computer Methods and Pro- grams in Biomedicine 114 (1). Elsevier:80–87. https://doi.org/10.1016/j.cmpb.2014.01. 012.
 
 Crowninshield, Roy D. 1978. “Use of Optimization Techniques to Predict Muscle Forces.” Journal of Biomechanical Engineering 100 (2). American Society of Mechanical Engineers:88–92. https://doi.org/10.1115/1.3426197.
 
@@ -184,8 +184,8 @@ Muller, A., D. Haering, C. Pontonnier, and G. Dumont. 2017. “Non-invasive techni
 
 Muller, A., C. Pontonnier, and G. Dumont. 2017. “Uncertainty propagation in multibody human model dynamics.” Multibody System Dynamics 40 (2):177–92. https://doi.org/10. 1007/s11044-017-9566-7.
 
-Muller, A., C. Pontonnier, C. Germain, and G. Dumont. 2015. “Dealing with modularity of multibody models.” In Proceedings of the 40ème Congrès de La Société de Biomé- canique, Computer Methods in Biomechanics and Biomedical Engineering, 18:2008–9. sup1. https://doi.org/10.1080/10255842.2015.1069599.
+Muller, A., C. Pontonnier, C. Germain, and G. Dumont. 2015. “Dealing with modularity of multibody models.” In Proceedings of the 40ème Congrès de La Société de Biomécanique, Computer Methods in Biomechanics and Biomedical Engineering, 18:2008–9. sup1. https://doi.org/10.1080/10255842.2015.1069599.
 
-Muller, Antoine, Félix Demore, Charles Pontonnier, and Georges Dumont. 2017. “MusIC Makes the Muscles Work Together.” In XVI International Symposium on Computer Simulation in Biomechanics, 2.
+Muller, A.,  F. Demore, C. Pontonnier, and G. Dumont. 2017. “MusIC Makes the Muscles Work Together.” In XVI International Symposium on Computer Simulation in Biomechanics, 2.
 
-Muller, Antoine, Charles Pontonnier, and Georges Dumont. 2018. “The Music Method: A Fast and Quasi-Optimal Solution to the Muscle Forces Estimation Problem.” Computer Methods in Biomechanics and Biomedical Engineering 21 (2). Taylor & Francis:149–60. https://doi.org/10.1080/10255842.2018.1429596
+Muller, A., C. Pontonnier, and G. Dumont. 2018. “The Music Method: A Fast and Quasi-Optimal Solution to the Muscle Forces Estimation Problem.” Computer Methods in Biomechanics and Biomedical Engineering 21 (2). Taylor & Francis:149–60. https://doi.org/10.1080/10255842.2018.1429596
