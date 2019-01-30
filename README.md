@@ -34,7 +34,7 @@ Tags:
 	
 ## Affiliations:
  - (1) Univ Rennes, CNRS, Inria, IRISA - UMR 6074, F-35000 Rennes, France
- - (2) Centre de Recherche des Ecoles de Saint-Cyr CoÎtquidan, 56380 Guer, France
+ - (2) Centre de Recherche des Ecoles de Saint-Cyr Co√´tquidan, 56380 Guer, France
  - (3) Univ Rennes, M2S - EA 1274, 35170 Bruz, France
    
 date: 2 July 2018
@@ -74,7 +74,7 @@ From an anthropometric based model, the geometric, inertial and muscular paramet
 calibrated to fit the size and mass of the subject to be analyzed (Muller et al. 2016) (Muller, Pontonnier, and Dumont 2017) (A. Muller et al. 2017). 
 Then, from motion capture data (extracted from a 
 c3d file thanks to (Barre and Armand 2014)), the inverse kinematics step computes joint 
-coordinates trajectories against time (Lu and Oíconnor 1999). Then, joint torques are computed 
+coordinates trajectories against time (Lu and O‚Äôconnor 1999). Then, joint torques are computed 
 thanks to an inverse dynamics step (Featherstone, 2008). To this end, external forces 
 applied to the subject have to be known. They may be directly extracted from 
 experimental data (as platform forces) or be estimated from motion data by using 
@@ -140,9 +140,9 @@ alt="Tutorial#3" width="240" height="180" border="10" /></a>
 
 # Citing CusToM <a name="Cite"></a>
 
-Cite the Journal of Open Source Software paper: [![Under_Review](https://img.shields.io/badge/JOSS-Under_Review-yellow.svg)](10.21105/joss.00927)
+Cite the Journal of Open Source Software paper: [![status](http://joss.theoj.org/papers/4b412d584fbfa911edfae882146e2cd3/status.svg)](http://joss.theoj.org/papers/4b412d584fbfa911edfae882146e2cd3)
 
-Muller, A., Pontonnier, C., Puchaud, P., Dumont, G., (2018). CusToM : _a Matlab toolbox for musculoskeletal simulation_, in review. Journal of Open Source Software.
+Muller, A., Pontonnier, C., Puchaud, P., Dumont, G., (2018). CusToM : _a Matlab toolbox for musculoskeletal simulation_, Journal of Open Source Software.
 
 # Contributing <a name="Contributing"></a>
 
@@ -158,34 +158,34 @@ CusToM is provided under: [![License](https://img.shields.io/badge/License-3_Cla
 
 # Acknowledgements <a name="Acknowledgements"></a>
 
-We acknowledge contributions from Diane Haering, FÈlix Demore, Marvin Chauwin, Claire Livet, Lancelot Barthe and Amaury Dalla Monta.
+We acknowledge contributions from Diane Haering, F√©lix Demore, Marvin Chauwin, Claire Livet, Lancelot Barthe and Amaury Dalla Monta.
 
 # Bibliography <a name="Bibliography"></a>
 
-Barre, A., and S. Armand. 2014. ìBiomechanical Toolkit: Open-Source Framework to Visualize and Process Biomechanical Data.î Computer Methods and Pro- grams in Biomedicine 114 (1). Elsevier:80ñ87. https://doi.org/10.1016/j.cmpb.2014.01. 012.
+Barre, A., and S. Armand. 2014. ‚ÄúBiomechanical Toolkit: Open-Source Framework to Visualize and Process Biomechanical Data.‚Äù Computer Methods and Pro- grams in Biomedicine 114 (1). Elsevier:80‚Äì87. https://doi.org/10.1016/j.cmpb.2014.01. 012.
 
-Crowninshield, Roy D. 1978. ìUse of Optimization Techniques to Predict Muscle Forces.î Journal of Biomechanical Engineering 100 (2). American Society of Mechanical Engineers:88ñ92. https://doi.org/10.1115/1.3426197.
+Crowninshield, Roy D. 1978. ‚ÄúUse of Optimization Techniques to Predict Muscle Forces.‚Äù Journal of Biomechanical Engineering 100 (2). American Society of Mechanical Engineers:88‚Äì92. https://doi.org/10.1115/1.3426197.
 
-Damsgaard, M., J. Rasmussen, S. T. Christensen, E. Surma, and M. de Zee. 2006. ìAnalysis of musculoskeletal systems in the AnyBody Modeling System.î Simulation Modelling Practice and Theory 14 (8):1100ñ1111. https://doi.org/10.1016/j.simpat.2006. 09.001.
+Damsgaard, M., J. Rasmussen, S. T. Christensen, E. Surma, and M. de Zee. 2006. ‚ÄúAnalysis of musculoskeletal systems in the AnyBody Modeling System.‚Äù Simulation Modelling Practice and Theory 14 (8):1100‚Äì1111. https://doi.org/10.1016/j.simpat.2006. 09.001.
 
-Delp, S. L., F. C Anderson, A. S Arnold, P. Loan, A. Habib, C. T. John, E. Guendelman, and D. G. Thelen. 2007. ìOpenSim: Open source to create and analyze dynamic simu- lations of movement.î IEEE Transactions on Bio-Medical Engineering 54 (11):1940ñ50. https://doi.org/10.1109/TBME.2007.901024.
+Delp, S. L., F. C Anderson, A. S Arnold, P. Loan, A. Habib, C. T. John, E. Guendelman, and D. G. Thelen. 2007. ‚ÄúOpenSim: Open source to create and analyze dynamic simu- lations of movement.‚Äù IEEE Transactions on Bio-Medical Engineering 54 (11):1940‚Äì50. https://doi.org/10.1109/TBME.2007.901024.
 
-Erdemir, A., S. McLean, W. Herzog, and A. J. van den Bogert. 2007. ìModel-based estimation of muscle forces exerted during movements.î Clinical Biomechanics 22 (2):131ñ 54. https://doi.org/10.1016/j.clinbiomech.2006.09.005.
+Erdemir, A., S. McLean, W. Herzog, and A. J. van den Bogert. 2007. ‚ÄúModel-based estimation of muscle forces exerted during movements.‚Äù Clinical Biomechanics 22 (2):131‚Äì 54. https://doi.org/10.1016/j.clinbiomech.2006.09.005.
 
 Featherstone, R., 2008. Rigid Body Dynamics Algorithms, Constraints.
 
-Fluit, R., M. S. Andersen, S. Kolk, N. Verdonschot, and H. F. J. M. Koopman. 2014. ìPre- diction of ground reaction forces and moments during various activities of daily living.îJournal of Biomechanics 47 (10). Elsevier:2321ñ9. https://doi.org/10.1016/j.jbiomech. 2014.04.030.
+Fluit, R., M. S. Andersen, S. Kolk, N. Verdonschot, and H. F. J. M. Koopman. 2014. ‚ÄúPre- diction of ground reaction forces and moments during various activities of daily living.‚ÄùJournal of Biomechanics 47 (10). Elsevier:2321‚Äì9. https://doi.org/10.1016/j.jbiomech. 2014.04.030.
 
-Lu, T. W., and J. J. Oíconnor. 1999. ìBone position estimation from skin marker co- ordinates using global optimisation with joint constraints.î Journal of Biomechanics 32 (2):129ñ34. https://doi.org/10.1016/S0021-9290(98)00158-4.
+Lu, T. W., and J. J. O‚Äôconnor. 1999. ‚ÄúBone position estimation from skin marker co- ordinates using global optimisation with joint constraints.‚Äù Journal of Biomechanics 32 (2):129‚Äì34. https://doi.org/10.1016/S0021-9290(98)00158-4.
 
-Muller, A., C. Germain, C. Pontonnier, and G. Dumont. 2016. ìA simple method to calibrate kinematical invariants: application to overhead throwing.î In Proceedings of the 33rd International Society of Biomechanics in Sports.
+Muller, A., C. Germain, C. Pontonnier, and G. Dumont. 2016. ‚ÄúA simple method to calibrate kinematical invariants: application to overhead throwing.‚Äù In Proceedings of the 33rd International Society of Biomechanics in Sports.
 
-Muller, A., D. Haering, C. Pontonnier, and G. Dumont. 2017. ìNon-invasive techniques for musculoskeletal model calibration.î In Proceedings of the 23Ëme CongrËs FranÁais de MÈcanique.
+Muller, A., D. Haering, C. Pontonnier, and G. Dumont. 2017. ‚ÄúNon-invasive techniques for musculoskeletal model calibration.‚Äù In Proceedings of the 23√®me Congr√®s Fran√ßais de M√©canique.
 
-Muller, A., C. Pontonnier, and G. Dumont. 2017. ìUncertainty propagation in multibody human model dynamics.î Multibody System Dynamics 40 (2):177ñ92. https://doi.org/10. 1007/s11044-017-9566-7.
+Muller, A., C. Pontonnier, and G. Dumont. 2017. ‚ÄúUncertainty propagation in multibody human model dynamics.‚Äù Multibody System Dynamics 40 (2):177‚Äì92. https://doi.org/10. 1007/s11044-017-9566-7.
 
-Muller, A., C. Pontonnier, C. Germain, and G. Dumont. 2015. ìDealing with modularity of multibody models.î In Proceedings of the 40Ëme CongrËs de La SociÈtÈ de BiomÈcanique, Computer Methods in Biomechanics and Biomedical Engineering, 18:2008ñ9. sup1. https://doi.org/10.1080/10255842.2015.1069599.
+Muller, A., C. Pontonnier, C. Germain, and G. Dumont. 2015. ‚ÄúDealing with modularity of multibody models.‚Äù In Proceedings of the 40√®me Congr√®s de La Soci√©t√© de Biom√©canique, Computer Methods in Biomechanics and Biomedical Engineering, 18:2008‚Äì9. sup1. https://doi.org/10.1080/10255842.2015.1069599.
 
-Muller, A.,  F. Demore, C. Pontonnier, and G. Dumont. 2017. ìMusIC Makes the Muscles Work Together.î In XVI International Symposium on Computer Simulation in Biomechanics, 2.
+Muller, A.,  F. Demore, C. Pontonnier, and G. Dumont. 2017. ‚ÄúMusIC Makes the Muscles Work Together.‚Äù In XVI International Symposium on Computer Simulation in Biomechanics, 2.
 
-Muller, A., C. Pontonnier, and G. Dumont. 2018. ìThe Music Method: A Fast and Quasi-Optimal Solution to the Muscle Forces Estimation Problem.î Computer Methods in Biomechanics and Biomedical Engineering 21 (2). Taylor & Francis:149ñ60. https://doi.org/10.1080/10255842.2018.1429596
+Muller, A., C. Pontonnier, and G. Dumont. 2018. ‚ÄúThe Music Method: A Fast and Quasi-Optimal Solution to the Muscle Forces Estimation Problem.‚Äù Computer Methods in Biomechanics and Biomedical Engineering 21 (2). Taylor & Francis:149‚Äì60. https://doi.org/10.1080/10255842.2018.1429596
