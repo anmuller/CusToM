@@ -56,7 +56,7 @@ end
 % exclude non used markers
 Markers_set=Markers_set(find([Markers_set.exist])); %#ok<FNDSB>
 
-% Calculs préliminaires
+% Prelimiray computations
 if seg_anim % anatomical position where other segments are attached
     [Human_model] = anat_position_solid_repere(Human_model,find(~[Human_model.mother]));
 end
@@ -153,7 +153,7 @@ for f=f_affich
         end
     end
     
-    %% Vectors of external forces issued from experimental data (Vecteurs efforts extérieurs issus de données expérimentales)
+    %% Vectors of external forces issued from prediction (Vecteurs efforts extérieurs issus de prediction)
     if external_force_pred
         extern_forces_f = external_forces_pred(f).Visual;
         color_vect = 1-([53 210 55]/255);

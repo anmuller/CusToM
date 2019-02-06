@@ -11,6 +11,7 @@
 - [Statement of Need](#StatementofNeed)
 - [Summary](#Summary)  
 - [Installation instructions](#Installationinstructions)
+- [Additional Installation](#ExtraInst)
 - [Data processing examples](#Dataprocessingexamples)
 - [Citing CusToM](#Cite)
 - [Contributing](#Contributing)  
@@ -103,6 +104,18 @@ CusToM was implemented and tested with the Matlab 2018a version on Windows 10. A
 
 CusToM was not developped on MacosX and Linux. For MacosX, it could be necessary to download the source files of BTK and to compile and install BTK accordingly with your device. You would need to download [btk-core-0.3.0\_src.zip](https://code.google.com/archive/p/b-tk/downloads).
 
+### 1. Additionnal installations <a name="ExtraInst"></a>
+
+3D Animations tools have incorporated.
+
+![Cool 3D Anim](https://user-images.githubusercontent.com/40755537/50661630-fb32b100-0fa3-11e9-8c80-5d93d5b48911.gif)
+
+ If you want to use this tool to vizualise your computations on particular trial. Please install:
+
+* [GIBBON](https://github.com/gibbonCode/GIBBON/) which has an advanced graphics animation creation and exporting capabilities through a figure window based GUI.
+* [Export_fig](https://github.com/altmany/export_fig/archive/master.zip), it helps to export publication quality images .
+
+
 # Data processing examples <a name="Dataprocessingexamples"></a>
 
 Three tutorials extracted from research works are available in the current release. The first one consists in [predicting the ground reaction forces on a sidestep motion](#Tuto1). The second tutorials consists in [analyzing the kinematics of a pick-and-place task realized in a Virtual Reality Environment](#Tuto2) (holding a Head-Mounted-Display). The third tutorial consists in [estimating the lower limbs muscle forces during a cycling motion](#Tuto3). The tutorials are also illustrated by videos available in the repository. You can either follow
@@ -137,7 +150,7 @@ This third example consisted in linking the symmetry, the performance and the he
 <a href="http://www.youtube.com/watch?v=foL7PEI8P9o" target="_blank"><img src="https://img.youtube.com/vi/foL7PEI8P9o/0.jpg" 
 alt="Tutorial#3" width="240" height="180" border="10" /></a>
 
-### Extra tutorials could be find on the [workshop repository](https://github.com/cpontonn/CusToM-Workshop).
+### Extra tutorials could be found on the [workshop repository](https://github.com/cpontonn/CusToM-Workshop).
 
 # Citing CusToM <a name="Cite"></a>
 
