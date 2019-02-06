@@ -1,4 +1,5 @@
-## CusToM: a Matlab toolbox for musculoskeletal simulation
+﻿## CusToM: a Matlab toolbox for musculoskeletal simulation
+## Dev Animation
 
 **CusToM Status:** [![status](http://joss.theoj.org/papers/4b412d584fbfa911edfae882146e2cd3/status.svg)](http://joss.theoj.org/papers/4b412d584fbfa911edfae882146e2cd3)
 
