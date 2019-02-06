@@ -69,7 +69,7 @@ if mod_marker_anim
         end        
     end
 end
-% muscular points position
+% position of muscle points
 if muscles_anim
     for m=1:numel(Muscles) % for each muscle
         if Muscles(m).exist

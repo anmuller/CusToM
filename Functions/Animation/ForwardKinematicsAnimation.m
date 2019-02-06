@@ -1,4 +1,6 @@
-function [Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation(Human_model,Markers_set,Muscles,q,j,muscles_anim,mod_marker_anim,solid_inertia_anim)
+function [Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation(...
+    Human_model,Markers_set,Muscles,q,j,...
+    muscles_anim,mod_marker_anim,solid_inertia_anim)
 % Computation of a forward kinematics step for the animation
 %
 %   INPUT

@@ -20,6 +20,8 @@ function [] = Animate(ModelParameters, AnimateParameters, varargin)
 filename = AnimateParameters.filename(1:end-4);
 
 seg_anim = AnimateParameters.seg_anim;
+mass_centers_anim=AnimateParameters.mass_centers_anim;
+Global_mass_center_anim=AnimateParameters.Global_mass_center_anim;
 muscles_anim = AnimateParameters.muscles_anim;
 mod_marker_anim = AnimateParameters.mod_marker_anim;
 exp_marker_anim = AnimateParameters.exp_marker_anim;
@@ -52,7 +54,11 @@ if muscles_anim
     load([filename '/MuscleForcesComputationResults.mat']); %#ok<LOAD>
     Aopt = MuscleForcesComputationResults.MuscleActivations;
 end
-
+if mass_centers_anim
+    num_s_mass_center=find([Human_model.Visual]);
+    nb_ms = length(num_s_mass_center);
+    C_ms(1:nb_ms,:)=repmat([34,139,34]/255,[nb_ms 1]);
+end
 % exclude non used markers
 Markers_set=Markers_set(find([Markers_set.exist])); %#ok<FNDSB>
 
@@ -98,7 +104,8 @@ for f=f_affich
         qf(1,:)=q6dof(6,f);
         qf(2:size(q,1),:)=q(2:end,f);
         qf((size(q,1)+2):(size(q,1)+6),:)=q6dof(1:5,f);
-        [Human_model_bis,Muscles_test, Markers_set_test]=ForwardKinematicsAnimation(Human_model,Markers_set,Muscles,qf,find(~[Human_model.mother]),muscles_anim,mod_marker_anim,solid_inertia_anim);
+%         [Human_model_bis,Muscles_test, Markers_set_test]=ForwardKinematicsAnimation8(Human_model,Markers_set,Muscles,qf,find(~[Human_model.mother]),muscles_anim,mod_marker_anim,solid_inertia_anim);
+        [Human_model_bis,Muscles_test, Markers_set_test]=ForwardKinematicsAnimation8(Human_model,Markers_set,Muscles,qf,find(~[Human_model.mother]),seg_anim,muscles_anim,mod_marker_anim,solid_inertia_anim);
 
         %% segments
         for j=find([Human_model_bis.Visual])
@@ -140,7 +147,31 @@ for f=f_affich
             scatter3(real_markers(marker).position(f,1),real_markers(marker).position(f,2),real_markers(marker).position(f,3),20,'filled','MarkerFaceColor',[0 153 255]/255)
         end
     end
-    
+    %% Mass Centers
+    if mass_centers_anim
+        Vsms=[];
+        for j=num_s_mass_center
+            X = (Human_model_bis(j).Tc_R0_Ri(1:3,4))';
+            Vsms=[Vsms;X];
+        end
+        hmass=patch('Faces',1:nb_ms,'Vertices',Vsms,'FaceColor','none','FaceVertexCData',C_ms,'EdgeColor','none');
+        hmass.Marker='o';
+        hmass.MarkerFaceColor='flat';
+        hmass.MarkerEdgeColor='k';
+        hmass.MarkerSize=6;
+        
+    end
+     %% Global Mass Centers
+    if Global_mass_center_anim
+        CoM = CalcCoM(Human_model_bis);
+        X = CoM';
+        hGmass=patch('Faces',1,'Vertices',X,'FaceColor','none','FaceVertexCData',[34,139,34]/255,'EdgeColor','none');
+        hGmass.Marker='o';
+        hGmass.MarkerFaceColor='flat';
+        hGmass.MarkerEdgeColor='k';
+        hGmass.MarkerSize=10;
+
+    end
     %% Vectors of external forces issued from experimental data (Vecteurs efforts extérieurs issus de données expérimentales)
     if external_force_anim
         extern_forces_f = external_forces(f).Visual;
