@@ -224,22 +224,16 @@ for f=f_affich
             cur_nb_V=length(Human_model_bis(jjj).V);
             cur_nb_F=length(Human_model_bis(jjj).F);
             tot_nb_F=length(Fbones);
-            tot_nb_V=length(X);
             
-            Fbones((1:cur_nb_F)+tot_nb_F,:)=Human_model_bis(jjj).F+tot_nb_V;
+            Fbones((1:nbFs)+(ii-1)*nbFs,:)=Fs+cur_nb_V*(ii-1);
             
             onearray = ones([1,cur_nb_V]);
-            if isempty(Human_model_bis(jjj).V)
-                temp=[];
-            else
-                temp=(Human_model_bis(jjj).Tc_R0_Ri*...
-                [Human_model_bis(jjj).V';onearray ])';
-            end
             X = [ X ;...
-                temp];
+                (Human_model_bis(j).Tc_R0_Ri*...
+                [Human_model_bis(j).V';onearray ])'];
         end
         if f==f_affich(1)
-            hc = gpatch(Fbones,X(:,1:3),[227 218 201]/255*0.9,'none');
+            hc = gpatch(,X(:,1:3),[227 218 201]/255*0.9,'none');
         end
         animStruct.Handles{f}=[animStruct.Handles{f} hc];
         animStruct.Props{f}={ animStruct.Props{f}{:}, 'Vertices'};
