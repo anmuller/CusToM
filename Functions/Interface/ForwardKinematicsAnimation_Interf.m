@@ -1,4 +1,4 @@
-function [Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation_Interf(Human_model,Markers_set,Muscles,q,j,muscles_anim,mod_marker_anim,RPelvis)
+function [Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation_Interf(Human_model,Markers_set,Muscles,q,j,seg_anim,muscles_anim,mod_marker_anim,RPelvis)
 % Computation of a forward kinematics step for the interface
 %
 %   INPUT
@@ -44,8 +44,11 @@ else
         Human_model(j).R = Human_model(i).R * Rodrigues(Human_model(j).u,Human_model(j).theta);
     end
 end
+Human_model(j).pc = Human_model(j).p + Human_model(j).R*Human_model(j).c;
+Human_model(j).Tc_R0_Ri=[Human_model(j).R, Human_model(j).pc ; [0 0 0 1]];
 
 % Computation of each point position
+if seg_anim
 if Human_model(j).Visual == 1
     Human_model(j).pos_pts_anim = [Human_model(j).pos_pts_anim Human_model(j).p]; % local segment coordinate frame
     Human_model(j).pos_pts_anim = [Human_model(j).pos_pts_anim (Human_model(j).R * Human_model(j).c + Human_model(j).p)]; % center of mass position
@@ -60,6 +63,7 @@ if Human_model(j).Visual == 1
             end
         end
     end
+end
 end
 % mod_marker
 if mod_marker_anim
@@ -82,7 +86,7 @@ if muscles_anim
     end
 end
 
-[Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation_Interf(Human_model,Markers_set,Muscles,q,Human_model(j).sister,muscles_anim,mod_marker_anim);
-[Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation_Interf(Human_model,Markers_set,Muscles,q,Human_model(j).child,muscles_anim,mod_marker_anim);
+[Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation_Interf(Human_model,Markers_set,Muscles,q,Human_model(j).sister,seg_anim,muscles_anim,mod_marker_anim);
+[Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation_Interf(Human_model,Markers_set,Muscles,q,Human_model(j).child,seg_anim,muscles_anim,mod_marker_anim);
 
 end

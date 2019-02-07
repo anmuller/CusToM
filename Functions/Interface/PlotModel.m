@@ -69,8 +69,8 @@ else
 end
 
 %% Forward kinematics
-%[Human_model_bis,Muscles_bis, Markers_set_bis]=ForwardKinematicsAnimation_Interf(OsteoArticularModel,Markers,Muscles,q,find(~[OsteoArticularModel.mother]),muscles_anim,mod_marker_anim,RPelvis);
-[Human_model_bis,Muscles_bis, Markers_set_bis]=ForwardKinematicsAnimation8(OsteoArticularModel,Markers,Muscles,q,find(~[OsteoArticularModel.mother]),seg_anim,muscles_anim,mod_marker_anim,RPelvis);
+[Human_model_bis,Muscles_bis, Markers_set_bis]=ForwardKinematicsAnimation_Interf(OsteoArticularModel,Markers,Muscles,q,find(~[OsteoArticularModel.mother]),seg_anim,muscles_anim,mod_marker_anim,RPelvis);
+%[Human_model_bis,Muscles_bis, Markers_set_bis]=ForwardKinematicsAnimation8(OsteoArticularModel,Markers,Muscles,q,find(~[OsteoArticularModel.mother]),seg_anim,muscles_anim,mod_marker_anim,RPelvis);
 
 %% Segments visualization
 if seg_anim
