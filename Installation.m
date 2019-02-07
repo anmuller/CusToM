@@ -32,7 +32,7 @@ Toolboxes_installed = intersect(Needed_Toolboxes_for_CusToM,Toolboxes_list);
 Toolboxes_not_available = setdiff(Needed_Toolboxes_for_CusToM,Toolboxes_list);
 
 if isempty(Toolboxes_installed)
-    s = ['None of the required Toolboxes are installed to run CuToM' '\n' ...
+    s = ['None of the required Toolboxes are installed to run CusToM' '\n' ...
         'You need the following toolbox to run CusToM:'];
     for ii =1:length(Toolboxes_not_available)
         s=[s '\n' Toolboxes_not_available{ii}];
