@@ -87,6 +87,11 @@ catch
     EnableModel(6) = 1;
 end
 
+%% Change root
+if nargout==3 && ~strcmp(OsteoArticularModel([OsteoArticularModel.mother]==0).name, ModelParameters.Root)
+    OsteoArticularModel = ChangeRoot(OsteoArticularModel, ModelParameters.Root);
+end
+
 %% Markers
 [Markers] = ModelParameters.Markers(ModelParameters.MarkersOptions);
 
