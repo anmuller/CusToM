@@ -62,9 +62,15 @@ if bone_anim % on charge les géométries osseuses.
     else
         k = (ModelParameters.Size/1.80);
     end
-    bonepath=which('Pelvis.mat');
-    bonepath = fileparts(bonepath);
+    bonespath=which('ModelGeneration.m');
+    bonespath = fileparts(bonespath);
     for ii=find([Human_model.Visual])
+        %TLEM or not.
+        if isfield(Human_model,'Geometry') && ~isempty(Human_model(ii).Geometry)
+            bonepath=fullfile(bonespath,['Geometries_' Human_model(ii).Geometry]);
+        else
+        bonepath=fullfile(bonespath,'Geometries');
+        end
         try
             load(fullfile(bonepath, Human_model(ii).name))
             Human_model(ii).V=k(ii)*p;

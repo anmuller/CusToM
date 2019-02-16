@@ -34,6 +34,17 @@ for i=1:numel(Markers_set)
     end
 end
 
+%% Remove solids without kinematic dependancy (Patella)
+bool_kd = isfield(Human_model,'kinematic_dependancy');
+if bool_kd
+    Human_model_save=Human_model;
+    X=extractfield(Human_model,'kinematic_dependancy');
+    ind=~cellfun(@isempty,X)==1;
+    Human_model(ind)=[];
+    [Human_model,~]=Maj_Human_model(Human_model,Human_model_save,0);
+    Markers_set= VerifMarkersOnModel(Human_model,Markers_set);
+end
+
 %% variables initialization
 q = sym('q', [numel(Human_model) 1]);  % joint coordinates initialization (number of solids - 1 (pelvis))
 assume(q,'real')
@@ -207,6 +218,16 @@ nbClosedLoop=numel(p_ClosedLoop);
 %We delete p and R fields
 Human_model = rmfield(Human_model, 'p');
 Human_model = rmfield(Human_model, 'R');
+
+%% find kinematic cuts to add them again to human model
+if bool_kd
+    ind_reduce = find(~cellfun(@isempty,{Human_model.KinematicsCut}')==1);
+    for ii=1:length(ind_reduce)
+        [~,ind_complete]=intersect({Human_model_save.name}',Human_model(ind_reduce(ii)).name);
+        Human_model_save(ind_complete).KinematicsCut=Human_model(ind_reduce(ii)).KinematicsCut;
+    end
+    Human_model = Human_model_save;
+end
 
 end
 

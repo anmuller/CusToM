@@ -28,6 +28,17 @@ disp(['Inverse kinematics (' filename ') ...'])
 Human_model = BiomechanicalModel.OsteoArticularModel;
 Markers_set = BiomechanicalModel.Markers;
 
+%% Remove solids without kinematic dependancy (Patella)
+bool_kd = isfield(Human_model,'kinematic_dependancy');
+if bool_kd
+    Human_model_save=Human_model;
+    X=extractfield(Human_model,'kinematic_dependancy'); % supprimer extract field
+    ind=~cellfun(@isempty,X)==1;
+    Human_model(ind)=[];
+    [Human_model,~]=Maj_Human_model(Human_model,Human_model_save,0);
+    Markers_set= VerifMarkersOnModel(Human_model,Markers_set);
+end
+
 %% Symbolic function generation
 % Markers position with respects to joint coordinates
 nbClosedLoop = sum(~cellfun('isempty',{Human_model.ClosedLoop}));
@@ -157,7 +168,27 @@ q=q(1:end-6,:);  % joint coordinates
 q(1,:)=0;        % position of the pelvis
 
 time=real_markers(1).time';
-    
+
+%% Treating kinematic dependancy
+% Interpolation 
+if bool_kd
+    ind_Kdep = find(cellfun(@isempty,{Human_model_save.kinematic_dependancy} )==0);
+    names_human_model={Human_model.name}';
+    for ii=1:length(ind_Kdep)
+        ind_jt_old = Human_model_save(ind_Kdep(ii)).kinematic_dependancy.Joint;
+        [~,ind_jt_new]=intersect(names_human_model,Human_model_save(ind_jt_old).name);
+        xq=q(ind_jt_new,:);
+        % interpolating on curve to get angle values        
+        x=Human_model_save(ind_Kdep(ii)).kinematic_dependancy.numerical_estimates(1,:);
+        v=Human_model_save(ind_Kdep(ii)).kinematic_dependancy.numerical_estimates(2,:);
+        vq = interp1(x,v,xq,'pchip');
+        q= [q(1:ind_Kdep(ii)-1,:); vq; q(ind_Kdep(ii):end,:)];
+        names_human_model = [names_human_model(1:ind_Kdep(ii)-1);...
+            Human_model_save(ind_Kdep(ii)).name;...
+            names_human_model(ind_Kdep(ii):end) ];
+    end
+end
+
 %% Save data
 ExperimentalData.FirstFrame = Firstframe;
 ExperimentalData.LastFrame = Lastframe;

@@ -37,6 +37,14 @@ if AnalysisParameters.CalibIK.Active
     disp('... Geometrical Calibration done')
 end
 
+%% Joint Calibration
+if ~isempty(find(contains(...
+        {BiomechanicalModel.OsteoArticularModel.name}','Patella'), 1))
+    disp('Joint Calibration ...')
+    [BiomechanicalModel]=CalibratePatellaJoint(BiomechanicalModel);
+    disp('... Joint Calibration done')
+end
+
 %% Symbolic functions
 disp('Preliminary Computations ...')
 [BiomechanicalModel.OsteoArticularModel] = Add6dof(BiomechanicalModel.OsteoArticularModel);
