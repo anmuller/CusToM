@@ -51,7 +51,9 @@ assume(q,'real')
 % facteurs d'homothétie (homothetic factors)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ind=1:numel(Human_model);
-ind_k = unique([Markers_set.num_solid]);
+ind_k = unique([Markers_set.num_solid]);% takes solids with markers 
+ind_k = unique([ind_k  find(not(cellfun(@isempty,{Human_model.anat_position})))]); % takes solids without markers
+
 nb_k= length(ind_k);
 k_map=zeros(numel(Human_model));
 for i=1:nb_k
