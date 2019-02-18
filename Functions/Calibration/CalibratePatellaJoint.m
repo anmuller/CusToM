@@ -1,6 +1,7 @@
 function [BiomechanicalModel]=CalibratePatellaJoint(BiomechanicalModel)
 % Generation of the function between Knee Angle and Patella Angle with the
-% femur based on newton algorithm
+% femur based on newton algorithm: length of the patellar tendon as
+% to remain constant
 %
 %   INPUT
 %   - BiomechanicalModel with its field OsteoarticularModel is need

@@ -39,24 +39,24 @@ function [Human_model_calib, calib_parameters, Markers_set] = GeometricalCalibra
 Human_model_save=OsteoArticularModel;
 
 %% Taking into account of constraints specified in AnalysisParameters
-
+solid_names={OsteoArticularModel.name};
 % k
 for i = 1:size(AnalysisParameters.CalibIK.LengthDelete,1)
-    [~,~,num_solid] = intersect(AnalysisParameters.CalibIK.LengthDelete{i,1},{OsteoArticularModel.name});
+    [~,~,num_solid] = intersect(AnalysisParameters.CalibIK.LengthDelete{i,1},solid_names);
     OsteoArticularModel(num_solid).calib_k_constraint = [];
 end
 for i = 1:size(AnalysisParameters.CalibIK.LengthAdd,1)
-    [~,~,num_solid1] = intersect(AnalysisParameters.CalibIK.LengthAdd{i,1},{OsteoArticularModel.name});
-    [~,~,num_solid2] = intersect(AnalysisParameters.CalibIK.LengthAdd{i,2},{OsteoArticularModel.name});
+    [~,~,num_solid1] = intersect(AnalysisParameters.CalibIK.LengthAdd{i,1},solid_names);
+    [~,~,num_solid2] = intersect(AnalysisParameters.CalibIK.LengthAdd{i,2},solid_names);
     OsteoArticularModel(num_solid1).calib_k_constraint = num_solid2;
 end
 % v
 for i=1:size(AnalysisParameters.CalibIK.AxisDelete,1)
-    [~,~,num_solid] = intersect(AnalysisParameters.CalibIK.AxisDelete{i,1},{OsteoArticularModel.name});
+    [~,~,num_solid] = intersect(AnalysisParameters.CalibIK.AxisDelete{i,1},solid_names);
     OsteoArticularModel(num_solid).v = setdiff(OsteoArticularModel(num_solid).v',AnalysisParameters.CalibIK.AxisDelete{i,2}','rows')';
 end
 for i=1:size(AnalysisParameters.CalibIK.AxisAdd,1)
-    [~,~,num_solid] = intersect(AnalysisParameters.CalibIK.AxisAdd{i,1},{OsteoArticularModel.name});
+    [~,~,num_solid] = intersect(AnalysisParameters.CalibIK.AxisAdd{i,1},solid_names);
     OsteoArticularModel(num_solid).v = [OsteoArticularModel(num_solid).v AnalysisParameters.CalibIK.AxisAdd{i,2}]; 
 end
 % Markers
