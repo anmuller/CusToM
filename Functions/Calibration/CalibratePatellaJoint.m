@@ -68,8 +68,8 @@ for i_s=1:2
         [p2]=ForwardKinematicsPoint(OsteoArticularModel,ind_Rthigh,ind2,ind22,q_config);
         fp2=matlabFunction(p2);
         
-        % theta_p pour theta_g [-pi,pi]
-        theta_g=[-pi:pi/360:pi]';
+        % theta_p pour theta_g [-pi,pi] [flexion,extension]
+        theta_g=[-pi:pi/180:pi/4]';
         %nombre de boucle pour la méthode de newton
         n_bcle=3; % plus de variation après 4 chiffre après la virgule
         % initialisation des theta_p estimés
@@ -111,7 +111,23 @@ for i_s=1:2
         theta_p_fin=theta_p_est(:,n_bcle);
         OsteoArticularModel(ind1).kinematic_dependancy.Joint=ind2;
         OsteoArticularModel(ind1).kinematic_dependancy.numerical_estimates=[theta_g ,theta_p_fin]';
+        
+        % Regression 5 order polynome
+        [p,S]=polyfit(theta_g,theta_p_fin,5);
+        [y, delta]=polyval(p,theta_g,S);
+        alpha_g=sym('alpha_g','real');
+        
+        alpha_p=sym(zeros(1,1));
+        order=length(p);
+        for ii=1:length(p)
+            alpha_p = alpha_g^(order-ii)*p(ii) + alpha_p;
+        end
+        % Handle function
+        q=matlabFunction(alpha_p);
+        OsteoArticularModel(ind1).kinematic_dependancy.q=q;
+
         OsteoArticularModel(ind1).kinematic_dependancy.L_tendon=L0;
+        
     end
 end
 BiomechanicalModel.OsteoArticularModel=OsteoArticularModel;

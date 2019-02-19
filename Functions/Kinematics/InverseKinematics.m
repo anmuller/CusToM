@@ -35,9 +35,9 @@ end
 for i = 1:numel(AnalysisParameters.filename)
     filename = AnalysisParameters.filename{i}(1:end-4);
     if AnalysisParameters.IK.Method == 1
-        [ExperimentalData, InverseKinematicsResults] = InverseKinematicsOpti(filename,AnalysisParameters,BiomechanicalModel); %#ok<ASGLU> % Optimization method
+        [ExperimentalData, InverseKinematicsResults] = InverseKinematicsOpti(filename,AnalysisParameters,BiomechanicalModel); % % Optimization method
     elseif AnalysisParameters.IK.Method == 2
-        [ExperimentalData, InverseKinematicsResults] = InverseKinematicsLM(filename,AnalysisParameters,BiomechanicalModel); %#ok<ASGLU> % Levenberg-Marquardt algorithm
+        [ExperimentalData, InverseKinematicsResults] = InverseKinematicsLM(filename,AnalysisParameters,BiomechanicalModel); % % Levenberg-Marquardt algorithm
     end
 
     % Save data
