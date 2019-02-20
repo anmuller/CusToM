@@ -1,4 +1,4 @@
-function [Moment_Arms_sub,C] = MomentArmsComputation(Human_model,Muscles)
+function [Moment_Arms_sub,C] = MomentArmsComputation(BiomechanicalModel)
 % Computation of the moment arms matrix
 %
 %   INPUT
@@ -17,11 +17,19 @@ function [Moment_Arms_sub,C] = MomentArmsComputation(Human_model,Muscles)
 % Georges Dumont
 % Modification : Pierre Puchaud 
 %________________________________________________________
-Nb_q = numel(Human_model)-6;
+Human_model=BiomechanicalModel.OsteoArticularModel;
+Muscles=BiomechanicalModel.Muscles;
+
+if isfield(BiomechanicalModel,'Generalized_Coordinates')
+    q=BiomechanicalModel.Generalized_Coordinates.q_complete;
+else
+    Nb_q = numel(Human_model)-6;
+    q = sym('q',[Nb_q,1],'real'); % nb de degrees of freedom
+end
 Nb_m = numel(Muscles);
 
-% Compute muscle length
-q = sym('q',[Nb_q,1],'real'); % nb de degrees of freedom
+%% Compute muscle lengths
+
 L = sym(zeros(Nb_m,1));
 for i_m=1:Nb_m % for each muscle
     if Muscles(i_m).exist% if this muscle exist on the model
@@ -31,9 +39,14 @@ for i_m=1:Nb_m % for each muscle
 end
 
 %% Computation of moment arms
+if isfield(BiomechanicalModel,'Generalized_Coordinates')
+    q_map_unsix=BiomechanicalModel.Generalized_Coordinates.q_map_unsix;
+    q=q_map_unsix'*q;
+    Nb_q=length(q);
+end
 R=-jacobian(L,q)';
 R=R(:);
-sizeMA_Lin=Nb_q*Nb_m;
+sizeMA_Lin=Nb_q*Nb_m; % Last 6 degrees of freedom are not taken into account after the jacobian
 sizeMA_Sub=[Nb_q Nb_m];
 Moment_Arms_lin=cell(sizeMA_Lin,1);
 Moment_Arms_sub=cell(sizeMA_Sub);

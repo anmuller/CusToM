@@ -64,6 +64,10 @@ end
 
 q_map=orth(q_map); %kernel of A in A*K=K (Kernal of A matrix)
 q_dep_map=orth(q_dep_map); %kernel of A in A*K=K (Kernal of A matrix)
+% matrix mapping coordinates without the moving basis.
+q_map_unsix=q_map;[~,col]=find(q_map_unsix(end-5:end,:));
+    q_map_unsix(:,col)=[];
+
 
 q_red=q_map'*q;
 q_dep=q_dep_map'*q;
@@ -81,7 +85,9 @@ Generalized_Coordinates.q_red=q_red;
 Generalized_Coordinates.q_dep=q_dep;
 Generalized_Coordinates.fq_dep=fq_dep;
 Generalized_Coordinates.q_map=q_map;
+Generalized_Coordinates.q_map_unsix=q_map_unsix;
 Generalized_Coordinates.q_dep_map=q_dep_map;
+Generalized_Coordinates.q_complete=q_complete;
 
 k=ones(numel(Human_model),1);
 p_adapt=zeros(sum([Markers_set.exist]),3);

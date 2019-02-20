@@ -66,7 +66,8 @@ end
 
 if numel(BiomechanicalModel.Muscles)
     disp('Moment Arms Computation ...')
-    [BiomechanicalModel.MomentArms,BiomechanicalModel.MuscularCoupling] = MomentArmsComputation(BiomechanicalModel.OsteoArticularModel,BiomechanicalModel.Muscles);
+    [BiomechanicalModel.MomentArms,BiomechanicalModel.MuscularCoupling] =...
+        MomentArmsComputation(BiomechanicalModel);
     disp('... Moment Arms Computation done');
 end
 
