@@ -60,7 +60,7 @@ if bone_anim % on charge les géométries osseuses.
         k_calib = BiomechanicalModel.GeometricalCalibration.k_calib;
         k = (ModelParameters.Size/1.80)*k_calib;
     else
-        k = (ModelParameters.Size/1.80);
+        k = repmat((ModelParameters.Size/1.80),[numel(Human_model),1]);
     end
     bonespath=which('ModelGeneration.m');
     bonespath = fileparts(bonespath);
@@ -79,7 +79,7 @@ if bone_anim % on charge les géométries osseuses.
                 bone.vertices=p;
                 
                 bone_red=reducepatch(bone,nb_faces);
-                Human_model(ii).V=k(ii)*bone_red.vertices;
+                Human_model(ii).V=1.2063*k(ii)*bone_red.vertices;
                 Human_model(ii).F=bone_red.faces;
             else
                 Human_model(ii).V=k(ii)*p;

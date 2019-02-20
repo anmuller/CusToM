@@ -98,7 +98,9 @@ end
 %  fBrainlab AG, Munich, Germany
 % *The authors Carbone and Fluit contributed equally.
 % Journal of Biomechanics, Available online 8 January 2015, http://dx.doi.org/10.1016/j.jbiomech.2014.12.034
-% --------------------------- Foot ----------------------------------------
+%% Adjustement of k
+k=k*1.2063; %to fit 50th percentile person of 1.80m height 
+% --------------------------- Talus----------------------------------------
 
 % Position du CoM par rapport au repère de référence
 CoM_Talus=k*Mirror*[0;	0	;0];

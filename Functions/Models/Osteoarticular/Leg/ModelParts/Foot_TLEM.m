@@ -82,6 +82,8 @@ end
 %  fBrainlab AG, Munich, Germany
 % *The authors Carbone and Fluit contributed equally.
 % Journal of Biomechanics, Available online 8 January 2015, http://dx.doi.org/10.1016/j.jbiomech.2014.12.034
+%% Adjustement of k
+k=k*1.2063; %to fit 50th percentile person of 1.80m height 
 % --------------------------- Foot ----------------------------------------
 
 % Position du CoM par rapport au repère de référence

@@ -90,7 +90,9 @@ end
 %  fBrainlab AG, Munich, Germany
 % *The authors Carbone and Fluit contributed equally.
 % Journal of Biomechanics, Available online 8 January 2015, http://dx.doi.org/10.1016/j.jbiomech.2014.12.034
-% ------------------------- Pelvis ----------------------------------------
+%% Adjustement of k
+k=k*1.2063; %to fit 50th percentile person of 1.80m height 
+%% ------------------------- Pelvis ----------------------------------------
 
 % Position du CoM par rapport au repère de centré au milieu RASIS-LASIS
 CoM_Pelvis = k*[-0.0484;	-0.0355;	0.0000];
