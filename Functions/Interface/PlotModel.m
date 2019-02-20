@@ -38,9 +38,7 @@ size_markers = 20;
 if isfield(Anim,'CoefLineWidth')
     size_bones = size_bones*Anim.CoefLineWidth;
     size_muscles = size_muscles*Anim.CoefLineWidth;
-    if size_muscles < 0.5
-        size_muscles = 0.5;
-    end
+    size_muscles = max(size_muscles, 0.5);
     size_markers = size_markers*Anim.CoefLineWidth;
 end
 
@@ -56,7 +54,7 @@ else
 end
 
 %% Position and orientation of the pelvis
-[OsteoArticularModel] = anat_position_solid_repere(OsteoArticularModel,find(~[OsteoArticularModel.mother]));
+% [OsteoArticularModel] = anat_position_solid_repere(OsteoArticularModel,find(~[OsteoArticularModel.mother]));
 if Anim.ModelChoice % only a view to generate the model
     RPelvis = Rodrigues([0 1 0],-110*pi/180);
 else
