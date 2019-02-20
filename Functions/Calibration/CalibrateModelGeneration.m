@@ -75,7 +75,7 @@ end
 
 if numel(BiomechanicalModel.Muscles) && AnalysisParameters.Muscles.Method == 2
     disp('MusIC Database Generation ...')
-    eval(['[BiomechanicalModel.MusICDatabase_' char(AnalysisParameters.Muscles.Costfunction) num2str(AnalysisParameters.Muscles.CostfunctionOptions) '_' num2str(AnalysisParameters.Muscles.DatabaseDensity(1)) '_' num2str(AnalysisParameters.Muscles.DatabaseDensity(2)) '] = MusICDatabaseGeneration(BiomechanicalModel.OsteoArticularModel, BiomechanicalModel.Muscles, BiomechanicalModel.MuscularCoupling, BiomechanicalModel.MomentArms, AnalysisParameters);']) 
+    eval(['[BiomechanicalModel.MusICDatabase_' char(AnalysisParameters.Muscles.Costfunction) num2str(AnalysisParameters.Muscles.CostfunctionOptions) '_' num2str(AnalysisParameters.Muscles.DatabaseDensity(1)) '_' num2str(AnalysisParameters.Muscles.DatabaseDensity(2)) '] = MusICDatabaseGeneration(BiomechanicalModel, AnalysisParameters);']) 
     disp('... MusIC Database Generation done')
 end
 

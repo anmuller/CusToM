@@ -25,7 +25,7 @@ function [MuscleForcesComputationResults] = ForcesComputationMusIC(filename, Bio
 
 if ~isfield(BiomechanicalModel,['MusICDatabase_' char(AnalysisParameters.Muscles.Costfunction) num2str(AnalysisParameters.Muscles.CostfunctionOptions) '_' num2str(AnalysisParameters.Muscles.DatabaseDensity(1)) '_' num2str(AnalysisParameters.Muscles.DatabaseDensity(2))])
     disp('MusIC Database Generation ...')
-    eval(['[BiomechanicalModel.MusICDatabase_' char(AnalysisParameters.Muscles.Costfunction) num2str(AnalysisParameters.Muscles.CostfunctionOptions) '_' num2str(AnalysisParameters.Muscles.DatabaseDensity(1)) '_' num2str(AnalysisParameters.Muscles.DatabaseDensity(2)) '] = MusICDatabaseGeneration(BiomechanicalModel.OsteoArticularModel, BiomechanicalModel.Muscles, BiomechanicalModel.MuscularCoupling, BiomechanicalModel.MomentArms, AnalysisParameters);']) 
+    eval(['[BiomechanicalModel.MusICDatabase_' char(AnalysisParameters.Muscles.Costfunction) num2str(AnalysisParameters.Muscles.CostfunctionOptions) '_' num2str(AnalysisParameters.Muscles.DatabaseDensity(1)) '_' num2str(AnalysisParameters.Muscles.DatabaseDensity(2)) '] = MusICDatabaseGeneration(BiomechanicalModel, AnalysisParameters);']) 
     disp('... MusIC Database Generation done')
     save('BiomechanicalModel','BiomechanicalModel');
 end
@@ -38,9 +38,24 @@ Muscles = BiomechanicalModel.Muscles;
 C = BiomechanicalModel.MuscularCoupling;
 Database = eval(['BiomechanicalModel.MusICDatabase_' char(AnalysisParameters.Muscles.Costfunction) num2str(AnalysisParameters.Muscles.CostfunctionOptions) '_' num2str(AnalysisParameters.Muscles.DatabaseDensity(1)) '_' num2str(AnalysisParameters.Muscles.DatabaseDensity(2))]);
 load([filename '/InverseKinematicsResults']) %#ok<LOAD>
-q = InverseKinematicsResults.JointCoordinates;
 load([filename '/InverseDynamicsResults']) %#ok<LOAD>
-torques = InverseDynamicsResults.JointTorques;
+
+if isfield(BiomechanicalModel,'Generalized_Coordinates')
+q_map_unsix = BiomechanicalModel.Generalized_Coordinates.q_map_unsix;
+q = q_map_unsix'*[InverseKinematicsResults.FreeJointCoordinates(end,:);...
+    InverseKinematicsResults.JointCoordinates(2:end,:);
+    InverseKinematicsResults.JointCoordinates(1,:);
+    InverseKinematicsResults.FreeJointCoordinates(1:end-1,:)];
+
+torques = q_map_unsix'*[InverseDynamicsResults.DynamicResiduals.t6dof(end,:);...
+    InverseDynamicsResults.JointTorques(2:end,:);
+    InverseDynamicsResults.JointTorques(1,:);
+    InverseDynamicsResults.DynamicResiduals.f6dof;
+    InverseDynamicsResults.DynamicResiduals.t6dof(1:end-1,:)];
+else
+  q=InverseKinematicsResults.JointCoordinates;  
+  torques=InverseDynamicsResults.JointTorques;
+end
 
 %%  Detection of joint concerned by the muscle
 n=0;
