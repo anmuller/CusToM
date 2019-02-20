@@ -246,6 +246,7 @@ Human_model(incr_solid).child=0;
 Human_model(incr_solid).mother=s_mother;
 Human_model(incr_solid).a=[0.8784	0.4638	0.1152]';
 Human_model(incr_solid).joint=1;
+Human_model(incr_solid).calib_k_constraint=s_mother;
 Human_model(incr_solid).limit_inf=-pi/4;
 Human_model(incr_solid).limit_sup=pi/2;
 Human_model(incr_solid).ActiveJoint=1;

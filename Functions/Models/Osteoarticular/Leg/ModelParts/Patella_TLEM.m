@@ -163,6 +163,7 @@ Human_model(incr_solid).child=0;
 Human_model(incr_solid).mother=s_mother;
 Human_model(incr_solid).a=-[Mirror(3,3)*0.1144	-Mirror(3,3)*0.0585	-0.9984]';
 Human_model(incr_solid).joint=1;
+Human_model(incr_solid).calib_k_constraint=s_mother;
 Human_model(incr_solid).limit_inf=0;
 Human_model(incr_solid).limit_sup=pi/90;
 Human_model(incr_solid).ActiveJoint=1;
