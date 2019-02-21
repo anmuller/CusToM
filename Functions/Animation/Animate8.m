@@ -73,7 +73,7 @@ if bone_anim % on charge les géométries osseuses.
         end
         try
             load(fullfile(bonepath, Human_model(ii).name)) %#ok<LOAD>
-            nb_faces=2500;
+            nb_faces=4000;
             if length(t)>nb_faces
                 bone.faces=t;
                 bone.vertices=p;

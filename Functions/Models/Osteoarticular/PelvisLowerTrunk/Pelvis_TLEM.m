@@ -104,16 +104,13 @@ Hip_midRASISASIS = k*[0.0338;0.0807;-0.0843];
 Pelvis_HipJointRightNode = k*[-0.0338;-0.0807;0.0843]                           - CoM_Pelvis;
 Pelvis_HipJointLeftNode = k*[-0.0338;-0.0807;-0.0843]                           - CoM_Pelvis;
 Pelvis_HipJointsCenterNode = (Pelvis_HipJointLeftNode+Pelvis_HipJointRightNode)/2-CoM_Pelvis;
-Pelvis_SacrumJointNode = k*[0.027 -0.030 0] - CoM_Pelvis;
 
 % ------------------------- Sacrum ----------------------------------------
 
 % Position des noeuds
-Sacrum_L5JointNode = k*[0.043 -0.005 0];
 % Sacrum_L5JointNode = k*[-65;30;0]/1000- CoM_Pelvis; % Défini à la main sur la géométrie du Sacrum .STL
-% Sacrum_PelvisJointNode = k*[0.027 -0.030 0];
 
-Pelvis_L5JointNode = Pelvis_SacrumJointNode'-Sacrum_L5JointNode';
+Pelvis_L5JointNode = k*[-0.0664;  0.0224; 0]-CoM_Pelvis; %from TLEM to OldPelvis Morphing
 
 
 %% Définition des positions anatomiques
@@ -128,7 +125,7 @@ Pelvis_position_set= {...
     'Pelvis_HipJointRightNode', Pelvis_HipJointRightNode; ...
     'Pelvis_HipJointLeftNode',  Pelvis_HipJointLeftNode; ...
     'Pelvis_LowerTrunkNode',    Pelvis_L5JointNode; ...
-    %     'Pelvis_L5JointNode', Pelvis_SacrumJointNode'-Sacrum_L5JointNode'; ...
+        'Pelvis_L5JointNode', Pelvis_L5JointNode; ...
     'Pelvis_HipJointsCenterNode', Pelvis_HipJointsCenterNode; ...
     'CoMPelvis',                [0; 0; 0]...
     };
@@ -258,7 +255,7 @@ end
 
     %% ["Adjustments to McConville et al. and Young et al. body segment inertial parameters"] R. Dumas
     % ------------------------- Pelvis ----------------------------------------
-    Length_Pelvis = norm(Pelvis_HipJointsCenterNode-Sacrum_L5JointNode);
+    Length_Pelvis = norm(Pelvis_HipJointsCenterNode-Pelvis_L5JointNode);
     [I_Pelvis]=rgyration2inertia([100 107 95 25*1i 12*1i 8*1i], Mass.Pelvis_Mass, [0 0 0], Length_Pelvis);
 
 %% Création de la structure "Human_model"
