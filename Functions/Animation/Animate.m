@@ -37,12 +37,7 @@ Markers_set = BiomechanicalModel.Markers;
 Muscles = BiomechanicalModel.Muscles;
 load([filename '/InverseKinematicsResults.mat']); %#ok<LOAD>
 q = InverseKinematicsResults.JointCoordinates;
-if isfield(InverseKinematicsResults,'FreeJointCoordinates')
-    q6dof = InverseKinematicsResults.FreeJointCoordinates;
-else
-    PelvisPosition = InverseKinematicsResults.PelvisPosition;
-    PelvisOrientation = InverseKinematicsResults.PelvisOrientation;
-end
+q6dof = InverseKinematicsResults.FreeJointCoordinates;
 load([filename '/ExperimentalData.mat']); %#ok<LOAD>
 real_markers = ExperimentalData.MarkerPositions;
 time = ExperimentalData.Time;
@@ -106,17 +101,11 @@ for f=f_affich
     
     if seg_anim
         %% direct kinematics
-        if isfield(InverseKinematicsResults,'FreeJointCoordinates')
-            qf(1,:)=q6dof(6,f);
-            qf(2:size(q,1),:)=q(2:end,f);
-            qf((size(q,1)+2):(size(q,1)+6),:)=q6dof(1:5,f);
-            [Human_model_bis,Muscles_test, Markers_set_test]=ForwardKinematicsAnimation8(Human_model,Markers_set,Muscles,qf,find(~[Human_model.mother]),seg_anim,muscles_anim,mod_marker_anim,solid_inertia_anim);
-        else
-            qf = q(:,f);
-            Human_model(1).p = PelvisPosition{f};
-            Human_model(1).R = PelvisOrientation{f};
-            [Human_model_bis]=ForwardKinematicsAnimation8(Human_model,qf,find(~[Human_model.mother]),seg_anim);
-        end
+        qf(1,:)=q6dof(6,f);
+        qf(2:size(q,1),:)=q(2:end,f);
+        qf((size(q,1)+2):(size(q,1)+6),:)=q6dof(1:5,f);
+%         [Human_model_bis,Muscles_test, Markers_set_test]=ForwardKinematicsAnimation8(Human_model,Markers_set,Muscles,qf,find(~[Human_model.mother]),muscles_anim,mod_marker_anim,solid_inertia_anim);
+        [Human_model_bis,Muscles_test, Markers_set_test]=ForwardKinematicsAnimation8(Human_model,Markers_set,Muscles,qf,find(~[Human_model.mother]),seg_anim,muscles_anim,mod_marker_anim,solid_inertia_anim);
 
         %% segments
         for j=find([Human_model_bis.Visual])
@@ -205,7 +194,8 @@ for f=f_affich
             [extern_forces_f(3,nb_f), extern_forces_f(3,nb_f) + extern_forces_f(6,nb_f)/coef_f_visual],...
             'color', color_vect, 'LineWidth', 2);
         end
-    end    
+    end
+    
     
     %% affichage et sauvegarde (drawing an saving)
     drawnow
