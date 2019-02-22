@@ -1,4 +1,4 @@
-function MVNXModelGeneration(ModelParameters, AnalysisParameters)
+function [OsteoArticularModel] = MVNXModelGeneration(ModelParameters, AnalysisParameters)
 % Generation of the osteo-articular model from a MVNX file
 %
 %   INPUT
@@ -59,7 +59,9 @@ OsteoArticularModel=[];
 
 BiomechanicalModel.OsteoArticularModel = OsteoArticularModel;
 
-save('BiomechanicalModel','BiomechanicalModel');
+if ~nargout
+    save('BiomechanicalModel','BiomechanicalModel');
+end
 
 end
 

@@ -35,7 +35,7 @@ end
 % Inverse kinematics
 for i = 1:numel(AnalysisParameters.filename)
     % Load inverse kinematics from a MVNX
-    if isequal(AnalysisParameters.General.InputData, @MVNX)
+    if isequal(AnalysisParameters.General.InputData, @MVNX_V3)
         MVNXInverseKinematics(AnalysisParameters.filename{i}(1:end-5), AnalysisParameters);
         return;
     end

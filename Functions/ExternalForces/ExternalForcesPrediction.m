@@ -34,7 +34,12 @@ disp(['External Forces Prediction (' filename ') ...'])
 Human_model = BiomechanicalModel.OsteoArticularModel;
 load([filename '/InverseKinematicsResults.mat']); %#ok<LOAD>
 q = InverseKinematicsResults.JointCoordinates';
-q6dof = InverseKinematicsResults.FreeJointCoordinates';
+if isfield(InverseKinematicsResults,'FreeJointCoordinates')
+    q6dof = InverseKinematicsResults.FreeJointCoordinates';
+else
+    PelvisPosition = InverseKinematicsResults.PelvisPosition;
+    PelvisOrientation = InverseKinematicsResults.PelvisOrientation;
+end        
 load([filename '/ExperimentalData.mat']); %#ok<LOAD>
 time = ExperimentalData.Time;
 

@@ -26,7 +26,7 @@ function [] = CalibrateModelGeneration(ModelParameters,AnalysisParameters)
 %________________________________________________________
 
 %% Model generation from a MVNX file
-if isequal(AnalysisParameters.General.InputData, @MVNX)
+if isequal(AnalysisParameters.General.InputData, @MVNX_V3)
     disp('Model Generation ...')
     MVNXModelGeneration(ModelParameters, AnalysisParameters);
     disp('... Model Generation done')
