@@ -54,7 +54,7 @@ else
 end
 
 %% Position and orientation of the pelvis
-% [OsteoArticularModel] = anat_position_solid_repere(OsteoArticularModel,find(~[OsteoArticularModel.mother]));
+[OsteoArticularModel] = anat_position_solid_repere(OsteoArticularModel,find(~[OsteoArticularModel.mother]));
 if Anim.ModelChoice % only a view to generate the model
     RPelvis = Rodrigues([0 1 0],-110*pi/180);
 else

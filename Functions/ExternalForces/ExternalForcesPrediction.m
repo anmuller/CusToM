@@ -42,7 +42,7 @@ freq=1/time(2);
 
 %% Creation of a structure to add contact points
 for i=1:numel(AnalysisParameters.Prediction.ContactPoint)
-    Prediction(i).points_prediction_efforts = AnalysisParameters.Prediction.ContactPoint{i};
+    Prediction(i).points_prediction_efforts = AnalysisParameters.Prediction.ContactPoint{i}; %#ok<AGROW>
 end
 Prediction=verif_Prediction_Humanmodel(Human_model,Prediction);
 NbPointsPrediction = numel(Prediction);
@@ -110,7 +110,7 @@ dw=derivee2(dt,w);
 %% Initialisations des différents efforts et leur stockage
 for f=1:nbframe
     for n=1:numel(Human_model)
-        external_forces_pred(f).fext(n).fext=zeros(3,2);
+        external_forces_pred(f).fext(n).fext=zeros(3,2); %#ok<AGROW>
         %external_forces_pred_opti(n).fext=zeros(3,2); % decommenter lors de l'usage de l'optimisation non-linéaire (uncomment this line if using non-linear optimisation)
     end
 end
@@ -242,12 +242,12 @@ if AnalysisParameters.Prediction.FilterActive
     % Conversion sous la forme d'une matrice (conversion into a matrix)
     for i=1:numel(external_forces_pred)
         for j=1:numel(external_forces_pred(i).fext)
-            PredictionFx(i,j) = external_forces_pred(i).fext(j).fext(1,1);
-            PredictionFy(i,j) = external_forces_pred(i).fext(j).fext(2,1);
-            PredictionFz(i,j) = external_forces_pred(i).fext(j).fext(3,1);
-            PredictionMx(i,j) = external_forces_pred(i).fext(j).fext(1,2);
-            PredictionMy(i,j) = external_forces_pred(i).fext(j).fext(2,2);
-            PredictionMz(i,j) = external_forces_pred(i).fext(j).fext(3,2);
+            PredictionFx(i,j) = external_forces_pred(i).fext(j).fext(1,1); %#ok<AGROW>
+            PredictionFy(i,j) = external_forces_pred(i).fext(j).fext(2,1); %#ok<AGROW>
+            PredictionFz(i,j) = external_forces_pred(i).fext(j).fext(3,1); %#ok<AGROW>
+            PredictionMx(i,j) = external_forces_pred(i).fext(j).fext(1,2); %#ok<AGROW>
+            PredictionMy(i,j) = external_forces_pred(i).fext(j).fext(2,2); %#ok<AGROW> 
+            PredictionMz(i,j) = external_forces_pred(i).fext(j).fext(3,2); %#ok<AGROW>
         end
     end
     % Filtrage
@@ -289,7 +289,7 @@ end
 %% Sauvegarde des données (data saving)
 
 if exist([filename '/ExternalForcesComputationResults.mat'],'file')
-    load([filename '/ExternalForcesComputationResults.mat']);
+    load([filename '/ExternalForcesComputationResults.mat']); %#ok<LOAD>
 end
 ExternalForcesComputationResults.ExternalForcesPrediction = external_forces_pred;
 
