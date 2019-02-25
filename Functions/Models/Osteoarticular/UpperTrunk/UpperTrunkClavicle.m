@@ -152,7 +152,7 @@ LClavicle_position_set= {...
 %%                     Scaling inertial parameters
 
 % longueur entre 'Pelvis_L5JointNode' et 'Thorax_T1C5'
-Lpts={'Pelvis_L5JointNode';'LowerTrunk_UpperTrunkNode'};
+Lpts={'Pelvis_LowerTrunkNode';'LowerTrunk_UpperTrunkNode'};
 for pp=1:2
     test=0;
     for i=1:numel(OsteoArticularModel)
