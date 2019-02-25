@@ -85,7 +85,7 @@ diff=-Thorax_T12L1JointNode-CoM_bary;
 %%                     Scaling inertial parameters
 
 % distance between 'Pelvis_L5JointNode' and 'Thorax_T1C5'
-Lpts={'Pelvis_L5JointNode';'LowerTrunk_UpperTrunkNode'};
+Lpts={'Pelvis_LowerTrunkNode';'LowerTrunk_UpperTrunkNode'};
 for pp=1:2
     test=0;
     for i=1:numel(OsteoArticularModel)
