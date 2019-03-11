@@ -158,7 +158,7 @@ alt="Tutorial#3" width="240" height="180" border="10" /></a>
 
 Cite the Journal of Open Source Software paper: [![status](http://joss.theoj.org/papers/4b412d584fbfa911edfae882146e2cd3/status.svg)](http://joss.theoj.org/papers/4b412d584fbfa911edfae882146e2cd3)
 
-Muller, A., Pontonnier, C., Puchaud, P., Dumont, G., (2018). CusToM : _a Matlab toolbox for musculoskeletal simulation_, Journal of Open Source Software.
+Muller, A., Pontonnier, C., Puchaud, P., Dumont, G., (2019). CusToM : _a Matlab toolbox for musculoskeletal simulation_, Journal of Open Source Software.
 
 # Contributing <a name="Contributing"></a>
 

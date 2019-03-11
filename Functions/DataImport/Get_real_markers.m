@@ -28,7 +28,11 @@ function [real_markers, nb_frame, Firstframe, Lastframe,f] = Get_real_markers(fi
 % Filtrage (Filtering)
 if AnalysisParameters.General.FilterActive
     for i=1:numel(real_markers)
-    	real_markers(i).position=filt_data(real_markers(i).position_c3d,AnalysisParameters.General.FilterCutOff,f);
+    	real_markers(i).position = filt_data(real_markers(i).position_c3d,AnalysisParameters.General.FilterCutOff,f);
+    end
+else
+    for i=1:numel(real_markers)
+    	real_markers(i).position = real_markers(i).position_c3d;
     end
 end
 

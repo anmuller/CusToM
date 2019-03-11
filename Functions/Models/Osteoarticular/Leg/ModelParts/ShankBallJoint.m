@@ -127,7 +127,7 @@ Shank_position_set= {...
             %% %% "Human_model" structure generation
     
 num_solid=0;
-%% Ankle_J1
+%% Knee_J1
     num_solid=num_solid+1;        % number of the solid ...
     name=list_solid{num_solid}; % solid name
     eval(['incr_solid=s_' name ';'])  % number of the solid in the model
@@ -139,13 +139,13 @@ num_solid=0;
     OsteoArticularJoint(incr_solid).joint=1;
     OsteoArticularJoint(incr_solid).limit_inf=-pi;
     OsteoArticularJoint(incr_solid).limit_sup=0;
-    OsteoArticularJoint(incr_solid).Visual=1;
+    OsteoArticularJoint(incr_solid).Visual=0;
     OsteoArticularJoint(incr_solid).m=0;
     OsteoArticularJoint(incr_solid).b=pos_attachment_pt;
     OsteoArticularJoint(incr_solid).I=zeros(3,3);
     OsteoArticularJoint(incr_solid).c=[0 0 0]';
     
-%% Ankle_J2
+%% Knee_J2
     num_solid=num_solid+1;        % number of the solid ...
     name=list_solid{num_solid}; % solid name
     eval(['incr_solid=s_' name ';'])  % number of the solid in the model
@@ -156,9 +156,9 @@ num_solid=0;
     OsteoArticularJoint(incr_solid).a=[1 0 0]';
     OsteoArticularJoint(incr_solid).joint=1;
     OsteoArticularJoint(incr_solid).joint=1;
-    OsteoArticularJoint(incr_solid).limit_inf=-pi;
-    OsteoArticularJoint(incr_solid).limit_sup=0;
-    OsteoArticularJoint(incr_solid).Visual=1;
+    OsteoArticularJoint(incr_solid).limit_inf=-pi/4;
+    OsteoArticularJoint(incr_solid).limit_sup=pi/4;
+    OsteoArticularJoint(incr_solid).Visual=0;
     OsteoArticularJoint(incr_solid).m=0;
     OsteoArticularJoint(incr_solid).b=[0 0 0]';
     OsteoArticularJoint(incr_solid).I=zeros(3,3);
@@ -174,8 +174,8 @@ num_solid=0;
     OsteoArticularJoint(incr_solid).mother=s_Knee_J2;
     OsteoArticularJoint(incr_solid).a=[0 1 0]';
     OsteoArticularJoint(incr_solid).joint=1;
-    OsteoArticularJoint(incr_solid).limit_inf=-pi;
-    OsteoArticularJoint(incr_solid).limit_sup=0;
+    OsteoArticularJoint(incr_solid).limit_inf=-pi/4;
+    OsteoArticularJoint(incr_solid).limit_sup=pi/4;
     OsteoArticularJoint(incr_solid).Visual=1;
     OsteoArticularJoint(incr_solid).m=Mass.Shank_Mass;
     OsteoArticularJoint(incr_solid).b=[0 0 0]';
