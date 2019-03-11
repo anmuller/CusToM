@@ -1,5 +1,7 @@
 ﻿## CusToM: a Matlab toolbox for musculoskeletal simulation
-## Dev XSens
+## Dev Model Twente 2.0
+Adding a new model to the toolbox from: 
+V. Carbone et al., “TLEM 2.0 - A comprehensive musculoskeletal geometry dataset for subject-specific modeling of lower extremity,” J. Biomech., vol. 48, no. 5, pp. 734–741, 2015.
 
 **CusToM Status:** [![status](http://joss.theoj.org/papers/4b412d584fbfa911edfae882146e2cd3/status.svg)](http://joss.theoj.org/papers/4b412d584fbfa911edfae882146e2cd3)
 

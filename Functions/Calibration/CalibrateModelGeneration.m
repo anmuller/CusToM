@@ -45,10 +45,19 @@ if AnalysisParameters.CalibIK.Active
     disp('... Geometrical Calibration done')
 end
 
+%% Joint Calibration
+if ~isempty(find(contains(...
+        {BiomechanicalModel.OsteoArticularModel.name}','Patella'), 1))
+    disp('Joint Calibration ...')
+    [BiomechanicalModel]=CalibratePatellaJoint(BiomechanicalModel);
+    disp('... Joint Calibration done')
+end
+
 %% Symbolic functions
 disp('Preliminary Computations ...')
 [BiomechanicalModel.OsteoArticularModel] = Add6dof(BiomechanicalModel.OsteoArticularModel);
-[BiomechanicalModel.OsteoArticularModel, BiomechanicalModel.Jacob] = SymbolicFunctionGenerationIK(BiomechanicalModel.OsteoArticularModel,BiomechanicalModel.Markers);
+[BiomechanicalModel.OsteoArticularModel, BiomechanicalModel.Jacob,~,...
+    BiomechanicalModel.Generalized_Coordinates] = SymbolicFunctionGenerationIK(BiomechanicalModel.OsteoArticularModel,BiomechanicalModel.Markers);
 disp('... Preliminary Computations done')
 
 %% Inertial calibration
@@ -65,7 +74,8 @@ end
 
 if numel(BiomechanicalModel.Muscles)
     disp('Moment Arms Computation ...')
-    [BiomechanicalModel.MomentArms,BiomechanicalModel.MuscularCoupling] = MomentArmsComputation(BiomechanicalModel.OsteoArticularModel,BiomechanicalModel.Muscles);
+    [BiomechanicalModel.MomentArms,BiomechanicalModel.MuscularCoupling] =...
+        MomentArmsComputation(BiomechanicalModel);
     disp('... Moment Arms Computation done');
 end
 
@@ -73,7 +83,7 @@ end
 
 if numel(BiomechanicalModel.Muscles) && AnalysisParameters.Muscles.Method == 2
     disp('MusIC Database Generation ...')
-    eval(['[BiomechanicalModel.MusICDatabase_' char(AnalysisParameters.Muscles.Costfunction) num2str(AnalysisParameters.Muscles.CostfunctionOptions) '_' num2str(AnalysisParameters.Muscles.DatabaseDensity(1)) '_' num2str(AnalysisParameters.Muscles.DatabaseDensity(2)) '] = MusICDatabaseGeneration(BiomechanicalModel.OsteoArticularModel, BiomechanicalModel.Muscles, BiomechanicalModel.MuscularCoupling, BiomechanicalModel.MomentArms, AnalysisParameters);']) 
+    eval(['[BiomechanicalModel.MusICDatabase_' char(AnalysisParameters.Muscles.Costfunction) num2str(AnalysisParameters.Muscles.CostfunctionOptions) '_' num2str(AnalysisParameters.Muscles.DatabaseDensity(1)) '_' num2str(AnalysisParameters.Muscles.DatabaseDensity(2)) '] = MusICDatabaseGeneration(BiomechanicalModel, AnalysisParameters);']) 
     disp('... MusIC Database Generation done')
 end
 

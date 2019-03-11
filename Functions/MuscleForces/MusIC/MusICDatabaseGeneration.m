@@ -1,4 +1,4 @@
-function [Database] = MusICDatabaseGeneration(Human_model, Muscles, C, Moment_Arms, AnalysisParameters)
+function [Database] = MusICDatabaseGeneration(BiomechanicalModel, AnalysisParameters)
 % Generation of the database used in the MusIC method
 %   
 %   INPUT
@@ -25,8 +25,33 @@ C_database = 100; % Nm, reference couples
 nb_data = AnalysisParameters.Muscles.DatabaseDensity; %number of different joint coordinates in the database
 
 %% loading variables
-limit_inf = [Human_model.limit_inf]; % needed to use parfor command
-limit_sup = [Human_model.limit_sup];
+Human_model = BiomechanicalModel.OsteoArticularModel;
+Muscles = BiomechanicalModel.Muscles;
+C = BiomechanicalModel.MuscularCoupling;
+Moment_Arms = BiomechanicalModel.MomentArms;
+
+if isfield(BiomechanicalModel,'Generalized_Coordinates')
+    q_map_unsix=BiomechanicalModel.Generalized_Coordinates.q_map_unsix;
+    l_inf1=[Human_model.limit_inf]';
+    l_sup1=[Human_model.limit_sup]';
+    % to handle infinity
+    ind_infinf=not(isfinite(l_inf1));
+    ind_infsup=not(isfinite(l_sup1));
+    % tip to handle inflinity with a complex number.
+    l_inf1(ind_infinf)=1i;
+    l_sup1(ind_infsup)=1i;
+    % new indexing
+    l_inf1=q_map_unsix'*l_inf1;
+    l_sup1=q_map_unsix'*l_sup1;
+    %find 1i to replay by inf
+    l_inf1(l_inf1==1i)=-inf;
+    l_sup1(l_sup1==1i)=+inf;
+else
+    l_inf1=[Human_model.limit_inf]';
+    l_sup1=[Human_model.limit_sup]';
+end
+
+
 Fmax = [Muscles.f0]';
 nb_muscles = numel(Muscles);
 C=C; %#ok<ASGSL> % useful for parallel computation
@@ -38,9 +63,9 @@ options = optimoptions('fmincon','algorithm','sqp','Display','notify','Display',
 warning('off','all')
 list_art = find(any(C,2)); % list of joints containing one muscle
 tic
-parfor i = 1:numel(list_art) % subdatabase i
+parfor ii = 1:numel(list_art) % subdatabase i
     list_coupling = [];
-    art = list_art(i);
+    art = list_art(ii);
     art_mus = []; % list of muscles which actuate this joint
     for p=1:nb_muscles
         if ~isnumeric(Moment_Arms{art,p}) %#ok<PFBNS>
@@ -50,28 +75,28 @@ parfor i = 1:numel(list_art) % subdatabase i
     %% Definition of joint postures to achieve (Q)
     Q=cell(size(C,1),1); % initialisation
     % Set of joint positions generation 
-    for j=1:numel(Q)
-        if C(art,j) == 1
-            if j==art
-                Q{j}=linspace(limit_inf(j),limit_sup(j),nb_data(1))'; %#ok<PFBNS>
+    for jj=1:numel(Q)
+        if C(art,jj) == 1
+            if jj==art
+                Q{jj}=linspace(l_inf1(jj),l_sup1(jj),nb_data(1))'; %#ok<PFBNS>
             else
-                Q{j}=linspace(limit_inf(j),limit_sup(j),nb_data(2))';
+                Q{jj}=linspace(l_inf1(jj),l_sup1(jj),nb_data(2))';
             end
         else
-            Q{j}=0;
+            Q{jj}=0;
         end
     end
     % List of each joint configuration
     list_str = Q(1);
-    for j=2:numel(Q)
-        list_str = [list_str Q(j)];
+    for jj=2:numel(Q)
+        list_str = [list_str Q(jj)];
     end
     X = cartprod(list_str{:});
     % initilisation of the database
-    if sum(C(list_art(i),:)) == 1
+    if sum(C(list_art(ii),:)) == 1
         list_fim_init = {num2str(nb_data(1)),1};
     else
-        list_coupling = find(C(list_art(i),:));
+        list_coupling = find(C(list_art(ii),:));
         if list_coupling(1) == art
             list_fim_init = {nb_data(1)};
         else
@@ -85,13 +110,13 @@ parfor i = 1:numel(list_art) % subdatabase i
             end
         end
     end
-    Database(i).RatioPos = cell(list_fim_init{:}); 
-    Database(i).RatioNeg = cell(list_fim_init{:});
+    Database(ii).RatioPos = cell(list_fim_init{:}); 
+    Database(ii).RatioNeg = cell(list_fim_init{:});
     %% Subdatabase generation for each joint configuration 
     for SigneSigma = [-1,1] % alpha+ and alpha-
         Aeq=zeros(numel(list_art),nb_muscles); %#ok<PFBNS>
-        for j=1:size(X,1) % for each joint configuration 
-            conf_q = X(j,:)';
+        for jj=1:size(X,1) % for each joint configuration 
+            conf_q = X(jj,:)';
             % moment arm computation
             c=0;
             for m_n=1:numel(list_art)
@@ -112,20 +137,20 @@ parfor i = 1:numel(list_art) % subdatabase i
             F0 = zeros(nb_muscles_art,1);
             Fmax_art = Fmax(art_mus,:); %#ok<PFBNS>
             % Optimization
-            [Fopt] = AnalysisParameters.Muscles.Costfunction(F0, Aeq(i,art_mus), beq, Fmin, [], options, AnalysisParameters.Muscles.CostfunctionOptions, Fmax_art); %#ok<PFBNS>
+            [Fopt] = AnalysisParameters.Muscles.Costfunction(F0, Aeq(ii,art_mus), beq, Fmin, [], options, AnalysisParameters.Muscles.CostfunctionOptions, Fmax_art); %#ok<PFBNS>
             Aopt = Fopt./Fmax_art;
             % we fulfill the database(for the secondary joints)
             if beq > 0
-                Database(i).RatioPos{j} = [Aopt/sum(Aopt);beq];
+                Database(ii).RatioPos{jj} = [Aopt/sum(Aopt);beq];
             elseif beq < 0
-                Database(i).RatioNeg{j} = [Aopt/sum(Aopt);beq];
+                Database(ii).RatioNeg{jj} = [Aopt/sum(Aopt);beq];
             end
         end
     end
     % we save other info
-    Database(i).art_mus = art_mus;
-    Database(i).Q = Q;
-    Database(i).list_coupling = list_coupling;
+    Database(ii).art_mus = art_mus;
+    Database(ii).Q = Q;
+    Database(ii).list_coupling = list_coupling;ii
 end
 
 end

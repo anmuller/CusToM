@@ -32,22 +32,27 @@ nbClosedLoop = sum(~cellfun('isempty',{Human_model.ClosedLoop})); %#ok<NASGU>
 
 %% List of markers from the model
 list_markers={};
-for i=1:numel(Markers_set)
-    if Markers_set(i).exist
-        list_markers=[list_markers;Markers_set(i).name]; %#ok<AGROW>
+for ii=1:numel(Markers_set)
+    if Markers_set(ii).exist
+        list_markers=[list_markers;Markers_set(ii).name]; %#ok<AGROW>
     end
 end
-nb_solid=size(Human_model,2);  % Number of solids
+%% Number of solids considered in the Inverse Kinematics
+if isfield(BiomechanicalModel,'Generalized_Coordinates')
+    nb_solid=length(BiomechanicalModel.Generalized_Coordinates.q_red);
+else
+    nb_solid=size(Human_model,2);  % Number of solids
+end
 
 %% Position of the real markers from the c3d file
-[real_markers, nb_frame, Firstframe, Lastframe,f_mocap] = Get_real_markers(filename,list_markers,AnalysisParameters); %#ok<ASGLU>
+[real_markers, nb_frame, Firstframe, Lastframe,f_mocap] = Get_real_markers(filename,list_markers,AnalysisParameters); 
 
 %% Root position
 Base_position=cell(nb_frame,1);
 Base_rotation=cell(nb_frame,1);
-for i=1:nb_frame
-    Base_position{i}=zeros(3,1);
-    Base_rotation{i}=eye(3,3);
+for ii=1:nb_frame
+    Base_position{ii}=zeros(3,1);
+    Base_rotation{ii}=eye(3,3);
 end
 
 %% Initializations
@@ -55,10 +60,10 @@ end
 % Linear constraints for the inverse kinematics
 Aeq_ik=zeros(nb_solid);  % initialization
 beq_ik=zeros(nb_solid,1);
-for i=1:nb_solid
-   if size(Human_model(i).linear_constraint) ~= [0 0] %#ok<BDSCA>
-       Aeq_ik(i,i)=-1;
-       Aeq_ik(i,Human_model(i).linear_constraint(1,1))=Human_model(i).linear_constraint(2,1);
+for ii=1:nb_solid
+   if size(Human_model(ii).linear_constraint) ~= [0 0] %#ok<BDSCA>
+       Aeq_ik(ii,ii)=-1;
+       Aeq_ik(ii,Human_model(ii).linear_constraint(1,1))=Human_model(ii).linear_constraint(2,1);
    end    
 end
 
@@ -85,8 +90,26 @@ for m=1:numel(list_markers)
 end
 
 % Joint limits
-l_inf1=[Human_model.limit_inf]';
-l_sup1=[Human_model.limit_sup]';
+if isfield(BiomechanicalModel,'Generalized_Coordinates')
+    q_map=BiomechanicalModel.Generalized_Coordinates.q_map;
+    l_inf1=[Human_model.limit_inf]';
+    l_sup1=[Human_model.limit_sup]';
+    % to handle infinity
+    ind_infinf=not(isfinite(l_inf1));
+    ind_infsup=not(isfinite(l_sup1));
+    % tip to handle inflinity with a complex number.
+    l_inf1(ind_infinf)=1i;
+    l_sup1(ind_infsup)=1i;
+    % new indexing
+    l_inf1=q_map'*l_inf1;
+    l_sup1=q_map'*l_sup1;
+    %find 1i to replay by inf
+    l_inf1(l_inf1==1i)=-inf;
+    l_sup1(l_sup1==1i)=+inf;
+else
+    l_inf1=[Human_model.limit_inf]';
+    l_sup1=[Human_model.limit_sup]';
+end
 
 % Jacobian matrix loading
 Jfq = BiomechanicalModel.Jacob.Jfq;
@@ -103,9 +126,13 @@ indexesNumericJcutcut = BiomechanicalModel.Jacob.indexesNumericJcutcut;
 nonNumericJcutcut = BiomechanicalModel.Jacob.nonNumericJcutcut;
 
 % Inverse kinematics parameters
-pos_root =find([Human_model.mother]==0); %  root solid position
-lambda = 5e-2; % LM
+if isfield(BiomechanicalModel,'Generalized_Coordinates')
+    pos_root =find(q_map'*([Human_model.mother]==0)'); %  root solid position;
+else
+    pos_root =find([Human_model.mother]==0); %  root solid position
+end
 
+lambda = 5e-2; % LM
 
 h = waitbar(0,['Inverse Kinematics (' filename ')']);
 % 1st frame : classical optimization
@@ -158,12 +185,26 @@ for f=1:nb_frame
     [KinematicsError(:,f)] = ErrorMarkersIK(q(:,f),nb_cut,real_markers,f,list_markers,Rcut,pcut);
 end
 
-q6dof=[q(end-4:end,:);q(1,:)]; 
-q=q(1:end-6,:); 
-q(1,:)=0;       
+% Reaffect coordinates
+if isfield(BiomechanicalModel,'Generalized_Coordinates')
+    q_complet=q_map*q; % real_coordinates
+    fq_dep=BiomechanicalModel.Generalized_Coordinates.fq_dep;
+    q_dep_map=BiomechanicalModel.Generalized_Coordinates.q_dep_map;
+    for ii=1:size(q,2)
+    q_complet(:,ii)=q_complet(:,ii)+q_dep_map*fq_dep(q(:,ii)); % add dependancies
+    end
+    
+    q6dof=[q_complet(end-4:end,:);q_complet(1,:)];
+    q=q_complet(1:end-6,:);
+    q(1,:)=0;
+else
+    q6dof=[q(end-4:end,:);q(1,:)];
+    q=q(1:end-6,:);
+    q(1,:)=0;
+end
 
 time=real_markers(1).time'; 
-    
+
 %% Save data
 ExperimentalData.FirstFrame = Firstframe;
 ExperimentalData.LastFrame = Lastframe;
