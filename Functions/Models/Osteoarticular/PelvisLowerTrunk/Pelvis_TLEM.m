@@ -230,17 +230,17 @@ for i=1:2 % positions anatomiques des 2 côtés
         ['Pectineus3Origin1'	Signe 'Pelvis'],Mirror*(k*[0.028320;0.00760;-0.042720]-Hip_midRASISASIS)-CoM_Pelvis;...
         ['Pectineus4Origin1'	Signe 'Pelvis'],Mirror*(k*[0.035890;0.000550;-0.049820]-Hip_midRASISASIS)-CoM_Pelvis;...
         ['Piriformis1Origin1'	Signe 'Pelvis'],Mirror*(k*[-0.071570;0.05790;-0.056680]-Hip_midRASISASIS)-CoM_Pelvis;...
-        ['PsoasMajorT12I_TMVia5' Signe  'Pelvis'],Mirror*k*[-0.0313    0.0050    0.0653];... %from Krigeage
-        ['PsoasMajorL1I_TMVia4' Signe  'Pelvis'],Mirror*k*[-0.0313    0.0050    0.0643];... %from Krigeage
-        ['PsoasMajorL2I_TMVia3' Signe  'Pelvis'],Mirror*k*[-0.0311    0.0049    0.0620];... %from Krigeage
-        ['PsoasMajorL3I_TMVia2' Signe  'Pelvis'],Mirror*k*[   -0.0309    0.0048    0.0584];... %from Krigeage
-        ['PsoasMajorL4I_TMVia1' Signe  'Pelvis'],Mirror*k*[-0.0305    0.0048    0.0517];... %from Krigeage
-        ['PsoasMajorL5_TMVia1' Signe  'Pelvis'],Mirror*k*[ -0.0303    0.0049    0.0480];... %from Krigeage
-        ['PsoasMajor1T_TMVia5' Signe  'Pelvis'],Mirror*k*[-0.0436   -0.0001    0.0673];... %from Krigeage
-        ['PsoasMajor2T_TMVia4' Signe  'Pelvis'],Mirror*k*[-0.0434   -0.0001    0.0653];... %from Krigeage
-        ['PsoasMajor3T_TMVia3' Signe  'Pelvis'],Mirror*k*[-0.0433   -0.0001    0.0640];... %from Krigeage
-        ['PsoasMajor4T_TMVia2' Signe  'Pelvis'],Mirror*k*[-0.0427   -0.0001    0.0555];... %from Krigeage
-        ['PsoasMajor5T_TMVia1' Signe  'Pelvis'],Mirror*k*[-0.0431   -0.0001    0.0607];... %from Krigeage
+        ['PsoasMajorT12I_TMVia5' Signe  'Pelvis'],Mirror*k*[-0.0313    0.0050    0.0653]';... %from Krigeage
+        ['PsoasMajorL1I_TMVia4' Signe  'Pelvis'],Mirror*k*[-0.0313    0.0050    0.0643]';... %from Krigeage
+        ['PsoasMajorL2I_TMVia3' Signe  'Pelvis'],Mirror*k*[-0.0311    0.0049    0.0620]';... %from Krigeage
+        ['PsoasMajorL3I_TMVia2' Signe  'Pelvis'],Mirror*k*[   -0.0309    0.0048    0.0584]';... %from Krigeage
+        ['PsoasMajorL4I_TMVia1' Signe  'Pelvis'],Mirror*k*[-0.0305    0.0048    0.0517]';... %from Krigeage
+        ['PsoasMajorL5_TMVia1' Signe  'Pelvis'],Mirror*k*[ -0.0303    0.0049    0.0480]';... %from Krigeage
+        ['PsoasMajor1T_TMVia5' Signe  'Pelvis'],Mirror*k*[-0.0436   -0.0001    0.0673]';... %from Krigeage
+        ['PsoasMajor2T_TMVia4' Signe  'Pelvis'],Mirror*k*[-0.0434   -0.0001    0.0653]';... %from Krigeage
+        ['PsoasMajor3T_TMVia3' Signe  'Pelvis'],Mirror*k*[-0.0433   -0.0001    0.0640]';... %from Krigeage
+        ['PsoasMajor4T_TMVia2' Signe  'Pelvis'],Mirror*k*[-0.0427   -0.0001    0.0555]';... %from Krigeage
+        ['PsoasMajor5T_TMVia1' Signe  'Pelvis'],Mirror*k*[-0.0431   -0.0001    0.0607]';... %from Krigeage
         ['PsoasMajor1Via1' Signe  'Pelvis'],Mirror*(k*[0.013490;0.032890;-0.001550]-Hip_midRASISASIS)-CoM_Pelvis;...
         ['PsoasMajor2Via1' Signe  'Pelvis'],Mirror*(k*[0.013490;0.032890;-0.001550]-Hip_midRASISASIS)-CoM_Pelvis;...
         ['PsoasMajor3Via1' Signe  'Pelvis'],Mirror*(k*[0.013490;0.032890;-0.001550]-Hip_midRASISASIS)-CoM_Pelvis;...
