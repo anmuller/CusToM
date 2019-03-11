@@ -25,6 +25,14 @@ function [] = CalibrateModelGeneration(ModelParameters,AnalysisParameters)
 % Georges Dumont
 %________________________________________________________
 
+%% Model generation from a MVNX file
+if isequal(AnalysisParameters.General.InputData, @MVNX_V3)
+    disp('Model Generation ...')
+    MVNXModelGeneration(ModelParameters, AnalysisParameters);
+    disp('... Model Generation done')
+    return;
+end
+
 %% Anthropometric model generation
 disp('Anthropometric Model Generation ...')
 [BiomechanicalModel.OsteoArticularModel, BiomechanicalModel.Markers, BiomechanicalModel.Muscles] = ModelGeneration(ModelParameters);

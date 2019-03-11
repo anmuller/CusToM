@@ -34,29 +34,34 @@ disp(['External Forces Prediction (' filename ') ...'])
 Human_model = BiomechanicalModel.OsteoArticularModel;
 load([filename '/InverseKinematicsResults.mat']); %#ok<LOAD>
 q = InverseKinematicsResults.JointCoordinates';
-q6dof = InverseKinematicsResults.FreeJointCoordinates';
+if isfield(InverseKinematicsResults,'FreeJointCoordinates')
+    q6dof = InverseKinematicsResults.FreeJointCoordinates';
+else
+    PelvisPosition = InverseKinematicsResults.PelvisPosition;
+    PelvisOrientation = InverseKinematicsResults.PelvisOrientation;
+end        
 load([filename '/ExperimentalData.mat']); %#ok<LOAD>
 time = ExperimentalData.Time;
 
 freq=1/time(2);
 
-%% Création de la structure Prédiction contenant les points de contact
 %% Creation of a structure to add contact points
 for i=1:numel(AnalysisParameters.Prediction.ContactPoint)
-    Prediction(i).points_prediction_efforts = AnalysisParameters.Prediction.ContactPoint{i};
+    Prediction(i).points_prediction_efforts = AnalysisParameters.Prediction.ContactPoint{i}; %#ok<AGROW>
 end
 Prediction=verif_Prediction_Humanmodel(Human_model,Prediction);
 NbPointsPrediction = numel(Prediction);
 
-%% Gravité (gravity)
+%% Gravity
 g=[0 0 -9.81]';
 
-%% On enlève la liaison 6 ddl ajoutée par la cinématique inverse
 %% get rid of the 6DOF joint
-Human_model=Human_model(1:(numel(Human_model)-6));
+if isfield(InverseKinematicsResults,'FreeJointCoordinates')
+    Human_model(Human_model(end).child).mother = 0;
+    Human_model=Human_model(1:(numel(Human_model)-6));
+end
 
-%% Définition des vitesses / accélérations articulaires
-% Speed and acceleration for every joint
+%% Speed and acceleration for every joint
 dt=1/freq;
 dq=derivee2(dt,q);  % vitesses
 ddq=derivee2(dt,dq);  % accélérations
@@ -67,10 +72,15 @@ nbframe=size(q,1);
 % (position / vitesse / accélération / orientation / vitesse angulaire / accélération angulaire)
 % Kinematical data for Pelvis (Position/speed/acceleration/angles/angular speed/angular acceleration)
 
-p_pelvis=q6dof(:,1:3);  % frame i : p_pelvis(i,:)
-r_pelvis=cell(size(q6dof,1),1);
-for i=1:size(q6dof,1)
-    r_pelvis{i}=Rodrigues([1 0 0]',q6dof(i,4))*Rodrigues([0 1 0]',q6dof(i,5))*Rodrigues([0 0 1]',q6dof(i,6)); % matrice de rotation en fonction des rotations successives (x,y,z) : frame i : r_pelvis{i}
+if isfield(InverseKinematicsResults,'FreeJointCoordinates')
+    p_pelvis=q6dof(:,1:3);  % frame i : p_pelvis(i,:)
+    r_pelvis=cell(size(q6dof,1),1);
+    for i=1:size(q6dof,1)
+        r_pelvis{i}=Rodrigues([1 0 0]',q6dof(i,4))*Rodrigues([0 1 0]',q6dof(i,5))*Rodrigues([0 0 1]',q6dof(i,6)); % matrice de rotation en fonction des rotations successives (x,y,z) : frame i : r_pelvis{i}
+    end
+else
+    p_pelvis = cell2mat(PelvisPosition)';
+    r_pelvis  = PelvisOrientation';
 end
 
 %dR
@@ -105,7 +115,7 @@ dw=derivee2(dt,w);
 %% Initialisations des différents efforts et leur stockage
 for f=1:nbframe
     for n=1:numel(Human_model)
-        external_forces_pred(f).fext(n).fext=zeros(3,2);
+        external_forces_pred(f).fext(n).fext=zeros(3,2); %#ok<AGROW>
         %external_forces_pred_opti(n).fext=zeros(3,2); % decommenter lors de l'usage de l'optimisation non-linéaire (uncomment this line if using non-linear optimisation)
     end
 end
@@ -117,27 +127,6 @@ end
 Fx=zeros(NbPointsPrediction,nbframe);
 Fy=zeros(NbPointsPrediction,nbframe);
 Fz=zeros(NbPointsPrediction,nbframe);
-
-% Detect(1).points_prediction_efforts='Rfootenlair';
-% Detect(2).points_prediction_efforts='Lfootenlair';
-% Detect(1).exist=0;
-% Detect(2).exist=0;
-% for f=1:nbframe
-%     Detect(find(strcmp({Detect.points_prediction_efforts},'Rfootenlair'))).ptsdetect(f)=0; %#ok<FNDSB>
-%     Detect(find(strcmp({Detect.points_prediction_efforts},'Lfootenlair'))).ptsdetect(f)=0; %#ok<FNDSB>
-% end
-
-%% Paramètres de l'optimisation fmincon pour probleme non-lineaire, minimisation des X^n
-%% Parameters of fmincon for non linear optimisation of X^n
-% X0= 1*ones(3*numel(Prediction),1);
-% A=[];
-% b=[];
-% lb=-ones(3*numel(Prediction),1);
-% lb(2*numel(Prediction)+1:3*numel(Prediction))=0;
-% ub=ones(3*numel(Prediction),1);
-%
-% %options = optimoptions(@fmincon,'Algorithm','sqp','Display','off','GradObj','off','PlotFcns',@optimplotfval,'GradConstr','off','TolFun',1e-6,'TolX',1e-6);
-% options = optimoptions(@fmincon,'Algorithm','sqp','Display','off','GradObj','off','GradConstr','off','TolFun',1e-6,'TolX',1e-6);
 
 %% Paramètres de l'optimisation fmincon pour probleme lineaire
 X0= 1*zeros(3*NbPointsPrediction,1);
@@ -183,8 +172,6 @@ for i=1:nbframe
     end
     Fmax=[Fx(:,i)' Fy(:,i)' Fz(:,i)'];
     
-    %% Optimisation directe
-    %% Linearisation de la condition dynamique
     %% Direct optimisation by linearization of the dynamical condition.
     A=zeros(6,3*numel(Prediction));
     b1=[0 0 0]';
@@ -210,8 +197,7 @@ for i=1:nbframe
     end
     
     
-    %% Prise en compte du frottement: Pour chaque ponctuelle, |Fx|<0.5|Fz| et |Fy|<0.5|Fz|
-    %% taking friction into account for every point to point link, |Fx|<0.5|Fz| et |Fy|<0.5|Fz|
+    %% Taking friction into account for every point to point link, |Fx|<0.5|Fz| et |Fy|<0.5|Fz|
     Afric=zeros(4*numel(Prediction),3*numel(Prediction));
     bfric=zeros(4*numel(Prediction),1);
     
@@ -228,8 +214,6 @@ for i=1:nbframe
         Afric(k+3*numel(Prediction),k+2*numel(Prediction))=-coef_friction*Prediction(k).efforts_max(i,3);
     end
     
-    %% Minimisation de la somme des efforts normalisés pour chaque ponctuelle,
-    % tout en respectant la dynamique et les frottements
     %% Minimizing sum of normalized efforts for each punctual joint while respecting dynamical equations and friction
     X = fmincon(@(X) sum(X.^2),X0,Afric,bfric,A,b,lb,ub,[],options);
     
@@ -246,89 +230,15 @@ for i=1:nbframe
         Prediction(k).efforts(i,3)=X(k+2*numel(Prediction))*Prediction(k).efforts_max(i,1);
     end
     
-    %% Optimisation non linéaire
-    % Non utilisée car la linéaire marche bien
-    %
-    %     X = fmincon(@(X) sum(X.^2),X0,A,b,[],[],lb,ub,@(X) respect_dynamique(X,Human_model,Prediction,Fmax,external_forces_pred_opti,i),options);
-    %     X0=X;
-    %     tic
-    %     [~,ceq(:,i)]=respect_dynamique(X,Human_model,Prediction,Fmax,external_forces_pred_opti,i);
-    
     %% Calcul des efforts extérieurs tels qu’utilisés par la suite pour la dynamique
     %% Computation of external forces for use with dynamics
     external_forces_pred=addForces_Prediction_frame_par_frame(X,external_forces_pred,Prediction,Fmax,i);
     
-    %% Distinction utilisation Kinect ou modèle normal: on ne recherche les efforts que sous les pieds
-    %% distinction between Kinect or normal model: just look for effort under the feet
-%     if Parameters.Markers_set(1)==4
-
-%         Solid_name1='RShank';
-%         SolidR=find(strcmp({Human_model.name},Solid_name1));   % numéro de ce solide (solid number)
-%         
-%         Solid_name2='LShank';
-%         SolidL=find(strcmp({Human_model.name},Solid_name2));   % numéro de ce solide (solid number)
-%     else
-%         Solid_name1='RFoot';
-%         SolidR=find(strcmp({Human_model.name},Solid_name1));   % numéro de ce solide (solid number)
-%         
-%         Solid_name2='LFoot';
-%         SolidL=find(strcmp({Human_model.name},Solid_name2));   % numéro de ce solide (solid number)
-%     end
-    
-    %% Stockage des forces (forces storage)
-
-%     force_pied_droit_pred(i).Fx=external_forces_pred(i).fext(SolidR).fext(1,1);
-%     force_pied_droit_pred(i).Fy=external_forces_pred(i).fext(SolidR).fext(2,1);
-%     force_pied_droit_pred(i).Fz=external_forces_pred(i).fext(SolidR).fext(3,1);
-%     force_pied_droit_pred(i).Mx=external_forces_pred(i).fext(SolidR).fext(1,2);
-%     force_pied_droit_pred(i).My=external_forces_pred(i).fext(SolidR).fext(2,2);
-%     force_pied_droit_pred(i).Mz=external_forces_pred(i).fext(SolidR).fext(3,2);
-%     
-%     force_pied_gauche_pred(i).Fx=external_forces_pred(i).fext(SolidL).fext(1,1);
-%     force_pied_gauche_pred(i).Fy=external_forces_pred(i).fext(SolidL).fext(2,1);
-%     force_pied_gauche_pred(i).Fz=external_forces_pred(i).fext(SolidL).fext(3,1);
-%     force_pied_gauche_pred(i).Mx=external_forces_pred(i).fext(SolidL).fext(1,2);
-%     force_pied_gauche_pred(i).My=external_forces_pred(i).fext(SolidL).fext(2,2);
-%     force_pied_gauche_pred(i).Mz=external_forces_pred(i).fext(SolidL).fext(3,2);
-  
     waitbar(i/nbframe)
 end
 
 close(h)
 disp(['... External Forces Prediction (' filename ') done'])
-
-%% Donnees filtrees comme la plateforme (filtered data)
-%     f_mocap=1/time(2);
-% 
-%     force_pied_droit_pred_filt.Fx=filt_data([force_pied_droit_pred.Fx]',5,f_mocap);
-%     force_pied_droit_pred_filt.Fy=filt_data([force_pied_droit_pred.Fy]',5,f_mocap);
-%     force_pied_droit_pred_filt.Fz=filt_data([force_pied_droit_pred.Fz]',5,f_mocap);
-%     force_pied_droit_pred_filt.Mx=filt_data([force_pied_droit_pred.Mx]',5,f_mocap);
-%     force_pied_droit_pred_filt.My=filt_data([force_pied_droit_pred.My]',5,f_mocap);
-%     force_pied_droit_pred_filt.Mz=filt_data([force_pied_droit_pred.Mz]',5,f_mocap);
-%     
-%     force_pied_gauche_pred_filt.Fx=filt_data([force_pied_gauche_pred.Fx]',5,f_mocap);
-%     force_pied_gauche_pred_filt.Fy=filt_data([force_pied_gauche_pred.Fy]',5,f_mocap);
-%     force_pied_gauche_pred_filt.Fz=filt_data([force_pied_gauche_pred.Fz]',5,f_mocap);
-%     force_pied_gauche_pred_filt.Mx=filt_data([force_pied_gauche_pred.Mx]',5,f_mocap);
-%     force_pied_gauche_pred_filt.My=filt_data([force_pied_gauche_pred.My]',5,f_mocap);
-%     force_pied_gauche_pred_filt.Mz=filt_data([force_pied_gauche_pred.Mz]',5,f_mocap);
-%     
-%     for f=1:numel(time)
-%         external_forces_pred(f).fext(SolidR).fext(1,1)=force_pied_droit_pred_filt.Fx(f);
-%         external_forces_pred(f).fext(SolidR).fext(2,1)=force_pied_droit_pred_filt.Fy(f);
-%         external_forces_pred(f).fext(SolidR).fext(3,1)=force_pied_droit_pred_filt.Fz(f);
-%         external_forces_pred(f).fext(SolidR).fext(1,2)=force_pied_droit_pred_filt.Mx(f);
-%         external_forces_pred(f).fext(SolidR).fext(2,2)=force_pied_droit_pred_filt.My(f);
-%         external_forces_pred(f).fext(SolidR).fext(3,2)=force_pied_droit_pred_filt.Mz(f);
-%         
-%         external_forces_pred(f).fext(SolidL).fext(1,1)=force_pied_gauche_pred_filt.Fx(f);
-%         external_forces_pred(f).fext(SolidL).fext(2,1)=force_pied_gauche_pred_filt.Fy(f);
-%         external_forces_pred(f).fext(SolidL).fext(3,1)=force_pied_gauche_pred_filt.Fz(f);
-%         external_forces_pred(f).fext(SolidL).fext(1,2)=force_pied_gauche_pred_filt.Mx(f);
-%         external_forces_pred(f).fext(SolidL).fext(2,2)=force_pied_gauche_pred_filt.My(f);
-%         external_forces_pred(f).fext(SolidL).fext(3,2)=force_pied_gauche_pred_filt.Mz(f);
-%     end
 
 %% Filtrage des données
 
@@ -337,12 +247,12 @@ if AnalysisParameters.Prediction.FilterActive
     % Conversion sous la forme d'une matrice (conversion into a matrix)
     for i=1:numel(external_forces_pred)
         for j=1:numel(external_forces_pred(i).fext)
-            PredictionFx(i,j) = external_forces_pred(i).fext(j).fext(1,1);
-            PredictionFy(i,j) = external_forces_pred(i).fext(j).fext(2,1);
-            PredictionFz(i,j) = external_forces_pred(i).fext(j).fext(3,1);
-            PredictionMx(i,j) = external_forces_pred(i).fext(j).fext(1,2);
-            PredictionMy(i,j) = external_forces_pred(i).fext(j).fext(2,2);
-            PredictionMz(i,j) = external_forces_pred(i).fext(j).fext(3,2);
+            PredictionFx(i,j) = external_forces_pred(i).fext(j).fext(1,1); %#ok<AGROW>
+            PredictionFy(i,j) = external_forces_pred(i).fext(j).fext(2,1); %#ok<AGROW>
+            PredictionFz(i,j) = external_forces_pred(i).fext(j).fext(3,1); %#ok<AGROW>
+            PredictionMx(i,j) = external_forces_pred(i).fext(j).fext(1,2); %#ok<AGROW>
+            PredictionMy(i,j) = external_forces_pred(i).fext(j).fext(2,2); %#ok<AGROW> 
+            PredictionMz(i,j) = external_forces_pred(i).fext(j).fext(3,2); %#ok<AGROW>
         end
     end
     % Filtrage
@@ -381,27 +291,10 @@ for f=1:numel(external_forces_pred) % pour chaque frame (for every frame)
     end
 end
 
-%% Récupération des données dans une matrice (extraction of data)
-
-% for f=1:numel(external_forces_pred)
-%     EffortsPred1(:,f) = external_forces_pred(f).Visual(:,1); %#ok<*SAGROW>
-%     EffortsPred2(:,f) = external_forces_pred(f).Visual(:,2);
-% end
-% for i=1:numel(EffortsPred1)
-%     if isnan(EffortsPred1(i))
-%         EffortsPred1(i)=0;
-%     end
-% end
-% for i=1:numel(EffortsPred2)
-%     if isnan(EffortsPred2(i))
-%         EffortsPred2(i)=0;
-%     end
-% end
-
 %% Sauvegarde des données (data saving)
 
 if exist([filename '/ExternalForcesComputationResults.mat'],'file')
-    load([filename '/ExternalForcesComputationResults.mat']);
+    load([filename '/ExternalForcesComputationResults.mat']); %#ok<LOAD>
 end
 ExternalForcesComputationResults.ExternalForcesPrediction = external_forces_pred;
 

@@ -25,6 +25,7 @@ function [] = InverseKinematics(AnalysisParameters,varargin)
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
 % Georges Dumont
 %________________________________________________________
+
 if numel(varargin)
     BiomechanicalModel = varargin{1};
 else
@@ -33,11 +34,18 @@ end
 
 % Inverse kinematics
 for i = 1:numel(AnalysisParameters.filename)
+    % Load inverse kinematics from a MVNX
+    if isequal(AnalysisParameters.General.InputData, @MVNX_V3)
+        MVNXInverseKinematics(AnalysisParameters.filename{i}(1:end-5), AnalysisParameters);
+        return;
+    end
+    
+    % Inverse kinematics
     filename = AnalysisParameters.filename{i}(1:end-4);
     if AnalysisParameters.IK.Method == 1
-        [ExperimentalData, InverseKinematicsResults] = InverseKinematicsOpti(filename,AnalysisParameters,BiomechanicalModel); %#ok<ASGLU> % Optimization method
+        [ExperimentalData, InverseKinematicsResults] = InverseKinematicsOpti(filename,AnalysisParameters,BiomechanicalModel); % Optimization method
     elseif AnalysisParameters.IK.Method == 2
-        [ExperimentalData, InverseKinematicsResults] = InverseKinematicsLM(filename,AnalysisParameters,BiomechanicalModel); %#ok<ASGLU> % Levenberg-Marquardt algorithm
+        [ExperimentalData, InverseKinematicsResults] = InverseKinematicsLM(filename,AnalysisParameters,BiomechanicalModel); % Levenberg-Marquardt algorithm
     end
 
     % Save data

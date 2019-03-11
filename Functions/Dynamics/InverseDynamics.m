@@ -34,7 +34,12 @@ for num_fil = 1:numel(AnalysisParameters.filename)
     time = ExperimentalData.Time;
     load([filename '/InverseKinematicsResults.mat']); %#ok<LOAD>
     q = InverseKinematicsResults.JointCoordinates';
-    q6dof = InverseKinematicsResults.FreeJointCoordinates';
+    if isfield(InverseKinematicsResults,'FreeJointCoordinates')
+        q6dof = InverseKinematicsResults.FreeJointCoordinates';
+    else
+        PelvisPosition = InverseKinematicsResults.PelvisPosition;
+        PelvisOrientation = InverseKinematicsResults.PelvisOrientation;
+    end
     load([filename '/ExternalForcesComputationResults.mat']); %#ok<LOAD>
     if AnalysisParameters.ID.InputData == 0
         external_forces = ExternalForcesComputationResults.NoExternalForce;
@@ -49,11 +54,12 @@ for num_fil = 1:numel(AnalysisParameters.filename)
     %% Gravité (Gravity)
     g=[0 0 -9.81]';
 
-    %% on enlève la liaison 6 ddl ajoutée par la cinématique inverse
     %% get rid of the 6DOF joint
-    Human_model=Human_model(1:(numel(Human_model)-6));
+    if isfield(InverseKinematicsResults,'FreeJointCoordinates')
+        Human_model(Human_model(end).child).mother = 0;
+        Human_model=Human_model(1:(numel(Human_model)-6));
+    end
 
-    %% Définition des vitesses / accélérations articulaires
     %% articular speed and acceleration
     dt=1/freq;
     dq=derivee2(dt,q);  % vitesses
@@ -65,11 +71,15 @@ for num_fil = 1:numel(AnalysisParameters.filename)
     % (position / vitesse / accélération / orientation / vitesse angulaire / accélération angulaire)
     % Kinematical data for Pelvis (Position/speed/acceleration/angles/angular speed/angular acceleration)
 
-    p_pelvis=q6dof(:,1:3);  % frame i : p_pelvis(i,:)
-    r_pelvis=cell(size(q6dof,1),1);
-    for i=1:size(q6dof,1)
-        r_pelvis{i}=Rodrigues([1 0 0]',q6dof(i,4))*Rodrigues([0 1 0]',q6dof(i,5))*Rodrigues([0 0 1]',q6dof(i,6)); 
-	% matrice de rotation en fonction des rotations successives (x,y,z) : frame i : r_pelvis{i}
+    if isfield(InverseKinematicsResults,'FreeJointCoordinates')
+        p_pelvis=q6dof(:,1:3);  % frame i : p_pelvis(i,:)
+        r_pelvis=cell(size(q6dof,1),1);
+        for i=1:size(q6dof,1)
+            r_pelvis{i}=Rodrigues([1 0 0]',q6dof(i,4))*Rodrigues([0 1 0]',q6dof(i,5))*Rodrigues([0 0 1]',q6dof(i,6)); % matrice de rotation en fonction des rotations successives (x,y,z) : frame i : r_pelvis{i}
+        end
+    else
+        p_pelvis = cell2mat(PelvisPosition)';
+        r_pelvis  = PelvisOrientation';
     end
 
     %dR
@@ -101,7 +111,6 @@ for num_fil = 1:numel(AnalysisParameters.filename)
     % dw
     dw=derivee2(dt,w);
 
-    %% Dynamique inverse
     %% Inverse dynamics
     torques=zeros(nbframe,numel(Human_model));
     f6dof=zeros(3,nbframe);
@@ -109,7 +118,6 @@ for num_fil = 1:numel(AnalysisParameters.filename)
     t6dof=t6dof0;
     h = waitbar(0,['Inverse Dynamics (' filename ')']);
     for i=1:nbframe
-        % attribution à chaque articulation de la position/vitesse/accélération
         % setting position/speed/acceleration for each joint
         Human_model(1).p=p_pelvis(i,:)';
         Human_model(1).R=r_pelvis{i};
@@ -124,7 +132,6 @@ for num_fil = 1:numel(AnalysisParameters.filename)
         end
         Human_model = ForwardAllKinematics(Human_model,1);
         [Human_model,f6dof(:,i),t6dof0(:,i)]=InverseDynamicsSolid(Human_model,external_forces(i).fext,g,1);
-        % Calcul des efforts au niveau de la liaison 6DoF (transport du moment)
         % Expression of moment reduced at the point of the 6DOF
         t6dof(:,i) = t6dof0(:,i) + cross(f6dof(:,i),p_pelvis(i,:)'); 
         torques(i,2:end)=[Human_model.torques];
@@ -134,7 +141,7 @@ for num_fil = 1:numel(AnalysisParameters.filename)
         waitbar(i/nbframe)
     end
     close(h)
-    torques=torques'; % lignes : chaque ddl / colonne : chaque frame (lines: dof, columns: frame)
+    torques=torques';
 
     InverseDynamicsResults.DynamicResiduals.f6dof = f6dof;
     InverseDynamicsResults.DynamicResiduals.t6dof = t6dof; 

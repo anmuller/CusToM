@@ -38,9 +38,7 @@ size_markers = 20;
 if isfield(Anim,'CoefLineWidth')
     size_bones = size_bones*Anim.CoefLineWidth;
     size_muscles = size_muscles*Anim.CoefLineWidth;
-    if size_muscles < 0.5
-        size_muscles = 0.5;
-    end
+    size_muscles = max(size_muscles, 0.5);
     size_markers = size_markers*Anim.CoefLineWidth;
 end
 
