@@ -116,6 +116,7 @@ for num_fil = 1:numel(AnalysisParameters.filename)
     f6dof=zeros(3,nbframe);
     t6dof0=zeros(3,nbframe);
     t6dof=t6dof0;
+    FContactDyn=struct('F',[],'T',[]);
     h = waitbar(0,['Inverse Dynamics (' filename ')']);
     for i=1:nbframe
         % setting position/speed/acceleration for each joint
