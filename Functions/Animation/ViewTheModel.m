@@ -18,8 +18,18 @@ close all
 load('ModelParameters.mat')
 
 X=cFigure; hold on;
-XX=axes; hold on;
-Anim.ModelChoice= 1;
-PlotModel(ModelParameters,XX,1,0,1,0,0,0,0,0,Anim);
+XX=axes;
+AnimateParameters.Mode = 'GenerateParameters';
+AnimateParameters.seg_anim = 1;
+AnimateParameters.bone_anim = 0;
+AnimateParameters.mass_centers_anim = 0;
+AnimateParameters.Global_mass_center_anim = 0;
+AnimateParameters.muscles_anim = 1;
+AnimateParameters.mod_marker_anim = 1;
+AnimateParameters.exp_marker_anim = 0;
+AnimateParameters.external_forces_anim = 0;
+AnimateParameters.external_forces_pred = 0;
+AnimateParameters.PictureFrame = 1;
+AnimateParameters.ax = XX;
+PlotAnimation(ModelParameters, AnimateParameters);
 axis equal;
-

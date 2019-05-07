@@ -1,6 +1,6 @@
 function [Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation8(...
     Human_model,Markers_set,Muscles,q,j,...
-    seg_anim,muscles_anim,mod_marker_anim,solid_inertia_anim)
+    seg_anim,muscles_anim,mod_marker_anim)
 % Computation of a forward kinematics step for the animation8
 %
 %   INPUT
@@ -70,16 +70,6 @@ if seg_anim
         end
     end
 end
-if solid_inertia_anim
-    % Computation of cylinders origins
-    for n=1:numel(Human_model)
-        for b=1:numel(Human_model(n).N_Bone) % pour chaque point de chaque solide
-            if Human_model(n).N_Bone(b,1) == j % si le point considéré appartient au solide j : on calcule sa position
-                Human_model(n).pos_cylinder_anim(:,b) = (Human_model(j).R * (Human_model(j).c + Human_model(j).anat_position{Human_model(n).N_Point(b,1),2}) + Human_model(j).p);
-            end
-        end
-    end
-end
 % mod_marker
 if mod_marker_anim
     for m=1:numel(Markers_set)
@@ -89,7 +79,7 @@ if mod_marker_anim
     end
 end
 % position of muscle points
-if muscles_anim
+if muscles_anim && numel(Muscles)
     ind_mu=find([Muscles.exist]==1);
     for i_mu = 1:numel(ind_mu) % for each muscle
         m=ind_mu(i_mu);
@@ -102,7 +92,7 @@ if muscles_anim
     end
 end
 
-[Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation8(Human_model,Markers_set,Muscles,q,Human_model(j).sister,seg_anim,muscles_anim,mod_marker_anim,solid_inertia_anim);
-[Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation8(Human_model,Markers_set,Muscles,q,Human_model(j).child,seg_anim,muscles_anim,mod_marker_anim,solid_inertia_anim);
+[Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation8(Human_model,Markers_set,Muscles,q,Human_model(j).sister,seg_anim,muscles_anim,mod_marker_anim);
+[Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation8(Human_model,Markers_set,Muscles,q,Human_model(j).child,seg_anim,muscles_anim,mod_marker_anim);
 
 end
