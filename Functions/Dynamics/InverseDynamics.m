@@ -23,7 +23,7 @@ function []=InverseDynamics(AnalysisParameters)
 %________________________________________________________
 
 for num_fil = 1:numel(AnalysisParameters.filename)
-    filename = AnalysisParameters.filename{num_fil}(1:end-4);
+    filename = AnalysisParameters.filename{num_fil}(1:end-(numel(AnalysisParameters.General.Extension)-1));
 
     disp(['Inverse dynamics (' filename ') ...'])
 

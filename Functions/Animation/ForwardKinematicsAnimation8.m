@@ -12,7 +12,6 @@ function [Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation8(...
 %   - j: current solid
 %   - muscles_anim: representation of the muscles (0 or 1)
 %   - mod_marker_anim: representation of the model markers (0 or 1)
-%   - solid_inertia_anim: representation of the stadium solids (0 or 1)
 %   OUTPUT
 %   - Human_model: osteo-articular model (see the Documentation for the
 %   structure) 

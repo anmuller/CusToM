@@ -31,13 +31,13 @@ else
 end
 
 for i = 1:numel(AnalysisParameters.filename)
-    filename = AnalysisParameters.filename{i}(1:end-4);
+    filename = AnalysisParameters.filename{i}(1:end-(numel(AnalysisParameters.General.Extension)-1));
     if AnalysisParameters.ID.InputData == 0
-        [ExternalForcesComputationResults] = ExternalForces_Zero(filename, BiomechanicalModel); %#ok<NASGU>
+        [ExternalForcesComputationResults] = ExternalForces_Zero(filename, BiomechanicalModel);
     elseif AnalysisParameters.ID.InputData == 1
-        [ExternalForcesComputationResults] = AnalysisParameters.ExternalForces.Method(filename, BiomechanicalModel, AnalysisParameters); %#ok<NASGU>
+        [ExternalForcesComputationResults] = AnalysisParameters.ExternalForces.Method(filename, BiomechanicalModel, AnalysisParameters); 
     elseif AnalysisParameters.ID.InputData == 2
-        [ExternalForcesComputationResults] = ExternalForcesPrediction(filename, AnalysisParameters, BiomechanicalModel, ModelParameters); %#ok<NASGU>
+        [ExternalForcesComputationResults] = ExternalForcesPrediction(filename, AnalysisParameters, BiomechanicalModel, ModelParameters);
     end
     save([filename '/ExternalForcesComputationResults'],'ExternalForcesComputationResults');
 end

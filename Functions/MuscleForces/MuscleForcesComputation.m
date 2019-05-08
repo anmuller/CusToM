@@ -21,7 +21,7 @@ function [] = MuscleForcesComputation(AnalysisParameters)
 load('BiomechanicalModel.mat'); %#ok<LOAD>
 
 for i = 1:numel(AnalysisParameters.filename)
-    filename = AnalysisParameters.filename{i}(1:end-4);
+    filename = AnalysisParameters.filename{i}(1:end-(numel(AnalysisParameters.General.Extension)-1));
     if AnalysisParameters.Muscles.Method == 1
         [MuscleForcesComputationResults] = ForcesComputationOpti(filename, BiomechanicalModel, AnalysisParameters); %#ok<NASGU>
     elseif AnalysisParameters.Muscles.Method == 2

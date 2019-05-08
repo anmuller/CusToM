@@ -16,6 +16,7 @@ function [varargout] = PlotAnimation(ModelParameters, AnimateParameters)
 % Georges Dumont
 %________________________________________________________
 
+DataXSens = 0;
 if isequal(AnimateParameters.Mode, 'GenerateParameters')
     [Human_model, Markers_set, Muscles, EnableModel] = ModelGeneration(ModelParameters);
     [Human_model] = Add6dof(Human_model);
@@ -23,18 +24,26 @@ if isequal(AnimateParameters.Mode, 'GenerateParameters')
     q6dof = [0 0 0 0 -110*pi/180 0]'; % rotation for visual
     q = zeros(numel(Human_model)-6,1);
 else
+    load('AnalysisParameters.mat'); %#ok<LOAD>
+    num_ext = numel(AnalysisParameters.General.Extension)-1;
     % Filename
-    filename = AnimateParameters.filename(1:end-4);
+    filename = AnimateParameters.filename(1:end-num_ext);
     % Files loading
     load('BiomechanicalModel.mat'); %#ok<LOAD>
     Human_model = BiomechanicalModel.OsteoArticularModel;
-    Markers_set = BiomechanicalModel.Markers;
-    Muscles = BiomechanicalModel.Muscles;
     load([filename '/InverseKinematicsResults.mat']); %#ok<LOAD>
     q = InverseKinematicsResults.JointCoordinates;
-    q6dof = InverseKinematicsResults.FreeJointCoordinates;
     load([filename '/ExperimentalData.mat']); %#ok<LOAD>
-    real_markers = ExperimentalData.MarkerPositions;
+    if isfield(InverseKinematicsResults,'FreeJointCoordinates')
+        q6dof = InverseKinematicsResults.FreeJointCoordinates;
+        Markers_set = BiomechanicalModel.Markers;
+        Muscles = BiomechanicalModel.Muscles;
+        real_markers = ExperimentalData.MarkerPositions;
+    else
+        DataXSens = 1;
+        PelvisPosition = InverseKinematicsResults.PelvisPosition;
+        PelvisOrientation = InverseKinematicsResults.PelvisOrientation;
+    end
 end
 
 % AnimateParameters
@@ -49,10 +58,12 @@ external_force_anim = AnimateParameters.external_forces_anim;
 external_force_pred = AnimateParameters.external_forces_pred;
 
 % exclude non used markers
-Markers_set=Markers_set(find([Markers_set.exist])); %#ok<FNDSB>
+if ~DataXSens
+    Markers_set=Markers_set(find([Markers_set.exist])); %#ok<FNDSB>
+end
 
 % Preliminary computations
-if seg_anim %anatomical position where other segments are attached
+if seg_anim && ~DataXSens %anatomical position where other segments are attached
     [Human_model] = anat_position_solid_repere(Human_model,find(~[Human_model.mother]));
 end
 if bone_anim
@@ -159,14 +170,13 @@ elseif isequal(AnimateParameters.Mode, 'GenerateAnimate') || isequal(AnimatePara
     ax = AnimateParameters.ax;
 end
 
-
 % Frames to display
 if isequal(AnimateParameters.Mode, 'Picture') ...
         || isequal(AnimateParameters.Mode, 'GenerateAnimate') ...
         || isequal(AnimateParameters.Mode, 'GenerateParameters')
     f_affich = AnimateParameters.PictureFrame;
 else
-    f_affich = 1:size(q,2);
+    f_affich = 1:5:size(q,2);
 end
 
 %Initialization animStruct
@@ -204,12 +214,19 @@ for f=f_affich
     end
     
     %% forward kinematics
-    qf(1,:)=q6dof(6,f);
-    qf(2:size(q,1),:)=q(2:end,f);
-    qf((size(q,1)+2):(size(q,1)+6),:)=q6dof(1:5,f);
-    [Human_model_bis,Muscles_test, Markers_set_test]=...
-        ForwardKinematicsAnimation8(Human_model,Markers_set,Muscles,qf,find(~[Human_model.mother]),...
-        seg_anim,muscles_anim,mod_marker_anim);
+    if DataXSens
+        qf = q(:,f);
+        Human_model(1).p = PelvisPosition{f};
+        Human_model(1).R = PelvisOrientation{f};
+        [Human_model_bis] = ForwardKinematicsAnimation8XSens(Human_model,qf,1);
+    else
+        qf(1,:)=q6dof(6,f);
+        qf(2:size(q,1),:)=q(2:end,f);
+        qf((size(q,1)+2):(size(q,1)+6),:)=q6dof(1:5,f);
+        [Human_model_bis,Muscles_test, Markers_set_test]=...
+            ForwardKinematicsAnimation8(Human_model,Markers_set,Muscles,qf,find(~[Human_model.mother]),...
+            seg_anim,muscles_anim,mod_marker_anim);
+    end
     
     %% Segments
     if seg_anim
@@ -227,6 +244,7 @@ for f=f_affich
         animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices'};
         animStruct.Set{f} = {animStruct.Set{f}{:},V_seg};
     end
+    
     %% Bones
     if bone_anim % To do % to concatenate bones;
         X=[];
@@ -257,7 +275,6 @@ for f=f_affich
         animStruct.Handles{f}=[animStruct.Handles{f} hc];
         animStruct.Props{f}={ animStruct.Props{f}{:}, 'Vertices'};
         animStruct.Set{f}={animStruct.Set{f}{:},X(:,1:3)};
-        
     end
     
     %% Markers
@@ -348,7 +365,7 @@ for f=f_affich
         animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices','FaceVertexCData'};
         animStruct.Set{f} = {animStruct.Set{f}{:},Vmu,CEmu};
     end
-    %% Vectors of external forces issued from experimental data (Vecteurs efforts extérieurs issus de données expérimentales)
+    %% Vectors of external forces issued from experimental data
     if external_force_anim
         extern_forces_f = external_forces(f).Visual;
         F_ef=[];V_ef=[];
@@ -371,7 +388,7 @@ for f=f_affich
         animStruct.Set{f} = {animStruct.Set{f}{:},V_ef};
     end
     
-    %% Vectors of external forces issued from prediction (Vecteurs efforts extérieurs issus de prediction)
+    %% Vectors of external forces issued from prediction
     if external_force_pred
         extern_forces_f = external_forces_pred(f).Visual;
         F_efp=[];V_efp=[];
@@ -412,7 +429,7 @@ end
 if isequal(AnimateParameters.Mode, 'Figure')
     close all
     v=VideoWriter([filename '.avi']);
-    v.FrameRate=1/ExperimentalData.Time(2);
+    v.FrameRate=1/(5*ExperimentalData.Time(2));
     open(v)
     writeVideo(v,M);
     close(v)
