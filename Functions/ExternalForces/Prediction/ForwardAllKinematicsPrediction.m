@@ -43,6 +43,7 @@ if j~=1
     Human_model(j).dv0=Human_model(i).dv0+dsv*Human_model(j).dq+sv*Human_model(j).ddq;
     Human_model(j).sw=sw;
     Human_model(j).sv=sv;
+end
     %% Position et vitesse des points de contact avec l'extérieur
     for m=1:numel(Prediction)
         if Prediction(m).exist && Prediction(m).num_solid == j
@@ -50,7 +51,7 @@ if j~=1
             Prediction(m).vitesse = Human_model(j).v0 + cross(Human_model(j).w,Prediction(m).pos_anim); % calcul de la vitesse
         end
     end
-end
+% end
 
 [Human_model,Prediction]=ForwardAllKinematicsPrediction(Human_model,Prediction,Human_model(j).sister);
 [Human_model,Prediction]=ForwardAllKinematicsPrediction(Human_model,Prediction,Human_model(j).child);
