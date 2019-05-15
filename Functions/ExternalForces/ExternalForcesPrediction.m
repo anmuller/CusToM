@@ -280,7 +280,7 @@ end
 if ~any(strcmp('Visual',fieldnames(external_forces_pred)))
     external_forces_pred(1).Visual=[];
 end
-if ~isequal(AnalysisParameters.General.InputData, '@MVNX_V3')
+if ~isequal(AnalysisParameters.General.InputData, @MVNX_V3)
     % One force for each solid
     for f=1:numel(external_forces_pred) % for every frame
         for i=unique([Prediction.num_solid]) % for every solid

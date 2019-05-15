@@ -218,6 +218,8 @@ elseif isequal(AnimateParameters.Mode, 'cFigure')
     drawnow;
 elseif isequal(AnimateParameters.Mode, 'GenerateAnimate') || isequal(AnimateParameters.Mode, 'GenerateParameters')
     ax = AnimateParameters.ax;
+    camlight(ax, 'headlight');
+%     material(ax, 'metal');
 end
 
 % Frames to display
@@ -249,6 +251,7 @@ for f=f_affich
         ax = gca;
         axis equal
         set(ax,'visible','off')
+        camlight(ax, 'headlight');
         xlim(AnimateParameters.xlim);
         ylim(AnimateParameters.ylim);
         zlim(AnimateParameters.zlim);
@@ -294,7 +297,7 @@ for f=f_affich
         animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices'}; %#ok<*CCAT>
         animStruct.Set{f} = {animStruct.Set{f}{:},V_seg};
     end
-    
+
     %% Bones
     if bone_anim % To do % to concatenate bones;
         X=[];
