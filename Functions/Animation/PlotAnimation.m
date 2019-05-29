@@ -287,7 +287,11 @@ for f=f_affich
         F_seg=[];
         for j=find([Human_model_bis.Visual])
             pts = Human_model_bis(j).pos_pts_anim';
-            F_seg =[F_seg; nchoosek(1:size(pts,1),2)+length(V_seg)]; %#ok<AGROW> %need to be done before V_seg !
+            if size(pts,1)>1
+                F_seg =[F_seg; nchoosek(1:size(pts,1),2)+length(V_seg)]; %#ok<AGROW> %need to be done before V_seg !
+            else
+                F_seg =[F_seg; length(V_seg) length(V_seg)+1]; %#ok<AGROW> %need to be done before V_seg !
+            end
             V_seg = [V_seg; pts];  %#ok<AGROW>
         end
         if f==f_affich(1) || isequal(AnimateParameters.Mode, 'Figure')
