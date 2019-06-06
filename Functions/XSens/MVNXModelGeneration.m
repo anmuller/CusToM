@@ -63,6 +63,10 @@ if ~nargout
     save('BiomechanicalModel','BiomechanicalModel');
 end
 
+%% Visual pre-generation
+% XSens_Visual(OsteoArticularModel, tree);
+
+
 end
 
 
