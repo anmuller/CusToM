@@ -209,8 +209,12 @@ if external_forces_anim || external_forces_p  %vector normalization
     coef_f_visual=(ModelParameters.Mass*9.81)/lmax_vector_visual;
 end
 if forceplate
-    h = btkReadAcquisition([filename '.c3d']);
-    ForceplatesData = btkGetForcePlatforms(h);
+    if isequal(AnalysisParameters.ExternalForces.Method, @DataInC3D)
+        h = btkReadAcquisition([filename '.c3d']);
+        ForceplatesData = btkGetForcePlatforms(h);
+    elseif isequal(AnalysisParameters.ExternalForces.Method, @PF_IRSST)
+        load([filename '.mat']); %#ok<LOAD>
+    end
 end
 
 % Figure
@@ -236,7 +240,7 @@ if isequal(AnimateParameters.Mode, 'Picture') ...
         || isequal(AnimateParameters.Mode, 'GenerateParameters')
     f_affich = AnimateParameters.PictureFrame;
 else
-    f_affich = 1:5:size(q,2);
+    f_affich = 1:1:size(q,2);
 end
 
 %Initialization animStruct
@@ -434,17 +438,6 @@ for f=f_affich
         F_ef=[];V_ef=[];
         for i_for=1:size(extern_forces_f,2)
 %             if norm(extern_forces_f(4:6,i_for)) > 20
-%                 % Arrows
-%                 X_array=[extern_forces_f(1,i_for),...
-%                     extern_forces_f(4,i_for)/coef_f_visual];
-%                 Y_array=[extern_forces_f(2,i_for),...
-%                     extern_forces_f(5,i_for)/coef_f_visual];
-%                 Z_array=[extern_forces_f(3,i_for),...
-%                     extern_forces_f(6,i_for)/coef_f_visual];
-%                 [F,V]=quiver3Dpatch(X_array(1),Y_array(1),Z_array(1),...
-%                     X_array(2),Y_array(2),Z_array(2),[],[]);
-%                 F_ef=[F_ef;F+size(V_ef,1)]; V_ef=[V_ef;V];  %#ok<AGROW>
-                % Lines
                 X_array=[extern_forces_f(1,i_for),...
                     extern_forces_f(1,i_for) + extern_forces_f(4,i_for)/coef_f_visual];
                 Y_array=[extern_forces_f(2,i_for),...
@@ -456,9 +449,6 @@ for f=f_affich
 %             end
         end
         if f==f_affich(1) || isequal(AnimateParameters.Mode, 'Figure')
-%             % Arrows
-%             Ext=gpatch(ax,F_ef,V_ef,color_vect_force,color_vect_force,0.5);
-            % Lines
             Ext = gpatch(ax,F_ef,V_ef,[],color_vect_force,1,4);
         end
         animStruct.Handles{f} = [animStruct.Handles{f} Ext];
@@ -472,17 +462,6 @@ for f=f_affich
         F_efp=[];V_efp=[];
         for i_for=1:size(extern_forces_f,2)
 %             if norm(extern_forces_f(4:6,i_for)) > 20
-%                 % Arrows
-%                 X_array=[extern_forces_f(1,i_for),...
-%                     extern_forces_f(4,i_for)/coef_f_visual];
-%                 Y_array=[extern_forces_f(2,i_for),...
-%                     extern_forces_f(5,i_for)/coef_f_visual];
-%                 Z_array=[extern_forces_f(3,i_for),...
-%                     extern_forces_f(6,i_for)/coef_f_visual];
-%                 [F,V]=quiver3Dpatch(X_array(1),Y_array(1),Z_array(1),...
-%                     X_array(2),Y_array(2),Z_array(2),[],[]);
-%                 F_efp=[F_efp;F+size(V_efp,1)]; V_efp=[V_efp;V]; %#ok<AGROW>
-                % Lines
                 X_array=[extern_forces_f(1,i_for),...
                     extern_forces_f(1,i_for) + extern_forces_f(4,i_for)/coef_f_visual];
                 Y_array=[extern_forces_f(2,i_for),...
@@ -494,9 +473,6 @@ for f=f_affich
 %             end
         end
         if f==f_affich(1) || isequal(AnimateParameters.Mode, 'Figure')
-%             % Arrows
-%             Extp=gpatch(ax,F_efp,V_efp,color_vect_force_p,color_vect_force_p,0.5);
-            % Lines
             Extp = gpatch(ax,F_efp,V_efp,[],color_vect_force_p,1,4);
         end
         animStruct.Handles{f} = [animStruct.Handles{f} Extp];
@@ -506,15 +482,21 @@ for f=f_affich
     
     %% Display force plates position
     if forceplate
-        x_fp = []; y_fp = []; z_fp = [];
-        for i=1:numel(ForceplatesData)
-            if ~isequal(AnalysisParameters.ExternalForces.Options{i}, 'NoContact')
-                x_fp = [x_fp ForceplatesData(i).corners(1,:)'/1000]; %#ok<AGROW> % mm -> m
-                y_fp = [y_fp ForceplatesData(i).corners(2,:)'/1000]; %#ok<AGROW> % mm -> m
-                z_fp = [z_fp ForceplatesData(i).corners(3,:)'/1000]; %#ok<AGROW> % mm -> m
+        if isequal(AnalysisParameters.ExternalForces.Method, @DataInC3D)
+            x_fp = []; y_fp = []; z_fp = [];
+            for i=1:numel(ForceplatesData)
+                if ~isequal(AnalysisParameters.ExternalForces.Options{i}, 'NoContact')
+                    x_fp = [x_fp ForceplatesData(i).corners(1,:)'/1000]; %#ok<AGROW> % mm -> m
+                    y_fp = [y_fp ForceplatesData(i).corners(2,:)'/1000]; %#ok<AGROW> % mm -> m
+                    z_fp = [z_fp ForceplatesData(i).corners(3,:)'/1000]; %#ok<AGROW> % mm -> m
+                end
             end
-        end
-        patch(ax,x_fp,y_fp,z_fp,[.9 .9 .9]);
+        elseif isequal(AnalysisParameters.ExternalForces.Method, @PF_IRSST)
+            x_fp = ExperimentalData.CoinsPF(1,:)/1000; % mm -> m
+            y_fp = ExperimentalData.CoinsPF(2,:)/1000; % mm -> m
+            z_fp = ExperimentalData.CoinsPF(3,:)/1000; % mm -> m
+        end            
+        patch(ax,x_fp,y_fp,z_fp,[1 1 1]);
     end
     
     %% Base of support
@@ -544,7 +526,7 @@ end
 if isequal(AnimateParameters.Mode, 'Figure')
     close all
     v=VideoWriter([filename '.avi']);
-    v.FrameRate=1/(5*ExperimentalData.Time(2));
+    v.FrameRate=1/(1*ExperimentalData.Time(2));
     open(v)
     writeVideo(v,M);
     close(v)

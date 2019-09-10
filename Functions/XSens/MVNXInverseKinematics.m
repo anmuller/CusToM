@@ -28,7 +28,7 @@ tree = load_mvnx(filename); tree.subject.frames.frame = tree.subject.frames.fram
 ExperimentalData.Time = [tree.subject.frames.frame(frame1:end).time]'/1000;
 ExperimentalData.Time = ExperimentalData.Time - ExperimentalData.Time(1);
 
-%% Inverse kinematics
+%% Joint coordinates
 InverseKinematicsResults.JointCoordinates = reshape([tree.subject.frames.frame.jointAngle],66,[]);
 InverseKinematicsResults.JointCoordinates = [zeros(1,size(InverseKinematicsResults.JointCoordinates,2));InverseKinematicsResults.JointCoordinates*pi/180];
 % L5S1
@@ -148,17 +148,46 @@ for i = frame1:size(tree.subject.frames.frame,2)
     InverseKinematicsResults.PelvisOrientation{i-frame1+1} = quat2rotm(tree.subject.frames.frame(i).orientation(1:4));
 end
 
+%% Position, velocity and acceleration
+if isfield(tree.subject.frames.frame, 'position')
+    InverseKinematicsResults.SegmentPosition = reshape([tree.subject.frames.frame(frame1:end).position],69,[]);
+end
+if isfield(tree.subject.frames.frame, 'velocity')
+    InverseKinematicsResults.SegmentVelocity = reshape([tree.subject.frames.frame(frame1:end).velocity],69,[]);
+end
+if isfield(tree.subject.frames.frame, 'acceleration')
+    InverseKinematicsResults.SegmentAcceleration = reshape([tree.subject.frames.frame(frame1:end).acceleration],69,[]);
+end
+if isfield(tree.subject.frames.frame, 'orientation')
+    InverseKinematicsResults.SegmentOrientation = reshape([tree.subject.frames.frame(frame1:end).orientation],92,[]);
+end
+if isfield(tree.subject.frames.frame, 'angularVelocity')
+    InverseKinematicsResults.SegmentAngularVelocity = reshape([tree.subject.frames.frame(frame1:end).angularVelocity],69,[]);
+end
+if isfield(tree.subject.frames.frame, 'angularAcceleration')
+    InverseKinematicsResults.SegmentAngularAcceleration = reshape([tree.subject.frames.frame(frame1:end).angularAcceleration],69,[]);
+end
+
 %% Filtering
 if AnalysisParameters.General.FilterActive
     PelvisPosition = zeros(3,numel(InverseKinematicsResults.PelvisPosition)); PelvisOrientation = zeros(9,numel(InverseKinematicsResults.PelvisPosition));
-    f_filt = AnalysisParameters.General.FilterCutOff;
-    InverseKinematicsResults.JointCoordinates = filt_data(InverseKinematicsResults.JointCoordinates',f_filt,1/ExperimentalData.Time(2))';
+%     f_filt = AnalysisParameters.General.FilterCutOff;
+    for i=2:size(InverseKinematicsResults.JointCoordinates,1)
+        InverseKinematicsResults.JointCoordinates(i,:) = filt_data2(InverseKinematicsResults.JointCoordinates(i,:)',1/ExperimentalData.Time(2), 99)';
+    end
+%     InverseKinematicsResults.JointCoordinates = filt_data(InverseKinematicsResults.JointCoordinates',f_filt,1/ExperimentalData.Time(2))';
     for i = 1:numel(InverseKinematicsResults.PelvisPosition)
         PelvisPosition(:,i) = InverseKinematicsResults.PelvisPosition{i};
         PelvisOrientation(:,i) = [InverseKinematicsResults.PelvisOrientation{i}(:,1);InverseKinematicsResults.PelvisOrientation{i}(:,2);InverseKinematicsResults.PelvisOrientation{i}(:,3)]; %#ok<SAGROW>
     end
-    FiltPelvisPosition = filt_data(PelvisPosition',f_filt,1/ExperimentalData.Time(2))';
-    FiltPelvisOrientation = filt_data(PelvisOrientation',f_filt,1/ExperimentalData.Time(2))';
+    for i=1:size(PelvisPosition,1)
+        FiltPelvisPosition(i,:) = filt_data2(PelvisPosition(i,:)',1/ExperimentalData.Time(2), 99)'; %#ok<AGROW>
+    end
+    for i=1:size(PelvisOrientation,1)
+        FiltPelvisOrientation(i,:) = filt_data2(PelvisOrientation(i,:)',1/ExperimentalData.Time(2), 99)'; %#ok<AGROW>
+    end
+%     FiltPelvisPosition = filt_data(PelvisPosition',f_filt,1/ExperimentalData.Time(2))';
+%     FiltPelvisOrientation = filt_data(PelvisOrientation',f_filt,1/ExperimentalData.Time(2))';
     for i = 1:numel(InverseKinematicsResults.PelvisPosition)
         InverseKinematicsResults.PelvisPosition{i} = FiltPelvisPosition(:,i);
         InverseKinematicsResults.PelvisOrientation{i} = [FiltPelvisOrientation(1:3,i) FiltPelvisOrientation(4:6,i) FiltPelvisOrientation(7:9,i)];

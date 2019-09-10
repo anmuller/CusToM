@@ -61,10 +61,11 @@ for num_fil = 1:numel(AnalysisParameters.filename)
     end
 
     %% articular speed and acceleration
+    
     dt=1/freq;
     dq=derivee2(dt,q);  % vitesses
     ddq=derivee2(dt,dq);  % accélérations
-
+    
     nbframe=size(q,1);
 
     %% Définition des données cinématiques du pelvis
@@ -81,14 +82,14 @@ for num_fil = 1:numel(AnalysisParameters.filename)
         p_pelvis = cell2mat(PelvisPosition)';
         r_pelvis  = PelvisOrientation';
     end
-
+    
     %dR
     dR=zeros(3,3,nbframe);
     for ligne=1:3
         for colonne=1:3
             dR(ligne,colonne,:)=derivee2(dt,cell2mat(cellfun(@(b) b(ligne,colonne),r_pelvis,'UniformOutput',false)));
-            dR(ligne,colonne,:)=derivee2(dt,cell2mat(cellfun(@(b) b(ligne,colonne),r_pelvis,'UniformOutput',false)));
-            dR(ligne,colonne,:)=derivee2(dt,cell2mat(cellfun(@(b) b(ligne,colonne),r_pelvis,'UniformOutput',false)));
+%             dR(ligne,colonne,:)=derivee2(dt,cell2mat(cellfun(@(b) b(ligne,colonne),r_pelvis,'UniformOutput',false)));
+%             dR(ligne,colonne,:)=derivee2(dt,cell2mat(cellfun(@(b) b(ligne,colonne),r_pelvis,'UniformOutput',false)));
         end
     end
     w=zeros(nbframe,3);
@@ -110,7 +111,7 @@ for num_fil = 1:numel(AnalysisParameters.filename)
 
     % dw
     dw=derivee2(dt,w);
-
+    
     %% Inverse dynamics
     torques=zeros(nbframe,numel(Human_model));
     f6dof=zeros(3,nbframe);

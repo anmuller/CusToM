@@ -84,7 +84,7 @@ nb_markers=size(list_markers,1);
 nb_solid=size(OsteoArticularModel,2);  % nb de solides (number of solids)
 
 %% Real markers position from C3D file
-filename = AnalysisParameters.CalibIK.filename(1:end-4);
+filename = AnalysisParameters.CalibIK.filename(1:end-(numel(AnalysisParameters.General.Extension)-1));
 [real_markers, nb_frame]=Get_real_markers_Calibration(filename,list_markers, AnalysisParameters);
 
 %% Selection/choice of frame sample

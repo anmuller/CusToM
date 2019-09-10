@@ -1,6 +1,6 @@
-function [] = ComplementaryData(AnalysisParameters)
+function [] = BaseOfSupport(AnalysisParameters)
 % TO DO
-% Calcul complémentaire : base de support
+% Calcul de la base de support
 
 % Thresholds
 PositionThreshold = AnalysisParameters.Prediction.PositionThreshold;
@@ -31,7 +31,7 @@ for num_f = 1:numel(AnalysisParameters.filename) % for each file
             ContactPoint = [ContactPoint; Human_model(m).anat_position(:,1)]; %#ok<AGROW>
         end
     end
-    NbPointsPrediction = numel(ContactPoint); % Nb de points de contact au sol
+    NbPointsPrediction = numel(ContactPoint); % Number of ground contact points
     for l=1:NbPointsPrediction
         Prediction(l).points_prediction_efforts = ContactPoint{l}; %#ok<AGROW>
     end
@@ -43,9 +43,9 @@ for num_f = 1:numel(AnalysisParameters.filename) % for each file
         Human_model=Human_model(1:(numel(Human_model)-6));
     end
     
-    % Speed and acceleration for every joint
-    dq=derivee2(dt,q);  % vitesses
-    ddq=derivee2(dt,dq);  % accélérations
+    % Velocity and acceleration for every joint
+    dq=derivee2(dt,q);  % velocities
+    ddq=derivee2(dt,dq);  % accelerations
     nbframe=size(q,1);
     
     % Kinematical data for Pelvis (Position/speed/acceleration/angles/angular speed/angular acceleration)

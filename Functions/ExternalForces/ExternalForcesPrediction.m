@@ -62,6 +62,10 @@ if isfield(InverseKinematicsResults,'FreeJointCoordinates')
 end
 
 %% Speed and acceleration for every joint
+%     nbframemovmean = 100;
+%     q = movmean(q,nbframemovmean)
+
+
 dt=1/freq;
 dq=derivee2(dt,q);  % vitesses
 ddq=derivee2(dt,dq);  % accélérations
@@ -83,13 +87,16 @@ else
     r_pelvis  = PelvisOrientation';
 end
 
+%     p_pelvis = movmean(p_pelvis,nbframemovmean)
+
+
 %dR
 dR=zeros(3,3,nbframe);
 for ligne=1:3
     for colonne=1:3
         dR(ligne,colonne,:)=derivee2(dt,cell2mat(cellfun(@(b) b(ligne,colonne),r_pelvis,'UniformOutput',false)));
-        dR(ligne,colonne,:)=derivee2(dt,cell2mat(cellfun(@(b) b(ligne,colonne),r_pelvis,'UniformOutput',false)));
-        dR(ligne,colonne,:)=derivee2(dt,cell2mat(cellfun(@(b) b(ligne,colonne),r_pelvis,'UniformOutput',false)));
+%         dR(ligne,colonne,:)=derivee2(dt,cell2mat(cellfun(@(b) b(ligne,colonne),r_pelvis,'UniformOutput',false)));
+%         dR(ligne,colonne,:)=derivee2(dt,cell2mat(cellfun(@(b) b(ligne,colonne),r_pelvis,'UniformOutput',false)));
     end
 end
 w=zeros(nbframe,3);
@@ -116,7 +123,6 @@ dw=derivee2(dt,w);
 for f=1:nbframe
     for n=1:numel(Human_model)
         external_forces_pred(f).fext(n).fext=zeros(3,2); %#ok<AGROW>
-        %external_forces_pred_opti(n).fext=zeros(3,2); % decommenter lors de l'usage de l'optimisation non-linéaire (uncomment this line if using non-linear optimisation)
     end
 end
 
@@ -154,8 +160,6 @@ for i=1:nbframe
     end
     % Calcul positions / vitesses / accélération de chaque solide (computation of position/speed/acceleration for each solid)
     [Human_model,Prediction] = ForwardAllKinematicsPrediction(Human_model,Prediction,1); 
-%     cptG=0;
-%     cptD=0;
     %% Calcul des efforts maximaux disponibles (computation of maximum available effort)
     for pred = 1:numel(Prediction)
         Prediction(pred).px(i)=Prediction(pred).pos_anim(1);
@@ -227,7 +231,7 @@ for i=1:nbframe
     for k = 1:numel(Prediction)
         Prediction(k).efforts(i,1)=X(k)*Prediction(k).efforts_max(i,1);
         Prediction(k).efforts(i,2)=X(k+numel(Prediction))*Prediction(k).efforts_max(i,2);
-        Prediction(k).efforts(i,3)=X(k+2*numel(Prediction))*Prediction(k).efforts_max(i,1);
+        Prediction(k).efforts(i,3)=X(k+2*numel(Prediction))*Prediction(k).efforts_max(i,3);
     end
     
     %% Calcul des efforts extérieurs tels qu’utilisés par la suite pour la dynamique
@@ -293,28 +297,35 @@ if ~isequal(AnalysisParameters.General.InputData, @MVNX_V3)
         end
     end
 else
-    % One force for each foot and for each hand
     for f=1:numel(external_forces_pred) % for every frame
-        % Right foot (solids 52 and 55)
-            T = external_forces_pred(f).fext(52).fext + external_forces_pred(f).fext(55).fext;
+%     % One force for each foot
+%         % Right foot (solids 52 and 55)
+%             T = external_forces_pred(f).fext(52).fext + external_forces_pred(f).fext(55).fext;
+%             CoP = cross(T(:,1),T(:,2))/(norm(T(:,1))^2);
+%             CoP = CoP - (CoP(3)/T(3,1))*T(:,1); 
+%             external_forces_pred(f).Visual = [external_forces_pred(f).Visual [CoP;T(:,1)]];
+%         % Left foot (solids 64 and 67)
+%             T = external_forces_pred(f).fext(64).fext + external_forces_pred(f).fext(67).fext;
+%             CoP = cross(T(:,1),T(:,2))/(norm(T(:,1))^2);
+%             CoP = CoP - (CoP(3)/T(3,1))*T(:,1); 
+%             external_forces_pred(f).Visual = [external_forces_pred(f).Visual [CoP;T(:,1)]];
+% %         % Right hand (solid 31)
+% %             T = external_forces_pred(f).fext(31).fext;
+% %             CoP = cross(T(:,1),T(:,2))/(norm(T(:,1))^2);
+% %             CoP = CoP - (CoP(3)/T(3,1))*T(:,1); 
+% %             external_forces_pred(f).Visual = [external_forces_pred(f).Visual [CoP;T(:,1)]];
+% %         % Left hand (solid 43)
+% %             T = external_forces_pred(f).fext(43).fext;
+% %             CoP = cross(T(:,1),T(:,2))/(norm(T(:,1))^2);
+% %             CoP = CoP - (CoP(3)/T(3,1))*T(:,1); 
+% %             external_forces_pred(f).Visual = [external_forces_pred(f).Visual [CoP;T(:,1)]];
+    % One global force
+            T = external_forces_pred(f).fext(52).fext + external_forces_pred(f).fext(55).fext + ...
+                external_forces_pred(f).fext(64).fext + external_forces_pred(f).fext(67).fext;
             CoP = cross(T(:,1),T(:,2))/(norm(T(:,1))^2);
             CoP = CoP - (CoP(3)/T(3,1))*T(:,1); 
             external_forces_pred(f).Visual = [external_forces_pred(f).Visual [CoP;T(:,1)]];
-        % Left foot (solids 64 and 67)
-            T = external_forces_pred(f).fext(64).fext + external_forces_pred(f).fext(67).fext;
-            CoP = cross(T(:,1),T(:,2))/(norm(T(:,1))^2);
-            CoP = CoP - (CoP(3)/T(3,1))*T(:,1); 
-            external_forces_pred(f).Visual = [external_forces_pred(f).Visual [CoP;T(:,1)]];
-        % Right hand (solid 31)
-            T = external_forces_pred(f).fext(31).fext;
-            CoP = cross(T(:,1),T(:,2))/(norm(T(:,1))^2);
-            CoP = CoP - (CoP(3)/T(3,1))*T(:,1); 
-            external_forces_pred(f).Visual = [external_forces_pred(f).Visual [CoP;T(:,1)]];
-        % Left hand (solid 43)
-            T = external_forces_pred(f).fext(43).fext;
-            CoP = cross(T(:,1),T(:,2))/(norm(T(:,1))^2);
-            CoP = CoP - (CoP(3)/T(3,1))*T(:,1); 
-            external_forces_pred(f).Visual = [external_forces_pred(f).Visual [CoP;T(:,1)]];
+
     end
 end
 

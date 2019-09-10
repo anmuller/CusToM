@@ -21,8 +21,7 @@ function [real_markers, nb_frames]=Get_real_markers_Calibration(filename,list_ma
 nb_f = size(filename,1);
 
 if nb_f==1 %% if one c3d for geoemtrical calibration
-   [real_markers, ~, ~, ~,~] = Get_real_markers(filename,list_markers, AnalysisParameters);
-    
+    [real_markers, ~, ~, ~,~] = Get_real_markers(filename,list_markers, AnalysisParameters);
 else %% Concatenation of c3d files for geometrical calibration only
     real_markers=struct();
     for i=1:numel(filename)
