@@ -1,4 +1,4 @@
-function [Markers]=Marker_set7(varargin)
+function [Markers]=IRSST_DP(varargin)
 % Definition of the markers set used in the IRSST for project: déplacement
 % des pieds
 %

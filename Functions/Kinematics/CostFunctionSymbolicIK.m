@@ -29,7 +29,10 @@ end
 
 error=0;
 for m=1:numel(list_function_markers)
-    error = error + norm(list_function_markers{m}(q,pcut,Rcut) - real_markers(m).position(f,:)')^2;
+    a= norm(list_function_markers{m}(q,pcut,Rcut) - real_markers(m).position(f,:)')^2;
+    if ~isnan(a)
+        error = error + a;
+    end
 end
 
 end

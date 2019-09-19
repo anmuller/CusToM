@@ -240,7 +240,7 @@ if isequal(AnimateParameters.Mode, 'Picture') ...
         || isequal(AnimateParameters.Mode, 'GenerateParameters')
     f_affich = AnimateParameters.PictureFrame;
 else
-    f_affich = 1:1:size(q,2);
+    f_affich = 1:3:size(q,2);
 end
 
 %Initialization animStruct
@@ -526,7 +526,7 @@ end
 if isequal(AnimateParameters.Mode, 'Figure')
     close all
     v=VideoWriter([filename '.avi']);
-    v.FrameRate=1/(1*ExperimentalData.Time(2));
+    v.FrameRate=1/(3*ExperimentalData.Time(2));
     open(v)
     writeVideo(v,M);
     close(v)

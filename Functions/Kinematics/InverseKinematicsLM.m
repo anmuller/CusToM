@@ -175,10 +175,10 @@ close(h)
 %% Data processing
 if AnalysisParameters.IK.FilterActive
     % data filtering
-%     q=filt_data(q',AnalysisParameters.IK.FilterCutOff,f_mocap)';
-    for i = [1:size(q,1)-6,size(q,1)-4:size(q,1)]
-        q(i,:) = filt_data2(q(i,:)',f_mocap, 99)';
-    end
+    q=filt_data(q',AnalysisParameters.IK.FilterCutOff,f_mocap)';
+%     for i = [1:size(q,1)-6,size(q,1)-4:size(q,1)]
+%         q(i,:) = filt_data2(q(i,:)',f_mocap, 99)';
+%     end
 end
 
 % Error computation
