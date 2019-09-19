@@ -18,7 +18,7 @@ cur_version(isletter(cur_version)) = [];
 cur_version = str2double(cur_version);
 
 if cur_version>=2018 % the version needs to be at least from 2018.
-    disp(['Your Matlab version ' version ' is compatible with CusToM toolbox'])
+    disp(['Your Matlab version ' version ' is compatible with CusToM'])
 else
     warning(sprintf('Your Matlab version is too old for CusToM \n you need at least Matlab 9.4.0.813654 (R2018a)'))
 end
@@ -44,7 +44,7 @@ elseif isempty(Toolboxes_not_available)
 else
     disp('Required Toolboxes installed to run CuToM');
     disp(Toolboxes_installed);
-    s = ['Toolboxes not installed to run CuToM' '\n' ...
+    s = ['Toolboxes not installed to run CusToM' '\n' ...
         'You need the following toolbox to run CusToM:'];
     for ii =1:length(Toolboxes_not_available)
         s=[s '\n' Toolboxes_not_available{ii}];
