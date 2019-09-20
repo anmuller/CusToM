@@ -39,10 +39,10 @@ if isempty(Toolboxes_installed)
     end
     error(sprintf(s));
 elseif isempty(Toolboxes_not_available)
-    disp(' All the required Toolboxes are installed to run CuToM');
+    disp(' All the required Toolboxes are installed to run CusToM');
     disp(Toolboxes_installed);
 else
-    disp('Required Toolboxes installed to run CuToM');
+    disp('Required Toolboxes installed to run CusToM');
     disp(Toolboxes_installed);
     s = ['Toolboxes not installed to run CusToM' '\n' ...
         'You need the following toolbox to run CusToM:'];

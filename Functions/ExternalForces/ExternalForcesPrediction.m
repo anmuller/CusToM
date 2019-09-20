@@ -298,34 +298,32 @@ if ~isequal(AnalysisParameters.General.InputData, @MVNX_V3)
     end
 else
     for f=1:numel(external_forces_pred) % for every frame
-%     % One force for each foot
-%         % Right foot (solids 52 and 55)
-%             T = external_forces_pred(f).fext(52).fext + external_forces_pred(f).fext(55).fext;
+%     % One force for each solid
+%         for i=unique([Prediction.num_solid]) % for every solid
+%             T = external_forces_pred(f).fext(i).fext;
+%             % CoP position
 %             CoP = cross(T(:,1),T(:,2))/(norm(T(:,1))^2);
-%             CoP = CoP - (CoP(3)/T(3,1))*T(:,1); 
+%             CoP = CoP - (CoP(3)/T(3,1))*T(:,1); % point on z=0
+%             % external_forces structure
 %             external_forces_pred(f).Visual = [external_forces_pred(f).Visual [CoP;T(:,1)]];
-%         % Left foot (solids 64 and 67)
-%             T = external_forces_pred(f).fext(64).fext + external_forces_pred(f).fext(67).fext;
-%             CoP = cross(T(:,1),T(:,2))/(norm(T(:,1))^2);
-%             CoP = CoP - (CoP(3)/T(3,1))*T(:,1); 
-%             external_forces_pred(f).Visual = [external_forces_pred(f).Visual [CoP;T(:,1)]];
-% %         % Right hand (solid 31)
-% %             T = external_forces_pred(f).fext(31).fext;
-% %             CoP = cross(T(:,1),T(:,2))/(norm(T(:,1))^2);
-% %             CoP = CoP - (CoP(3)/T(3,1))*T(:,1); 
-% %             external_forces_pred(f).Visual = [external_forces_pred(f).Visual [CoP;T(:,1)]];
-% %         % Left hand (solid 43)
-% %             T = external_forces_pred(f).fext(43).fext;
-% %             CoP = cross(T(:,1),T(:,2))/(norm(T(:,1))^2);
-% %             CoP = CoP - (CoP(3)/T(3,1))*T(:,1); 
-% %             external_forces_pred(f).Visual = [external_forces_pred(f).Visual [CoP;T(:,1)]];
-    % One global force
-            T = external_forces_pred(f).fext(52).fext + external_forces_pred(f).fext(55).fext + ...
-                external_forces_pred(f).fext(64).fext + external_forces_pred(f).fext(67).fext;
+%         end
+    % One force for each foot
+        % Right foot (solids 52 and 55)
+            T = external_forces_pred(f).fext(52).fext + external_forces_pred(f).fext(55).fext;
             CoP = cross(T(:,1),T(:,2))/(norm(T(:,1))^2);
             CoP = CoP - (CoP(3)/T(3,1))*T(:,1); 
             external_forces_pred(f).Visual = [external_forces_pred(f).Visual [CoP;T(:,1)]];
-
+        % Left foot (solids 64 and 67)
+            T = external_forces_pred(f).fext(64).fext + external_forces_pred(f).fext(67).fext;
+            CoP = cross(T(:,1),T(:,2))/(norm(T(:,1))^2);
+            CoP = CoP - (CoP(3)/T(3,1))*T(:,1); 
+            external_forces_pred(f).Visual = [external_forces_pred(f).Visual [CoP;T(:,1)]];
+%     % One global force
+%             T = external_forces_pred(f).fext(52).fext + external_forces_pred(f).fext(55).fext + ...
+%                 external_forces_pred(f).fext(64).fext + external_forces_pred(f).fext(67).fext;
+%             CoP = cross(T(:,1),T(:,2))/(norm(T(:,1))^2);
+%             CoP = CoP - (CoP(3)/T(3,1))*T(:,1); 
+%             external_forces_pred(f).Visual = [external_forces_pred(f).Visual [CoP;T(:,1)]];
     end
 end
 

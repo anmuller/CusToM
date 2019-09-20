@@ -437,7 +437,7 @@ for f=f_affich
         extern_forces_f = external_forces(f).Visual;
         F_ef=[];V_ef=[];
         for i_for=1:size(extern_forces_f,2)
-%             if norm(extern_forces_f(4:6,i_for)) > 20
+            if norm(extern_forces_f(4:6,i_for)) > 50
                 X_array=[extern_forces_f(1,i_for),...
                     extern_forces_f(1,i_for) + extern_forces_f(4,i_for)/coef_f_visual];
                 Y_array=[extern_forces_f(2,i_for),...
@@ -446,7 +446,7 @@ for f=f_affich
                     extern_forces_f(3,i_for) + extern_forces_f(6,i_for)/coef_f_visual];
                 F_ef = [F_ef; [1 2]+size(V_ef,1)]; %#ok<AGROW>
                 V_ef = [V_ef; [X_array' Y_array' Z_array']]; %#ok<AGROW>
-%             end
+            end
         end
         if f==f_affich(1) || isequal(AnimateParameters.Mode, 'Figure')
             Ext = gpatch(ax,F_ef,V_ef,[],color_vect_force,1,4);
@@ -461,7 +461,7 @@ for f=f_affich
         extern_forces_f = external_forces_pred(f).Visual;
         F_efp=[];V_efp=[];
         for i_for=1:size(extern_forces_f,2)
-%             if norm(extern_forces_f(4:6,i_for)) > 20
+            if norm(extern_forces_f(4:6,i_for)) > 50
                 X_array=[extern_forces_f(1,i_for),...
                     extern_forces_f(1,i_for) + extern_forces_f(4,i_for)/coef_f_visual];
                 Y_array=[extern_forces_f(2,i_for),...
@@ -470,7 +470,7 @@ for f=f_affich
                     extern_forces_f(3,i_for) + extern_forces_f(6,i_for)/coef_f_visual];
                 F_efp = [F_efp; [1 2]+size(V_efp,1)]; %#ok<AGROW>
                 V_efp = [V_efp; [X_array' Y_array' Z_array']]; %#ok<AGROW>
-%             end
+            end
         end
         if f==f_affich(1) || isequal(AnimateParameters.Mode, 'Figure')
             Extp = gpatch(ax,F_efp,V_efp,[],color_vect_force_p,1,4);
