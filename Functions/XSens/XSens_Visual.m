@@ -1,10 +1,12 @@
 function [] = XSens_Visual(OsteoArticularModel, tree)
-% TO DO
+% Visual generation for XSens data
 %
 %   INPUT
-%   - 
+%   - OsteoArticularModel: osteo-articular model of an already existing
+%   model (see the Documentation for the structure)
+%   - tree: data extracted from a MVNX file
 %   OUTPUT
-%   -
+%   Results are automatically saved on a folder 'Visual'
 %________________________________________________________
 %
 % Licence

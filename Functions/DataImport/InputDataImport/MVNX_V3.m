@@ -1,6 +1,5 @@
 function [varargout] = MVNX_V3(varargin)
 % Import MVNX file
-%   
 %
 % Licence
 % Toolbox distributed under 3-Clause BSD License

@@ -306,8 +306,15 @@ for f=f_affich
             end
             V_seg = [V_seg; pts];  %#ok<AGROW>
         end
-        if f==f_affich(1) || isequal(AnimateParameters.Mode, 'Figure')
-            h_seg = gpatch(ax,F_seg,V_seg,[],0.4*[1 1 1],1,4);
+        if isequal(AnimateParameters.Mode, 'Figure') ...
+                || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
+                || isequal(AnimateParameters.Mode, 'GenerateAnimate')
+            finv = figure('visible','off');
+            h_seg = gpatch(F_seg,V_seg,[],0.4*[1 1 1],1,4);
+            copyobj(h_seg,ax);
+            close(finv);
+        elseif f==f_affich(1) 
+            h_seg = gpatch(F_seg,V_seg,[],0.4*[1 1 1],1,4);
         end
         animStruct.Handles{f} = [animStruct.Handles{f} h_seg];
         animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices'}; %#ok<*CCAT>
@@ -337,7 +344,7 @@ for f=f_affich
                 temp]; %#ok<AGROW>
         end
         if f==f_affich(1) || isequal(AnimateParameters.Mode, 'Figure')
-            hc = gpatch(ax,Fbones,X(:,1:3),[227 218 201]/255*0.9,'none');
+            hc = gpatch(Fbones,X(:,1:3),[227 218 201]/255*0.9,'none');
         end
         animStruct.Handles{f}=[animStruct.Handles{f} hc];
         animStruct.Props{f}={ animStruct.Props{f}{:}, 'Vertices'};
@@ -425,7 +432,7 @@ for f=f_affich
             CEmu=[CEmu; repmat(color_mus(mu,:),[nbpts_mu 1])]; %#ok<AGROW>
         end
         if f==f_affich(1) || isequal(AnimateParameters.Mode, 'Figure')
-            hmu=gpatch(ax,Fmu,Vmu,[],CEmu,1,2);
+            hmu=gpatch(Fmu,Vmu,[],CEmu,1,2);
         end
         animStruct.Handles{f} = [animStruct.Handles{f} hmu hmu];
         animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices','FaceVertexCData'};
@@ -449,7 +456,7 @@ for f=f_affich
             end
         end
         if f==f_affich(1) || isequal(AnimateParameters.Mode, 'Figure')
-            Ext = gpatch(ax,F_ef,V_ef,[],color_vect_force,1,4);
+            Ext = gpatch(F_ef,V_ef,[],color_vect_force,1,4);
         end
         animStruct.Handles{f} = [animStruct.Handles{f} Ext];
         animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices'};
@@ -473,7 +480,7 @@ for f=f_affich
             end
         end
         if f==f_affich(1) || isequal(AnimateParameters.Mode, 'Figure')
-            Extp = gpatch(ax,F_efp,V_efp,[],color_vect_force_p,1,4);
+            Extp = gpatch(F_efp,V_efp,[],color_vect_force_p,1,4);
         end
         animStruct.Handles{f} = [animStruct.Handles{f} Extp];
         animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices'};
