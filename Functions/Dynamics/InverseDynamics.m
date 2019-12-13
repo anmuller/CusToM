@@ -88,8 +88,6 @@ for num_fil = 1:numel(AnalysisParameters.filename)
     for ligne=1:3
         for colonne=1:3
             dR(ligne,colonne,:)=derivee2(dt,cell2mat(cellfun(@(b) b(ligne,colonne),r_pelvis,'UniformOutput',false)));
-%             dR(ligne,colonne,:)=derivee2(dt,cell2mat(cellfun(@(b) b(ligne,colonne),r_pelvis,'UniformOutput',false)));
-%             dR(ligne,colonne,:)=derivee2(dt,cell2mat(cellfun(@(b) b(ligne,colonne),r_pelvis,'UniformOutput',false)));
         end
     end
     w=zeros(nbframe,3);
