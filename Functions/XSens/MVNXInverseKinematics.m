@@ -25,8 +25,10 @@ tree = load_mvnx(filename); tree.subject.frames.frame = tree.subject.frames.fram
 
 %% Experimental data
 [~, frame1] = intersect({tree.subject.frames.frame.type},'normal');
-ExperimentalData.Time = [tree.subject.frames.frame(frame1:end).time]'/1000;
-ExperimentalData.Time = ExperimentalData.Time - ExperimentalData.Time(1);
+freq = tree.subject.frameRate;
+ExperimentalData.Time = 0:1/freq:((numel(tree.subject.frames.frame)-frame1)/freq);
+% Instants manu
+ExperimentalData.InstantsPF = reshape(find(cellfun(@(x) logical(numel(x)), {tree.subject.frames.frame(frame1:end).marker})),2,[])';
 
 %% Joint coordinates
 InverseKinematicsResults.JointCoordinates = reshape([tree.subject.frames.frame.jointAngle],66,[]);
@@ -65,7 +67,7 @@ InverseKinematicsResults.JointCoordinates(17:19,:) = ...
 InverseKinematicsResults.JointCoordinates(20:22,:) = ...
     [ - InverseKinematicsResults.JointCoordinates(22,:); ...
     - InverseKinematicsResults.JointCoordinates(20,:); ...
-    + InverseKinematicsResults.JointCoordinates(19,:)];
+    + InverseKinematicsResults.JointCoordinates(21,:)];
 % Right Shoulder
 InverseKinematicsResults.JointCoordinates(23:25,:) = ...
     [ - InverseKinematicsResults.JointCoordinates(25,:); ...
@@ -170,24 +172,27 @@ end
 
 %% Filtering
 if AnalysisParameters.General.FilterActive
+%     pp = 99;
     PelvisPosition = zeros(3,numel(InverseKinematicsResults.PelvisPosition)); PelvisOrientation = zeros(9,numel(InverseKinematicsResults.PelvisPosition));
-%     f_filt = AnalysisParameters.General.FilterCutOff;
-    for i=2:size(InverseKinematicsResults.JointCoordinates,1)
-        InverseKinematicsResults.JointCoordinates(i,:) = filt_data2(InverseKinematicsResults.JointCoordinates(i,:)',1/ExperimentalData.Time(2), 99)';
-    end
-%     InverseKinematicsResults.JointCoordinates = filt_data(InverseKinematicsResults.JointCoordinates',f_filt,1/ExperimentalData.Time(2))';
+    f_filt = AnalysisParameters.General.FilterCutOff;
+%     for i=2:size(InverseKinematicsResults.JointCoordinates,1)
+%         if any(InverseKinematicsResults.JointCoordinates(i,:))
+%             InverseKinematicsResults.JointCoordinates(i,:) = filt_data2(InverseKinematicsResults.JointCoordinates(i,:)',1/ExperimentalData.Time(2), pp)';
+%         end
+%     end
+    InverseKinematicsResults.JointCoordinates = filt_data(InverseKinematicsResults.JointCoordinates',f_filt,1/ExperimentalData.Time(2))';
     for i = 1:numel(InverseKinematicsResults.PelvisPosition)
         PelvisPosition(:,i) = InverseKinematicsResults.PelvisPosition{i};
         PelvisOrientation(:,i) = [InverseKinematicsResults.PelvisOrientation{i}(:,1);InverseKinematicsResults.PelvisOrientation{i}(:,2);InverseKinematicsResults.PelvisOrientation{i}(:,3)]; %#ok<SAGROW>
     end
-    for i=1:size(PelvisPosition,1)
-        FiltPelvisPosition(i,:) = filt_data2(PelvisPosition(i,:)',1/ExperimentalData.Time(2), 99)'; %#ok<AGROW>
-    end
-    for i=1:size(PelvisOrientation,1)
-        FiltPelvisOrientation(i,:) = filt_data2(PelvisOrientation(i,:)',1/ExperimentalData.Time(2), 99)'; %#ok<AGROW>
-    end
-%     FiltPelvisPosition = filt_data(PelvisPosition',f_filt,1/ExperimentalData.Time(2))';
-%     FiltPelvisOrientation = filt_data(PelvisOrientation',f_filt,1/ExperimentalData.Time(2))';
+%     for i=1:size(PelvisPosition,1)
+%         FiltPelvisPosition(i,:) = filt_data2(PelvisPosition(i,:)',1/ExperimentalData.Time(2), pp)'; %#ok<AGROW>
+%     end
+%     for i=1:size(PelvisOrientation,1)
+%         FiltPelvisOrientation(i,:) = filt_data2(PelvisOrientation(i,:)',1/ExperimentalData.Time(2), pp)'; %#ok<AGROW>
+%     end
+    FiltPelvisPosition = filt_data(PelvisPosition',f_filt,1/ExperimentalData.Time(2))';
+    FiltPelvisOrientation = filt_data(PelvisOrientation',f_filt,1/ExperimentalData.Time(2))';
     for i = 1:numel(InverseKinematicsResults.PelvisPosition)
         InverseKinematicsResults.PelvisPosition{i} = FiltPelvisPosition(:,i);
         InverseKinematicsResults.PelvisOrientation{i} = [FiltPelvisOrientation(1:3,i) FiltPelvisOrientation(4:6,i) FiltPelvisOrientation(7:9,i)];

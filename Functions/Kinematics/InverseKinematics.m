@@ -34,23 +34,20 @@ end
 
 % Inverse kinematics
 for i = 1:numel(AnalysisParameters.filename)
-    % Load inverse kinematics from a MVNX
-    if isequal(AnalysisParameters.General.InputData, @MVNX_V3)
+    if isequal(AnalysisParameters.General.InputData, @MVNX_V3) % Load inverse kinematics from a MVNX
         MVNXInverseKinematics(AnalysisParameters.filename{i}(1:end-(numel(AnalysisParameters.General.Extension)-1)), AnalysisParameters);
-        return;
-    end
-    
-    % Inverse kinematics
-    filename = AnalysisParameters.filename{i}(1:end-(numel(AnalysisParameters.General.Extension)-1));
-    if AnalysisParameters.IK.Method == 1
-        [ExperimentalData, InverseKinematicsResults] = InverseKinematicsOpti(filename,AnalysisParameters,BiomechanicalModel); % Optimization method
-    elseif AnalysisParameters.IK.Method == 2
-        [ExperimentalData, InverseKinematicsResults] = InverseKinematicsLM(filename,AnalysisParameters,BiomechanicalModel); % Levenberg-Marquardt algorithm
-    end
+    else
+        filename = AnalysisParameters.filename{i}(1:end-(numel(AnalysisParameters.General.Extension)-1));
+        if AnalysisParameters.IK.Method == 1
+            [ExperimentalData, InverseKinematicsResults] = InverseKinematicsOpti(filename,AnalysisParameters,BiomechanicalModel); % Optimization method
+        elseif AnalysisParameters.IK.Method == 2
+            [ExperimentalData, InverseKinematicsResults] = InverseKinematicsLM(filename,AnalysisParameters,BiomechanicalModel); % Levenberg-Marquardt algorithm
+        end
 
-    % Save data
-    save([filename '/ExperimentalData'],'ExperimentalData');
-    save([filename '/InverseKinematicsResults'],'InverseKinematicsResults');
+        % Save data
+        save([filename '/ExperimentalData'],'ExperimentalData');
+        save([filename '/InverseKinematicsResults'],'InverseKinematicsResults');
+    end
 end
 
 end
