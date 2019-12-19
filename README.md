@@ -158,7 +158,7 @@ alt="Tutorial#3" width="240" height="180" border="10" /></a>
 
 ### 4. XSENS Tutorial <a name="Tuto4"></a>
 
-![alt text](https://github.com/anmuller/CusToM/tree/Dev_IRSST/Examples/Tennis_Processed/efw/figure2.gif)
+![alt text](https://github.com/anmuller/CusToM/blob/Dev_IRSST/Examples/Tennis_Processed/efw/figure2.gif)
 
 The objective of the last tutorial is to evaluate ground reaction forces of a tennis service motion recorded with XSENS inertial sensors using the force prediction algorithm. 
 At the end of the tutorial, key concepts should be understood: contact points, contribution to dynamic equilibrium.
