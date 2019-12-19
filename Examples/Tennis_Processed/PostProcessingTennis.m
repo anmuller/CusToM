@@ -1,4 +1,4 @@
-% Post Processing "SideStep" example
+% Post Processing "Tennis" example
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This example aimed at observing weight transfer during tennis serve using
 % only magnetic and inertial measurement units (MIMU). The motion capture

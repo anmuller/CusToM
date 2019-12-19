@@ -1,7 +1,4 @@
 ﻿## CusToM: a Matlab toolbox for musculoskeletal simulation
-## Dev Model Twente 2.0
-Adding a new model to the toolbox from: 
-V. Carbone et al., “TLEM 2.0 - A comprehensive musculoskeletal geometry dataset for subject-specific modeling of lower extremity,” J. Biomech., vol. 48, no. 5, pp. 734–741, 2015.
 
 **CusToM Status:** [![status](http://joss.theoj.org/papers/4b412d584fbfa911edfae882146e2cd3/status.svg)](http://joss.theoj.org/papers/4b412d584fbfa911edfae882146e2cd3)
 
@@ -103,29 +100,34 @@ CusToM was implemented and tested with the Matlab 2018a version on Windows 10. A
 * Symbolic Matlab Toolbox
 * Optimization Toolbox
 * Parallel Computing Toolbox
-* DSP System Toolbox
-* Signal Processing Toolbox
+* DSP System Toolbox or Signal Processing Toolbox
 
 CusToM was not developped on MacosX and Linux. For MacosX, it could be necessary to download the source files of BTK and to compile and install BTK accordingly with your device. You would need to download [btk-core-0.3.0\_src.zip](https://code.google.com/archive/p/b-tk/downloads).
 
-### 1. Additionnal installations <a name="ExtraInst"></a>
+### External libraries included <a name="ExtraInst"></a>
+* [BTK Biomechanical toolkit](https://code.google.com/archive/p/b-tk/downloads) to import .c3d files
 
-3D Animations tools have incorporated.
-
+*  3D Animations tools have incorporated thanks to [GIBBON](https://github.com/gibbonCode/GIBBON/) which has an advanced graphics animation creation and exporting capabilities through a figure window based GUI.
 ![Cool 3D Anim](https://user-images.githubusercontent.com/40755537/50661630-fb32b100-0fa3-11e9-8c80-5d93d5b48911.gif)
 
- If you want to use this tool to vizualise your computations on particular trial. Please install:
+* [Export_fig](https://github.com/altmany/export_fig/archive/master.zip), it helps to export publication quality images.
 
-* [GIBBON](https://github.com/gibbonCode/GIBBON/) which has an advanced graphics animation creation and exporting capabilities through a figure window based GUI.
-* [Export_fig](https://github.com/altmany/export_fig/archive/master.zip), it helps to export publication quality images .
+* [Camview](https://fr.mathworks.com/matlabcentral/fileexchange/38019-figure-control-widget)
 
+# Models included in CusToM
+
+- Full body model (source : [AMMR](https://zenodo.org/record/3521521#.Xfux0_xCd9M))
+- [Twente lower extremity model 2.0](https://www.sciencedirect.com/science/article/pii/S0021929014006885)
+- [Kinematic model of Xsens MVN](https://pdfs.semanticscholar.org/dd11/614195c0252f16a14e33ab9869d9da3054df.pdf)
 
 # Data processing examples <a name="Dataprocessingexamples"></a>
 
-Three tutorials extracted from research works are available in the current release. The first one consists in [predicting the ground reaction forces on a sidestep motion](#Tuto1). The second tutorials consists in [analyzing the kinematics of a pick-and-place task realized in a Virtual Reality Environment](#Tuto2) (holding a Head-Mounted-Display). The third tutorial consists in [estimating the lower limbs muscle forces during a cycling motion](#Tuto3). The tutorials are also illustrated by videos available in the repository. You can either follow
+Four tutorials extracted from research works are available in the current release. The first one consists in [predicting the ground reaction forces on a sidestep motion](#Tuto1). The second tutorials consists in [analyzing the kinematics of a pick-and-place task realized in a Virtual Reality Environment](#Tuto2) (holding a Head-Mounted-Display). The third tutorial consists in [estimating the lower limbs muscle forces during a cycling motion](#Tuto3). The tutorials are also illustrated by videos available in the repository. You can either follow
 the instructions below or the videos to run these examples.
 
 Examples are both detailed in the [CusToM Documentation](https://github.com/anmuller/CusToM/blob/master/Docs/CusToMDocumentation.pdf) and in [Youtube Videos](https://www.youtube.com/channel/UCfV7B4SIHa5Oc9SdvznjKRg).
+
+A fourth tutorial has been added on a [tennis service](#Tuto4) motion from [XSENS Analyze suite](https://content.xsens.com/motion-data) based on inertial sensors.
 
 ### 1. External forces prediction on a side-step motion <a name="Tuto1"></a>
 
@@ -153,6 +155,13 @@ This third example consisted in linking the symmetry, the performance and the he
 
 <a href="http://www.youtube.com/watch?v=foL7PEI8P9o" target="_blank"><img src="https://img.youtube.com/vi/foL7PEI8P9o/0.jpg" 
 alt="Tutorial#3" width="240" height="180" border="10" /></a>
+
+### 4. XSENS Tutorial <a name="Tuto4"></a>
+
+![alt text](https://github.com/anmuller/CusToM/tree/Dev_IRSST/Examples/Tennis_Processed/efw/figure2.gif)
+
+The objective of the last tutorial is to evaluate ground reaction forces of a tennis service motion recorded with XSENS inertial sensors using the force prediction algorithm. 
+At the end of the tutorial, key concepts should be understood: contact points, contribution to dynamic equilibrium.
 
 ### Extra tutorials could be found on the [workshop repository](https://github.com/cpontonn/CusToM-Workshop).
 
