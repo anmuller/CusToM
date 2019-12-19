@@ -26,14 +26,20 @@ end
 %% Check the toolboxes
 Needed_Toolboxes_for_CusToM= {'Optimization Toolbox';...
     'Parallel Computing Toolbox';...
-    'DSP System Toolbox';...
-    'Symbolic Math Toolbox';...
     'Signal Processing Toolbox'};
+One_of_them_Toolboxes_for_CusToM={'DSP System Toolbox', 'Symbolic Math Toolbox'};
 Toolboxes = ver;
 Toolboxes_list={Toolboxes.Name}';
 
 Toolboxes_installed = intersect(Needed_Toolboxes_for_CusToM,Toolboxes_list);
+One_of_them_Toolboxes_installed= intersect(One_of_them_Toolboxes_for_CusToM,Toolboxes_list);
 Toolboxes_not_available = setdiff(Needed_Toolboxes_for_CusToM,Toolboxes_list);
+if isempty(One_of_them_Toolboxes_installed)
+    Toolboxes_not_available=[Toolboxes_not_available(:)', One_of_them_Toolboxes_for_CusToM{1}]';
+else
+    Toolboxes_installed =[Toolboxes_installed(:)', One_of_them_Toolboxes_installed{1}]';
+end
+
 
 if isempty(Toolboxes_installed)
     s = ['None of the required Toolboxes are installed to run CusToM' '\n' ...
@@ -42,7 +48,7 @@ if isempty(Toolboxes_installed)
         s=[s '\n' Toolboxes_not_available{ii}];
     end
     error(sprintf(s));
-elseif isempty(Toolboxes_not_available)
+elseif isempty(Toolboxes_not_available) 
     disp(' All the required Toolboxes are installed to run CusToM');
     disp(Toolboxes_installed);
 else
