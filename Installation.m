@@ -26,7 +26,7 @@ end
 %% Check the toolboxes
 Needed_Toolboxes_for_CusToM= {'Optimization Toolbox';...
     'Parallel Computing Toolbox';...
-    'Signal Processing Toolbox'};
+    'Signal Processing Toolbox';'Robotics System Toolbox'};
 One_of_them_Toolboxes_for_CusToM={'DSP System Toolbox', 'Symbolic Math Toolbox'};
 Toolboxes = ver;
 Toolboxes_list={Toolboxes.Name}';

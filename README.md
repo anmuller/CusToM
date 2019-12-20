@@ -101,6 +101,7 @@ CusToM was implemented and tested with the Matlab 2018a version on Windows 10. A
 * Optimization Toolbox
 * Parallel Computing Toolbox
 * DSP System Toolbox or Signal Processing Toolbox
+* Robotics System Toolbox  
 
 CusToM was not developped on MacosX and Linux. For MacosX, it could be necessary to download the source files of BTK and to compile and install BTK accordingly with your device. You would need to download [btk-core-0.3.0\_src.zip](https://code.google.com/archive/p/b-tk/downloads).
 
