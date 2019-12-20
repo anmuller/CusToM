@@ -67,6 +67,11 @@ if isfield(AnimateParameters, 'Global_mass_center_anim')
 else
     Global_mass_center_anim = 0;
 end
+if isfield(AnimateParameters, 'Force_Prediction_points')
+    Force_Prediction_points = AnimateParameters.Force_Prediction_points;
+else
+    Force_Prediction_points = 0;
+end
 if isfield(AnimateParameters, 'muscles_anim')
     muscles_anim = AnimateParameters.muscles_anim;
 else
@@ -102,6 +107,7 @@ if isfield(AnimateParameters, 'BoS')
 else
     BoS = 0;
 end
+
 
 % exclude non used markers
 if ~DataXSens
@@ -177,6 +183,15 @@ if mod_marker_anim || exp_marker_anim || mass_centers_anim
         nb_ms = length(num_s_mass_center);
         C_ms(1:nb_ms,:)=repmat([34,139,34]/255,[nb_ms 1]);
     end
+end
+if Force_Prediction_points
+    %% Creation of a structure to add contact points
+    for i=1:numel(AnalysisParameters.Prediction.ContactPoint)
+        Prediction(i).points_prediction_efforts = AnalysisParameters.Prediction.ContactPoint{i}; %#ok<AGROW>
+    end
+    Prediction=verif_Prediction_Humanmodel(Human_model,Prediction);
+    NbPointsPrediction = numel(Prediction);
+    C_pt_p(1:NbPointsPrediction,:)=repmat([100,139,34]/255,[NbPointsPrediction 1]);
 end
 if muscles_anim
     color0 = [0.9 0.9 0.9];
@@ -420,6 +435,28 @@ for f=f_affich
         animStruct.Handles{f}=[animStruct.Handles{f} hGmass];
         animStruct.Props{f}={animStruct.Props{f}{:}, 'Vertices'};
         animStruct.Set{f}={animStruct.Set{f}{:},X};
+    end
+    
+    %% Force Prediction points
+    if Force_Prediction_points
+        Vpt_p=[];
+        for j=1:NbPointsPrediction
+            i_so=Prediction(j).num_solid;
+            num_m=Prediction(j).num_markers;
+            pt_pred=Human_model_bis(i_so).anat_position{num_m,2};
+            X = Human_model_bis(i_so).Tc_R0_Ri*[pt_pred;1];
+            Vpt_p=[Vpt_p;X(1:3)']; %#ok<AGROW>
+        end
+        if f==f_affich(1) || isequal(AnimateParameters.Mode, 'Figure')
+            hmass = patch(ax,'Faces',1:NbPointsPrediction,'Vertices',Vpt_p,'FaceColor','none','FaceVertexCData',C_pt_p,'EdgeColor','none');
+            hmass.Marker='o';
+            hmass.MarkerFaceColor='flat';
+            hmass.MarkerEdgeColor='k';
+            hmass.MarkerSize=6;
+        end
+        animStruct.Handles{f}=[animStruct.Handles{f} hmass];
+        animStruct.Props{f}={animStruct.Props{f}{:}, 'Vertices'};
+        animStruct.Set{f}={animStruct.Set{f}{:},Vpt_p};
     end
     
     %% Muscles
