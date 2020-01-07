@@ -123,8 +123,8 @@ CusToM was not developped on MacosX and Linux. For MacosX, it could be necessary
 
 # Data processing examples <a name="Dataprocessingexamples"></a>
 
-Four tutorials extracted from research works are available in the current release. The first one consists in [predicting the ground reaction forces on a sidestep motion](#Tuto1). The second tutorials consists in [analyzing the kinematics of a pick-and-place task realized in a Virtual Reality Environment](#Tuto2) (holding a Head-Mounted-Display). The third tutorial consists in [estimating the lower limbs muscle forces during a cycling motion](#Tuto3). The tutorials are also illustrated by videos available in the repository. You can either follow
-the instructions below or the videos to run these examples.
+Four tutorials extracted from research works are available in the current release. The first one consists in [predicting the ground reaction forces on a sidestep motion](#Tuto1). The second tutorials consists in [analyzing the kinematics of a pick-and-place task realized in a Virtual Reality Environment](#Tuto2) (holding a Head-Mounted-Display). The third tutorial consists in [estimating the lower limbs muscle forces during a cycling motion](#Tuto3). The tutorials are also illustrated by videos available in the repository.
+As the videos were recorded using a older version of CusToM, you may notice small differences in the user interface. You can either follow the instructions below or the videos to run these examples.
 
 Examples are both detailed in the [CusToM Documentation](https://github.com/anmuller/CusToM/blob/master/Docs/CusToMDocumentation.pdf) and in [Youtube Videos](https://www.youtube.com/channel/UCfV7B4SIHa5Oc9SdvznjKRg).
 
