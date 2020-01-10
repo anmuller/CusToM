@@ -48,16 +48,26 @@ R=-jacobian(L,q)';
 R=R(:);
 sizeMA_Lin=Nb_q*Nb_m; % Last 6 degrees of freedom are not taken into account after the jacobian
 sizeMA_Sub=[Nb_q Nb_m];
-Moment_Arms_lin=cell(sizeMA_Lin,1);
+Moment_Arms_lin=num2cell(zeros(sizeMA_Lin,1));
 Moment_Arms_sub=cell(sizeMA_Sub);
 
-parfor ii=1:sizeMA_Lin %parfor, to process faster.
-    if R(ii)==0
-    Moment_Arms_lin{ii} = 0;    
-    else
-    Moment_Arms_lin{ii} = matlabFunction(simplify(R(ii)),'Vars',{q});
-    end
+
+
+indices=find(R~=0)';
+for ii=indices%parfor, to process faster.{ii} = 0;    
+    Moment_Arms_lin{ii} = matlabFunction(R(ii),'Vars',{q});
 end
+
+
+% parfor ii=1:sizeMA_Lin %parfor, to process faster.
+%     if R(ii)==0
+%     Moment_Arms_lin{ii} = 0;    
+%     else
+%     Moment_Arms_lin{ii} = matlabFunction(simplify(R(ii)),'Vars',{q});
+%     end
+% end
+
+
 % Reordering the matrix
 for ii=1:sizeMA_Lin %subscript indexing
     [I,J]=ind2sub(sizeMA_Sub,ii);

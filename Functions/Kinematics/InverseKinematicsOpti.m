@@ -143,7 +143,7 @@ else
             q0=zeros(nb_solid,1);   
             ik_function_objective=@(qvar)CostFunctionSymbolicIK(qvar,nb_cut,real_markers,f,list_function,list_function_markers,Rcut,pcut);
             nonlcon=@(qvar)ClosedLoop(qvar,nbClosedLoop);
-            [q{1}(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,nonlcon,options1);
+            [q(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,nonlcon,options1);
         else
             if f > 2
                 delta=q(:,f-1)-q(:,f-2);
