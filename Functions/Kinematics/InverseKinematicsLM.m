@@ -124,7 +124,11 @@ nonNumericJcutq = BiomechanicalModel.Jacob.nonNumericJcutq;
 Jcutcut = BiomechanicalModel.Jacob.Jcutcut;
 indexesNumericJcutcut = BiomechanicalModel.Jacob.indexesNumericJcutcut;
 nonNumericJcutcut = BiomechanicalModel.Jacob.nonNumericJcutcut;
-
+if isfield(BiomechanicalModel.Jacob,'RmvInd_q')
+    RmvInd_q = BiomechanicalModel.Jacob.RmvInd_q;Ind_q=setdiff(1:nb_solid,RmvInd_q);
+else
+    RmvInd_q=[];Ind_q=setdiff(1:nb_solid,RmvInd_q);
+end
 % Inverse kinematics parameters
 if isfield(BiomechanicalModel,'Generalized_Coordinates')
     pos_root =find(q_map'*([Human_model.mother]==0)'); %  root solid position;
@@ -159,7 +163,7 @@ for f = 2:nb_frame
     % Jcutcut
     Jcutcut(indexesNumericJcutcut) = nonNumericJcutcut(q(:,f-1),pcut,Rcut);
     % J
-    J = Jfq + Jfcut*dJcutq(Jcutcut,Jcutq);
+    J = Jfq + Jfcut*dJcutq(Jcutcut,Jcutq); J(:,RmvInd_q)=[];
     % dq (Levenberg–Marquardt)
     Jt = transpose(J);
     JtJ = Jt*J;
@@ -167,7 +171,8 @@ for f = 2:nb_frame
     B=Jt*(dX);
     dq = A\B;
     % joint coordinates computation
-    q(:,f)=q(:,f-1)+[dq(1:pos_root-1,:);0;dq(pos_root:end,:)];
+    q(Ind_q,f)=q(Ind_q,f-1)+dq;
+%     q(Ind_q,f)=q(Ind_q,f-1)+[dq(1:pos_root-1,:);0;dq(pos_root:end,:)];
     waitbar(f/nb_frame)
 end
 close(h)
