@@ -460,7 +460,7 @@ for f=f_affich
     end
     
     %% Muscles
-    if muscles_anim && numel(Muscles)
+    if muscles_anim && sum([Muscles.exist])
         Fmu=[];
         CEmu=[];
         Vmu=[];
