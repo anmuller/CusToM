@@ -21,7 +21,7 @@ function [OsteoArticularModel]= PelvisLowerTrunk(OsteoArticularModel,k,Mass,Atta
 %________________________________________________________
 %
 % Licence
-% Toolbox distributed under 3-Clause BSD License
+% Toolbox distributed under GPL 3.0 Licence
 %________________________________________________________
 %
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
