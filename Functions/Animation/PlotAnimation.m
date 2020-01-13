@@ -9,7 +9,7 @@ function [varargout] = PlotAnimation(ModelParameters, AnimateParameters)
 %________________________________________________________
 %
 % Licence
-% Toolbox distributed under 3-Clause BSD License
+% Toolbox distributed under GPL 3.0 Licence
 %________________________________________________________
 %
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
@@ -138,7 +138,7 @@ if bone_anim
             end
             try
                 load(fullfile(bonepath, Human_model(ii).name)) %#ok<LOAD>
-                nb_faces=4000;
+                nb_faces=4500;
                 if length(t)>nb_faces
                     bone.faces=t;
                     bone.vertices=p;
@@ -239,13 +239,13 @@ if isequal(AnimateParameters.Mode, 'Figure') ...
 elseif isequal(AnimateParameters.Mode, 'cFigure')
     fig=cFigure; % from GIBBON
     view(3); axis equal; axis tight; axis vis3d; grid on; box on;
-    camlight headlight; axis off; axis manual;
+    camlight headlight; axis off; axis manual; lighting gouraud;
     ax=gca;
     ax.Clipping = 'off';
     drawnow;
 elseif isequal(AnimateParameters.Mode, 'GenerateAnimate') || isequal(AnimateParameters.Mode, 'GenerateParameters')
     ax = AnimateParameters.ax;
-    camlight(ax, 'headlight');
+    camlight(ax, 'headlight'); lighting(ax,'gouraud');
 %     material(ax, 'metal');
 end
 
@@ -460,7 +460,7 @@ for f=f_affich
     end
     
     %% Muscles
-    if muscles_anim && numel(Muscles)
+    if muscles_anim && sum([Muscles.exist])
         Fmu=[];
         CEmu=[];
         Vmu=[];

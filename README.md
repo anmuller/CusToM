@@ -2,7 +2,7 @@
 
 **CusToM Status:** [![status](http://joss.theoj.org/papers/4b412d584fbfa911edfae882146e2cd3/status.svg)](http://joss.theoj.org/papers/4b412d584fbfa911edfae882146e2cd3)
 
-**License:** [![License](https://img.shields.io/badge/License-3_Clause_BSD-orange.svg)](https://github.com/anmuller/CusToM/blob/master/LICENSE)
+**License:** [![License](https://camo.githubusercontent.com/899066452bb77fd8731295847eb9c17dfdf601d8/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4c6963656e73652d474e555f47504c76332d6f72616e67652e737667)](https://github.com/anmuller/CusToM/blob/Dev_IRSST/LICENSE)
 
 
 # Table of contents
@@ -182,7 +182,7 @@ See [CODE_OF_CONDUCT](CODE_OF_CONDUCT.md)
 
 # License <a name="License"></a>
 
-CusToM is provided under: [![License](https://img.shields.io/badge/License-3_Clause_BSD-orange.svg)](https://github.com/anmuller/CusToM/blob/master/LICENSE). The [license](https://github.com/anmuller/CusToM/blob/master/LICENSE) file is found on the GitHub repository.
+CusToM is provided under: [![License](https://camo.githubusercontent.com/899066452bb77fd8731295847eb9c17dfdf601d8/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4c6963656e73652d474e555f47504c76332d6f72616e67652e737667)](https://github.com/anmuller/CusToM/blob/Dev_IRSST/LICENSE). The file can be found on the repository.
 
 # Acknowledgements <a name="Acknowledgements"></a>
 
