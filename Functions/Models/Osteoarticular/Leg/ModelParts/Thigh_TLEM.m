@@ -324,12 +324,12 @@ Human_model(incr_solid).limit_inf=-pi/2;
 Human_model(incr_solid).limit_sup=pi/2;
 Human_model(incr_solid).ActiveJoint=1;
 Human_model(incr_solid).Visual=1;
-Human_model(incr_solid).Geometry='TLEM';
 Human_model(incr_solid).m=Mass.Thigh_Mass;
 Human_model(incr_solid).b=[0 0 0]';
 Human_model(incr_solid).I=[I_Thigh(1) I_Thigh(4) I_Thigh(5); I_Thigh(4) I_Thigh(2) I_Thigh(6); I_Thigh(5) I_Thigh(6) I_Thigh(3)];
 Human_model(incr_solid).c=-Thigh_HipJointNode;
 Human_model(incr_solid).anat_position=Thigh_position_set;
 Human_model(incr_solid).L={[Signe 'Thigh_HipJointNode'];[Signe 'Thigh_KneeJointNode'];[Signe 'Thigh_PatellaFemurJointNode']};
+Human_model(incr_solid).visual_file = ['TLEM/' Signe 'Thigh.mat'];
 
 end

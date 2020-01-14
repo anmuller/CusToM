@@ -140,7 +140,6 @@ Human_model(incr_solid).limit_inf=-pi/4;
 Human_model(incr_solid).limit_sup=pi/2;
 Human_model(incr_solid).ActiveJoint=1;
 Human_model(incr_solid).Visual=1;
-Human_model(incr_solid).Geometry='TLEM';
 % Human_model(incr_solid).Group=[n_group 3];
 % Human_model(incr_solid).m=Mass;
 Human_model(incr_solid).m=k*0.045582; % directly from Carbone et al. 2015
@@ -160,5 +159,6 @@ Human_model(incr_solid).limit_alpha= [ 10 , -10;... limit sup premier axe, limit
                                       10, -10]; %limit sup 2e axe, limit inf 2e axe
 Human_model(incr_solid).v= [ R(:,1) , R(:,2) ];
 Human_model(incr_solid).calib_a=1;
+Human_model(incr_solid).visual_file = ['TLEM/' Signe 'Talus.mat'];
 
 end

@@ -121,38 +121,54 @@ end
 if bone_anim
     if ~DataXSens
         % scaling factors.
-        if isfield(BiomechanicalModel.GeometricalCalibration,'k_calib') && ~isfield(BiomechanicalModel.GeometricalCalibration,'k_markers')
+        if isfield(BiomechanicalModel,'GeometricalCalibration') && isfield(BiomechanicalModel.GeometricalCalibration,'k_calib') && ~isfield(BiomechanicalModel.GeometricalCalibration,'k_markers')
             k_calib = BiomechanicalModel.GeometricalCalibration.k_calib;
             k = (ModelParameters.Size/1.80)*k_calib;
         else
             k = repmat((ModelParameters.Size/1.80),[numel(Human_model),1]);
         end
         bonespath=which('ModelGeneration.m');
-        bonespath = fileparts(bonespath);
+        bonespath = fullfile(fileparts(bonespath),'Visual');
         for ii=find([Human_model.Visual])
-            %TLEM or not.
-            if isfield(Human_model,'Geometry') && ~isempty(Human_model(ii).Geometry)
-                bonepath=fullfile(bonespath,['Geometries_' Human_model(ii).Geometry]);
-            else
-                bonepath=fullfile(bonespath,'Geometries');
-            end
-            try
-                load(fullfile(bonepath, Human_model(ii).name)) %#ok<LOAD>
-                nb_faces=4500;
-                if length(t)>nb_faces
-                    bone.faces=t;
-                    bone.vertices=p;
+            if numel(Human_model(ii).visual_file) % a visual could be associated to this solid
+                if exist(fullfile(bonespath,Human_model(ii).visual_file),'file') % this visual exists
+                    load(fullfile(bonespath,Human_model(ii).visual_file)); %#ok<LOAD>
+                    nb_faces=4500;
+                    if length(t)>nb_faces
+                        bone.faces=t;
+                        bone.vertices=p;
 
-                    bone_red=reducepatch(bone,nb_faces);
-                    Human_model(ii).V=1.2063*k(ii)*bone_red.vertices;
-                    Human_model(ii).F=bone_red.faces;
-                else
-                    Human_model(ii).V=k(ii)*p;
-                    Human_model(ii).F=t;
+                        bone_red=reducepatch(bone,nb_faces);
+                        Human_model(ii).V=1.2063*k(ii)*bone_red.vertices;
+                        Human_model(ii).F=bone_red.faces;
+                    else
+                        Human_model(ii).V=k(ii)*p;
+                        Human_model(ii).F=t;
+                    end
                 end
-            catch
-                error(['3D Mesh not found of ' Human_model(ii).name]);
             end
+%             if isfield(Human_model,'Geometry') && ~isempty(Human_model(ii).Geometry)
+%                 bonepath=fullfile(bonespath,['Geometries_' Human_model(ii).Geometry]);
+%             else
+%                 bonepath=fullfile(bonespath,'Geometries');
+%             end
+%             try
+%                 load(fullfile(bonepath, Human_model(ii).name)) %#ok<LOAD>
+%                 nb_faces=4500;
+%                 if length(t)>nb_faces
+%                     bone.faces=t;
+%                     bone.vertices=p;
+% 
+%                     bone_red=reducepatch(bone,nb_faces);
+%                     Human_model(ii).V=1.2063*k(ii)*bone_red.vertices;
+%                     Human_model(ii).F=bone_red.faces;
+%                 else
+%                     Human_model(ii).V=k(ii)*p;
+%                     Human_model(ii).F=t;
+%                 end
+%             catch
+%                 error(['3D Mesh not found of ' Human_model(ii).name]);
+%             end
         end
     else
         for ii=find([Human_model.Visual])
@@ -338,39 +354,45 @@ for f=f_affich
 
     %% Bones
     if bone_anim % To do % to concatenate bones;
-        X=[];
-        Fbones=[];
-        jj=find([Human_model_bis.Visual]);
-        for j=1:length(jj)
-            jjj=jj(j);
-            cur_nb_V=length(Human_model_bis(jjj).V);
-            cur_nb_F=length(Human_model_bis(jjj).F);
-            tot_nb_F=length(Fbones);
-            tot_nb_V=length(X);
-            Fbones((1:cur_nb_F)+tot_nb_F,:)=Human_model_bis(jjj).F+tot_nb_V; %#ok<AGROW>
-            onearray = ones([1,cur_nb_V]);
-            if isempty(Human_model_bis(jjj).V)
-                temp=[];
-            else
-                temp=(Human_model_bis(jjj).Tc_R0_Ri*...
-                    [Human_model_bis(jjj).V';onearray ])';
+        if isfield(Human_model_bis,'V')
+            X=[];
+            Fbones=[];
+            jj=find(cellfun(@(x) numel(x), {Human_model_bis.V}));
+            for j=1:length(jj)
+                jjj=jj(j);
+                cur_nb_V=length(Human_model_bis(jjj).V);
+                cur_nb_F=length(Human_model_bis(jjj).F);
+                tot_nb_F=length(Fbones);
+                tot_nb_V=length(X);
+                Fbones((1:cur_nb_F)+tot_nb_F,:)=Human_model_bis(jjj).F+tot_nb_V; %#ok<AGROW>
+                onearray = ones([1,cur_nb_V]);
+                if isempty(Human_model_bis(jjj).V)
+                    temp=[];
+                else
+                    temp=(Human_model_bis(jjj).Tc_R0_Ri*...
+                        [Human_model_bis(jjj).V';onearray ])';
+                end
+                X = [ X ;...
+                    temp]; %#ok<AGROW>
             end
-            X = [ X ;...
-                temp]; %#ok<AGROW>
+            if isequal(AnimateParameters.Mode, 'Figure') ...
+                    || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
+                    || isequal(AnimateParameters.Mode, 'GenerateAnimate')
+                finv = figure('visible','off');
+                hc = gpatch(Fbones,X(:,1:3),[227 218 201]/255*0.9,'none');
+                copyobj(hc,ax);
+                close(finv);
+            elseif f==f_affich(1) 
+                hc = gpatch(Fbones,X(:,1:3),[227 218 201]/255*0.9,'none');
+            end
+            animStruct.Handles{f}=[animStruct.Handles{f} hc];
+            animStruct.Props{f}={ animStruct.Props{f}{:}, 'Vertices'};
+            animStruct.Set{f}={animStruct.Set{f}{:},X(:,1:3)};
+        else
+            if ~isequal(AnimateParameters.Mode, 'Figure')
+                warning('No osteo-articular bone model is available');
+            end
         end
-        if isequal(AnimateParameters.Mode, 'Figure') ...
-                || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
-                || isequal(AnimateParameters.Mode, 'GenerateAnimate')
-            finv = figure('visible','off');
-            hc = gpatch(Fbones,X(:,1:3),[227 218 201]/255*0.9,'none');
-            copyobj(hc,ax);
-            close(finv);
-        elseif f==f_affich(1) 
-            hc = gpatch(Fbones,X(:,1:3),[227 218 201]/255*0.9,'none');
-        end
-        animStruct.Handles{f}=[animStruct.Handles{f} hc];
-        animStruct.Props{f}={ animStruct.Props{f}{:}, 'Vertices'};
-        animStruct.Set{f}={animStruct.Set{f}{:},X(:,1:3)};
     end
     
     %% Markers

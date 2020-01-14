@@ -75,7 +75,7 @@ LeftToeRot = quat2rotm(tree.subject.frames.frame(num_pose).orientation((23-1)*4+
 % Length (to scale)
 bonespath=which('ModelGeneration.m');
 bonespath = fileparts(bonespath);
-bonepath=fullfile(bonespath,'Geometries_XSens');
+bonepath=fullfile(bonespath,'Visual\XSens');
 
 load([bonepath '/XSensSTLLength.mat']); %#ok<LOAD>
 

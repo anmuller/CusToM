@@ -290,7 +290,6 @@ OsteoArticularModel(incr_solid).KinematicsCut=[];              % coupure cinémat
 OsteoArticularModel(incr_solid).ClosedLoop=[];                 % si solide de fermeture de boucle : {numéro du solide i sur lequel est attaché ce solide ; point d'attache (repère du solide i)}
 OsteoArticularModel(incr_solid).ActiveJoint=1;                 % 1 si articulation active / 0 si articulation passive
 OsteoArticularModel(incr_solid).Visual=1;                      % 1 si il y a un visuel associé / 0 sinon
-OsteoArticularModel(incr_solid).Geometry='TLEM';
 % OsteoArticularModel(incr_solid).Group=[n_group 1];                   % groupe pour la calibration dynamique
 OsteoArticularModel(incr_solid).b=pos_attachment_pt;                    % position du point d'attache par rapport au repère parent
 OsteoArticularModel(incr_solid).c=[0 0 0]';                    % position du centre de masse dans le repère local
@@ -299,6 +298,7 @@ OsteoArticularModel(incr_solid).I=[I_Pelvis(1) I_Pelvis(4) I_Pelvis(5); I_Pelvis
 OsteoArticularModel(incr_solid).anat_position=Pelvis_position_set;
 OsteoArticularModel(incr_solid).linear_constraint=[];
 OsteoArticularModel(incr_solid).L={'Pelvis_HipJointsCenterNode';'Pelvis_LowerTrunkNode'};
-OsteoArticularModel(incr_solid).v= [] ;
+OsteoArticularModel(incr_solid).v= [];
+OsteoArticularModel(incr_solid).visual_file = 'TLEM/PelvisSacrum.mat';
 
 end
