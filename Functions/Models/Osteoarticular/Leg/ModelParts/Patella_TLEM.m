@@ -176,6 +176,7 @@ Human_model(incr_solid).I=I_Patella;
 Human_model(incr_solid).c=-Patella_KneeJointNode;
 Human_model(incr_solid).anat_position=Patella_position_set;
 Human_model(incr_solid).L={[Signe 'Patella_KneeJointNode']};
-Human_model(incr_solid).kinematic_dependancy.active=1;
+% Human_model(incr_solid).kinematic_dependancy=struct();
+% Human_model(incr_solid).kinematic_dependancy.active=1;
 
 end
