@@ -181,6 +181,5 @@ num_solid=0;
     OsteoArticularModel(incr_solid).L={'Pelvis_HipJointsCenterNode';'Pelvis_LowerTrunkNode'};
     OsteoArticularModel(incr_solid).limit_alpha= [];
     OsteoArticularModel(incr_solid).v= [] ;
-    OsteoArticularModel(incr_solid).visual_file = '';
     
 end

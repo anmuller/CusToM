@@ -130,20 +130,22 @@ if bone_anim
         bonespath=which('ModelGeneration.m');
         bonespath = fullfile(fileparts(bonespath),'Visual');
         for ii=find([Human_model.Visual])
-            if numel(Human_model(ii).visual_file) % a visual could be associated to this solid
-                if exist(fullfile(bonespath,Human_model(ii).visual_file),'file') % this visual exists
-                    load(fullfile(bonespath,Human_model(ii).visual_file)); %#ok<LOAD>
-                    nb_faces=4500;
-                    if length(t)>nb_faces
-                        bone.faces=t;
-                        bone.vertices=p;
+            if isfield(Human_model,'visual_file')
+                if numel(Human_model(ii).visual_file) % a visual could be associated to this solid
+                    if exist(fullfile(bonespath,Human_model(ii).visual_file),'file') % this visual exists
+                        load(fullfile(bonespath,Human_model(ii).visual_file)); %#ok<LOAD>
+                        nb_faces=4500;
+                        if length(t)>nb_faces
+                            bone.faces=t;
+                            bone.vertices=p;
 
-                        bone_red=reducepatch(bone,nb_faces);
-                        Human_model(ii).V=1.2063*k(ii)*bone_red.vertices;
-                        Human_model(ii).F=bone_red.faces;
-                    else
-                        Human_model(ii).V=k(ii)*p;
-                        Human_model(ii).F=t;
+                            bone_red=reducepatch(bone,nb_faces);
+                            Human_model(ii).V=1.2063*k(ii)*bone_red.vertices;
+                            Human_model(ii).F=bone_red.faces;
+                        else
+                            Human_model(ii).V=k(ii)*p;
+                            Human_model(ii).F=t;
+                        end
                     end
                 end
             end
