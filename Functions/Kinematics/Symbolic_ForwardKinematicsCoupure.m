@@ -25,7 +25,7 @@ function [Human_model,Markers_set,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoo
 %________________________________________________________
 %
 % Licence
-% Toolbox distributed under 3-Clause BSD License
+% Toolbox distributed under GPL 3.0 Licence
 %________________________________________________________
 %
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
@@ -84,6 +84,7 @@ if Human_model(j).mother ~= 0
         Human_model(j).R=Human_model(i).R*Rodrigues(Human_model(j).a,angle)*Rodrigues(Human_model(j).u,Human_model(j).theta); % coordinate frame orientation
             end
             if Human_model(j).joint == 2    % slide joint
+                
         Human_model(j).p=Human_model(i).R*(k(i)*Human_model(j).b + angle*Human_model(j).a)+Human_model(i).p;
         Human_model(j).R=Human_model(i).R*Rodrigues(Human_model(j).u,Human_model(j).theta);
             end

@@ -1,15 +1,33 @@
 function [Human_model]= Forearm_Pennestri_model_definition(Human_model,k,Signe,Mass,varargin)
-%% Fichier de description du mod�le de bras
-% Human_model : partie du mod�le d�j� construite (si il existe)
-% attachment_pt : nom du points d'attache (si il existe)
-% k : coefficient multiplicateur pour le scaling lin�aire
-% Signe : 'R' ou 'L' (Right ou Left)
-% Mass : masse du mod�le complet
-% scaling_choice  : choix de la m�thode de mise � l'�chelle des donn�es inertielles
-% Density : densit� du corps
+% Addition of an forearm model
+%
+%	Based on:
+%	-Pennestrì, E., Stefanelli, R., Valentini, P. P., & Vita, L. (2007).
+%Virtual musculo-skeletal model for the biomechanical analysis of the upper limb.
+% Journal of Biomechanics, 40(6), 1350–1361. https://doi.org/10.1016/j.jbiomech.2006.05.013
+%
+%   INPUT
+%   - Human_model: osteo-articular model of an already existing
+%   model (see the Documentation for the structure)
+%   - k: homothety coefficient for the geometrical parameters (defined as
+%   the subject size in cm divided by 180)
+%   - Signe: side of the arm model ('R' for right side or 'L' for left side)
+%   - Mass: mass of the solids
+%   - AttachmentPoint: name of the attachment point of the model on the
+%   already existing model (character string)
+%   OUTPUT
+%   - Human_model: new osteo-articular model (see the Documentation
+%   for the structure) 
+%________________________________________________________
+%
+% Licence
+% Toolbox distributed under GPL 3.0 Licence
+%________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
-%% Variables de sortie :
-% "enrichissement de la structure "Human_model""
 
 %% Liste des solides
 list_solid={'Elbow_J1' 'Elbow_J2' 'Radius' 'Ulna_J1' 'Ulna_J2' 'Ulna_J3' 'Ulna' 'UlnaHumerus'};
@@ -22,15 +40,6 @@ else
         Mirror=[1 0 0; 0 1 0; 0 0 -1];
     end
 end
-
-%% Incr�mentation du num�ro des groupes
-% n_group=0;
-% for i=1:numel(Human_model)
-%     if size(Human_model(i).Group) ~= [0 0] %#ok<BDSCA>
-%         n_group=max(n_group,Human_model(i).Group(1,1));
-%     end
-% end
-% n_group=n_group+1;
 
 
 %% Incr�mentation de la num�rotation des solides

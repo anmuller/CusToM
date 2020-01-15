@@ -10,7 +10,7 @@ function [Moment_Arms_sub,C] = MomentArmsComputation(BiomechanicalModel)
 %________________________________________________________
 %
 % Licence
-% Toolbox distributed under 3-Clause BSD License
+% Toolbox distributed under GPL 3.0 Licence
 %________________________________________________________
 %
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
@@ -48,16 +48,19 @@ R=-jacobian(L,q)';
 R=R(:);
 sizeMA_Lin=Nb_q*Nb_m; % Last 6 degrees of freedom are not taken into account after the jacobian
 sizeMA_Sub=[Nb_q Nb_m];
-Moment_Arms_lin=cell(sizeMA_Lin,1);
+Moment_Arms_lin=num2cell(zeros(sizeMA_Lin,1));
 Moment_Arms_sub=cell(sizeMA_Sub);
 
-parfor ii=1:sizeMA_Lin %parfor, to process faster.
-    if R(ii)==0
-    Moment_Arms_lin{ii} = 0;    
-    else
-    Moment_Arms_lin{ii} = matlabFunction(simplify(R(ii)),'Vars',{q});
-    end
+ind = find(R~=0);
+R_temp = R(ind); sizeMA_Lin_temp= length(ind);
+Moment_Arms_lin_temp = cell(sizeMA_Lin_temp,1);
+
+parfor ii=1:sizeMA_Lin_temp 
+    %     Moment_Arms_lin_temp{ii} = matlabFunction(simplify(R_temp(ii)),'Vars',{q});
+    Moment_Arms_lin_temp{ii} = matlabFunction(R_temp(ii),'Vars',{q});
 end
+Moment_Arms_lin(ind)=Moment_Arms_lin_temp;
+
 % Reordering the matrix
 for ii=1:sizeMA_Lin %subscript indexing
     [I,J]=ind2sub(sizeMA_Sub,ii);
