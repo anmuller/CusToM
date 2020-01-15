@@ -1,6 +1,6 @@
 function [OsteoArticularModel]= Upperarm_Shoulder(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)
 % Addition of an upper arm model
-%   This upper arm model contains one solid (humerus), exhibits 3 dof for the
+%   This upper arm model contains two solids (humerus, scapula), exhibits ? dof for the
 %   shoulder
 %
 %   INPUT
@@ -24,7 +24,7 @@ function [OsteoArticularModel]= Upperarm_Shoulder(OsteoArticularModel,k,Signe,Ma
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
 % Georges Dumont
 %________________________________________________________
-list_solid={'Scapula_J1' 'Scapula_J2' 'ScapulaThorax'  'Humerus'};
+list_solid={'Clavicle_J1' 'Clavicle_J2' 'Scapula' 'Scapula_J1' 'Scapula_J2' 'Humerus' 'ScapulaThoracicJ1' 'ScapulaThoracicJ2' 'ScapulaThoracicJ3' 'ScapulaThoracicJ4' 'ScapulaThoracicJ5' 'ScapulaThoracicJ6'};
 
 %% Choose right or left arm
 if Signe == 'R'
@@ -183,19 +183,21 @@ Length_Humerus=norm(Humerus_ghJointNode-Humerus_ElbowJointNode);
 [I_Humerus]=rgyration2inertia([31 14 32 6 5 2], Mass.UpperArm_Mass, [0 0 0], Length_Humerus, Signe);
 
 
-%% Cr?ation de la structure "Human_model"
+%% "Human model" structure generation
 
 num_solid=0;
-%% Humerus
-% Shoulder_J1
-num_solid=num_solid+1;        % solide num?ro ...
-name=list_solid{num_solid}; % nom du solide
-eval(['incr_solid=s_' name ';'])  % num?ro du solide dans le mod?le
+
+%% Scapula
+
+% Clavicle_J1
+num_solid=num_solid+1;        % solid number
+name=list_solid{num_solid}; % solid name
+eval(['incr_solid=s_' name ';'])  % solid number in model tree
 OsteoArticularModel(incr_solid).name=[Signe name];    % nom du solide ('R' ou 'L' en suffixe)
 OsteoArticularModel(incr_solid).sister=0;                       % sister : d?finit en entr?e de la fonction
 OsteoArticularModel(incr_solid).child=s_Scapula_J2;                 % child : Shank
 OsteoArticularModel(incr_solid).mother=s_mother;                       % mother : d?finit en entr?e de la fonction
-OsteoArticularModel(incr_solid).a=[0 1 0]';                          % rotation /x
+OsteoArticularModel(incr_solid).a=[0 1 0]';                          % rotation /y
 OsteoArticularModel(incr_solid).joint=1;
 if Signe == 'R'
     OsteoArticularModel(incr_solid).limit_inf=-pi/2;                       % but?e articulaire inf?rieure
@@ -218,7 +220,102 @@ OsteoArticularModel(incr_solid).ClosedLoop=[];
 OsteoArticularModel(incr_solid).linear_constraint=[];
 OsteoArticularModel(incr_solid).Visual=0;
 
-% Shoulder_J2
+% Clavicle_J2
+num_solid=num_solid+1;        % solide num?ro ...
+name=list_solid{num_solid}; % nom du solide
+eval(['incr_solid=s_' name ';'])  % num?ro du solide dans le mod?le
+OsteoArticularModel(incr_solid).name=[Signe name];    % nom du solide ('R' ou 'L' en suffixe)
+OsteoArticularModel(incr_solid).sister=0;                       % sister : d?finit en entr?e de la fonction
+OsteoArticularModel(incr_solid).child=s_Scapula;                 % child : Shank
+OsteoArticularModel(incr_solid).mother=s_Clavicle_J1;                       % mother : d?finit en entr?e de la fonction
+OsteoArticularModel(incr_solid).a=[1 0 0]';                          % rotation /x
+OsteoArticularModel(incr_solid).joint=1;
+if Signe == 'R'
+    OsteoArticularModel(incr_solid).limit_inf=-pi/2;                       % but?e articulaire inf?rieure
+    OsteoArticularModel(incr_solid).limit_sup=pi;                      % but?e articulaire sup?rieure
+else
+    OsteoArticularModel(incr_solid).limit_inf=-pi;                       % but?e articulaire inf?rieure
+    OsteoArticularModel(incr_solid).limit_sup=pi/2;                      % but?e articulaire sup?rieure
+end
+OsteoArticularModel(incr_solid).ActiveJoint=1;
+OsteoArticularModel(incr_solid).m=0;                                 % masse de r?f?rence
+OsteoArticularModel(incr_solid).b=pos_attachment_pt;                    % position du point d'attache par rapport au rep?re parent
+OsteoArticularModel(incr_solid).I=zeros(3,3);                        % matrice d'inertie de r?f?rence
+OsteoArticularModel(incr_solid).c=[0 0 0]';                          % position du centre de masse dans le rep?re local
+OsteoArticularModel(incr_solid).calib_k_constraint=[];
+OsteoArticularModel(incr_solid).u=[];                          % rotation fixe selon l'axe u d'un angle theta (apr?s la rotation q)
+OsteoArticularModel(incr_solid).theta=[];
+OsteoArticularModel(incr_solid).KinematicsCut=[];              % coupure cin?matique
+OsteoArticularModel(incr_solid).ClosedLoop=[];
+                 % si solide de fermeture de boucle : {num?ro du solide i sur lequel est attach? ce solide ; point d'attache (rep?re du solide i)}
+OsteoArticularModel(incr_solid).linear_constraint=[];
+OsteoArticularModel(incr_solid).Visual=0;
+
+% Scapula
+num_solid=num_solid+1;        % solide num?ro ...
+name=list_solid{num_solid}; % nom du solide
+eval(['incr_solid=s_' name ';'])  % num?ro du solide dans le mod?le
+OsteoArticularModel(incr_solid).name=[Signe name];    % nom du solide ('R' ou 'L' en suffixe)
+OsteoArticularModel(incr_solid).sister=0;                       % sister : d?finit en entr?e de la fonction
+OsteoArticularModel(incr_solid).child=s_ScapulaThoracicJ1;                 % child : Shank
+OsteoArticularModel(incr_solid).mother=s_Clavicle_J2;                       % mother : d?finit en entr?e de la fonction
+OsteoArticularModel(incr_solid).a=[0 0 0]';                          % rotation /z
+OsteoArticularModel(incr_solid).joint=1;
+if Signe == 'R'
+    OsteoArticularModel(incr_solid).limit_inf=-pi/2;                       % but?e articulaire inf?rieure
+    OsteoArticularModel(incr_solid).limit_sup=pi;                      % but?e articulaire sup?rieure
+else
+    OsteoArticularModel(incr_solid).limit_inf=-pi;                       % but?e articulaire inf?rieure
+    OsteoArticularModel(incr_solid).limit_sup=pi/2;                      % but?e articulaire sup?rieure
+end
+OsteoArticularModel(incr_solid).ActiveJoint=1;
+OsteoArticularModel(incr_solid).m=0;                                 % masse de r?f?rence
+OsteoArticularModel(incr_solid).b=pos_attachment_pt;                    % position du point d'attache par rapport au rep?re parent
+OsteoArticularModel(incr_solid).I=zeros(3,3);                        % matrice d'inertie de r?f?rence
+OsteoArticularModel(incr_solid).c=[0 0 0]';                          % position du centre de masse dans le rep?re local
+OsteoArticularModel(incr_solid).calib_k_constraint=[];
+OsteoArticularModel(incr_solid).u=[];                          % rotation fixe selon l'axe u d'un angle theta (apr?s la rotation q)
+OsteoArticularModel(incr_solid).theta=[];
+OsteoArticularModel(incr_solid).KinematicsCut=[];              % coupure cin?matique
+OsteoArticularModel(incr_solid).ClosedLoop=[];
+                 % si solide de fermeture de boucle : {num?ro du solide i sur lequel est attach? ce solide ; point d'attache (rep?re du solide i)}
+OsteoArticularModel(incr_solid).linear_constraint=[];
+OsteoArticularModel(incr_solid).Visual=0;
+
+
+%% Humerus
+% Scapula_J1
+num_solid=num_solid+1;        % solide num?ro ...
+name=list_solid{num_solid}; % nom du solide
+eval(['incr_solid=s_' name ';'])  % num?ro du solide dans le mod?le
+OsteoArticularModel(incr_solid).name=[Signe name];    % nom du solide ('R' ou 'L' en suffixe)
+OsteoArticularModel(incr_solid).sister=s_ScapulaThoracicJ1;                       % sister : d?finit en entr?e de la fonction
+OsteoArticularModel(incr_solid).child=s_Scapula_J2;                 % child : Shank
+OsteoArticularModel(incr_solid).mother=0;                       % mother : d?finit en entr?e de la fonction
+OsteoArticularModel(incr_solid).a=[0 1 0]';                          % rotation /y
+OsteoArticularModel(incr_solid).joint=1;
+if Signe == 'R'
+    OsteoArticularModel(incr_solid).limit_inf=-pi/2;                       % but?e articulaire inf?rieure
+    OsteoArticularModel(incr_solid).limit_sup=pi;                      % but?e articulaire sup?rieure
+else
+    OsteoArticularModel(incr_solid).limit_inf=-pi;                       % but?e articulaire inf?rieure
+    OsteoArticularModel(incr_solid).limit_sup=pi/2;                      % but?e articulaire sup?rieure
+end
+OsteoArticularModel(incr_solid).ActiveJoint=1;
+OsteoArticularModel(incr_solid).m=0;                                 % masse de r?f?rence
+OsteoArticularModel(incr_solid).b=pos_attachment_pt;                    % position du point d'attache par rapport au rep?re parent
+OsteoArticularModel(incr_solid).I=zeros(3,3);                        % matrice d'inertie de r?f?rence
+OsteoArticularModel(incr_solid).c=[0 0 0]';                          % position du centre de masse dans le rep?re local
+OsteoArticularModel(incr_solid).calib_k_constraint=[];
+OsteoArticularModel(incr_solid).u=[];                          % rotation fixe selon l'axe u d'un angle theta (apr?s la rotation q)
+OsteoArticularModel(incr_solid).theta=[];
+OsteoArticularModel(incr_solid).KinematicsCut=[];              % coupure cin?matique
+OsteoArticularModel(incr_solid).ClosedLoop=[];
+                 % si solide de fermeture de boucle : {num?ro du solide i sur lequel est attach? ce solide ; point d'attache (rep?re du solide i)}
+OsteoArticularModel(incr_solid).linear_constraint=[];
+OsteoArticularModel(incr_solid).Visual=0;
+
+% Scapula_J2
 num_solid=num_solid+1;        % solide num?ro ...
 name=list_solid{num_solid}; % nom du solide
 eval(['incr_solid=s_' name ';'])  % num?ro du solide dans le mod?le
@@ -243,29 +340,6 @@ OsteoArticularModel(incr_solid).c=[0 0 0]';
 OsteoArticularModel(incr_solid).Visual=0;
 OsteoArticularModel(incr_solid).anat_position=Scapula_position_set;
 
-
-
-% ScapulaThorax
-num_solid=num_solid+1;        % solide num?ro ...
-name=list_solid{num_solid}; % nom du solide
-eval(['incr_solid=s_' name ';'])  % num?ro du solide dans le mod?le
-OsteoArticularModel(incr_solid).name=[Signe name];
-OsteoArticularModel(incr_solid).sister=0;
-OsteoArticularModel(incr_solid).child=0;
-OsteoArticularModel(incr_solid).mother=s_Scapula_J1;
-OsteoArticularModel(incr_solid).a=[0 0 1]';
-OsteoArticularModel(incr_solid).joint=1;
-OsteoArticularModel(incr_solid).limit_inf=-pi;
-OsteoArticularModel(incr_solid).limit_sup=pi;
-OsteoArticularModel(incr_solid).ClosedLoop = ['Thorax_Scapula_J1JointNode'];
-OsteoArticularModel(incr_solid).ActiveJoint=0;
-OsteoArticularModel(incr_solid).m=0;
-OsteoArticularModel(incr_solid).b=[0 0 0]';
-OsteoArticularModel(incr_solid).I=zeros(3,3);
-OsteoArticularModel(incr_solid).c=[0 0 0]';
-OsteoArticularModel(incr_solid).Visual=0;
-
-
 % Humerus
 num_solid=num_solid+1;        % solide num?ro ...
 name=list_solid{num_solid}; % nom du solide
@@ -288,5 +362,122 @@ OsteoArticularModel(incr_solid).anat_position=Humerus_position_set;
 OsteoArticularModel(incr_solid).Visual=1;
 OsteoArticularModel(incr_solid).L={[Signe 'Humerus_ghJointNode'];[Signe 'Humerus_ElbowJointNode']};
 
-    
-    end
+
+%% ScapuloThoracicJoint
+
+% ScapulaThoracicJ1
+num_solid=num_solid+1;        % solide num?ro ...
+name=list_solid{num_solid}; % nom du solide
+eval(['incr_solid=s_' name ';'])  % num?ro du solide dans le mod?le
+OsteoArticularModel(incr_solid).name=[Signe name];
+OsteoArticularModel(incr_solid).sister=0;
+OsteoArticularModel(incr_solid).child=s_ScapulaThoracicJ2;
+OsteoArticularModel(incr_solid).mother=s_Scapula;
+OsteoArticularModel(incr_solid).a=[1 0 0]';
+OsteoArticularModel(incr_solid).joint=2;
+OsteoArticularModel(incr_solid).limit_inf=-pi;
+OsteoArticularModel(incr_solid).limit_sup=pi;
+OsteoArticularModel(incr_solid).ActiveJoint=0;
+OsteoArticularModel(incr_solid).m=0;
+OsteoArticularModel(incr_solid).b=[0 0 0]';
+OsteoArticularModel(incr_solid).I=zeros(3,3);
+OsteoArticularModel(incr_solid).c=[0 0 0]';
+OsteoArticularModel(incr_solid).Visual=0;
+
+% ScapulaThoracicJ2
+num_solid=num_solid+1;        % solide num?ro ...
+name=list_solid{num_solid}; % nom du solide
+eval(['incr_solid=s_' name ';'])  % num?ro du solide dans le mod?le
+OsteoArticularModel(incr_solid).name=[Signe name];
+OsteoArticularModel(incr_solid).sister=0;
+OsteoArticularModel(incr_solid).child=s_ScapulaThoracicJ3;
+OsteoArticularModel(incr_solid).mother=s_ScapulaThoracicJ1;
+OsteoArticularModel(incr_solid).a=[0 1 0]';
+OsteoArticularModel(incr_solid).joint=2;
+OsteoArticularModel(incr_solid).limit_inf=-pi;
+OsteoArticularModel(incr_solid).limit_sup=pi;
+OsteoArticularModel(incr_solid).ActiveJoint=0;
+OsteoArticularModel(incr_solid).m=0;
+OsteoArticularModel(incr_solid).b=[0 0 0]';
+OsteoArticularModel(incr_solid).I=zeros(3,3);
+OsteoArticularModel(incr_solid).c=[0 0 0]';
+OsteoArticularModel(incr_solid).Visual=0;
+
+% ScapulaThoracicJ3
+num_solid=num_solid+1;        % solide num?ro ...
+name=list_solid{num_solid}; % nom du solide
+eval(['incr_solid=s_' name ';'])  % num?ro du solide dans le mod?le
+OsteoArticularModel(incr_solid).name=[Signe name];
+OsteoArticularModel(incr_solid).sister=0;
+OsteoArticularModel(incr_solid).child=s_ScapulaThoracicJ4;
+OsteoArticularModel(incr_solid).mother=s_ScapulaThoracicJ2;
+OsteoArticularModel(incr_solid).a=[0 0 1]';
+OsteoArticularModel(incr_solid).joint=2;
+OsteoArticularModel(incr_solid).limit_inf=-pi;
+OsteoArticularModel(incr_solid).limit_sup=pi;
+OsteoArticularModel(incr_solid).ActiveJoint=0;
+OsteoArticularModel(incr_solid).m=0;
+OsteoArticularModel(incr_solid).b=[0 0 0]';
+OsteoArticularModel(incr_solid).I=zeros(3,3);
+OsteoArticularModel(incr_solid).c=[0 0 0]';
+OsteoArticularModel(incr_solid).Visual=0;
+
+% ScapulaThoracicJ4
+num_solid=num_solid+1;        % solide num?ro ...
+name=list_solid{num_solid}; % nom du solide
+eval(['incr_solid=s_' name ';'])  % num?ro du solide dans le mod?le
+OsteoArticularModel(incr_solid).name=[Signe name];
+OsteoArticularModel(incr_solid).sister=0;
+OsteoArticularModel(incr_solid).child=s_ScapulaThoracicJ5;
+OsteoArticularModel(incr_solid).mother=s_ScapulaThoracicJ3;
+OsteoArticularModel(incr_solid).a=[1 0 0]';
+OsteoArticularModel(incr_solid).joint=1;
+OsteoArticularModel(incr_solid).limit_inf=-pi;
+OsteoArticularModel(incr_solid).limit_sup=pi;
+OsteoArticularModel(incr_solid).ActiveJoint=0;
+OsteoArticularModel(incr_solid).m=0;
+OsteoArticularModel(incr_solid).b=[0 0 0]';
+OsteoArticularModel(incr_solid).I=zeros(3,3);
+OsteoArticularModel(incr_solid).c=[0 0 0]';
+OsteoArticularModel(incr_solid).Visual=0;
+
+% ScapulaThoracicJ5
+num_solid=num_solid+1;        % solide num?ro ...
+name=list_solid{num_solid}; % nom du solide
+eval(['incr_solid=s_' name ';'])  % num?ro du solide dans le mod?le
+OsteoArticularModel(incr_solid).name=[Signe name];
+OsteoArticularModel(incr_solid).sister=0;
+OsteoArticularModel(incr_solid).child=s_ScapulaThoracicJ6;
+OsteoArticularModel(incr_solid).mother=s_ScapulaThoracicJ4;
+OsteoArticularModel(incr_solid).a=[0 1 0]';
+OsteoArticularModel(incr_solid).joint=1;
+OsteoArticularModel(incr_solid).limit_inf=-pi;
+OsteoArticularModel(incr_solid).limit_sup=pi;
+OsteoArticularModel(incr_solid).ActiveJoint=0;
+OsteoArticularModel(incr_solid).m=0;
+OsteoArticularModel(incr_solid).b=[0 0 0]';
+OsteoArticularModel(incr_solid).I=zeros(3,3);
+OsteoArticularModel(incr_solid).c=[0 0 0]';
+OsteoArticularModel(incr_solid).Visual=0;
+
+% ScapulaThoracicJ6
+num_solid=num_solid+1;        % solide num?ro ...
+name=list_solid{num_solid}; % nom du solide
+eval(['incr_solid=s_' name ';'])  % num?ro du solide dans le mod?le
+OsteoArticularModel(incr_solid).name=[Signe name];
+OsteoArticularModel(incr_solid).sister=0;
+OsteoArticularModel(incr_solid).child=0;
+OsteoArticularModel(incr_solid).mother=s_ScapulaThoracicJ5;
+OsteoArticularModel(incr_solid).a=[0 0 1]';
+OsteoArticularModel(incr_solid).joint=1;
+OsteoArticularModel(incr_solid).limit_inf=-pi;
+OsteoArticularModel(incr_solid).limit_sup=pi;
+OsteoArticularModel(incr_solid).ActiveJoint=0;
+OsteoArticularModel(incr_solid).m=0;
+OsteoArticularModel(incr_solid).b=[0 0 0]';
+OsteoArticularModel(incr_solid).I=zeros(3,3);
+OsteoArticularModel(incr_solid).c=[0 0 0]';
+OsteoArticularModel(incr_solid).Visual=0;
+OsteoArticularModel(incr_solid).ClosedLoop = ['Thorax_Scapula_J6JointNode'];
+
+end
