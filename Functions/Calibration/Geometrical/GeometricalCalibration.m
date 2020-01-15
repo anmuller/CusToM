@@ -71,7 +71,7 @@ s_root=find([OsteoArticularModel.mother]==0); %#ok<NASGU> % numéro du solide roo
 
 %% Symbolical function generation
 % Markers position according to the joint coordinates
-[OsteoArticularModel,nbClosedLoop,~,nb_k,k_map,nb_p,p_map,nb_alpha,alpha_map,A_norm,b_norm]=SymbolicFunctionGeneration_A(OsteoArticularModel, Markers_set);
+[OsteoArticularModel,nbClosedLoop,GC,nb_k,k_map,nb_p,p_map,nb_alpha,alpha_map,A_norm,b_norm]=SymbolicFunctionGeneration_A(OsteoArticularModel, Markers_set);
 
 %% list of markers from the model
 list_markers={};
@@ -112,22 +112,39 @@ taille = nb_k+nb_p+nb_alpha;
 
 k_init=zeros(taille,1);
 
-% linear constraints for inverse kinemeatics
-Aeq_ik=zeros(nb_solid);  
-beq_ik=zeros(nb_solid,1);
-for i=1:nb_solid
-    if size(OsteoArticularModel(i).linear_constraint) ~= [0 0] %#ok<BDSCA>
+Nb_qred=size(GC.q_red,1);
+% linear constraints for inverse kinemeatics, same joint angles for two
+% joints
+Aeq_ik=zeros(Nb_qred);  
+beq_ik=zeros(Nb_qred,1);
+solid_red = (GC.q_map'*[1:nb_solid]')';
+for i=1:length(solid_red)
+    jj=solid_red(i);
+    if size(OsteoArticularModel(jj).linear_constraint) ~= [0 0] %#ok<BDSCA>
         Aeq_ik(i,i)=-1;
-        Aeq_ik(i,OsteoArticularModel(i).linear_constraint(1,1))=OsteoArticularModel(i).linear_constraint(2,1);
+        ind_col = OsteoArticularModel(jj).linear_constraint(1,1);
+        [~,c]=find(GC.q_map(ind_col,:));
+        
+        ind_val = OsteoArticularModel(jj).linear_constraint(2,1);
+        [~,cc]=find(GC.q_map(ind_val,:));
+        Aeq_ik(i,c)=cc;
     end
 end
+% Aeq_ik=zeros(nb_solid);  
+% beq_ik=zeros(nb_solid,1);
+% for i=1:nb_solid
+%     if size(OsteoArticularModel(i).linear_constraint) ~= [0 0] %#ok<BDSCA>
+%         Aeq_ik(i,i)=-1;
+%         Aeq_ik(i,OsteoArticularModel(i).linear_constraint(1,1))=OsteoArticularModel(i).linear_constraint(2,1);
+%     end
+% end
 
 %% Inverse kinematics
 
 % options = optimoptions(@fmincon,'Algorithm','interior-point','Display','iter-detailed','PlotFcns',@optimplotfval,'TolFun',1e-2,'MaxFunEvals',20000);
 options = optimoptions(@fmincon,'Algorithm','interior-point','Display','off','TolFun',1e-2,'MaxFunEvals',20000);
 
-q_value{1}=zeros(nb_solid,nb_frame_calib);
+q_value{1}=zeros(Nb_qred,nb_frame_calib);
 
 addpath('Symbolic_function')
 
@@ -144,12 +161,27 @@ for m=1:numel(list_markers)
     list_function_markers{m}=str2func(sprintf([list_markers{m} '_Position']));
 end
 
-l_inf=[OsteoArticularModel.limit_inf];
-l_sup=[OsteoArticularModel.limit_sup];
+% Joint limits
+q_map=GC.q_map;
+l_inf=[OsteoArticularModel.limit_inf]';
+l_sup=[OsteoArticularModel.limit_sup]';
+% to handle infinity
+ind_infinf=not(isfinite(l_inf));
+ind_infsup=not(isfinite(l_sup));
+% tip to handle inflinity with a complex number.
+l_inf(ind_infinf)=1i;
+l_sup(ind_infsup)=1i;
+% new indexing
+l_inf=q_map'*l_inf;
+l_sup=q_map'*l_sup;
+%find 1i to replay by inf
+l_inf(l_inf==1i)=-inf;
+l_sup(l_sup==1i)=+inf;
+
 
 for f=1:nb_frame_calib
     if f == 1      % initial frame
-        q0=zeros(nb_solid,1);
+        q0=zeros(Nb_qred,1);
     else
         q0=q_value{1}(:,f-1);
     end
@@ -277,6 +309,21 @@ if nb_alpha
         if ~isempty(Human_model_calib(j).v)
             alpha_j=calib_parameters.alpha_calib(j,:);
             Human_model_calib(j).a = Rodrigues(Human_model_calib(j).v(:,2),alpha_j(2))*Rodrigues(Human_model_calib(j).v(:,1),alpha_j(1))*Human_model_calib(j).a;
+        end
+    end
+end
+
+% kinematic dependancy %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+if size(GC.q_dep,1)>0
+    vect_q_dep = GC.q_dep_map*GC.fq_dep_k(GC.q_red , kp_opt_unormalized(1:nb_k,end));
+    vect_k_dep = GC.q_dep_map*GC.ind_k_dep;
+    for j=1:numel(Human_model_save)
+        if isfield(Human_model_calib,'kinematic_dependancy') && ~isempty(Human_model_calib(j).kinematic_dependancy)
+                 Human_model_calib(j).kinematic_dependancy.q=matlabFunction(vect_q_dep(j));
+                 if vect_k_dep(j)~=0
+                    Human_model_calib(j).kinematic_dependancy.numerical_estimates(:,2)=...
+                        calib_parameters.k_calib(vect_k_dep(j))*Human_model_calib(j).kinematic_dependancy.numerical_estimates(:,2);   
+                 end
         end
     end
 end
