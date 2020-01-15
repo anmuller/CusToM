@@ -28,7 +28,16 @@ side={'R','L'};
 for i_s=1:2
     [~,ind1]=intersect(solid_list,[side{i_s} 'Patella']);
     if ~isempty(ind1)
-        
+         % Add the kinematic _dependancy field.
+        if isfield(OsteoArticularModel,'kinematic_dependancy')
+            OsteoArticularModel(ind1).kinematic_dependancy.Active=1;
+        else
+            for ii=1:numel(OsteoArticularModel)
+                OsteoArticularModel(ii).kinematic_dependancy = [];
+            end
+            OsteoArticularModel(ind1).kinematic_dependancy.Active=1;
+        end
+
         [~,ind11]=...
             intersect(OsteoArticularModel(ind1).anat_position(:,1),...
             [side{i_s} 'PatellarLigament1']);
@@ -110,7 +119,7 @@ for i_s=1:2
         
         theta_p_fin=theta_p_est(:,n_bcle);
         OsteoArticularModel(ind1).kinematic_dependancy.Joint=ind2;
-        OsteoArticularModel(ind1).kinematic_dependancy.numerical_estimates=[theta_g ,theta_p_fin]';
+        OsteoArticularModel(ind1).kinematic_dependancy.numerical_estimates=[theta_g ,theta_p_fin];
         
         % Regression 5 order polynome
         [p,S]=polyfit(theta_g,theta_p_fin,5);

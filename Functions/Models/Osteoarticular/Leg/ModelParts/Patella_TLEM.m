@@ -168,7 +168,6 @@ Human_model(incr_solid).limit_inf=0;
 Human_model(incr_solid).limit_sup=pi/90;
 Human_model(incr_solid).ActiveJoint=1;
 Human_model(incr_solid).Visual=1;
-Human_model(incr_solid).Geometry='TLEM';
 Human_model(incr_solid).m = k*0.025246; % in kg from carbone et al.
 % Human_model(incr_solid).m=Mass;
 Human_model(incr_solid).b=pos_attachment_pt;
@@ -176,6 +175,8 @@ Human_model(incr_solid).I=I_Patella;
 Human_model(incr_solid).c=-Patella_KneeJointNode;
 Human_model(incr_solid).anat_position=Patella_position_set;
 Human_model(incr_solid).L={[Signe 'Patella_KneeJointNode']};
-Human_model(incr_solid).kinematic_dependancy.active=1;
+% Human_model(incr_solid).kinematic_dependancy=struct();
+% Human_model(incr_solid).kinematic_dependancy.active=1;
+Human_model(incr_solid).visual_file = ['TLEM/' Signe 'Patella.mat'];
 
 end

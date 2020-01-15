@@ -341,7 +341,6 @@ Human_model(incr_solid).limit_inf=-pi;
 Human_model(incr_solid).limit_sup=pi;
 Human_model(incr_solid).ActiveJoint=1;
 Human_model(incr_solid).Visual=1;
-Human_model(incr_solid).Geometry='TLEM';
 % Human_model(incr_solid).Group=[n_group 2];
 Human_model(incr_solid).m=Mass.Shank_Mass;
 Human_model(incr_solid).b=pos_attachment_pt;
@@ -359,5 +358,6 @@ Human_model(incr_solid).limit_alpha= [10 , -10;...
                                         10, -10];
 Human_model(incr_solid).v= [ R(:,1) , R(:,2) ];
 Human_model(incr_solid).calib_a=1;
+Human_model(incr_solid).visual_file = ['TLEM/' Signe 'Shank.mat'];
 
 end
