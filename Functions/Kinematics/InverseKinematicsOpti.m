@@ -60,13 +60,34 @@ end
 %% Initializations
 
 % Linear constraints for the inverse kinematics
-Aeq_ik=zeros(nb_solid);  % initialization
+% Aeq_ik=zeros(nb_solid);  % initialization
+% beq_ik=zeros(nb_solid,1);
+% for ii=1:nb_solid
+%    if size(Human_model(ii).linear_constraint) ~= [0 0] %#ok<BDSCA>
+%        Aeq_ik(ii,ii)=-1;
+%        Aeq_ik(ii,Human_model(ii).linear_constraint(1,1))=Human_model(i).linear_constraint(2,1);
+%    end    
+% end
+% linear constraints for inverse kinemeatics, same joint angles for two
+% joints
+Aeq_ik=zeros(nb_solid);  
 beq_ik=zeros(nb_solid,1);
-for ii=1:nb_solid
-   if size(Human_model(ii).linear_constraint) ~= [0 0] %#ok<BDSCA>
-       Aeq_ik(ii,ii)=-1;
-       Aeq_ik(ii,Human_model(ii).linear_constraint(1,1))=Human_model(i).linear_constraint(2,1);
-   end    
+if isfield(BiomechanicalModel,'Generalized_Coordinates')
+    solid_red = (BiomechanicalModel.Generalized_Coordinates.q_map'*(1:size(Human_model,2))')';;
+else
+    solid_red=1:size(Human_model,2);  % Number of solids
+end
+for i=1:length(solid_red)
+    jj=solid_red(i);
+    if size(OsteoArticularModel(jj).linear_constraint) ~= [0 0] %#ok<BDSCA>
+        Aeq_ik(i,i)=-1;
+        ind_col = OsteoArticularModel(jj).linear_constraint(1,1);
+        [~,c]=find(GC.q_map(ind_col,:));
+        
+        ind_val = OsteoArticularModel(jj).linear_constraint(2,1);
+        [~,cc]=find(GC.q_map(ind_val,:));
+        Aeq_ik(i,c)=cc;
+    end
 end
 
 %% Inverse kinematics frame per frame

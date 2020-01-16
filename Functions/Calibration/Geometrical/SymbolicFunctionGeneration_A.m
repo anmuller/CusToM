@@ -1,4 +1,4 @@
-function [Human_model,nbClosedLoop,q,nb_k,k_map,nb_p,p_map,nb_alpha,alpha_map,...
+function [Human_model,nbClosedLoop,Generalized_Coordinates,nb_k,k_map,nb_p,p_map,nb_alpha,alpha_map,...
 A_norm,b_norm]=SymbolicFunctionGeneration_A(Human_model, Markers_set)
 % Generation of symbolic function containing the position of markers according to joint coordinates and geometrical parameters
 %
@@ -47,6 +47,54 @@ nb_markers=size(list_markers,1);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 q = sym('q', [numel(Human_model) 1]);  %initialisation de q (nb de solides -1 (pelvis))
 assume(q,'real')
+
+q_map=eye(numel(Human_model));
+q_dep_map=zeros(numel(Human_model));
+
+bool_kd = isfield(Human_model,'kinematic_dependancy');
+if bool_kd
+    X={Human_model.kinematic_dependancy};
+    ind_q=find(~cellfun(@isempty,X)==1);
+    for ii=1:length(ind_q)
+        q_map(ind_q(ii),ind_q(ii))=0;% q is reduced in case of dependant variables.
+        q_dep_map(ind_q(ii),ind_q(ii))=1;% indexing
+    end
+end
+s_root=find([Human_model.mother]==0);
+q_map(s_root,s_root)=0;
+
+[~,col]=find(sum(q_map,1)==0); q_map(:,col)=[];
+% q_map=orth(q_map); %kernel of A in A*K=K (Kernal of A matrix)
+[~,col]=find(sum(q_dep_map,1)==0); q_dep_map(:,col)=[];
+%q_dep_map=orth(q_dep_map); %kernel of A in A*K=K (Kernal of A matrix)
+% matrix mapping coordinates without the moving basis.
+q_map_unsix=q_map;[~,col]=find(q_map_unsix(end-5:end,:));
+    q_map_unsix(:,col)=[];
+
+q_red=q_map'*q;
+q_dep=q_dep_map'*q;
+ind_q_dependancy=zeros(size(q_dep_map,2),1);
+q_dep_scaled=zeros(size(q_dep_map,2),1);
+for ii=1:size(q_dep_map,2)
+    ind_q_dependancy(ii)=Human_model(logical(q_dep_map(:,ii))).kinematic_dependancy.Joint;
+    q_handle=Human_model(logical(q_dep_map(:,ii))).kinematic_dependancy.q;
+    q_dep(ii)=q_handle(q(ind_q_dependancy(ii)));
+    if Human_model(logical(q_dep_map(:,ii))).joint ==2 % scaling the kinematic constraints if its a translation
+        q_dep_scaled(ii)=1;
+    end
+end
+
+fq_dep=matlabFunction(q_dep,'vars',{q_red});
+q_complete=q_dep_map*q_dep+ q_map*q_red;
+
+Generalized_Coordinates.q_red=q_red;
+Generalized_Coordinates.q_dep=q_dep;
+Generalized_Coordinates.fq_dep=fq_dep;
+Generalized_Coordinates.q_map=q_map;
+Generalized_Coordinates.q_map_unsix=q_map_unsix;
+Generalized_Coordinates.q_dep_map=q_dep_map;
+Generalized_Coordinates.q_complete=q_complete;
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % facteurs d'homothétie (homothetic factors)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -59,7 +107,8 @@ k_map=zeros(numel(Human_model));
 for i=1:nb_k
 k_map(ind_k(i),ind_k(i))=1;
 end
-k_map=orth(k_map); %Noyau de A dans le système d'equation linéaire A*K=K (Kernal of A matrix)
+%k_map=orth(k_map); %Noyau de A dans le système d'equation linéaire A*K=K (Kernal of A matrix)
+[~,col]=find(sum(k_map,1)==0); k_map(:,col)=[];
 [~,V]=setdiff(ind,ind_k);
 k_map(V,nb_k+1)=1;
 
@@ -72,6 +121,37 @@ k_map(V,nb_k+1)=1;
 
 k_sym = sym('k_sym', [nb_k 1]);  %initialisation de k (nb de solides)
 assume(k_sym,'real');
+
+% Scaling the kinematic dependancies.
+k_sym_tot=k_map*[k_sym,;1];
+% get the homethetic coefficients of the parent coordinate of the dependant coordinate
+% only for sliders
+vect=ones(size(k_sym));
+k_test_tot=k_map*[vect,;0];
+ind_k_dep =zeros(size(ind_q_dependancy));
+k_dep=sym(zeros(size(ind_q_dependancy)));
+for ii=1:length(ind_q_dependancy)
+    if q_dep_scaled(ii) % if it is a slider
+        ij = Human_model(ind_q_dependancy(ii)).mother;
+        while k_test_tot(ij)==0
+            ij = Human_model(ij).mother;
+        end 
+        ind_k_dep(ii)=ij;
+        k_dep(ii)=k_sym_tot(ij);
+    else % if it is a hinge
+        ind_k_dep(ii)=0;
+        k_dep(ii)=1;
+    end
+end
+q_dep_k=k_dep.*q_dep;
+fq_dep_k=matlabFunction(q_dep_k,'vars',{q_red,k_sym});
+q_complete_k=q_dep_map*q_dep_k+ q_map*q_red;
+
+Generalized_Coordinates.k_dep=k_dep;
+Generalized_Coordinates.ind_k_dep=ind_k_dep;
+Generalized_Coordinates.q_dep_k=q_dep_k;
+Generalized_Coordinates.fq_dep_k=fq_dep_k;
+Generalized_Coordinates.q_complete_k=q_complete_k;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % déplacement des marqueurs p (displacement of markers p)
@@ -204,7 +284,8 @@ Human_model(s_root).p=pPelvis;
 Human_model(s_root).R=RPelvis;
 
 % Calcul de la position de chaque marqueurs de façon symbolique (computation of markers position under a symbolic form)
-[Human_model,Markers_set,~,~,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,s_root,q,k,p_adapt_mat,alpha,1,1);
+[Human_model,Markers_set,~,~,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,s_root,q_complete_k,k,p_adapt_mat,alpha,1,1);
+% [Human_model,Markers_set,~,~,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,s_root,q,k,p_adapt_mat,alpha,1,1);
 
 % position et rotation des solides servant de coupure (position and rotation of solids defining the cuts)
 for ii=1:max([Human_model.KinematicsCut])
@@ -231,7 +312,7 @@ end
 % marqueurs % trop long avec les nouvelles variables
 for i=1:numel(Markers_set)
    if Markers_set(i).exist
-       matlabFunction(Markers_set(i).position_symbolic,'file',['Symbolic_function/' Markers_set(i).name '_Position.m'],'vars',{pPelvis,RPelvis,q,var_sym,pcut,Rcut});
+       matlabFunction(Markers_set(i).position_symbolic,'file',['Symbolic_function/' Markers_set(i).name '_Position.m'],'vars',{pPelvis,RPelvis,q_red,var_sym,pcut,Rcut});
    end
 end
 
@@ -250,13 +331,13 @@ for i=1:numel(Human_model)  % solide i
     if size(Human_model(i).KinematicsCut) ~= 0
         matlabFunction(Human_model(i).R,Human_model(i).p,'File',['Symbolic_function/f' num2str(Human_model(i).KinematicsCut) 'cut.m'],...
             'Outputs',{['R' num2str(num2str(Human_model(i).KinematicsCut)) 'cut' ],['p' num2str(num2str(Human_model(i).KinematicsCut)) 'cut' ]},...;
-            'vars',{pPelvis,RPelvis,q,var_sym,pcut,Rcut});
+            'vars',{pPelvis,RPelvis,q_red,var_sym,pcut,Rcut});
     end
 end
 % boucle(s) fermée(s) (Closed loops)
 for i=1:numel(p_ClosedLoop)
     matlabFunction(R_ClosedLoop{i},p_ClosedLoop{i},'File',['Symbolic_function/fCL' num2str(i) '.m'],...
-            'Outputs',{'R','p'},'vars',{pPelvis,RPelvis,q,var_sym,pcut,Rcut});   
+            'Outputs',{'R','p'},'vars',{pPelvis,RPelvis,q_red,var_sym,pcut,Rcut});   
 end
 nbClosedLoop=numel(p_ClosedLoop);
 

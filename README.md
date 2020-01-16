@@ -119,6 +119,7 @@ CusToM was not developped on MacosX and Linux. For MacosX, it could be necessary
 
 - Full body model (source : [AMMR](https://zenodo.org/record/3521521#.Xfux0_xCd9M))
 - [Twente lower extremity model 2.0](https://www.sciencedirect.com/science/article/pii/S0021929014006885)
+- [Gait 2354 model](https://simtk-confluence.stanford.edu/display/OpenSim/Gait%2B2392%2Band%2B2354%2BModels)
 - [Kinematic model of Xsens MVN](https://pdfs.semanticscholar.org/dd11/614195c0252f16a14e33ab9869d9da3054df.pdf)
 
 # Data processing examples <a name="Dataprocessingexamples"></a>
