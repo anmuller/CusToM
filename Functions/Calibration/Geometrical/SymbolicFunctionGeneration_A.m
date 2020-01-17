@@ -73,12 +73,16 @@ q_map_unsix=q_map;[~,col]=find(q_map_unsix(end-5:end,:));
 
 q_red=q_map'*q;
 q_dep=q_dep_map'*q;
-ind_q_dependancy=zeros(size(q_dep_map,2),1);
 q_dep_scaled=zeros(size(q_dep_map,2),1);
 for ii=1:size(q_dep_map,2)
-    ind_q_dependancy(ii)=Human_model(logical(q_dep_map(:,ii))).kinematic_dependancy.Joint;
+    ind_q_dependancy=Human_model(logical(q_dep_map(:,ii))).kinematic_dependancy.Joint;
+    q_dependancy = q(ind_q_dependancy);
+    q_handle_input = cell(length(q_dependancy),1);
+    for jj=1:size(q_handle_input)
+        q_handle_input{jj} = q_dependancy(jj);
+    end
     q_handle=Human_model(logical(q_dep_map(:,ii))).kinematic_dependancy.q;
-    q_dep(ii)=q_handle(q(ind_q_dependancy(ii)));
+    q_dep(ii)=q_handle(q_handle_input{:});
     if Human_model(logical(q_dep_map(:,ii))).joint ==2 % scaling the kinematic constraints if its a translation
         q_dep_scaled(ii)=1;
     end

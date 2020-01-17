@@ -171,7 +171,7 @@ Human_model(incr_solid).I=zeros(3,3);
 Human_model(incr_solid).c=[0 0 0]';
 % Dependancy
 Human_model(incr_solid).kinematic_dependancy.active=1;
-Human_model(incr_solid).kinematic_dependancy.Joint=incr_solid+2; % tibia_r
+Human_model(incr_solid).kinematic_dependancy.Joint=[incr_solid+2]; % tibia_r
 
 % numerical values
 theta_g = [-2.09440,-1.745330,-1.396260,-1.04720,-0.6981320,-0.3490660,-0.1745330,0.1973440,0.3373950,0.4901780,1.521460,2.09440]';
@@ -254,7 +254,7 @@ a2 =    k*0.001183  ;
 b2 =   k*-0.005434  ;
 a3 =   k*-0.002767  ;
 b3 =    k*0.000915  ;
-w =        0.75  ;
+w  =        0.75  ;
 f_tx = matlabFunction(a0 + a1*cos(X*w) + b1*sin(X*w) + a2*cos(2*X*w) + b2*sin(2*X*w) + a3*cos(3*X*w) + b3*sin(3*X*w));
 Human_model(incr_solid).kinematic_dependancy.q=f_tx;
 %% Knee_Ty

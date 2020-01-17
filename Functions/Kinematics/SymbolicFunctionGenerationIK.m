@@ -67,7 +67,12 @@ q_dep=q_dep_map'*q;
 for ii=1:size(q_dep_map,2)
     ind_q_dependancy=Human_model(logical(q_dep_map(:,ii))).kinematic_dependancy.Joint;
     q_handle=Human_model(logical(q_dep_map(:,ii))).kinematic_dependancy.q;
-    q_dep(ii)=q_handle(q(ind_q_dependancy));
+    q_dependancy = q(ind_q_dependancy);
+    q_handle_input = cell(length(q_dependancy),1);
+    for jj=1:size(q_handle_input)
+        q_handle_input{jj} = q_dependancy(jj);
+    end
+    q_dep(ii)=q_handle(q_handle_input{:});
 end
 
 fq_dep=matlabFunction(q_dep,'vars',{q_red});
