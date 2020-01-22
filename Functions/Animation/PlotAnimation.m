@@ -77,6 +77,11 @@ if isfield(AnimateParameters, 'muscles_anim')
 else
     muscles_anim = 0;
 end
+if isfield(AnimateParameters, 'wrap')
+    wrap_anim = AnimateParameters.wrap;
+else
+    wrap_anim = 0;
+end
 if isfield(AnimateParameters, 'mod_marker_anim')
     mod_marker_anim = AnimateParameters.mod_marker_anim;
 else
@@ -513,6 +518,42 @@ for f=f_affich
         animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices','FaceVertexCData'};
         animStruct.Set{f} = {animStruct.Set{f}{:},Vmu,CEmu};
     end
+    %% Muscle wraps
+    if wrap_anim && isfield(Human_model,'wrap') && numel([Human_model.wrap])>0
+        %&& sum(cellfun(@isempty,[Muscles.wrap]'))==0
+        Fw=[];
+        CEw=[];
+        Vw=[];
+        Wraps = [Human_model.wrap];
+        
+        for i_w = 1:numel(Wraps)
+            num_solid=Wraps(i_w).num_solid;
+            T_Ri_Rw=[Wraps(i_w).orientation,Wraps(i_w).location;[0 0 0],1];
+            X = Human_model_bis(num_solid).Tc_R0_Ri*T_Ri_Rw;
+            [Fcyl,Vcyl]=PlotCylinder(Wraps(i_w).R,Wraps(i_w).h);
+            Vcyl_R0= (X*[Vcyl';ones(1,length(Vcyl))])';
+            
+            tot_nb_F=length(Fw);
+            cur_nb_F=length(Fcyl);
+            tot_nb_V=length(Vw);
+            Fw((1:cur_nb_F)+tot_nb_F,:)=Fcyl+tot_nb_V;
+            Vw=[Vw ;Vcyl_R0(:,1:3)]; %#ok<AGROW>
+        end
+        if isequal(AnimateParameters.Mode, 'Figure') ...
+                || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
+                || isequal(AnimateParameters.Mode, 'GenerateAnimate')
+            finv = figure('visible','off');
+            hw=gpatch(Fw,Vw,'c','none',0.75);
+            copyobj(hw,ax);
+            close(finv);
+        elseif f==f_affich(1) 
+            hw=gpatch(Fw,Vw,'c','none',0.75);
+        end        
+        animStruct.Handles{f} = [animStruct.Handles{f} hw];
+        animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices'};
+        animStruct.Set{f} = {animStruct.Set{f}{:},Vw};
+    end
+    
     
     %% Vectors of external forces issued from experimental data
     if external_forces_anim
