@@ -32,7 +32,7 @@ L = zeros(nmr,1);
 
 for j=1:nmr % for each muscle
        % compute the length of the muscle
-        L(j) = Muscle_length(Human_model,Muscles(idxm(j)),q);
+        L(j) = Muscle_lengthNum(Human_model,Muscles(idxm(j)),q);
       
 end
 

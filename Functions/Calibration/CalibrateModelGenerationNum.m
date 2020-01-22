@@ -98,9 +98,13 @@ dp=0.001;
          MomentArmsComputationInit(BiomechanicalModel,q,dp);
      disp('... Muscular Coupling Computation done');
  end
-
-
-
+ 
+ %% Wrapping locations
+ if ~isempty([BiomechanicalModel.Muscles.wrap]')
+     [BiomechanicalModel] =...
+         WrappingLocations(BiomechanicalModel);
+ end
+ 
 save('BiomechanicalModel','BiomechanicalModel');
 
 end
