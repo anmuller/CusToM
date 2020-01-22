@@ -1,4 +1,4 @@
-function [Muscles]=LegMusclesTLEM(Muscles,Signe)
+function [Muscles]=LegMusclesTLEM_for_wrapping(Muscles,Signe)
 % Definition of the leg muscle model
 %   This model contains 166 muscles, actuating the hip, the knee and the
 %   ankle joint
@@ -48,6 +48,15 @@ s=[s;{...
 
 
 % Création de la structure
+ff = fieldnames(Muscles);
+cur_fnames={'name','f0','l0','Kt','ls','alpha0','path','wrap'};
+for ii=1:length(cur_fnames)
+    
+    if ~contains(cur_fnames{ii},ff)
+        [Muscles.(cur_fnames{ii})] = cell(numel(Muscles),1);
+    end
+end
+
 Muscles=[Muscles;struct('name',{s{:,1}}','f0',{s{:,2}}','l0',{s{:,3}}',...
     'Kt',{s{:,4}}','ls',{s{:,5}}','alpha0',{s{:,6}}','path',{s{:,7}}','wrap',{s{:,8}}')]; %#ok<CCAT1>
 
