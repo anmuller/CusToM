@@ -1,4 +1,4 @@
-function [R,L] = MomentArmsComputationNum(BiomechanicalModel,q,dp)
+function [C] = MomentArmsComputationInit(BiomechanicalModel,q,dp)
 % Computation of the moment arms matrix (numerical version)
 %
 %   INPUT
@@ -7,9 +7,8 @@ function [R,L] = MomentArmsComputationNum(BiomechanicalModel,q,dp)
 %   - dp: differentiation step
 %   - Ucall : is a unique call for finding
 %   OUTPUT
-%   - R: moment arms matrix at the current frame
-%   - ltau: index vector of the joints actuated by muscles
-%   - L: muscle lengths vector at the current frame
+%   - C: muscular coupling matrix (meaning, which muscle actuate which
+%   joint)
 %________________________________________________________
 %
 % Licence
@@ -50,17 +49,19 @@ for j=1:nmr % for each muscle
         Lpdq(j) = Muscle_length(Human_model,Muscles(idxm(j)),q+dq);
         % compute the length of the muscle at q-dq
         Lmdq(j) = Muscle_length(Human_model,Muscles(idxm(j)),q-dq);
-%         R(:,i)=(-Lpdq+Lmdq)/(2*dp); % it is -dl/dq
-% if Lpdq(j)~=0 || Lmdq(j)~=0
-%     R(:,i)=(-Lpdq+Lmdq)/(2*dp); % it is -dl/dq
-% else
-%     R(:,i)=0;
-% end
+
 end
 R(:,i)=(-Lpdq+Lmdq)/(2*dp); % it is -dl/dq
 end
-% beware that the matrix is finally nq*nm
-R=R';
+C=zeros(nmr,nq);
+
+for i=1:nmr
+    for j=1:nq
+        if R(i,j)~=0
+            C(i,j)=1;
+        end
+    end
+end
 
 
 

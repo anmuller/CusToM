@@ -68,7 +68,7 @@ for i=1:Nb_frames % for each frames
 %     i
     % computation of muscle moment arms from joint posture
 
-[R,Lm(:,i)]=MomentArmsComputationNum(BiomechanicalModel,q(:,i),0.001);
+[R,Lm(:,i)]=MomentArmsComputationNum(BiomechanicalModel,q(:,i),0.0001);
 if i==1 % find the relevant joints
     [idxj,~]=find(sum(R,2)~=0);
 end
