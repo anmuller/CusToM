@@ -55,6 +55,7 @@ end
 
 if AnalysisParameters.Muscles.Active
     MuscleForcesComputation(AnalysisParameters);
+    %MuscleForcesComputationNum(AnalysisParameters);
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

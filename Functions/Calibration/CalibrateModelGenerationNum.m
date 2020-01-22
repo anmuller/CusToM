@@ -89,6 +89,18 @@ end
 %     disp('... MusIC Database Generation done')
 % end
 
+%% Muscular coupling computation
+q=zeros(numel(BiomechanicalModel.OsteoArticularModel(:))-6,1)'+0.01;
+dp=0.001;
+ if numel(BiomechanicalModel.Muscles)
+     disp('Muscular Coupling Computation ...')
+     [BiomechanicalModel.Coupling] =...
+         MomentArmsComputationInit(BiomechanicalModel,q,dp);
+     disp('... Muscular Coupling Computation done');
+ end
+
+
+
 save('BiomechanicalModel','BiomechanicalModel');
 
 end
