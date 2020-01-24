@@ -22,7 +22,7 @@ function [Lmt] = Muscle_lengthNum(Human_model,Muscles,q)
 Lmt = 0;
 if ~isempty(Muscles.wrap{1})
     %find the wrap
-        Wrap = [Human_model.wrap]; names = {Wrap.name}'; [~,ind]=intersect(Muscles.wrap{1},names);
+        Wrap = [Human_model.wrap]; names = {Wrap.name}'; [~,ind]=intersect(names,Muscles.wrap{1});
         cur_Wrap=Wrap(ind); 
     for p=1:(numel(Muscles.path)-1)
         % distance between p and p+1 point

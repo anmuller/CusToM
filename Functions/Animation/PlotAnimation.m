@@ -534,9 +534,9 @@ for f=f_affich
             mu=ind_mu(i_mu);
             pts_mu = Muscles_test(mu).pos_pts';
             nbpts_mu = size(pts_mu,1);
-            if ~isempty(Muscles(mu).wrap{1})
+            if ~isempty(Muscles(mu).wrap) && ~isempty(Muscles(mu).wrap{1})
                 % find the wrap
-                Wrap = [Human_model.wrap]; names = {Wrap.name}'; [~,ind]=intersect(Muscles(mu).wrap{1},names);
+                Wrap = [Human_model.wrap]; names = {Wrap.name}'; [~,ind]=intersect(names,Muscles(mu).wrap{1});
                 cur_Wrap=Wrap(ind);
                 % wrap object
                 T_Ri_Rw=[cur_Wrap.orientation,cur_Wrap.location;[0 0 0],1];
@@ -550,16 +550,18 @@ for f=f_affich
                         tmp=T_R0_Rw*[pt_wrap_inRw(:,:,imw)';ones(1,size(pt_wrap_inRw,1))];
                         pt_wrap(:,:,imw)=tmp(1:3,:)';
                         % add the wrapping points
-                        nb_added_pts=size([pts_mu(1,:);pt_wrap(:,:,imw)],1);
+                        nb_added_pts=size([pts_mu(imw,:);pt_wrap(:,:,imw)],1);
                         cur_Fmu = repmat([1 2],[nb_added_pts-1 1])+(0:nb_added_pts-2)'+size(Vmu,1);
-                        Vmu=[Vmu;pts_mu(1,:);pt_wrap(:,:,imw)];
+                        Vmu=[Vmu;pts_mu(imw,:);pt_wrap(:,:,imw)];
                         Fmu =[Fmu; cur_Fmu]; %#ok<AGROW>
                         CEmu=[CEmu; repmat(color_mus(mu,:),[nb_added_pts 1])]; %#ok<AGROW>
                     else
-                        Fmu =[Fmu; cur_Fmu]; %#ok<AGROW>
-                        Vmu=[Vmu ;pts_mu]; %#ok<AGROW>
-                        CEmu=[CEmu; repmat(color_mus(mu,:),[nbpts_mu 1])]; %#ok<AGROW>
-                        cur_Fmu = repmat([1 2],[nbpts_mu-1 1])+(0:nbpts_mu-2)'+size(Vmu,1);
+                        if imw>1
+                            cur_Fmu = [1 2]+size(Vmu,1);
+                            Fmu =[Fmu; cur_Fmu]; %#ok<AGROW>
+                        end
+                        Vmu=[Vmu ;pts_mu(imw,:)]; %#ok<AGROW>
+                        CEmu=[CEmu; color_mus(mu,:)]; %#ok<AGROW>
                     end
                 end
                 cur_Fmu = repmat([0 1],[1 1])+size(Vmu,1);
