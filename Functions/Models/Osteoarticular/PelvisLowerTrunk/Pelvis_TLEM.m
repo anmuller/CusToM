@@ -311,8 +311,10 @@ OsteoArticularModel(incr_solid).wrap(1).R=0.0600;
 OsteoArticularModel(incr_solid).wrap(1).orientation=[-0.999158540440827,-0.0232314727333666,0.0338000000000000;...
                                                     -0.0410147664159582,0.565940670078522,-0.823400000000000;...
                                                     0,-0.824118593787152,-0.566400000000000];
-OsteoArticularModel(incr_solid).wrap(2).location=k*[-0.0201;	0.1060;	0.0435]-Hip_midRASISASIS-CoM_Pelvis;
+OsteoArticularModel(incr_solid).wrap(1).location=k*[-0.0201;	0.1060;	0.0435]-Hip_midRASISASIS-CoM_Pelvis;
 OsteoArticularModel(incr_solid).wrap(1).h=0.35;
+OsteoArticularModel(incr_solid).wrap(1).num_solid=incr_solid;
+
 
 % Wrapping
 OsteoArticularModel(incr_solid).wrap(2).name=['Wrap' 'L' 'Pelvis' 'GluteusMaximus'];
@@ -324,6 +326,7 @@ OsteoArticularModel(incr_solid).wrap(2).orientation=[-0.999158540440827,0.023231
                                                       0,-0.824118593787152,0.56640];
 OsteoArticularModel(incr_solid).wrap(2).location=k*[-0.0201;	0.1060;	-0.0435]-Hip_midRASISASIS-CoM_Pelvis;
 OsteoArticularModel(incr_solid).wrap(2).h=0.35;
+OsteoArticularModel(incr_solid).wrap(2).num_solid=incr_solid;
 
 
 end
