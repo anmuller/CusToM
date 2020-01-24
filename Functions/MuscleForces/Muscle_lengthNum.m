@@ -20,7 +20,7 @@ function [Lmt] = Muscle_lengthNum(Human_model,Muscles,q)
 %________________________________________________________
 
 Lmt = 0;
-if ~isempty(Muscles.wrap{1})
+if ~isempty(Muscles.wrap) && ~isempty(Muscles.wrap{1})
     %find the wrap
         Wrap = [Human_model.wrap]; names = {Wrap.name}'; [~,ind]=intersect(names,Muscles.wrap{1});
         cur_Wrap=Wrap(ind); 
