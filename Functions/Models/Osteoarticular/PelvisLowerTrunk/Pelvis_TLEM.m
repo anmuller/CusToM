@@ -259,6 +259,8 @@ for i=1:2 % positions anatomiques des 2 côtés
         ['Semitendinosus1Origin1'	Signe 'Pelvis'],Mirror*(k*[-0.043160;-0.057260;-0.034470]-Hip_midRASISASIS)-CoM_Pelvis;...
         ['TensorFasciaeLatae1Origin1'	Signe 'Pelvis'],Mirror*(k*[0.022490;0.091550;0.046770]-Hip_midRASISASIS)-CoM_Pelvis;...
         ['TensorFasciaeLatae2Origin1'	Signe 'Pelvis'],Mirror*(k*[0.029420;0.086140;0.042660]-Hip_midRASISASIS)-CoM_Pelvis;...
+        ['Wrap' Signe 'Pelvis' 'GluteusMaximus'],Mirror*(k*[-0.0201;	0.1060;	0.0435]-Hip_midRASISASIS)-CoM_Pelvis;...
+
         }]; %#ok<AGROW>
 end
 
@@ -300,5 +302,26 @@ OsteoArticularModel(incr_solid).linear_constraint=[];
 OsteoArticularModel(incr_solid).L={'Pelvis_HipJointsCenterNode';'Pelvis_LowerTrunkNode'};
 OsteoArticularModel(incr_solid).v= [];
 OsteoArticularModel(incr_solid).visual_file = 'TLEM/PelvisSacrum.mat';
+
+% Wrapping
+OsteoArticularModel(incr_solid).wrap(1).name=['Wrap' 'R' 'Pelvis' 'GluteusMaximus'];
+OsteoArticularModel(incr_solid).wrap(1).anat_position=['Wrap' 'R' 'Pelvis' 'GluteusMaximus'];
+OsteoArticularModel(incr_solid).wrap(1).type='C'; % C: Cylinder or S: Sphere
+OsteoArticularModel(incr_solid).wrap(1).R=0.0600;
+OsteoArticularModel(incr_solid).wrap(1).orientation=[-0.999158540440827,-0.0232314727333666,0.0338000000000000;...
+                                                    -0.0410147664159582,0.565940670078522,-0.823400000000000;...
+                                                    0,-0.824118593787152,-0.566400000000000];
+OsteoArticularModel(incr_solid).wrap(1).h=0.35;
+
+% Wrapping
+OsteoArticularModel(incr_solid).wrap(2).name=['Wrap' 'L' 'Pelvis' 'GluteusMaximus'];
+OsteoArticularModel(incr_solid).wrap(2).anat_position=['Wrap' 'L' 'Pelvis' 'GluteusMaximus'];
+OsteoArticularModel(incr_solid).wrap(2).type='C'; % C: Cylinder or S: Sphere
+OsteoArticularModel(incr_solid).wrap(2).R=0.0600;
+OsteoArticularModel(incr_solid).wrap(2).orientation=[-0.999158540440827,0.0232314727333666,0.03380000;...
+                                                     -0.0410147664159582,-0.565940670078522,-0.82340;...
+                                                      0,-0.824118593787152,0.56640];
+OsteoArticularModel(incr_solid).wrap(2).h=0.35;
+
 
 end

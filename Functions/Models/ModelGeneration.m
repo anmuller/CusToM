@@ -104,7 +104,7 @@ end
 %% Muscles
 if numel(ModelParameters.Muscles)
     % Initialisation
-    Muscles = struct('name',[],'f0',[],'l0',[],'Kt',[],'ls',[],'alpha0',[],'path',[]);Muscles(1) = [];
+    Muscles = struct('name',[],'f0',[],'l0',[],'Kt',[],'ls',[],'alpha0',[],'path',[],'wrap',[]);Muscles(1) = [];
 
     % add muscle sets
     for i = 1:numel(ModelParameters.Muscles)

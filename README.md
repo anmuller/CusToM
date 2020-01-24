@@ -103,8 +103,15 @@ CusToM was implemented and tested with the Matlab 2018a version on Windows 10. A
 * DSP System Toolbox or Signal Processing Toolbox
 * Robotics System Toolbox  
 
-CusToM was not developped on MacosX and Linux. For MacosX, it could be necessary to download the source files of BTK and to compile and install BTK accordingly with your device. You would need to download [btk-core-0.3.0\_src.zip](https://code.google.com/archive/p/b-tk/downloads).
+CusToM was not developped on MacosX and Linux. For MacosX, it could be necessary to download the source files of BTK and to compile and install BTK accordingly with your device. You would need to download [btk-core-0.3.0\_src.zip](https://code.google.com/archive/p/b-tk/downloads). For Linux, you would need to download [btk-0.3.0_Linux_MatlabR2009a_64bit.tar.gz] or [btk-0.3.0_Linux_MatlabR2009a_32bit.tar.gz] depending on your device. 
 
+For Ubuntu, the content of lib folder in btk must be moved in /usr/local/lib. For Fedora, the content of lib folder in btk must be moved in /usr/lib64.
+Then, use the command **sudo ldconfig** in the new location. 
+
+To check that your installation of btk is correct, go whitin any folder of "Examples". Write "GenerateParameters" in the Matlab command, click on "GenerateParameters" in the new window. Then, in the window "Analysis" which will open, desactivate all the boxes except the InverseKinematics box. Click on "Run", and check that there is no error in Matlab prompt due to unreadable .c3d file. If there is no error, the installation is complete. If not, feel free to open an issue in github.
+
+
+ 
 ### External libraries included <a name="ExtraInst"></a>
 * [BTK Biomechanical toolkit](https://code.google.com/archive/p/b-tk/downloads) to import .c3d files
 

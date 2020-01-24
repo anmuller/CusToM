@@ -1,7 +1,0 @@
-/* Created by mdot for Matlab */
-digraph m2html {
-  PelvisLowerTrunk -> Pelvis;
-
-  Pelvis [URL="Pelvis.html"];
-  PelvisLowerTrunk [URL="PelvisLowerTrunk.html"];
-}
