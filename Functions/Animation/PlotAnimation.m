@@ -522,7 +522,7 @@ for f=f_affich
         animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices'};
         animStruct.Set{f} = {animStruct.Set{f}{:},Vw};
     end
-    
+
     %% Muscles
     if muscles_anim && ~isempty(Muscles) && sum([Muscles.exist])
         Fmu=[];
@@ -546,7 +546,7 @@ for f=f_affich
                 % verify if wrap.
                 for imw=1:nbpts_mu-1
                     if Intersect_line_cylinder(pts_mu_inRw(1:3,imw)', pts_mu_inRw(1:3,imw+1)', cur_Wrap.R)
-                        [~,~,~,pt_wrap_inRw(:,:,imw)]=CylinderWrapping(pts_mu_inRw(1:3,imw)', pts_mu_inRw(1:3,imw+1)', cur_Wrap.R);
+                        [L(f),~,~,pt_wrap_inRw(:,:,imw)]=CylinderWrapping(pts_mu_inRw(1:3,imw), pts_mu_inRw(1:3,imw+1), cur_Wrap.R);
                         tmp=T_R0_Rw*[pt_wrap_inRw(:,:,imw)';ones(1,size(pt_wrap_inRw,1))];
                         pt_wrap(:,:,imw)=tmp(1:3,:)';
                         % add the wrapping points
@@ -713,5 +713,5 @@ if isequal(AnimateParameters.Mode, 'GenerateParameters')
     varargout{2} = Markers_set;
     varargout{3} = EnableModel;
 end
-
+% save('L','L')
 end

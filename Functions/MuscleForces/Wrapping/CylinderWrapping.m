@@ -20,6 +20,10 @@ function [L,Q,T,AnimPt_in_Rw]=CylinderWrapping(P,S,R)
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
 % Georges Dumont
 %________________________________________________________
+if size(P,1)<3 || size(S,1)<3 
+    error('P or S need to 3x1 arrays');
+end
+
 
 %%% Cartesian coordiantes of Q and T in xy plan
 Qx1 = (P(1)*R^2-R*P(2)*sqrt(P(1)^2+P(2)^2-R^2))/(P(1)^2+P(2)^2);
@@ -71,7 +75,7 @@ T = [T1, T2];
 L = [norm(P-Q(:, 1))+norm(T(:, 1)-S)+l_arc1, norm(P-Q(:, 2))+norm(T(:, 2)-S)+l_arc2];
 
 %Choose the minimal one,
-[~,ind]=min(L);
+[~,ind]=min(L); ind
 L=L(ind);Q=Q(:,ind);T=T(:,ind);
 
 if nargout>3
@@ -85,6 +89,16 @@ if nargout>3
     z = z_T;
     
     AnimPt_in_Rw=[x',y',z'];
+    
+% figure
+% fastscatter3(Q); hold on
+% fastscatter3(T)
+% plot(2*cosd(0:360),2*sind(0:360))
+% axis equal
+% plot(2*cosd(theta1),2*sind(theta1),'bo')
+% plot(2*cosd(theta2),2*sind(theta2),'ro')
+% plot(R*cosd(theta),R*sind(theta),'k-')
+
 end
 
 end
