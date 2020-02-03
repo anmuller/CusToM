@@ -47,13 +47,23 @@ else
     torques=InverseDynamicsResults.JointTorques;
 end
 
-%% Computation of muscle forces (optimization)
+Nb_q=size(q,1);
+Nb_frames=size(torques,2);
+Nb_muscles=numel(Muscles);
 %existing muscles
 idm = logical([Muscles.exist]);
 
-Nb_frames=size(torques,2);
-% Nb_muscles=sum([Muscles.exist]);
-Nb_muscles=numel(Muscles);
+%% computation of muscle moment arms from joint posture
+Lm=zeros(Nb_muscles,Nb_frames);
+R=zeros(Nb_q,Nb_muscles,Nb_frames);
+for i=1:Nb_frames % for each frames
+    Lm(idm,i)   =   MuscleLengthComputationNum(BiomechanicalModel,q(:,i));
+    R(:,:,i)    =   MomentArmsComputationNum(BiomechanicalModel,q(:,i),0.0001);
+end
+
+[idxj,~]=find(sum(R(:,:,1),2)~=0);
+
+%% Computation of muscle forces (optimization)
 % Optimisation parameters
 F0 = zeros(Nb_muscles,1);
 Fmin = zeros(Nb_muscles,1);
@@ -61,22 +71,15 @@ Fmin = zeros(Nb_muscles,1);
 Fopt = zeros(Nb_muscles,Nb_frames);
 Aopt = zeros(size(Fopt));
 
-Lm=zeros(Nb_muscles,Nb_frames);
 options = optimoptions(@fmincon,'Algorithm','sqp','Display','off','GradObj','off','GradConstr','off','TolFun',1e-6);
 % options = optimoptions(@fmincon,'Algorithm','sqp','Display','off','GradObj','off','GradConstr','off','TolFun',1e-9,'MaxFunEvals',20000);
 % options = optimoptions(@fmincon,'Algorithm','sqp','Display','off','GradObj','off','GradConstr','off','TolFun',1e-9,'MaxFunEvals',100000,'TolX',1e-9,'StepTolerance',1e-15,'FunctionTolerance',1e-10,'MaxIterations',5000);
 
 h = waitbar(0,['Forces Computation (' filename ')']);
-tic
+
 for i=1:Nb_frames % for each frames
-    %     i
-    % computation of muscle moment arms from joint posture
-    
-    [R,Lm(idm,i)]=MomentArmsComputationNum(BiomechanicalModel,q(:,i),0.0001);
-    if i==1 % find the relevant joints
-        [idxj,~]=find(sum(R,2)~=0);
-    end
-    Aeq=R(idxj,:);
+    % Moment arms
+    Aeq=R(idxj,:,i);
     % Joint Torques
     beq=torques(idxj,i); % C
     % Fmax
@@ -87,14 +90,13 @@ for i=1:Nb_frames % for each frames
     Aopt(:,i) = Fopt(:,i)./Fmax;
     F0=Fopt(:,i);
     waitbar(i/Nb_frames)
-    
 end
 close(h)
-% w=toc; %#ok<NASGU>
 
 MuscleForcesComputationResults.MuscleActivations = Aopt;
 MuscleForcesComputationResults.MuscleForces = Fopt;
 MuscleForcesComputationResults.MuscleLengths = Lm;
+MuscleForcesComputationResults.MuscleLeverArm = R;
 
 disp(['... Forces Computation (' filename ') done'])
 
