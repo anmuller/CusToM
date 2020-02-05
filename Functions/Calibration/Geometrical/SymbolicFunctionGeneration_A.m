@@ -74,6 +74,7 @@ q_map_unsix=q_map;[~,col]=find(q_map_unsix(end-5:end,:));
 q_red=q_map'*q;
 q_dep=q_dep_map'*q;
 q_dep_scaled=zeros(size(q_dep_map,2),1);
+ind_q_dependancy=zeros(size(q_dep_map,2),1);
 for ii=1:size(q_dep_map,2)
     ind_q_dependancy=Human_model(logical(q_dep_map(:,ii))).kinematic_dependancy.Joint;
     q_dependancy = q(ind_q_dependancy);
