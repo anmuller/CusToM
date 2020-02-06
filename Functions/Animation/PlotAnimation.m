@@ -586,9 +586,9 @@ for f=f_affich
         elseif f==f_affich(1) 
             hmu=gpatch(Fmu,Vmu,[],CEmu,1,2);
         end        
-        animStruct.Handles{f} = [animStruct.Handles{f} hmu hmu];
-        animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices','FaceVertexCData'};
-        animStruct.Set{f} = {animStruct.Set{f}{:},Vmu,CEmu};
+        animStruct.Handles{f} = [animStruct.Handles{f} hmu hmu hmu];
+        animStruct.Props{f} = {animStruct.Props{f}{:},'Faces','Vertices','FaceVertexCData'};
+        animStruct.Set{f} = {animStruct.Set{f}{:},Fmu,Vmu,CEmu};
     end    
     
     %% Vectors of external forces issued from experimental data

@@ -37,7 +37,7 @@ BiomechanicalModel.OsteoArticularModel=OsteoArticularModel;
 q= zeros(numel(OsteoArticularModel),1);
 Muscles = BiomechanicalModel.Muscles;
 for ii=1:numel(Muscles)
-    if ~isempty(Muscles(ii).wrap) && ~isempty(Muscles(ii).wrap{1})
+    if Muscles(ii).exist && ~isempty(Muscles(ii).wrap) && ~isempty(Muscles(ii).wrap{1})
         %find the wrap
         Wrap = [OsteoArticularModel.wrap]; names = {Wrap.name}'; [~,ind]=intersect(names,Muscles(ii).wrap{1});
         cur_Wrap=Wrap(ind);
