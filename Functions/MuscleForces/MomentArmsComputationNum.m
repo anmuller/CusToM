@@ -1,4 +1,4 @@
-function [R,L] = MomentArmsComputationNum(BiomechanicalModel,q,dp)
+function [R] = MomentArmsComputationNum(BiomechanicalModel,qval,dp)
 % Computation of the moment arms matrix (numerical version)
 %
 %   INPUT
@@ -8,8 +8,6 @@ function [R,L] = MomentArmsComputationNum(BiomechanicalModel,q,dp)
 %   - Ucall : is a unique call for finding
 %   OUTPUT
 %   - R: moment arms matrix at the current frame
-%   - ltau: index vector of the joints actuated by muscles
-%   - L: muscle lengths vector at the current frame
 %________________________________________________________
 %
 % Licence
@@ -22,26 +20,49 @@ function [R,L] = MomentArmsComputationNum(BiomechanicalModel,q,dp)
 %________________________________________________________
 Human_model=BiomechanicalModel.OsteoArticularModel;
 Muscles=BiomechanicalModel.Muscles;
-nq=numel(q);
+% nq=numel(qval);
 C=BiomechanicalModel.Coupling;
 idxm=find([Muscles.exist]);
 nmr=numel(idxm);
 
-%% Computation of moment arms
-R=zeros(nmr,nq);%init R
+%% Dependancies
+q_complete=BiomechanicalModel.Generalized_Coordinates.q_complete;
+q_map_unsix =BiomechanicalModel.Generalized_Coordinates.q_map_unsix;
+q_red_unsix = q_map_unsix'*q_complete;
+nqred_unsix=numel(q_red_unsix);
 
-for i=1:nq
-    dq=zeros(nq,1); %differentiation step vector
+q_map=BiomechanicalModel.Generalized_Coordinates.q_map;
+% q_red=q_map'*qval; % real_coordinates
+
+fq_dep=BiomechanicalModel.Generalized_Coordinates.fq_dep;
+q_dep_map=BiomechanicalModel.Generalized_Coordinates.q_dep_map;
+% q=q_complet+q_dep_map*fq_dep(qval); % add dependancies
+
+q=qval(1:end-6); %only degrees of freedom of the body, not the floating base.
+
+%% Computation of moment arms
+R=zeros(nmr,nqred_unsix);%init R
+
+for i=1:nqred_unsix
+    dq=zeros(nqred_unsix,1); %differentiation step vector
     dq(i)=dp;
+    
+    dq_complet=q_map_unsix*dq;
+    dq_p=dq_complet+q_dep_map*fq_dep(dq);% plus
+    dq_m=-dq_complet+q_dep_map*fq_dep(-dq);% minus
+    
+    dq_p=dq_p(1:end-6);
+    dq_m=dq_m(1:end-6);
+    
     Lpdq=zeros(nmr,1);
     Lmdq=zeros(nmr,1);
     for j=1:nmr % for each muscle
         if C(j,i)==1
-            % compute the length of the muscle at q+dq
-            Lpdq(j) = Muscle_lengthNum(Human_model,Muscles(idxm(j)),q+dq);
-            % compute the length of the muscle at q-dq
-            Lmdq(j) = Muscle_lengthNum(Human_model,Muscles(idxm(j)),q-dq);
-            %         R(:,i)=(-Lpdq+Lmdq)/(2*dp); % it is -dl/dq
+        % compute the length of the muscle at q+dq
+        Lpdq(j) = Muscle_lengthNum(Human_model,Muscles(idxm(j)),q+dq_p); % q+dq
+        % compute the length of the muscle at q-dq
+        Lmdq(j) = Muscle_lengthNum(Human_model,Muscles(idxm(j)),q+dq_m); % q-dq
+    %         R(:,i)=(-Lpdq+Lmdq)/(2*dp); % it is -dl/dq
             % if Lpdq(j)~=0 || Lmdq(j)~=0
             %     R(:,i)=(-Lpdq+Lmdq)/(2*dp); % it is -dl/dq
             % else

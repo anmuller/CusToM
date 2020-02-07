@@ -32,10 +32,11 @@ load([filename '/InverseDynamicsResults']) %#ok<LOAD>
 
 if isfield(BiomechanicalModel,'Generalized_Coordinates')
     q_map_unsix = BiomechanicalModel.Generalized_Coordinates.q_map_unsix;
-    q = q_map_unsix'*[InverseKinematicsResults.FreeJointCoordinates(end,:);...
+    Q=[InverseKinematicsResults.FreeJointCoordinates(end,:);...
         InverseKinematicsResults.JointCoordinates(2:end,:);
         InverseKinematicsResults.JointCoordinates(1,:);
         InverseKinematicsResults.FreeJointCoordinates(1:end-1,:)];
+    q = q_map_unsix'*Q;
     
     torques = q_map_unsix'*[InverseDynamicsResults.DynamicResiduals.t6dof(end,:);...
         InverseDynamicsResults.JointTorques(2:end,:);
@@ -49,16 +50,17 @@ end
 
 Nb_q=size(q,1);
 Nb_frames=size(torques,2);
-Nb_muscles=numel(Muscles);
+
 %existing muscles
 idm = logical([Muscles.exist]);
+Nb_muscles=numel(Muscles(idm));
 
 %% computation of muscle moment arms from joint posture
 Lm=zeros(Nb_muscles,Nb_frames);
 R=zeros(Nb_q,Nb_muscles,Nb_frames);
 for i=1:Nb_frames % for each frames
-    Lm(idm,i)   =   MuscleLengthComputationNum(BiomechanicalModel,q(:,i));
-    R(:,:,i)    =   MomentArmsComputationNum(BiomechanicalModel,q(:,i),0.0001);
+    Lm(idm,i)   =   MuscleLengthComputationNum(BiomechanicalModel,Q(:,i)); %dependant of every q (q_complete)
+    R(:,:,i)    =   MomentArmsComputationNum(BiomechanicalModel,Q(:,i),0.0001); %depend on reduced set of q (q_red)
 end
 
 [idxj,~]=find(sum(R(:,:,1),2)~=0);
@@ -67,7 +69,8 @@ end
 % Optimisation parameters
 F0 = zeros(Nb_muscles,1);
 Fmin = zeros(Nb_muscles,1);
-
+% Fmax
+Fmax = [Muscles(idm).f0]';
 Fopt = zeros(Nb_muscles,Nb_frames);
 Aopt = zeros(size(Fopt));
 
@@ -82,10 +85,8 @@ for i=1:Nb_frames % for each frames
     Aeq=R(idxj,:,i);
     % Joint Torques
     beq=torques(idxj,i); % C
-    % Fmax
-    Fmax = [Muscles.f0]';
     % Optimization
-    Fopt(idm,i) = AnalysisParameters.Muscles.Costfunction(F0(idm,1), Aeq, beq, Fmin(idm), Fmax(idm), options, AnalysisParameters.Muscles.CostfunctionOptions, Fmax(idm));
+    Fopt(:,i) = AnalysisParameters.Muscles.Costfunction(F0, Aeq, beq, Fmin, Fmax, options, AnalysisParameters.Muscles.CostfunctionOptions, Fmax);
     % Muscular activity
     Aopt(:,i) = Fopt(:,i)./Fmax;
     F0=Fopt(:,i);
@@ -93,9 +94,9 @@ for i=1:Nb_frames % for each frames
 end
 close(h)
 
-MuscleForcesComputationResults.MuscleActivations = Aopt;
-MuscleForcesComputationResults.MuscleForces = Fopt;
-MuscleForcesComputationResults.MuscleLengths = Lm;
+MuscleForcesComputationResults.MuscleActivations(idm,:) = Aopt;
+MuscleForcesComputationResults.MuscleForces(idm,:) = Fopt;
+MuscleForcesComputationResults.MuscleLengths= Lm;
 MuscleForcesComputationResults.MuscleLeverArm = R;
 
 disp(['... Forces Computation (' filename ') done'])

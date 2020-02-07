@@ -80,7 +80,7 @@ end
 if isfield(AnimateParameters, 'wrap')
     wrap_anim = AnimateParameters.wrap;
 else
-    wrap_anim = 0;
+    wrap_anim = 1;
 end
 if isfield(AnimateParameters, 'mod_marker_anim')
     mod_marker_anim = AnimateParameters.mod_marker_anim;
@@ -267,7 +267,7 @@ elseif isequal(AnimateParameters.Mode, 'cFigure')
     ax.Clipping = 'off';
     drawnow;
 elseif isequal(AnimateParameters.Mode, 'GenerateAnimate') || isequal(AnimateParameters.Mode, 'GenerateParameters')
-    ax = AnimateParameters.ax;
+    ax = AnimateParameters.ax; 
     camlight(ax, 'headlight'); lighting(ax,'gouraud');
 %     material(ax, 'metal');
 end
@@ -278,7 +278,7 @@ if isequal(AnimateParameters.Mode, 'Picture') ...
         || isequal(AnimateParameters.Mode, 'GenerateParameters')
     f_affich = AnimateParameters.PictureFrame;
 else
-    f_affich = 1:3:size(q,2);
+    f_affich = 1:1:size(q,2);
 end
 
 %Initialization animStruct
@@ -685,7 +685,7 @@ for f=f_affich
     %% Save figure
     if isequal(AnimateParameters.Mode, 'Figure')
         % drawing an saving
-        drawnow
+        drawnow;
         M(cpt) = getframe(fig); %#ok<AGROW>
     end
     
