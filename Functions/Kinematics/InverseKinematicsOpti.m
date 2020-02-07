@@ -73,7 +73,7 @@ end
 Aeq_ik=zeros(nb_solid);  
 beq_ik=zeros(nb_solid,1);
 if isfield(BiomechanicalModel,'Generalized_Coordinates')
-    solid_red = (BiomechanicalModel.Generalized_Coordinates.q_map'*(1:size(Human_model,2))')';;
+    solid_red = (BiomechanicalModel.Generalized_Coordinates.q_map'*(1:size(Human_model,2))')';
 else
     solid_red=1:size(Human_model,2);  % Number of solids
 end
