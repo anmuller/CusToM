@@ -50,12 +50,6 @@ if C(j,i)==1
         Lpdq(j) = Muscle_length(Human_model,Muscles(idxm(j)),q+dq);
         % compute the length of the muscle at q-dq
         Lmdq(j) = Muscle_length(Human_model,Muscles(idxm(j)),q-dq);
-%         R(:,i)=(-Lpdq+Lmdq)/(2*dp); % it is -dl/dq
-% if Lpdq(j)~=0 || Lmdq(j)~=0
-%     R(:,i)=(-Lpdq+Lmdq)/(2*dp); % it is -dl/dq
-% else
-%     R(:,i)=0;
-% end
 end
 end
 R(:,i)=(-Lpdq+Lmdq)/(2*dp); % it is -dl/dq

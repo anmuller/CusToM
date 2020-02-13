@@ -9,6 +9,7 @@ function [C] = MomentArmsComputationInit(BiomechanicalModel,q,dp)
 %   OUTPUT
 %   - C: muscular coupling matrix (meaning, which muscle actuate which
 %   joint)
+%   - Clines: active joints (joints being actuated by muscles)
 %________________________________________________________
 %
 % Licence
