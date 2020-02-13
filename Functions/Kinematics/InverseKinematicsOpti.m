@@ -79,12 +79,12 @@ else
 end
 for i=1:length(solid_red)
     jj=solid_red(i);
-    if size(OsteoArticularModel(jj).linear_constraint) ~= [0 0] %#ok<BDSCA>
+    if size(Human_model(jj).linear_constraint) ~= [0 0] %#ok<BDSCA>
         Aeq_ik(i,i)=-1;
-        ind_col = OsteoArticularModel(jj).linear_constraint(1,1);
+        ind_col = Human_model(jj).linear_constraint(1,1);
         [~,c]=find(GC.q_map(ind_col,:));
         
-        ind_val = OsteoArticularModel(jj).linear_constraint(2,1);
+        ind_val = Human_model(jj).linear_constraint(2,1);
         [~,cc]=find(GC.q_map(ind_val,:));
         Aeq_ik(i,c)=cc;
     end

@@ -157,5 +157,6 @@ num_solid=0;
     OsteoArticularModel(incr_solid).c=-Skull_NeckNode';
     OsteoArticularModel(incr_solid).anat_position=Skull_position_set;
     OsteoArticularModel(incr_solid).L={'Skull_TopOfHead';'Thorax_T1C5'};
+    OsteoArticularModel(incr_solid).visual_file = ['Holzbaur/skull.mat'];
 
 end

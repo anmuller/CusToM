@@ -242,6 +242,7 @@ num_solid=0;
     OsteoArticularModel(incr_solid).m=UpperTrunk_Mass;                 
     OsteoArticularModel(incr_solid).I=[I_Thorax(1) I_Thorax(4) I_Thorax(5); I_Thorax(4) I_Thorax(2) I_Thorax(6); I_Thorax(5) I_Thorax(6) I_Thorax(3)];
     OsteoArticularModel(incr_solid).anat_position=Thorax_position_set;
+    OsteoArticularModel(incr_solid).visual_file = ['Holzbaur/thorax.mat'];
     OsteoArticularModel(incr_solid).L={'Pelvis_LowerTrunkNode';'Thorax_T1C5'};
     
     %% Rclavicle
@@ -300,6 +301,8 @@ num_solid=0;
     OsteoArticularModel(incr_solid).I=zeros(3,3);
     OsteoArticularModel(incr_solid).c=[0 0 0]';
     OsteoArticularModel(incr_solid).anat_position=RClavicle_position_set;
+    OsteoArticularModel(incr_solid).visual_file = ['Holzbaur/clavicle_r.mat'];
+
 
     %% Lclavicle
     % LClavicle_J1
@@ -357,5 +360,6 @@ num_solid=0;
     OsteoArticularModel(incr_solid).I=zeros(3,3);
     OsteoArticularModel(incr_solid).c=[0 0 0]';
     OsteoArticularModel(incr_solid).anat_position=LClavicle_position_set;
+    OsteoArticularModel(incr_solid).visual_file = ['Holzbaur/clavicle_l.mat'];
 
 end

@@ -194,5 +194,6 @@ num_solid=0;
     OsteoArticularModel(incr_solid).I=[I_Thorax(1) I_Thorax(4) I_Thorax(5); I_Thorax(4) I_Thorax(2) I_Thorax(6); I_Thorax(5) I_Thorax(6) I_Thorax(3)];
     OsteoArticularModel(incr_solid).anat_position=Thorax_position_set;
     OsteoArticularModel(incr_solid).L={'Pelvis_L5JointNode';'Thorax_T1C5'};
+    OsteoArticularModel(incr_solid).visual_file = ['gait2354/torso.mat'];
 
 end

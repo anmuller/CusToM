@@ -3,7 +3,7 @@ A_norm,b_norm]=SymbolicFunctionGeneration_A(Human_model, Markers_set)
 % Generation of symbolic function containing the position of markers according to joint coordinates and geometrical parameters
 %
 %   INPUT
-%   - Human_model: osteo-articular model (see the Documentation for the
+%   - Human_model: osteo-articular model (see the Documentation for the²
 %   structure) 
 %   - Markers_set: set of markers (see the Documentation for the structure)
 %   OUTPUT
@@ -74,12 +74,14 @@ q_map_unsix=q_map;[~,col]=find(q_map_unsix(end-5:end,:));
 q_red=q_map'*q;
 q_dep=q_dep_map'*q;
 q_dep_scaled=zeros(size(q_dep_map,2),1);
-ind_q_dependancy=zeros(size(q_dep_map,2),1);
+ind_q_dependancy=cell(size(q_dep_map,2),1);
+
 for ii=1:size(q_dep_map,2)
-    ind_q_dependancy=Human_model(logical(q_dep_map(:,ii))).kinematic_dependancy.Joint;
-    q_dependancy = q(ind_q_dependancy);
+    ind_q_dependancy_current=Human_model(logical(q_dep_map(:,ii))).kinematic_dependancy.Joint;
+    ind_q_dependancy{ii}=ind_q_dependancy_current';
+    q_dependancy = q(ind_q_dependancy_current);
     q_handle_input = cell(length(q_dependancy),1);
-    for jj=1:size(q_handle_input)
+    for jj=1:size(q_handle_input,1)
         q_handle_input{jj} = q_dependancy(jj);
     end
     q_handle=Human_model(logical(q_dep_map(:,ii))).kinematic_dependancy.q;
@@ -133,16 +135,19 @@ k_sym_tot=k_map*[k_sym,;1];
 % only for sliders
 vect=ones(size(k_sym));
 k_test_tot=k_map*[vect,;0];
-ind_k_dep =zeros(size(ind_q_dependancy));
-k_dep=sym(zeros(size(ind_q_dependancy)));
+ind_k_dep=zeros(size(ind_q_dependancy,1),1);
+k_dep=sym(zeros(size(ind_q_dependancy,1),1));
 for ii=1:length(ind_q_dependancy)
     if q_dep_scaled(ii) % if it is a slider
-        ij = Human_model(ind_q_dependancy(ii)).mother;
-        while k_test_tot(ij)==0
-            ij = Human_model(ij).mother;
-        end 
-        ind_k_dep(ii)=ij;
-        k_dep(ii)=k_sym_tot(ij);
+        ind_q_dependancy_holder=ind_q_dependancy{ii};
+        for jj=1:length(ind_q_dependancy_holder)
+            ij = Human_model(ind_q_dependancy_holder(jj)).mother;
+            while k_test_tot(ij)==0
+                ij = Human_model(ij).mother;
+            end 
+            ind_k_dep(ii)=ij;
+            k_dep(ii)=k_sym_tot(ij);
+        end
     else % if it is a hinge
         ind_k_dep(ii)=0;
         k_dep(ii)=1;

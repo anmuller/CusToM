@@ -266,10 +266,10 @@ for i=1:numel(p_ClosedLoop)
 %     matlabFunction(R_ClosedLoop{i},p_ClosedLoop{i},'File',['Symbolic_function/fCL' num2str(i) '.m'],...
 %         'Outputs',{'R','p'},'vars',{q});
     matlabFunction(R_ClosedLoop{i},p_ClosedLoop{i},'File',['Symbolic_function/fCL' num2str(i) '.m'],...
-        'Outputs',{'R','p'},'vars',{q_red});
+        'Outputs',{'R','p'},'vars',q_red);
 end
 nbClosedLoop=numel(p_ClosedLoop);
-
+    
 %We delete p and R fields
 Human_model = rmfield(Human_model, 'p');
 Human_model = rmfield(Human_model, 'R');

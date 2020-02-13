@@ -320,10 +320,10 @@ if size(GC.q_dep,1)>0
     for j=1:numel(Human_model_save)
         if isfield(Human_model_calib,'kinematic_dependancy') && ~isempty(Human_model_calib(j).kinematic_dependancy)
                  Human_model_calib(j).kinematic_dependancy.q=matlabFunction(vect_q_dep(j));
-                 if vect_k_dep(j)~=0
-                    Human_model_calib(j).kinematic_dependancy.numerical_estimates(:,2)=...
-                        calib_parameters.k_calib(vect_k_dep(j))*Human_model_calib(j).kinematic_dependancy.numerical_estimates(:,2);   
-                 end
+%                  if vect_k_dep(j)~=0
+%                     Human_model_calib(j).kinematic_dependancy.numerical_estimates(:,2)=...
+%                         calib_parameters.k_calib(vect_k_dep(j))*Human_model_calib(j).kinematic_dependancy.numerical_estimates(:,2);   
+%                  end
         end
     end
 end
