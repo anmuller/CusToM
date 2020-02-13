@@ -32,10 +32,11 @@ load([filename '/InverseDynamicsResults']) %#ok<LOAD>
 
 if isfield(BiomechanicalModel,'Generalized_Coordinates')
     q_map_unsix = BiomechanicalModel.Generalized_Coordinates.q_map_unsix;
-    q = q_map_unsix'*[InverseKinematicsResults.FreeJointCoordinates(end,:);...
+    Q=[InverseKinematicsResults.FreeJointCoordinates(end,:);...
         InverseKinematicsResults.JointCoordinates(2:end,:);
         InverseKinematicsResults.JointCoordinates(1,:);
         InverseKinematicsResults.FreeJointCoordinates(1:end-1,:)];
+    q = q_map_unsix'*Q;
     
     torques = q_map_unsix'*[InverseDynamicsResults.DynamicResiduals.t6dof(end,:);...
         InverseDynamicsResults.JointTorques(2:end,:);
@@ -47,54 +48,56 @@ else
     torques=InverseDynamicsResults.JointTorques;
 end
 
-%% Computation of muscle forces (optimization)
+Nb_q=size(q,1);
+Nb_frames=size(torques,2);
+
 %existing muscles
 idm = logical([Muscles.exist]);
+Nb_muscles=numel(Muscles(idm));
 
-Nb_frames=size(torques,2);
-% Nb_muscles=sum([Muscles.exist]);
-Nb_muscles=numel(Muscles);
+%% computation of muscle moment arms from joint posture
+Lm=zeros(Nb_muscles,Nb_frames);
+R=zeros(Nb_q,Nb_muscles,Nb_frames);
+for i=1:Nb_frames % for each frames
+    Lm(idm,i)   =   MuscleLengthComputationNum(BiomechanicalModel,Q(:,i)); %dependant of every q (q_complete)
+    R(:,:,i)    =   MomentArmsComputationNum(BiomechanicalModel,Q(:,i),0.0001); %depend on reduced set of q (q_red)
+end
+
+[idxj,~]=find(sum(R(:,:,1),2)~=0);
+
+%% Computation of muscle forces (optimization)
 % Optimisation parameters
 F0 = zeros(Nb_muscles,1);
 Fmin = zeros(Nb_muscles,1);
-
+% Fmax
+Fmax = [Muscles(idm).f0]';
 Fopt = zeros(Nb_muscles,Nb_frames);
 Aopt = zeros(size(Fopt));
 
-Lm=zeros(Nb_muscles,Nb_frames);
 options = optimoptions(@fmincon,'Algorithm','sqp','Display','off','GradObj','off','GradConstr','off','TolFun',1e-6);
 % options = optimoptions(@fmincon,'Algorithm','sqp','Display','off','GradObj','off','GradConstr','off','TolFun',1e-9,'MaxFunEvals',20000);
 % options = optimoptions(@fmincon,'Algorithm','sqp','Display','off','GradObj','off','GradConstr','off','TolFun',1e-9,'MaxFunEvals',100000,'TolX',1e-9,'StepTolerance',1e-15,'FunctionTolerance',1e-10,'MaxIterations',5000);
 
 h = waitbar(0,['Forces Computation (' filename ')']);
-tic
+
 for i=1:Nb_frames % for each frames
-    %     i
-    % computation of muscle moment arms from joint posture
-    
-    [R,Lm(idm,i)]=MomentArmsComputationNum(BiomechanicalModel,q(:,i),0.0001);
-    if i==1 % find the relevant joints
-        [idxj,~]=find(sum(R,2)~=0);
-    end
-    Aeq=R(idxj,:);
+    % Moment arms
+    Aeq=R(idxj,:,i);
     % Joint Torques
     beq=torques(idxj,i); % C
-    % Fmax
-    Fmax = [Muscles.f0]';
     % Optimization
-    Fopt(idm,i) = AnalysisParameters.Muscles.Costfunction(F0(idm,1), Aeq, beq, Fmin(idm), Fmax(idm), options, AnalysisParameters.Muscles.CostfunctionOptions, Fmax(idm));
+    Fopt(:,i) = AnalysisParameters.Muscles.Costfunction(F0, Aeq, beq, Fmin, Fmax, options, AnalysisParameters.Muscles.CostfunctionOptions, Fmax);
     % Muscular activity
     Aopt(:,i) = Fopt(:,i)./Fmax;
     F0=Fopt(:,i);
     waitbar(i/Nb_frames)
-    
 end
 close(h)
-% w=toc; %#ok<NASGU>
 
-MuscleForcesComputationResults.MuscleActivations = Aopt;
-MuscleForcesComputationResults.MuscleForces = Fopt;
-MuscleForcesComputationResults.MuscleLengths = Lm;
+MuscleForcesComputationResults.MuscleActivations(idm,:) = Aopt;
+MuscleForcesComputationResults.MuscleForces(idm,:) = Fopt;
+MuscleForcesComputationResults.MuscleLengths= Lm;
+MuscleForcesComputationResults.MuscleLeverArm = R;
 
 disp(['... Forces Computation (' filename ') done'])
 

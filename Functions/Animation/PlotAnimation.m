@@ -80,7 +80,7 @@ end
 if isfield(AnimateParameters, 'wrap')
     wrap_anim = AnimateParameters.wrap;
 else
-    wrap_anim = 0;
+    wrap_anim = 1;
 end
 if isfield(AnimateParameters, 'mod_marker_anim')
     mod_marker_anim = AnimateParameters.mod_marker_anim;
@@ -267,7 +267,7 @@ elseif isequal(AnimateParameters.Mode, 'cFigure')
     ax.Clipping = 'off';
     drawnow;
 elseif isequal(AnimateParameters.Mode, 'GenerateAnimate') || isequal(AnimateParameters.Mode, 'GenerateParameters')
-    ax = AnimateParameters.ax;
+    ax = AnimateParameters.ax; 
     camlight(ax, 'headlight'); lighting(ax,'gouraud');
 %     material(ax, 'metal');
 end
@@ -278,7 +278,7 @@ if isequal(AnimateParameters.Mode, 'Picture') ...
         || isequal(AnimateParameters.Mode, 'GenerateParameters')
     f_affich = AnimateParameters.PictureFrame;
 else
-    f_affich = 1:3:size(q,2);
+    f_affich = 1:1:size(q,2);
 end
 
 %Initialization animStruct
@@ -522,7 +522,7 @@ for f=f_affich
         animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices'};
         animStruct.Set{f} = {animStruct.Set{f}{:},Vw};
     end
-    
+
     %% Muscles
     if muscles_anim && ~isempty(Muscles) && sum([Muscles.exist])
         Fmu=[];
@@ -546,7 +546,7 @@ for f=f_affich
                 % verify if wrap.
                 for imw=1:nbpts_mu-1
                     if Intersect_line_cylinder(pts_mu_inRw(1:3,imw)', pts_mu_inRw(1:3,imw+1)', cur_Wrap.R)
-                        [~,~,~,pt_wrap_inRw(:,:,imw)]=CylinderWrapping(pts_mu_inRw(1:3,imw)', pts_mu_inRw(1:3,imw+1)', cur_Wrap.R);
+                        [L(f),~,~,pt_wrap_inRw(:,:,imw)]=CylinderWrapping(pts_mu_inRw(1:3,imw), pts_mu_inRw(1:3,imw+1), cur_Wrap.R);
                         tmp=T_R0_Rw*[pt_wrap_inRw(:,:,imw)';ones(1,size(pt_wrap_inRw,1))];
                         pt_wrap(:,:,imw)=tmp(1:3,:)';
                         % add the wrapping points
@@ -586,9 +586,9 @@ for f=f_affich
         elseif f==f_affich(1) 
             hmu=gpatch(Fmu,Vmu,[],CEmu,1,2);
         end        
-        animStruct.Handles{f} = [animStruct.Handles{f} hmu hmu];
-        animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices','FaceVertexCData'};
-        animStruct.Set{f} = {animStruct.Set{f}{:},Vmu,CEmu};
+        animStruct.Handles{f} = [animStruct.Handles{f} hmu hmu hmu];
+        animStruct.Props{f} = {animStruct.Props{f}{:},'Faces','Vertices','FaceVertexCData'};
+        animStruct.Set{f} = {animStruct.Set{f}{:},Fmu,Vmu,CEmu};
     end    
     
     %% Vectors of external forces issued from experimental data
@@ -685,7 +685,7 @@ for f=f_affich
     %% Save figure
     if isequal(AnimateParameters.Mode, 'Figure')
         % drawing an saving
-        drawnow
+        drawnow;
         M(cpt) = getframe(fig); %#ok<AGROW>
     end
     
@@ -713,5 +713,5 @@ if isequal(AnimateParameters.Mode, 'GenerateParameters')
     varargout{2} = Markers_set;
     varargout{3} = EnableModel;
 end
-
+% save('L','L')
 end
