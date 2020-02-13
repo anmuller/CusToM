@@ -79,7 +79,7 @@ R_Thorax_scJointNode = k*[0.006325 0.00693 0.025465] - CoM_Thorax_ibhgc;
 L_Thorax_scJointNode = k*[0.006325 0.00693 -0.025465] - CoM_Thorax_ibhgc;
 Thorax_scjJointCenter=k*[0 0.1240 0]-Thorax_T12L1JointNode; %#ok<NASGU>
 NeckNode=Thorax_C1HatNode;
-Thorax_EllipsoidNode = k*[-0.02 -0.0173 0.0609];
+Thorax_EllipsoidNode = k*[-0.02 -0.0173 0.0609] - CoM_Thorax_ibhgc;
 
 
 %% Definition of anatomical landmarks (with respect to the center of mass of the solid)
@@ -241,6 +241,7 @@ Human_model(incr_solid).joint=1;
 Human_model(incr_solid).limit_inf=-0.2;
 Human_model(incr_solid).limit_sup=0.2;
 Human_model(incr_solid).Visual=1;
+Human_model(incr_solid).Visual_file='Holzbaur/torso.mat';
 Human_model(incr_solid).calib_k_constraint=[];
 Human_model(incr_solid).b=[0 0 0]';  
 Human_model(incr_solid).c=-Thorax_T12L1JointNode';

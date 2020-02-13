@@ -84,6 +84,9 @@ Scapula_acJointNode = k*Mirror*[-0.01357; 0.00011; -0.01523] - Scapula_CoM;
 Scapula_ghJointNode = k*Mirror*[-0.00955; -0.034; 0.009] - Scapula_CoM;
 Scapula_stJointNode = k*Mirror*[-0.05982; -0.03904; -0.056] - Scapula_CoM;
 Scapula_acromion = k*Mirror*[-0.0142761 0.0131922 -0.00563961]' - Scapula_CoM;
+Scapula_cluster1 = k*Mirror*[-0.0860033 0.0298369 -0.00786593]' - Scapula_CoM;
+Scapula_cluster2 = k*Mirror*[-0.0956621 0.0398035 -0.0552027]' - Scapula_CoM;
+Scapula_cluster3 = k*Mirror*[-0.119492 0.0147336 -0.0385808]' - Scapula_CoM;
 
 %% Definition of anatomical landmarks (with respect to the center of mass of the solid)
 
@@ -93,7 +96,10 @@ Scapula_position_set = {...
     ['Thorax_Shoulder' FullSide 'Node'], Scapula_ghJointNode;...
     % Markers
     [Side 'SHO'], Scapula_acromion;...
-    ['AC' Cote], Scapula_acromion;
+    ['AC' Cote], Scapula_acromion;...
+    ['MTAC' Cote '1'], Scapula_cluster1;...
+    ['MTAC' Cote '2'], Scapula_cluster2;...
+    ['MTAC' Cote '3'], Scapula_cluster3;...
     % Muscle paths
     [Side '_scapula_DELT1_r-P3'],k*Mirror*([0.04347;-0.03252;0.00099])-Scapula_CoM;...
     [Side '_scapula_DELT2_r-P3'],k*Mirror*([5e-05;0.00294;0.02233])-Scapula_CoM;...
@@ -147,9 +153,9 @@ Scapula_position_set = {...
 Scapula_Mass_generic=0.70396;
 I_scapula_generic=[0.0012429 0.0011504 0.0013651 0.0004494 Sign*0.00040922 Sign*0.0002411];
 I_scapula=(k^2*Mass.Scapula_Mass/Scapula_Mass_generic)*I_scapula_generic;
-Thorax_Rx=0.07;
-Thorax_Ry=0.15;
-Thorax_Rz=0.07;
+Thorax_Rx=k*0.07;
+Thorax_Ry=k*0.15;
+Thorax_Rz=k*0.07;
 
 %% "Human_model" structure generation
  
@@ -319,7 +325,7 @@ Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
 Human_model(incr_solid).linear_constraint=[];
 Human_model(incr_solid).anat_position=Scapula_position_set;
 Human_model(incr_solid).Visual=1;
-Human_model(incr_solid).Visual_file=['Holzbaur/scapula_' lower(Side) '.mat'];
+Human_model(incr_solid).visual_file=['Holzbaur/scapula_' lower(Side) '.mat'];
 
 
 % ThoracicEllips_J1
