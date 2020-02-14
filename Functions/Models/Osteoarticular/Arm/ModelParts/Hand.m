@@ -169,6 +169,7 @@ num_solid=0;
     OsteoArticularModel(incr_solid).c=-Hand_WristJointNode';
     OsteoArticularModel(incr_solid).anat_position=Hand_position_set;
     OsteoArticularModel(incr_solid).Visual=1;
+    OsteoArticularModel(incr_solid).visual_file = ['Holzbaur/hand_' Signe '.mat'];
     OsteoArticularModel(incr_solid).L={[Signe 'Hand_WristJointNode'];[Signe 'Hand_EndNode']};
 
 end

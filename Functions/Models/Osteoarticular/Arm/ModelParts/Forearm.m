@@ -178,6 +178,7 @@ num_solid=0;
     OsteoArticularJoint(incr_solid).c=-Forearm_ElbowJointNode';
     OsteoArticularJoint(incr_solid).anat_position=Forearm_position_set;
     OsteoArticularJoint(incr_solid).Visual=1;
+    OsteoArticularJoint(incr_solid).visual_file = ['Holzbaur/radius_' Signe '.mat'];
     OsteoArticularJoint(incr_solid).L={[Signe 'Forearm_ElbowJointNode'];[Signe 'Forearm_WristJointNode']};
     
 end
