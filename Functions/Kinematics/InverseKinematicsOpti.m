@@ -96,6 +96,7 @@ options1 = optimoptions(@fmincon,'Display','off','TolFun',1e-3,'MaxFunEvals',200
 options2 = optimoptions(@fmincon,'Algorithm','sqp','Display','off','TolFun',1e-2,'MaxFunEvals',20000,'GradObj','off','GradConstr','off');
 
 q=zeros(nb_solid,nb_frame);
+ceq=zeros(9*nbClosedLoop,nb_frame);
 
 addpath('Symbolic_function')
 
@@ -172,11 +173,11 @@ else
             else            
                 q0=q(:,f-1);
             end
-        l_inf=max(q(:,f-1)-0.2,l_inf1);
-        l_sup=min(q(:,f-1)+0.2,l_sup1); 
-        ik_function_objective=@(qvar)CostFunctionSymbolicIK(qvar,nb_cut,real_markers,f,list_function,list_function_markers,Rcut,pcut);
-        nonlcon=@(qvar)ClosedLoop(qvar,nbClosedLoop);
-        [q(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf,l_sup,nonlcon,options2);
+            l_inf=max(q(:,f-1)-0.2,l_inf1);
+            l_sup=min(q(:,f-1)+0.2,l_sup1); 
+            ik_function_objective=@(qvar)CostFunctionSymbolicIK(qvar,nb_cut,real_markers,f,list_function,list_function_markers,Rcut,pcut);
+            nonlcon=@(qvar)ClosedLoop(qvar,nbClosedLoop);
+            [q(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf,l_sup,nonlcon,options2);
         end
         waitbar(f/nb_frame)
     end
@@ -194,6 +195,7 @@ KinematicsError=zeros(numel(list_markers),nb_frame);
 nb_cut=max([Human_model.KinematicsCut]);
 for f=1:nb_frame
     [KinematicsError(:,f)] = ErrorMarkersIK(q(:,f),nb_cut,real_markers,f,list_markers,Rcut,pcut);
+    [~,ceq(:,f)]=nonlcon(q(:,f));
 end
 
 % Reaffect coordinates
@@ -226,6 +228,7 @@ ExperimentalData.Time = time;
 InverseKinematicResults.JointCoordinates = q;
 InverseKinematicResults.FreeJointCoordinates = q6dof;
 InverseKinematicResults.ReconstructionError = KinematicsError;
+InverseKinematicResults.NonLinearConstraint = ceq;
     
 disp(['... Inverse kinematics (' filename ') done'])
 
