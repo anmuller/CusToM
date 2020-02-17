@@ -1,4 +1,4 @@
-function [Muscles]=LegMusclesTLEM_wrap(Muscles,Signe)
+function [Muscles]=LegMusclesTLEM_withwraps(Muscles,Signe)
 % Definition of the leg muscle model
 %   This model contains 166 muscles, actuating the hip, the knee and the
 %   ankle joint
