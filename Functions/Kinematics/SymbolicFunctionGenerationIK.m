@@ -1,4 +1,4 @@
-function [Human_model,Jacob,nbClosedLoop,Generalized_Coordinates]=SymbolicFunctionGenerationIK(Human_model,Markers_set)
+function [Human_model,Jacob,Generalized_Coordinates]=SymbolicFunctionGenerationIK(Human_model,Markers_set)
 % Computation of function used in the inverse kinematics step
 %   Generated functions contain the global position of each marker and its
 %   Jacobian matrix. All functions are evaluated according to the joint
@@ -100,7 +100,7 @@ Human_model(s_root).R=RPelvis;
 
 % Computation of the symbolic markers position
 %[Human_model,Markers_set,~,~,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure(Human_model,Markers_set,s_root,q,k,p_adapt,1,1);
-[Human_model,Markers_set,~,~,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure(Human_model,Markers_set,s_root,q_complete,k,p_adapt,1,1);
+[Human_model,Markers_set,~]=Symbolic_ForwardKinematicsCoupure(Human_model,Markers_set,s_root,q_complete,k,p_adapt,1);
 
 % position and rotation of the solids used as cuts
 for ii=1:max([Human_model.KinematicsCut])
@@ -261,15 +261,17 @@ for ii=1:length(ind_Kcut) % solide i
         'Outputs',{['R' num2str(num2str(Human_model(i_Kc).KinematicsCut)) 'cut' ],['p' num2str(num2str(Human_model(i_Kc).KinematicsCut)) 'cut' ]},...;
         'vars',{q_red,pcut,Rcut});
 end
-% Closed loops
-for i=1:numel(p_ClosedLoop)
+
+% %% Closed loops
+% for i=1:numel(p_ClosedLoop)
+% %     matlabFunction(R_ClosedLoop{i},p_ClosedLoop{i},'File',['Symbolic_function/fCL' num2str(i) '.m'],...
+% %         'Outputs',{'R','p'},'vars',{q});
 %     matlabFunction(R_ClosedLoop{i},p_ClosedLoop{i},'File',['Symbolic_function/fCL' num2str(i) '.m'],...
-%         'Outputs',{'R','p'},'vars',{q});
-    matlabFunction(R_ClosedLoop{i},p_ClosedLoop{i},'File',['Symbolic_function/fCL' num2str(i) '.m'],...
-        'Outputs',{'R','p'},'vars',{q_red});
-end
-nbClosedLoop=numel(p_ClosedLoop);
-    
+%         'Outputs',{'R','p'},'vars',{q_red});
+% end
+% nbClosedLoop=numel(p_ClosedLoop);
+
+
 %We delete p and R fields
 Human_model = rmfield(Human_model, 'p');
 Human_model = rmfield(Human_model, 'R');

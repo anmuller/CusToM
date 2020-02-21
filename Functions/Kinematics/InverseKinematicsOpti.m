@@ -139,7 +139,7 @@ end
 
 % Inverse kinematics
 h = waitbar(0,['Inverse Kinematics (' filename ')']);
-if nbClosedLoop == 0 % if there is no closed loo^p
+if nbClosedLoop == 0 % if there is no closed loop
     for f=1:nb_frame    
         if f == 1      % initial value
             q0=zeros(nb_solid,1);   
@@ -164,7 +164,8 @@ else
         if f == 1      % initial value
             q0=zeros(nb_solid,1);   
             ik_function_objective=@(qvar)CostFunctionSymbolicIK(qvar,nb_cut,real_markers,f,list_function,list_function_markers,Rcut,pcut);
-            nonlcon=@(qvar)ClosedLoop(qvar,nbClosedLoop);
+%             nonlcon=@(qvar)ClosedLoop(qvar,nbClosedLoop);
+            nonlcon=@(qvar)NonLinCon_ClosedLoop(BiomechanicalModel,nbClosedLoop,qvar);
             [q(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,nonlcon,options1);
         else
             if f > 2
@@ -176,7 +177,8 @@ else
             l_inf=max(q(:,f-1)-0.2,l_inf1);
             l_sup=min(q(:,f-1)+0.2,l_sup1); 
             ik_function_objective=@(qvar)CostFunctionSymbolicIK(qvar,nb_cut,real_markers,f,list_function,list_function_markers,Rcut,pcut);
-            nonlcon=@(qvar)ClosedLoop(qvar,nbClosedLoop);
+%             nonlcon=@(qvar)ClosedLoop(qvar,nbClosedLoop);
+            nonlcon=@(qvar)NonLinCon_ClosedLoop(BiomechanicalModel,nbClosedLoop,qvar);
             [q(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf,l_sup,nonlcon,options2);
         end
         waitbar(f/nb_frame)

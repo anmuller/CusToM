@@ -1,5 +1,5 @@
-function [Human_model,Markers_set,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop]=...
-    Symbolic_ForwardKinematicsCoupure(Human_model,Markers_set,j,q,k,p_adapt,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop)
+function [Human_model,Markers_set,num_cut]=...
+    Symbolic_ForwardKinematicsCoupure(Human_model,Markers_set,j,q,k,p_adapt,num_cut)
 % Computation of a symbolic forward kinematics 
 %
 %   INPUT
@@ -32,10 +32,10 @@ function [Human_model,Markers_set,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoo
 % Georges Dumont
 %________________________________________________________
 
-if nargin<10
-    p_ClosedLoop={};
-    R_ClosedLoop={};
-end
+% if nargin<10
+%     p_ClosedLoop={};
+%     R_ClosedLoop={};
+% end
 
 %%
 if j==0
@@ -90,29 +90,29 @@ if Human_model(j).mother ~= 0
             end
     end
     
-    % If closed loopt
-    if size(Human_model(j).ClosedLoop) ~= [0 0] %#ok<BDSCA>
-        % we find the solid and the position where there was a cut
-        name=Human_model(j).ClosedLoop;
-        test=0;
-        for pp=1:numel(Human_model)
-            for kk=1:size(Human_model(pp).anat_position,1)
-                if strcmp(name,Human_model(pp).anat_position(kk,1))
-                    num_solid=pp;
-                    num_markers=kk;
-                    test=1;
-                    break
-                end
-            end
-            if test == 1
-                break
-            end
-        end
-        [solid_path]=find_solid_path_ClosedLoop(Human_model,j,num_solid);
-        s = Human_model(num_solid).c + Human_model(num_solid).anat_position{num_markers,2}; % position with respects to the position of the mother solid joint of the closed loop
-        [Human_model,p_ClosedLoop{numClosedLoop},R_ClosedLoop{numClosedLoop}] = ForwardKinematics_ClosedLoop(Human_model,1,s,solid_path,[0 0 0]',eye(3),q,k);
-        numClosedLoop=numClosedLoop+1;
-    end
+%     % If closed loopt
+%     if size(Human_model(j).ClosedLoop) ~= [0 0] %#ok<BDSCA>
+%         % we find the solid and the position where there was a cut
+%         name=Human_model(j).ClosedLoop;
+%         test=0;
+%         for pp=1:numel(Human_model)
+%             for kk=1:size(Human_model(pp).anat_position,1)
+%                 if strcmp(name,Human_model(pp).anat_position(kk,1))
+%                     num_solid=pp;
+%                     num_markers=kk;
+%                     test=1;
+%                     break
+%                 end
+%             end
+%             if test == 1
+%                 break
+%             end
+%         end
+%         [solid_path]=find_solid_path_ClosedLoop(Human_model,j,num_solid);
+%         s = Human_model(num_solid).c + Human_model(num_solid).anat_position{num_markers,2}; % position with respects to the position of the mother solid joint of the closed loop
+%         [Human_model,p_ClosedLoop{numClosedLoop},R_ClosedLoop{numClosedLoop}] = ForwardKinematics_ClosedLoop(Human_model,1,s,solid_path,[0 0 0]',eye(3),q,k);
+%         numClosedLoop=numClosedLoop+1;
+%     end
     
 end
 
@@ -125,7 +125,7 @@ for m=1:numel(Markers_set)
     end
 end
 
-[Human_model,Markers_set,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure(Human_model,Markers_set,Human_model(j).sister,q,k,p_adapt,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop);
-[Human_model,Markers_set,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure(Human_model,Markers_set,Human_model(j).child,q,k,p_adapt,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop);
+[Human_model,Markers_set,num_cut]=Symbolic_ForwardKinematicsCoupure(Human_model,Markers_set,Human_model(j).sister,q,k,p_adapt,num_cut);
+[Human_model,Markers_set,num_cut]=Symbolic_ForwardKinematicsCoupure(Human_model,Markers_set,Human_model(j).child,q,k,p_adapt,num_cut);
 
 end

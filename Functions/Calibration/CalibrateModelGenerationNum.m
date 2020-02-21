@@ -58,7 +58,7 @@ end
 %% Symbolic functions
 disp('Preliminary Computations ...')
 [BiomechanicalModel.OsteoArticularModel] = Add6dof(BiomechanicalModel.OsteoArticularModel);
-[BiomechanicalModel.OsteoArticularModel, BiomechanicalModel.Jacob,~,...
+[BiomechanicalModel.OsteoArticularModel, BiomechanicalModel.Jacob,...
     BiomechanicalModel.Generalized_Coordinates] = SymbolicFunctionGenerationIK(BiomechanicalModel.OsteoArticularModel,BiomechanicalModel.Markers);
 disp('... Preliminary Computations done')
 
@@ -108,9 +108,11 @@ end
  end
  
  %% Wrapping locations
- if ~isempty([BiomechanicalModel.Muscles.wrap]')
-     [BiomechanicalModel] =...
-         WrappingLocations(BiomechanicalModel);
+ if ~isempty([BiomechanicalModel.Muscles])
+    if ~isempty([BiomechanicalModel.Muscles.wrap]')
+         [BiomechanicalModel] =...
+             WrappingLocations(BiomechanicalModel);
+    end
  end
  
 save('BiomechanicalModel','BiomechanicalModel');
