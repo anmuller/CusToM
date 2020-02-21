@@ -108,10 +108,13 @@ end
  end
  
  %% Wrapping locations
- if ~isempty([BiomechanicalModel.Muscles.wrap]')
-     [BiomechanicalModel] =...
-         WrappingLocations(BiomechanicalModel);
+ if ~isempty([BiomechanicalModel.Muscles])
+    if ~isempty([BiomechanicalModel.Muscles.wrap]')
+         [BiomechanicalModel] =...
+             WrappingLocations(BiomechanicalModel);
+    end
  end
+ 
  
 save('BiomechanicalModel','BiomechanicalModel');
 
