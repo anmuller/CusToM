@@ -79,9 +79,9 @@ bonepath=fullfile(bonespath,'Visual\XSens');
 
 load([bonepath '/XSensSTLLength.mat']); %#ok<LOAD>
 
-if ~exist('Visual','dir')
+% if ~exist('Visual','dir')
     mkdir('Visual')
-end
+% end
 
 %% Pelvis
 load([bonepath '/Pelvis.mat']); %#ok<LOAD>

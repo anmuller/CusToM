@@ -272,7 +272,7 @@ elseif isequal(AnimateParameters.Mode, 'cFigure')
     ax.Clipping = 'off';
     drawnow;
 elseif isequal(AnimateParameters.Mode, 'GenerateAnimate') || isequal(AnimateParameters.Mode, 'GenerateParameters')
-    ax = AnimateParameters.ax;
+    ax = AnimateParameters.ax; 
     camlight(ax, 'headlight'); lighting(ax,'gouraud');
 %     material(ax, 'metal');
 end
@@ -283,7 +283,7 @@ if isequal(AnimateParameters.Mode, 'Picture') ...
         || isequal(AnimateParameters.Mode, 'GenerateParameters')
     f_affich = AnimateParameters.PictureFrame;
 else
-    f_affich = 1:3:size(q,2);
+    f_affich = 1:1:size(q,2);
 end
 
 %Initialization animStruct
@@ -493,36 +493,6 @@ for f=f_affich
         animStruct.Set{f}={animStruct.Set{f}{:},Vpt_p};
     end
     
-    %% Muscles
-    if muscles_anim && ~isempty(Muscles) && sum([Muscles.exist])
-        Fmu=[];
-        CEmu=[];
-        Vmu=[];
-        color_mus = color0 + Aopt(:,f)*(color1 - color0);
-        ind_mu=find([Muscles_test.exist]==1);
-        for i_mu = 1:numel(ind_mu)
-            mu=ind_mu(i_mu);
-            pts_mu = Muscles_test(mu).pos_pts';
-            nbpts_mu = size(pts_mu,1);
-            cur_Fmu = repmat([1 2],[nbpts_mu-1 1])+(0:nbpts_mu-2)'+size(Vmu,1);
-            Fmu =[Fmu; cur_Fmu]; %#ok<AGROW>
-            Vmu=[Vmu ;pts_mu]; %#ok<AGROW>
-            CEmu=[CEmu; repmat(color_mus(mu,:),[nbpts_mu 1])]; %#ok<AGROW>
-        end
-        if isequal(AnimateParameters.Mode, 'Figure') ...
-                || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
-                || isequal(AnimateParameters.Mode, 'GenerateAnimate')
-            finv = figure('visible','off');
-            hmu=gpatch(Fmu,Vmu,[],CEmu,1,2);
-            copyobj(hmu,ax);
-            close(finv);
-        elseif f==f_affich(1) 
-            hmu=gpatch(Fmu,Vmu,[],CEmu,1,2);
-        end        
-        animStruct.Handles{f} = [animStruct.Handles{f} hmu hmu];
-        animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices','FaceVertexCData'};
-        animStruct.Set{f} = {animStruct.Set{f}{:},Vmu,CEmu};
-    end
     %% Muscle wraps
     if wrap_anim && isfield(Human_model,'wrap') && numel([Human_model.wrap])>0
         %&& sum(cellfun(@isempty,[Muscles.wrap]'))==0
@@ -537,7 +507,6 @@ for f=f_affich
             X = Human_model_bis(num_solid).Tc_R0_Ri*T_Ri_Rw;
             [Fcyl,Vcyl]=PlotCylinder(Wraps(i_w).R,Wraps(i_w).h);
             Vcyl_R0= (X*[Vcyl';ones(1,length(Vcyl))])';
-            
             tot_nb_F=length(Fw);
             cur_nb_F=length(Fcyl);
             tot_nb_V=length(Vw);
@@ -558,6 +527,7 @@ for f=f_affich
         animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices'};
         animStruct.Set{f} = {animStruct.Set{f}{:},Vw};
     end
+<<<<<<< HEAD
     
     %% Scapulo-thoracic Ellipsoid
     if ellipsoid_anim
@@ -580,11 +550,67 @@ for f=f_affich
             tot_nb_V=length(Ve);
             Fe((1:cur_nb_F)+tot_nb_F,:)=Fel1+tot_nb_V;
             Ve=[Ve ;Vell_R0(:,1:3)]; %#ok<AGROW>
+=======
+
+    %% Muscles
+    if muscles_anim && ~isempty(Muscles) && sum([Muscles.exist])
+        Fmu=[];
+        CEmu=[];
+        Vmu=[];
+        color_mus = color0 + Aopt(:,f)*(color1 - color0);
+        ind_mu=find([Muscles_test.exist]==1);
+        for i_mu = 1:numel(ind_mu)
+            mu=ind_mu(i_mu);
+            pts_mu = Muscles_test(mu).pos_pts';
+            nbpts_mu = size(pts_mu,1);
+            if ~isempty(Muscles(mu).wrap) && ~isempty(Muscles(mu).wrap{1})
+                % find the wrap
+                Wrap = [Human_model.wrap]; names = {Wrap.name}'; [~,ind]=intersect(names,Muscles(mu).wrap{1});
+                cur_Wrap=Wrap(ind);
+                % wrap object
+                T_Ri_Rw=[cur_Wrap.orientation,cur_Wrap.location;[0 0 0],1];
+                T_R0_Rw = Human_model_bis(cur_Wrap.num_solid).Tc_R0_Ri*T_Ri_Rw;   
+                % pts in Rw
+                pts_mu_inRw=T_R0_Rw\[pts_mu';ones(1,nbpts_mu)];
+                % verify if wrap.
+                for imw=1:nbpts_mu-1
+                    if Intersect_line_cylinder(pts_mu_inRw(1:3,imw)', pts_mu_inRw(1:3,imw+1)', cur_Wrap.R)
+                        [L(f),~,~,pt_wrap_inRw(:,:,imw)]=CylinderWrapping(pts_mu_inRw(1:3,imw), pts_mu_inRw(1:3,imw+1), cur_Wrap.R);
+                        tmp=T_R0_Rw*[pt_wrap_inRw(:,:,imw)';ones(1,size(pt_wrap_inRw,1))];
+                        pt_wrap(:,:,imw)=tmp(1:3,:)';
+                        % add the wrapping points
+                        nb_added_pts=size([pts_mu(imw,:);pt_wrap(:,:,imw)],1);
+                        cur_Fmu = repmat([1 2],[nb_added_pts-1 1])+(0:nb_added_pts-2)'+size(Vmu,1);
+                        Vmu=[Vmu;pts_mu(imw,:);pt_wrap(:,:,imw)];
+                        Fmu =[Fmu; cur_Fmu]; %#ok<AGROW>
+                        CEmu=[CEmu; repmat(color_mus(mu,:),[nb_added_pts 1])]; %#ok<AGROW>
+                    else
+                        if imw>1
+                            cur_Fmu = [1 2]+size(Vmu,1);
+                            Fmu =[Fmu; cur_Fmu]; %#ok<AGROW>
+                        end
+                        Vmu=[Vmu ;pts_mu(imw,:)]; %#ok<AGROW>
+                        CEmu=[CEmu; color_mus(mu,:)]; %#ok<AGROW>
+                    end
+                end
+                cur_Fmu = repmat([0 1],[1 1])+size(Vmu,1);
+                Fmu =[Fmu; cur_Fmu]; %#ok<AGROW>
+                Vmu=[Vmu ;pts_mu(end,:)]; %#ok<AGROW>
+                CEmu=[CEmu; color_mus(mu,:)]; %#ok<AGROW>
+            else
+                cur_Fmu = repmat([1 2],[nbpts_mu-1 1])+(0:nbpts_mu-2)'+size(Vmu,1);
+                Fmu =[Fmu; cur_Fmu]; %#ok<AGROW>
+                Vmu=[Vmu ;pts_mu]; %#ok<AGROW>
+                CEmu=[CEmu; repmat(color_mus(mu,:),[nbpts_mu 1])]; %#ok<AGROW>
+            end
+            
+>>>>>>> origin/Dev_Wrapping
         end
         if isequal(AnimateParameters.Mode, 'Figure') ...
                 || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
                 || isequal(AnimateParameters.Mode, 'GenerateAnimate')
             finv = figure('visible','off');
+<<<<<<< HEAD
             he=gpatch(Fe,Ve,'c','none',0.3);
             copyobj(he,ax);
             close(finv);
@@ -595,6 +621,18 @@ for f=f_affich
         animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices'};
         animStruct.Set{f} = {animStruct.Set{f}{:},Ve};
     end
+=======
+            hmu=gpatch(Fmu,Vmu,[],CEmu,1,2);
+            copyobj(hmu,ax);
+            close(finv);
+        elseif f==f_affich(1) 
+            hmu=gpatch(Fmu,Vmu,[],CEmu,1,2);
+        end        
+        animStruct.Handles{f} = [animStruct.Handles{f} hmu hmu hmu];
+        animStruct.Props{f} = {animStruct.Props{f}{:},'Faces','Vertices','FaceVertexCData'};
+        animStruct.Set{f} = {animStruct.Set{f}{:},Fmu,Vmu,CEmu};
+    end    
+>>>>>>> origin/Dev_Wrapping
     
     %% Vectors of external forces issued from experimental data
     if external_forces_anim
@@ -690,7 +728,7 @@ for f=f_affich
     %% Save figure
     if isequal(AnimateParameters.Mode, 'Figure')
         % drawing an saving
-        drawnow
+        drawnow;
         M(cpt) = getframe(fig); %#ok<AGROW>
     end
     
@@ -718,5 +756,5 @@ if isequal(AnimateParameters.Mode, 'GenerateParameters')
     varargout{2} = Markers_set;
     varargout{3} = EnableModel;
 end
-
+% save('L','L')
 end

@@ -1,4 +1,4 @@
-function [L,Q,T,AnimPt_in_Rw]=CylinderWrapping(P,S,R)
+function [L,Q,T,AnimPt_in_Rw,ind]=CylinderWrapping(P,S,R,ind)
 % Provide the length wrapping around a cylinder
 %   Based on:
 %   -B.A. Garner and M.G. Pandy, The obstacle-set method for 
@@ -11,6 +11,10 @@ function [L,Q,T,AnimPt_in_Rw]=CylinderWrapping(P,S,R)
 %   - R: radius of the cylinder
 %   OUTPUT
 %   - L: minimal Length between P and S wrapping around the cylinder.
+%   - Q: Position of point Q on the cylinder.
+%   - T: Position of point T on the cylinder.
+%   - AnimPt_in_Rw: 20 points on the cylinder for displaying purpose.
+%   - ind : side of the wrapping.
 %________________________________________________________
 %
 % Licence
@@ -20,6 +24,10 @@ function [L,Q,T,AnimPt_in_Rw]=CylinderWrapping(P,S,R)
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
 % Georges Dumont
 %________________________________________________________
+if size(P,1)<3 || size(S,1)<3 
+    error('P or S need to 3x1 arrays');
+end
+
 
 %%% Cartesian coordiantes of Q and T in xy plan
 Qx1 = (P(1)*R^2-R*P(2)*sqrt(P(1)^2+P(2)^2-R^2))/(P(1)^2+P(2)^2);
@@ -70,8 +78,11 @@ Q = [Q1, Q2];
 T = [T1, T2];
 L = [norm(P-Q(:, 1))+norm(T(:, 1)-S)+l_arc1, norm(P-Q(:, 2))+norm(T(:, 2)-S)+l_arc2];
 
-%Choose the minimal one,
+%Choose the minimal one or the previous one
+if nargin>3 && ~isempty(ind)
+else
 [~,ind]=min(L);
+end
 L=L(ind);Q=Q(:,ind);T=T(:,ind);
 
 if nargout>3
@@ -85,6 +96,17 @@ if nargout>3
     z = z_T;
     
     AnimPt_in_Rw=[x',y',z'];
+    
+% figure
+% fastscatter3(Q); hold on
+% fastscatter3(T);
+% fastscatter3(P); fastscatter3(S);
+% plot(R*cosd(0:360),R*sind(0:360))
+% axis equal
+% plot(R*cosd(theta1),R*sind(theta1),'bo')
+% plot(R*cosd(theta2),R*sind(theta2),'ro')
+% plot(R*cosd(theta),R*sind(theta),'k-')
+
 end
 
 end

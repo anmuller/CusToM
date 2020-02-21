@@ -1,4 +1,4 @@
-function [L,Typ] = distance_point_wrap(Point1,Bone1,Point2,Bone2,Human_model,q,Wrap)
+function [L,Typ,wrapside] = distance_point_wrap(Point1,Bone1,Point2,Bone2,Human_model,q,Wrap,wrapside,EnforcedWrap)
 % Computation of the distance between two points
 %
 %   INPUT
@@ -13,6 +13,7 @@ function [L,Typ] = distance_point_wrap(Point1,Bone1,Point2,Bone2,Human_model,q,W
 %   OUTPUT
 %   - L: distance between the two studied points
 %   - Typ: relative orientation of the two points (-1 ou 1)
+%   - Wrapside: side of wrapping (1 or 2)
 %________________________________________________________
 %
 % Licence
@@ -82,7 +83,8 @@ end
 % Computation of coordinates of the Wrap
 if numel(wrap_path)==1
     Wc = Human_model(Wrap.num_solid).c+Wrap.location; % wrap_center
-    R_i_w = Wrap.orientation;	
+    R_i_w = Wrap.orientation;
+    T_Ri_Rw = [R_i_w, Wc;[0 0 0],1];
 else
     for n=wrap_path(2:end)
         m = Human_model(n).mother;
@@ -93,6 +95,7 @@ else
     Human_model(l).c_global = Human_model(l).p + Human_model(l).R * Human_model(l).c;
     Wc = Human_model(l).c_global + Human_model(l).R * Wrap.location; % wrap_center
     R_i_w = Human_model(l).R*Wrap.orientation;
+    T_Ri_Rw = [R_i_w, Wc;[0 0 0],1];
 end
 
 % fastscatter3(A); hold on;
@@ -100,18 +103,32 @@ end
 % fastscatter3(Wc)
 
 % Compute A and B in Wrap frame
-Aw=R_i_w'*A+Wc;
-Bw=R_i_w'*B+Wc;
+Aw=T_Ri_Rw\[A;1];   Aw(4)=[];
+Bw=T_Ri_Rw\[B;1];   Bw(4)=[];
+
+% subplot(1,2,2)
+% fastscatter3(Aw); hold on;
+% fastscatter3(Bw)
+% fastscatter3([0 0 0]); axis equal
+% Vérifier les longueurs les distances entre les points
+
+
+% fastscatter3(A); hold on;
+% fastscatter3(B)
+% fastscatter3(Wc)
+
 
 % Is there an intersection between the cylinder and the straight line
 % between Aw and Bw
 % intersection_droite_cylindre(Aw, Bw, [0 0 0], Wrap.R, -Wrap.h, +Wrap.h)
-if Intersect_line_cylinder(Aw, Bw, Wrap.R)
-     [L]=CylinderWrapping(Aw, Bw, Wrap.R);
+if Intersect_line_cylinder(Aw, Bw, Wrap.R) || EnforcedWrap
+     [L,~,~,~,wrapside]=CylinderWrapping(Aw, Bw, Wrap.R, wrapside);
+     Typ = sign(Bw(2)-Aw(2));
 else
     %Distance between A and B
     L = norm(B-A);
     Typ = sign(B(2)-A(2));
+    wrapside=[];
 end
 
 

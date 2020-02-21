@@ -90,8 +90,16 @@ end
 % end
 
 %% Muscular coupling computation
-q=zeros(numel(BiomechanicalModel.OsteoArticularModel(:))-6,1)'+0.01;
-dp=0.001;
+
+if isfield(BiomechanicalModel,'Generalized_Coordinates')
+    q_red=BiomechanicalModel.Generalized_Coordinates.q_red;
+    q=zeros(numel(q_red),1)+0.01;
+    dp=0.001;
+else
+    q=zeros(numel(BiomechanicalModel.OsteoArticularModel(:))-6,1)+0.01;
+    dp=0.001;
+end
+
  if numel(BiomechanicalModel.Muscles)
      disp('Muscular Coupling Computation ...')
      [BiomechanicalModel.Coupling] =...
