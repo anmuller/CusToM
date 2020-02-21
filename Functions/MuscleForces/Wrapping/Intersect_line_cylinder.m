@@ -16,7 +16,7 @@ function [bool]=Intersect_line_cylinder(P1,P2,R)
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
 % Georges Dumont
 %________________________________________________________
-
+bool=0;
 
 % %circle equation : x^2+y^2=R^2
 % % equation of the line : y = a*x+b avec :

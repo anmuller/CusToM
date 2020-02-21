@@ -193,9 +193,16 @@ end
 % Error computation
 KinematicsError=zeros(numel(list_markers),nb_frame);
 nb_cut=max([Human_model.KinematicsCut]);
-for f=1:nb_frame
-    [KinematicsError(:,f)] = ErrorMarkersIK(q(:,f),nb_cut,real_markers,f,list_markers,Rcut,pcut);
-    [~,ceq(:,f)]=nonlcon(q(:,f));
+
+if nbClosedLoop == 0
+    for f=1:nb_frame
+        [KinematicsError(:,f)] = ErrorMarkersIK(q(:,f),nb_cut,real_markers,f,list_markers,Rcut,pcut);
+    end
+else
+    for f=1:nb_frame
+        [KinematicsError(:,f)] = ErrorMarkersIK(q(:,f),nb_cut,real_markers,f,list_markers,Rcut,pcut);
+        [~,ceq(:,f)]=nonlcon(q(:,f));
+    end
 end
 
 % Reaffect coordinates

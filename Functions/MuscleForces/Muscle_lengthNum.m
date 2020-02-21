@@ -1,4 +1,4 @@
-function [Lmt] = Muscle_lengthNum(Human_model,Muscles,q)
+function [Lmt,wrapside] = Muscle_lengthNum(Human_model,Muscles,q)
 % Computation of the muscle/tendon length
 %
 %   INPUT
@@ -8,7 +8,7 @@ function [Lmt] = Muscle_lengthNum(Human_model,Muscles,q)
 %   - q: vector of joint coordinates at a given instant
 %   - m: number of the muscle in the set
 %   OUTPUT
-%   - length of the muscle/tendon
+%   - Lmt length of the muscle/tendon
 %________________________________________________________
 %
 % Licence
@@ -20,18 +20,19 @@ function [Lmt] = Muscle_lengthNum(Human_model,Muscles,q)
 %________________________________________________________
 
 Lmt = 0;
-if ~isempty(Muscles.wrap{1})
+if ~isempty(Muscles.wrap) && ~isempty(Muscles.wrap{1})
     %find the wrap
-        Wrap = [Human_model.wrap]; names = {Wrap.name}'; [~,ind]=intersect(Muscles.wrap{1},names);
-        cur_Wrap=Wrap(ind); 
+    Wrap = [Human_model.wrap]; names = {Wrap.name}'; [~,ind]=intersect(names,Muscles.wrap{1});
+    cur_Wrap=Wrap(ind);
     for p=1:(numel(Muscles.path)-1)
         % distance between p and p+1 point
         M_Bone = Muscles.num_solid(p); % number of the solid which contains this position
         M_pos = Muscles.num_markers(p); % number of the anatomical landmark in this solid
         N_Bone = Muscles.num_solid(p+1);
         N_pos = Muscles.num_markers(p+1);
- 
-        Lmt = Lmt + distance_point_wrap(M_pos,M_Bone,N_pos,N_Bone,Human_model,q,cur_Wrap);
+        Wrapside=Muscles.wrapside;
+        [L]=distance_point_wrap(M_pos,M_Bone,N_pos,N_Bone,Human_model,q,cur_Wrap,Wrapside,0);
+        Lmt = Lmt + L;
     end
 else
     for p=1:(numel(Muscles.path)-1)
