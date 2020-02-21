@@ -74,6 +74,8 @@ end
 
 %%                     Definition of anatomical landmarks
 
+% Adaptation to 50th-percentile male
+k = 1.8/1.7*k;
 % Center of mass location with respect to the reference frame
 CoM_Clavicle = k*Mirror*[-0.011096 0.0063723 0.054168]';
 

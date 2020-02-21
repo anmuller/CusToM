@@ -77,6 +77,8 @@ else
 end
 %%                     Definition of anatomical landmarks
 
+% Adaptation to 50th-percentile male
+k=1.8/1.7*k;
 % Centre of motion location in OpenSim frame
 Scapula_CoM = k*Mirror*[-0.054694 -0.035032 -0.043734]';
 % landmarks location in CusToM frame
@@ -167,7 +169,7 @@ num_solid=num_solid+1;                                      % solid number
 name=list_solid{num_solid};                                 % solid name
 eval(['incr_solid=s_' name ';'])                            % solid number in model tree
 Human_model(incr_solid).name=[Side name];          % solid name with side
-Human_model(incr_solid).sister=0;                   % Solid's sister
+Human_model(incr_solid).sister=s_ThoracicEllips_J1;                   % Solid's sister
 Human_model(incr_solid).child=s_ScapuloThoracic_J2;         % Solid's child
 Human_model(incr_solid).mother=s_mother;            % Solid's mother
 Human_model(incr_solid).a=[1 0 0]';                          
@@ -228,7 +230,7 @@ num_solid=num_solid+1;                                      % solid number
 name=list_solid{num_solid};                                 % solid name
 eval(['incr_solid=s_' name ';'])                            % solid number in model tree
 Human_model(incr_solid).name=[Side name];          % solid name with side
-Human_model(incr_solid).sister=s_ThoracicEllips_J1;                   % Solid's sister
+Human_model(incr_solid).sister=0;                   % Solid's sister
 Human_model(incr_solid).child=s_ScapuloThoracic_J4;         % Solid's child
 Human_model(incr_solid).mother=s_ScapuloThoracic_J2;            % Solid's mother
 Human_model(incr_solid).a=[0 0 1]';                          
@@ -335,7 +337,7 @@ eval(['incr_solid=s_' name ';'])                            % solid number in mo
 Human_model(incr_solid).name=[Side name];          % solid name with side
 Human_model(incr_solid).sister=s_ThoracicEllips_J2;                   % Solid's sister
 Human_model(incr_solid).child=0;         % Solid's child
-Human_model(incr_solid).mother=s_ScapuloThoracic_J3;            % Solid's mother
+Human_model(incr_solid).mother=s_mother;            % Solid's mother
 Human_model(incr_solid).a=[1 0 0]';                          
 Human_model(incr_solid).joint=1;
 Human_model(incr_solid).limit_inf=-pi;
@@ -359,7 +361,7 @@ eval(['incr_solid=s_' name ';'])                            % solid number in mo
 Human_model(incr_solid).name=[Side name];          % solid name with side
 Human_model(incr_solid).sister=0;                   % Solid's sister
 Human_model(incr_solid).child=0;         % Solid's child
-Human_model(incr_solid).mother=s_ScapuloThoracic_J3;            % Solid's mother
+Human_model(incr_solid).mother=s_mother;            % Solid's mother
 Human_model(incr_solid).a=[0 1 0]';                          
 Human_model(incr_solid).joint=1;
 Human_model(incr_solid).limit_inf=-pi;
