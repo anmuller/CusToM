@@ -77,16 +77,16 @@ if isfield(AnimateParameters, 'muscles_anim')
 else
     muscles_anim = 0;
 end
-if isfield(AnimateParameters, 'wrap')
-    wrap_anim = AnimateParameters.wrap;
-else
-    wrap_anim = 0;
-end
 % if isfield(AnimateParameters, 'ellipsoid')
 %     ellipsoid_anim = AnimateParameters.ellipsoid;
 % else
 ellipsoid_anim = 0;
 % end
+if isfield(AnimateParameters, 'wrap')
+    wrap_anim = AnimateParameters.wrap;
+else
+    wrap_anim = 1;
+end
 if isfield(AnimateParameters, 'mod_marker_anim')
     mod_marker_anim = AnimateParameters.mod_marker_anim;
 else
@@ -493,6 +493,43 @@ for f=f_affich
         animStruct.Set{f}={animStruct.Set{f}{:},Vpt_p};
     end
     
+        %% Scapulo-thoracic Ellipsoid
+    if ellipsoid_anim
+        %&& sum(cellfun(@isempty,[Muscles.wrap]'))==0
+        Fe=[];
+        CEe=[];
+        Ve=[];
+        num_solid=7;
+        
+        for i_w = 1:2
+            pos_ell=Human_model_bis(7).anat_position{8+i_w, 2};
+            T_Ri_Rw=[eye(3,3), pos_ell;[0 0 0],1];
+            X = Human_model_bis(num_solid).Tc_R0_Ri*T_Ri_Rw;
+            [xel1,yel1,zel1]=ellipsoid(0,0,0,1.8/1.7*0.07,1.8/1.7*0.15,1.8/1.7*0.07);
+            [Fel1,Vel1]=surf2patch(xel1,yel1,zel1);
+            Vell_R0= (X*[Vel1';ones(1,length(Vel1))])';
+            
+            tot_nb_F=length(Fe);
+            cur_nb_F=length(Fel1);
+            tot_nb_V=length(Ve);
+            Fe((1:cur_nb_F)+tot_nb_F,:)=Fel1+tot_nb_V;
+            Ve=[Ve ;Vell_R0(:,1:3)]; %#ok<AGROW>
+        end
+        if isequal(AnimateParameters.Mode, 'Figure') ...
+                || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
+                || isequal(AnimateParameters.Mode, 'GenerateAnimate')
+            finv = figure('visible','off');
+            he=gpatch(Fe,Ve,'c','none',0.3);
+            copyobj(he,ax);
+            close(finv);
+        elseif f==f_affich(1) 
+            he=gpatch(Fe,Ve,'c','none',0.3);
+        end        
+        animStruct.Handles{f} = [animStruct.Handles{f} he];
+        animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices'};
+        animStruct.Set{f} = {animStruct.Set{f}{:},Ve};
+    end
+    
     %% Muscle wraps
     if wrap_anim && isfield(Human_model,'wrap') && numel([Human_model.wrap])>0
         %&& sum(cellfun(@isempty,[Muscles.wrap]'))==0
@@ -527,30 +564,6 @@ for f=f_affich
         animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices'};
         animStruct.Set{f} = {animStruct.Set{f}{:},Vw};
     end
-<<<<<<< HEAD
-    
-    %% Scapulo-thoracic Ellipsoid
-    if ellipsoid_anim
-        %&& sum(cellfun(@isempty,[Muscles.wrap]'))==0
-        Fe=[];
-        CEe=[];
-        Ve=[];
-        num_solid=7;
-        
-        for i_w = 1:2
-            pos_ell=Human_model_bis(7).anat_position{8+i_w, 2};
-            T_Ri_Rw=[eye(3,3), pos_ell;[0 0 0],1];
-            X = Human_model_bis(num_solid).Tc_R0_Ri*T_Ri_Rw;
-            [xel1,yel1,zel1]=ellipsoid(0,0,0,1.8/1.7*0.07,1.8/1.7*0.15,1.8/1.7*0.07);
-            [Fel1,Vel1]=surf2patch(xel1,yel1,zel1);
-            Vell_R0= (X*[Vel1';ones(1,length(Vel1))])';
-            
-            tot_nb_F=length(Fe);
-            cur_nb_F=length(Fel1);
-            tot_nb_V=length(Ve);
-            Fe((1:cur_nb_F)+tot_nb_F,:)=Fel1+tot_nb_V;
-            Ve=[Ve ;Vell_R0(:,1:3)]; %#ok<AGROW>
-=======
 
     %% Muscles
     if muscles_anim && ~isempty(Muscles) && sum([Muscles.exist])
@@ -604,24 +617,11 @@ for f=f_affich
                 CEmu=[CEmu; repmat(color_mus(mu,:),[nbpts_mu 1])]; %#ok<AGROW>
             end
             
->>>>>>> origin/Dev_Wrapping
         end
         if isequal(AnimateParameters.Mode, 'Figure') ...
                 || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
                 || isequal(AnimateParameters.Mode, 'GenerateAnimate')
             finv = figure('visible','off');
-<<<<<<< HEAD
-            he=gpatch(Fe,Ve,'c','none',0.3);
-            copyobj(he,ax);
-            close(finv);
-        elseif f==f_affich(1) 
-            he=gpatch(Fe,Ve,'c','none',0.3);
-        end        
-        animStruct.Handles{f} = [animStruct.Handles{f} he];
-        animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices'};
-        animStruct.Set{f} = {animStruct.Set{f}{:},Ve};
-    end
-=======
             hmu=gpatch(Fmu,Vmu,[],CEmu,1,2);
             copyobj(hmu,ax);
             close(finv);
@@ -632,7 +632,6 @@ for f=f_affich
         animStruct.Props{f} = {animStruct.Props{f}{:},'Faces','Vertices','FaceVertexCData'};
         animStruct.Set{f} = {animStruct.Set{f}{:},Fmu,Vmu,CEmu};
     end    
->>>>>>> origin/Dev_Wrapping
     
     %% Vectors of external forces issued from experimental data
     if external_forces_anim
@@ -758,3 +757,4 @@ if isequal(AnimateParameters.Mode, 'GenerateParameters')
 end
 % save('L','L')
 end
+
