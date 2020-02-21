@@ -1,4 +1,4 @@
-function [c,ceq]=NonLinCon_ClosedLoop(BiomechanicalModel,nbClosedLoop,q_red)
+function [c,ceq]=NonLinCon_ClosedLoop(Human_model,Generalized_Coordinates,nbClosedLoop,q_var)
 % Non-linear equation used in the inverse kinematics step for closed loops
 %
 %   INPUT
@@ -21,9 +21,8 @@ c=[];
 %% Number of solids considered in the Inverse Kinematics
 
         
-q = BiomechanicalModel.Generalized_Coordinates.q_map*q_red;
+q = Generalized_Coordinates.q_map*q_var;
 
-Human_model = BiomechanicalModel.OsteoArticularModel;
 for j=1:numel(Human_model)
     Human_model(j).q=q(j);
 end
@@ -60,7 +59,7 @@ for j=1:numel(Human_model)
     end
 end
 
-ceq=zeros(9*nbClosedLoop,1);
+ceq=sym('ceq',[9*nbClosedLoop 1]);
 
 for j=1:nbClosedLoop
     Rtemp=Human_model(loop_start(j)).R*Human_model(loop_end(j)).R' -eye(3);

@@ -90,6 +90,8 @@ k=ones(numel(Human_model),1);
 p_adapt=zeros(sum([Markers_set.exist]),3);
 pPelvis=zeros(3,1);
 RPelvis=eye(3,3);
+nbClosedLoop = sum(~cellfun('isempty',{Human_model.ClosedLoop}));
+
 
 %% Symbolic function generation for each coordinate frame position
 s_root=find([Human_model.mother]==0); % number of the root solid
@@ -262,6 +264,13 @@ for ii=1:length(ind_Kcut) % solide i
         'vars',{q_red,pcut,Rcut});
 end
 
+
+if nbClosedLoop>0
+    [c,ceq]=NonLinCon_ClosedLoop(Human_model,Generalized_Coordinates,nbClosedLoop,q_red);
+    matlabFunction(c,ceq,'File','Symbolic_function/fCL.m',...
+        'Outputs',{'c','ceq'},'vars',{q_red});
+end
+    
 % %% Closed loops
 % for i=1:numel(p_ClosedLoop)
 % %     matlabFunction(R_ClosedLoop{i},p_ClosedLoop{i},'File',['Symbolic_function/fCL' num2str(i) '.m'],...
