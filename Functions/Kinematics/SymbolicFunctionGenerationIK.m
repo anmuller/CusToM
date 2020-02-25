@@ -264,7 +264,7 @@ for ii=1:length(ind_Kcut) % solide i
         'vars',{q_red,pcut,Rcut});
 end
 
-
+% Closed loop constraints generation
 if nbClosedLoop>0
     [c,ceq]=Gen_NonLinCon_ClosedLoop(Human_model,nbClosedLoop);
     matlabFunction(c,ceq,'File','Symbolic_function/fCL.m',...
