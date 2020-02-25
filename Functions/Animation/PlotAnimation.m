@@ -85,7 +85,7 @@ ellipsoid_anim = 0;
 if isfield(AnimateParameters, 'wrap')
     wrap_anim = AnimateParameters.wrap;
 else
-    wrap_anim = 1;
+    wrap_anim = 0;
 end
 if isfield(AnimateParameters, 'mod_marker_anim')
     mod_marker_anim = AnimateParameters.mod_marker_anim;
