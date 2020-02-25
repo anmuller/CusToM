@@ -164,7 +164,7 @@ else
         if f == 1      % initial value
             q0=zeros(nb_solid,1);   
             ik_function_objective=@(qvar)CostFunctionSymbolicIK(qvar,nb_cut,real_markers,f,list_function,list_function_markers,Rcut,pcut);
-            nonlcon=@(qvar)fCL(qvar);
+            nonlcon=@(qvar)NonLinCon_ClosedLoop(qvar,nb_cut,list_function,pcut,Rcut);
             [q(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,nonlcon,options1);
         else
             if f > 2
@@ -176,7 +176,7 @@ else
             l_inf=max(q(:,f-1)-0.2,l_inf1);
             l_sup=min(q(:,f-1)+0.2,l_sup1); 
             ik_function_objective=@(qvar)CostFunctionSymbolicIK(qvar,nb_cut,real_markers,f,list_function,list_function_markers,Rcut,pcut);
-            nonlcon=@(qvar)fCL(qvar);
+            nonlcon=@(qvar)NonLinCon_ClosedLoop(qvar,nb_cut,list_function,pcut,Rcut);
             [q(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf,l_sup,nonlcon,options2);
         end
         waitbar(f/nb_frame)

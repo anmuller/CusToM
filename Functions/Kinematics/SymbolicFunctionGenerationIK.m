@@ -266,20 +266,11 @@ end
 
 
 if nbClosedLoop>0
-    [c,ceq]=NonLinCon_ClosedLoop(Human_model,Generalized_Coordinates,nbClosedLoop,q_red);
+    [c,ceq]=Gen_NonLinCon_ClosedLoop(Human_model,nbClosedLoop);
     matlabFunction(c,ceq,'File','Symbolic_function/fCL.m',...
-        'Outputs',{'c','ceq'},'vars',{q_red});
+        'Outputs',{'c','ceq'},'vars',{q_red,pcut,Rcut});
 end
     
-% %% Closed loops
-% for i=1:numel(p_ClosedLoop)
-% %     matlabFunction(R_ClosedLoop{i},p_ClosedLoop{i},'File',['Symbolic_function/fCL' num2str(i) '.m'],...
-% %         'Outputs',{'R','p'},'vars',{q});
-%     matlabFunction(R_ClosedLoop{i},p_ClosedLoop{i},'File',['Symbolic_function/fCL' num2str(i) '.m'],...
-%         'Outputs',{'R','p'},'vars',{q_red});
-% end
-% nbClosedLoop=numel(p_ClosedLoop);
-
 
 %We delete p and R fields
 Human_model = rmfield(Human_model, 'p');
