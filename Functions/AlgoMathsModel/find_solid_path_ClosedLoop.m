@@ -51,9 +51,9 @@ solid_2_ancestor_ind = find(solid_2_root_path==nearest_ancestor);
 
 if i>k % Starting from smallest solid increment
     solid_1_path = solid_1_root_path(solid_1_ancestor_ind:end);
-    solid_2_path = sort(solid_2_root_path(solid_2_ancestor_ind:end),'descend');
+    solid_2_path = sort(solid_2_root_path(solid_2_ancestor_ind:end),'ascend');
 else
-    solid_1_path = sort(solid_1_root_path(solid_1_ancestor_ind:end),'descend');
+    solid_1_path = sort(solid_1_root_path(solid_1_ancestor_ind:end),'ascend');
     solid_2_path = solid_2_root_path(solid_2_ancestor_ind:end);
 end
 

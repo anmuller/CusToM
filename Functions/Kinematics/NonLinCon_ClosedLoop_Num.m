@@ -1,4 +1,4 @@
-function [c,ceq]=NonLinCon_ClosedLoop_Num(Human_model,solid_path1,solid_path2,num_solid,num_markers,q,k)
+function [c,ceq]=NonLinCon_ClosedLoop_Num(Human_model,Generalized_Coordinates,solid_path1,solid_path2,num_solid,num_markers,q_red,k)
 % Non-linear equation used in the inverse kinematics step for closed loops
 %
 %   INPUT
@@ -32,6 +32,8 @@ function [c,ceq]=NonLinCon_ClosedLoop_Num(Human_model,solid_path1,solid_path2,nu
 
 c=[];
 ceq=zeros(9*length(num_solid),1);
+q=Generalized_Coordinates.q_dep_map*Generalized_Coordinates.fq_dep(q_red)+Generalized_Coordinates.q_map*q_red;
+
 
 for pp=1:numel(num_solid)
     if isempty(solid_path2{pp}) % if the beginning coincides with the end of the loop

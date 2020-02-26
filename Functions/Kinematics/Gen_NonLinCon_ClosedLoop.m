@@ -22,9 +22,6 @@ c=[];
 
 %% Number of solids considered in the Inverse Kinematics
    
-% q = Generalized_Coordinates.q_map*q_var;
-% nb_cut = length(ind_Kcut);
-
 loop_start=zeros(1 ,nbClosedLoop);
 loop_end=zeros(1, nbClosedLoop);
 loop_end_anat=zeros(1, nbClosedLoop);
