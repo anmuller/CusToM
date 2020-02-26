@@ -31,7 +31,7 @@ function [c,ceq]=NonLinCon_ClosedLoop_Num(Human_model,solid_path1,solid_path2,nu
 
 
 c=[];
-ceq=sym('ceq', [9*length(num_solid),1]);
+ceq=zeros(9*length(num_solid),1);
 
 for pp=1:numel(num_solid)
     if isempty(solid_path2{pp}) % if the beginning coincides with the end of the loop

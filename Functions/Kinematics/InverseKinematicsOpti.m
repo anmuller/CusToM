@@ -97,7 +97,6 @@ options2 = optimoptions(@fmincon,'Algorithm','sqp','Display','off','TolFun',1e-2
 
 q=zeros(nb_solid,nb_frame);
 ceq=zeros(9*nbClosedLoop,nb_frame);
-
 addpath('Symbolic_function')
 
 nb_cut=max([Human_model.KinematicsCut]);
