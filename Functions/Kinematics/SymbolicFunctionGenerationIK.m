@@ -102,9 +102,13 @@ Human_model(s_root).R=RPelvis;
 
 % Computation of the symbolic markers position
 %[Human_model,Markers_set,~,~,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure(Human_model,Markers_set,s_root,q,k,p_adapt,1,1);
-[Human_model,Markers_set,~]=Symbolic_ForwardKinematicsCoupure(Human_model,Markers_set,s_root,q_complete,k,p_adapt,1);
+[Human_model,Markers_set,num_cut]=Symbolic_ForwardKinematicsCoupure(Human_model,Markers_set,s_root,q_complete,k,p_adapt,0);
 
 % position and rotation of the solids used as cuts
+if num_cut==0
+    pcut=sym('pcut',[3,1,0]);
+    Rcut=sym('Rcut',[3,3,0]);
+end
 for ii=1:max([Human_model.KinematicsCut])
     eval(['p' num2str(ii) 'cut = sym([''p'' num2str(ii) ''cut''], [3 1]);'])
     eval(['R' num2str(ii) 'cut = sym([''R'' num2str(ii) ''cut''], [3 3]);'])
@@ -162,6 +166,7 @@ Jfq(idx)=1;
 indexesNumericJfq = find(Jfq_sym~=0 & Jfq_sym~=1)';
 % nonNumericJfq = matlabFunction(Jfq_sym(indexesNumericJfq), 'Vars', {q,pcut,Rcut});
 nonNumericJfq = matlabFunction(Jfq_sym(indexesNumericJfq), 'Vars', {q_red,pcut,Rcut});
+
 
 % Jfcut
 Nb_cut = size(pcut,3);
@@ -231,7 +236,7 @@ nonNumericJcutcut = matlabFunction(Jcutcut_sym(indexesNumericJcutcut), 'Vars', {
 
 % Find solides without marqueurs at the end of the chains.
 RmvInd_q = intersect(find(sum(Jcutq_sym,1)==0),find(sum(Jfq_sym,1)==0));
-%% Sauvegarde des données relatives à la matrice Jacobienne
+%% Sauvegarde des donnï¿½es relatives ï¿½ la matrice Jacobienne
 Jacob.Jfq = Jfq;
 Jacob.indexesNumericJfq = indexesNumericJfq;
 Jacob.nonNumericJfq = nonNumericJfq;
@@ -245,7 +250,9 @@ Jacob.Jcutcut = Jcutcut;
 Jacob.indexesNumericJcutcut = indexesNumericJcutcut;
 Jacob.nonNumericJcutcut = nonNumericJcutcut;
 Jacob.RmvInd_q=RmvInd_q;
-%% Création des fonctions pour chaque marqueurs et chaque solide de coupure
+
+
+%% Crï¿½ation des fonctions pour chaque marqueurs et chaque solide de coupure
 
 for ii=1:length(ind_mk)
     m = ind_mk(ii);
