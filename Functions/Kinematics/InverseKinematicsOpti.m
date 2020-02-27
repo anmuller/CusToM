@@ -92,17 +92,19 @@ end
 
 %% Inverse kinematics frame per frame
 
-options1 = optimoptions(@fmincon,'Display','off','TolFun',1e-3,'MaxFunEvals',20000,'GradObj','off','GradConstr','off');
+options1 = optimoptions(@fmincon,'Display','final','TolFun',1e-3,'MaxFunEvals',50000,'GradObj','off','GradConstr','off');
 options2 = optimoptions(@fmincon,'Algorithm','sqp','Display','off','TolFun',1e-2,'MaxFunEvals',20000,'GradObj','off','GradConstr','off');
 
 q=zeros(nb_solid,nb_frame);
 ceq=zeros(9*nbClosedLoop,nb_frame);
 addpath('Symbolic_function')
+% k=ones(nb_solid,1);
 
 nb_cut=max([Human_model.KinematicsCut]);
 
 Rcut=zeros(3,3,nb_cut);   % initialization of the cut coordinates frames position and orientation
 pcut=zeros(3,1,nb_cut);
+
 
 % Generation of the functions list used in the cost function computation
 list_function=cell(nb_cut,1);
@@ -159,11 +161,13 @@ if nbClosedLoop == 0 % if there is no closed loop
         waitbar(f/nb_frame)
     end
 else
+%     [solid_path1,solid_path2,num_solid,num_markers]=Data_ClosedLoop(Human_model);
     for f=1:nb_frame    
         if f == 1      % initial value
             q0=zeros(nb_solid,1);   
             ik_function_objective=@(qvar)CostFunctionSymbolicIK(qvar,nb_cut,real_markers,f,list_function,list_function_markers,Rcut,pcut);
             nonlcon=@(qvar)NonLinCon_ClosedLoop(qvar,nb_cut,list_function,pcut,Rcut);
+%             nonlcon=@(qvar)NonLinCon_ClosedLoop_Num(Human_model,BiomechanicalModel.Generalized_Coordinates,solid_path1,solid_path2,num_solid,num_markers,qvar,k);            
             [q(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,nonlcon,options1);
         else
             if f > 2
@@ -176,6 +180,7 @@ else
             l_sup=min(q(:,f-1)+0.2,l_sup1); 
             ik_function_objective=@(qvar)CostFunctionSymbolicIK(qvar,nb_cut,real_markers,f,list_function,list_function_markers,Rcut,pcut);
             nonlcon=@(qvar)NonLinCon_ClosedLoop(qvar,nb_cut,list_function,pcut,Rcut);
+%             nonlcon=@(qvar)NonLinCon_ClosedLoop_Num(Human_model,BiomechanicalModel.Generalized_Coordinates,solid_path1,solid_path2,num_solid,num_markers,qvar,k);            
             [q(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf,l_sup,nonlcon,options2);
         end
         waitbar(f/nb_frame)
@@ -198,9 +203,11 @@ if nbClosedLoop == 0
         [KinematicsError(:,f)] = ErrorMarkersIK(q(:,f),nb_cut,real_markers,f,list_markers,Rcut,pcut);
     end
 else
+%     nonlcon2=@(qvar)NonLinCon_ClosedLoop(qvar,nb_cut,list_function,pcut,Rcut);
     for f=1:nb_frame
         [KinematicsError(:,f)] = ErrorMarkersIK(q(:,f),nb_cut,real_markers,f,list_markers,Rcut,pcut);
         [~,ceq(:,f)]=nonlcon(q(:,f));
+%         [~,ceq2(:,f)]=nonlcon2(q(:,f));
     end
 end
 
@@ -235,7 +242,7 @@ InverseKinematicResults.JointCoordinates = q;
 InverseKinematicResults.FreeJointCoordinates = q6dof;
 InverseKinematicResults.ReconstructionError = KinematicsError;
 InverseKinematicResults.NonLinearConstraint = ceq;
-    
+% InverseKinematicResults.NonLinearConstraint2 = ceq2;
 disp(['... Inverse kinematics (' filename ') done'])
 
 
