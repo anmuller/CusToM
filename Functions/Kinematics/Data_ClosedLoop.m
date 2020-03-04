@@ -36,7 +36,7 @@ for j=1:numel(Human_model)
                 break
             end
         end
-        [path1,path2]=find_solid_path_ClosedLoop(Human_model,j,num_solid(end));
+        [path1,path2]=find_solid_path(Human_model,j,num_solid(end));
         solid_path1=[solid_path1 path1];
         solid_path2=[solid_path2 path2];
     end

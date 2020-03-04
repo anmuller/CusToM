@@ -77,20 +77,24 @@ else
 end
 %%                     Definition of anatomical landmarks
 
-CoM_Thorax = k*[0.060 0.303 0];
-Thorax_T12L1JointNode = k*[0.022 0.154 0] - CoM_Thorax;
-Thorax_ShoulderRightNode=k*[-0.0408 0.1099 0.1929]-Thorax_T12L1JointNode;
-Thorax_osim2antoine = [k k Thorax_ShoulderRightNode(3)/0.17]; % scaling coef based on shoulder width
+% ------------------------- Thorax ----------------------------------------
+% scaling coef based on shoulder width
+CoM_Thorax               = k*[0.060 0.303 0];
+Thorax_T12L1JointNode    = k*[0.022 0.154 0] - CoM_Thorax;
+Thorax_ShoulderRightNode = k*[-0.0408 0.1099 0.1929]-Thorax_T12L1JointNode;
+Thorax_osim2antoine      = [k k Thorax_ShoulderRightNode(3)/0.17]; 
+
+% ------------------------ Scapula ----------------------------------------
 % Centre of motion location in OpenSim frame
 Scapula_CoM = Thorax_osim2antoine.*Mirror*[-0.054694 -0.035032 -0.043734]';
-% landmarks location in CusToM frame
-Scapula_acJointNode = Thorax_osim2antoine.*Mirror*[-0.01357; 0.00011; -0.01523] - Scapula_CoM;
+% Landmarks location in CusToM frame
 Scapula_ghJointNode = Thorax_osim2antoine.*Mirror*[-0.00955; -0.034; 0.009] - Scapula_CoM;
 Scapula_stJointNode = Thorax_osim2antoine.*Mirror*[-0.05982; -0.03904; -0.056] - Scapula_CoM;
-Scapula_acromion = Thorax_osim2antoine.*Mirror*[-0.0142761 0.0131922 -0.00563961]' - Scapula_CoM;
-Scapula_cluster1 = Thorax_osim2antoine.*Mirror*[-0.0860033 0.0298369 -0.00786593]' - Scapula_CoM;
-Scapula_cluster2 = Thorax_osim2antoine.*Mirror*[-0.0956621 0.0398035 -0.0552027]' - Scapula_CoM;
-Scapula_cluster3 = Thorax_osim2antoine.*Mirror*[-0.119492 0.0147336 -0.0385808]' - Scapula_CoM;
+Scapula_acJointNode = Thorax_osim2antoine.*Mirror*[-0.01357; 0.00011; -0.01523] - Scapula_CoM;
+Scapula_acromion    = Thorax_osim2antoine.*Mirror*[-0.0142761 0.0131922 -0.00563961]' - Scapula_CoM;
+Scapula_cluster1    = Thorax_osim2antoine.*Mirror*[-0.0860033 0.0298369 -0.00786593]' - Scapula_CoM;
+Scapula_cluster2    = Thorax_osim2antoine.*Mirror*[-0.0956621 0.0398035 -0.0552027]' - Scapula_CoM;
+Scapula_cluster3    = Thorax_osim2antoine.*Mirror*[-0.119492 0.0147336 -0.0385808]' - Scapula_CoM;
 
 %% Definition of anatomical landmarThorax_osim2antoine.s (with respect to the center of mass of the solid)
 
@@ -136,11 +140,6 @@ Scapula_position_set = {...
     [Side '_Scapula_LAT3-P3'],Thorax_osim2antoine.*Mirror*([-0.10059;-0.16313;-0.059077])-Scapula_CoM;...
     [Side '_Scapula_CORB-P1'],Thorax_osim2antoine.*Mirror*([0.0125;-0.04127;-0.02652])-Scapula_CoM;...
     [Side '_Scapula_CORB-P2'],Thorax_osim2antoine.*Mirror*([0.00483;-0.06958;-0.01563])-Scapula_CoM;...
-%     [Side '_Scapula_TRIlong-P1'],Thorax_osim2antoine.*Mirror*([-0.04565;-0.04073;-0.01377])-Scapula_CoM;...
-%     [Side '_Scapula_BIClong-P1'],Thorax_osim2antoine.*Mirror*([-0.03123;-0.02353;-0.01305])-Scapula_CoM;...
-%     [Side '_Scapula_BIClong-P2'],Thorax_osim2antoine.*Mirror*([-0.02094;-0.01309;-0.00461])-Scapula_CoM;...
-%     [Side '_Scapula_BICshort-P1'],Thorax_osim2antoine.*Mirror*([0.01268;-0.03931;-0.02625])-Scapula_CoM;...
-%     [Side '_Scapula_BICshort-P2'],Thorax_osim2antoine.*Mirror*([0.00093;-0.06704;-0.01593])-Scapula_CoM;...
     [Side '_Scapula_trap_acr-P1'],Thorax_osim2antoine.*Mirror*([-0.02;0.0004;-0.0125])-Scapula_CoM;...
     [Side '_Scapula_levator_scap-P1'],Thorax_osim2antoine.*Mirror*([-0.069;0.0062;-0.0938])-Scapula_CoM;...
     [Side '_Scapula_trap_acr-P1'],Thorax_osim2antoine.*Mirror*([-0.02;0.0004;-0.0125])-Scapula_CoM;...
@@ -163,12 +162,13 @@ Scapula_position_set = {...
 
 %%                     Scaling inertial parameters
 
+% Generic Inertia extraced from (Klein Breteler et al. 1999)
 Scapula_Mass_generic=0.70396;
 I_Scapula_generic=[0.0012429 0.0011504 0.0013651 0.0004494 Sign*0.00040922 Sign*0.0002411];
-I_Scapula=(k^2*Mass.Scapula_Mass/Scapula_Mass_generic)*I_Scapula_generic;
-Thorax_Rx=Thorax_osim2antoine.*0.07;
-Thorax_Ry=Thorax_osim2antoine.*0.15;
-Thorax_Rz=Thorax_osim2antoine.*0.07;
+I_Scapula=(norm(Thorax_osim2antoine)^2*Mass.Scapula_Mass/Scapula_Mass_generic)*I_Scapula_generic;
+Thorax_Rx=Thorax_osim2antoine(1)*0.07;
+Thorax_Ry=Thorax_osim2antoine(2).*0.15;
+Thorax_Rz=Thorax_osim2antoine(3).*0.07;
 
 %% "Human_model" structure generation
  
@@ -375,8 +375,8 @@ Human_model(incr_solid).child=0;         % Solid's child
 Human_model(incr_solid).mother=s_mother;            % Solid's mother
 Human_model(incr_solid).a=[0 1 0]';                          
 Human_model(incr_solid).joint=1;
-Human_model(incr_solid).limit_inf=-pi;
-Human_model(incr_solid).limit_sup=pi;
+Human_model(incr_solid).limit_inf=-pi/2;
+Human_model(incr_solid).limit_sup=pi/2;
 Human_model(incr_solid).ActiveJoint=1;
 Human_model(incr_solid).m=0;                        % Reference mass
 Human_model(incr_solid).b=[0 0 0]';        % Attachment point position in mother's frame
@@ -405,7 +405,7 @@ Human_model(incr_solid).limit_inf=-pi;
 Human_model(incr_solid).limit_sup=pi;
 Human_model(incr_solid).ActiveJoint=1;
 Human_model(incr_solid).m=0;                        % Reference mass
-Human_model(incr_solid).b=Scapula_acJointNode;        % Attachment point position in mother's frame
+Human_model(incr_solid).b=Scapula_acJointNode-Scapula_stJointNode;        % Attachment point position in mother's frame
 Human_model(incr_solid).I=zeros(3,3);               % Reference inertia matrix
 Human_model(incr_solid).c=[0 0 0]';                 % Centre of mass position in local frame
 Human_model(incr_solid).calib_k_constraint=[];
