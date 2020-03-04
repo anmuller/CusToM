@@ -74,15 +74,18 @@ end
 
 %%                     Definition of anatomical landmarks
 
+% ------------------------- Thorax ----------------------------------------
+% scaling coef based on shoulder width
+
 CoM_Thorax = k*[0.060 0.303 0];
 Thorax_T12L1JointNode = k*[0.022 0.154 0] - CoM_Thorax;
 Thorax_ShoulderRightNode=k*[-0.0408 0.1099 0.1929]-Thorax_T12L1JointNode;
-Thorax_osim2antoine = [k k Thorax_ShoulderRightNode(3)/0.17]; % scaling coef based on shoulder width
+Thorax_osim2antoine = [k k Thorax_ShoulderRightNode(3)/0.17];
 
+% ------------------------ Clavicle ---------------------------------------
 % Center of mass location with respect to the reference frame
 CoM_Clavicle = Thorax_osim2antoine.*Mirror*[-0.011096 0.0063723 0.054168]';
-
-% Node locations
+% Node locations in CusToM frame
 Clavicle_acJointNode = Thorax_osim2antoine.*Mirror*[-0.02924 0.02024 0.12005]' - CoM_Clavicle;
 Clavicle_scJointNode = Thorax_osim2antoine.*Mirror*[0 0 0]' - CoM_Clavicle;
 Clavicle_marker_set1 = Thorax_osim2antoine.*Mirror*[0.005 0.02 0.07]';
@@ -105,8 +108,9 @@ Clavicle_position_set= {...
 
 %% Scaling inertial parameters
 
-I_clavicle_generic=[0.00024259 0.00025526 0.00004442 -0.00001898 Sign*-0.00006994 Sign*0.00005371];
+% Generic Inertia extraced from (Klein Breteler et al. 1999)
 Clavicle_Mass_generic=0.156;
+I_clavicle_generic=[0.00024259 0.00025526 0.00004442 -0.00001898 Sign*-0.00006994 Sign*0.00005371];
 I_clavicle=(norm(Thorax_osim2antoine)^2*Mass.Clavicle_Mass/Clavicle_Mass_generic).*I_clavicle_generic;
 
 %% "Human_model" structure generation

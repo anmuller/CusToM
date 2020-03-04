@@ -77,20 +77,24 @@ else
 end
 %%                     Definition of anatomical landmarks
 
-CoM_Thorax = k*[0.060 0.303 0];
-Thorax_T12L1JointNode = k*[0.022 0.154 0] - CoM_Thorax;
-Thorax_ShoulderRightNode=k*[-0.0408 0.1099 0.1929]-Thorax_T12L1JointNode;
-Thorax_osim2antoine = [k k Thorax_ShoulderRightNode(3)/0.17]; % scaling coef based on shoulder width
+% ------------------------- Thorax ----------------------------------------
+% scaling coef based on shoulder width
+CoM_Thorax               = k*[0.060 0.303 0];
+Thorax_T12L1JointNode    = k*[0.022 0.154 0] - CoM_Thorax;
+Thorax_ShoulderRightNode = k*[-0.0408 0.1099 0.1929]-Thorax_T12L1JointNode;
+Thorax_osim2antoine      = [k k Thorax_ShoulderRightNode(3)/0.17]; 
+
+% ------------------------ Scapula ----------------------------------------
 % Centre of motion location in OpenSim frame
 Scapula_CoM = Thorax_osim2antoine.*Mirror*[-0.054694 -0.035032 -0.043734]';
-% landmarks location in CusToM frame
+% Landmarks location in CusToM frame
 Scapula_ghJointNode = Thorax_osim2antoine.*Mirror*[-0.00955; -0.034; 0.009] - Scapula_CoM;
 Scapula_stJointNode = Thorax_osim2antoine.*Mirror*[-0.05982; -0.03904; -0.056] - Scapula_CoM;
 Scapula_acJointNode = Thorax_osim2antoine.*Mirror*[-0.01357; 0.00011; -0.01523] - Scapula_CoM;
-Scapula_acromion = Thorax_osim2antoine.*Mirror*[-0.0142761 0.0131922 -0.00563961]' - Scapula_CoM;
-Scapula_cluster1 = Thorax_osim2antoine.*Mirror*[-0.0860033 0.0298369 -0.00786593]' - Scapula_CoM;
-Scapula_cluster2 = Thorax_osim2antoine.*Mirror*[-0.0956621 0.0398035 -0.0552027]' - Scapula_CoM;
-Scapula_cluster3 = Thorax_osim2antoine.*Mirror*[-0.119492 0.0147336 -0.0385808]' - Scapula_CoM;
+Scapula_acromion    = Thorax_osim2antoine.*Mirror*[-0.0142761 0.0131922 -0.00563961]' - Scapula_CoM;
+Scapula_cluster1    = Thorax_osim2antoine.*Mirror*[-0.0860033 0.0298369 -0.00786593]' - Scapula_CoM;
+Scapula_cluster2    = Thorax_osim2antoine.*Mirror*[-0.0956621 0.0398035 -0.0552027]' - Scapula_CoM;
+Scapula_cluster3    = Thorax_osim2antoine.*Mirror*[-0.119492 0.0147336 -0.0385808]' - Scapula_CoM;
 
 %% Definition of anatomical landmarThorax_osim2antoine.s (with respect to the center of mass of the solid)
 
@@ -158,6 +162,7 @@ Scapula_position_set = {...
 
 %%                     Scaling inertial parameters
 
+% Generic Inertia extraced from (Klein Breteler et al. 1999)
 Scapula_Mass_generic=0.70396;
 I_Scapula_generic=[0.0012429 0.0011504 0.0013651 0.0004494 Sign*0.00040922 Sign*0.0002411];
 I_Scapula=(norm(Thorax_osim2antoine)^2*Mass.Scapula_Mass/Scapula_Mass_generic)*I_Scapula_generic;
