@@ -40,8 +40,8 @@ if i>k % Starting from smallest solid increment
     solid_1_path = solid_1_root_path(solid_1_ancestor_ind:end);
     solid_2_path = sort(solid_2_root_path(solid_2_ancestor_ind:end),'ascend');
 else
-    solid_1_path = sort(solid_1_root_path(solid_1_ancestor_ind:end),'ascend');
-    solid_2_path = solid_2_root_path(solid_2_ancestor_ind:end);
+    solid_1_path = solid_2_root_path(solid_2_ancestor_ind:end);
+    solid_2_path = sort(solid_1_root_path(solid_1_ancestor_ind:end),'ascend');
 end
 
 % end
@@ -52,6 +52,9 @@ function solid_root_path=find_solid_root_path(Human_model,i,solid_root_path)
 
 if nargin < 3   % if first incrementation
     solid_root_path=i;
+    if i==1
+        return
+    end
     
 elseif i==1
     solid_root_path = [1 solid_root_path];
