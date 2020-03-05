@@ -13,8 +13,6 @@ function [Human_model,p,R] = ForwardKinematics_ClosedLoop(Human_model,n,s,solid_
 %   - R: matrix rotatio of the closed loops
 %   - q: vector of joint coordinates
 %   - k: vector of homothety coefficient
-
-
 %   OUTPUT
 %   - Human_model: osteo-articular model (see the Documentation for the
 %   structure) 
