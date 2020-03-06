@@ -5,7 +5,7 @@ function [] = CalibrateModelGenerationNum(ModelParameters,AnalysisParameters)
 %
 %	Associated publication:
 %	- Muller, A., Haering, D., Pontonnier, C., & Dumont, G., 2017. 
-%	Non-invasive techniques for musculoskeletal model calibration. In 23ème Congrès Français de Mécanique.
+%	Non-invasive techniques for musculoskeletal model calibration. In 23ï¿½me Congrï¿½s Franï¿½ais de Mï¿½canique.
 %
 %   INPUT
 %   - ModelParameters: parameters of the musculoskeletal model,
@@ -91,14 +91,10 @@ end
 
 %% Muscular coupling computation
 
-if isfield(BiomechanicalModel,'Generalized_Coordinates')
-    q_red=BiomechanicalModel.Generalized_Coordinates.q_red;
-    q=zeros(numel(q_red),1)+0.01;
-    dp=0.001;
-else
-    q=zeros(numel(BiomechanicalModel.OsteoArticularModel(:))-6,1)+0.01;
-    dp=0.001;
-end
+
+q=zeros(numel(BiomechanicalModel.OsteoArticularModel(:))-6,1)+0.01;
+dp=0.001;
+
 
  if numel(BiomechanicalModel.Muscles)
      disp('Muscular Coupling Computation ...')

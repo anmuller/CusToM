@@ -30,7 +30,13 @@ function [Fopt] = PolynomialFunction(F0, Aeq, beq, Fmin, Fmax, fmincon_options, 
 %________________________________________________________
 
 % Cost function
+if ~sum(isinf(Fmax))
 cost_function = @(F) sum((F./Fmaxbis).^(options));
+else
+    % ClosedLoop case
+    ind_act=find(isinf(Fmax)); % first element to be infinite in Fmax
+    cost_function = @(F) sum((F(1:ind_act-1)./Fmaxbis(1:ind_act-1)).^(options));
+end
 % Optimization
 Fopt = fmincon(cost_function,F0,[],[],Aeq,beq,Fmin,Fmax,[],fmincon_options);
 
