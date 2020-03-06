@@ -1,4 +1,4 @@
-function [Lmt,wrapside] = Muscle_lengthNum(Human_model,Muscles,q)
+function [Lmt,Wrapside] = Muscle_lengthNum(Human_model,Muscles,q)
 % Computation of the muscle/tendon length
 %
 %   INPUT
@@ -14,13 +14,15 @@ function [Lmt,wrapside] = Muscle_lengthNum(Human_model,Muscles,q)
 % Licence
 % Toolbox distributed under GPL 3.0 Licence
 %________________________________________________________
-%
+% 
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
 % Georges Dumont
 %________________________________________________________
 
 Lmt = 0;
-if ~isempty(Muscles.wrap) && ~isempty([Muscles.wrap])
+Wrapside=[];
+
+if isfield(Muscles,'wrap') && ~isempty([Muscles.wrap])
     %find the wrap
     Wrap = [Human_model.wrap]; names = {Wrap.name}'; [~,ind]=intersect(names,Muscles.wrap{1});
     cur_Wrap=Wrap(ind);
