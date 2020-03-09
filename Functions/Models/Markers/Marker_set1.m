@@ -6,7 +6,7 @@ function [Markers]=Marker_set1(varargin)
 %________________________________________________________
 %
 % Licence
-% Toolbox distributed under 3-Clause BSD License
+% Toolbox distributed under GPL 3.0 Licence
 %________________________________________________________
 %
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
@@ -20,7 +20,7 @@ s=[s;{'TMPD' 'RFHD' {'Off';'Off';'On'}; 'TMPG' 'LFHD' {'Off';'Off';'On'}; 'OCCD'
     'ACD' 'RSHO' {'Off';'Off';'On'}; 'ACG' 'LSHO' {'Off';'Off';'On'}; ...
     'EASD' 'RFWT' {'On';'Off';'On'}; 'EASG' 'LFWT' {'On';'Off';'On'}; 'EPSD' 'RBWT' {'On';'Off';'On'}; 'EPSG' 'LBWT' {'On';'Off';'On'}; ...
     'T8' 'T8' {'Off';'On';'Off'}; 'T12' 'T12' {'Off';'On';'Off'}; ...
-    'CLAVD' 'CLAVD' {'On','On','On'}; 'CLAVG' 'CLAVG' {'On','On','On'}; ...
+    'CLAVD' 'CLAVD' {'On';'On';'On'}; 'CLAVG' 'CLAVG' {'On';'On';'On'}; ...
     }];
 
 Side1={'D';'G'};

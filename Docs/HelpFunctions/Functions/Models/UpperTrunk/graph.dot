@@ -1,7 +1,0 @@
-/* Created by mdot for Matlab */
-digraph m2html {
-
-  UpperTrunk [URL="UpperTrunk.html"];
-  UpperTrunkClavicle [URL="UpperTrunkClavicle.html"];
-  UpperTrunkHead [URL="UpperTrunkHead.html"];
-}

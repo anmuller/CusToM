@@ -11,7 +11,7 @@ function [ExperimentalData, InverseKinematicResults] = InverseKinematicsLM(filen
 %________________________________________________________
 %
 % Licence
-% Toolbox distributed under 3-Clause BSD License
+% Toolbox distributed under GPL 3.0 Licence
 %________________________________________________________
 %
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
@@ -69,9 +69,10 @@ end
 
 %% Inverse kinematics frame per frame
 
-options1 = optimoptions(@fmincon,'Display','off','TolFun',1e-3,'MaxFunEvals',20000,'GradObj','off','GradConstr','off');
+options1 = optimoptions(@fmincon,'Display','off','TolFun',1e-3,'MaxFunEvals',50000,'GradObj','off','GradConstr','off');
 
 q=zeros(nb_solid,nb_frame);
+ceq=zeros(9*nbClosedLoop,nb_frame);
 
 addpath('Symbolic_function')
 
@@ -124,7 +125,11 @@ nonNumericJcutq = BiomechanicalModel.Jacob.nonNumericJcutq;
 Jcutcut = BiomechanicalModel.Jacob.Jcutcut;
 indexesNumericJcutcut = BiomechanicalModel.Jacob.indexesNumericJcutcut;
 nonNumericJcutcut = BiomechanicalModel.Jacob.nonNumericJcutcut;
-
+if isfield(BiomechanicalModel.Jacob,'RmvInd_q')
+    RmvInd_q = BiomechanicalModel.Jacob.RmvInd_q;Ind_q=setdiff(1:nb_solid,RmvInd_q);
+else
+    RmvInd_q=[];Ind_q=setdiff(1:nb_solid,RmvInd_q);
+end
 % Inverse kinematics parameters
 if isfield(BiomechanicalModel,'Generalized_Coordinates')
     pos_root =find(q_map'*([Human_model.mother]==0)'); %  root solid position;
@@ -159,7 +164,7 @@ for f = 2:nb_frame
     % Jcutcut
     Jcutcut(indexesNumericJcutcut) = nonNumericJcutcut(q(:,f-1),pcut,Rcut);
     % J
-    J = Jfq + Jfcut*dJcutq(Jcutcut,Jcutq);
+    J = Jfq + Jfcut*dJcutq(Jcutcut,Jcutq); J(:,RmvInd_q)=[];
     % dq (Levenberg–Marquardt)
     Jt = transpose(J);
     JtJ = Jt*J;
@@ -167,7 +172,8 @@ for f = 2:nb_frame
     B=Jt*(dX);
     dq = A\B;
     % joint coordinates computation
-    q(:,f)=q(:,f-1)+[dq(1:pos_root-1,:);0;dq(pos_root:end,:)];
+    q(Ind_q,f)=q(Ind_q,f-1)+dq;
+%     q(Ind_q,f)=q(Ind_q,f-1)+[dq(1:pos_root-1,:);0;dq(pos_root:end,:)];
     waitbar(f/nb_frame)
 end
 close(h)
@@ -181,8 +187,16 @@ end
 % Error computation
 KinematicsError=zeros(numel(list_markers),nb_frame);
 nb_cut=max([Human_model.KinematicsCut]);
-for f=1:nb_frame
-    [KinematicsError(:,f)] = ErrorMarkersIK(q(:,f),nb_cut,real_markers,f,list_markers,Rcut,pcut);
+if nbClosedLoop == 0
+    for f=1:nb_frame
+        [KinematicsError(:,f)] = ErrorMarkersIK(q(:,f),nb_cut,real_markers,f,list_markers,Rcut,pcut);
+    end
+else
+    nonlcon=@(qvar)NonLinCon_ClosedLoop(qvar,nb_cut,list_function,pcut,Rcut);
+    for f=1:nb_frame
+        [KinematicsError(:,f)] = ErrorMarkersIK(q(:,f),nb_cut,real_markers,f,list_markers,Rcut,pcut);
+        [~,ceq(:,f)]=nonlcon(q(:,f));
+    end
 end
 
 % Reaffect coordinates
@@ -214,6 +228,7 @@ ExperimentalData.Time = time;
 InverseKinematicResults.JointCoordinates = q;
 InverseKinematicResults.FreeJointCoordinates = q6dof;
 InverseKinematicResults.ReconstructionError = KinematicsError;
+InverseKinematicResults.NonLinearConstraint = ceq;
     
 disp(['... Inverse kinematics (' filename ') done'])
 

@@ -17,7 +17,7 @@ function [error] = CostFunctionSymbolicIK(q,nb_cut,real_markers,f,list_function,
 %________________________________________________________
 %
 % Licence
-% Toolbox distributed under 3-Clause BSD License
+% Toolbox distributed under GPL 3.0 Licence
 %________________________________________________________
 %
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
@@ -29,7 +29,10 @@ end
 
 error=0;
 for m=1:numel(list_function_markers)
-    error = error + norm(list_function_markers{m}(q,pcut,Rcut) - real_markers(m).position(f,:)')^2;
+    a= norm(list_function_markers{m}(q,pcut,Rcut) - real_markers(m).position(f,:)')^2;
+    if ~isnan(a)
+        error = error + a;
+    end
 end
 
 end

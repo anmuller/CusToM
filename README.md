@@ -1,11 +1,8 @@
 ﻿## CusToM: a Matlab toolbox for musculoskeletal simulation
-## Dev Model Twente 2.0
-Adding a new model to the toolbox from: 
-V. Carbone et al., “TLEM 2.0 - A comprehensive musculoskeletal geometry dataset for subject-specific modeling of lower extremity,” J. Biomech., vol. 48, no. 5, pp. 734–741, 2015.
 
 **CusToM Status:** [![status](http://joss.theoj.org/papers/4b412d584fbfa911edfae882146e2cd3/status.svg)](http://joss.theoj.org/papers/4b412d584fbfa911edfae882146e2cd3)
 
-**License:** [![License](https://img.shields.io/badge/License-3_Clause_BSD-orange.svg)](https://github.com/anmuller/CusToM/blob/master/LICENSE)
+**License:** [![License](https://camo.githubusercontent.com/899066452bb77fd8731295847eb9c17dfdf601d8/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4c6963656e73652d474e555f47504c76332d6f72616e67652e737667)](https://github.com/anmuller/CusToM/blob/Dev_IRSST/LICENSE)
 
 
 # Table of contents
@@ -102,28 +99,44 @@ After downloading the main folder and placing it in a relevant location, the ins
 CusToM was implemented and tested with the Matlab 2018a version on Windows 10. Authors can not guarantee that the code could be run on previous versions. Here is a list of toolboxes which appear to be used in CusToM:
 * Symbolic Matlab Toolbox
 * Optimization Toolbox
-* Parallel Computing Toolbox.
+* Parallel Computing Toolbox
+* DSP System Toolbox or Signal Processing Toolbox
+* Robotics System Toolbox  
 
-CusToM was not developped on MacosX and Linux. For MacosX, it could be necessary to download the source files of BTK and to compile and install BTK accordingly with your device. You would need to download [btk-core-0.3.0\_src.zip](https://code.google.com/archive/p/b-tk/downloads).
+CusToM was not developped on MacosX and Linux. For MacosX, it could be necessary to download the source files of BTK and to compile and install BTK accordingly with your device. You would need to download [btk-core-0.3.0\_src.zip](https://code.google.com/archive/p/b-tk/downloads). For Linux, you would need to download [btk-0.3.0_Linux_MatlabR2009a_64bit.tar.gz] or [btk-0.3.0_Linux_MatlabR2009a_32bit.tar.gz] depending on your device. 
 
-### 1. Additionnal installations <a name="ExtraInst"></a>
+For Ubuntu, the content of lib folder in btk must be moved in /usr/local/lib. For Fedora, the content of lib folder in btk must be moved in /usr/lib64.
+Then, use the command **sudo ldconfig** in the new location. 
 
-3D Animations tools have incorporated.
+To check that your installation of btk is correct, go whitin any folder of "Examples". Write "GenerateParameters" in the Matlab command, click on "GenerateParameters" in the new window. Then, in the window "Analysis" which will open, desactivate all the boxes except the InverseKinematics box. Click on "Run", and check that there is no error in Matlab prompt due to unreadable .c3d file. If there is no error, the installation is complete. If not, feel free to open an issue in github.
 
+
+ 
+### External libraries included <a name="ExtraInst"></a>
+* [BTK Biomechanical toolkit](https://code.google.com/archive/p/b-tk/downloads) to import .c3d files
+
+*  3D Animations tools have incorporated thanks to [GIBBON](https://github.com/gibbonCode/GIBBON/) which has an advanced graphics animation creation and exporting capabilities through a figure window based GUI.
 ![Cool 3D Anim](https://user-images.githubusercontent.com/40755537/50661630-fb32b100-0fa3-11e9-8c80-5d93d5b48911.gif)
 
- If you want to use this tool to vizualise your computations on particular trial. Please install:
+* [Export_fig](https://github.com/altmany/export_fig/archive/master.zip), it helps to export publication quality images.
 
-* [GIBBON](https://github.com/gibbonCode/GIBBON/) which has an advanced graphics animation creation and exporting capabilities through a figure window based GUI.
-* [Export_fig](https://github.com/altmany/export_fig/archive/master.zip), it helps to export publication quality images .
+* [Camview](https://fr.mathworks.com/matlabcentral/fileexchange/38019-figure-control-widget)
 
+# Models included in CusToM
+
+- Full body model (source : [AMMR](https://zenodo.org/record/3521521#.Xfux0_xCd9M))
+- [Twente lower extremity model 2.0](https://www.sciencedirect.com/science/article/pii/S0021929014006885)
+- [Gait 2354 model](https://simtk-confluence.stanford.edu/display/OpenSim/Gait%2B2392%2Band%2B2354%2BModels)
+- [Kinematic model of Xsens MVN](https://pdfs.semanticscholar.org/dd11/614195c0252f16a14e33ab9869d9da3054df.pdf)
 
 # Data processing examples <a name="Dataprocessingexamples"></a>
 
-Three tutorials extracted from research works are available in the current release. The first one consists in [predicting the ground reaction forces on a sidestep motion](#Tuto1). The second tutorials consists in [analyzing the kinematics of a pick-and-place task realized in a Virtual Reality Environment](#Tuto2) (holding a Head-Mounted-Display). The third tutorial consists in [estimating the lower limbs muscle forces during a cycling motion](#Tuto3). The tutorials are also illustrated by videos available in the repository. You can either follow
-the instructions below or the videos to run these examples.
+Four tutorials extracted from research works are available in the current release. The first one consists in [predicting the ground reaction forces on a sidestep motion](#Tuto1). The second tutorials consists in [analyzing the kinematics of a pick-and-place task realized in a Virtual Reality Environment](#Tuto2) (holding a Head-Mounted-Display). The third tutorial consists in [estimating the lower limbs muscle forces during a cycling motion](#Tuto3). The tutorials are also illustrated by videos available in the repository.
+As the videos were recorded using a older version of CusToM, you may notice small differences in the user interface. You can either follow the instructions below or the videos to run these examples.
 
 Examples are both detailed in the [CusToM Documentation](https://github.com/anmuller/CusToM/blob/master/Docs/CusToMDocumentation.pdf) and in [Youtube Videos](https://www.youtube.com/channel/UCfV7B4SIHa5Oc9SdvznjKRg).
+
+A fourth tutorial has been added on a [tennis service](#Tuto4) motion from [XSENS Analyze suite](https://content.xsens.com/motion-data) based on inertial sensors.
 
 ### 1. External forces prediction on a side-step motion <a name="Tuto1"></a>
 
@@ -152,6 +165,13 @@ This third example consisted in linking the symmetry, the performance and the he
 <a href="http://www.youtube.com/watch?v=foL7PEI8P9o" target="_blank"><img src="https://img.youtube.com/vi/foL7PEI8P9o/0.jpg" 
 alt="Tutorial#3" width="240" height="180" border="10" /></a>
 
+### 4. XSENS Tutorial <a name="Tuto4"></a>
+
+![alt text](https://github.com/anmuller/CusToM/blob/Dev_IRSST/Examples/Tennis_Processed/efw/figure2.gif)
+
+The objective of the last tutorial is to evaluate ground reaction forces of a tennis service motion recorded with XSENS inertial sensors using the force prediction algorithm. 
+At the end of the tutorial, key concepts should be understood: contact points, contribution to dynamic equilibrium.
+
 ### Extra tutorials could be found on the [workshop repository](https://github.com/cpontonn/CusToM-Workshop).
 
 # Citing CusToM <a name="Cite"></a>
@@ -170,7 +190,7 @@ See [CODE_OF_CONDUCT](CODE_OF_CONDUCT.md)
 
 # License <a name="License"></a>
 
-CusToM is provided under: [![License](https://img.shields.io/badge/License-3_Clause_BSD-orange.svg)](https://github.com/anmuller/CusToM/blob/master/LICENSE). The [license](https://github.com/anmuller/CusToM/blob/master/LICENSE) file is found on the GitHub repository.
+CusToM is provided under: [![License](https://camo.githubusercontent.com/899066452bb77fd8731295847eb9c17dfdf601d8/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4c6963656e73652d474e555f47504c76332d6f72616e67652e737667)](https://github.com/anmuller/CusToM/blob/Dev_IRSST/LICENSE). The file can be found on the repository.
 
 # Acknowledgements <a name="Acknowledgements"></a>
 

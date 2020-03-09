@@ -9,7 +9,7 @@ function [varargout] = PlotAnimation(ModelParameters, AnimateParameters)
 %________________________________________________________
 %
 % Licence
-% Toolbox distributed under 3-Clause BSD License
+% Toolbox distributed under GPL 3.0 Licence
 %________________________________________________________
 %
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
@@ -67,10 +67,25 @@ if isfield(AnimateParameters, 'Global_mass_center_anim')
 else
     Global_mass_center_anim = 0;
 end
+if isfield(AnimateParameters, 'Force_Prediction_points')
+    Force_Prediction_points = AnimateParameters.Force_Prediction_points;
+else
+    Force_Prediction_points = 0;
+end
 if isfield(AnimateParameters, 'muscles_anim')
     muscles_anim = AnimateParameters.muscles_anim;
 else
     muscles_anim = 0;
+end
+% if isfield(AnimateParameters, 'ellipsoid')
+%     ellipsoid_anim = AnimateParameters.ellipsoid;
+% else
+ellipsoid_anim = 0;
+% end
+if isfield(AnimateParameters, 'wrap')
+    wrap_anim = AnimateParameters.wrap;
+else
+    wrap_anim = 0;
 end
 if isfield(AnimateParameters, 'mod_marker_anim')
     mod_marker_anim = AnimateParameters.mod_marker_anim;
@@ -103,6 +118,7 @@ else
     BoS = 0;
 end
 
+
 % exclude non used markers
 if ~DataXSens
     Markers_set=Markers_set(find([Markers_set.exist])); %#ok<FNDSB>
@@ -115,38 +131,56 @@ end
 if bone_anim
     if ~DataXSens
         % scaling factors.
-        if isfield(BiomechanicalModel.GeometricalCalibration,'k_calib') && ~isfield(BiomechanicalModel.GeometricalCalibration,'k_markers')
+        if isfield(BiomechanicalModel,'GeometricalCalibration') && isfield(BiomechanicalModel.GeometricalCalibration,'k_calib') && ~isfield(BiomechanicalModel.GeometricalCalibration,'k_markers')
             k_calib = BiomechanicalModel.GeometricalCalibration.k_calib;
             k = (ModelParameters.Size/1.80)*k_calib;
         else
             k = repmat((ModelParameters.Size/1.80),[numel(Human_model),1]);
         end
         bonespath=which('ModelGeneration.m');
-        bonespath = fileparts(bonespath);
+        bonespath = fullfile(fileparts(bonespath),'Visual');
         for ii=find([Human_model.Visual])
-            %TLEM or not.
-            if isfield(Human_model,'Geometry') && ~isempty(Human_model(ii).Geometry)
-                bonepath=fullfile(bonespath,['Geometries_' Human_model(ii).Geometry]);
-            else
-                bonepath=fullfile(bonespath,'Geometries');
-            end
-            try
-                load(fullfile(bonepath, Human_model(ii).name)) %#ok<LOAD>
-                nb_faces=4000;
-                if length(t)>nb_faces
-                    bone.faces=t;
-                    bone.vertices=p;
+            if isfield(Human_model,'visual_file')
+                if numel(Human_model(ii).visual_file) % a visual could be associated to this solid
+                    if exist(fullfile(bonespath,Human_model(ii).visual_file),'file') % this visual exists
+                        load(fullfile(bonespath,Human_model(ii).visual_file)); %#ok<LOAD>
+                        nb_faces=4500;
+                        if length(t)>nb_faces
+                            bone.faces=t;
+                            bone.vertices=p;
 
-                    bone_red=reducepatch(bone,nb_faces);
-                    Human_model(ii).V=1.2063*k(ii)*bone_red.vertices;
-                    Human_model(ii).F=bone_red.faces;
-                else
-                    Human_model(ii).V=k(ii)*p;
-                    Human_model(ii).F=t;
+                            bone_red=reducepatch(bone,nb_faces);
+                            Human_model(ii).V=1.2063*k(ii)*bone_red.vertices;
+                            Human_model(ii).F=bone_red.faces;
+                        else
+                            Human_model(ii).V=k(ii)*p;
+                            Human_model(ii).F=t;
+                        end
+                    end
                 end
-            catch
-                error(['3D Mesh not found of ' Human_model(ii).name]);
             end
+%             if isfield(Human_model,'Geometry') && ~isempty(Human_model(ii).Geometry)
+%                 bonepath=fullfile(bonespath,['Geometries_' Human_model(ii).Geometry]);
+%             else
+%                 bonepath=fullfile(bonespath,'Geometries');
+%             end
+%             try
+%                 load(fullfile(bonepath, Human_model(ii).name)) %#ok<LOAD>
+%                 nb_faces=4500;
+%                 if length(t)>nb_faces
+%                     bone.faces=t;
+%                     bone.vertices=p;
+% 
+%                     bone_red=reducepatch(bone,nb_faces);
+%                     Human_model(ii).V=1.2063*k(ii)*bone_red.vertices;
+%                     Human_model(ii).F=bone_red.faces;
+%                 else
+%                     Human_model(ii).V=k(ii)*p;
+%                     Human_model(ii).F=t;
+%                 end
+%             catch
+%                 error(['3D Mesh not found of ' Human_model(ii).name]);
+%             end
         end
     else
         for ii=find([Human_model.Visual])
@@ -177,6 +211,15 @@ if mod_marker_anim || exp_marker_anim || mass_centers_anim
         nb_ms = length(num_s_mass_center);
         C_ms(1:nb_ms,:)=repmat([34,139,34]/255,[nb_ms 1]);
     end
+end
+if Force_Prediction_points
+    %% Creation of a structure to add contact points
+    for i=1:numel(AnalysisParameters.Prediction.ContactPoint)
+        Prediction(i).points_prediction_efforts = AnalysisParameters.Prediction.ContactPoint{i}; %#ok<AGROW>
+    end
+    Prediction=verif_Prediction_Humanmodel(Human_model,Prediction);
+    NbPointsPrediction = numel(Prediction);
+    C_pt_p(1:NbPointsPrediction,:)=repmat([100,139,34]/255,[NbPointsPrediction 1]);
 end
 if muscles_anim
     color0 = [0.9 0.9 0.9];
@@ -209,8 +252,12 @@ if external_forces_anim || external_forces_p  %vector normalization
     coef_f_visual=(ModelParameters.Mass*9.81)/lmax_vector_visual;
 end
 if forceplate
-    h = btkReadAcquisition([filename '.c3d']);
-    ForceplatesData = btkGetForcePlatforms(h);
+    if isequal(AnalysisParameters.ExternalForces.Method, @DataInC3D)
+        h = btkReadAcquisition([filename '.c3d']);
+        ForceplatesData = btkGetForcePlatforms(h);
+    elseif isequal(AnalysisParameters.ExternalForces.Method, @PF_IRSST)
+        load([filename '.mat']); %#ok<LOAD>
+    end
 end
 
 % Figure
@@ -220,13 +267,13 @@ if isequal(AnimateParameters.Mode, 'Figure') ...
 elseif isequal(AnimateParameters.Mode, 'cFigure')
     fig=cFigure; % from GIBBON
     view(3); axis equal; axis tight; axis vis3d; grid on; box on;
-    camlight headlight; axis off; axis manual;
+    camlight headlight; axis off; axis manual; lighting gouraud;
     ax=gca;
     ax.Clipping = 'off';
     drawnow;
 elseif isequal(AnimateParameters.Mode, 'GenerateAnimate') || isequal(AnimateParameters.Mode, 'GenerateParameters')
-    ax = AnimateParameters.ax;
-    camlight(ax, 'headlight');
+    ax = AnimateParameters.ax; 
+    camlight(ax, 'headlight'); lighting(ax,'gouraud');
 %     material(ax, 'metal');
 end
 
@@ -236,7 +283,7 @@ if isequal(AnimateParameters.Mode, 'Picture') ...
         || isequal(AnimateParameters.Mode, 'GenerateParameters')
     f_affich = AnimateParameters.PictureFrame;
 else
-    f_affich = 1:5:size(q,2);
+    f_affich = 1:1:size(q,2);
 end
 
 %Initialization animStruct
@@ -302,8 +349,15 @@ for f=f_affich
             end
             V_seg = [V_seg; pts];  %#ok<AGROW>
         end
-        if f==f_affich(1) || isequal(AnimateParameters.Mode, 'Figure')
-            h_seg = gpatch(ax,F_seg,V_seg,[],0.4*[1 1 1],1,4);
+        if isequal(AnimateParameters.Mode, 'Figure') ...
+                || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
+                || isequal(AnimateParameters.Mode, 'GenerateAnimate')
+            finv = figure('visible','off');
+            h_seg = gpatch(F_seg,V_seg,[],0.4*[1 1 1],1,4);
+            copyobj(h_seg,ax);
+            close(finv);
+        elseif f==f_affich(1) 
+            h_seg = gpatch(F_seg,V_seg,[],0.4*[1 1 1],1,4);
         end
         animStruct.Handles{f} = [animStruct.Handles{f} h_seg];
         animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices'}; %#ok<*CCAT>
@@ -312,32 +366,45 @@ for f=f_affich
 
     %% Bones
     if bone_anim % To do % to concatenate bones;
-        X=[];
-        Fbones=[];
-        jj=find([Human_model_bis.Visual]);
-        for j=1:length(jj)
-            jjj=jj(j);
-            cur_nb_V=length(Human_model_bis(jjj).V);
-            cur_nb_F=length(Human_model_bis(jjj).F);
-            tot_nb_F=length(Fbones);
-            tot_nb_V=length(X);
-            Fbones((1:cur_nb_F)+tot_nb_F,:)=Human_model_bis(jjj).F+tot_nb_V; %#ok<AGROW>
-            onearray = ones([1,cur_nb_V]);
-            if isempty(Human_model_bis(jjj).V)
-                temp=[];
-            else
-                temp=(Human_model_bis(jjj).Tc_R0_Ri*...
-                    [Human_model_bis(jjj).V';onearray ])';
+        if isfield(Human_model_bis,'V')
+            X=[];
+            Fbones=[];
+            jj=find(cellfun(@(x) numel(x), {Human_model_bis.V}));
+            for j=1:length(jj)
+                jjj=jj(j);
+                cur_nb_V=length(Human_model_bis(jjj).V);
+                cur_nb_F=length(Human_model_bis(jjj).F);
+                tot_nb_F=length(Fbones);
+                tot_nb_V=length(X);
+                Fbones((1:cur_nb_F)+tot_nb_F,:)=Human_model_bis(jjj).F+tot_nb_V; %#ok<AGROW>
+                onearray = ones([1,cur_nb_V]);
+                if isempty(Human_model_bis(jjj).V)
+                    temp=[];
+                else
+                    temp=(Human_model_bis(jjj).Tc_R0_Ri*...
+                        [Human_model_bis(jjj).V';onearray ])';
+                end
+                X = [ X ;...
+                    temp]; %#ok<AGROW>
             end
-            X = [ X ;...
-                temp]; %#ok<AGROW>
+            if isequal(AnimateParameters.Mode, 'Figure') ...
+                    || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
+                    || isequal(AnimateParameters.Mode, 'GenerateAnimate')
+                finv = figure('visible','off');
+                hc = gpatch(Fbones,X(:,1:3),[227 218 201]/255*0.9,'none');
+                copyobj(hc,ax);
+                close(finv);
+            elseif f==f_affich(1) 
+                hc = gpatch(Fbones,X(:,1:3),[227 218 201]/255*0.9,'none');
+            end
+            animStruct.Handles{f}=[animStruct.Handles{f} hc];
+            animStruct.Props{f}={ animStruct.Props{f}{:}, 'Vertices'};
+            animStruct.Set{f}={animStruct.Set{f}{:},X(:,1:3)};
+        else
+            if ~isequal(AnimateParameters.Mode, 'Figure')
+                warning('No osteo-articular bone model is available');
+            end
         end
-        if f==f_affich(1) || isequal(AnimateParameters.Mode, 'Figure')
-            hc = gpatch(ax,Fbones,X(:,1:3),[227 218 201]/255*0.9,'none');
-        end
-        animStruct.Handles{f}=[animStruct.Handles{f} hc];
-        animStruct.Props{f}={ animStruct.Props{f}{:}, 'Vertices'};
-        animStruct.Set{f}={animStruct.Set{f}{:},X(:,1:3)};
     end
     
     %% Markers
@@ -404,8 +471,102 @@ for f=f_affich
         animStruct.Set{f}={animStruct.Set{f}{:},X};
     end
     
+    %% Force Prediction points
+    if Force_Prediction_points
+        Vpt_p=[];
+        for j=1:NbPointsPrediction
+            i_so=Prediction(j).num_solid;
+            num_m=Prediction(j).num_markers;
+            pt_pred=Human_model_bis(i_so).anat_position{num_m,2};
+            X = Human_model_bis(i_so).Tc_R0_Ri*[pt_pred;1];
+            Vpt_p=[Vpt_p;X(1:3)']; %#ok<AGROW>
+        end
+        if f==f_affich(1) || isequal(AnimateParameters.Mode, 'Figure')
+            hmass = patch(ax,'Faces',1:NbPointsPrediction,'Vertices',Vpt_p,'FaceColor','none','FaceVertexCData',C_pt_p,'EdgeColor','none');
+            hmass.Marker='o';
+            hmass.MarkerFaceColor='flat';
+            hmass.MarkerEdgeColor='k';
+            hmass.MarkerSize=6;
+        end
+        animStruct.Handles{f}=[animStruct.Handles{f} hmass];
+        animStruct.Props{f}={animStruct.Props{f}{:}, 'Vertices'};
+        animStruct.Set{f}={animStruct.Set{f}{:},Vpt_p};
+    end
+    
+        %% Scapulo-thoracic Ellipsoid
+    if ellipsoid_anim
+        %&& sum(cellfun(@isempty,[Muscles.wrap]'))==0
+        Fe=[];
+        CEe=[];
+        Ve=[];
+        num_solid=7;
+        
+        for i_w = 1:2
+            pos_ell=Human_model_bis(7).anat_position{8+i_w, 2};
+            T_Ri_Rw=[eye(3,3), pos_ell;[0 0 0],1];
+            X = Human_model_bis(num_solid).Tc_R0_Ri*T_Ri_Rw;
+            [xel1,yel1,zel1]=ellipsoid(0,0,0,1.8/1.7*0.07,1.8/1.7*0.15,1.8/1.7*0.07);
+            [Fel1,Vel1]=surf2patch(xel1,yel1,zel1);
+            Vell_R0= (X*[Vel1';ones(1,length(Vel1))])';
+            
+            tot_nb_F=length(Fe);
+            cur_nb_F=length(Fel1);
+            tot_nb_V=length(Ve);
+            Fe((1:cur_nb_F)+tot_nb_F,:)=Fel1+tot_nb_V;
+            Ve=[Ve ;Vell_R0(:,1:3)]; %#ok<AGROW>
+        end
+        if isequal(AnimateParameters.Mode, 'Figure') ...
+                || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
+                || isequal(AnimateParameters.Mode, 'GenerateAnimate')
+            finv = figure('visible','off');
+            he=gpatch(Fe,Ve,'c','none',0.3);
+            copyobj(he,ax);
+            close(finv);
+        elseif f==f_affich(1) 
+            he=gpatch(Fe,Ve,'c','none',0.3);
+        end        
+        animStruct.Handles{f} = [animStruct.Handles{f} he];
+        animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices'};
+        animStruct.Set{f} = {animStruct.Set{f}{:},Ve};
+    end
+    
+    %% Muscle wraps
+    if wrap_anim && isfield(Human_model,'wrap') && numel([Human_model.wrap])>0
+        %&& sum(cellfun(@isempty,[Muscles.wrap]'))==0
+        Fw=[];
+        CEw=[];
+        Vw=[];
+        Wraps = [Human_model.wrap];
+        
+        for i_w = 1:numel(Wraps)
+            num_solid=Wraps(i_w).num_solid;
+            T_Ri_Rw=[Wraps(i_w).orientation,Wraps(i_w).location;[0 0 0],1];
+            X = Human_model_bis(num_solid).Tc_R0_Ri*T_Ri_Rw;
+            [Fcyl,Vcyl]=PlotCylinder(Wraps(i_w).R,Wraps(i_w).h);
+            Vcyl_R0= (X*[Vcyl';ones(1,length(Vcyl))])';
+            tot_nb_F=length(Fw);
+            cur_nb_F=length(Fcyl);
+            tot_nb_V=length(Vw);
+            Fw((1:cur_nb_F)+tot_nb_F,:)=Fcyl+tot_nb_V;
+            Vw=[Vw ;Vcyl_R0(:,1:3)]; %#ok<AGROW>
+        end
+        if isequal(AnimateParameters.Mode, 'Figure') ...
+                || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
+                || isequal(AnimateParameters.Mode, 'GenerateAnimate')
+            finv = figure('visible','off');
+            hw=gpatch(Fw,Vw,'c','none',0.75);
+            copyobj(hw,ax);
+            close(finv);
+        elseif f==f_affich(1) 
+            hw=gpatch(Fw,Vw,'c','none',0.75);
+        end        
+        animStruct.Handles{f} = [animStruct.Handles{f} hw];
+        animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices'};
+        animStruct.Set{f} = {animStruct.Set{f}{:},Vw};
+    end
+
     %% Muscles
-    if muscles_anim && numel(Muscles)
+    if muscles_anim && ~isempty(Muscles) && sum([Muscles.exist])
         Fmu=[];
         CEmu=[];
         Vmu=[];
@@ -415,36 +576,69 @@ for f=f_affich
             mu=ind_mu(i_mu);
             pts_mu = Muscles_test(mu).pos_pts';
             nbpts_mu = size(pts_mu,1);
-            cur_Fmu = repmat([1 2],[nbpts_mu-1 1])+(0:nbpts_mu-2)'+size(Vmu,1);
-            Fmu =[Fmu; cur_Fmu]; %#ok<AGROW>
-            Vmu=[Vmu ;pts_mu]; %#ok<AGROW>
-            CEmu=[CEmu; repmat(color_mus(mu,:),[nbpts_mu 1])]; %#ok<AGROW>
+            if ~isempty(Muscles(mu).wrap) && ~isempty(Muscles(mu).wrap{1})
+                % find the wrap
+                Wrap = [Human_model.wrap]; names = {Wrap.name}'; [~,ind]=intersect(names,Muscles(mu).wrap{1});
+                cur_Wrap=Wrap(ind);
+                % wrap object
+                T_Ri_Rw=[cur_Wrap.orientation,cur_Wrap.location;[0 0 0],1];
+                T_R0_Rw = Human_model_bis(cur_Wrap.num_solid).Tc_R0_Ri*T_Ri_Rw;   
+                % pts in Rw
+                pts_mu_inRw=T_R0_Rw\[pts_mu';ones(1,nbpts_mu)];
+                % verify if wrap.
+                for imw=1:nbpts_mu-1
+                    if Intersect_line_cylinder(pts_mu_inRw(1:3,imw)', pts_mu_inRw(1:3,imw+1)', cur_Wrap.R)
+                        [L(f),~,~,pt_wrap_inRw(:,:,imw)]=CylinderWrapping(pts_mu_inRw(1:3,imw), pts_mu_inRw(1:3,imw+1), cur_Wrap.R);
+                        tmp=T_R0_Rw*[pt_wrap_inRw(:,:,imw)';ones(1,size(pt_wrap_inRw,1))];
+                        pt_wrap(:,:,imw)=tmp(1:3,:)';
+                        % add the wrapping points
+                        nb_added_pts=size([pts_mu(imw,:);pt_wrap(:,:,imw)],1);
+                        cur_Fmu = repmat([1 2],[nb_added_pts-1 1])+(0:nb_added_pts-2)'+size(Vmu,1);
+                        Vmu=[Vmu;pts_mu(imw,:);pt_wrap(:,:,imw)];
+                        Fmu =[Fmu; cur_Fmu]; %#ok<AGROW>
+                        CEmu=[CEmu; repmat(color_mus(mu,:),[nb_added_pts 1])]; %#ok<AGROW>
+                    else
+                        if imw>1
+                            cur_Fmu = [1 2]+size(Vmu,1);
+                            Fmu =[Fmu; cur_Fmu]; %#ok<AGROW>
+                        end
+                        Vmu=[Vmu ;pts_mu(imw,:)]; %#ok<AGROW>
+                        CEmu=[CEmu; color_mus(mu,:)]; %#ok<AGROW>
+                    end
+                end
+                cur_Fmu = repmat([0 1],[1 1])+size(Vmu,1);
+                Fmu =[Fmu; cur_Fmu]; %#ok<AGROW>
+                Vmu=[Vmu ;pts_mu(end,:)]; %#ok<AGROW>
+                CEmu=[CEmu; color_mus(mu,:)]; %#ok<AGROW>
+            else
+                cur_Fmu = repmat([1 2],[nbpts_mu-1 1])+(0:nbpts_mu-2)'+size(Vmu,1);
+                Fmu =[Fmu; cur_Fmu]; %#ok<AGROW>
+                Vmu=[Vmu ;pts_mu]; %#ok<AGROW>
+                CEmu=[CEmu; repmat(color_mus(mu,:),[nbpts_mu 1])]; %#ok<AGROW>
+            end
+            
         end
-        if f==f_affich(1) || isequal(AnimateParameters.Mode, 'Figure')
-            hmu=gpatch(ax,Fmu,Vmu,[],CEmu,1,2);
-        end
-        animStruct.Handles{f} = [animStruct.Handles{f} hmu hmu];
-        animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices','FaceVertexCData'};
-        animStruct.Set{f} = {animStruct.Set{f}{:},Vmu,CEmu};
-    end
+        if isequal(AnimateParameters.Mode, 'Figure') ...
+                || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
+                || isequal(AnimateParameters.Mode, 'GenerateAnimate')
+            finv = figure('visible','off');
+            hmu=gpatch(Fmu,Vmu,[],CEmu,1,2);
+            copyobj(hmu,ax);
+            close(finv);
+        elseif f==f_affich(1) 
+            hmu=gpatch(Fmu,Vmu,[],CEmu,1,2);
+        end        
+        animStruct.Handles{f} = [animStruct.Handles{f} hmu hmu hmu];
+        animStruct.Props{f} = {animStruct.Props{f}{:},'Faces','Vertices','FaceVertexCData'};
+        animStruct.Set{f} = {animStruct.Set{f}{:},Fmu,Vmu,CEmu};
+    end    
     
     %% Vectors of external forces issued from experimental data
     if external_forces_anim
         extern_forces_f = external_forces(f).Visual;
         F_ef=[];V_ef=[];
         for i_for=1:size(extern_forces_f,2)
-%             if norm(extern_forces_f(4:6,i_for)) > 20
-%                 % Arrows
-%                 X_array=[extern_forces_f(1,i_for),...
-%                     extern_forces_f(4,i_for)/coef_f_visual];
-%                 Y_array=[extern_forces_f(2,i_for),...
-%                     extern_forces_f(5,i_for)/coef_f_visual];
-%                 Z_array=[extern_forces_f(3,i_for),...
-%                     extern_forces_f(6,i_for)/coef_f_visual];
-%                 [F,V]=quiver3Dpatch(X_array(1),Y_array(1),Z_array(1),...
-%                     X_array(2),Y_array(2),Z_array(2),[],[]);
-%                 F_ef=[F_ef;F+size(V_ef,1)]; V_ef=[V_ef;V];  %#ok<AGROW>
-                % Lines
+            if norm(extern_forces_f(4:6,i_for)) > 50
                 X_array=[extern_forces_f(1,i_for),...
                     extern_forces_f(1,i_for) + extern_forces_f(4,i_for)/coef_f_visual];
                 Y_array=[extern_forces_f(2,i_for),...
@@ -453,14 +647,18 @@ for f=f_affich
                     extern_forces_f(3,i_for) + extern_forces_f(6,i_for)/coef_f_visual];
                 F_ef = [F_ef; [1 2]+size(V_ef,1)]; %#ok<AGROW>
                 V_ef = [V_ef; [X_array' Y_array' Z_array']]; %#ok<AGROW>
-%             end
+            end
         end
-        if f==f_affich(1) || isequal(AnimateParameters.Mode, 'Figure')
-%             % Arrows
-%             Ext=gpatch(ax,F_ef,V_ef,color_vect_force,color_vect_force,0.5);
-            % Lines
-            Ext = gpatch(ax,F_ef,V_ef,[],color_vect_force,1,4);
-        end
+        if isequal(AnimateParameters.Mode, 'Figure') ...
+                || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
+                || isequal(AnimateParameters.Mode, 'GenerateAnimate')
+            finv = figure('visible','off');
+            Ext = gpatch(F_ef,V_ef,[],color_vect_force,1,4);
+            copyobj(Ext,ax);
+            close(finv);
+        elseif f==f_affich(1) 
+            Ext = gpatch(F_ef,V_ef,[],color_vect_force,1,4);
+        end         
         animStruct.Handles{f} = [animStruct.Handles{f} Ext];
         animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices'};
         animStruct.Set{f} = {animStruct.Set{f}{:},V_ef};
@@ -471,18 +669,7 @@ for f=f_affich
         extern_forces_f = external_forces_pred(f).Visual;
         F_efp=[];V_efp=[];
         for i_for=1:size(extern_forces_f,2)
-%             if norm(extern_forces_f(4:6,i_for)) > 20
-%                 % Arrows
-%                 X_array=[extern_forces_f(1,i_for),...
-%                     extern_forces_f(4,i_for)/coef_f_visual];
-%                 Y_array=[extern_forces_f(2,i_for),...
-%                     extern_forces_f(5,i_for)/coef_f_visual];
-%                 Z_array=[extern_forces_f(3,i_for),...
-%                     extern_forces_f(6,i_for)/coef_f_visual];
-%                 [F,V]=quiver3Dpatch(X_array(1),Y_array(1),Z_array(1),...
-%                     X_array(2),Y_array(2),Z_array(2),[],[]);
-%                 F_efp=[F_efp;F+size(V_efp,1)]; V_efp=[V_efp;V]; %#ok<AGROW>
-                % Lines
+            if norm(extern_forces_f(4:6,i_for)) > 50
                 X_array=[extern_forces_f(1,i_for),...
                     extern_forces_f(1,i_for) + extern_forces_f(4,i_for)/coef_f_visual];
                 Y_array=[extern_forces_f(2,i_for),...
@@ -491,14 +678,18 @@ for f=f_affich
                     extern_forces_f(3,i_for) + extern_forces_f(6,i_for)/coef_f_visual];
                 F_efp = [F_efp; [1 2]+size(V_efp,1)]; %#ok<AGROW>
                 V_efp = [V_efp; [X_array' Y_array' Z_array']]; %#ok<AGROW>
-%             end
+            end
         end
-        if f==f_affich(1) || isequal(AnimateParameters.Mode, 'Figure')
-%             % Arrows
-%             Extp=gpatch(ax,F_efp,V_efp,color_vect_force_p,color_vect_force_p,0.5);
-            % Lines
-            Extp = gpatch(ax,F_efp,V_efp,[],color_vect_force_p,1,4);
-        end
+        if isequal(AnimateParameters.Mode, 'Figure') ...
+                || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
+                || isequal(AnimateParameters.Mode, 'GenerateAnimate')
+            finv = figure('visible','off');
+            Extp = gpatch(F_efp,V_efp,[],color_vect_force_p,1,4);
+            copyobj(Extp,ax);
+            close(finv);
+        elseif f==f_affich(1) 
+            Extp = gpatch(F_efp,V_efp,[],color_vect_force_p,1,4);
+        end          
         animStruct.Handles{f} = [animStruct.Handles{f} Extp];
         animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices'};
         animStruct.Set{f} = {animStruct.Set{f}{:},V_efp};
@@ -506,15 +697,21 @@ for f=f_affich
     
     %% Display force plates position
     if forceplate
-        x_fp = []; y_fp = []; z_fp = [];
-        for i=1:numel(ForceplatesData)
-            if ~isequal(AnalysisParameters.ExternalForces.Options{i}, 'NoContact')
-                x_fp = [x_fp ForceplatesData(i).corners(1,:)'/1000]; %#ok<AGROW> % mm -> m
-                y_fp = [y_fp ForceplatesData(i).corners(2,:)'/1000]; %#ok<AGROW> % mm -> m
-                z_fp = [z_fp ForceplatesData(i).corners(3,:)'/1000]; %#ok<AGROW> % mm -> m
+        if isequal(AnalysisParameters.ExternalForces.Method, @DataInC3D)
+            x_fp = []; y_fp = []; z_fp = [];
+            for i=1:numel(ForceplatesData)
+                if ~isequal(AnalysisParameters.ExternalForces.Options{i}, 'NoContact')
+                    x_fp = [x_fp ForceplatesData(i).corners(1,:)'/1000]; %#ok<AGROW> % mm -> m
+                    y_fp = [y_fp ForceplatesData(i).corners(2,:)'/1000]; %#ok<AGROW> % mm -> m
+                    z_fp = [z_fp ForceplatesData(i).corners(3,:)'/1000]; %#ok<AGROW> % mm -> m
+                end
             end
-        end
-        patch(ax,x_fp,y_fp,z_fp,[.9 .9 .9]);
+        elseif isequal(AnalysisParameters.ExternalForces.Method, @PF_IRSST)
+            x_fp = ExperimentalData.CoinsPF(1,:)/1000; % mm -> m
+            y_fp = ExperimentalData.CoinsPF(2,:)/1000; % mm -> m
+            z_fp = ExperimentalData.CoinsPF(3,:)/1000; % mm -> m
+        end            
+        patch(ax,x_fp,y_fp,z_fp,[1 1 1]);
     end
     
     %% Base of support
@@ -530,7 +727,7 @@ for f=f_affich
     %% Save figure
     if isequal(AnimateParameters.Mode, 'Figure')
         % drawing an saving
-        drawnow
+        drawnow;
         M(cpt) = getframe(fig); %#ok<AGROW>
     end
     
@@ -544,7 +741,7 @@ end
 if isequal(AnimateParameters.Mode, 'Figure')
     close all
     v=VideoWriter([filename '.avi']);
-    v.FrameRate=1/(5*ExperimentalData.Time(2));
+    v.FrameRate=1/(3*ExperimentalData.Time(2));
     open(v)
     writeVideo(v,M);
     close(v)
@@ -558,5 +755,6 @@ if isequal(AnimateParameters.Mode, 'GenerateParameters')
     varargout{2} = Markers_set;
     varargout{3} = EnableModel;
 end
-
+% save('L','L')
 end
+

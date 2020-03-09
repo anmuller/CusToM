@@ -18,13 +18,13 @@ function [OsteoArticularModel]= Upperarm(OsteoArticularModel,k,Signe,Mass,Attach
 %________________________________________________________
 %
 % Licence
-% Toolbox distributed under 3-Clause BSD License
+% Toolbox distributed under GPL 3.0 Licence
 %________________________________________________________
 %
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
 % Georges Dumont
 %________________________________________________________
-list_solid={'Shoulder_J1' 'Shoulder_J2' 'Humerus'};
+list_solid={'Glenohumeral_J1' 'Glenohumeral_J2' 'Humerus'};
 
 %% Choose right or left arm
 if Signe == 'R'
@@ -68,7 +68,7 @@ else
     if OsteoArticularModel(s_mother).child == 0      % if the mother don't have any child
         OsteoArticularModel(s_mother).child = eval(['s_' list_solid{1}]);    % the child of this mother is this solid
     else
-        [OsteoArticularModel]=sister_actualize(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la dernière soeur
+        [OsteoArticularModel]=sister_actualize(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la derniï¿½re soeur
     end
 end
 
@@ -119,32 +119,74 @@ Humerus_position_set = {...
     [Signe 'EAR'], k*Mirror*[-0.05 0.1674 0]'; ...
 %     [Signe 'Humerus_Brachioradialis_o'], (Humerus_Brachioradialis+Humerus_ghJointNode)'; ...
     [Signe 'Humerus_Brachioradialis_o'], Humerus_RadiusJointNode'+[0 0.07 0]'; ...
-    ...[Signe 'Humerus_Biceps'], (Humerus_Biceps+Humerus_ghJointNode)'; ...
-    [Signe 'Humerus_BicepsL_via2'], (Humerus_BicepsL_via2+Humerus_ghJointNode)';
-    [Signe 'Humerus_BicepsL_via3'], (Humerus_BicepsL_via3+Humerus_ghJointNode)';
-    [Signe 'Humerus_BicepsL_via4'], (Humerus_BicepsL_via4+Humerus_ghJointNode)';
-    [Signe 'Humerus_BicepsL_via5'], (Humerus_BicepsL_via5+Humerus_ghJointNode)';
-    [Signe 'Humerus_BicepsL_via6'], (Humerus_BicepsL_via6+Humerus_ghJointNode)';
-    [Signe 'Humerus_BicepsS_via2'], (Humerus_BicepsS_via2+Humerus_ghJointNode)';
-    [Signe 'Humerus_BicepsS_via3'], (Humerus_BicepsS_via3+Humerus_ghJointNode)';
-    [Signe 'Humerus_Biceps_via7'], (Humerus_Biceps_via7+Humerus_ghJointNode)';
-    ...
+%     [Signe 'Humerus_Biceps'], (Humerus_Biceps+Humerus_ghJointNode)'; ...
+    [Signe 'Humerus_BicepsL_via2'], (Humerus_BicepsL_via2+Humerus_ghJointNode)';...
+    [Signe 'Humerus_BicepsL_via3'], (Humerus_BicepsL_via3+Humerus_ghJointNode)';...
+    [Signe 'Humerus_BicepsL_via4'], (Humerus_BicepsL_via4+Humerus_ghJointNode)';...
+    [Signe 'Humerus_BicepsL_via5'], (Humerus_BicepsL_via5+Humerus_ghJointNode)';...
+    [Signe 'Humerus_BicepsL_via6'], (Humerus_BicepsL_via6+Humerus_ghJointNode)';...
+    [Signe 'Humerus_BicepsS_via2'], (Humerus_BicepsS_via2+Humerus_ghJointNode)';...
+    [Signe 'Humerus_BicepsS_via3'], (Humerus_BicepsS_via3+Humerus_ghJointNode)';...
+    [Signe 'Humerus_Biceps_via7'], (Humerus_Biceps_via7+Humerus_ghJointNode)';...
 %     [Signe 'Humerus_ECRL_o'], (Humerus_ECRL+Humerus_ghJointNode)'; ...
     [Signe 'Humerus_ECRL_o'], Humerus_RadiusJointNode'+[0 0.03 0]'; ...
     [Signe 'Humerus_Brachialis_o'], (Humerus_Brachialis+Humerus_ghJointNode)'; ...
 %     [Signe 'Humerus_PronatorTeres_o'], (Humerus_PronatorTeres+Humerus_ghJointNode)'; ...
     [Signe 'Humerus_PronatorTeres_o'], Humerus_UlnaJointNode'+[0 0.02 0.01]'; ...
-    ...
-    ...[Signe 'Humerus_Triceps_o'], (Humerus_Triceps+Humerus_ghJointNode)'; ...
-    [Signe 'Humerus_TricepsLg_via1'], (Humerus_TricepsLg_via1+Humerus_ghJointNode)';
-    [Signe 'Humerus_TricepsLat_o'], (Humerus_TricepsLat_o+Humerus_ghJointNode)'; 
-    [Signe 'Humerus_TricepsLat_via1'], (Humerus_TricepsLat_via1+Humerus_ghJointNode)'; 
-    [Signe 'Humerus_TricepsMed_o'], (Humerus_TricepsMed_o+Humerus_ghJointNode)'; 
-    [Signe 'Humerus_TricepsMed_via1'], (Humerus_TricepsMed_via1+Humerus_ghJointNode)'; 
-    [Signe 'Humerus_Triceps_via2'], (Humerus_Triceps_via2+Humerus_ghJointNode)';
-    [Signe 'Humerus_Triceps_via3'], (Humerus_Triceps_via3+Humerus_ghJointNode)';
+%     [Signe 'Humerus_Triceps_o'], (Humerus_Triceps+Humerus_ghJointNode)'; ...
+    [Signe 'Humerus_TricepsLg_via1'], (Humerus_TricepsLg_via1+Humerus_ghJointNode)';...
+    [Signe 'Humerus_TricepsLat_o'], (Humerus_TricepsLat_o+Humerus_ghJointNode)'; ...
+    [Signe 'Humerus_TricepsLat_via1'], (Humerus_TricepsLat_via1+Humerus_ghJointNode)';... 
+    [Signe 'Humerus_TricepsMed_o'], (Humerus_TricepsMed_o+Humerus_ghJointNode)'; ...
+    [Signe 'Humerus_TricepsMed_via1'], (Humerus_TricepsMed_via1+Humerus_ghJointNode)';... 
+    [Signe 'Humerus_Triceps_via2'], (Humerus_Triceps_via2+Humerus_ghJointNode)';...
+    [Signe 'Humerus_Triceps_via3'], (Humerus_Triceps_via3+Humerus_ghJointNode)';...
     [Signe 'Humerus_Triceps_via4'], Humerus_ElbowJointNode' + k*[-0.028 0 0]';...
+    
+    % Muscles from (Puchaud et al. 2019)
+    [Signe '_humerus_r_DELT1_r-P1'],osim2antoine.*Mirror*([0.00896;-0.11883;0.00585])+Humerus_ghJointNode';...
+    [Signe '_humerus_r_DELT1_r-P2'],osim2antoine.*Mirror*([0.01623;-0.11033;0.00412])+Humerus_ghJointNode';...
+    [Signe '_humerus_r_DELT2_r-P1'],osim2antoine.*Mirror*([0.00461;-0.13611;0.0056])+Humerus_ghJointNode';...
+    [Signe '_humerus_r_DELT3_r-P3'],osim2antoine.*Mirror*([0.00206;-0.07602;0.01045])+Humerus_ghJointNode';...
+    [Signe '_humerus_r_PECM1_r-P1'],osim2antoine.*Mirror*([0.01169;-0.04191;0.0078])+Humerus_ghJointNode';...
+    [Signe '_humerus_r_PECM1_r-P2'],osim2antoine.*Mirror*([0.017133;-0.037;-0.00337])+Humerus_ghJointNode';...
+    [Signe '_humerus_r_PECM2_r-P1'],osim2antoine.*Mirror*([0.01274;-0.04289;0.00785])+Humerus_ghJointNode';...
+    [Signe '_humerus_r_PECM2_r-P2'],osim2antoine.*Mirror*([0.015513;-0.04223;-0.00447])+Humerus_ghJointNode';...
+    [Signe '_humerus_r_PECM3_r-P1'],osim2antoine.*Mirror*([0.01269;-0.04375;0.0075])+Humerus_ghJointNode';...
+    [Signe '_humerus_r_PECM3_r-P2'],osim2antoine.*Mirror*([0.014239;-0.049652;-0.0093637])+Humerus_ghJointNode';...
+    
+        % TO BE MODIFIED
+     [Signe 'Humerus_Coracobrachialis_i'],[ 0 0 0]';...
+     [Signe 'Humerus_Deltoid_i'],[ 0 0 0]';...
+    [Signe 'Humerus_LatissumusDorsi_i'],[ 0 0 0]';...
+    [Signe 'Humerus_PectoralisMajor_i'],[ 0 0 0]';...
+    [Signe 'Humerus_Supraspinatus_i'],[ 0 0 0]';...
+    [Signe 'Humerus_Infraspinatus_i'],[ 0 0 0]';...
+    [Signe 'Humerus_CubitalisAnterior_o'],[ 0 0 0]';...
+    [Signe 'Humerus_FlexorCarpiUlnaris_o'],[ 0 0 0]';...
+    [Signe 'Humerus_ExtensorCarpiUlnaris_o'],[ 0 0 0]';...
+    [Signe 'Humerus_ExtensorDigitorum_o'],[ 0 0 0]';...
+    [Signe 'Humerus_FlexorDigitorumSuperior_o'],[ 0 0 0]';...
+    [Signe 'Humerus_FlexorCarpiRadialis_o'],[ 0 0 0]';...
     };
+
+
+
+    % TO BE MODIFIED
+Scapula_position_set={...
+    [Signe 'Scapula_Coracobrachialis_o'],[ 0 0 0]';...
+   [Signe 'Scapula_Deltoid_o'],[ 0 0 0]';...
+  [Signe 'Scapula_Supraspinatus_o'],[ 0 0 0]';...
+   [Signe 'Scapula_Infraspinatus_o'],[ 0 0 0]';...    
+   [Signe 'Scapula_BicepsL_o'],[ 0 0 0]';...
+   [Signe 'Scapula_BicepsL_via1'],[ 0 0 0]';...
+    [Signe 'Scapula_BicepsS_o'],[ 0 0 0]';...
+    [Signe 'Scapula_BicepsS_via1'],[ 0 0 0]';...
+    [Signe 'Scapula_Triceps_o'],[ 0 0 0]';...
+    };
+
+%END OF TO BE MODIFIED
+
 
 %%                     Scaling inertial parameters
 
@@ -157,76 +199,78 @@ Humerus_position_set = {...
 
 num_solid=0;
 %% Humerus
-    % Shoulder_J1
-    num_solid=num_solid+1;        % number of the solid ...
-    name=list_solid{num_solid}; % name of the solid
-    eval(['incr_solid=s_' name ';'])  % number of the solid in the model
-    OsteoArticularModel(incr_solid).name=[Signe name];    % name of the solid ('R' or 'L' in prefix)
-    OsteoArticularModel(incr_solid).sister=0;                       % sister : defined as an input of the function   
-    OsteoArticularModel(incr_solid).child=s_Shoulder_J2;                 
-    OsteoArticularModel(incr_solid).mother=s_mother;                       % mother : defined as an input of the function  
-    OsteoArticularModel(incr_solid).a=[0 1 0]';                          % rotation /x
-    OsteoArticularModel(incr_solid).joint=1;
-	if Signe == 'R'
-		OsteoArticularModel(incr_solid).limit_inf=-pi/2;                       	% inferior joint biomechanical stop
-		OsteoArticularModel(incr_solid).limit_sup=pi;                      		% superior joint biomechanical stop
-	else
-		OsteoArticularModel(incr_solid).limit_inf=-pi;                       % inferior joint biomechanical stop
-		OsteoArticularModel(incr_solid).limit_sup=pi/2;                      % superior joint biomechanical stop
-	end
-    OsteoArticularModel(incr_solid).m=0;                                 % reference mass
-    OsteoArticularModel(incr_solid).b=pos_attachment_pt;                 % attachment point with respect to the parent's frame
-    OsteoArticularModel(incr_solid).I=zeros(3,3);                        % reference inertia matrix
-    OsteoArticularModel(incr_solid).c=[0 0 0]';                          % center of mass location in the local frame
-    OsteoArticularModel(incr_solid).calib_k_constraint=[];   
-    OsteoArticularModel(incr_solid).u=[];                          % fixed rotation with respect to u axis of theta angle
-    OsteoArticularModel(incr_solid).theta=[];
-    OsteoArticularModel(incr_solid).KinematicsCut=[];              % kinematic cut
-    OsteoArticularModel(incr_solid).ClosedLoop=[];                 % if this solid close a closed-loop chain : {number of solid i on which is attached this solid ; attachement point (local frame of solid i}
-    OsteoArticularModel(incr_solid).linear_constraint=[];
-    OsteoArticularModel(incr_solid).Visual=0;
+% Glenohumeral_J1
+num_solid=num_solid+1;        % number of the solid ...
+name=list_solid{num_solid}; % name of the solid
+eval(['incr_solid=s_' name ';'])  % number of the solid in the model
+OsteoArticularModel(incr_solid).name=[Signe name];    % name of the solid ('R' or 'L' in prefix)
+OsteoArticularModel(incr_solid).sister=0;                       % sister : defined as an input of the function   
+OsteoArticularModel(incr_solid).child=s_Glenohumeral_J2;                 
+OsteoArticularModel(incr_solid).mother=s_mother;                       % mother : defined as an input of the function  
+OsteoArticularModel(incr_solid).a=[0 1 0]';                          % rotation /x
+OsteoArticularModel(incr_solid).joint=1;
+if Signe == 'R'
+    OsteoArticularModel(incr_solid).limit_inf=-pi/2;                       	% inferior joint biomechanical stop
+    OsteoArticularModel(incr_solid).limit_sup=pi;                      		% superior joint biomechanical stop
+else
+    OsteoArticularModel(incr_solid).limit_inf=-pi;                       % inferior joint biomechanical stop
+    OsteoArticularModel(incr_solid).limit_sup=pi/2;                      % superior joint biomechanical stop
+end
+OsteoArticularModel(incr_solid).m=0;                                 % reference mass
+OsteoArticularModel(incr_solid).b=pos_attachment_pt;                 % attachment point with respect to the parent's frame
+OsteoArticularModel(incr_solid).I=zeros(3,3);                        % reference inertia matrix
+OsteoArticularModel(incr_solid).c=[0 0 0]';                          % center of mass location in the local frame
+OsteoArticularModel(incr_solid).calib_k_constraint=[];   
+OsteoArticularModel(incr_solid).u=[];                          % fixed rotation with respect to u axis of theta angle
+OsteoArticularModel(incr_solid).theta=[];
+OsteoArticularModel(incr_solid).KinematicsCut=[];              % kinematic cut
+OsteoArticularModel(incr_solid).ClosedLoop=[];                 % if this solid close a closed-loop chain : {number of solid i on which is attached this solid ; attachement point (local frame of solid i}
+OsteoArticularModel(incr_solid).linear_constraint=[];
+OsteoArticularModel(incr_solid).Visual=0;
 
-    % Shoulder_J2
-    num_solid=num_solid+1;        % number of the solid ...
-    name=list_solid{num_solid}; % name of the solid
-    eval(['incr_solid=s_' name ';'])  % number of the solid in the model
-    OsteoArticularModel(incr_solid).name=[Signe name];  
-    OsteoArticularModel(incr_solid).sister=0;                
-    OsteoArticularModel(incr_solid).child=s_Humerus;                   
-    OsteoArticularModel(incr_solid).mother=s_Shoulder_J1;           
-    OsteoArticularModel(incr_solid).a=[1 0 0]'; 
-    OsteoArticularModel(incr_solid).joint=1;
-	if Signe == 'R'
-		OsteoArticularModel(incr_solid).limit_inf=-pi;                     % inferior joint biomechanical stop
-		OsteoArticularModel(incr_solid).limit_sup=pi/2;                    % superior joint biomechanical stop
-	else
-		OsteoArticularModel(incr_solid).limit_inf=-pi/2;                   % inferior joint biomechanical stop
-		OsteoArticularModel(incr_solid).limit_sup=pi;                      % superior joint biomechanical stop
-	end
-    OsteoArticularModel(incr_solid).m=0;                 
-    OsteoArticularModel(incr_solid).b=[0 0 0]';  
-    OsteoArticularModel(incr_solid).I=zeros(3,3);
-    OsteoArticularModel(incr_solid).c=[0 0 0]';
-    OsteoArticularModel(incr_solid).Visual=0;
+% Glenohumeral_J2
+num_solid=num_solid+1;        % number of the solid ...
+name=list_solid{num_solid}; % name of the solid
+eval(['incr_solid=s_' name ';'])  % number of the solid in the model
+OsteoArticularModel(incr_solid).name=[Signe name];  
+OsteoArticularModel(incr_solid).sister=0;                
+OsteoArticularModel(incr_solid).child=s_Humerus;                   
+OsteoArticularModel(incr_solid).mother=s_Glenohumeral_J1;           
+OsteoArticularModel(incr_solid).a=[1 0 0]'; 
+OsteoArticularModel(incr_solid).joint=1;
+if Signe == 'R'
+    OsteoArticularModel(incr_solid).limit_inf=-pi;                     % inferior joint biomechanical stop
+    OsteoArticularModel(incr_solid).limit_sup=pi/2;                    % superior joint biomechanical stop
+else
+    OsteoArticularModel(incr_solid).limit_inf=-pi/2;                   % inferior joint biomechanical stop
+    OsteoArticularModel(incr_solid).limit_sup=pi;                      % superior joint biomechanical stop
+end
+OsteoArticularModel(incr_solid).m=0;                 
+OsteoArticularModel(incr_solid).b=[0 0 0]';  
+OsteoArticularModel(incr_solid).I=zeros(3,3);
+OsteoArticularModel(incr_solid).c=[0 0 0]';
+OsteoArticularModel(incr_solid).Visual=0;
+% OsteoArticularModel(incr_solid).anat_position=Scapula_position_set;
 
-    % Humerus
-    num_solid=num_solid+1;         % number of the solid ...
-    name=list_solid{num_solid}; % name of the solid
-    eval(['incr_solid=s_' name ';'])  % number of the solid in the model
-    OsteoArticularModel(incr_solid).name=[Signe name];
-    OsteoArticularModel(incr_solid).sister=0;    
-    OsteoArticularModel(incr_solid).child=0;
-    OsteoArticularModel(incr_solid).mother=s_Shoulder_J2;
-    OsteoArticularModel(incr_solid).a=[0 1 0]';
-    OsteoArticularModel(incr_solid).joint=1;
-    OsteoArticularModel(incr_solid).limit_inf=-2*pi/3;
-    OsteoArticularModel(incr_solid).limit_sup=2*pi/3;
-    OsteoArticularModel(incr_solid).m=Mass.UpperArm_Mass;
-    OsteoArticularModel(incr_solid).b=[0 0 0]';
-    OsteoArticularModel(incr_solid).I=[I_Humerus(1) I_Humerus(4) I_Humerus(5); I_Humerus(4) I_Humerus(2) I_Humerus(6); I_Humerus(5) I_Humerus(6) I_Humerus(3)];
-    OsteoArticularModel(incr_solid).c=-Humerus_ghJointNode';
-    OsteoArticularModel(incr_solid).anat_position=Humerus_position_set;
-    OsteoArticularModel(incr_solid).Visual=1;
-    OsteoArticularModel(incr_solid).L={[Signe 'Humerus_ghJointNode'];[Signe 'Humerus_ElbowJointNode']};
-    
-    end
+% Humerus
+num_solid=num_solid+1;         % number of the solid ...
+name=list_solid{num_solid}; % name of the solid
+eval(['incr_solid=s_' name ';'])  % number of the solid in the model
+OsteoArticularModel(incr_solid).name=[Signe name];
+OsteoArticularModel(incr_solid).sister=0;    
+OsteoArticularModel(incr_solid).child=0;
+OsteoArticularModel(incr_solid).mother=s_Glenohumeral_J2;
+OsteoArticularModel(incr_solid).a=[0 1 0]';
+OsteoArticularModel(incr_solid).joint=1;
+OsteoArticularModel(incr_solid).limit_inf=-2*pi/3;
+OsteoArticularModel(incr_solid).limit_sup=2*pi/3;
+OsteoArticularModel(incr_solid).m=Mass.UpperArm_Mass;
+OsteoArticularModel(incr_solid).b=[0 0 0]';
+OsteoArticularModel(incr_solid).I=[I_Humerus(1) I_Humerus(4) I_Humerus(5); I_Humerus(4) I_Humerus(2) I_Humerus(6); I_Humerus(5) I_Humerus(6) I_Humerus(3)];
+OsteoArticularModel(incr_solid).c=-Humerus_ghJointNode';
+OsteoArticularModel(incr_solid).anat_position=Humerus_position_set;
+OsteoArticularModel(incr_solid).Visual=1;
+OsteoArticularModel(incr_solid).visual_file = ['Holzbaur/humerus_' Signe '.mat'];
+OsteoArticularModel(incr_solid).L={[Signe 'Humerus_ghJointNode'];[Signe 'Humerus_ElbowJointNode']};
+
+end

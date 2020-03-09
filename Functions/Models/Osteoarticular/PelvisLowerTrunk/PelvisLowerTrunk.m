@@ -21,7 +21,7 @@ function [OsteoArticularModel]= PelvisLowerTrunk(OsteoArticularModel,k,Mass,Atta
 %________________________________________________________
 %
 % Licence
-% Toolbox distributed under 3-Clause BSD License
+% Toolbox distributed under GPL 3.0 Licence
 %________________________________________________________
 %
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
@@ -61,7 +61,7 @@ end
 if OsteoArticularModel(s_mother).child == 0      % if the mother don't have any child
     OsteoArticularModel(s_mother).child = eval(['s_' list_solid{1}]);    % the child of this mother is this solid
 else
-    [OsteoArticularModel]=sister_actualize(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la dernière soeur
+    [OsteoArticularModel]=sister_actualize(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la derniï¿½re soeur
 end   
 
 
@@ -123,6 +123,8 @@ LowerTrunk_position_set= {...
     'LowerTrunk_UpperTrunkNode', (L5_L4JointNode-L5_SacrumJointNode)' + (L4_L3JointNode-L4_L5JointNode)' + ...
         (L3_L2JointNode-L3_L4JointNode)' + (L2_L1JointNode-L2_L3JointNode)' + (L1_T12JointNode-L1_L2JointNode)'; ...
     'LowerTrunk_Origin', [0 0 0]'; ...
+    % BULLSHIT
+    ['Pelvis_LatissumusDorsi_o'],[ 0 0 0 ]';...
     };
 
 %%                     Scaling inertial parameters

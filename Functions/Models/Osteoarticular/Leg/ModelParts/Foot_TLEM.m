@@ -251,7 +251,6 @@ Human_model(incr_solid).limit_inf=-pi/4;
 Human_model(incr_solid).limit_sup=pi/2;
 Human_model(incr_solid).ActiveJoint=1;
 Human_model(incr_solid).Visual=1;
-Human_model(incr_solid).Geometry='TLEM';
 % Human_model(incr_solid).Group=[n_group 3];
 Human_model(incr_solid).m=Mass.Foot_Mass;
 Human_model(incr_solid).b=pos_attachment_pt;
@@ -269,5 +268,6 @@ R=Rodrigues_from_two_axes(a2,a1); % recherche des deux axes orthogonaux à l'axe 
 Human_model(incr_solid).limit_alpha= [ 20 , -20;... %[limit_sup premier axe, limit_inf premier axe;...
                                         30, -30]; %limit_sup 2nd axe, limit_inf 2nd axe;...
 Human_model(incr_solid).v= [ R(:,2) , R(:,3) ];
+Human_model(incr_solid).visual_file = ['TLEM/' Signe 'Foot.mat'];
 
 end
