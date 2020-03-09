@@ -22,7 +22,7 @@ function [OsteoArticularModel]= UpperTrunkClavicle(OsteoArticularModel,k,Mass,At
 %________________________________________________________
 %
 % Licence
-% Toolbox distributed under 3-Clause BSD License
+% Toolbox distributed under GPL 3.0 Licence
 %________________________________________________________
 %
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
@@ -65,7 +65,7 @@ else
     if OsteoArticularModel(s_mother).child == 0      % if the mother don't have any child
         OsteoArticularModel(s_mother).child = eval(['s_' list_solid{1}]);    % the child of this mother is this solid
     else
-        [OsteoArticularModel]=sister_actualize(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la dernière soeur
+        [OsteoArticularModel]=sister_actualize(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la derniï¿½re soeur
     end
 end    
 
@@ -125,6 +125,8 @@ Thorax_position_set= {...
     'Thorax_scjJointRightNode', Thorax_scjJointRightNode'; ...
     'Thorax_scjJointLeftNode', Thorax_scjJointLeftNode'; ...
     'Thorax_T12L1JointNode', Thorax_T12L1JointNode'; ...
+    %      TO BE MODIFIED
+    ['Thorax_PectoralisMajor_o'],[0 0 0]';...
     };
     
 RClavicle_position_set= {...    
@@ -151,6 +153,9 @@ LClavicle_position_set= {...
 
 %%                     Scaling inertial parameters
 
+% Rigid upper trunk segments mass
+UpperTrunk_Mass = Mass.Thorax_Mass + 2*(Mass.Scapula_Mass);
+
 % longueur entre 'Pelvis_L5JointNode' et 'Thorax_T1C5'
 Lpts={'Pelvis_LowerTrunkNode';'LowerTrunk_UpperTrunkNode'};
 for pp=1:2
@@ -169,12 +174,12 @@ for pp=1:2
         end       
     end
 end
-Lenght_Thorax = distance_point(Lpts{1,3},Lpts{1,2},Lpts{2,3},Lpts{2,2},OsteoArticularModel,zeros(numel(OsteoArticularModel),1)) ...
+Length_Thorax = distance_point(Lpts{1,3},Lpts{1,2},Lpts{2,3},Lpts{2,2},OsteoArticularModel,zeros(numel(OsteoArticularModel),1)) ...
     +norm(Thorax_T12L1JointNode-Thorax_T1C5);
 
     %% ["Adjustments to McConville et al. and Young et al. body segment inertial parameters"] R. Dumas
     % ------------------------- Thorax ----------------------------------------
-    [I_Thorax]=rgyration2inertia([27 25 28 18 2 4*1i], Mass.UpperTrunk_Mass, [0 0 0], Lenght_Thorax);
+    [I_Thorax]=rgyration2inertia([27 25 28 18 2 4*1i], UpperTrunk_Mass, [0 0 0], Length_Thorax);
 
                     %% %% "Human_model" structure generation
  
@@ -234,9 +239,10 @@ num_solid=0;
     OsteoArticularModel(incr_solid).calib_k_constraint=[];
     OsteoArticularModel(incr_solid).b=[0 0 0]';  
     OsteoArticularModel(incr_solid).c=-Thorax_T12L1JointNode';
-    OsteoArticularModel(incr_solid).m=Mass.UpperTrunk_Mass;                 
+    OsteoArticularModel(incr_solid).m=UpperTrunk_Mass;                 
     OsteoArticularModel(incr_solid).I=[I_Thorax(1) I_Thorax(4) I_Thorax(5); I_Thorax(4) I_Thorax(2) I_Thorax(6); I_Thorax(5) I_Thorax(6) I_Thorax(3)];
     OsteoArticularModel(incr_solid).anat_position=Thorax_position_set;
+    OsteoArticularModel(incr_solid).visual_file = ['Holzbaur/thorax.mat'];
     OsteoArticularModel(incr_solid).L={'Pelvis_LowerTrunkNode';'Thorax_T1C5'};
     
     %% Rclavicle
@@ -290,11 +296,13 @@ num_solid=0;
     OsteoArticularModel(incr_solid).limit_sup=pi/2;
     OsteoArticularModel(incr_solid).Visual=1;
     OsteoArticularModel(incr_solid).calib_k_constraint=s_Thorax;
-    OsteoArticularModel(incr_solid).m=0;                 
+    OsteoArticularModel(incr_solid).m=Mass.Clavicle_Mass;                 
     OsteoArticularModel(incr_solid).b=[0 0 0]';  
     OsteoArticularModel(incr_solid).I=zeros(3,3);
     OsteoArticularModel(incr_solid).c=[0 0 0]';
     OsteoArticularModel(incr_solid).anat_position=RClavicle_position_set;
+    OsteoArticularModel(incr_solid).visual_file = ['Holzbaur/clavicle_r.mat'];
+
 
     %% Lclavicle
     % LClavicle_J1
@@ -347,10 +355,11 @@ num_solid=0;
     OsteoArticularModel(incr_solid).limit_sup=pi/2;
     OsteoArticularModel(incr_solid).Visual=1;
     OsteoArticularModel(incr_solid).calib_k_constraint=s_Thorax;
-    OsteoArticularModel(incr_solid).m=0;                 
+    OsteoArticularModel(incr_solid).m=Mass.Clavicle_Mass;                 
     OsteoArticularModel(incr_solid).b=[0 0 0]';  
     OsteoArticularModel(incr_solid).I=zeros(3,3);
     OsteoArticularModel(incr_solid).c=[0 0 0]';
     OsteoArticularModel(incr_solid).anat_position=LClavicle_position_set;
+    OsteoArticularModel(incr_solid).visual_file = ['Holzbaur/clavicle_l.mat'];
 
 end

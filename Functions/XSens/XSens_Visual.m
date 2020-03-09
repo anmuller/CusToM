@@ -1,14 +1,16 @@
 function [] = XSens_Visual(OsteoArticularModel, tree)
-% TO DO
+% Visual generation for XSens data
 %
 %   INPUT
-%   - 
+%   - OsteoArticularModel: osteo-articular model of an already existing
+%   model (see the Documentation for the structure)
+%   - tree: data extracted from a MVNX file
 %   OUTPUT
-%   -
+%   Results are automatically saved on a folder 'Visual'
 %________________________________________________________
 %
 % Licence
-% Toolbox distributed under 3-Clause BSD License
+% Toolbox distributed under GPL 3.0 Licence
 %________________________________________________________
 %
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
@@ -73,13 +75,13 @@ LeftToeRot = quat2rotm(tree.subject.frames.frame(num_pose).orientation((23-1)*4+
 % Length (to scale)
 bonespath=which('ModelGeneration.m');
 bonespath = fileparts(bonespath);
-bonepath=fullfile(bonespath,'Geometries_XSens');
+bonepath=fullfile(bonespath,'Visual\XSens');
 
 load([bonepath '/XSensSTLLength.mat']); %#ok<LOAD>
 
-if ~exist('Visual','dir')
+% if ~exist('Visual','dir')
     mkdir('Visual')
-end
+% end
 
 %% Pelvis
 load([bonepath '/Pelvis.mat']); %#ok<LOAD>

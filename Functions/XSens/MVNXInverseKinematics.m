@@ -11,7 +11,7 @@ function MVNXInverseKinematics(filename, AnalysisParameters)
 %________________________________________________________
 %
 % Licence
-% Toolbox distributed under 3-Clause BSD License
+% Toolbox distributed under GPL 3.0 Licence
 %________________________________________________________
 %
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
@@ -25,10 +25,10 @@ tree = load_mvnx(filename); tree.subject.frames.frame = tree.subject.frames.fram
 
 %% Experimental data
 [~, frame1] = intersect({tree.subject.frames.frame.type},'normal');
-ExperimentalData.Time = [tree.subject.frames.frame(frame1:end).time]'/1000;
-ExperimentalData.Time = ExperimentalData.Time - ExperimentalData.Time(1);
+freq = tree.subject.frameRate;
+ExperimentalData.Time = 0:1/freq:((numel(tree.subject.frames.frame)-frame1)/freq);
 
-%% Inverse kinematics
+%% Joint coordinates
 InverseKinematicsResults.JointCoordinates = reshape([tree.subject.frames.frame.jointAngle],66,[]);
 InverseKinematicsResults.JointCoordinates = [zeros(1,size(InverseKinematicsResults.JointCoordinates,2));InverseKinematicsResults.JointCoordinates*pi/180];
 % L5S1
@@ -65,7 +65,7 @@ InverseKinematicsResults.JointCoordinates(17:19,:) = ...
 InverseKinematicsResults.JointCoordinates(20:22,:) = ...
     [ - InverseKinematicsResults.JointCoordinates(22,:); ...
     - InverseKinematicsResults.JointCoordinates(20,:); ...
-    + InverseKinematicsResults.JointCoordinates(19,:)];
+    + InverseKinematicsResults.JointCoordinates(21,:)];
 % Right Shoulder
 InverseKinematicsResults.JointCoordinates(23:25,:) = ...
     [ - InverseKinematicsResults.JointCoordinates(25,:); ...
@@ -146,6 +146,26 @@ InverseKinematicsResults.JointCoordinates(65:67,:) = ...
 for i = frame1:size(tree.subject.frames.frame,2)
     InverseKinematicsResults.PelvisPosition{i-frame1+1} = tree.subject.frames.frame(i).position(1,1:3)';
     InverseKinematicsResults.PelvisOrientation{i-frame1+1} = quat2rotm(tree.subject.frames.frame(i).orientation(1:4));
+end
+
+%% Position, velocity and acceleration
+if isfield(tree.subject.frames.frame, 'position')
+    InverseKinematicsResults.SegmentPosition = reshape([tree.subject.frames.frame(frame1:end).position],69,[]);
+end
+if isfield(tree.subject.frames.frame, 'velocity')
+    InverseKinematicsResults.SegmentVelocity = reshape([tree.subject.frames.frame(frame1:end).velocity],69,[]);
+end
+if isfield(tree.subject.frames.frame, 'acceleration')
+    InverseKinematicsResults.SegmentAcceleration = reshape([tree.subject.frames.frame(frame1:end).acceleration],69,[]);
+end
+if isfield(tree.subject.frames.frame, 'orientation')
+    InverseKinematicsResults.SegmentOrientation = reshape([tree.subject.frames.frame(frame1:end).orientation],92,[]);
+end
+if isfield(tree.subject.frames.frame, 'angularVelocity')
+    InverseKinematicsResults.SegmentAngularVelocity = reshape([tree.subject.frames.frame(frame1:end).angularVelocity],69,[]);
+end
+if isfield(tree.subject.frames.frame, 'angularAcceleration')
+    InverseKinematicsResults.SegmentAngularAcceleration = reshape([tree.subject.frames.frame(frame1:end).angularAcceleration],69,[]);
 end
 
 %% Filtering

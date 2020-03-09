@@ -1,8 +1,0 @@
-/* Created by mdot for Matlab */
-digraph m2html {
-
-  Leg [URL="Leg.html"];
-  LegBallJoint [URL="LegBallJoint.html"];
-  LegWithoutAnkle [URL="LegWithoutAnkle.html"];
-  LegWithoutAnklePronation [URL="LegWithoutAnklePronation.html"];
-}

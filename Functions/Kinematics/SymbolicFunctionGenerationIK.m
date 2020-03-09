@@ -1,4 +1,4 @@
-function [Human_model,Jacob,nbClosedLoop,Generalized_Coordinates]=SymbolicFunctionGenerationIK(Human_model,Markers_set)
+function [Human_model,Jacob,Generalized_Coordinates]=SymbolicFunctionGenerationIK(Human_model,Markers_set)
 % Computation of function used in the inverse kinematics step
 %   Generated functions contain the global position of each marker and its
 %   Jacobian matrix. All functions are evaluated according to the joint
@@ -16,7 +16,7 @@ function [Human_model,Jacob,nbClosedLoop,Generalized_Coordinates]=SymbolicFuncti
 %________________________________________________________
 %
 % Licence
-% Toolbox distributed under 3-Clause BSD License
+% Toolbox distributed under GPL 3.0 Licence
 %________________________________________________________
 %
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
@@ -50,13 +50,16 @@ if bool_kd
         q_dep_map(ind_q(ii),ind_q(ii))=1;% indexing
     end
 end
+s_root=find([Human_model.mother]==0);
+q_map(s_root,s_root)=0;
 
-q_map=orth(q_map); %kernel of A in A*K=K (Kernal of A matrix)
-q_dep_map=orth(q_dep_map); %kernel of A in A*K=K (Kernal of A matrix)
+[~,col]=find(sum(q_map,1)==0); q_map(:,col)=[];
+% q_map=orth(q_map); %kernel of A in A*K=K (Kernal of A matrix)
+[~,col]=find(sum(q_dep_map,1)==0); q_dep_map(:,col)=[];
+%q_dep_map=orth(q_dep_map); %kernel of A in A*K=K (Kernal of A matrix)
 % matrix mapping coordinates without the moving basis.
 q_map_unsix=q_map;[~,col]=find(q_map_unsix(end-5:end,:));
     q_map_unsix(:,col)=[];
-
 
 q_red=q_map'*q;
 q_dep=q_dep_map'*q;
@@ -64,7 +67,12 @@ q_dep=q_dep_map'*q;
 for ii=1:size(q_dep_map,2)
     ind_q_dependancy=Human_model(logical(q_dep_map(:,ii))).kinematic_dependancy.Joint;
     q_handle=Human_model(logical(q_dep_map(:,ii))).kinematic_dependancy.q;
-    q_dep(ii)=q_handle(q(ind_q_dependancy));
+    q_dependancy = q(ind_q_dependancy);
+    q_handle_input = cell(length(q_dependancy),1);
+    for jj=1:size(q_handle_input)
+        q_handle_input{jj} = q_dependancy(jj);
+    end
+    q_dep(ii)=q_handle(q_handle_input{:});
 end
 
 fq_dep=matlabFunction(q_dep,'vars',{q_red});
@@ -82,6 +90,8 @@ k=ones(numel(Human_model),1);
 p_adapt=zeros(sum([Markers_set.exist]),3);
 pPelvis=zeros(3,1);
 RPelvis=eye(3,3);
+nbClosedLoop = sum(~cellfun('isempty',{Human_model.ClosedLoop}));
+
 
 %% Symbolic function generation for each coordinate frame position
 s_root=find([Human_model.mother]==0); % number of the root solid
@@ -92,7 +102,7 @@ Human_model(s_root).R=RPelvis;
 
 % Computation of the symbolic markers position
 %[Human_model,Markers_set,~,~,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure(Human_model,Markers_set,s_root,q,k,p_adapt,1,1);
-[Human_model,Markers_set,~,~,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure(Human_model,Markers_set,s_root,q_complete,k,p_adapt,1,1);
+[Human_model,Markers_set,~]=Symbolic_ForwardKinematicsCoupure(Human_model,Markers_set,s_root,q_complete,k,p_adapt,1);
 
 % position and rotation of the solids used as cuts
 for ii=1:max([Human_model.KinematicsCut])
@@ -125,7 +135,7 @@ ind_Kcut = find(cellfun(@isempty,{Human_model.KinematicsCut} )==0);
 % ind_Kcut = logical(q_map'*not(cellfun(@isempty,{Human_model.KinematicsCut} ))');
 
 %Nb_q = numel(Human_model)-1;
-Nb_q = numel(q_red)-1;
+Nb_q = numel(q_red);%-1;
 Nb_mk=numel(list_markers);
 Nb_dir_mk=3*Nb_mk;
 
@@ -219,6 +229,8 @@ indexesNumericJcutcut=find(Jcutcut_sym~=0 & Jcutcut_sym~=1);
 nonNumericJcutcut = matlabFunction(Jcutcut_sym(indexesNumericJcutcut), 'Vars', {q_red,pcut,Rcut});
 % end
 
+% Find solides without marqueurs at the end of the chains.
+RmvInd_q = intersect(find(sum(Jcutq_sym,1)==0),find(sum(Jfq_sym,1)==0));
 %% Sauvegarde des données relatives à la matrice Jacobienne
 Jacob.Jfq = Jfq;
 Jacob.indexesNumericJfq = indexesNumericJfq;
@@ -232,7 +244,7 @@ Jacob.nonNumericJcutq = nonNumericJcutq;
 Jacob.Jcutcut = Jcutcut;
 Jacob.indexesNumericJcutcut = indexesNumericJcutcut;
 Jacob.nonNumericJcutcut = nonNumericJcutcut;
-
+Jacob.RmvInd_q=RmvInd_q;
 %% Création des fonctions pour chaque marqueurs et chaque solide de coupure
 
 for ii=1:length(ind_mk)
@@ -251,14 +263,14 @@ for ii=1:length(ind_Kcut) % solide i
         'Outputs',{['R' num2str(num2str(Human_model(i_Kc).KinematicsCut)) 'cut' ],['p' num2str(num2str(Human_model(i_Kc).KinematicsCut)) 'cut' ]},...;
         'vars',{q_red,pcut,Rcut});
 end
-% Closed loops
-for i=1:numel(p_ClosedLoop)
-%     matlabFunction(R_ClosedLoop{i},p_ClosedLoop{i},'File',['Symbolic_function/fCL' num2str(i) '.m'],...
-%         'Outputs',{'R','p'},'vars',{q});
-    matlabFunction(R_ClosedLoop{i},p_ClosedLoop{i},'File',['Symbolic_function/fCL' num2str(i) '.m'],...
-        'Outputs',{'R','p'},'vars',{q_red});
+
+% Closed loop constraints generation
+if nbClosedLoop>0
+    [c,ceq]=Gen_NonLinCon_ClosedLoop(Human_model,nbClosedLoop);
+    matlabFunction(c,ceq,'File','Symbolic_function/fCL.m',...
+        'Outputs',{'c','ceq'},'vars',{q_red,pcut,Rcut});
 end
-nbClosedLoop=numel(p_ClosedLoop);
+    
 
 %We delete p and R fields
 Human_model = rmfield(Human_model, 'p');

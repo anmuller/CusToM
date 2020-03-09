@@ -21,7 +21,7 @@ function [OsteoArticularModel]= UpperTrunk(OsteoArticularModel,k,Mass,Attachment
 %________________________________________________________
 %
 % Licence
-% Toolbox distributed under 3-Clause BSD License
+% Toolbox distributed under GPL 3.0 Licence
 %________________________________________________________
 %
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
@@ -104,6 +104,9 @@ Thorax_position_set= {...
 
 %%                     Scaling inertial parameters
 
+% Rigid upper trunk segments mass
+UpperTrunk_Mass = Mass.Thorax_Mass + 2*(Mass.Scapula_Mass + Mass.Clavicle_Mass); % equal to McConville uppertrunk mass
+
 % distance between 'Pelvis_L5JointNode' and 'Thorax_T1C5'
 Lpts={'Pelvis_LowerTrunkNode';'LowerTrunk_UpperTrunkNode'};
 for pp=1:2
@@ -122,12 +125,12 @@ for pp=1:2
         end       
     end
 end
-Lenght_Thorax = distance_point(Lpts{1,3},Lpts{1,2},Lpts{2,3},Lpts{2,2},OsteoArticularModel,zeros(numel(OsteoArticularModel),1)) ...
+Length_Thorax = distance_point(Lpts{1,3},Lpts{1,2},Lpts{2,3},Lpts{2,2},OsteoArticularModel,zeros(numel(OsteoArticularModel),1)) ...
     +norm(Thorax_T12L1JointNode-Thorax_T1C5);
 
     %% ["Adjustments to McConville et al. and Young et al. body segment inertial parameters"] R. Dumas
     % ------------------------- Thorax ----------------------------------------
-    [I_Thorax]=rgyration2inertia([27 25 28 18 2 4*1i], Mass.UpperTrunk_Mass, [0 0 0], Lenght_Thorax);
+    [I_Thorax]=rgyration2inertia([27 25 28 18 2 4*1i], UpperTrunk_Mass, [0 0 0], Length_Thorax);
 
                     %% %% "Human_model" structure generation
  
@@ -187,9 +190,10 @@ num_solid=0;
     OsteoArticularModel(incr_solid).calib_k_constraint=[];
     OsteoArticularModel(incr_solid).b=[0 0 0]';  
     OsteoArticularModel(incr_solid).c=-Thorax_T12L1JointNode';
-    OsteoArticularModel(incr_solid).m=Mass.UpperTrunk_Mass;                 
+    OsteoArticularModel(incr_solid).m=UpperTrunk_Mass;                 
     OsteoArticularModel(incr_solid).I=[I_Thorax(1) I_Thorax(4) I_Thorax(5); I_Thorax(4) I_Thorax(2) I_Thorax(6); I_Thorax(5) I_Thorax(6) I_Thorax(3)];
     OsteoArticularModel(incr_solid).anat_position=Thorax_position_set;
     OsteoArticularModel(incr_solid).L={'Pelvis_L5JointNode';'Thorax_T1C5'};
+    OsteoArticularModel(incr_solid).visual_file = ['gait2354/torso.mat'];
 
 end

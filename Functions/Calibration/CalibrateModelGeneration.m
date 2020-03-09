@@ -18,7 +18,7 @@ function [] = CalibrateModelGeneration(ModelParameters,AnalysisParameters)
 %________________________________________________________
 %
 % Licence
-% Toolbox distributed under 3-Clause BSD License
+% Toolbox distributed under Licence GPL 3.0
 %________________________________________________________
 %
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and

@@ -12,7 +12,7 @@ function [Human_model,Human_model_save]=Maj_Human_model(Human_model,Human_model_
 %________________________________________________________
 %
 % Licence
-% Toolbox distributed under 3-Clause BSD License
+% Toolbox distributed under GPL 3.0 Licence
 %________________________________________________________
 %
 % Authors : Pierre Puchaud, Antoine Muller, Charles Pontonnier, and
