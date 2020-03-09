@@ -192,6 +192,7 @@ num_solid=0;
     OsteoArticularModel(incr_solid).c=[0 0 0]';
     OsteoArticularModel(incr_solid).m=0;                 
     OsteoArticularModel(incr_solid).I=zeros(3,3);
+    OsteoArticularModel(incr_solid).comment='Trunk Flexion(-)/Extension(+)';
 
     % UpperTrunk_J2
     num_solid=num_solid+1;        % number of the solid ...
@@ -211,6 +212,7 @@ num_solid=0;
     OsteoArticularModel(incr_solid).c=[0 0 0]';
     OsteoArticularModel(incr_solid).m=0;                 
     OsteoArticularModel(incr_solid).I=zeros(3,3);
+    OsteoArticularModel(incr_solid).comment='Trunk Axial Rotation Right(+)/Left(-)';
 
     % Thorax
     num_solid=num_solid+1;        % number of the solid ...
@@ -232,5 +234,6 @@ num_solid=0;
     OsteoArticularModel(incr_solid).I=Iglob;
     OsteoArticularModel(incr_solid).anat_position=Thorax_position_set;
     OsteoArticularModel(incr_solid).L={'Pelvis_L5JointNode';'Thorax_T1C5'};
+    OsteoArticularModel(incr_solid).comment='Trunk Lateral Bending Right(+)/Left(-)';
 
 end
