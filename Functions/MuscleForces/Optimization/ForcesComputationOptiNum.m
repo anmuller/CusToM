@@ -58,6 +58,7 @@ for i=1:Nb_frames % for each frames
 end
 
 Lm = Lmt./(Ls./L0+1);
+% Muscle length ratio to optimal length
 Lm_norm = Lm./L0;
 
 [idxj,~]=find(sum(R(:,:,1),2)~=0);
@@ -73,6 +74,8 @@ Fmax = [Muscles(idm).f0]';
 Amax = ones(Nb_muscles,1);
 Fopt = zeros(Nb_muscles,Nb_frames);
 Aopt = zeros(size(Fopt));
+% Muscle Forces Matrices computation
+[Fl,Fp]=AnalysisParameters.Muscles.MuscleModel(Lm,Fmax);
 
 options1 = optimoptions(@fmincon,'Algorithm','sqp','Display','final','GradObj','off','GradConstr','off','TolFun',1e-6,'MaxIterations',100000,'MaxFunEvals',100000);
 options2 = optimoptions(@fmincon,'Algorithm','sqp','Display','final','GradObj','off','GradConstr','off','TolFun',1e-6,'MaxIterations',1000,'MaxFunEvals',2000000);
@@ -132,26 +135,20 @@ if isfield(BiomechanicalModel.OsteoArticularModel,'ClosedLoop') && ~isempty([Bio
     MuscleForcesComputationResults.MuscleLeverArm = R;
     
 else
-    % Moment arms
-    
-    [fl,fp]=AnalysisParameters.Muscles.ForceModel(Lm);
-    
-    flval=f_fl_m_a_SARSHARI(Lm_norm);
-    fpval=f_fl_m_p_SARSHARI(Lm_norm);
-    
-    Aeq=R(idxj,:,1).*(Fmax.*flval(:,1))';
+    % Moment arms 
+    Aeq=R(idxj,:,1).*(Fl(:,1))';
     % Joint Torques
-    beq=torques(idxj,1) - (R(idxj,:,1)*fpval(:,1)); % C
+    beq=torques(idxj,1) - R(idxj,:,1)*Fp(:,1); % C
     [Aopt(:,1)] = AnalysisParameters.Muscles.Costfunction(A0, Aeq, beq, Amin, Amax, options1, AnalysisParameters.Muscles.CostfunctionOptions, Fmax);
 %     F0=Fopt(:,1);
     A0=Aopt(:,1);
-    Fopt(:,1) = (Fmax.*flval(:,1)).*Aopt(:,1);
+    Fopt(:,1) = Fl(:,1).*Aopt(:,1)+Fp(:,1);
     
     for i=1:Nb_frames % for each frames
         % Moment arms
-        Aeq=R(idxj,:,i).*(Fmax.*flval(:,i))';
+        Aeq=R(idxj,:,i).*(Fl(:,i))';
         % Joint Torques
-        beq=torques(idxj,i) - (R(idxj,:,i)*fpval(:,i)); % C
+        beq=torques(idxj,i) - R(idxj,:,i)*Fp(:,i); % C
         % Optimization
         [Aopt(:,i)] = AnalysisParameters.Muscles.Costfunction(A0, Aeq, beq, Amin, Amax, options2, AnalysisParameters.Muscles.CostfunctionOptions, Fmax);        
         % Muscular activity
@@ -159,7 +156,7 @@ else
 %         F0=Fopt(:,i);
         A0=Aopt(:,i);
         waitbar(i/Nb_frames)
-        Fopt(:,i) = (Fmax.*flval(:,i)).*Aopt(:,i);
+        Fopt(:,i) = Fl(:,i).*Aopt(:,i)+Fp(:,i);
     end
     
     MuscleForcesComputationResults.MuscleActivations(idm,:) = Aopt;
