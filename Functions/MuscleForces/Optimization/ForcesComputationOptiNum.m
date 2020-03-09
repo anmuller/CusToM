@@ -69,7 +69,7 @@ options2 = optimoptions(@fmincon,'Algorithm','sqp','Display','final','GradObj','
 
 h = waitbar(0,['Forces Computation (' filename ')']);
 
-if isfield(BiomechanicalModel.OsteoArticularModel,'ClosedLoop')
+if isfield(BiomechanicalModel.OsteoArticularModel,'ClosedLoop') && ~isempty([BiomechanicalModel.OsteoArticularModel.ClosedLoop])
     
     % TO BE CHANGED AFTER CALIBRATION
     k=ones(size(q,1),1);
