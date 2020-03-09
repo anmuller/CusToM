@@ -168,7 +168,8 @@ num_solid=0;
     OsteoArticularModel(incr_solid).limit_alpha= [ 30 , 45;...
                                           -30, -45]*pi/180 ;
 %     Human_model(incr_solid).v= [ [1; 0; 0] , [0 ;1;0] ] ;
-    
+    OsteoArticularModel(incr_solid).comment='Ankle Flexion(+)/Extension(-)';
+
     % Foot
     num_solid=num_solid+1;        % number of the solid ...
     name=list_solid{num_solid}; % solid name
@@ -194,6 +195,10 @@ num_solid=0;
     OsteoArticularModel(incr_solid).limit_alpha= [ 30 , 140;...
                                           -30, -140]*pi/180 ;
 %     Human_model(incr_solid).v= [ [0; 1; 0] , [0 ;0;1] ] ;
-
+if Signe == 'R'
+    OsteoArticularModel(incr_solid).comment='Subtalar Inversion(-)/Eversion(+)';
+else
+    OsteoArticularModel(incr_solid).comment='Subtalar Inversion(+)/Eversion(-)';
+end
 
 end

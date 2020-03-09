@@ -102,7 +102,7 @@ I_toes = k*eye(3).*[0.0001;0.0002;0.0001];
 %% Création de la structure "Human_model"
 
 num_solid=0;
-%% Calcn
+%% Toes
 num_solid=num_solid+1;        % solide numéro ...
 name=list_solid{num_solid}; % nom du solide
 eval(['incr_solid=s_' name ';'])  % numéro du solide dans le modèle
@@ -123,5 +123,5 @@ Human_model(incr_solid).c=CoM_toes;
 Human_model(incr_solid).anat_position=calcn_position_set;
 Human_model(incr_solid).L={[Signe 'toes_calcJointNode']};
 Human_model(incr_solid).visual_file = ['gait2354/toes_'  lower(Signe) '.mat'];
-
+Human_model(incr_solid).comment = 'Toes Extension(+)/Flexion(-)';
 end

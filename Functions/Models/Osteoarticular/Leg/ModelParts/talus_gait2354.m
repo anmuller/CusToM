@@ -127,5 +127,5 @@ Human_model(incr_solid).I=I_Talus;
 Human_model(incr_solid).c=CoM_talus;
 Human_model(incr_solid).anat_position=talus_position_set;
 Human_model(incr_solid).L={[Signe 'talus_tibiaJointNode'];[Signe 'talus_calcJointNode']};
-
+Human_model(incr_solid).comment='Ankle Flexion(+)/Extension(-)';
 end

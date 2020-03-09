@@ -359,5 +359,6 @@ Human_model(incr_solid).limit_alpha= [10 , -10;...
 Human_model(incr_solid).v= [ R(:,1) , R(:,2) ];
 Human_model(incr_solid).calib_a=1;
 Human_model(incr_solid).visual_file = ['TLEM/' Signe 'Shank.mat'];
+Human_model(incr_solid).comment='Knee Flexion(-)/Extension(-)';
 
 end

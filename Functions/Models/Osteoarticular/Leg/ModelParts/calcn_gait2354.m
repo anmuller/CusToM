@@ -137,4 +137,10 @@ Human_model(incr_solid).c=CoM_calcn;
 Human_model(incr_solid).anat_position=calcn_position_set;
 Human_model(incr_solid).L={[Signe 'calcn_talusJointNode'];[Signe 'calcn_toeJointNode']};
 Human_model(incr_solid).visual_file = ['gait2354/calcn_'  lower(Signe) '.mat'];
+
+if Signe == 'R'
+    Human_model(incr_solid).comment='Subtalar Inversion(-)/Eversion(+)';
+else
+    Human_model(incr_solid).comment='Subtalar Inversion(+)/Eversion(-)';
+end
 end
