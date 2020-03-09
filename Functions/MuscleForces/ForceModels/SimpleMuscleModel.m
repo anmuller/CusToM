@@ -1,6 +1,6 @@
-function [Fl,Fp] = ForceLength(lm_norm,Fmax)
-% Computation of the muscle forces parameters in the case of a force-length
-% Muscle model : F = Fmax*(A*fa(lm_norm)+fp(lm_norm))
+function [Fl,Fp] = SimpleMuscleModel(Lm_norm,Fmax)
+% Computation of the muscle forces parameters in the case of a simple
+% Muscle model : F = Fmax*A
 %
 %   INPUT
 %   - Lm_norm : Muscle length ratio to optimal length
@@ -17,8 +17,8 @@ function [Fl,Fp] = ForceLength(lm_norm,Fmax)
 % Georges Dumont
 %________________________________________________________
 
-fl=exp(-(lm_norm-1).^2/0.0955);
-fp=0.067*exp(3.832*(lm_norm - 1)) + 0.00378;
+fl=ones(size(Lm_norm));
+fp=zeros(size(Lm_norm));
 
 Fl = Fmax.*fl;
 Fp = Fmax.*fp;
