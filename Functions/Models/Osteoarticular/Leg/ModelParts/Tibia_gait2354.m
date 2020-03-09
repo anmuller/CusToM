@@ -169,6 +169,7 @@ Human_model(incr_solid).m=0;
 Human_model(incr_solid).b=pos_attachment_pt;
 Human_model(incr_solid).I=zeros(3,3);
 Human_model(incr_solid).c=[0 0 0]';
+Human_model(incr_solid).comment='Knee Antero-Posterior Translation';
 % Dependancy
 Human_model(incr_solid).kinematic_dependancy.active=1;
 Human_model(incr_solid).kinematic_dependancy.Joint=[incr_solid+2]; % tibia_r
@@ -275,6 +276,7 @@ Human_model(incr_solid).m=0;
 Human_model(incr_solid).b=[0 0 0]';
 Human_model(incr_solid).I=zeros(3,3);
 Human_model(incr_solid).c=[0 0 0]';
+Human_model(incr_solid).comment='Knee Longitudinal Translation';
 
 % Dependancy
 Human_model(incr_solid).kinematic_dependancy.active=1;
@@ -327,5 +329,7 @@ Human_model(incr_solid).limit_alpha= [10 , -10;...
 %     OsteoArticularModel(incr_solid).v= [ [1; 0; 0] , [0 ;1;0] ] ;
 Human_model(incr_solid).v= [] ;
 Human_model(incr_solid).calib_a=1;
+Human_model(incr_solid).comment='Knee Flexion(-)/Extension(-)';
+
 
 end

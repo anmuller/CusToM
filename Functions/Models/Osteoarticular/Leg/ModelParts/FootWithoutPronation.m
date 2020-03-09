@@ -172,5 +172,5 @@ OsteoArticularModel(incr_solid).L={[Signe 'Foot_AnkleJointNode'];[Signe 'Foot_To
     OsteoArticularModel(incr_solid).limit_alpha= [ 30 , 45;...
                                           -30, -45] ;
     OsteoArticularModel(incr_solid).v= [ [1; 0; 0] , [0 ;1;0] ] ;
-
+OsteoArticularModel(incr_solid).comment='Ankle Flexion(+)/Extension(-)';
 end

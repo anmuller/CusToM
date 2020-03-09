@@ -269,5 +269,11 @@ Human_model(incr_solid).limit_alpha= [ 20 , -20;... %[limit_sup premier axe, lim
                                         30, -30]; %limit_sup 2nd axe, limit_inf 2nd axe;...
 Human_model(incr_solid).v= [ R(:,2) , R(:,3) ];
 Human_model(incr_solid).visual_file = ['TLEM/' Signe 'Foot.mat'];
+if Signe == 'R'
+    Human_model(incr_solid).comment='Subtalar Inversion(-)/Eversion(+)';
+else
+    Human_model(incr_solid).comment='Subtalar Inversion(+)/Eversion(-)';
+end
+
 
 end
