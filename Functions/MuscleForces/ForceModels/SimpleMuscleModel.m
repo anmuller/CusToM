@@ -1,4 +1,4 @@
-function [Fl,Fp] = SimpleMuscleModel(Lm_norm,Fmax)
+function [Fa,Fp] = SimpleMuscleModel(Lm_norm,Vm,Fmax)
 % Computation of the muscle forces parameters in the case of a simple
 % Muscle model : F = Fmax*A
 %
@@ -20,7 +20,7 @@ function [Fl,Fp] = SimpleMuscleModel(Lm_norm,Fmax)
 fl=ones(size(Lm_norm));
 fp=zeros(size(Lm_norm));
 
-Fl = Fmax.*fl;
+Fa = Fmax.*fl;
 Fp = Fmax.*fp;
 end
 

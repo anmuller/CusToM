@@ -1,4 +1,4 @@
-function [Fa,Fp] = ForceLengthMuscleModel(lm_norm,Vm,Fmax)
+function [Fa,Fp] = ForceLengthVelocityMuscleModel(lm_norm,Vm,Fmax)
 % Computation of the muscle forces parameters in the case of a force-length
 % Muscle model : F = Fmax*(A*fa(lm_norm)+fp(lm_norm))
 %
@@ -24,8 +24,9 @@ function [Fa,Fp] = ForceLengthMuscleModel(lm_norm,Vm,Fmax)
 
 fl=exp(-(lm_norm-1).^2/0.0955);
 fp=0.067*exp(3.832*(lm_norm - 1)) + 0.00378;
+fv= 1.9108 ./ ( 1 + exp(-4.994*Vm) );
 
-Fa = Fmax.*fl;
+Fa = Fmax.*fl.*fv;
 Fp = Fmax.*fp;
 end
 
