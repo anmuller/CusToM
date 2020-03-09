@@ -145,18 +145,14 @@ else
     Aeq=R(idxj,:,1).*(Fa(:,1))';
     % Joint Torques
     beq=torques(idxj,1) - R(idxj,:,1)*Fp(:,1); % C
-    [Aopt(:,1)] = AnalysisParameters.Muscles.Costfunction(A0, Aeq, beq, Amin, Amax, options1, AnalysisParameters.Muscles.CostfunctionOptions, Fmax);
+    [Aopt(:,1)] = AnalysisParameters.Muscles.Costfunction(A0, Aeq, beq, Amin, Amax, options1, AnalysisParameters.Muscles.CostfunctionOptions, Fa(:,1));
 %     F0=Fopt(:,1);
     A0=Aopt(:,1);
     Fopt(:,1) = Fa(:,1).*Aopt(:,1)+Fp(:,1);
     
     for i=1:Nb_frames % for each frames
-        % Moment arms
-        Aeq=R(idxj,:,i).*(Fa(:,i))';
-        % Joint Torques
-        beq=torques(idxj,i) - R(idxj,:,i)*Fp(:,i); % C
         % Optimization
-        [Aopt(:,i)] = AnalysisParameters.Muscles.Costfunction(A0, Aeq, beq, Amin, Amax, options2, AnalysisParameters.Muscles.CostfunctionOptions, Fmax);        
+        [Aopt(:,i)] = AnalysisParameters.Muscles.Costfunction(A0, Aeq, beq, Amin, Amax, options2, AnalysisParameters.Muscles.CostfunctionOptions, Fa(:,i));        
         % Muscular activity
 %         Aopt(:,i) = Fopt(:,i)./Fmax;
 %         F0=Fopt(:,i);
