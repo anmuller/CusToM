@@ -1,4 +1,4 @@
-function [Aopt] = PolynomialFunction(A0, Aeq, beq, Amin, Amax, fmincon_options, options, Fa, varargin)
+function [Aopt] = PolynomialFunction(A0, Aeq, beq, Amin, Amax, fmincon_options, options, Fa, Fmax, varargin)
 % Optimization used for the force sharing problem: polynomial function
 %   
 %	Based on :
@@ -31,11 +31,11 @@ function [Aopt] = PolynomialFunction(A0, Aeq, beq, Amin, Amax, fmincon_options, 
 
 % Cost function
 if ~sum(isinf(Amax))
-cost_function = @(A) sum(Fa.*A.^(options));
+cost_function = @(A) sum((Fa./Fmax.*A).^(options));
 else
     % ClosedLoop case
     ind_act=find(isinf(Amax)); % first element to be infinite in Fmax
-    cost_function = @(A) sum(A(1:ind_act-1).^(options));
+    cost_function = @(A) sum((Fa./Fmax(1:ind_act-1).*A(1:ind_act-1)).^(options));
 end
 % Optimization
 Aopt = fmincon(cost_function,A0,[],[],Aeq,beq,Amin,Amax,[],fmincon_options);

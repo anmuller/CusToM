@@ -1,4 +1,4 @@
-function [Aopt] = MinMax(A0, Aeq, beq, Amin, Amax, fmincon_options, ~, Fmax, varargin)
+function [Aopt] = MinMax(A0, Aeq, beq, Amin, Amax, fmincon_options, ~, ~, ~, varargin)
 % Optimization used for the force sharing problem: min/max criteria
 %
 %	Based on:
