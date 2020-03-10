@@ -69,9 +69,6 @@ if AnalysisParameters.CalibID.Active
     disp('... Dynamic Calibration done')
 end
 
-%% Muscular calibration
-[BiomechanicalModel]=MuscleCalibrationAnthropo(ModelParameters,AnalysisParameters,BiomechanicalModel);
-
 %% Moment arms matrix et muscular coupling
 % not applicable here
 % if numel(BiomechanicalModel.Muscles)
@@ -108,6 +105,9 @@ dp=0.001;
              WrappingLocations(BiomechanicalModel);
     end
  end
+ 
+%% Muscular calibration
+[BiomechanicalModel]=MuscleCalibrationAnthropo(ModelParameters,AnalysisParameters,BiomechanicalModel);
  
 save('BiomechanicalModel','BiomechanicalModel');
 
