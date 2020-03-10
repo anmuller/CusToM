@@ -299,7 +299,9 @@ LClavicle_position_set= {...
 %%                     Scaling inertial parameters
 
 % Rigid upper trunk segments mass
-UpperTrunk_Mass = Mass.Thorax_Mass + 2*(Mass.Scapula_Mass);
+UpperTrunk_Mass = Mass.Thorax_Mass;
+
+Shoulder_Mass = Mass.Clavicle_Mass + Mass.Scapula_Mass;
 
 % longueur entre 'Pelvis_L5JointNode' et 'Thorax_T1C5'
 Lpts={'Pelvis_LowerTrunkNode';'LowerTrunk_UpperTrunkNode'};
@@ -326,6 +328,15 @@ Length_Thorax = distance_point(Lpts{1,3},Lpts{1,2},Lpts{2,3},Lpts{2,2},OsteoArti
     % ------------------------- Thorax ----------------------------------------
     [I_Thorax]=rgyration2inertia([27 25 28 18 2 4*1i], UpperTrunk_Mass, [0 0 0], Length_Thorax);
 
+    % Generic Inertia extraced from (Klein Breteler et al. 1999)
+    Clavicle_Mass_generic=0.156;
+    I_Clavicle_generic=[0.00024259 0.00025526 0.00004442 -0.00001898 -0.00006994 0.00005371];
+    I_Clavicle=(norm(Thorax_osim2antoine)^2*Mass.Clavicle_Mass/Clavicle_Mass_generic).*I_Clavicle_generic;
+    Scapula_Mass_generic=0.70396;
+    I_Scapula_generic=[0.0012429 0.0011504 0.0013651 0.0004494 0.00040922 0.0002411];
+    I_Scapula=(norm(Thorax_osim2antoine)^2*Mass.Scapula_Mass/Scapula_Mass_generic)*I_Scapula_generic;
+    I_Shoulder=I_Clavicle+I_Scapula;
+    
                     %% %% "Human_model" structure generation
  
 num_solid=0;
@@ -447,9 +458,9 @@ num_solid=0;
     OsteoArticularModel(incr_solid).limit_sup=pi/2;
     OsteoArticularModel(incr_solid).Visual=1;
     OsteoArticularModel(incr_solid).calib_k_constraint=s_Thorax;
-    OsteoArticularModel(incr_solid).m=Mass.Clavicle_Mass;                 
+    OsteoArticularModel(incr_solid).m=Shoulder_Mass;                 
     OsteoArticularModel(incr_solid).b=[0 0 0]';  
-    OsteoArticularModel(incr_solid).I=zeros(3,3);
+    OsteoArticularModel(incr_solid).I=[I_Shoulder(1) I_Shoulder(4) I_Shoulder(5); I_Shoulder(4) I_Shoulder(2) I_Shoulder(6); I_Shoulder(5) I_Shoulder(6) I_Shoulder(3)];
     OsteoArticularModel(incr_solid).c=[0 0 0]';
     OsteoArticularModel(incr_solid).anat_position=RClavicle_position_set;
     OsteoArticularModel(incr_solid).visual_file = ['Holzbaur/clavicle_r.mat'];
@@ -509,9 +520,9 @@ num_solid=0;
     OsteoArticularModel(incr_solid).limit_sup=pi/2;
     OsteoArticularModel(incr_solid).Visual=1;
     OsteoArticularModel(incr_solid).calib_k_constraint=s_Thorax;
-    OsteoArticularModel(incr_solid).m=Mass.Clavicle_Mass;                 
+    OsteoArticularModel(incr_solid).m=Shoulder_Mass;                 
     OsteoArticularModel(incr_solid).b=[0 0 0]';  
-    OsteoArticularModel(incr_solid).I=zeros(3,3);
+    OsteoArticularModel(incr_solid).I=[1 1 -1; 1 1 -1; -1 -1 1].*[I_Shoulder(1) I_Shoulder(4) I_Shoulder(5); I_Shoulder(4) I_Shoulder(2) I_Shoulder(6); I_Shoulder(5) I_Shoulder(6) I_Shoulder(3)];
     OsteoArticularModel(incr_solid).c=[0 0 0]';
     OsteoArticularModel(incr_solid).anat_position=LClavicle_position_set;
     OsteoArticularModel(incr_solid).visual_file = ['Holzbaur/clavicle_l.mat'];

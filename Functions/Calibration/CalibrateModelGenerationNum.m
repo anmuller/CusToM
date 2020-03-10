@@ -107,8 +107,9 @@ dp=0.001;
  end
  
 %% Muscular calibration
-[BiomechanicalModel]=MuscleCalibrationAnthropo(ModelParameters,AnalysisParameters,BiomechanicalModel);
- 
+ if ~isempty([BiomechanicalModel.Muscles])
+    [BiomechanicalModel]=MuscleCalibrationAnthropo(ModelParameters,AnalysisParameters,BiomechanicalModel);
+ end
 save('BiomechanicalModel','BiomechanicalModel');
 
 end
