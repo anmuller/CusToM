@@ -70,7 +70,7 @@ if AnalysisParameters.CalibID.Active
 end
 
 %% Muscular calibration
-% To do
+[BiomechanicalModel]=MuscleCalibrationAnthropo(ModelParameters,AnalysisParameters,BiomechanicalModel);
 
 %% Moment arms matrix et muscular coupling
 % not applicable here
@@ -90,8 +90,6 @@ end
 % end
 
 %% Muscular coupling computation
-
-
 q=zeros(numel(BiomechanicalModel.OsteoArticularModel(:))-6,1)+0.01;
 dp=0.001;
 
@@ -110,7 +108,6 @@ dp=0.001;
              WrappingLocations(BiomechanicalModel);
     end
  end
- 
  
 save('BiomechanicalModel','BiomechanicalModel');
 
