@@ -1,4 +1,4 @@
-function [Moment_Arms_sub,C] = MomentArmsComputation(BiomechanicalModel)
+function [Moment_Arms_sub,C,L] = MomentArmsComputation(BiomechanicalModel)
 % Computation of the moment arms matrix
 %
 %   INPUT
@@ -21,7 +21,7 @@ Human_model=BiomechanicalModel.OsteoArticularModel;
 Muscles=BiomechanicalModel.Muscles;
 
 %
-if length(q0)==numel(BiomechanicalModel.OsteoArticularModel(:)) && ~isempty(intersect({BiomechanicalModel.OsteoArticularModel.name},'root0'))  
+if  ~isempty(intersect({BiomechanicalModel.OsteoArticularModel.name},'root0')) %&& length(q0)==numel(BiomechanicalModel.OsteoArticularModel(:))
     Nb_q = numel(Human_model)-6 ;%only degrees of freedom of the body, not the floating base.
 else
      Nb_q= numel(Human_model);

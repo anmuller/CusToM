@@ -164,6 +164,7 @@ num_solid=0;
     OsteoArticularModel(incr_solid).b=pos_attachment_pt;
     OsteoArticularModel(incr_solid).I=zeros(3,3);
     OsteoArticularModel(incr_solid).c=[0 0 0]';
+	OsteoArticularModel(incr_solid).comment='Ankle Flexion(+)/Extension(-)';
     
     % Ankle_J2
     num_solid=num_solid+1;        % number of the solid ...
@@ -182,7 +183,11 @@ num_solid=0;
     OsteoArticularModel(incr_solid).b=[0 0 0]';
     OsteoArticularModel(incr_solid).I=zeros(3,3);
     OsteoArticularModel(incr_solid).c=[0 0 0]';
-
+	if Signe=='R'
+		OsteoArticularModel(incr_solid).comment='Ankle Inversion(-)/Eversion(+)';
+	else
+		OsteoArticularModel(incr_solid).comment='Ankle Inversion(+)/Eversion(-)';
+	end
     % Ankle_J2
     num_solid=num_solid+1;        % number of the solid ...
     name=list_solid{num_solid}; % solid name
@@ -204,5 +209,9 @@ num_solid=0;
     OsteoArticularModel(incr_solid).c=-Foot_AnkleJointNode';
     OsteoArticularModel(incr_solid).anat_position=Foot_position_set;
     OsteoArticularModel(incr_solid).L={[Signe 'Foot_AnkleJointNode'];[Signe 'Foot_ToetipNode']};
-
+	if Signe=='R'
+		OsteoArticularModel(incr_solid).comment='Ankle Internal(-)/External(+) Rotation';
+	else
+		OsteoArticularModel(incr_solid).comment='Ankle Internal(+)/External(-) Rotation';
+	end
 end

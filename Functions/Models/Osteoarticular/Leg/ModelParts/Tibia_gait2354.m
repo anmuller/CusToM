@@ -141,6 +141,7 @@ Shank_position_set= {...
     ['tib_post_' lower(Signe) '-P2'],k*Mirror*([-0.0144;-0.4051;-0.0229])-CoM_tibia;...
     ['tib_ant_' lower(Signe) '-P1'],k*Mirror*([0.0179;-0.1624;0.0115])-CoM_tibia;...
     ['tib_ant_' lower(Signe) '-P2'],k*Mirror*([0.0329;-0.3951;-0.0177])-CoM_tibia;...
+    ['rect_fem_' lower(Signe) '-P3'],k*Mirror*([0.0617576; 0.020984; -0.0014])-CoM_tibia;...
     };
 
 %%                     Mise à l'échelle des inerties
@@ -169,6 +170,7 @@ Human_model(incr_solid).m=0;
 Human_model(incr_solid).b=pos_attachment_pt;
 Human_model(incr_solid).I=zeros(3,3);
 Human_model(incr_solid).c=[0 0 0]';
+Human_model(incr_solid).comment='Knee Antero-Posterior Translation';
 % Dependancy
 Human_model(incr_solid).kinematic_dependancy.active=1;
 Human_model(incr_solid).kinematic_dependancy.Joint=[incr_solid+2]; % tibia_r
@@ -275,6 +277,7 @@ Human_model(incr_solid).m=0;
 Human_model(incr_solid).b=[0 0 0]';
 Human_model(incr_solid).I=zeros(3,3);
 Human_model(incr_solid).c=[0 0 0]';
+Human_model(incr_solid).comment='Knee Longitudinal Translation';
 
 % Dependancy
 Human_model(incr_solid).kinematic_dependancy.active=1;
@@ -327,5 +330,7 @@ Human_model(incr_solid).limit_alpha= [10 , -10;...
 %     OsteoArticularModel(incr_solid).v= [ [1; 0; 0] , [0 ;1;0] ] ;
 Human_model(incr_solid).v= [] ;
 Human_model(incr_solid).calib_a=1;
+Human_model(incr_solid).comment='Knee Flexion(-)/Extension(-)';
+
 
 end

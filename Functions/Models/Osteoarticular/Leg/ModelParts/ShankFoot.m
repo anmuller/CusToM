@@ -264,6 +264,6 @@ OsteoArticularModel(incr_solid).L={[Signe 'Shank_KneeJointNode'];[Signe 'Shank_A
 OsteoArticularModel(incr_solid).limit_alpha= [ 20 , 30;...
     -20, -30] ;
 OsteoArticularModel(incr_solid).v= [ [1; 0; 0] , [0 ;1;0] ] ;
-
+OsteoArticularModel(incr_solid).comment= 'Knee Flexion(-)/Extension(+)' ;
 
 end

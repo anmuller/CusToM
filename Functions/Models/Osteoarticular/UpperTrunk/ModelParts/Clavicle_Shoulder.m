@@ -133,6 +133,7 @@ Human_model(incr_solid).m=0;
 Human_model(incr_solid).b=pos_attachment_pt;  
 Human_model(incr_solid).I=zeros(3,3);
 Human_model(incr_solid).c=[0 0 0]';
+Human_model(incr_solid).comment='Clavicle Axial Rotation Forward(-)/Backward(+)';
 
 % Clavicle_J2
 num_solid=num_solid+1;        % number of the solid ...
@@ -151,6 +152,7 @@ Human_model(incr_solid).m=0;
 Human_model(incr_solid).b=[0 0 0]';  
 Human_model(incr_solid).I=zeros(3,3);
 Human_model(incr_solid).c=[0 0 0]';
+Human_model(incr_solid).comment='Clavivle Depression(-)/Elevation(+)';
 
 % Clavicle
 num_solid=num_solid+1;        % number of the solid ...
@@ -172,6 +174,7 @@ Human_model(incr_solid).I=[I_clavicle(1) I_clavicle(4) I_clavicle(5); I_clavicle
 Human_model(incr_solid).c=-Clavicle_scJointNode;
 Human_model(incr_solid).anat_position=Clavicle_position_set;
 Human_model(incr_solid).visual_file = ['Holzbaur/clavicle_' lower(Side) '.mat'];
+Human_model(incr_solid).comment='Clavivle Protraction(+)/Retraction(-)';
 
 end
 

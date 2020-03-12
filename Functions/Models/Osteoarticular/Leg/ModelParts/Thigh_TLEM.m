@@ -293,6 +293,7 @@ Human_model(incr_solid).theta=[];
 Human_model(incr_solid).KinematicsCut=[];              % coupure cinématique
 Human_model(incr_solid).ClosedLoop=[];                 % si solide de fermeture de boucle : {numéro du solide i sur lequel est attaché ce solide ; point d'attache (repère du solide i)}
 Human_model(incr_solid).linear_constraint=[];
+OsteoArticularModel(incr_solid).comment='Hip Flexion(+)/Extension(-) - Z-Rotation';
 
 % Hip_J2
 num_solid=num_solid+1;        % solide numéro ...
@@ -312,6 +313,11 @@ Human_model(incr_solid).m=0;
 Human_model(incr_solid).b=[0 0 0]';
 Human_model(incr_solid).I=zeros(3,3);
 Human_model(incr_solid).c=[0 0 0]';
+if Signe=='R'
+    Human_model(incr_solid).comment='Hip Abduction(-)/Adduction(+) - X-Rotation';
+else
+    Human_model(incr_solid).comment='Hip Abduction(+)/Adduction(-) - X-Rotation';
+end
 
 % Thigh
 num_solid=num_solid+1;        % solide numéro ...
@@ -334,6 +340,12 @@ Human_model(incr_solid).c=-Thigh_HipJointNode;
 Human_model(incr_solid).anat_position=Thigh_position_set;
 Human_model(incr_solid).L={[Signe 'Thigh_HipJointNode'];[Signe 'Thigh_KneeJointNode'];[Signe 'Thigh_PatellaFemurJointNode']};
 Human_model(incr_solid).visual_file = ['TLEM/' Signe 'Thigh.mat'];
+if Signe=='R'
+    Human_model(incr_solid).comment='Hip Internal(+)/External(-) Rotation';
+else
+    Human_model(incr_solid).comment='Hip Internal(-)/External(+) Rotation';
+end
+
 
 % Wrapping 1
 Human_model(incr_solid).wrap(1).name=['Wrap' Signe 'Thigh' 'Illiopsoas'];

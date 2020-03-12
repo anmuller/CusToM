@@ -108,6 +108,8 @@ CusToM was not developped on MacosX and Linux. For MacosX, it could be necessary
 For Ubuntu, the content of lib folder in btk must be moved in /usr/local/lib. For Fedora, the content of lib folder in btk must be moved in /usr/lib64.
 Then, use the command **sudo ldconfig** in the new location. 
 
+For MacosX, CMake is required to build the binaries from the download BTK source code with the "BTK_WRAP_MATLAB" option. Then use the command make in the binaries location. If need be, check the documentation "btk_files_installation_on_MacOS".
+
 To check that your installation of btk is correct, go whitin any folder of "Examples". Write "GenerateParameters" in the Matlab command, click on "GenerateParameters" in the new window. Then, in the window "Analysis" which will open, desactivate all the boxes except the InverseKinematics box. Click on "Run", and check that there is no error in Matlab prompt due to unreadable .c3d file. If there is no error, the installation is complete. If not, feel free to open an issue in github.
 
 

@@ -209,6 +209,7 @@ Human_model(incr_solid).b=pos_attachment_pt;
 Human_model(incr_solid).c=[0 0 0]';
 Human_model(incr_solid).m=0;                 
 Human_model(incr_solid).I=zeros(3,3);
+Human_model(incr_solid).comment='Trunk Flexion(-)/Extension(+)';
 
 % UpperTrunk_J2
 num_solid=num_solid+1;        % number of the solid ...
@@ -228,6 +229,7 @@ Human_model(incr_solid).b=[0 0 0]';
 Human_model(incr_solid).c=[0 0 0]';
 Human_model(incr_solid).m=0;                 
 Human_model(incr_solid).I=zeros(3,3);
+Human_model(incr_solid).comment='Trunk Axial Rotation Right(+)/Left(-)';
 
 % Thorax
 num_solid=num_solid+1;        % number of the solid ...
@@ -250,5 +252,6 @@ Human_model(incr_solid).m=Mass.Thorax_Mass;
 Human_model(incr_solid).I=[I_Thorax(1) I_Thorax(4) I_Thorax(5); I_Thorax(4) I_Thorax(2) I_Thorax(6); I_Thorax(5) I_Thorax(6) I_Thorax(3)];
 Human_model(incr_solid).anat_position=Thorax_position_set;
 Human_model(incr_solid).L={'Pelvis_LowerTrunkNode';'Thorax_T1C5'};
+Human_model(incr_solid).comment='Trunk Lateral Bending Right(+)/Left(-)';
 
 end

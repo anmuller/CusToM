@@ -178,5 +178,6 @@ Human_model(incr_solid).L={[Signe 'Patella_KneeJointNode']};
 % Human_model(incr_solid).kinematic_dependancy=struct();
 % Human_model(incr_solid).kinematic_dependancy.active=1;
 Human_model(incr_solid).visual_file = ['TLEM/' Signe 'Patella.mat'];
+Human_model(incr_solid).comment='Patella Flexion(-)/Extension(+)';
 
 end
