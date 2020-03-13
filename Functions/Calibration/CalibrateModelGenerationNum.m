@@ -93,7 +93,7 @@ end
              WrappingLocations(BiomechanicalModel);
     end
  end
-
+ 
  %% Muscular coupling computation
 q=zeros(numel(BiomechanicalModel.OsteoArticularModel(:))-6,1)+0.01;
 dp=0.001;
@@ -105,12 +105,12 @@ dp=0.001;
          MomentArmsComputationInit(BiomechanicalModel,q,dp);
      disp('... Muscular Coupling Computation done');
  end
- 
- 
-%% Muscular calibration
+
+ %% Muscular calibration
  if ~isempty([BiomechanicalModel.Muscles])
     [BiomechanicalModel]=MuscleCalibrationAnthropo(ModelParameters,AnalysisParameters,BiomechanicalModel);
  end
+ 
+ 
 save('BiomechanicalModel','BiomechanicalModel');
-
 end
