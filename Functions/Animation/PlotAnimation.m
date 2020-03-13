@@ -18,19 +18,18 @@ function [varargout] = PlotAnimation(ModelParameters, AnimateParameters)
 
 [filename,DataXSens,q,q6dof,Markers_set,Muscles,real_markers,PelvisPosition,PelvisOrientation,EnableModel,Human_model,AnalysisParameters,InverseKinematicsResults,ExperimentalData,BiomechanicalModel]=DataExtractionForAnimation(AnimateParameters,ModelParameters);
 
-
 % AnimateParameters
-[AnatLandmark,Segment,seg_anim,bone_anim,mass_centers_anim,Global_mass_center_anim,Force_Prediction_points,muscles_anim,ellipsoid_anim,wrap_anim,mod_marker_anim,exp_marker_anim,external_forces_anim,external_forces_p,forceplate,BoS]=OptionsChoices(BiomechanicalModel,AnimateParameters);
+options=OptionsChoices(BiomechanicalModel,AnimateParameters);
 
 % Preliminary computations
-if seg_anim && ~DataXSens %anatomical position where other segments are attached
+if options.seg_anim && ~DataXSens %anatomical position where other segments are attached
     [Human_model] = anat_position_solid_repere(Human_model,find(~[Human_model.mother]));
 end
 
 
 %% Mesh of bones
-if bone_anim
-    [Human_model]=BoneView(DataXSens,Human_model,BiomechanicalModel,ModelParameters,Segment);
+if options.bone_anim
+    [Human_model]=BoneView(DataXSens,Human_model,BiomechanicalModel,ModelParameters,options.Segment);
 end
 
 
@@ -75,7 +74,7 @@ animStruct.Set=cell(1,size(q,2));
 
 %% Animation frame by frame
 
-[animStruct]=AnimationFramebyFrame(ax,filename,AnalysisParameters,ModelParameters,AnimateParameters,Human_model,DataXSens,q,q6dof,PelvisPosition,PelvisOrientation,Markers_set,f_affich,Muscles,animStruct,real_markers,BiomechanicalModel);
+[animStruct]=AnimationFramebyFrame(ax,filename,AnalysisParameters,ModelParameters,AnimateParameters,DataXSens,q,q6dof,PelvisPosition,PelvisOrientation,Markers_set,f_affich,Muscles,animStruct,real_markers,BiomechanicalModel,Human_model);
 
 
 
