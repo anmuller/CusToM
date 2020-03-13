@@ -48,11 +48,14 @@ idm = logical([Muscles.exist]);
 Nb_muscles=numel(Muscles(idm));
 
 %% computation of muscle moment arms from joint posture
-L0=zeros(Nb_muscles,1);
-Ls=zeros(Nb_muscles,1);
+L0=ones(Nb_muscles,1);
+Ls=ones(Nb_muscles,1);
 for i=1:Nb_muscles
-    L0(i) = BiomechanicalModel.Muscles(i).l0;
-    Ls(i) = BiomechanicalModel.Muscles(i).ls;
+    Muscle_i = BiomechanicalModel.Muscles(i);
+    if ~isempty(Muscle_i.ls) && ~isempty(Muscle_i.l0)
+        L0(i) = Muscle_i.l0;
+        Ls(i) = Muscle_i.ls;
+    end
 end
 Lmt=zeros(Nb_muscles,Nb_frames);
 R=zeros(Nb_q,Nb_muscles,Nb_frames);
@@ -73,6 +76,9 @@ Vm = gradient(Lm_norm)*freq;
 % Optimisation parameters
 Amin = zeros(Nb_muscles,1);
 A0  = 0.5*ones(Nb_muscles,1);
+for i=1:size(idm,2)
+    Muscles(i).f0 = 10000*Muscles(i).f0;
+end
 Fmax = [Muscles(idm).f0]';
 Amax = ones(Nb_muscles,1);
 Fopt = zeros(Nb_muscles,Nb_frames);

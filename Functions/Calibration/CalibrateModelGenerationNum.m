@@ -86,7 +86,15 @@ end
 %     disp('... MusIC Database Generation done')
 % end
 
-%% Muscular coupling computation
+ %% Wrapping locations
+ if ~isempty([BiomechanicalModel.Muscles])
+    if ~isempty([BiomechanicalModel.Muscles.wrap]')
+         [BiomechanicalModel] =...
+             WrappingLocations(BiomechanicalModel);
+    end
+ end
+
+ %% Muscular coupling computation
 q=zeros(numel(BiomechanicalModel.OsteoArticularModel(:))-6,1)+0.01;
 dp=0.001;
 
@@ -98,13 +106,6 @@ dp=0.001;
      disp('... Muscular Coupling Computation done');
  end
  
- %% Wrapping locations
- if ~isempty([BiomechanicalModel.Muscles])
-    if ~isempty([BiomechanicalModel.Muscles.wrap]')
-         [BiomechanicalModel] =...
-             WrappingLocations(BiomechanicalModel);
-    end
- end
  
 %% Muscular calibration
  if ~isempty([BiomechanicalModel.Muscles])
