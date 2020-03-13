@@ -16,4 +16,5 @@ ModelParameters.Size=1.80;
 [BiomechanicalModel.OsteoArticularModel] = Add6dof(BiomechanicalModel.OsteoArticularModel);
 s_root=find([BiomechanicalModel.OsteoArticularModel.mother]==0);
 
+BiomechanicalModel = WrappingLocations(BiomechanicalModel);
 end
