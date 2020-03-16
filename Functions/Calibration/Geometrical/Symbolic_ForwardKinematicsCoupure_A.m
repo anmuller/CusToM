@@ -133,7 +133,7 @@ if Human_model(j).mother ~= 0
             end
         end
         [solid_path1,solid_path2]=find_solid_path(Human_model,j,num_solid);
-        [c{numClosedLoop},ceq{numClosedLoop}]=NonLinCon_ClosedLoop_Sym(Human_model,solid_path1,solid_path2,num_solid,num_markers,q,k);
+        [c{numClosedLoop},ceq{numClosedLoop}]=NonLinCon_ClosedLoop_Sym(Human_model,solid_path1,solid_path2,num_solid,num_markers,Q,k);
         numClosedLoop=numClosedLoop+1;
     end
     

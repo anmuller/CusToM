@@ -54,13 +54,13 @@ if isempty(solid_path2) % if the beginning coincides with the end of the loop
 
     % Quaternion expression of rotation matrix   
     r=1/2*sqrt(1+Rtemp(1,1)+Rtemp(2,2)+Rtemp(3,3));
-    ceq(1+7*(pp-1))=r-1;
-    ceq(2+7*(pp-1))=Rtemp(3,2)-Rtemp(2,3);
-    ceq(3+7*(pp-1))=Rtemp(1,3)-Rtemp(3,1);
-    ceq(4+7*(pp-1))=Rtemp(2,1)-Rtemp(1,2);
-    ceq(5+7*(pp-1))=ptemp(1); 
-    ceq(6+7*(pp-1))=ptemp(2);
-    ceq(7+7*(pp-1))=ptemp(3);
+    ceq(1)=r-1;
+    ceq(2)=Rtemp(3,2)-Rtemp(2,3);
+    ceq(3)=Rtemp(1,3)-Rtemp(3,1);
+    ceq(4)=Rtemp(2,1)-Rtemp(1,2);
+    ceq(5)=ptemp(1); 
+    ceq(6)=ptemp(2);
+    ceq(7)=ptemp(3);
 
 
 else
@@ -88,13 +88,13 @@ else
 
         % Quaternion expression of rotation matrix   
         r=1/2*sqrt(1+Rtemp(1,1)+Rtemp(2,2)+Rtemp(3,3));
-        ceq(1+7*(pp-1))=r-1;
-        ceq(2+7*(pp-1))=Rtemp(3,2)-Rtemp(2,3);
-        ceq(3+7*(pp-1))=Rtemp(1,3)-Rtemp(3,1);
-        ceq(4+7*(pp-1))=Rtemp(2,1)-Rtemp(1,2);
-        ceq(5+7*(pp-1))=ptemp(1); 
-        ceq(6+7*(pp-1))=ptemp(2);
-        ceq(7+7*(pp-1))=ptemp(3);
+        ceq(1)=r-1;
+        ceq(2)=Rtemp(3,2)-Rtemp(2,3);
+        ceq(3)=Rtemp(1,3)-Rtemp(3,1);
+        ceq(4)=Rtemp(2,1)-Rtemp(1,2);
+        ceq(5)=ptemp(1); 
+        ceq(6)=ptemp(2);
+        ceq(7)=ptemp(3);
 
 
     else% if the loop is cut elsewhere in the loop
@@ -126,13 +126,13 @@ else
 
         % Quaternion expression of rotation matrix   
         r=1/2*sqrt(1+Rtemp(1,1)+Rtemp(2,2)+Rtemp(3,3));
-        ceq(1+7*(pp-1))=r-1;
-        ceq(2+7*(pp-1))=Rtemp(3,2)-Rtemp(2,3);
-        ceq(3+7*(pp-1))=Rtemp(1,3)-Rtemp(3,1);
-        ceq(4+7*(pp-1))=Rtemp(2,1)-Rtemp(1,2);
-        ceq(5+7*(pp-1))=ptemp(1); 
-        ceq(6+7*(pp-1))=ptemp(2);
-        ceq(7+7*(pp-1))=ptemp(3);
+        ceq(1)=r-1;
+        ceq(2)=Rtemp(3,2)-Rtemp(2,3);
+        ceq(3)=Rtemp(1,3)-Rtemp(3,1);
+        ceq(4)=Rtemp(2,1)-Rtemp(1,2);
+        ceq(5)=ptemp(1); 
+        ceq(6)=ptemp(2);
+        ceq(7)=ptemp(3);
 
 
     end
