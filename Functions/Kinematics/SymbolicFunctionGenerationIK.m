@@ -90,7 +90,6 @@ k=ones(numel(Human_model),1);
 p_adapt=zeros(sum([Markers_set.exist]),3);
 pPelvis=zeros(3,1);
 RPelvis=eye(3,3);
-nbClosedLoop = sum(~cellfun('isempty',{Human_model.ClosedLoop}));
 
 
 %% Symbolic function generation for each coordinate frame position
@@ -102,7 +101,7 @@ Human_model(s_root).R=RPelvis;
 
 % Computation of the symbolic markers position
 %[Human_model,Markers_set,~,~,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure(Human_model,Markers_set,s_root,q,k,p_adapt,1,1);
-[Human_model,Markers_set,~]=Symbolic_ForwardKinematicsCoupure(Human_model,Markers_set,s_root,q_complete,k,p_adapt,1);
+[Human_model,Markers_set,~,~,c_ClosedLoop,ceq_ClosedLoop]=Symbolic_ForwardKinematicsCoupure(Human_model,Markers_set,s_root,q_complete,k,p_adapt,1,1);
 
 % position and rotation of the solids used as cuts
 for ii=1:max([Human_model.KinematicsCut])
@@ -264,13 +263,11 @@ for ii=1:length(ind_Kcut) % solide i
         'vars',{q_red,pcut,Rcut});
 end
 
-% Closed loop constraints generation
-if nbClosedLoop>0
-    [c,ceq]=Gen_NonLinCon_ClosedLoop(Human_model,nbClosedLoop);
-    matlabFunction(c,ceq,'File','Symbolic_function/fCL.m',...
-        'Outputs',{'c','ceq'},'vars',{q_red,pcut,Rcut});
+% Closed loops
+for i=1:numel(c_ClosedLoop)
+    matlabFunction(c_ClosedLoop{i},ceq_ClosedLoop{i},'File',['Symbolic_function/fCL' num2str(i) '.m'],...
+            'Outputs',{'c','ceq'},'vars',{q_red});   
 end
-    
 
 %We delete p and R fields
 Human_model = rmfield(Human_model, 'p');

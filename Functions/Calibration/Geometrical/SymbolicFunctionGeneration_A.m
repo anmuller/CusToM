@@ -348,7 +348,7 @@ end
 % boucle(s) fermée(s) (Closed loops)
 for i=1:numel(c_ClosedLoop)
     matlabFunction(ceq_ClosedLoop{i},c_ClosedLoop{i},'File',['Symbolic_function/fCL' num2str(i) '.m'],...
-            'Outputs',{'R','p'},'vars',{pPelvis,RPelvis,q_red,var_sym,pcut,Rcut});   
+            'Outputs',{'c','ceq'},'vars',{pPelvis,RPelvis,q_red,var_sym,pcut,Rcut});   
 end
 nbClosedLoop=numel(c_ClosedLoop);
 

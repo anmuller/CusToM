@@ -96,7 +96,7 @@ options1 = optimoptions(@fmincon,'Display','final','TolFun',1e-3,'MaxFunEvals',1
 options2 = optimoptions(@fmincon,'Algorithm','sqp','Display','off','TolFun',1e-2,'MaxFunEvals',20000,'GradObj','off','GradConstr','off');
 
 q=zeros(nb_solid,nb_frame);
-ceq=zeros(9*nbClosedLoop,nb_frame);
+ceq=zeros(7*nbClosedLoop,nb_frame);
 addpath('Symbolic_function')
 % k=ones(nb_solid,1);
 
@@ -166,7 +166,7 @@ else
         if f == 1      % initial value
             q0=zeros(nb_solid,1);   
             ik_function_objective=@(qvar)CostFunctionSymbolicIK(qvar,nb_cut,real_markers,f,list_function,list_function_markers,Rcut,pcut);
-            nonlcon=@(qvar)NonLinCon_ClosedLoop(qvar,nb_cut,list_function,pcut,Rcut);
+            nonlcon=@(qvar)ClosedLoop(qvar,nbClosedLoop);
 %             q=Generalized_Coordinates.q_dep_map*Generalized_Coordinates.fq_dep(q_red)+Generalized_Coordinates.q_map*q_red;
 %             nonlcon=@(qvar)NonLinCon_ClosedLoop_Num(Human_model,solid_path1,solid_path2,num_solid,num_markers,qvar,k);            
             [q(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,nonlcon,options1);
@@ -180,7 +180,8 @@ else
             l_inf=max(q(:,f-1)-0.2,l_inf1);
             l_sup=min(q(:,f-1)+0.2,l_sup1); 
             ik_function_objective=@(qvar)CostFunctionSymbolicIK(qvar,nb_cut,real_markers,f,list_function,list_function_markers,Rcut,pcut);
-            nonlcon=@(qvar)NonLinCon_ClosedLoop(qvar,nb_cut,list_function,pcut,Rcut);
+%             nonlcon=@(qvar)NonLinCon_ClosedLoop(qvar,nb_cut,list_function,pcut,Rcut);
+            nonlcon=@(qvar)ClosedLoop(qvar,nbClosedLoop);
 %             nonlcon=@(qvar)NonLinCon_ClosedLoop_Num(Human_model,BiomechanicalModel.Generalized_Coordinates,solid_path1,solid_path2,num_solid,num_markers,qvar,k);            
             [q(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf,l_sup,nonlcon,options2);
         end
