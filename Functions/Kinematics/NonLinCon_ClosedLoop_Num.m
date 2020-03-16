@@ -26,10 +26,7 @@ function [c,ceq]=NonLinCon_ClosedLoop_Num(Human_model,solid_path1,solid_path2,nu
 % Georges Dumont
 %________________________________________________________
 
-
-
-
-
+% Contraints initialization
 c=[];
 %ceq=zeros(9*length(num_solid),1);
 ceq=zeros(7*length(num_solid),1);
@@ -60,7 +57,7 @@ for pp=1:numel(num_solid)
 %         ceq(9+9*(pp-1))=ptemp(3);
         
         % Quaternion expression of non linear constraints
-        r=1/2*sqrt(Rtemp(1,1)+Rtemp(2,2)+Rtemp(3,3));
+        r=1/2*sqrt(1+Rtemp(1,1)+Rtemp(2,2)+Rtemp(3,3));
         ceq(1+7*(pp-1))=r-1;
         ceq(2+7*(pp-1))=1/(4*r)*(Rtemp(3,2)-Rtemp(2,3));
         ceq(3+7*(pp-1))=1/(4*r)*(Rtemp(1,3)-Rtemp(3,1));
@@ -94,7 +91,7 @@ for pp=1:numel(num_solid)
 %             ceq(9+9*(pp-1))=ptemp(3);
        
             % Quaternion expression of non linear constraints
-            r=1/2*sqrt(Rtemp(1,1)+Rtemp(2,2)+Rtemp(3,3));
+            r=1/2*sqrt(1+Rtemp(1,1)+Rtemp(2,2)+Rtemp(3,3));
             ceq(1+7*(pp-1))=r-1;
             ceq(2+7*(pp-1))=1/(4*r)*(Rtemp(3,2)-Rtemp(2,3));
             ceq(3+7*(pp-1))=1/(4*r)*(Rtemp(1,3)-Rtemp(3,1));
