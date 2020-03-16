@@ -294,7 +294,7 @@ Human_model(s_root).p=pPelvis;
 Human_model(s_root).R=RPelvis;
 
 % Calcul de la position de chaque marqueurs de façon symbolique (computation of markers position under a symbolic form)
-[Human_model,Markers_set,~,~,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,s_root,q_complete_k,k,p_adapt_mat,alpha,1,1);
+[Human_model,Markers_set,~,~,c_ClosedLoop,ceq_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,s_root,q_complete_k,k,p_adapt_mat,alpha,1,1);
 % [Human_model,Markers_set,~,~,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,s_root,q,k,p_adapt_mat,alpha,1,1);
 
 % position et rotation des solides servant de coupure (position and rotation of solids defining the cuts)
@@ -344,12 +344,13 @@ for i=1:numel(Human_model)  % solide i
             'vars',{pPelvis,RPelvis,q_red,var_sym,pcut,Rcut});
     end
 end
-% % boucle(s) fermée(s) (Closed loops)
-% for i=1:numel(p_ClosedLoop)
-%     matlabFunction(R_ClosedLoop{i},p_ClosedLoop{i},'File',['Symbolic_function/fCL' num2str(i) '.m'],...
-%             'Outputs',{'R','p'},'vars',{pPelvis,RPelvis,q_red,var_sym,pcut,Rcut});   
-% end
-% nbClosedLoop=numel(p_ClosedLoop);
+
+% boucle(s) fermée(s) (Closed loops)
+for i=1:numel(c_ClosedLoop)
+    matlabFunction(ceq_ClosedLoop{i},c_ClosedLoop{i},'File',['Symbolic_function/fCL' num2str(i) '.m'],...
+            'Outputs',{'R','p'},'vars',{pPelvis,RPelvis,q_red,var_sym,pcut,Rcut});   
+end
+nbClosedLoop=numel(c_ClosedLoop);
 
 end
 
