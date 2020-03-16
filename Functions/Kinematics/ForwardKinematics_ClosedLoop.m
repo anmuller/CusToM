@@ -35,7 +35,7 @@ end
 
 %% incr�mentation de la position et orientation
 if n ~= 1
-    if n~=(numel(solid_path))
+   % if n~=(numel(solid_path))
         j=solid_path(n); % num�ro du solide
         i=Human_model(j).mother; % num�ro de la m�re
         
@@ -54,28 +54,28 @@ if n ~= 1
             R=R*Rodrigues(Human_model(j).u,Human_model(j).theta);
         end
         
-    else
-        if n==(numel(solid_path))
-            j=solid_path(n); % num�ro du solide
-            i=Human_model(j).mother; % num�ro de la m�re
+ %   else
+%         if n==(numel(solid_path)) && ~isempty(Human_model(solid_path(n)).ClosedLoop)
+%             j=solid_path(n); % num�ro du solide
+%             i=Human_model(j).mother; % num�ro de la m�re
+%             
+%             if size(Human_model(j).linear_constraint) == [0 0]  % si coordonn�e articulaire fonction lin�aire d'une autre coordonn�e articulaire
+%                 angle=-q(j);
+%             else
+%                 angle=-Human_model(j).linear_constraint(2)*q(Human_model(j).linear_constraint(1)); % qj=alpha*q
+%             end
+%             
+%             if Human_model(j).joint == 1    % liaison pivot
+%                 p=R*(k(i)*Human_model(j).b)+p; % position du rep�re
+%                 R=R*Rodrigues(Human_model(j).a,angle)*Rodrigues(Human_model(j).u,Human_model(j).theta); % orientation du rep�re
+%             end
+%             if Human_model(j).joint == 2    % liaison glissi�re
+%                 p=R*(k(i)*Human_model(j).b + angle*Human_model(j).a)+p;
+%                 R=R*Rodrigues(Human_model(j).u,Human_model(j).theta);
+%             end
             
-            if size(Human_model(j).linear_constraint) == [0 0]  % si coordonn�e articulaire fonction lin�aire d'une autre coordonn�e articulaire
-                angle=-q(j);
-            else
-                angle=-Human_model(j).linear_constraint(2)*q(Human_model(j).linear_constraint(1)); % qj=alpha*q
-            end
-            
-            if Human_model(j).joint == 1    % liaison pivot
-                p=R*(k(i)*Human_model(j).b)+p; % position du rep�re
-                R=R*Rodrigues(Human_model(j).a,angle)*Rodrigues(Human_model(j).u,Human_model(j).theta); % orientation du rep�re
-            end
-            if Human_model(j).joint == 2    % liaison glissi�re
-                p=R*(k(i)*Human_model(j).b + angle*Human_model(j).a)+p;
-                R=R*Rodrigues(Human_model(j).u,Human_model(j).theta);
-            end
-            
-        end
-    end
+%        end
+ %   end
 end
 
 n=n+1;
