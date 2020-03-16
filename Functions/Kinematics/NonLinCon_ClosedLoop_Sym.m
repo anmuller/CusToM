@@ -28,21 +28,18 @@ function [c,ceq]=NonLinCon_ClosedLoop_Sym(Human_model,solid_path1,solid_path2,nu
 
 % Contraints initialization
 c=[];
-ceq=sym('ceq',[7*length(num_solid),1]);
-
-
-for pp=1:numel(num_solid)
+ceq=sym('ceq',[7,1]);
     
-    if isempty(solid_path2{pp}) % if the beginning coincides with the end of the loop
-        
-        % Computation on path
-        s = Human_model(num_solid(pp)).c + Human_model(num_solid(pp)).anat_position{num_markers(pp),2}; % position with respects to the position of the mother solid joint of the closed loop
-        [Human_model,p_ClosedLoop,R_ClosedLoop] = ForwardKinematics_ClosedLoop(Human_model,1,s,solid_path1{pp},[0 0 0]',eye(3),q,k);
-        
-        % Rotation matrix and Position vector
-        Rtemp=R_ClosedLoop;
-        ptemp=p_ClosedLoop;
-       
+if isempty(solid_path2) % if the beginning coincides with the end of the loop
+
+    % Computation on path
+    s = Human_model(num_solid).c + Human_model(num_solid).anat_position{num_markers,2}; % position with respects to the position of the mother solid joint of the closed loop
+    [Human_model,p_ClosedLoop,R_ClosedLoop] = ForwardKinematics_ClosedLoop(Human_model,1,s,solid_path1,[0 0 0]',eye(3),q,k);
+
+    % Rotation matrix and Position vector
+    Rtemp=R_ClosedLoop;
+    ptemp=p_ClosedLoop;
+
 %         % Rotation matrix must be equal to eye
 %         Rtemp=R_ClosedLoop -eye(3);
 %         ceq(1+9*(pp-1))=Rtemp(1,1);
@@ -54,29 +51,29 @@ for pp=1:numel(num_solid)
 %         ceq(7+9*(pp-1))=ptemp(1);
 %         ceq(8+9*(pp-1))=ptemp(2);
 %         ceq(9+9*(pp-1))=ptemp(3);
-        
-        % Quaternion expression of rotation matrix   
-        r=1/2*sqrt(1+Rtemp(1,1)+Rtemp(2,2)+Rtemp(3,3));
-        ceq(1+7*(pp-1))=r-1;
-        ceq(2+7*(pp-1))=Rtemp(3,2)-Rtemp(2,3);
-        ceq(3+7*(pp-1))=Rtemp(1,3)-Rtemp(3,1);
-        ceq(4+7*(pp-1))=Rtemp(2,1)-Rtemp(1,2);
-        ceq(5+7*(pp-1))=ptemp(1); 
-        ceq(6+7*(pp-1))=ptemp(2);
-        ceq(7+7*(pp-1))=ptemp(3);
 
-        
-    else
-        if isempty(solid_path1{pp}) % if the beginning coincides with the end of the loop
-            
-            % Computation on path
-            s = Human_model(num_solid(pp)).c + Human_model(num_solid(pp)).anat_position{num_markers(pp),2}; % position with respects to the position of the mother solid joint of the closed loop
-            [Human_model,p_ClosedLoop,R_ClosedLoop] = ForwardKinematics_ClosedLoop(Human_model,1,s,solid_path2{pp},[0 0 0]',eye(3),q,k);
-            
-            % Rotation matrix and Position vector
-            Rtemp=R_ClosedLoop;
-            ptemp=p_ClosedLoop;
-            
+    % Quaternion expression of rotation matrix   
+    r=1/2*sqrt(1+Rtemp(1,1)+Rtemp(2,2)+Rtemp(3,3));
+    ceq(1+7*(pp-1))=r-1;
+    ceq(2+7*(pp-1))=Rtemp(3,2)-Rtemp(2,3);
+    ceq(3+7*(pp-1))=Rtemp(1,3)-Rtemp(3,1);
+    ceq(4+7*(pp-1))=Rtemp(2,1)-Rtemp(1,2);
+    ceq(5+7*(pp-1))=ptemp(1); 
+    ceq(6+7*(pp-1))=ptemp(2);
+    ceq(7+7*(pp-1))=ptemp(3);
+
+
+else
+    if isempty(solid_path1) % if the beginning coincides with the end of the loop
+
+        % Computation on path
+        s = Human_model(num_solid).c + Human_model(num_solid).anat_position{num_markers,2}; % position with respects to the position of the mother solid joint of the closed loop
+        [Human_model,p_ClosedLoop,R_ClosedLoop] = ForwardKinematics_ClosedLoop(Human_model,1,s,solid_path2,[0 0 0]',eye(3),q,k);
+
+        % Rotation matrix and Position vector
+        Rtemp=R_ClosedLoop;
+        ptemp=p_ClosedLoop;
+
 %             % Rotation matrix must be equal to eye
 %             Rtemp=R_ClosedLoop -eye(3);
 %             ceq(1+9*(pp-1))=Rtemp(1,1);
@@ -88,33 +85,33 @@ for pp=1:numel(num_solid)
 %             ceq(7+9*(pp-1))=ptemp(1);
 %             ceq(8+9*(pp-1))=ptemp(2);
 %             ceq(9+9*(pp-1))=ptemp(3);
-       
-            % Quaternion expression of rotation matrix   
-            r=1/2*sqrt(1+Rtemp(1,1)+Rtemp(2,2)+Rtemp(3,3));
-            ceq(1+7*(pp-1))=r-1;
-            ceq(2+7*(pp-1))=Rtemp(3,2)-Rtemp(2,3);
-            ceq(3+7*(pp-1))=Rtemp(1,3)-Rtemp(3,1);
-            ceq(4+7*(pp-1))=Rtemp(2,1)-Rtemp(1,2);
-            ceq(5+7*(pp-1))=ptemp(1); 
-            ceq(6+7*(pp-1))=ptemp(2);
-            ceq(7+7*(pp-1))=ptemp(3);
+
+        % Quaternion expression of rotation matrix   
+        r=1/2*sqrt(1+Rtemp(1,1)+Rtemp(2,2)+Rtemp(3,3));
+        ceq(1+7*(pp-1))=r-1;
+        ceq(2+7*(pp-1))=Rtemp(3,2)-Rtemp(2,3);
+        ceq(3+7*(pp-1))=Rtemp(1,3)-Rtemp(3,1);
+        ceq(4+7*(pp-1))=Rtemp(2,1)-Rtemp(1,2);
+        ceq(5+7*(pp-1))=ptemp(1); 
+        ceq(6+7*(pp-1))=ptemp(2);
+        ceq(7+7*(pp-1))=ptemp(3);
 
 
-        else% if the loop is cut elsewhere in the loop
-            
-            % Computation on path
-            [Human_model,p_ClosedLoop1,R_ClosedLoop1] = ForwardKinematics_ClosedLoop(Human_model,1,[0 0 0],solid_path1{pp},[0 0 0]',eye(3),q,k);
-            [Human_model,p_ClosedLoop2,R_ClosedLoop2] = ForwardKinematics_ClosedLoop(Human_model,1,[0 0 0],solid_path2{pp},[0 0 0]',eye(3),q,k);
-            if ~isempty(intersect(solid_path1{pp},num_solid(pp))) % Finding the solid with the anatomical position to be respected
-                p_ClosedLoop1 = p_ClosedLoop1 + R_ClosedLoop1*(Human_model(num_solid(pp)).c+Human_model(num_solid(pp)).anat_position{num_markers(pp),2});
-            else
-                p_ClosedLoop2= p_ClosedLoop2 + R_ClosedLoop2*(Human_model(num_solid(pp)).c+Human_model(num_solid(pp)).anat_position{num_markers(pp),2});
-            end
-            
-            % Rotation matrix and Position vector
-            ptemp=p_ClosedLoop2-p_ClosedLoop1;
-            Rtemp=R_ClosedLoop1*R_ClosedLoop2';
-  
+    else% if the loop is cut elsewhere in the loop
+
+        % Computation on path
+        [Human_model,p_ClosedLoop1,R_ClosedLoop1] = ForwardKinematics_ClosedLoop(Human_model,1,[0 0 0],solid_path1,[0 0 0]',eye(3),q,k);
+        [Human_model,p_ClosedLoop2,R_ClosedLoop2] = ForwardKinematics_ClosedLoop(Human_model,1,[0 0 0],solid_path2,[0 0 0]',eye(3),q,k);
+        if ~isempty(intersect(solid_path1,num_solid)) % Finding the solid with the anatomical position to be respected
+            p_ClosedLoop1 = p_ClosedLoop1 + R_ClosedLoop1*(Human_model(num_solid).c+Human_model(num_solid).anat_position{num_markers,2});
+        else
+            p_ClosedLoop2= p_ClosedLoop2 + R_ClosedLoop2*(Human_model(num_solid).c+Human_model(num_solid).anat_position{num_markers,2});
+        end
+
+        % Rotation matrix and Position vector
+        ptemp=p_ClosedLoop2-p_ClosedLoop1;
+        Rtemp=R_ClosedLoop1*R_ClosedLoop2';
+
 %             % Rotation matrix must be eye
 %             Rtemp=R_ClosedLoop1*R_ClosedLoop2' -eye(3);
 %             ceq(1+9*(pp-1))=Rtemp(1,1);
@@ -127,18 +124,17 @@ for pp=1:numel(num_solid)
 %             ceq(8+9*(pp-1))=ptemp(2);
 %             ceq(9+9*(pp-1))=ptemp(3);
 
-            % Quaternion expression of rotation matrix   
-            r=1/2*sqrt(1+Rtemp(1,1)+Rtemp(2,2)+Rtemp(3,3));
-            ceq(1+7*(pp-1))=r-1;
-            ceq(2+7*(pp-1))=Rtemp(3,2)-Rtemp(2,3);
-            ceq(3+7*(pp-1))=Rtemp(1,3)-Rtemp(3,1);
-            ceq(4+7*(pp-1))=Rtemp(2,1)-Rtemp(1,2);
-            ceq(5+7*(pp-1))=ptemp(1); 
-            ceq(6+7*(pp-1))=ptemp(2);
-            ceq(7+7*(pp-1))=ptemp(3);
-        
-            
-        end
+        % Quaternion expression of rotation matrix   
+        r=1/2*sqrt(1+Rtemp(1,1)+Rtemp(2,2)+Rtemp(3,3));
+        ceq(1+7*(pp-1))=r-1;
+        ceq(2+7*(pp-1))=Rtemp(3,2)-Rtemp(2,3);
+        ceq(3+7*(pp-1))=Rtemp(1,3)-Rtemp(3,1);
+        ceq(4+7*(pp-1))=Rtemp(2,1)-Rtemp(1,2);
+        ceq(5+7*(pp-1))=ptemp(1); 
+        ceq(6+7*(pp-1))=ptemp(2);
+        ceq(7+7*(pp-1))=ptemp(3);
+
+
     end
 end
 end
