@@ -27,7 +27,7 @@ function [OsteoArticularModel]= PelvisLowerTrunk(OsteoArticularModel,k,Mass,Atta
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
 % Georges Dumont
 %________________________________________________________
-[OsteoArticularModel]= Pelvis(OsteoArticularModel,k,Mass,AttachmentPoint);
+[OsteoArticularModel]= PelvisNoTrunk(OsteoArticularModel,k,Mass,AttachmentPoint);
 
 list_solid={'LowerTrunk_J1' 'LowerTrunk_J2' 'LowerTrunk'};
     

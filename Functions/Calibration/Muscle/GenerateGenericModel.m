@@ -15,6 +15,9 @@ ModelParameters.Size=1.80;
 %% Adding 6 DOF joint (pelvis to world)
 [BiomechanicalModel.OsteoArticularModel] = Add6dof(BiomechanicalModel.OsteoArticularModel);
 s_root=find([BiomechanicalModel.OsteoArticularModel.mother]==0);
-
-BiomechanicalModel = WrappingLocations(BiomechanicalModel);
+if ~isempty([BiomechanicalModel.Muscles])
+    if ~isempty([BiomechanicalModel.Muscles.wrap]')
+        BiomechanicalModel = WrappingLocations(BiomechanicalModel);
+    end
+end
 end
