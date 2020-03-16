@@ -344,12 +344,12 @@ for i=1:numel(Human_model)  % solide i
             'vars',{pPelvis,RPelvis,q_red,var_sym,pcut,Rcut});
     end
 end
-% boucle(s) fermée(s) (Closed loops)
-for i=1:numel(p_ClosedLoop)
-    matlabFunction(R_ClosedLoop{i},p_ClosedLoop{i},'File',['Symbolic_function/fCL' num2str(i) '.m'],...
-            'Outputs',{'R','p'},'vars',{pPelvis,RPelvis,q_red,var_sym,pcut,Rcut});   
-end
-nbClosedLoop=numel(p_ClosedLoop);
+% % boucle(s) fermée(s) (Closed loops)
+% for i=1:numel(p_ClosedLoop)
+%     matlabFunction(R_ClosedLoop{i},p_ClosedLoop{i},'File',['Symbolic_function/fCL' num2str(i) '.m'],...
+%             'Outputs',{'R','p'},'vars',{pPelvis,RPelvis,q_red,var_sym,pcut,Rcut});   
+% end
+% nbClosedLoop=numel(p_ClosedLoop);
 
 end
 
