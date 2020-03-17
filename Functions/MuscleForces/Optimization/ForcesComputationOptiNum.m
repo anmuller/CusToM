@@ -86,8 +86,8 @@ Aopt = zeros(size(Fopt));
 % Muscle Forces Matrices computation
 [Fa,Fp]=AnalysisParameters.Muscles.MuscleModel(Lm,Vm,Fmax);
 % Solver parameters
-options1 = optimoptions(@fmincon,'Algorithm','sqp','Display','final','GradObj','off','GradConstr','off','TolFun',1e-6,'MaxIterations',100000,'MaxFunEvals',100000);
-options2 = optimoptions(@fmincon,'Algorithm','sqp','Display','final','GradObj','off','GradConstr','off','TolFun',1e-6,'MaxIterations',1000,'MaxFunEvals',2000000);
+options1 = optimoptions(@fmincon,'Algorithm','sqp','Display','final','GradObj','off','GradConstr','off','TolFun',1e-6,'MaxIterations',100000,'MaxFunEvals',100000,'UseParallel',true);
+options2 = optimoptions(@fmincon,'Algorithm','sqp','Display','final','GradObj','off','GradConstr','off','TolFun',1e-6,'MaxIterations',1000,'MaxFunEvals',2000000,'UseParallel',true);
 
 h = waitbar(0,['Forces Computation (' filename ')']);
 

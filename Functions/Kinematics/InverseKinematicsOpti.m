@@ -92,8 +92,8 @@ end
 
 %% Inverse kinematics frame per frame
 
-options1 = optimoptions(@fmincon,'Display','final','TolFun',1e-3,'MaxFunEvals',100000,'GradObj','off','GradConstr','off');
-options2 = optimoptions(@fmincon,'Algorithm','sqp','Display','off','TolFun',1e-2,'MaxFunEvals',20000,'GradObj','off','GradConstr','off');
+options1 = optimoptions(@fmincon,'Display','final','TolFun',1e-3,'MaxFunEvals',100000,'GradObj','off','GradConstr','off','UseParallel',true);
+options2 = optimoptions(@fmincon,'Algorithm','sqp','Display','off','TolFun',1e-2,'MaxFunEvals',20000,'GradObj','off','GradConstr','off','UseParallel',true);
 
 q=zeros(nb_solid,nb_frame);
 ceq=zeros(7*nbClosedLoop,nb_frame);
