@@ -77,7 +77,7 @@ Vm = gradient(Lm_norm)*freq;
 Amin = zeros(Nb_muscles,1);
 A0  = 0.5*ones(Nb_muscles,1);
 for i=1:size(idm,2)
-    Muscles(i).f0 = 10000*Muscles(i).f0;
+    Muscles(i).f0 = 2*Muscles(i).f0;
 end
 Fmax = [Muscles(idm).f0]';
 Amax = ones(Nb_muscles,1);
@@ -86,8 +86,8 @@ Aopt = zeros(size(Fopt));
 % Muscle Forces Matrices computation
 [Fa,Fp]=AnalysisParameters.Muscles.MuscleModel(Lm,Vm,Fmax);
 % Solver parameters
-options1 = optimoptions(@fmincon,'Algorithm','sqp','Display','final','GradObj','off','GradConstr','off','TolFun',1e-6,'MaxIterations',100000,'MaxFunEvals',100000);
-options2 = optimoptions(@fmincon,'Algorithm','sqp','Display','final','GradObj','off','GradConstr','off','TolFun',1e-6,'MaxIterations',1000,'MaxFunEvals',2000000);
+options1 = optimoptions(@fmincon,'Algorithm','interior-point','Display','final','GradObj','off','GradConstr','off','TolFun',1e-3,'TolCon',1e-3,'MaxIterations',100000,'MaxFunEvals',100000);
+options2 = optimoptions(@fmincon,'Algorithm','sqp','Display','final','GradObj','off','GradConstr','off','TolFun',1e-2,'TolCon',1e-2,'MaxIterations',1000,'MaxFunEvals',2000000);
 
 h = waitbar(0,['Forces Computation (' filename ')']);
 
@@ -101,7 +101,7 @@ if isfield(BiomechanicalModel.OsteoArticularModel,'ClosedLoop') && ~isempty([Bio
     % Closed-loop constraints
     KT=ConstraintsJacobian(BiomechanicalModel,q(:,1),solid_path1,solid_path2,num_solid,num_markers,k,0.0001,dependancies)';
     [idKT,~]=find(sum(KT(:,:,1),2)~=0);
-    idq=intersect(idKT,idxj);
+    idq=unique(union(idKT,idxj));
     % Adaptation of variables to closed-loop problem
     A0 = [A0 ; zeros(size(KT,2),1)];
     Aopt = [Aopt; zeros(size(KT,2),Nb_frames)];

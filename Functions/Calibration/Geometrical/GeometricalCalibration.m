@@ -142,7 +142,7 @@ end
 %% Inverse kinematics
 
 % options = optimoptions(@fmincon,'Algorithm','interior-point','Display','iter-detailed','PlotFcns',@optimplotfval,'TolFun',1e-2,'MaxFunEvals',20000);
-options = optimoptions(@fmincon,'Algorithm','interior-point','Display','off','TolFun',1e-2,'MaxFunEvals',20000,'UseParallel',true);
+options = optimoptions(@fmincon,'Algorithm','interior-point','Display','off','TolFun',1e-2,'MaxFunEvals',20000);
 
 q_value{1}=zeros(Nb_qred,nb_frame_calib);
 
