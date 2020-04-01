@@ -182,6 +182,10 @@ Humerus_position_set = {...
     [Signe 'Humerus_ExtensorDigitorum_o'],Pennestri2custom*[ 0.242 0.02 -0.02]';...
     [Signe 'Humerus_FlexorDigitorumSuperior_o'],Pennestri2custom*[ 0.227 0.011 0.021]';...
     [Signe 'Humerus_FlexorCarpiRadialis_o'],Pennestri2custom*[ 0.249 0.027 0]';...
+    
+    
+    % Wraps
+    ['Wrap' Signe 'HumerusBiceps'], Humerus_ghJointNode';...
     };
 
 
@@ -269,5 +273,13 @@ OsteoArticularModel(incr_solid).anat_position=Humerus_position_set;
 OsteoArticularModel(incr_solid).Visual=1;
 OsteoArticularModel(incr_solid).visual_file = ['Holzbaur/humerus_' Signe '.mat'];
 OsteoArticularModel(incr_solid).L={[Signe 'Humerus_ghJointNode'];[Signe 'Humerus_ElbowJointNode']};
+
+
+% Wrapping 1
+Human_model(incr_solid).wrap(1).name=['Wrap' Signe 'HumerusBiceps'];
+Human_model(incr_solid).wrap(1).anat_position=['Wrap' Signe 'HumerusBiceps'];
+Human_model(incr_solid).wrap(1).type='S'; % C: Cylinder or S: Sphere
+Human_model(incr_solid).wrap(1).radius=0.05;
+Human_model(incr_solid).wrap(1).num_solid=incr_solid;
 
 end

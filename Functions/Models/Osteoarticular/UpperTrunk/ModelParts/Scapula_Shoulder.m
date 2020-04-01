@@ -159,7 +159,6 @@ Scapula_position_set = {...
     [Side '_Scapula_serr_ant_12-P1'],Thorax_osim2antoine.*Mirror*([-0.036;0;-0.082])-Scapula_CoM;...
     
     % Wraps
-    ['Wrap' Side 'ThoraxBiceps'],Scapula_acromion;....
     };
     
 
@@ -348,15 +347,6 @@ Human_model(incr_solid).anat_position=Scapula_position_set;
 Human_model(incr_solid).Visual=1;
 Human_model(incr_solid).visual_file=['Holzbaur/Scapula_' lower(Side) '.mat'];
 Human_model(incr_solid).comment='to be completed';
-
-
-% Wrapping 1
-Human_model(incr_solid).wrap(1).name=['Wrap' Signe 'ThoraxBiceps'];
-Human_model(incr_solid).wrap(1).anat_position=['Wrap' Signe 'ThoraxBiceps'];
-Human_model(incr_solid).wrap(1).type='S'; % C: Cylinder or S: Sphere
-Human_model(incr_solid).wrap(1).radius=0.05;
-Human_model(incr_solid).wrap(1).num_solid=incr_solid;
-
 
 % ThoracicEllips_J1
 num_solid=num_solid+1;                                      % solid number

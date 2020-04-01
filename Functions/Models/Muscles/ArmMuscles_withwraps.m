@@ -30,7 +30,7 @@ s=cell(0);
 
 % Elbow
 s=[s;{
-    [Signe 'BicepsL'],624.3,0.1157,4,0.2723,0,{[Signe 'Thorax_BicepsL_o'];[Signe 'Thorax_BicepsL_via1'];[Signe 'Humerus_BicepsL_via2'];[Signe 'Humerus_BicepsL_via3'];[Signe 'Humerus_BicepsL_via4'];[Signe 'Humerus_BicepsL_via5'];[Signe 'Humerus_BicepsL_via6'];[Signe 'Humerus_Biceps_via7'];[Signe 'Forearm_Biceps_i']},{['Wrap' Signe 'Thorax' 'Biceps']};... arm26.osim       
+    [Signe 'BicepsL'],624.3,0.1157,4,0.2723,0,{[Signe 'Thorax_BicepsL_o'];[Signe 'Thorax_BicepsL_via1'];[Signe 'Humerus_BicepsL_via2'];[Signe 'Humerus_BicepsL_via3'];[Signe 'Humerus_BicepsL_via4'];[Signe 'Humerus_BicepsL_via5'];[Signe 'Humerus_BicepsL_via6'];[Signe 'Humerus_Biceps_via7'];[Signe 'Forearm_Biceps_i']},{['Wrap' Signe 'HumerusBiceps']};... arm26.osim       
     }];
 
 % Structure generation
