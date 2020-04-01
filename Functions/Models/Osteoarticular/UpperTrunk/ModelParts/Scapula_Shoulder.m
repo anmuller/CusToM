@@ -354,8 +354,7 @@ Human_model(incr_solid).comment='to be completed';
 Human_model(incr_solid).wrap(1).name=['Wrap' Signe 'ThoraxBiceps'];
 Human_model(incr_solid).wrap(1).anat_position=['Wrap' Signe 'ThoraxBiceps'];
 Human_model(incr_solid).wrap(1).type='S'; % C: Cylinder or S: Sphere
-Human_model(incr_solid).wrap(1).R=0.05;
-Human_model(incr_solid).wrap(1).location=Scapula_acromion;
+Human_model(incr_solid).wrap(1).radius=0.05;
 Human_model(incr_solid).wrap(1).num_solid=incr_solid;
 
 
