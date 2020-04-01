@@ -540,15 +540,25 @@ for f=f_affich
         
         for i_w = 1:numel(Wraps)
             num_solid=Wraps(i_w).num_solid;
-            T_Ri_Rw=[Wraps(i_w).orientation,Wraps(i_w).location;[0 0 0],1];
+            T_Ri_Rw=[Wraps(i_w).R,Wraps(i_w).location;[0 0 0],1];
             X = Human_model_bis(num_solid).Tc_R0_Ri*T_Ri_Rw;
-            [Fcyl,Vcyl]=PlotCylinder(Wraps(i_w).R,Wraps(i_w).h);
+            if Wraps(i_w).type=='C'
+            [Fcyl,Vcyl]=PlotCylinder(Wraps(i_w).radius,Wraps(i_w).h);
             Vcyl_R0= (X*[Vcyl';ones(1,length(Vcyl))])';
             tot_nb_F=length(Fw);
             cur_nb_F=length(Fcyl);
             tot_nb_V=length(Vw);
             Fw((1:cur_nb_F)+tot_nb_F,:)=Fcyl+tot_nb_V;
             Vw=[Vw ;Vcyl_R0(:,1:3)]; %#ok<AGROW>
+            elseif Wraps(i_w).type=='S'
+            [Fsph,Vsph]=PlotSphere(Wraps(i_w).radius);
+            Vsph_R0= (X*[Vsph';ones(1,length(Vsph))])';
+            tot_nb_F=length(Fw);
+            cur_nb_F=length(Fsph);
+            tot_nb_V=length(Vw);
+            Fw((1:cur_nb_F)+tot_nb_F,:)=Fsph+tot_nb_V;
+            Vw=[Vw ;Vsph_R0(:,1:3)]; %#ok<AGROW>   
+            end
         end
         if isequal(AnimateParameters.Mode, 'Figure') ...
                 || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
@@ -588,6 +598,7 @@ for f=f_affich
                 % verify if wrap.
                 for imw=1:nbpts_mu-1
                     if Intersect_line_cylinder(pts_mu_inRw(1:3,imw)', pts_mu_inRw(1:3,imw+1)', cur_Wrap.R)
+                                % ADD SPHERE WRAPPING HERE
                         [L(f),~,~,pt_wrap_inRw(:,:,imw)]=CylinderWrapping(pts_mu_inRw(1:3,imw), pts_mu_inRw(1:3,imw+1), cur_Wrap.R);
                         tmp=T_R0_Rw*[pt_wrap_inRw(:,:,imw)';ones(1,size(pt_wrap_inRw,1))];
                         pt_wrap(:,:,imw)=tmp(1:3,:)';
