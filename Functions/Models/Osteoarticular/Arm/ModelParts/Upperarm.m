@@ -280,6 +280,7 @@ Human_model(incr_solid).wrap(1).name=['Wrap' Signe 'HumerusBiceps'];
 Human_model(incr_solid).wrap(1).anat_position=['Wrap' Signe 'HumerusBiceps'];
 Human_model(incr_solid).wrap(1).type='S'; % C: Cylinder or S: Sphere
 Human_model(incr_solid).wrap(1).radius=0.05;
+Human_model(incr_solid).wrap(1).R=eye(3);
 Human_model(incr_solid).wrap(1).num_solid=incr_solid;
 
 end
