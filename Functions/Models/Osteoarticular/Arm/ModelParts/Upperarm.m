@@ -276,11 +276,12 @@ OsteoArticularModel(incr_solid).L={[Signe 'Humerus_ghJointNode'];[Signe 'Humerus
 
 
 % Wrapping 1
-Human_model(incr_solid).wrap(1).name=['Wrap' Signe 'HumerusBiceps'];
-Human_model(incr_solid).wrap(1).anat_position=['Wrap' Signe 'HumerusBiceps'];
-Human_model(incr_solid).wrap(1).type='S'; % C: Cylinder or S: Sphere
-Human_model(incr_solid).wrap(1).radius=0.05;
-Human_model(incr_solid).wrap(1).R=eye(3);
-Human_model(incr_solid).wrap(1).num_solid=incr_solid;
+OsteoArticularModel(incr_solid).wrap(1).name=['Wrap' Signe 'HumerusBiceps'];
+OsteoArticularModel(incr_solid).wrap(1).anat_position=['Wrap' Signe 'HumerusBiceps'];
+OsteoArticularModel(incr_solid).wrap(1).type='S'; % C: Cylinder or S: Sphere
+OsteoArticularModel(incr_solid).wrap(1).radius=0.025;
+OsteoArticularModel(incr_solid).wrap(1).R=eye(3);
+OsteoArticularModel(incr_solid).wrap(1).num_solid=incr_solid;
+OsteoArticularModel(incr_solid).wrap(1).location=Humerus_ghJointNode';
 
 end

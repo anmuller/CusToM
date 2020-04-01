@@ -16,7 +16,7 @@ function [bool] = Intersect_line_sphere(P1, P2, R)
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
 % Georges Dumont
 %________________________________________________________%% 1- Compute locations of obstacle via points
-bool =0;
+bool=0;
 
 % [X1,Y1,Z1] = R*sphere(20);
 % surf(X1+O(1),Y1+O(2),Z1+O(3))

@@ -355,8 +355,7 @@ Human_model(incr_solid).wrap(1).radius=0.0275;
 Human_model(incr_solid).wrap(1).R=[   -0.928070502539686  ,Mirror(end)*0.284251353681878,     Mirror(end)*0.2406;...
                                                         -0.372404541212556  ,Mirror(end)*-0.708383672766642,    -0.5996           ;...
                                                         0                   ,-0.646060167544528,                Mirror(end)*0.7633];
-%Human_model(incr_solid).wrap(1).location=k*[-0.0149;	0.3890;	Mirror(end)*-0.0350] -   CoM_Thigh;
-%useless
+Human_model(incr_solid).wrap(1).location=k*[-0.0149;	0.3890;	Mirror(end)*-0.0350] -   CoM_Thigh;
 Human_model(incr_solid).wrap(1).h=0.35;
 Human_model(incr_solid).wrap(1).num_solid=incr_solid;
 
@@ -368,8 +367,7 @@ Human_model(incr_solid).wrap(2).radius=0.0250;
 Human_model(incr_solid).wrap(2).R=[0.404154809628085, Mirror(end)*0.893248353115711,  Mirror(end)*0.1969;...
                                                     -0.914690597882413, Mirror(end)*0.394680582636195,  0.087;...
                                                      0              ,   -0.215254773108573,             Mirror(end)*0.9766];
-%Human_model(incr_solid).wrap(2).location=k*[0.0022;	-0.0067;	Mirror(end)*-0.0589] -   CoM_Thigh;
-%useless
+Human_model(incr_solid).wrap(2).location=k*[0.0022;	-0.0067;	Mirror(end)*-0.0589] -   CoM_Thigh;
 Human_model(incr_solid).wrap(2).h=0.35;
 Human_model(incr_solid).wrap(2).num_solid=incr_solid;
 
@@ -381,8 +379,7 @@ Human_model(incr_solid).wrap(3).radius=0.0175;
 Human_model(incr_solid).wrap(3).R=[-0.0648854012091891,   Mirror(end)*0.988882451668858,  Mirror(end)*-0.1338;...
                                                         0.997892722044771,  Mirror(end)*0.0642995316107553, -0.0087;...
                                                         0,                  -0.134078585225335, Mirror(end)*-0.991];
-%Human_model(incr_solid).wrap(3).location=k*[-0.0030;	-0.0068;	Mirror(end)*0.0586]	-   CoM_Thigh;
-%useless
+Human_model(incr_solid).wrap(3).location=k*[-0.0030;	-0.0068;	Mirror(end)*0.0586]	-   CoM_Thigh;
 Human_model(incr_solid).wrap(3).h=0.35;
 Human_model(incr_solid).wrap(3).num_solid=incr_solid;
 
