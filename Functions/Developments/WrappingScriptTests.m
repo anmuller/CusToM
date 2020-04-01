@@ -15,7 +15,7 @@ R = 0.48;
 
 b = Intersect_line_sphere(P1,P2,R);
 
-figure;
+figure(1);
 [x,y,z]=sphere();
 s=surf(R*x,R*y,R*z); hold on; axis equal
 s.EdgeColor = 'none';
@@ -23,6 +23,22 @@ s.EdgeColor = 'none';
 h = plot3point(P1);
 h = plot3point(P2);
 
+if b
+    [L,Q,T,Pts]=SphereWrapping(P1,P2,R);
+    line3(P1,Q);
+    line3(P2,T);
+    h =plot3(Pts(:,1),Pts(:,2),Pts(:,3),'k*');
+else
+    line3(P1,P2);
+end
+
+disp(['Total distance between the 2 points = ' num2str(L)])
+
+
 function h = plot3point(Pt)
 h =plot3(Pt(1),Pt(2),Pt(3),'r*');
+end
+
+function h=line3(Pt1,Pt2)
+h=line([Pt1(1) Pt2(1)],[Pt1(2) Pt2(2)],[Pt1(3) Pt2(3)]);
 end

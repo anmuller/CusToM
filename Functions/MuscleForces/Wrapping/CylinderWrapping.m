@@ -9,6 +9,7 @@ function [L,Q,T,AnimPt_in_Rw,ind]=CylinderWrapping(P,S,R,ind)
 %   - P1: array 3x1 position of the first point
 %   - P2: array 3x1 position of the second point
 %   - R: radius of the cylinder
+%   - ind : side of the wrapping.
 %   OUTPUT
 %   - L: minimal Length between P and S wrapping around the cylinder.
 %   - Q: Position of point Q on the cylinder.
