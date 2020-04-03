@@ -88,7 +88,7 @@ cr = 0.071;
 du = 0.078;
 L_forearm = 0.2628;
 k_Pennestri2custom = L_forearm/(cr+dr)*k*Mirror;
-Pennestri2custom = k_Pennestri2custom*[0 0 1;1 0 0;0 1 0];
+Pennestri2custom = k_Pennestri2custom*[0 0 1;-1 0 0;0 -1 0];
 bh = 2*0.0191/(L_forearm/(cr+dr));
 
 % ------------------------- Radius ----------------------------------------

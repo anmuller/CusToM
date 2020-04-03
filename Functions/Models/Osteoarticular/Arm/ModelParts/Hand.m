@@ -78,7 +78,7 @@ dr = -0.159;
 cr = 0.071;
 L_forearm = 0.2628;
 k_Pennestri2custom = L_forearm/(cr-dr)*k*Mirror;
-Pennestri2custom = k_Pennestri2custom*[0 0 1;1 0 0;0 1 0];
+Pennestri2custom = k_Pennestri2custom*[0 0 1;-1 0 0;0 -1 0];
 
 % ------------------------- Hand ------------------------------------------
 
