@@ -82,14 +82,14 @@ end
 
 %%                      D�finition des noeuds
 
-dr = -0.159;
+dr = 0.159;
 er = 0.081;
 cr = 0.071;
-du = -0.078;
+du = 0.078;
 L_forearm = 0.2628;
-k_Pennestri2custom = L_forearm/(cr-dr)*k*Mirror;
+k_Pennestri2custom = L_forearm/(cr+dr)*k*Mirror;
 Pennestri2custom = k_Pennestri2custom*[0 0 1;1 0 0;0 1 0];
-bh = 2*0.0191/(L_forearm/(cr-dr));
+bh = 2*0.0191/(L_forearm/(cr+dr));
 
 % ------------------------- Radius ----------------------------------------
 Radius_ElbowJointNode = Pennestri2custom* [-dr 0 0]';
@@ -99,7 +99,7 @@ Radius_UlnaJointNode = Pennestri2custom* [cr bh 0]';
 % ------------------------- Ulna ------------------------------------------
 Ulna_HumerusJointNode = Pennestri2custom* [-du 0 0]';
 % Ulna_RadiusJointNode = (k*[0 -0.1430 0])*Mirror;
-Ulna_RadiusJointNode = Pennestri2custom* [cr-dr+du 0 0]';
+Ulna_RadiusJointNode = Pennestri2custom* [cr+dr-du 0 0]';
 
 %%              D�finition des positions anatomiques
 
