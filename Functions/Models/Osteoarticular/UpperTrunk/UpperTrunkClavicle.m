@@ -272,6 +272,9 @@ RClavicle_position_set= {...
     'R_Scapula_serr_ant_10-P1',Thorax_osim2antoine'.*([-0.0594;0.0017;-0.0897])-Scapula_CoM_osim'-Clavicle2Scapula';...
     'R_Scapula_serr_ant_11-P1',Thorax_osim2antoine'.*([-0.0513;0.0068;-0.0877])-Scapula_CoM_osim'-Clavicle2Scapula';...
     'R_Scapula_serr_ant_12-P1',Thorax_osim2antoine'.*([-0.036;0;-0.082])-Scapula_CoM_osim'-Clavicle2Scapula';...
+    
+    % Wraps
+    'WrapRThoraxGH',Thorax_osim2antoine'.*([-0.0058 -0.0378 0.0096]')-Scapula_CoM_osim'-Clavicle2Scapula';...
     };
 
 LClavicle_position_set= {...
@@ -330,6 +333,9 @@ LClavicle_position_set= {...
     'L_Scapula_serr_ant_10-P1',[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.0594;0.0017;-0.0897])-Scapula_CoM_osim'-Clavicle2Scapula');...
     'L_Scapula_serr_ant_11-P1',[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.0513;0.0068;-0.0877])-Scapula_CoM_osim'-Clavicle2Scapula');...
     'L_Scapula_serr_ant_12-P1',[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.036;0;-0.082])-Scapula_CoM_osim'-Clavicle2Scapula');...
+    
+    % Wraps
+    'WrapLThoraxGH',[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.0058 -0.0378 0.0096]')-Scapula_CoM_osim'-Clavicle2Scapula');...
     };
 
 %%                     Scaling inertial parameters
@@ -502,6 +508,18 @@ num_solid=0;
     OsteoArticularModel(incr_solid).visual_file = ['Holzbaur/clavicle_r.mat'];
     OsteoArticularModel(incr_solid).comment='Clavivle Protraction(-)/Retraction(+)';
 
+    
+    % Wrapping 1
+    Human_model(incr_solid).wrap(1).name='WrapRThoraxGH';
+    Human_model(incr_solid).wrap(1).anat_position='WrapRThoraxGH';
+    Human_model(incr_solid).wrap(1).type='S'; % C: Cylinder or S: Sphere
+    Human_model(incr_solid).wrap(1).radius=k*0.035;
+    Human_model(incr_solid).wrap(1).R=eye(3);
+    Human_model(incr_solid).wrap(1).location=Thorax_osim2antoine'.*([-0.0058 -0.0378 0.0096]')-Scapula_CoM_osim'-Clavicle2Scapula';
+    Human_model(incr_solid).wrap(1).h=0;
+    Human_model(incr_solid).wrap(1).num_solid=incr_solid;
+    
+    
 
     %% Lclavicle
     % LClavicle_J1
@@ -564,4 +582,14 @@ num_solid=0;
     OsteoArticularModel(incr_solid).visual_file = ['Holzbaur/clavicle_l.mat'];
     OsteoArticularModel(incr_solid).comment='Clavivle Protraction(+)/Retraction(-)';
 
+    
+    % Wrapping 2
+    Human_model(incr_solid).wrap(2).name='WrapLThoraxGH';
+    Human_model(incr_solid).wrap(2).anat_position='WrapLThoraxGH';
+    Human_model(incr_solid).wrap(2).type='S'; % C: Cylinder or S: Sphere
+    Human_model(incr_solid).wrap(2).radius=k*0.035;
+    Human_model(incr_solid).wrap(2).R=eye(3);
+    Human_model(incr_solid).wrap(2).location=[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.0058 -0.0378 0.0096]')-Scapula_CoM_osim'-Clavicle2Scapula');
+    Human_model(incr_solid).wrap(2).h=0;
+    Human_model(incr_solid).wrap(2).num_solid=incr_solid;
 end

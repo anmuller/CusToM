@@ -182,6 +182,9 @@ Humerus_position_set = {...
     [Signe 'Thorax_Infraspinatus_i'],Pennestri2custom*[0.028 -0.019 0.027]'+Humerus_ghJointNode';...
     [Signe 'Thorax_Trapezius_i'],Pennestri2custom*[0.031 0 0.024]'+Humerus_ghJointNode';...
     [Signe 'Thorax_BicepsBrachii2_i'],Pennestri2custom*[0.252 0.021 0]'+Humerus_ghJointNode';...
+    
+    % Wraps
+    ['Wrap' Signe 'HumerusDelt'],Mirror*osim2antoine'.*[-0.0139 -0.0127 -0.0262]'+Humerus_ghJointNode';...
     };
 
 
@@ -269,5 +272,17 @@ OsteoArticularModel(incr_solid).anat_position=Humerus_position_set;
 OsteoArticularModel(incr_solid).Visual=1;
 OsteoArticularModel(incr_solid).visual_file = ['Holzbaur/humerus_' Signe '.mat'];
 OsteoArticularModel(incr_solid).L={[Signe 'Humerus_ghJointNode'];[Signe 'Humerus_ElbowJointNode']};
+
+% Wrapping 1
+Human_model(incr_solid).wrap(1).name=['Wrap' Signe 'HumerusDelt'];
+Human_model(incr_solid).wrap(1).anat_position=['Wrap' Signe 'HumerusDelt'];
+Human_model(incr_solid).wrap(1).type='C'; % C: Cylinder or S: Sphere
+Human_model(incr_solid).wrap(1).radius=k*0.05;
+Human_model(incr_solid).wrap(1).R=[ 0.4515   -0.2896    0.8440;
+                                    0.5805    0.8136   -0.0313;
+                                    -0.6776    0.5041    0.5355];
+Human_model(incr_solid).wrap(1).location=Mirror*osim2antoine'.*[-0.0139 -0.0127 -0.0262]'+Humerus_ghJointNode';
+Human_model(incr_solid).wrap(1).h=k*0.1;
+Human_model(incr_solid).wrap(1).num_solid=incr_solid;
 
 end
