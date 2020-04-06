@@ -3,10 +3,10 @@ function [L,Typ,wrapside] = distance_point_wrap(Point1,Bone1,Point2,Bone2,Human_
 %
 %   INPUT
 %   - Point1: position of the anatomical position of the first studied
-%   point on its solid 
+%   point on its solid
 %   - Bone1: number of the solid containing the first studied point
 %   - Point2: position of the anatomical position of the second studied
-%   point on its solid  
+%   point on its solid
 %   - Bone2: number of the solid containing the second studied point
 %   - Human_model: osteo-articular model (see the Documentation for the structure)
 %   - q: vector of joint coordinates at a given instant
@@ -123,27 +123,25 @@ Bw=T_Ri_Rw\[B;1];   Bw(4)=[];
 % between Aw and Bw
 % intersection_droite_cylindre(Aw, Bw, [0 0 0], Wrap.radius, -Wrap.h, +Wrap.h)
 if Wrap.type=='C'
-if Intersect_line_cylinder(Aw, Bw, Wrap.radius) || EnforcedWrap
-     [L,~,~,~,wrapside]=CylinderWrapping(Aw, Bw, Wrap.radius, wrapside);
-     Typ = sign(Bw(2)-Aw(2));
-else
-    %Distance between A and B
-    L = norm(B-A);
-    Typ = sign(B(2)-A(2));
-    wrapside=[];
-end
+    if Intersect_line_cylinder(Aw, Bw, Wrap.radius) || EnforcedWrap
+        [L,~,~,~,wrapside]=CylinderWrapping(Aw, Bw, Wrap.radius, wrapside);
+        Typ = sign(Bw(2)-Aw(2));
+    else
+        %Distance between A and B
+        L = norm(B-A);
+        Typ = sign(B(2)-A(2));
+        wrapside=[];
+    end
 elseif Wrap.type=='S'
-if Intersect_line_sphere(Aw, Bw, Wrap.radius) || EnforcedWrap
-     [L,~,~,~,wrapside]=SphereWrapping(Aw, Bw, Wrap.radius, wrapside);
-     Typ = sign(Bw(2)-Aw(2));
-else
-    %Distance between A and B
-    L = norm(B-A);
-    Typ = sign(B(2)-A(2));
-    wrapside=[];
-end  
-
-
-
+    if Intersect_line_sphere(Aw, Bw, Wrap.radius) || EnforcedWrap
+        [L,~,~,~,wrapside]=SphereWrapping(Aw, Bw, Wrap.radius, wrapside);
+        Typ = sign(Bw(2)-Aw(2));
+    else
+        %Distance between A and B
+        L = norm(B-A);
+        Typ = sign(B(2)-A(2));
+        wrapside=[];
+    end
 end
+
 end

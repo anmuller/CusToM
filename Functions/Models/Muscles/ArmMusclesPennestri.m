@@ -9,7 +9,7 @@ function [Muscles]=ArmMusclesPennestri(Muscles,Signe)
 
 %   INPUT
 %   - Muscles: set of muscles (see the Documentation for the structure)
-%   - Signe: side of the arm model ('R' for right side or 'L' for left side)
+%   - Signe: Signe of the arm model ('R' for right Signe or 'L' for left Signe)
 %   OUTPUT
 %   - Muscles: new set of muscles (see the Documentation for the structure)
 %________________________________________________________
@@ -58,8 +58,8 @@ s=[s;{
     [Signe 'PronatorTeres'],54,0.07,[],[],[],{[Signe 'Humerus_PronatorTeres_o'];[Signe 'Radius_PronatorTeres_i']},{};...
     
     % Fake muscles from (Seth et al., 2016)
-    [Side '_Deltoid_ant'],1218.9,0.0976,[],0.093,0.38397,{[Side '_humerus_r_DELT1_r-P1'];[Side '_humerus_r_DELT1_r-P1'];[Side '_Scapula_DELT1-P3'];[Side '_clavicle_r_DELT1_r-P4']},{['Wrap' Signe 'HumerusDelt']};... 
-    [Side '_Deltoid_mid'],1103.5,0.1078,[],0.1095,0.2618,{[Side '_humerus_r_DELT2_r-P1'];[Side '_Scapula_DELT2-P3'];[Side '_Scapula_DELT2-P4']},{['Wrap' Signe 'ThoraxGH']};...   
+    [Signe '_Deltoid_ant'],1218.9,0.0976,[],0.093,0.38397,{[Signe '_humerus_r_DELT1_r-P1'];[Signe '_humerus_r_DELT1_r-P1'];[Signe '_Scapula_DELT1-P3'];[Signe '_clavicle_r_DELT1_r-P4']},{['Wrap' Signe 'HumerusDelt']};... 
+    [Signe '_Deltoid_mid'],1103.5,0.1078,[],0.1095,0.2618,{[Signe '_humerus_r_DELT2_r-P1'];[Signe '_Scapula_DELT2-P3'];[Signe '_Scapula_DELT2-P4']},{['Wrap' Signe 'ThoraxGH']};...   
     %     % Conservation du modèle de Holzbaur
 % % on conserve les biceps du modèle de Holzbaur sauf qu'on part de la
 %     % scapula pour le biceps short et glénoïde pour le biceps long

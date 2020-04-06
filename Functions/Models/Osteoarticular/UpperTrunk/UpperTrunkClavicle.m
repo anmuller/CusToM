@@ -510,14 +510,14 @@ num_solid=0;
 
     
     % Wrapping 1
-    Human_model(incr_solid).wrap(1).name='WrapRThoraxGH';
-    Human_model(incr_solid).wrap(1).anat_position='WrapRThoraxGH';
-    Human_model(incr_solid).wrap(1).type='S'; % C: Cylinder or S: Sphere
-    Human_model(incr_solid).wrap(1).radius=k*0.035;
-    Human_model(incr_solid).wrap(1).R=eye(3);
-    Human_model(incr_solid).wrap(1).location=Thorax_osim2antoine'.*([-0.0058 -0.0378 0.0096]')-Scapula_CoM_osim'-Clavicle2Scapula';
-    Human_model(incr_solid).wrap(1).h=0;
-    Human_model(incr_solid).wrap(1).num_solid=incr_solid;
+    OsteoArticularModel(incr_solid).wrap(1).name='WrapRThoraxGH';
+    OsteoArticularModel(incr_solid).wrap(1).anat_position='WrapRThoraxGH';
+    OsteoArticularModel(incr_solid).wrap(1).type='S'; % C: Cylinder or S: Sphere
+    OsteoArticularModel(incr_solid).wrap(1).radius=k*0.035;
+    OsteoArticularModel(incr_solid).wrap(1).R=eye(3);
+    OsteoArticularModel(incr_solid).wrap(1).location=Thorax_osim2antoine'.*([-0.0058 -0.0378 0.0096]')-Scapula_CoM_osim'-Clavicle2Scapula';
+    OsteoArticularModel(incr_solid).wrap(1).h=0;
+    OsteoArticularModel(incr_solid).wrap(1).num_solid=incr_solid;
     
     
 
@@ -584,12 +584,12 @@ num_solid=0;
 
     
     % Wrapping 2
-    Human_model(incr_solid).wrap(2).name='WrapLThoraxGH';
-    Human_model(incr_solid).wrap(2).anat_position='WrapLThoraxGH';
-    Human_model(incr_solid).wrap(2).type='S'; % C: Cylinder or S: Sphere
-    Human_model(incr_solid).wrap(2).radius=k*0.035;
-    Human_model(incr_solid).wrap(2).R=eye(3);
-    Human_model(incr_solid).wrap(2).location=[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.0058 -0.0378 0.0096]')-Scapula_CoM_osim'-Clavicle2Scapula');
-    Human_model(incr_solid).wrap(2).h=0;
-    Human_model(incr_solid).wrap(2).num_solid=incr_solid;
+    OsteoArticularModel(incr_solid).wrap(1).name='WrapLThoraxGH';
+    OsteoArticularModel(incr_solid).wrap(1).anat_position='WrapLThoraxGH';
+    OsteoArticularModel(incr_solid).wrap(1).type='S'; % C: Cylinder or S: Sphere
+    OsteoArticularModel(incr_solid).wrap(1).radius=k*0.035;
+    OsteoArticularModel(incr_solid).wrap(1).R=eye(3);
+    OsteoArticularModel(incr_solid).wrap(1).location=[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.0058 -0.0378 0.0096]')-Scapula_CoM_osim'-Clavicle2Scapula');
+    OsteoArticularModel(incr_solid).wrap(1).h=0;
+    OsteoArticularModel(incr_solid).wrap(1).num_solid=incr_solid;
 end
