@@ -30,7 +30,7 @@ function [Human_model]= Forearm_Pennestri_model_definition(Human_model,k,Signe,M
 
 
 %% Liste des solides
-list_solid={'Elbow_J1' 'Elbow_J2' 'Radius' 'Ulna_J1' 'Ulna_J2' 'Ulna_J3' 'Ulna' 'UlnaHumerus'};
+list_solid={'Radius_J1' 'Radius_J2' 'Radius' 'Ulna' 'UlnaRadius_J1' 'UlnaRadius_J2' 'UlnaRadius_J3' 'UlnaRadius'};
 
 %% Choix bras droite ou gauche
 if Signe == 'R'
@@ -123,6 +123,7 @@ Radius_position_set = {...
     [Signe 'RAD'], k*Mirror*[0 0.15 0.023]'; ...
     [Signe 'WRA'], k*Mirror*[0 -0.09 0.03]'; ...
     [Signe 'Forearm_WristJointNode'], Radius_WristJointNode'; ...
+    [Signe 'Radius_UlnaJointNode'], Radius_UlnaJointNode';
     [Signe 'Radius_SupinatorBrevis_i'], Radius_ElbowJointNode'+Pennestri2custom*[0.028 0.01 -0.01]';...
     [Signe 'Radius_Brachialis_i'],Radius_ElbowJointNode'+Pennestri2custom*[0.033 0.005 0.001]';...
     [Signe 'Radius_Brachioradialis_i'], Radius_ElbowJointNode'+Pennestri2custom*[0.238 -0.012 0]';...
@@ -170,13 +171,13 @@ I_Ulna=[Radius_ulna_sagittal*Radius_ulna_sagittal*Ulna_Mass, Radius_ulna_longitu
 
 num_solid=0;
 %% Radius
-% Elbow_J1
+% Radius_J1
 num_solid=num_solid+1;        % solide num�ro ...
 name=list_solid{num_solid}; % nom du solide
 eval(['incr_solid=s_' name ';'])  % num�ro du solide dans le mod�le
 Human_model(incr_solid).name=[Signe name];
-Human_model(incr_solid).sister=0;
-Human_model(incr_solid).child=s_Elbow_J2;
+Human_model(incr_solid).sister=s_Ulna;
+Human_model(incr_solid).child=s_Radius_J2;
 Human_model(incr_solid).mother=s_mother;
 Human_model(incr_solid).a=[0 0 1]';
 Human_model(incr_solid).joint=1;
@@ -189,14 +190,14 @@ Human_model(incr_solid).I=zeros(3,3);
 Human_model(incr_solid).c=[0 0 0]';
 Human_model(incr_solid).Visual=0;
 
-% Elbow_J2
+% Radius_J2
 num_solid=num_solid+1;        % solide num�ro ...
 name=list_solid{num_solid}; % nom du solide
 eval(['incr_solid=s_' name ';'])  % num�ro du solide dans le mod�le
 Human_model(incr_solid).name=[Signe name];
 Human_model(incr_solid).sister=0;
 Human_model(incr_solid).child=s_Radius;
-Human_model(incr_solid).mother=s_Elbow_J1;
+Human_model(incr_solid).mother=s_Radius_J1;
 Human_model(incr_solid).a=[1 0 0]';
 Human_model(incr_solid).joint=1;
 Human_model(incr_solid).limit_inf=-pi/4;
@@ -214,8 +215,8 @@ name=list_solid{num_solid}; % nom du solide
 eval(['incr_solid=s_' name ';'])  % num�ro du solide dans le mod�le
 Human_model(incr_solid).name=[Signe name];
 Human_model(incr_solid).sister=0;
-Human_model(incr_solid).child=s_Ulna_J1;
-Human_model(incr_solid).mother=s_Elbow_J2;
+Human_model(incr_solid).child=0;
+Human_model(incr_solid).mother=s_Radius_J2;
 Human_model(incr_solid).a=[0 1 0]';
 Human_model(incr_solid).joint=1;
 if Signe == 'R'
@@ -235,62 +236,6 @@ Human_model(incr_solid).anat_position=Radius_position_set;
 Human_model(incr_solid).Visual=1;
 
 %% Ulna
-% Ulna_J1
-num_solid=num_solid+1;        % solide num�ro ...
-name=list_solid{num_solid}; % nom du solide
-eval(['incr_solid=s_' name ';'])  % num�ro du solide dans le mod�le
-Human_model(incr_solid).name=[Signe name];
-Human_model(incr_solid).sister=0;
-Human_model(incr_solid).child=s_Ulna_J2;
-Human_model(incr_solid).mother=s_Radius;
-Human_model(incr_solid).a=[0 1 0]';
-Human_model(incr_solid).joint=2;
-Human_model(incr_solid).limit_inf=-0.1;
-Human_model(incr_solid).limit_sup=0.1;
-Human_model(incr_solid).ActiveJoint=0;
-Human_model(incr_solid).m=0;
-Human_model(incr_solid).b=(Radius_UlnaJointNode-Radius_ElbowJointNode)';
-Human_model(incr_solid).I=zeros(3,3);
-Human_model(incr_solid).c=[0 0 0]';
-Human_model(incr_solid).Visual=0;
-
-% Ulna_J2
-num_solid=num_solid+1;        % solide num�ro ...
-name=list_solid{num_solid}; % nom du solide
-eval(['incr_solid=s_' name ';'])  % num�ro du solide dans le mod�le
-Human_model(incr_solid).name=[Signe name];
-Human_model(incr_solid).sister=0;
-Human_model(incr_solid).child=s_Ulna_J3;
-Human_model(incr_solid).mother=s_Ulna_J1;
-Human_model(incr_solid).a=[0 0 1]';
-Human_model(incr_solid).joint=1;
-Human_model(incr_solid).limit_inf=-pi;
-Human_model(incr_solid).limit_sup=pi;
-Human_model(incr_solid).ActiveJoint=0;
-Human_model(incr_solid).m=0;
-Human_model(incr_solid).b=[0 0 0]';
-Human_model(incr_solid).I=zeros(3,3);
-Human_model(incr_solid).c=[0 0 0]';
-Human_model(incr_solid).Visual=0;
-
-% Ulna_J3
-num_solid=num_solid+1;        % solide num�ro ...
-name=list_solid{num_solid}; % nom du solide
-eval(['incr_solid=s_' name ';'])  % num�ro du solide dans le mod�le
-Human_model(incr_solid).name=[Signe name];
-Human_model(incr_solid).sister=0;
-Human_model(incr_solid).child=s_Ulna;
-Human_model(incr_solid).mother=s_Ulna_J2;
-Human_model(incr_solid).a=[0 1 0]';
-Human_model(incr_solid).joint=1;
-Human_model(incr_solid).limit_inf=-pi;
-Human_model(incr_solid).limit_sup=pi;
-Human_model(incr_solid).ActiveJoint=0;
-Human_model(incr_solid).m=0;
-Human_model(incr_solid).b=[0 0 0]';
-Human_model(incr_solid).I=zeros(3,3);
-Human_model(incr_solid).c=[0 0 0]';
-Human_model(incr_solid).Visual=0;
 
 % Ulna
 num_solid=num_solid+1;        % solide num�ro ...
@@ -298,40 +243,96 @@ name=list_solid{num_solid}; % nom du solide
 eval(['incr_solid=s_' name ';'])  % num�ro du solide dans le mod�le
 Human_model(incr_solid).name=[Signe name];
 Human_model(incr_solid).sister=0;
-Human_model(incr_solid).child=s_UlnaHumerus;
-Human_model(incr_solid).mother=s_Ulna_J3;
-Human_model(incr_solid).a=[1 0 0]';
+Human_model(incr_solid).child=s_UlnaRadius_J1;
+Human_model(incr_solid).mother=s_mother;
+Human_model(incr_solid).a=[0 0 1]';
+Human_model(incr_solid).joint=1;
+Human_model(incr_solid).limit_inf=0;
+Human_model(incr_solid).limit_sup=pi;
+Human_model(incr_solid).m=Ulna_Mass;
+Human_model(incr_solid).I=[I_Ulna(1) I_Ulna(4) I_Ulna(5); I_Ulna(4) I_Ulna(2) I_Ulna(6); I_Ulna(5) I_Ulna(6) I_Ulna(3)];
+Human_model(incr_solid).c=-Ulna_HumerusJointNode';
+Human_model(incr_solid).ActiveJoint=0;
+Human_model(incr_solid).b=pos_attachment_pt+(k*[0 0 -0.0382]*Mirror)';
+Human_model(incr_solid).calib_k_constraint=s_Radius;
+Human_model(incr_solid).anat_position=Ulna_position_set;
+Human_model(incr_solid).Visual=0;
+
+% UlnaRadius_J1
+num_solid=num_solid+1;        % solide num�ro ...
+name=list_solid{num_solid}; % nom du solide
+eval(['incr_solid=s_' name ';'])  % num�ro du solide dans le mod�le
+Human_model(incr_solid).name=[Signe name];
+Human_model(incr_solid).sister=0;
+Human_model(incr_solid).child=s_UlnaRadius_J2;
+Human_model(incr_solid).mother=s_Ulna;
+Human_model(incr_solid).a=[0 1 0]';
+Human_model(incr_solid).joint=2;
+Human_model(incr_solid).limit_inf=-0.1;
+Human_model(incr_solid).limit_sup=0.1;
+Human_model(incr_solid).ActiveJoint=0;
+Human_model(incr_solid).m=0;
+Human_model(incr_solid).b=(Ulna_RadiusJointNode-Ulna_HumerusJointNode)';
+Human_model(incr_solid).I=zeros(3,3);
+Human_model(incr_solid).c=[0 0 0]';
+Human_model(incr_solid).Visual=0;
+
+% UlnaRadius_J2
+num_solid=num_solid+1;        % solide num�ro ...
+name=list_solid{num_solid}; % nom du solide
+eval(['incr_solid=s_' name ';'])  % num�ro du solide dans le mod�le
+Human_model(incr_solid).name=[Signe name];
+Human_model(incr_solid).sister=0;
+Human_model(incr_solid).child=s_UlnaRadius_J3;
+Human_model(incr_solid).mother=s_UlnaRadius_J1;
+Human_model(incr_solid).a=[0 0 1]';
 Human_model(incr_solid).joint=1;
 Human_model(incr_solid).limit_inf=-pi;
 Human_model(incr_solid).limit_sup=pi;
 Human_model(incr_solid).ActiveJoint=0;
-Human_model(incr_solid).m=Ulna_Mass;
-% Human_model(incr_solid).Group=[n_group 2];
+Human_model(incr_solid).m=0;
 Human_model(incr_solid).b=[0 0 0]';
-Human_model(incr_solid).I=[I_Ulna(1) I_Ulna(4) I_Ulna(5); I_Ulna(4) I_Ulna(2) I_Ulna(6); I_Ulna(5) I_Ulna(6) I_Ulna(3)];
-Human_model(incr_solid).c=-Ulna_RadiusJointNode';
-Human_model(incr_solid).calib_k_constraint=s_Radius;
-Human_model(incr_solid).anat_position=Ulna_position_set;
-Human_model(incr_solid).Visual=1;
+Human_model(incr_solid).I=zeros(3,3);
+Human_model(incr_solid).c=[0 0 0]';
+Human_model(incr_solid).Visual=0;
 
-% UlnaHumerus
+% UlnaRadius_J3
+num_solid=num_solid+1;        % solide num�ro ...
+name=list_solid{num_solid}; % nom du solide
+eval(['incr_solid=s_' name ';'])  % num�ro du solide dans le mod�le
+Human_model(incr_solid).name=[Signe name];
+Human_model(incr_solid).sister=0;
+Human_model(incr_solid).child=s_UlnaRadius;
+Human_model(incr_solid).mother=s_UlnaRadius_J2;
+Human_model(incr_solid).a=[0 1 0]';
+Human_model(incr_solid).joint=1;
+Human_model(incr_solid).limit_inf=-pi;
+Human_model(incr_solid).limit_sup=pi;
+Human_model(incr_solid).ActiveJoint=0;
+Human_model(incr_solid).m=0;
+Human_model(incr_solid).b=[0 0 0]';
+Human_model(incr_solid).I=zeros(3,3);
+Human_model(incr_solid).c=[0 0 0]';
+Human_model(incr_solid).Visual=0;
+
+% UlnaRadius
 num_solid=num_solid+1;        % solide num�ro ...
 name=list_solid{num_solid}; % nom du solide
 eval(['incr_solid=s_' name ';'])  % num�ro du solide dans le mod�le
 Human_model(incr_solid).name=[Signe name];
 Human_model(incr_solid).sister=0;
 Human_model(incr_solid).child=0;
-Human_model(incr_solid).mother=s_Ulna;
-Human_model(incr_solid).a=[0 0 1]';
+Human_model(incr_solid).mother=s_UlnaRadius_J3;
+Human_model(incr_solid).a=[1 0 0]';
+Human_model(incr_solid).m=0;
+Human_model(incr_solid).b=[0 0 0]';
+Human_model(incr_solid).I=zeros(3,3);
+Human_model(incr_solid).c=[0 0 0]';
 Human_model(incr_solid).joint=1;
 Human_model(incr_solid).limit_inf=-pi;
 Human_model(incr_solid).limit_sup=pi;
-Human_model(incr_solid).ClosedLoop = [Signe 'Humerus_UlnaJointNode'];
 Human_model(incr_solid).ActiveJoint=0;
-Human_model(incr_solid).m=0;
-Human_model(incr_solid).b=(Ulna_HumerusJointNode-Ulna_RadiusJointNode)';
-Human_model(incr_solid).I=zeros(3,3);
-Human_model(incr_solid).c=[0 0 0]';
-Human_model(incr_solid).Visual=0;
+Human_model(incr_solid).Visual=1;
+Human_model(incr_solid).ClosedLoop = [Signe 'Radius_UlnaJointNode'];
 
 end
