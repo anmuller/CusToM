@@ -157,6 +157,8 @@ Scapula_position_set = {...
     [Side '_Scapula_serr_ant_10-P1'],Thorax_osim2antoine.*Mirror*([-0.0594;0.0017;-0.0897])-Scapula_CoM;...
     [Side '_Scapula_serr_ant_11-P1'],Thorax_osim2antoine.*Mirror*([-0.0513;0.0068;-0.0877])-Scapula_CoM;...
     [Side '_Scapula_serr_ant_12-P1'],Thorax_osim2antoine.*Mirror*([-0.036;0;-0.082])-Scapula_CoM;...
+    
+    % Wraps
     };
     
 
@@ -346,7 +348,6 @@ Human_model(incr_solid).Visual=1;
 Human_model(incr_solid).visual_file=['Holzbaur/Scapula_' lower(Side) '.mat'];
 Human_model(incr_solid).comment='to be completed';
 
-
 % ThoracicEllips_J1
 num_solid=num_solid+1;                                      % solid number
 name=list_solid{num_solid};                                 % solid name
@@ -474,5 +475,11 @@ Human_model(incr_solid).ClosedLoop=[Side '_Clavicle_acJointNode'];              
 Human_model(incr_solid).linear_constraint=[];
 Human_model(incr_solid).Visual=0;
 Human_model(incr_solid).comment='to be completed';
+
+
+
+
+
+
 end
 
