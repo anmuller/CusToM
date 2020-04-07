@@ -604,8 +604,7 @@ for f=f_affich
                     if cur_Wrap.type=='C' ...
                             && Intersect_line_cylinder(pts_mu_inRw(1:3,imw)', pts_mu_inRw(1:3,imw+1)', cur_Wrap.radius)
                         [L(f),~,~,pt_wrap_inRw(:,:,imw)]=CylinderWrapping(pts_mu_inRw(1:3,imw), pts_mu_inRw(1:3,imw+1), cur_Wrap.radius);
-                    elseif cur_Wrap.type=='S' && Intersect_line_sphere(pts_mu_inRw(1:3,imw), pts_mu_inRw(1:3,imw+1), cur_Wrap.radius)
-                        [L(f),~,~,pt_wrap_inRw(:,:,imw)]=SphereWrapping(pts_mu_inRw(1:3,imw), pts_mu_inRw(1:3,imw+1), cur_Wrap.radius);
+                        
                         tmp=T_R0_Rw*[pt_wrap_inRw(:,:,imw)';ones(1,size(pt_wrap_inRw,1))];
                         pt_wrap(:,:,imw)=tmp(1:3,:)';
                         % add the wrapping points
@@ -614,6 +613,19 @@ for f=f_affich
                         Vmu=[Vmu;pts_mu(imw,:);pt_wrap(:,:,imw)];
                         Fmu =[Fmu; cur_Fmu]; %#ok<AGROW>
                         CEmu=[CEmu; repmat(color_mus(mu,:),[nb_added_pts 1])]; %#ok<AGROW>
+                        
+                    elseif cur_Wrap.type=='S' && Intersect_line_sphere(pts_mu_inRw(1:3,imw), pts_mu_inRw(1:3,imw+1), cur_Wrap.radius)
+                        [L(f),~,~,pt_wrap_inRw(:,:,imw)]=SphereWrapping(pts_mu_inRw(1:3,imw), pts_mu_inRw(1:3,imw+1), cur_Wrap.radius);
+                    
+                        tmp=T_R0_Rw*[pt_wrap_inRw(:,:,imw)';ones(1,size(pt_wrap_inRw,1))];
+                        pt_wrap(:,:,imw)=tmp(1:3,:)';
+                        % add the wrapping points
+                        nb_added_pts=size([pts_mu(imw,:);pt_wrap(:,:,imw)],1);
+                        cur_Fmu = repmat([1 2],[nb_added_pts-1 1])+(0:nb_added_pts-2)'+size(Vmu,1);
+                        Vmu=[Vmu;pts_mu(imw,:);pt_wrap(:,:,imw)];
+                        Fmu =[Fmu; cur_Fmu]; %#ok<AGROW>
+                        CEmu=[CEmu; repmat(color_mus(mu,:),[nb_added_pts 1])]; %#ok<AGROW>
+                        
                     else
                         if imw>1
                             cur_Fmu = [1 2]+size(Vmu,1);
