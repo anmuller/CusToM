@@ -131,7 +131,7 @@ end
 if bone_anim
     if ~DataXSens
         % scaling factors.
-        if isfield(BiomechanicalModel,'GeometricalCalibration') && isfield(BiomechanicalModel.GeometricalCalibration,'k_calib') && ~isfield(BiomechanicalModel.GeometricalCalibration,'k_markers')
+        if exist('BiomechanicalModel','var') && isfield(BiomechanicalModel,'GeometricalCalibration') && isfield(BiomechanicalModel.GeometricalCalibration,'k_calib') && ~isfield(BiomechanicalModel.GeometricalCalibration,'k_markers')
             k_calib = BiomechanicalModel.GeometricalCalibration.k_calib;
             k = (ModelParameters.Size/1.80)*k_calib;
         else
