@@ -185,6 +185,7 @@ Humerus_position_set = {...
     
     % Wraps
     ['Wrap' Signe 'HumerusDelt'],Mirror*osim2antoine'.*[-0.0139 -0.0127 -0.0262]'+Humerus_ghJointNode';...
+    ['Wrap' Signe 'HumerusTri'],Mirror*osim2antoine'.*[0.0028 -0.2919 -0.0119]'+Humerus_ghJointNode';...
     };
 
 
@@ -284,5 +285,17 @@ OsteoArticularModel(incr_solid).wrap(1).R=[ 0.4515   -0.2896    0.8440;
 OsteoArticularModel(incr_solid).wrap(1).location=Mirror*osim2antoine'.*[-0.0139 -0.0127 -0.0262]'+Humerus_ghJointNode';
 OsteoArticularModel(incr_solid).wrap(1).h=k*0.1;
 OsteoArticularModel(incr_solid).wrap(1).num_solid=incr_solid;
+
+% Wrapping 2
+OsteoArticularModel(incr_solid).wrap(2).name=['Wrap' Signe 'HumerusTri'];
+OsteoArticularModel(incr_solid).wrap(2).anat_position=['Wrap' Signe 'HumerusTri'];
+OsteoArticularModel(incr_solid).wrap(2).type='C'; % C: Cylinder or S: Sphere
+OsteoArticularModel(incr_solid).wrap(2).radius=k*0.016;
+OsteoArticularModel(incr_solid).wrap(2).R=[ 0.9576    0.0114   -0.2878;
+                                            -0.0200    0.9994   -0.0268;
+                                            0.2873    0.0314    0.9573];
+OsteoArticularModel(incr_solid).wrap(2).location=Mirror*osim2antoine'.*[0.0028 -0.2919 -0.0119]'+Humerus_ghJointNode';
+OsteoArticularModel(incr_solid).wrap(2).h=k*0.1;
+OsteoArticularModel(incr_solid).wrap(2).num_solid=incr_solid;
 
 end
