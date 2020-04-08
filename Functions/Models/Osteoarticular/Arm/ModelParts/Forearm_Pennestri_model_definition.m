@@ -131,6 +131,9 @@ Radius_position_set = {...
     [Signe 'Radius_PronatorQuadrus_i'], Radius_ElbowJointNode'+Pennestri2custom*[0.236 -0.005 0.012]';...
 %     [Signe 'Radius_TricepsBrachii2_o'], Radius_ElbowJointNode'+Pennestri2custom*[-0.025 0.02 -0.02]';...
     [Signe 'Thorax_TricepsBrachii2_i'],Radius_ElbowJointNode'+Pennestri2custom*[0.038 0.027 -0.02]';...
+    
+    % Wraps
+    ['Wrap' Signe 'RadiusQuadratus'],Mirror*[0.0281 -0.1986 0.0288]'+Radius_ElbowJointNode';...
     };
 
 Ulna_position_set = {...
@@ -235,6 +238,20 @@ Human_model(incr_solid).c=-Radius_ElbowJointNode';
 Human_model(incr_solid).anat_position=Radius_position_set;
 Human_model(incr_solid).Visual=1;
 
+
+% Wrapping 1
+OsteoArticularModel(incr_solid).wrap(1).name=['Wrap' Signe 'RadiusQuadratus'];
+OsteoArticularModel(incr_solid).wrap(1).anat_position=['Wrap' Signe 'RadiusQuadratus'];
+OsteoArticularModel(incr_solid).wrap(1).type='C'; % C: Cylinder or S: Sphere
+OsteoArticularModel(incr_solid).wrap(1).radius=k*0.01;
+OsteoArticularModel(incr_solid).wrap(1).R=[ -0.8998    0.4361   -0.0127;
+                                            0.0046    0.0387    0.9992;
+                                            0.4363    0.8990   -0.0368];
+OsteoArticularModel(incr_solid).wrap(1).location=Mirror*[0.0281 -0.1986 0.0288]'+Radius_ElbowJointNode';
+OsteoArticularModel(incr_solid).wrap(1).h=k*0.1;
+OsteoArticularModel(incr_solid).wrap(1).num_solid=incr_solid;
+
+
 %% Ulna
 
 % Ulna
@@ -334,5 +351,4 @@ Human_model(incr_solid).limit_sup=pi;
 Human_model(incr_solid).ActiveJoint=0;
 Human_model(incr_solid).Visual=1;
 Human_model(incr_solid).ClosedLoop = [Signe 'Radius_UlnaJointNode'];
-
 end
