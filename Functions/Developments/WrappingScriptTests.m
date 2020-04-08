@@ -19,13 +19,13 @@ R = 0.48;
 
 b = Intersect_line_sphere(P1,P2,R);
 
-figure(1);
+cFigure;
 [x,y,z]=sphere();
 s=surf(R*x,R*y,R*z); hold on; axis equal
-s.EdgeColor = 'none';
+s.EdgeColor = 'k';
 s.FaceAlpha = 0.3;
 s.EdgeAlpha = 0.3;
-
+s.FaceColor = 'c';
 
 h = plot3point(P1);
 h = plot3point(P2);
@@ -40,12 +40,49 @@ else
 end
 
 disp(['Total distance between the 2 points = ' num2str(L)])
+view(3)
+axis equal; axis tight; axis vis3d; grid on; box on;
+% camlight left; 
+axis off; axis manual;
+lighting gouraud
+ax=gca;
+ax.Clipping = 'off';
+drawnow;
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+b = Intersect_line_cylinder(P1,P2,R);
+
+cFigure;
+[F,V]=PlotCylinder(R,1);
+c = gpatch(F,V,'c','k'); hold on; axis equal
+c.FaceAlpha = 0.3;
+c.EdgeAlpha = 0.3;
+
+h = plot3point(P1);
+h = plot3point(P2);
+
+if b
+    [L,Q,T,Pts]=CylinderWrapping(P1,P2,R);
+    line3(P1,Q);
+    line3(P2,T);
+    h =plot3(Pts(:,1),Pts(:,2),Pts(:,3),'k.');
+else
+    line3(P1,P2);
+end
+view(3)
+axis equal; axis tight; axis vis3d; grid on; box on;
+% camlight left; 
+axis off; axis manual;
+lighting gouraud
+ax=gca;
+ax.Clipping = 'off';
+drawnow;
 
 function h = plot3point(Pt)
 h =plot3(Pt(1),Pt(2),Pt(3),'r*');
 end
 
 function h=line3(Pt1,Pt2)
-h=line([Pt1(1) Pt2(1)],[Pt1(2) Pt2(2)],[Pt1(3) Pt2(3)]);
+h=plot3([Pt1(1) Pt2(1)],[Pt1(2) Pt2(2)],[Pt1(3) Pt2(3)],'linewidth',2,'Color','k');
 end
