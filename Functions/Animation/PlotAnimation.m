@@ -411,7 +411,7 @@ for f=f_affich
     end
     
     %% Markers
-    % Modèle
+    % Modï¿½le
     if mod_marker_anim || exp_marker_anim
         Vsmk=[];
         if mod_marker_anim %% Markers on the model
@@ -590,7 +590,7 @@ for f=f_affich
             mu=ind_mu(i_mu);
             pts_mu = Muscles_test(mu).pos_pts';
             nbpts_mu = size(pts_mu,1);
-            if ~isempty(Muscles(mu).wrap) && ~isempty(Muscles(mu).wrap{1})
+            if ~isequal(AnimateParameters.Mode, 'GenerateParameters') && ~isempty(Muscles(mu).wrap) && ~isempty(Muscles(mu).wrap{1})
                 % find the wrap
                 Wrap = [Human_model.wrap]; names = {Wrap.name}'; [~,ind]=intersect(names,Muscles(mu).wrap{1});
                 cur_Wrap=Wrap(ind);
