@@ -1,4 +1,4 @@
-function [Aopt,output] = PolynomialFunction(A0, Aeq, beq, Amin, Amax, fmincon_options, options, Fa, Fmax, indc,tmax, varargin)
+function Aopt = PolynomialFunction(A0, Aeq, beq, Amin, Amax, fmincon_options, options, Fa, Fmax, dt,varargin)
 % Optimization used for the force sharing problem: polynomial function
 %   
 %	Based on :
@@ -32,11 +32,28 @@ function [Aopt,output] = PolynomialFunction(A0, Aeq, beq, Amin, Amax, fmincon_op
 % Cost function
 if ~sum(isinf(Amax))
 cost_function = @(A) sum((Fa./Fmax.*A).^(options));
+ind_act=length(A0);
 else
     % ClosedLoop case
     ind_act=find(isinf(Amax)); % first element to be infinite in Fmax
-    cost_function = @(A) sum((Fa./Fmax(1:ind_act-1).*A(1:ind_act-1)).^(options))+1*sum((A(indc:end)).^2);
+    cost_function = @(A) sum(A(1:ind_act(1)-1).^(options));%+sum((A(indc:end)).^2);
 end
 % Optimization
-[Aopt,~,~,output] = fmincon(cost_function,A0,[],[],Aeq,beq,Amin,Amax,[],fmincon_options);
+%[Aopt,~,~,output] = fmincon(cost_function,A0,[],[],Aeq,beq,Amin,Amax,[],fmincon_options);
+H=zeros(length(A0));
+H(1:ind_act(1)-1,1:ind_act(1)-1)=eye(ind_act(1)-1); 
+A=[[eye(ind_act(1)-1), zeros(ind_act(1)-1, length(A0)-ind_act(1)+1)];...
+        zeros(length(A0)-ind_act(1)+1,length(A0));...
+        [ -eye(ind_act(1)-1) ,zeros(ind_act(1)-1,length(A0)-ind_act(1)+1) ];...
+        zeros(length(A0)-ind_act(1)+1,length(A0))];
+        
+ B=[200*dt+A0(1:ind_act(1)-1);zeros(length(A0)-ind_act(1)+1,1);...
+        200*dt-A0(1:ind_act(1)-1); zeros(length(A0)-ind_act(1)+1,1)];
+ 
+ 
+%H(indc:length(A0),indc:length(A0))=eye(length(indc:length(A0)));
+optionsquad=optimset('TolFun', 1e-12, 'TolCon',1e-12,'MaxIter',2000);
+
+Aopt=quadprog(H,[],A,B,Aeq,beq,Amin,Amax,A0,optionsquad);
+
 end

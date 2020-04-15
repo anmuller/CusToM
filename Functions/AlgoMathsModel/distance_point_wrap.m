@@ -48,11 +48,11 @@ solid1 = t1(ppac_t:end);
 solid2 = t2(ppac_t:end);
 wrap_path = t3(ppac_t:end);
 
-% Direct kinematics initialization (Initialisation de la cinématique directe)
+% Direct kinematics initialization (Initialisation de la cinï¿½matique directe)
 Human_model(ppac).p = zeros(3,1);
 Human_model(ppac).R = eye(3);
 
-% Computation of coordinates of point A (calcul des coordonnées du point A)
+% Computation of coordinates of point A (calcul des coordonnï¿½es du point A)
 if numel(solid1)==1
     A = Human_model(Bone1).c+Human_model(Bone1).anat_position{Point1,2};
 else
@@ -66,7 +66,7 @@ else
     A = Human_model(l).c_global + Human_model(l).R * Human_model(Bone1).anat_position{Point1,2};
 end
 
-% Computation of coordinates of point B (calcul des coordonnées du point B)
+% Computation of coordinates of point B (calcul des coordonnï¿½es du point B)
 if numel(solid2)==1
     B = Human_model(Bone2).c+Human_model(Bone2).anat_position{Point2,2};
 else
@@ -89,8 +89,15 @@ if numel(wrap_path)==1
 else
     for n=wrap_path(2:end)
         m = Human_model(n).mother;
+        if Human_model(n).joint==1 %revolute joint
         Human_model(n).p = Human_model(m).R * Human_model(n).b + Human_model(m).p;
         Human_model(n).R = Human_model(m).R * Rodrigues(Human_model(n).a,q(n)) * Rodrigues(Human_model(n).u,Human_model(n).theta);
+        else 
+            if Human_model(n).joint==2 %slider joint
+                     Human_model(n).p = Human_model(m).R * Human_model(n).b + Human_model(m).p+Human_model(n).a * q(n);
+                     Human_model(n).R = Human_model(m).R * Rodrigues(Human_model(n).u,Human_model(n).theta);
+            end
+        end
     end
     l = wrap_path(end);
     Human_model(l).c_global = Human_model(l).p + Human_model(l).R * Human_model(l).c;
@@ -111,7 +118,7 @@ Bw=T_Ri_Rw\[B;1];   Bw(4)=[];
 % fastscatter3(Aw); hold on;
 % fastscatter3(Bw)
 % fastscatter3([0 0 0]); axis equal
-% Vérifier les longueurs les distances entre les points
+% Vï¿½rifier les longueurs les distances entre les points
 
 
 % fastscatter3(A); hold on;
@@ -124,7 +131,7 @@ Bw=T_Ri_Rw\[B;1];   Bw(4)=[];
 % intersection_droite_cylindre(Aw, Bw, [0 0 0], Wrap.radius, -Wrap.h, +Wrap.h)
 if Wrap.type=='C'
     if Intersect_line_cylinder(Aw, Bw, Wrap.radius) || EnforcedWrap
-        [L,~,~,~,wrapside]=CylinderWrapping(Aw, Bw, Wrap.radius, wrapside);
+       [L,~,~,~,wrapside]=CylinderWrapping(Aw, Bw, Wrap.radius, wrapside);
         Typ = sign(Bw(2)-Aw(2));
     else
         %Distance between A and B

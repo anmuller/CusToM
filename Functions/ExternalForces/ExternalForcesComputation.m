@@ -39,7 +39,7 @@ for i = 1:numel(AnalysisParameters.filename)
     elseif AnalysisParameters.ID.InputData == 2
         [ExternalForcesComputationResults] = ExternalForcesPrediction(filename, AnalysisParameters, BiomechanicalModel, ModelParameters);
     end
-%     save([filename '/ExternalForcesComputationResults'],'ExternalForcesComputationResults');
+     save([filename '/ExternalForcesComputationResults'],'ExternalForcesComputationResults');
 end
 
 end
