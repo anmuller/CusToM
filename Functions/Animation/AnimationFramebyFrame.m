@@ -236,7 +236,7 @@ for f=f_affich
                     R32=[R32 Human_model_bis(index).R(3,2)];
                     R33=[R33 Human_model_bis(index).R(3,3)];
                     
-                    labels=[labels; BiomechanicalModel.OsteoArticularModel(index).anat_position(:,1)];
+                     labels=[labels; BiomechanicalModel.OsteoArticularModel(index).anat_position(:,1)];
 
                 end
                 

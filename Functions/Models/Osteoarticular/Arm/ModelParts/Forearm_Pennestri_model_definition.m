@@ -273,7 +273,7 @@ Human_model(incr_solid).ActiveJoint=0;
 Human_model(incr_solid).b=pos_attachment_pt+(k*[0 0 -0.0382]*Mirror)';
 Human_model(incr_solid).calib_k_constraint=s_Radius;
 Human_model(incr_solid).anat_position=Ulna_position_set;
-Human_model(incr_solid).Visual=0;
+Human_model(incr_solid).Visual=1;
 
 % UlnaRadius_J1
 num_solid=num_solid+1;        % solide num�ro ...
@@ -349,6 +349,6 @@ Human_model(incr_solid).joint=1;
 Human_model(incr_solid).limit_inf=-pi;
 Human_model(incr_solid).limit_sup=pi;
 Human_model(incr_solid).ActiveJoint=0;
-Human_model(incr_solid).Visual=1;
+Human_model(incr_solid).Visual=0;
 Human_model(incr_solid).ClosedLoop = [Signe 'Radius_UlnaJointNode'];
 end
