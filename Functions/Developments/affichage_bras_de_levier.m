@@ -81,10 +81,18 @@ for k=1:2
     
     if k==1
         title(['R',nom_muscle])
-         xlabel(['R',nom_arti,' (deg)']);
+         if ~isempty(intersect(nom_muscle,'Radius')) && length(nom_muscle)==6
+                     xlabel(['R',nom_arti,' (deg) Pro(+)/Sup(-)']);
+         else
+                      xlabel(['R',nom_arti,' (deg)']);
+         end
     else
         title(['L',nom_muscle])
-         xlabel(['L',nom_arti,' (deg)']);
+         if ~isempty(intersect(nom_muscle,'Radius'))&& length(nom_muscle)==6
+                     xlabel(['L',nom_arti,' (deg) Pro(-)/Sup(+)']);
+         else
+                      xlabel(['L',nom_arti,' (deg)']);
+         end
     end
     
     ylabel(['Moment arm (m/', num2str(echelle), ')' ])
