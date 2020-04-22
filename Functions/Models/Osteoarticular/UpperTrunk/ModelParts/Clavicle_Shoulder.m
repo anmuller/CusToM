@@ -37,8 +37,8 @@ end
 
 %% Solid numbering incremation
 
-s=size(Human_model,2)+1;  %#ok<NASGU> % numéro du premier solide
-for i=1:size(list_solid,2)      % numérotation de chaque solide : s_"nom du solide"
+s=size(Human_model,2)+1;  %#ok<NASGU> % numï¿½ro du premier solide
+for i=1:size(list_solid,2)      % numï¿½rotation de chaque solide : s_"nom du solide"
     if i==1
         eval(strcat('s_',list_solid{i},'=s;'))
     else
@@ -65,10 +65,10 @@ else
             error([AttachmentPoint ' is no existent'])
         end
     end
-    if Human_model(s_mother).child == 0      % si la mère n'a pas d'enfant
-        Human_model(s_mother).child = eval(['s_' list_solid{1}]);    % l'enfant de cette mère est ce solide
+    if Human_model(s_mother).child == 0      % si la mï¿½re n'a pas d'enfant
+        Human_model(s_mother).child = eval(['s_' list_solid{1}]);    % l'enfant de cette mï¿½re est ce solide
     else
-        [Human_model]=sister_actualize(Human_model,Human_model(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la dernière soeur
+        [Human_model]=sister_actualize(Human_model,Human_model(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la derniï¿½re soeur
     end
 end
 
@@ -174,7 +174,7 @@ Human_model(incr_solid).I=[I_clavicle(1) I_clavicle(4) I_clavicle(5); I_clavicle
 Human_model(incr_solid).c=-Clavicle_scJointNode;
 Human_model(incr_solid).anat_position=Clavicle_position_set;
 Human_model(incr_solid).visual_file = ['Holzbaur/clavicle_' lower(Side) '.mat'];
-Human_model(incr_solid).comment='Clavivle Protraction(+)/Retraction(-)';
+Human_model(incr_solid).comment='Clavicle Protraction(+)/Retraction(-)';
 
 end
 
