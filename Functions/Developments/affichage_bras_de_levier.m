@@ -57,7 +57,7 @@ end
 Nb_muscles=numel(BiomechanicalModel.Muscles);
 Nb_q=numel(HumanModel)-6*(~isempty(intersect(osnames,'root0')));
 
-angle=minangledeg:(maxangledeg-minangledeg)/100:maxangledeg;
+angle=minangledeg:(maxangledeg-minangledeg)/50:maxangledeg;
 Nb_frames=length(angle);
 q=zeros(Nb_q,Nb_frames);
 
