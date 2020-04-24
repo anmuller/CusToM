@@ -81,9 +81,9 @@ for k=1:2
     
     if k==1
         title(['R',nom_muscle])
-         if ~isempty(intersect(nom_arti,'Radius')) && length(nom_arti)==6
+         if size(intersect(nom_arti,'Radius'),2)== length(nom_arti)
                      xlabel(['R',nom_arti,' (deg) Pro(+)/Sup(-)']);
-         else if ~isempty(intersect(nom_arti,'Hand')) && length(nom_arti)==4
+         else if size(intersect(nom_arti,'Hand'),2)== length(nom_arti)
                     xlabel(['R',nom_arti,' (deg) Uln(+)/Rad(-)']);
              else
                       xlabel(['R',nom_arti,' (deg)']);
@@ -91,9 +91,9 @@ for k=1:2
          end
     else
         title(['L',nom_muscle])
-         if ~isempty(intersect(nom_arti,'Radius'))&& length(nom_arti)==6
+         if size(intersect(nom_arti,'Radius'),2)== length(nom_arti)
                      xlabel(['L',nom_arti,' (deg) Pro(-)/Sup(+)']);
-         else if ~isempty(intersect(nom_arti,'Hand')) && length(nom_arti)==4
+         else if size(intersect(nom_arti,'Hand'),2)== length(nom_arti)
                     xlabel(['L',nom_arti,' (deg) Uln(-)/Rad(+)']);
              else
                       xlabel(['L',nom_arti,' (deg)']);
