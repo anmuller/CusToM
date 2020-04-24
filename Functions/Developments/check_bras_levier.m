@@ -39,4 +39,4 @@ affichage_bras_de_levier('FlexorDigitorumSuperior',0,'Radius_J1',0,0,130,1);
 
 affichage_bras_de_levier('FlexorCarpiRadialis',0,'Hand',0,-25,35,1);
 affichage_bras_de_levier('FlexorCarpiRadialis',0,'Wrist_J1',0,-70,70,1);
-
+affichage_bras_de_levier('FlexorCarpiRadialis',0,'Radius_J1',0,0,130,1);
