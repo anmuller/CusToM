@@ -120,9 +120,10 @@ Hand_position_set= {...
     [Signe 'Hand_CubitalisAnterior_i'],Pennestri2custom*[0.006 0.0027 0.007]'+Hand_WristJointNode';
     [Signe 'Hand_FlexorCarpiUlnaris_i'],Pennestri2custom*[0.005 0.03 0.007]'+Hand_WristJointNode'+k*Mirror*[0.01 0 0.02]'; %Addition of a correction
     
-    [Signe 'Hand_ExtensorCarpiUlnaris_i'],Pennestri2custom*[0.005 0.03 -0.007]'+Hand_WristJointNode'+k*Mirror*[-0.008 0.003 0]';
+    [Signe 'Hand_ExtensorCarpiUlnaris_i'],Pennestri2custom*[0.005 0.03 -0.007]'+Hand_WristJointNode'+k*Mirror*[-0.008 0.003 0]';%Addition of a correction
  
-    [Signe 'Hand_ExtensorDigitorum_i'],Pennestri2custom*[0.038 0 -0.01]'+Hand_WristJointNode';
+    [Signe 'Hand_ExtensorDigitorum_i'],Pennestri2custom*[0.038 0 -0.01]'+Hand_WristJointNode'+k*Mirror*[-0.02 0.03 -0.005]';%Addition of a correction
+   
     [Signe 'Hand_FlexorDigitorumSuperior_i'],Pennestri2custom*[0.005 -0.018 -0.006]'+Hand_WristJointNode';
     [Signe 'Hand_FlexorCapriRadialis_i'],Pennestri2custom*[0.003 0.012 0.005]'+Hand_WristJointNode';
     [Signe 'Hand_AbductorDigitiV_i'],Pennestri2custom*[0.01 -0.018 -0.007]'+Hand_WristJointNode';
