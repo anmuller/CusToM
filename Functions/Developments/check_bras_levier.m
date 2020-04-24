@@ -25,6 +25,7 @@ affichage_bras_de_levier('FlexorCarpiUlnaris',0,'Radius_J1',0,0,130,1);
 
 affichage_bras_de_levier('ExtensorCarpiUlnaris',0,'Hand',0,-25,35,1);
 affichage_bras_de_levier('ExtensorCarpiUlnaris',0,'Wrist_J1',0,-70,70,1);
+affichage_bras_de_levier('ExtensorCarpiUlnaris',0,'Radius_J1',0,0,130,1);
 
 affichage_bras_de_levier('ExtensorDigitorum',0,'Hand',0,-25,35,1);
 affichage_bras_de_levier('ExtensorDigitorum',0,'Wrist_J1',0,-70,70,1);
