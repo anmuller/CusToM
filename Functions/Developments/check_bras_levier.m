@@ -43,6 +43,8 @@ affichage_bras_de_levier('FlexorCarpiRadialis',0,'Radius_J1',0,0,130,1);
 
 % Arm abduction = Glenohumeral_J2
 affichage_bras_de_levier('Deltoid_pos',0,'Glenohumeral_J2',0,0,-80,100);
+affichage_bras_de_levier('Deltoid_ant',0,'Glenohumeral_J2',0,0,-80,100);
+affichage_bras_de_levier('Deltoid_mid',0,'Glenohumeral_J2',0,0,-80,100);
 affichage_bras_de_levier('Lat_1',0,'Glenohumeral_J2',0,0,-80,100);
 hold on
 affichage_bras_de_levier('Lat_2',0,'Glenohumeral_J2',0,0,-80,100);
@@ -53,6 +55,8 @@ hold on
 affichage_bras_de_levier('PECM2',0,'Glenohumeral_J2',0,0,-80,100);
 affichage_bras_de_levier('PECM3',0,'Glenohumeral_J2',0,0,-80,100);
 hold off
-
+affichage_bras_de_levier('Supraspinatus',0,'Glenohumeral_J2',0,0,-80,100);
+affichage_bras_de_levier('Infraspinatus',0,'Glenohumeral_J2',0,0,-80,100);
+affichage_bras_de_levier('Coracobrachialis',0,'Glenohumeral_J2',0,0,-80,100);
 
 
