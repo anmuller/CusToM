@@ -1,4 +1,4 @@
-function affichage_bras_de_levier(nom_muscle,num_muscle,nom_arti,num_arti,minangledeg,maxangledeg,echelle)
+function affichage_bras_de_levier(BiomechanicalModel,nom_muscle,num_muscle,nom_arti,num_arti,minangledeg,maxangledeg,echelle)
 % Permet l'affichage des bras de levier pour un muscle donné et une
 % articulation donnée
 % Attention, à faire tourner dans le dossier où est placé le
@@ -19,7 +19,7 @@ function affichage_bras_de_levier(nom_muscle,num_muscle,nom_arti,num_arti,minang
 % ou, pour un BiomechanicalModel donné : 
 % affichage_bras_de_levier([],40,[],40,-90,90,100);
 
-load('BiomechanicalModel.mat');
+%load('BiomechanicalModel.mat');
 HumanModel=BiomechanicalModel.OsteoArticularModel;
 Muscles=BiomechanicalModel.Muscles;
 
