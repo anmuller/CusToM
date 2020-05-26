@@ -22,7 +22,7 @@ function [varargout] = PlotAnimation(ModelParameters, AnimateParameters)
 options=OptionsChoices(BiomechanicalModel,AnimateParameters);
 
 % Preliminary computations
-if options.seg_anim && ~DataXSens %anatomical position where other segments are attached
+if (options.seg_anim || options.AnatLandmark || isfield(options,'num_mus')) && ~DataXSens %anatomical position where other segments are attached
     [Human_model] = anat_position_solid_repere(Human_model,find(~[Human_model.mother]));
 end
 
@@ -63,7 +63,8 @@ end
 
 %Initialization animStruct
 animStruct=struct();
-if isfield(AnimateParameters,'Mode')  && ~isequal(AnimateParameters.Mode, 'GenerateParameters')
+if (isfield(AnimateParameters,'Mode')  && ~isequal(AnimateParameters.Mode, 'GenerateParameters') &&...
+        isfield(AnimateParameters,'Noc3d') &&  ~AnimateParameters.Noc3d)
     animStruct.Time=ExperimentalData.Time;
 end
 
