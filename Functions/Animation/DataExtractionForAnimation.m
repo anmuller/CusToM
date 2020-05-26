@@ -64,7 +64,10 @@ else
         Markers_set = BiomechanicalModel.Markers;
         Muscles = BiomechanicalModel.Muscles;
         q6dof = [0 0 0 0 -110*pi/180 0]'; % rotation for visual
-        q = zeros(numel(Human_model)-6,1);
+        q = zeros(numel(Human_model)-6,1);       
+        if isfield(AnimateParameters,'sol_anim')
+            q(AnimateParameters.sol_anim)=AnimateParameters.angle*pi/180;
+        end
     else
         load('AnalysisParameters.mat'); %#ok<LOAD>
         num_ext = numel(AnalysisParameters.General.Extension)-1;
