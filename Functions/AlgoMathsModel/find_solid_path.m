@@ -1,5 +1,6 @@
 function [solid_1_path,solid_2_path]=find_solid_path(Human_model,i,k)
 % Identification of the hierarchical path between two solids
+%
 %   INPUT
 %   - Human_model: osteo-articular model (see the Documentation for the
 %   structure)
