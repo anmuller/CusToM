@@ -63,13 +63,13 @@ R(:,:,1)    =   MomentArmsComputationNum(BiomechanicalModel,q(:,1),0.0001); %dep
 
  for i=1:Nb_frames % for each frames
      Lmt(idm,i)   =   MuscleLengthComputationNum(BiomechanicalModel,q(:,i)); %dependant of every q (q_complete)
-    % R(:,:,i)    =   MomentArmsComputationNum(BiomechanicalModel,q(:,i),0.0001); %depend on reduced set of q (q_red)
-     R(:,:,i)    =   R(:,:,1);
+    R(:,:,i)    =   MomentArmsComputationNum(BiomechanicalModel,q(:,i),0.0001); %depend on reduced set of q (q_red)
+%      R(:,:,i)    =   R(:,:,1);
  end
-%load('/home/clivet/Documents/Thèse/Developpement_CusToM/thesis/Fichiers_tests/Donnees a traiter/Ana Lucia Data - Sbj 1 - Trial 1 - Forearm model/Throwing_1/MuscleForcesComputationResults.mat');
-%R=   MuscleForcesComputationResults.MuscleLeverArm ;
+% %load('/home/clivet/Documents/Thèse/Developpement_CusToM/thesis/Fichiers_tests/Donnees a traiter/Ana Lucia Data - Sbj 1 - Trial 1 - Forearm model/Throwing_1/MuscleForcesComputationResults.mat');
+% R=   MuscleForcesComputationResults.MuscleLeverArm ;
 
-R=bras_levier_litt(BiomechanicalModel,R);
+% R=bras_levier_litt(BiomechanicalModel,R);
 
 Lm = Lmt(idm,:)./(Ls./L0+1);
 % Muscle length ratio to optimal length
