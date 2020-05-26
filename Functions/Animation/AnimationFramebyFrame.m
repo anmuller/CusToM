@@ -596,41 +596,41 @@ for f=f_affich
         animStruct.Set{f} = {animStruct.Set{f}{:},Fmu,Vmu,CEmu};
         
         
-        if isfield(Human_model,'wrap')
-            Fw=[];
-            CEw=[];
-            Vw=[];
-            Wraps = [Human_model.wrap];
-            
-            for i_w = 1:numel(Wraps)
-                num_solid=Wraps(i_w).num_solid;
-                if ~isempty(intersect(concerned_bones,num_solid))
-                    T_Ri_Rw=[Wraps(i_w).orientation,Wraps(i_w).location;[0 0 0],1];
-                    X = Human_model_bis(num_solid).Tc_R0_Ri*T_Ri_Rw;
-                    [Fcyl,Vcyl]=PlotCylinder(Wraps(i_w).R,Wraps(i_w).h);
-                    Vcyl_R0= (X*[Vcyl';ones(1,length(Vcyl))])';
-                    tot_nb_F=length(Fw);
-                    cur_nb_F=length(Fcyl);
-                    tot_nb_V=length(Vw);
-                    Fw((1:cur_nb_F)+tot_nb_F,:)=Fcyl+tot_nb_V;
-                    Vw=[Vw ;Vcyl_R0(:,1:3)]; %#ok<AGROW>
-                end
-            end
-            if isfield(AnimateParameters,'Mode')  && (isequal(AnimateParameters.Mode, 'Figure') ...
-                    || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
-                    || isequal(AnimateParameters.Mode, 'GenerateAnimate'))
-                finv = figure('visible','off');
-                hw=gpatch(Fw,Vw,'c','none',0.75);
-                copyobj(hw,ax);
-                close(finv);
-            elseif f==f_affich(1)
-                hw=gpatch(Fw,Vw,'c','none',0.75);
-            end
-            animStruct.Handles{f} = [animStruct.Handles{f} hw];
-            animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices'};
-            animStruct.Set{f} = {animStruct.Set{f}{:},Vw};
-        end
-        
+%         if isfield(Human_model,'wrap')
+%             Fw=[];
+%             CEw=[];
+%             Vw=[];
+%             Wraps = [Human_model.wrap];
+%             
+%             for i_w = 1:numel(Wraps)
+%                 num_solid=Wraps(i_w).num_solid;
+%                 if ~isempty(intersect(concerned_bones,num_solid))
+%                     T_Ri_Rw=[Wraps(i_w).orientation,Wraps(i_w).location;[0 0 0],1];
+%                     X = Human_model_bis(num_solid).Tc_R0_Ri*T_Ri_Rw;
+%                     [Fcyl,Vcyl]=PlotCylinder(Wraps(i_w).R,Wraps(i_w).h);
+%                     Vcyl_R0= (X*[Vcyl';ones(1,length(Vcyl))])';
+%                     tot_nb_F=length(Fw);
+%                     cur_nb_F=length(Fcyl);
+%                     tot_nb_V=length(Vw);
+%                     Fw((1:cur_nb_F)+tot_nb_F,:)=Fcyl+tot_nb_V;
+%                     Vw=[Vw ;Vcyl_R0(:,1:3)]; %#ok<AGROW>
+%                 end
+%             end
+%             if isfield(AnimateParameters,'Mode')  && (isequal(AnimateParameters.Mode, 'Figure') ...
+%                     || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
+%                     || isequal(AnimateParameters.Mode, 'GenerateAnimate'))
+%                 finv = figure('visible','off');
+%                 hw=gpatch(Fw,Vw,'c','none',0.75);
+%                 copyobj(hw,ax);
+%                 close(finv);
+%             elseif f==f_affich(1)
+%                 hw=gpatch(Fw,Vw,'c','none',0.75);
+%             end
+%             animStruct.Handles{f} = [animStruct.Handles{f} hw];
+%             animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices'};
+%             animStruct.Set{f} = {animStruct.Set{f}{:},Vw};
+%         end
+%         
         
         
         
