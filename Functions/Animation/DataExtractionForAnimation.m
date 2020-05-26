@@ -49,35 +49,45 @@ ExperimentalData=[];
 BiomechanicalModel=[];
 filename=[];
 
-if isfield(AnimateParameters,'Mode') && isequal(AnimateParameters.Mode, 'GenerateParameters')
+if (isfield(AnimateParameters,'Mode') && isequal(AnimateParameters.Mode, 'GenerateParameters'))
     [Human_model, Markers_set, Muscles, EnableModel] = ModelGeneration(ModelParameters);
     [Human_model] = Add6dof(Human_model);
     [Markers_set]=VerifMarkersOnModel(Human_model,Markers_set);
     q6dof = [0 0 0 0 -110*pi/180 0]'; % rotation for visual
     q = zeros(numel(Human_model)-6,1);
 else
-    load('AnalysisParameters.mat'); %#ok<LOAD>
-    num_ext = numel(AnalysisParameters.General.Extension)-1;
-    % Filename
-    filename = AnimateParameters.filename(1:end-num_ext);
-    % Files loading
-    load('BiomechanicalModel.mat'); %#ok<LOAD>
-    Human_model = BiomechanicalModel.OsteoArticularModel;
-    load([filename '/InverseKinematicsResults.mat']); %#ok<LOAD>
-    q = InverseKinematicsResults.JointCoordinates;
-    load([filename '/ExperimentalData.mat']); %#ok<LOAD>
-    if isfield(InverseKinematicsResults,'FreeJointCoordinates')
-        q6dof = InverseKinematicsResults.FreeJointCoordinates;
+    if ( isfield(AnimateParameters,'Noc3d') &&  AnimateParameters.Noc3d )
+        load('AnalysisParameters.mat'); %#ok<LOAD>
+        num_ext = numel(AnalysisParameters.General.Extension)-1;
+        load('BiomechanicalModel.mat'); %#ok<LOAD>
+        Human_model = BiomechanicalModel.OsteoArticularModel;
         Markers_set = BiomechanicalModel.Markers;
         Muscles = BiomechanicalModel.Muscles;
-        real_markers = ExperimentalData.MarkerPositions;
+        q6dof = [0 0 0 0 -110*pi/180 0]'; % rotation for visual
+        q = zeros(numel(Human_model)-6,1);
     else
-        DataXSens = 1;
-        PelvisPosition = InverseKinematicsResults.PelvisPosition;
-        PelvisOrientation = InverseKinematicsResults.PelvisOrientation;
+        load('AnalysisParameters.mat'); %#ok<LOAD>
+        num_ext = numel(AnalysisParameters.General.Extension)-1;
+        % Filename
+        filename = AnimateParameters.filename(1:end-num_ext);
+        % Files loading
+        load('BiomechanicalModel.mat'); %#ok<LOAD>
+        Human_model = BiomechanicalModel.OsteoArticularModel;
+        load([filename '/InverseKinematicsResults.mat']); %#ok<LOAD>
+        q = InverseKinematicsResults.JointCoordinates;
+        load([filename '/ExperimentalData.mat']); %#ok<LOAD>
+        if isfield(InverseKinematicsResults,'FreeJointCoordinates')
+            q6dof = InverseKinematicsResults.FreeJointCoordinates;
+            Markers_set = BiomechanicalModel.Markers;
+            Muscles = BiomechanicalModel.Muscles;
+            real_markers = ExperimentalData.MarkerPositions;
+        else
+            DataXSens = 1;
+            PelvisPosition = InverseKinematicsResults.PelvisPosition;
+            PelvisOrientation = InverseKinematicsResults.PelvisOrientation;
+        end
     end
 end
-
 
 % exclude non used markers
 if ~DataXSens

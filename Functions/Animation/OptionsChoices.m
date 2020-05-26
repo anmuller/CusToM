@@ -118,11 +118,16 @@ else
 end
 
 if isfield(AnimateParameters,'Segment')
-[~,options.Segment]=intersect({BiomechanicalModel.OsteoArticularModel.name},AnimateParameters.Segment);
+    [~,options.Segment]=intersect({BiomechanicalModel.OsteoArticularModel.name},AnimateParameters.Segment);
+    options.Segment=options.Segment';
 else
     options.Segment=[];
 end
 
+if isfield(AnimateParameters,'Muscles') && ~isempty(AnimateParameters.Muscles)
+    [~,num_mus]=intersect({BiomechanicalModel.Muscles.name},AnimateParameters.Muscles);
+    options.num_mus=num_mus';
+end
 
 
 end
