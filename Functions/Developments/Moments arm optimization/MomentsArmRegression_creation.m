@@ -17,3 +17,5 @@ MomentsArmRegression(k).regression(2).equation=1;
 MomentsArmRegression(k).regression(2).primaryjoint='RUD';
 MomentsArmRegression(k).regression(1).coeffs=[10.3467 1.0641 1.0495]';
 MomentsArmRegression(k).regression(2).coeffs=[1.6252 6.3604]';
+
+save('MomentsArmRegression.mat','MomentsArmRegression');
