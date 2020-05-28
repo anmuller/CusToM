@@ -19,7 +19,7 @@ for sign=deuxcoteoupas
     
     
      [sp1,sp2]=find_solid_path(BiomechanicalModel.OsteoArticularModel,min(num_solid),max(num_solid));
-    num_solid=unique([num_solid', sp1, sp2]');
+    num_solid=unique([num_solid, sp1, sp2]');
  
     for k=1:numel(num_solid)
         q(k,:)=linspace(BiomechanicalModel.OsteoArticularModel(num_solid(k)).limit_inf,BiomechanicalModel.OsteoArticularModel(num_solid(k)).limit_sup,nb_pts);
