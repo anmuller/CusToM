@@ -57,11 +57,11 @@ end
 
  nb_points=30;
 
-lmax=zeros(length(deuxcoteoupas),1);
-for k=deuxcoteoupas
-    lmax(k)=BiomechanicalModel.Muscles(num_muscle(k)).lmax;
-end
-
+% lmax=zeros(length(deuxcoteoupas),1);
+% for k=deuxcoteoupas
+%     lmax(k)=BiomechanicalModel.Muscles(num_muscle(k)).lmax;
+% end
+ lmax=BiomechanicalModel.Muscles(num_muscle(1)).lmax;
 
 options = optimoptions(@fmincon,'Algorithm','sqp','Display','final','GradObj','off','GradConstr','off','TolFun',1e-16,'TolCon',1e-16,'MaxIterations',100000,'MaxFunEvals',10000,'StepTolerance',1e-14);%,'PlotFcn','optimplotfval');
 

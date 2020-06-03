@@ -25,12 +25,11 @@ for j=1:size(Regression,2)
             rangeq2=linspace(BiomechanicalModel.OsteoArticularModel(joint_num2).limit_inf,BiomechanicalModel.OsteoArticularModel(joint_num2).limit_sup,nb_points);
             
             
-            q1=rangeq1;
-            for p=1:nb_points
-                q2=rangeq2(p);
-                for i=1:nb_points
-                    ideal_curve=[ ideal_curve equation2(Regression(j).coeffs,q1(i),q2)];
-                end
+            [X,Y]=meshgrid(rangeq1,rangeq2);
+            Xline=X(:);
+            Yline=Y(:);
+            for i=1:length(Xline)
+                    ideal_curve=[ ideal_curve equation2(Regression(j).coeffs,Xline(i),Yline(i))];
             end
             
         else
@@ -43,12 +42,11 @@ for j=1:size(Regression,2)
                 rangeq2=linspace(BiomechanicalModel.OsteoArticularModel(joint_num2).limit_inf,BiomechanicalModel.OsteoArticularModel(joint_num2).limit_sup,nb_points);
                 
                 
-                q1=rangeq1;
-                for p=1:nb_points
-                    q2=rangeq2(p);
-                    for i=1:nb_points
-                        ideal_curve=[ ideal_curve equation3(Regression(j).coeffs,q1(i),q2)];
-                    end
+                [X,Y]=meshgrid(rangeq1,rangeq2);
+                Xline=X(:);
+                Yline=Y(:);
+                for i=1:length(Xline)
+                        ideal_curve=[ ideal_curve equation2(Regression(j).coeffs,Xline(i),Yline(i))];
                 end
                 
             end

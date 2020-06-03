@@ -72,24 +72,94 @@ k=k+1;
 %% PronatorQuadrus
 MomentsArmRegression(k).name='PronatorQuadrus';
 MomentsArmRegression(k).regression(1).equation=3;
-MomentsArmRegression(k).regression(1).primaryjoint='Radius_J1';
+MomentsArmRegression(k).regression(1).primaryjoint='Ulna';
 MomentsArmRegression(k).regression(1).secondaryjoint='Radius';
 MomentsArmRegression(k).regression(1).coeffs=[11.0405 -1.0079 0.3933 -10.4824 -12.1639 -0.4369 36.9174 3.5232 -10.4223 21.2604 -37.2444 10.2666 -11.0060 14.5974 -3.9919 1.7526 -2.0089 0.5460 ]';
 MomentsArmRegression(k).regression(2).equation=2;
 MomentsArmRegression(k).regression(2).primaryjoint='Radius';
-MomentsArmRegression(k).regression(2).secondaryjoint='Radius_J1';
+MomentsArmRegression(k).regression(2).secondaryjoint='Ulna';
 MomentsArmRegression(k).regression(2).coeffs=[ 5.0238 7.6939 -0.2566 0.9826 -3.3182 0 -0.3034  ]';
 
 k=k+1;
-%% SupinatorBrevis'=
+%% SupinatorBrevis
 MomentsArmRegression(k).name='SupinatorBrevis';
 MomentsArmRegression(k).regression(1).equation=1;
 MomentsArmRegression(k).regression(1).primaryjoint='Radius';
 MomentsArmRegression(k).regression(1).coeffs=[ -13.8661 3.4337 ]';
 
 
+k=k+1;
+%% ExtensorCarpiRadialisBrevis
+MomentsArmRegression(k).name='ExtensorCarpiRadialisBrevis';
+MomentsArmRegression(k).regression(1).equation=2;
+MomentsArmRegression(k).regression(1).primaryjoint='Radius_J1';
+MomentsArmRegression(k).regression(1).secondaryjoint='Radius';
+MomentsArmRegression(k).regression(1).coeffs=[ -11.256 17.8548 1.6398 -0.5073 -2.8827 0 -0.0942 ]';
+MomentsArmRegression(k).regression(2).equation=2;
+MomentsArmRegression(k).regression(2).primaryjoint='Radius';
+MomentsArmRegression(k).regression(2).secondaryjoint='Radius_J1';
+MomentsArmRegression(k).regression(2).coeffs=[  0.2024 -0.9210 2.8116 -1.3039 ]';
+MomentsArmRegression(k).regression(3).equation=1;
+MomentsArmRegression(k).regression(3).primaryjoint='Wrist_J1';
+MomentsArmRegression(k).regression(3).coeffs=[ -13.4337 2.1411];
+MomentsArmRegression(k).regression(4).equation=1;
+MomentsArmRegression(k).regression(4).primaryjoint='Hand';
+MomentsArmRegression(k).regression(4).coeffs=[ -8.9026 6.3445];
+
+k=k+1;
+%% ExtensorCarpiRadialisLongus
+MomentsArmRegression(k).name='ExtensorCarpiRadialisLongus';
+MomentsArmRegression(k).regression(1).equation=2;
+MomentsArmRegression(k).regression(1).primaryjoint='Radius_J1';
+MomentsArmRegression(k).regression(1).secondaryjoint='Radius';
+MomentsArmRegression(k).regression(1).coeffs=[ -7.7034 16.3913 7.4361 -1.7566 0 -1.3336 0 0.0742 ]';
+MomentsArmRegression(k).regression(2).equation=2;
+MomentsArmRegression(k).regression(2).primaryjoint='Radius';
+MomentsArmRegression(k).regression(2).secondaryjoint='Radius_J1';
+MomentsArmRegression(k).regression(2).coeffs=[  -0.4621 -1.0054 6.5392 -2.3266 0 -0.5677 0 -0.0837]';
+MomentsArmRegression(k).regression(3).equation=1;
+MomentsArmRegression(k).regression(3).primaryjoint='Wrist_J1';
+MomentsArmRegression(k).regression(3).coeffs=[ -11.7166 2.2850];
+MomentsArmRegression(k).regression(4).equation=1;
+MomentsArmRegression(k).regression(4).primaryjoint='Hand';
+MomentsArmRegression(k).regression(4).coeffs=[ -19.6240 5.5435];
 
 
+
+
+k=k+1;
+%% ExtensorCarpiUlnaris
+MomentsArmRegression(k).name='ExtensorCarpiUlnaris';
+MomentsArmRegression(k).regression(1).equation=1;
+MomentsArmRegression(k).regression(1).primaryjoint='Wrist_J1';
+MomentsArmRegression(k).regression(1).coeffs=[-8.5156 3.1064];
+MomentsArmRegression(k).regression(2).equation=1;
+MomentsArmRegression(k).regression(2).primaryjoint='Hand';
+MomentsArmRegression(k).regression(2).coeffs=[24.0633 3.8461];
+
+% Data for elbowflexion
+% Taken from Gonzalez, R. V., Buchanan, T. S., & Delp, S. L. (1997). How muscle architecture and moment arms affect wrist flexion-extension moments. Journal of Biomechanics, 30(7), 705–712. https://doi.org/10.1016/S0021-9290(97)00015-8
+% From measures in OpenSim
+
+x=[4 12 21 37 53.8 70 77.5 84 91 95.8 101 105 109 114 118 122 126 129]*pi/180;
+y=[0.0025 0.00275 0.0030 0.00325 0.00325:-0.00025:0 ];
+
+p=polyfit(x,y,2);
+MomentsArmRegression(k).regression(3).primaryjoint='Radius_J1';
+MomentsArmRegression(k).regression(3).equation=1;
+MomentsArmRegression(k).regression(3).coeffs=flip(p)';
+
+% Data for elbowpronation
+% Taken from Gonzalez, R. V., Buchanan, T. S., & Delp, S. L. (1997). How muscle architecture and moment arms affect wrist flexion-extension moments. Journal of Biomechanics, 30(7), 705–712. https://doi.org/10.1016/S0021-9290(97)00015-8
+% From measures in OpenSim
+
+x=[-55 -42.7 -33.6 -24.5 -15.5 -6.4 2.7 11 22.5 32 46 62.7 84.5]*pi/180;
+y=0.006:-0.001:-0.006;
+
+p=polyfit(x,y,3);
+MomentsArmRegression(k).regression(4).primaryjoint='Radius';
+MomentsArmRegression(k).regression(4).equation=1;
+MomentsArmRegression(k).regression(4).coeffs=flip(p)';
 
 
 
@@ -98,25 +168,114 @@ k=k+1;
 %% ExtensorDigitorum
 MomentsArmRegression(k).name='ExtensorDigitorum';
 MomentsArmRegression(k).regression(1).equation=1;
-%MomentsArmRegression(k).regression(1).primaryjoint={"WFE"};
 MomentsArmRegression(k).regression(1).primaryjoint='Wrist_J1';
-MomentsArmRegression(k).regression(2).equation=1;
-%MomentsArmRegression(k).regression(2).primaryjoint={"RUD"};
-MomentsArmRegression(k).regression(2).primaryjoint='Hand';
 MomentsArmRegression(k).regression(1).coeffs=[-14.1276 1.7325]';
+MomentsArmRegression(k).regression(2).equation=1;
+MomentsArmRegression(k).regression(2).primaryjoint='Hand';
 MomentsArmRegression(k).regression(2).coeffs=[2.0459 4.5732]';
 
-% MomentsArmRegression(k).regression(3).primaryjoint='Radius_J1';
-% % Data for elbowflexion
-% % Taken from Gonzalez, R. V., Buchanan, T. S., & Delp, S. L. (1997). How muscle architecture and moment arms affect wrist flexion-extension moments. Journal of Biomechanics, 30(7), 705–712. https://doi.org/10.1016/S0021-9290(97)00015-8
-% % From measures in OpenSim
-% 
+% Data for elbowflexion
+% Taken from Gonzalez, R. V., Buchanan, T. S., & Delp, S. L. (1997). How muscle architecture and moment arms affect wrist flexion-extension moments. Journal of Biomechanics, 30(7), 705–712. https://doi.org/10.1016/S0021-9290(97)00015-8
+% From measures in OpenSim
+
 % x=[15, 40, 52.5 , 62, 71, 79 ,86, 93, 100, 106 , 112, 121, 127]*pi/180;
 % y=-0.01:0.001:0.002;
 % 
 % p=polyfit(x,y,2);
+% MomentsArmRegression(k).regression(3).primaryjoint='Radius_J1';
 % MomentsArmRegression(k).regression(3).equation=1;
 % MomentsArmRegression(k).regression(3).coeffs=flip(p)';
+% 
+% 
+% 
+% % Data for elbowpronation
+% % Taken from Gonzalez, R. V., Buchanan, T. S., & Delp, S. L. (1997). How muscle architecture and moment arms affect wrist flexion-extension moments. Journal of Biomechanics, 30(7), 705–712. https://doi.org/10.1016/S0021-9290(97)00015-8
+% % From measures in OpenSim
+% 
+% x=[-88 -75.5 -57 -13.6 4.5 15.5 26.4 35.5 44.5 53.6 62.7 71.8 81 90]*pi/180;
+% y=[0.001 0.00125 0.0015 0.0015:-0.00025:-0.0010];
+% 
+% p=polyfit(x,y,3);
+% MomentsArmRegression(k).regression(4).primaryjoint='Radius';
+% MomentsArmRegression(k).regression(4).equation=1;
+% MomentsArmRegression(k).regression(4).coeffs=flip(p)';
+% 
+
+
+
+
+k=k+1;
+%% FlexorCarpiRadialis
+MomentsArmRegression(k).name='FlexorCarpiRadialis';
+MomentsArmRegression(k).regression(1).equation=1;
+MomentsArmRegression(k).regression(1).primaryjoint='Wrist_J1';
+MomentsArmRegression(k).regression(1).coeffs=[13.2040 1.5995]';
+MomentsArmRegression(k).regression(2).equation=1;
+MomentsArmRegression(k).regression(2).primaryjoint='Hand';
+MomentsArmRegression(k).regression(2).coeffs=[-10.1898 5.5019]';
+
+% Data for elbowflexion
+% Taken from Gonzalez, R. V., Buchanan, T. S., & Delp, S. L. (1997). How muscle architecture and moment arms affect wrist flexion-extension moments. Journal of Biomechanics, 30(7), 705–712. https://doi.org/10.1016/S0021-9290(97)00015-8
+% From measures in OpenSim
+
+x=[0 4 7.5 11 15 18.5 23 27 31 35.4 39 43 48.5 53.8 59 65 72 81 101 122 131]*pi/180;
+y=[-0.0003:0.0001:0.0015 0.0014 0.0013];
+
+p=polyfit(x,y,3);
+MomentsArmRegression(k).regression(3).primaryjoint='Radius_J1';
+MomentsArmRegression(k).regression(3).equation=1;
+MomentsArmRegression(k).regression(3).coeffs=flip(p)';
+
+
+% Data for elbowflexion
+% Taken from Gonzalez, R. V., Buchanan, T. S., & Delp, S. L. (1997). How muscle architecture and moment arms affect wrist flexion-extension moments. Journal of Biomechanics, 30(7), 705–712. https://doi.org/10.1016/S0021-9290(97)00015-8
+% From measures in OpenSim
+
+x=[-88 -82.7 -77.3 -71.8 -66.4 -60 -55.5 -50.5 -43 -37 -31.8 -25 -19 -11.8 -2.7  10  51.8 62.7 71.8 80 86]*pi/180;
+y=[-0.0025:0.0005:0.005 0.005:-0.0005:0.003];
+
+p=polyfit(x,y,3);
+MomentsArmRegression(k).regression(4).primaryjoint='Radius';
+MomentsArmRegression(k).regression(4).equation=1;
+MomentsArmRegression(k).regression(4).coeffs=flip(p)';
+
+
+
+
+
+k=k+1;
+%% FlexorCarpiUlnaris
+MomentsArmRegression(k).name='FlexorCarpiUlnaris';
+MomentsArmRegression(k).regression(1).equation=1;
+MomentsArmRegression(k).regression(1).primaryjoint='Wrist_J1';
+MomentsArmRegression(k).regression(1).coeffs=[11.2147 4.6725 1.3307]';
+MomentsArmRegression(k).regression(2).equation=1;
+MomentsArmRegression(k).regression(2).primaryjoint='Hand';
+MomentsArmRegression(k).regression(2).coeffs=[19.6193 13.2905]';
+
+% Data for elbowflexion
+% Taken from Gonzalez, R. V., Buchanan, T. S., & Delp, S. L. (1997). How muscle architecture and moment arms affect wrist flexion-extension moments. Journal of Biomechanics, 30(7), 705–712. https://doi.org/10.1016/S0021-9290(97)00015-8
+% From measures in OpenSim
+
+x=[1 10 18 26 32.5 39 45 51 57 62.5 68 75 82 87.5 95 103 112.5 125]*pi/180;
+y=-0.002:0.00025:0.00225;
+
+p=polyfit(x,y,3);
+MomentsArmRegression(k).regression(3).primaryjoint='Radius_J1';
+MomentsArmRegression(k).regression(3).equation=1;
+MomentsArmRegression(k).regression(3).coeffs=flip(p)';
+
+% Data for elbowpronation
+% Taken from Gonzalez, R. V., Buchanan, T. S., & Delp, S. L. (1997). How muscle architecture and moment arms affect wrist flexion-extension moments. Journal of Biomechanics, 30(7), 705–712. https://doi.org/10.1016/S0021-9290(97)00015-8
+% From measures in OpenSim
+
+x=[-85 -79 -71 -63 -54 -42 -15 12  24 33 41 48 56 62 68 75 81 87  ]*pi/180;
+y=[0.00075 0.001 0.00125 0.0015 0.00175 0.002 0.00225 0.002 0.00175 0.00150 0.00125 0.001 0.00075 0.00050 0.00025 0 -0.00025 -0.0005];
+
+p=polyfit(x,y,3);
+MomentsArmRegression(k).regression(4).primaryjoint='Radius';
+MomentsArmRegression(k).regression(4).equation=1;
+MomentsArmRegression(k).regression(4).coeffs=flip(p)';
 
 
 
@@ -126,10 +285,38 @@ k=k+1;
 %% FlexorDigitorumSuperior
 MomentsArmRegression(k).name='FlexorDigitorumSuperior';
 MomentsArmRegression(k).regression(1).equation=1;
-MomentsArmRegression(k).regression(1).primaryjoint='WFE';
+MomentsArmRegression(k).regression(1).primaryjoint='Wrist_J1';
 MomentsArmRegression(k).regression(2).equation=1;
-MomentsArmRegression(k).regression(2).primaryjoint='RUD';
+MomentsArmRegression(k).regression(2).primaryjoint='Hand';
 MomentsArmRegression(k).regression(1).coeffs=[10.3467 1.0641 1.0495]';
 MomentsArmRegression(k).regression(2).coeffs=[1.6252 6.3604]';
 
-%save('MomentsArmRegression.mat','MomentsArmRegression');
+% Data for elbowflexion
+% Taken from Gonzalez, R. V., Buchanan, T. S., & Delp, S. L. (1997). How muscle architecture and moment arms affect wrist flexion-extension moments. Journal of Biomechanics, 30(7), 705–712. https://doi.org/10.1016/S0021-9290(97)00015-8
+% From measures in OpenSim
+
+x=[1.3 4 7.8 10.5 14 17.2 21 25 29 32.8 38 44.6 52 84 93 99 105 110 114 119 123 126 130]*pi/180;
+y=[-0.007:-0.001:-0.019 -0.019:0.001:-0.010];
+
+p=polyfit(x,y,2);
+MomentsArmRegression(k).regression(3).primaryjoint='Radius_J1';
+MomentsArmRegression(k).regression(3).equation=1;
+MomentsArmRegression(k).regression(3).coeffs=flip(p)';
+
+% Data for elbowpronation
+% Taken from Gonzalez, R. V., Buchanan, T. S., & Delp, S. L. (1997). How muscle architecture and moment arms affect wrist flexion-extension moments. Journal of Biomechanics, 30(7), 705–712. https://doi.org/10.1016/S0021-9290(97)00015-8
+% From measures in OpenSim
+
+x=[-86 -81 -75 -71 -66 -62.7 -57.3 -53.6 -48.2 -44.5 -40 -35.5 -31 -25 -21 -15.5 -8.2 -2.7 4.5 15.5 35 61 68 77 83 88]*pi/180;
+y=[-0.00175:0.00025:0.00325 0.003:-0.00025:0.002];
+
+p=polyfit(x,y,3);
+MomentsArmRegression(k).regression(4).primaryjoint='Radius';
+MomentsArmRegression(k).regression(4).equation=1;
+MomentsArmRegression(k).regression(4).coeffs=flip(p)';
+
+
+
+
+
+end

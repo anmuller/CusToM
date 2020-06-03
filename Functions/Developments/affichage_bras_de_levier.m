@@ -53,8 +53,9 @@ else
             [~,num_arti(2)]=intersect(osnames,['L',nom_arti]);
     end
 end
+idxm=find([BiomechanicalModel.Muscles.exist]);
+Nb_muscles=numel(idxm);
 
-Nb_muscles=numel(BiomechanicalModel.Muscles);
 Nb_q=numel(HumanModel)-6*(~isempty(intersect(osnames,'root0')));
 
 angle=minangledeg:(maxangledeg-minangledeg)/50:maxangledeg;
@@ -74,8 +75,11 @@ for k=1:2
     
     R=R*echelle;
     
+    
+    ind=find(idxm==num_muscle(k));
+    
     subplot(2,1,k)
-    temp=R(num_arti(k),num_muscle(k),:);
+    temp=R(num_arti(k),ind,:);
     plot(angle,temp(:),'LineWidth',3)
     ax=gca;
     

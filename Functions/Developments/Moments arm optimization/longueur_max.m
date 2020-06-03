@@ -39,7 +39,7 @@ end
 maxi=max(temp);
 
 
-lm = maxi-1.3*lmax;
+lm = maxi-1.5*lmax;
 
 ceq=0;
 
