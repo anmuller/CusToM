@@ -6,7 +6,6 @@ function [Muscles]=ArmMusclesPennestri(Muscles,Signe)
 %	- Pennestrì, E. , Stefanelli, R. , Valentini, P. P. , Vita, L.
 %	Virtual musculo-skeletal model for the biomechanical
 % analysis of the upper limb, Pennestrì2007
-
 %   INPUT
 %   - Muscles: set of muscles (see the Documentation for the structure)
 %   - Signe: Signe of the arm model ('R' for right Signe or 'L' for left Signe)
@@ -73,10 +72,10 @@ s=[s;{
     
     
     %     % Conservation du modèle de Holzbaur
-% % on conserve les biceps du modèle de Holzbaur sauf qu'on part de la
-%     % scapula pour le biceps short et glénoïde pour le biceps long
-    % [Signe 'BicepsL'],624.3,0.1157,4,0.2723,0,{[Signe 'Scapula_BicepsL_o'];[Signe 'Scapula_BicepsL_via1'];[Signe 'Humerus_BicepsL_via2'];[Signe 'Humerus_BicepsL_via3'];[Signe 'Humerus_BicepsL_via4'];[Signe 'Humerus_BicepsL_via5'];[Signe 'Humerus_BicepsL_via6'];[Signe 'Humerus_Biceps_via7'];[Signe 'Ulna_Biceps_i']},{};... arm26.osim       
- %    [Signe 'BicepsS'],435.56,0.1321,4,0.1923,0,{[Signe 'Scapula_BicepsS_o'];[Signe 'Scapula_BicepsS_via1'];[Signe 'Humerus_BicepsS_via2'];[Signe 'Humerus_BicepsS_via3'];[Signe 'Humerus_Biceps_via7'];[Signe 'Ulna_Biceps_i']},{};... arm26.osim    
+% on conserve les biceps du modèle de Holzbaur sauf qu'on part de la
+    % scapula pour le biceps short et glénoïde pour le biceps long
+    [Signe 'BicepsL'],624.3,0.1157,4,0.2723,0,{[Signe 'Scapula_BicepsL_o'];[Signe 'Scapula_BicepsL_via1'];[Signe 'Humerus_BicepsL_via2'];[Signe 'Humerus_BicepsL_via3'];[Signe 'Humerus_BicepsL_via4'];[Signe 'Humerus_BicepsL_via5'];[Signe 'Humerus_BicepsL_via6'];[Signe 'Humerus_Biceps_via7'];[Signe 'Ulna_Biceps_i']},{};... arm26.osim       
+    [Signe 'BicepsS'],435.56,0.1321,4,0.1923,0,{[Signe 'Scapula_BicepsS_o'];[Signe 'Scapula_BicepsS_via1'];[Signe 'Humerus_BicepsS_via2'];[Signe 'Humerus_BicepsS_via3'];[Signe 'Humerus_Biceps_via7'];[Signe 'Ulna_Biceps_i']},{};... arm26.osim    
 %     % on conserve les biceps du modèle de Holzbaur sauf qu'on part de la
 %     % scapula pour le triceps long
 %         [Signe 'TricepsLg'],798.5,0.134,4,0.143,0.209,{[Signe 'Scapula_Triceps_o'];[Signe 'Humerus_TricepsLg_via1'];[Signe 'Humerus_Triceps_via2'];[Signe 'Humerus_Triceps_via3'];[Signe 'Humerus_Triceps_via4'];[Signe 'Ulna_Triceps_via5'];[Signe 'Ulna_Triceps_i']},{};...       arm26.osim    

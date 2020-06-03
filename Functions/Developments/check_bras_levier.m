@@ -58,5 +58,4 @@ hold off
 affichage_bras_de_levier('Supraspinatus',0,'Glenohumeral_J2',0,0,-80,100);
 affichage_bras_de_levier('Infraspinatus',0,'Glenohumeral_J2',0,0,-80,100);
 affichage_bras_de_levier('Coracobrachialis',0,'Glenohumeral_J2',0,0,-80,100);
-
-
+affichage_bras_de_levier('Trapezius',0,'Glenohumeral_J2',0,0,-80,100);
