@@ -57,13 +57,13 @@ end
 Nb_muscles=numel(BiomechanicalModel.Muscles);
 Nb_q=numel(HumanModel)-6*(~isempty(intersect(osnames,'root0')));
 
-Nb_ClosedLoop = sum(~cellfun('isempty',{HumanModel.ClosedLoop}));
-list_q_ClosedLoop = [];
-for i=1:size(HumanModel,2)
-    if ~isempty(HumanModel(i).ClosedLoop)
-        list_q_ClosedLoop(end+1) = i;
-    end
-end
+% Nb_ClosedLoop = sum(~cellfun('isempty',{HumanModel.ClosedLoop}));
+% list_q_ClosedLoop = [];
+% for i=1:size(HumanModel,2)
+%     if ~isempty(HumanModel(i).ClosedLoop)
+%         list_q_ClosedLoop(end+1) = i;
+%     end
+% end
 
 angle=minangledeg:(maxangledeg-minangledeg)/50:maxangledeg;
 Nb_frames=length(angle);
@@ -75,10 +75,10 @@ figure()
 
 for k=1:2
     q(num_arti(k),:)=angle*pi/180;
-    if Nb_ClosedLoop~=0
-        nonlcon=@(qvar)ClosedLoop(qvar,nbClosedLoop);
-        
-    end
+%     if Nb_ClosedLoop~=0
+%         nonlcon=@(qvar)ClosedLoop(qvar,nbClosedLoop);
+%         
+%     end
     R=zeros(Nb_q,Nb_muscles,Nb_frames);
     for i=1:Nb_frames % for each frames
         R(:,:,i)    =   MomentArmsComputationNum(BiomechanicalModel,q(:,i),0.0001); %depend on reduced set of q (q_red)
