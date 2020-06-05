@@ -58,10 +58,10 @@ hold off
 affichage_bras_de_levier(BiomechanicalModel,'Supraspinatus',0,'Glenohumeral_J2',0,0,-80,100);
 affichage_bras_de_levier(BiomechanicalModel,'Infraspinatus',0,'Glenohumeral_J2',0,0,-80,100);
 affichage_bras_de_levier(BiomechanicalModel,'Coracobrachialis',0,'Glenohumeral_J2',0,0,-80,100);
-affichage_bras_de_levier('BicepsBrachii1',0,'Glenohumeral_J2',0,0,-80,100);
-affichage_bras_de_levier('Trapezius',0,'Glenohumeral_J2',0,0,-80,100);
-affichage_bras_de_levier('BicepsBrachii2',0,'Glenohumeral_J2',0,0,-80,100);
-affichage_bras_de_levier('TricepsBrachii1',0,'Glenohumeral_J2',0,0,-80,100);
-affichage_bras_de_levier('TricepsBrachii2',0,'Glenohumeral_J2',0,0,-80,100);
+affichage_bras_de_levier(BiomechanicalModel,'BicepsBrachii1',0,'Glenohumeral_J2',0,0,-80,100);
+affichage_bras_de_levier(BiomechanicalModel,'Trapezius',0,'Glenohumeral_J2',0,0,-80,100);
+affichage_bras_de_levier(BiomechanicalModel,'BicepsBrachii2',0,'Glenohumeral_J2',0,0,-80,100);
+affichage_bras_de_levier(BiomechanicalModel,'TricepsBrachii1',0,'Glenohumeral_J2',0,0,-80,100);
+affichage_bras_de_levier(BiomechanicalModel,'TricepsBrachii2',0,'Glenohumeral_J2',0,0,-80,100);
 
 
