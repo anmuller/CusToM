@@ -1,4 +1,4 @@
-function [Pts,involved_solids,BiomechanicalModel]=MomentArmOptimisation(name_mus,BiomechanicalModel,MomentsArmRegression)
+function [Pts,involved_solids,num_markersprov,BiomechanicalModel]=MomentArmOptimisation(name_mus,BiomechanicalModel,MomentsArmRegression)
 
 HumanModel=BiomechanicalModel.OsteoArticularModel;
 Muscles=BiomechanicalModel.Muscles;
