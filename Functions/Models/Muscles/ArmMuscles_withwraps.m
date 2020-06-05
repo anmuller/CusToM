@@ -1,4 +1,3 @@
-
 function [Muscles]=ArmMuscles_withwraps(Muscles,Signe)
 % Definition of an arm muscle model
 %   This model contains 9 muscles, actuating the elbow joint
