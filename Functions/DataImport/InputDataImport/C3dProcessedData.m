@@ -116,7 +116,7 @@ for ii=1:length(list_marker_c3d)
 end
 
 if ~isempty(cat(1,real_markers.Occluded))
-    warning(['A least one marker is occluded in ' filename ', occluded markers :')
+    warning(['A least one marker is occluded in ' filename ', occluded markers :'])
     disp([real_markers(cat(1,real_markers.IsOccluded)).name]')
 end
 
