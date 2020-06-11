@@ -41,9 +41,19 @@ else
 end
 
 if ~isempty(nom_arti)
+    nom_arti2='';
+    if strcmp(nom_arti,'Shoulder_Flexion')
+        nom_arti='Glenohumeral_J2';
+        nom_arti2='Glenohumeral_J1';
+    end
     num_arti=zeros(2,1);
     [~,num_arti(1)]=intersect(osnames,['R',nom_arti]);
     [~,num_arti(2)]=intersect(osnames,['L',nom_arti]);
+    if ~isempty(nom_arti2)
+        num_arti2=zeros(2,1);
+        [~,num_arti2(1)]=intersect(osnames,['R',nom_arti2]);
+        [~,num_arti2(2)]=intersect(osnames,['L',nom_arti2]);
+    end
 else
     nom_arti=osnames{num_arti(1)};
     nom_arti=nom_arti(2:end);
@@ -74,6 +84,9 @@ q=zeros(Nb_q,Nb_frames);
 figure()
 
 for k=1:2
+    if ~isempty(nom_arti2)
+        q(num_arti2(k),:)=pi/2;
+    end
     q(num_arti(k),:)=angle*pi/180;
 %     if Nb_ClosedLoop~=0
 %         nonlcon=@(qvar)ClosedLoop(qvar,nbClosedLoop);

@@ -61,7 +61,28 @@ affichage_bras_de_levier('Coracobrachialis',0,'Glenohumeral_J2',0,0,-80,100);
 affichage_bras_de_levier('Trapezius',0,'Glenohumeral_J2',0,0,-80,100);
 affichage_bras_de_levier('BicepsBrachii1',0,'Glenohumeral_J2',0,0,-80,100);
 affichage_bras_de_levier('BicepsBrachii2',0,'Glenohumeral_J2',0,0,-80,100);
-affichage_bras_de_levier('TricepsBrachii1',0,'Glenohumeral_J2',0,0,-80,100);
-affichage_bras_de_levier('TricepsBrachii2',0,'Glenohumeral_J2',0,0,-80,100);
+
+% Shoulder Flexion
+affichage_bras_de_levier('Deltoid_pos',0,'Shoulder_Flexion',0,0,-80,100);
+affichage_bras_de_levier('Deltoid_ant',0,'Shoulder_Flexion',0,0,-80,100);
+affichage_bras_de_levier('Deltoid_mid',0,'Shoulder_Flexion',0,0,-80,100);
+affichage_bras_de_levier('Lat_1',0,'Shoulder_Flexion',0,0,-80,100);
+hold on
+affichage_bras_de_levier('Lat_2',0,'Shoulder_Flexion',0,0,-80,100);
+affichage_bras_de_levier('Lat_3',0,'Shoulder_Flexion',0,0,-80,100);
+hold off
+affichage_bras_de_levier('PECM1',0,'Shoulder_Flexion',0,0,-80,100);
+hold on
+affichage_bras_de_levier('PECM2',0,'Shoulder_Flexion',0,0,-80,100);
+affichage_bras_de_levier('PECM3',0,'Shoulder_Flexion',0,0,-80,100);
+hold off
+affichage_bras_de_levier('Supraspinatus',0,'Shoulder_Flexion',0,0,-80,100);
+affichage_bras_de_levier('Infraspinatus',0,'Shoulder_Flexion',0,0,-80,100);
+affichage_bras_de_levier('Coracobrachialis',0,'Shoulder_Flexion',0,0,-80,100);
+affichage_bras_de_levier('Trapezius',0,'Shoulder_Flexion',0,0,-80,100);
+affichage_bras_de_levier('BicepsBrachii1',0,'Shoulder_Flexion',0,0,-80,100);
+affichage_bras_de_levier('BicepsBrachii2',0,'Shoulder_Flexion',0,0,-80,100);
+
+
 
 
