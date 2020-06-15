@@ -1,4 +1,4 @@
-function [animStruct]=AnimationFramebyFrame(ax,filename,AnalysisParameters,ModelParameters,AnimateParameters,DataXSens,q,q6dof,PelvisPosition,PelvisOrientation,Markers_set,f_affich,Muscles,animStruct,real_markers,BiomechanicalModel,Human_model)
+function [animStruct]=AnimationFramebyFrame(ax,fig,filename,AnalysisParameters,ModelParameters,AnimateParameters,DataXSens,q,q6dof,PelvisPosition,PelvisOrientation,Markers_set,f_affich,Muscles,animStruct,real_markers,BiomechanicalModel,Human_model)
 % Computation of animation structure for animation
 %
 %   INPUT
