@@ -39,7 +39,7 @@ if isfield(AnimateParameters,'Mode')  && (isequal(AnimateParameters.Mode, 'Figur
         || isequal(AnimateParameters.Mode, 'Picture'))
     fig=figure('outerposition',[483,60,456*1.5,466*1.5]);
     %ax=gca;
-elseif isfield(AnimateParameters,'Mode')  &&  isequal(AnimateParameters.Mode, 'cFigure')
+elseif (isfield(AnimateParameters,'Mode')  &&  isequal(AnimateParameters.Mode, 'cFigure')) 
     fig=cFigure; % from GIBBON
     view(3); axis equal; axis tight; axis vis3d; grid on; box on;
     camlight headlight; axis off; axis manual; lighting gouraud;
@@ -48,6 +48,7 @@ elseif isfield(AnimateParameters,'Mode')  &&  isequal(AnimateParameters.Mode, 'c
     drawnow;
 elseif isfield(AnimateParameters,'Mode')  &&  (isequal(AnimateParameters.Mode, 'GenerateAnimate') || isequal(AnimateParameters.Mode, 'GenerateParameters'))
     ax = AnimateParameters.ax; 
+    fig=ax.Parent;
     camlight(ax, 'headlight'); lighting(ax,'gouraud');
 %     material(ax, 'metal');
 end
@@ -75,7 +76,7 @@ animStruct.Set=cell(1,size(q,2));
 
 %% Animation frame by frame
 
-[animStruct]=AnimationFramebyFrame(ax,filename,AnalysisParameters,ModelParameters,AnimateParameters,DataXSens,q,q6dof,PelvisPosition,PelvisOrientation,Markers_set,f_affich,Muscles,animStruct,real_markers,BiomechanicalModel,Human_model);
+[animStruct]=AnimationFramebyFrame(ax,fig,filename,AnalysisParameters,ModelParameters,AnimateParameters,DataXSens,q,q6dof,PelvisPosition,PelvisOrientation,Markers_set,f_affich,Muscles,animStruct,real_markers,BiomechanicalModel,Human_model);
 
 
 
@@ -95,7 +96,7 @@ if isfield(AnimateParameters,'Mode')  && isequal(AnimateParameters.Mode, 'Figure
     open(v)
     writeVideo(v,M);
     close(v)
-elseif isfield(AnimateParameters,'Mode')  && isequal(AnimateParameters.Mode, 'cFigure')
+elseif (isfield(AnimateParameters,'Mode')  && isequal(AnimateParameters.Mode, 'cFigure') ) 
     anim8(fig,animStruct);
 end
 

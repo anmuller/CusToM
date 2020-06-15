@@ -61,9 +61,12 @@ else
         num_ext = numel(AnalysisParameters.General.Extension)-1;
         load('BiomechanicalModel.mat'); %#ok<LOAD>
         Human_model = BiomechanicalModel.OsteoArticularModel;
+        if isempty(intersect({BiomechanicalModel.OsteoArticularModel.name},'root0'))  
+                [Human_model] = Add6dof(Human_model);
+        end
         Markers_set = BiomechanicalModel.Markers;
         Muscles = BiomechanicalModel.Muscles;
-        q6dof = [0 0 0 0 -110*pi/180 0]'; % rotation for visual
+       q6dof = [0 0 0 pi -pi/2 pi/2]'; % rotation for visual
         q = zeros(numel(Human_model)-6,1);       
         if isfield(AnimateParameters,'sol_anim')
             q(AnimateParameters.sol_anim)=AnimateParameters.angle*pi/180;
