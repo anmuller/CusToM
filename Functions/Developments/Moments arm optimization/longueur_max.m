@@ -14,8 +14,32 @@ for k=1:numel(num_solid)
 end
 
 
+% Verification if a muscle as its origin or its insertion in the loop
+names_list={BiomechanicalModel.OsteoArticularModel(num_solid).name};
+names_loops={BiomechanicalModel.OsteoArticularModel((~cellfun('isempty',{BiomechanicalModel.OsteoArticularModel.ClosedLoop}))).ClosedLoop};
+flag=0;
+for k=1:length(names_loops)
+    temp=names_loops{k};
+    temp(1)=''; %get rid of "R" and "L"
+    ind = find(temp=='_');
+    name_sol1= temp(1:ind-1);
+    ind_end = strfind(temp,'JointNode');
+    name_sol2 = temp(ind+1:ind_end-1);
+    if sum(contains(names_list,name_sol1)) || sum(contains(names_list,name_sol2))
+        flag=1;
+    end
+end
+
+
 [sp1,sp2]=find_solid_path(BiomechanicalModel.OsteoArticularModel,min(num_solid),max(num_solid));
-num_solid=unique([num_solid, sp1, sp2]');
+if flag
+    % To be changed
+    num_solid=unique([num_solid, sp1, sp2]');
+    num_solid=num_solid(2:end);
+else
+        num_solid=unique([num_solid, sp1, sp2]');
+        num_solid=num_solid(2:end); % The first solid doesn't need to be moved
+end
 
 for k=1:numel(num_solid)
     q(k,:)=linspace(BiomechanicalModel.OsteoArticularModel(num_solid(k)).limit_inf,BiomechanicalModel.OsteoArticularModel(num_solid(k)).limit_sup,nb_pts);
@@ -36,7 +60,16 @@ parfor j=1:size(map_q,1)
     temp(j)=Muscle_lengthNum(BiomechanicalModel.OsteoArticularModel,BiomechanicalModel.Muscles(nummuscle),map_q(j,:)');
 end
 
+
+% figure();
+% subplot(2,1,1,'position',[0.0656,0.7877,0.8943,0.1935])
+% plot(temp)
+% subplot(2,1,2,'position',[0.065625,0.046826222684703,0.8953125,0.699271592091574])
+% imagesc(map_q(:,num_solid)')
+% yticks(1:size(BiomechanicalModel.OsteoArticularModel(num_solid),2));
+% yticklabels({BiomechanicalModel.OsteoArticularModel(num_solid).name})
 maxi=max(temp);
+
 
 
 lm = maxi-1.5*lmax;

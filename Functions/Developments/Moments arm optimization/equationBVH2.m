@@ -1,4 +1,4 @@
-function y=equation2(a,q1,q2)
+function y=equationBVH2(a,q1,q2)
 
 if size(a,2)<16
     a=[a ; zeros(16-size(a,2),1)];

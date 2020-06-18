@@ -1,4 +1,4 @@
-function y=equation3(a,q1,q2)
+function y=equationBVH3(a,q1,q2)
 
 if size(a,2)<18
     a=[a ; zeros(18-size(a,2),1)];

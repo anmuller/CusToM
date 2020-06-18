@@ -1,79 +1,51 @@
 function diff=fctcoutaffich(x,BiomechanicalModel,num_muscle,Regression,nb_points,involved_solids,num_markersprov)
 
 
-mac=[];
+
 ideal_curve=[];
 
-mac=[mac momentarmcurve(x,BiomechanicalModel,num_muscle,Regression,nb_points,'R',involved_solids,num_markersprov)];
+mac=momentarmcurve(x,BiomechanicalModel,num_muscle,Regression,nb_points,'R',involved_solids,num_markersprov);
 liste_noms=[];
 for j=1:size(Regression,2)
-    if Regression(j).equation==1
-        joint_name=Regression(j).primaryjoint;
+    rangeq=zeros(nb_points,size(Regression(j).joints,2));
+    ideal_curve_temp=[];
+    for k=1:size(Regression(j).joints,2)
+        joint_name=Regression(j).joints{k};
         [~,joint_num]=intersect({BiomechanicalModel.OsteoArticularModel.name},['R', joint_name]);
-        rangeq=linspace(BiomechanicalModel.OsteoArticularModel(joint_num).limit_inf,BiomechanicalModel.OsteoArticularModel(joint_num).limit_sup,nb_points);
-        ideal_curve=[ideal_curve polyval(flip(Regression(j).coeffs),rangeq)];
-        liste_noms=[liste_noms joint_name , ' ' ];
-    else
-        if Regression(j).equation==2
-            
-            joint_name1=Regression(j).primaryjoint;
-            joint_name2=Regression(j).secondaryjoint;
-            [~,joint_num1]=intersect({BiomechanicalModel.OsteoArticularModel.name},['R',joint_name1]);
-            [~,joint_num2]=intersect({BiomechanicalModel.OsteoArticularModel.name},['R',joint_name2]);
-            rangeq1=linspace(BiomechanicalModel.OsteoArticularModel(joint_num1).limit_inf,BiomechanicalModel.OsteoArticularModel(joint_num1).limit_sup,nb_points);
-            rangeq2=linspace(BiomechanicalModel.OsteoArticularModel(joint_num2).limit_inf,BiomechanicalModel.OsteoArticularModel(joint_num2).limit_sup,nb_points);
-            liste_noms=[liste_noms joint_name1 joint_name2 , ' '] ;
-            
-            [X,Y]=meshgrid(rangeq1,rangeq2);
-            Xline=X(:);
-            Yline=Y(:);
-            ideal_curve_temp=[];
-            
-            for i=1:length(Xline)
-                ideal_curve_temp=[ ideal_curve_temp equation2(Regression(j).coeffs,Xline(i),Yline(i))];
-            end
-            
-            figure()
-            mesh(X,Y,reshape(mac((nb_points^2)*(j-1)+1:(nb_points^2)*j),nb_points,nb_points));
-            hold on
-            s = mesh(X,Y,reshape(ideal_curve_temp*1e-3, nb_points,nb_points),'FaceAlpha','0.5');
-            s.FaceColor='Flat';
-            
-            ideal_curve=[ideal_curve ideal_curve_temp];
-            
-        else
-            if Regression(j).equation==3
-                joint_name1=Regression(j).primaryjoint;
-                joint_name2=Regression(j).secondaryjoint;
-                [~,joint_num1]=intersect({BiomechanicalModel.OsteoArticularModel.name},['R',joint_name1]);
-                [~,joint_num2]=intersect({BiomechanicalModel.OsteoArticularModel.name},['r',joint_name2]);
-                rangeq1=linspace(BiomechanicalModel.OsteoArticularModel(joint_num1).limit_inf,BiomechanicalModel.OsteoArticularModel(joint_num1).limit_sup,nb_points);
-                rangeq2=linspace(BiomechanicalModel.OsteoArticularModel(joint_num2).limit_inf,BiomechanicalModel.OsteoArticularModel(joint_num2).limit_sup,nb_points);
-              
-                liste_noms=[liste_noms joint_name1 joint_name2 , ' '] ;
-                
-                
-                [X,Y]=meshgrid(rangeq1,rangeq2);
-                Xline=X(:);
-                Yline=Y(:);
-                ideal_curve_temp=[];
-                for i=1:length(Xline)
-                    ideal_curve_temp=[ ideal_curve_temp equation2(Regression(j).coeffs,Xline(i),Yline(i))];
-                end
-                
-                figure()
-                mesh(X,Y,reshape(mac(nb_points*(j-1)+1:nb_points*j),nb_points,nb_points));
-                hold on
-                s = mesh(X,Y,reshape(ideal_curve_temp*1e-3, nb_points,nb_points),'FaceAlpha','0.5');
-                s.FaceColor='Flat';
-                
-                ideal_curve=[ideal_curve ideal_curve_temp];
-            end
-        end
+        rangeq(:,k)=linspace(BiomechanicalModel.OsteoArticularModel(joint_num).limit_inf,BiomechanicalModel.OsteoArticularModel(joint_num).limit_sup,nb_points)';
+        liste_noms=[liste_noms joint_name];
     end
     
     
+    map_q=zeros(nb_points^size(Regression(j).joints,2),size(Regression(j).joints,2));
+    for i=1:size(Regression(j).joints,2)
+        B1=repmat(rangeq(:,i),nb_points^(i-1),1);
+        B1=B1(:)';
+        B2=repmat(B1,1,nb_points^(size(Regression(j).joints,2)-i));
+        map_q(:,i) = B2;
+    end
+    
+    c = ['equation',Regression(j).equation] ;
+    fh = str2func(c);
+    ideal_curve_temp=[ideal_curve_temp fh(Regression(j).coeffs,map_q)];
+    
+    if size(Regression(j).joints,2)==2
+        figure()
+        [X,Y]=meshgrid(range_q(:,1),range_q(:,2));
+        mesh(X,Y,reshape(mac((nb_points^2)*(j-1)+1:(nb_points^2)*j),nb_points,nb_points));
+        hold on
+        s = mesh(X,Y,reshape(ideal_curve_temp*1e-3, nb_points,nb_points),'FaceAlpha','0.5');
+        s.FaceColor='interp';
+    end
+            
+    ideal_curve=[ideal_curve ideal_curve_temp];
+
+   liste_noms=[liste_noms ' '];
+    
 end
+
+
+    
 
 
 figure()
