@@ -1,4 +1,4 @@
-function mac=momentarmcurve(x,BiomechanicalModel,num_muscle,Regression,nb_points,Sign,num_solid,num_markers)
+function [mac,BiomechanicalModel]=momentarmcurve(x,BiomechanicalModel,num_muscle,Regression,nb_points,Sign,num_solid,num_markers)
 
 % Verification if a muscle as its origin or its insertion in the loop
 names_list={BiomechanicalModel.OsteoArticularModel(num_solid).name};
@@ -52,7 +52,7 @@ for j=1:size(Regression,2)
     end
     
     
-    for i=1:nb_points
+   parfor i=1:nb_points^size(Regression(j).joints,2)
         mac  = [mac  MomentArmsComputationNumMuscleJoint(BiomechanicalModel,q(:,i),0.0001,num_muscle,joint_num)];
     end
 end

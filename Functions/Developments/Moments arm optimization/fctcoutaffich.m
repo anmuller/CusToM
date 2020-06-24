@@ -1,10 +1,9 @@
 function diff=fctcoutaffich(x,BiomechanicalModel,num_muscle,Regression,nb_points,involved_solids,num_markersprov)
 
 
+mac=momentarmcurve(x,BiomechanicalModel,num_muscle,Regression,nb_points,'R',involved_solids,num_markersprov);
 
 ideal_curve=[];
-
-mac=momentarmcurve(x,BiomechanicalModel,num_muscle,Regression,nb_points,'R',involved_solids,num_markersprov);
 liste_noms=[];
 for j=1:size(Regression,2)
     rangeq=zeros(nb_points,size(Regression(j).joints,2));
@@ -31,7 +30,7 @@ for j=1:size(Regression,2)
     
     if size(Regression(j).joints,2)==2
         figure()
-        [X,Y]=meshgrid(range_q(:,1),range_q(:,2));
+        [X,Y]=meshgrid(rangeq(:,1),rangeq(:,2));
         mesh(X,Y,reshape(mac((nb_points^2)*(j-1)+1:(nb_points^2)*j),nb_points,nb_points));
         hold on
         s = mesh(X,Y,reshape(ideal_curve_temp*1e-3, nb_points,nb_points),'FaceAlpha','0.5');

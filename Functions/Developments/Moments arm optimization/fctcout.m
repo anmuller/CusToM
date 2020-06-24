@@ -3,7 +3,7 @@ function diff=fctcout(x,BiomechanicalModel,num_muscle,Regression,nb_points,invol
 
 ideal_curve=[];
 
-mac=momentarmcurve(x,BiomechanicalModel,num_muscle,Regression,nb_points,'R',involved_solids,num_markersprov);
+[mac,BiomechanicalModel]=momentarmcurve(x,BiomechanicalModel,num_muscle,Regression,nb_points,'R',involved_solids(2:end-1),num_markersprov(2:end-1));
 
 for j=1:size(Regression,2)
     rangeq=zeros(nb_points,size(Regression(j).joints,2));
