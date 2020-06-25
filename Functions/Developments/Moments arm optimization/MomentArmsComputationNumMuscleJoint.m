@@ -37,7 +37,7 @@ for i=1:length(numarti)
     Lpdq = Muscle_lengthNum(Human_model,Muscles(nummuscle),q+dq);
     % compute the length of the muscle at q-dq
     Lmdq = Muscle_lengthNum(Human_model,Muscles(nummuscle),q-dq);
-    %         R(:,i)=(-Lpdq+Lmdq)/(2*dp); % it is -dl/dq
+
     R(i)=(-Lpdq+Lmdq)/(2*dp); % it is -dl/dq
 end
 

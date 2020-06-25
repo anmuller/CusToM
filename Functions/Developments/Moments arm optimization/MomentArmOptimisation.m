@@ -1,4 +1,4 @@
-function [Pts,involved_solids,num_markersprov,BiomechanicalModel]=MomentArmOptimisation(name_mus,BiomechanicalModel,MomentsArmRegression)
+function [involved_solids,num_markersprov,BiomechanicalModel]=MomentArmOptimisation(name_mus,BiomechanicalModel,MomentsArmRegression)
 
 HumanModel=BiomechanicalModel.OsteoArticularModel;
 Muscles=BiomechanicalModel.Muscles;
@@ -122,7 +122,7 @@ MomentsArmComp(BiomechanicalModel,num_muscle(1),MomentsArmRegression(ind_mus_Reg
 
 
 
-[Pts,BiomechanicalModel]=LengthMinimisation(involved_solids,num_markersprov,BiomechanicalModel,num_muscle(1));
+[BiomechanicalModel]=LengthMinimisation(involved_solids,num_markersprov,BiomechanicalModel,MomentsArmRegression(ind_mus_Regr).regression);
 
 
 

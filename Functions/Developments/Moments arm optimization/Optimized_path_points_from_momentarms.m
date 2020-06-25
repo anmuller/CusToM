@@ -1,7 +1,7 @@
 %% Optimisation des bras de levier
 
 %load('/home/clivet/Documents/Thèse/Developpement_CusToM/thesis/Fichiers_tests/Donnees a traiter/Ana Lucia Data - Sbj 1 - Trial 1 - Forearm model/BiomechanicalModel.mat')
-load('BiomechanicalModel_ED_full.mat')
+load('BiomechanicalModel_ExtensorDigitorumall.mat')
 %name_mus='Brachioradialis';
 %name_mus='ExtensorDigitorum';
 %name_mus='FlexorDigitorumSuperior';
@@ -26,7 +26,7 @@ for i=1:length(all_muscles)
     name_mus=all_muscles{i};
     MomentsArmRegression=MomentsArmRegression_creation();
     
-    [Pts,involved_solids,num_markersprov,BiomechanicalModel]=MomentArmOptimisation(name_mus,BiomechanicalModel,MomentsArmRegression);
+    [involved_solids,num_markersprov,BiomechanicalModel]=MomentArmOptimisation(name_mus,BiomechanicalModel,MomentsArmRegression);
 % Brachio
     %     involved_solids{1}=[53;53;56;56];
 %     involved_solids{2}=[66;66;69;69];
@@ -54,6 +54,8 @@ for i=1:length(all_muscles)
     
 end
 
+
+save('BiomechanicalModel.mat','BiomechanicalModel');
 
 
 
