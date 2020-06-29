@@ -14,8 +14,10 @@ for j=1:size(Regression,2)
         [~,joint_num]=intersect({BiomechanicalModel.OsteoArticularModel.name},['R', joint_name]);
         rangeq(:,k)=linspace(BiomechanicalModel.OsteoArticularModel(joint_num).limit_inf,BiomechanicalModel.OsteoArticularModel(joint_num).limit_sup,nb_points)';
 
-        B1=repmat(rangeq(:,k),nb_points^(k-1),1);
+        B1=repmat(rangeq(:,k),1,nb_points^(k-1));
+        B1=B1';
         B1=B1(:)';
+   
         B2=repmat(B1,1,nb_points^(size(Regression(j).joints,2)-k));
         map_q(:,k) = B2;
     end
@@ -28,7 +30,7 @@ end
 
 
 
-diff=norm((mac-ideal_curve*1e-3).^2,2);
+diff=norm((mac-ideal_curve).^2,2);
 
 
 

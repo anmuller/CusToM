@@ -109,6 +109,12 @@ Pennestri2custom = k_Pennestri2custom*[0 0 1;-1 0 0;0 -1 0];
 bh = 2*0.0191/(L_forearm/(cr+dr));
 
 
+
+% From OpenSim
+Forearm_osim2antoine = [k (Radius_ElbowJointNode(2)-Radius_WristJointNode(2))/0.23559 k];
+CoM_radius = [ 0.0336341  -0.181559   0.0156]';
+
+
 % % ------------------------- Radius ----------------------------------------
 % Radius_ElbowJointNode = Pennestri2custom* [-dr 0 0]';
 % Radius_WristJointNode = Pennestri2custom* [er 0 0]';
@@ -129,7 +135,7 @@ Radius_position_set = {...
     [Signe 'Radius_SupinatorBrevis_i'], Radius_ElbowJointNode'+Pennestri2custom*[0.028 0.01 -0.01]';...
     [Signe 'Radius_Brachialis_i'],Radius_ElbowJointNode'+Pennestri2custom*[0.033 0.005 0.001]';...
     
-    [Signe 'Radius_Brachioradialis_i'], Radius_ElbowJointNode'+L_forearm/(cr+dr)*k*[0 0 -1;-1 0 0;0 -1 0]*[0.238 -0.012 0]';...
+ %   [Signe 'Radius_Brachioradialis_i'], Radius_ElbowJointNode'+L_forearm/(cr+dr)*k*[0 0 -1;-1 0 0;0 -1 0]*[0.238 -0.012 0]';...
         % Ajout d'un terme correctif
     [Signe 'Radius_PronatorTeres_i'], Radius_ElbowJointNode'+k_Pennestri2custom*[0 0 -1;-1 0 0;0 -1 0]*[0.055 -0.011 0.024]' + k*Mirror*[0.01 0 -0.01]';... 
 
@@ -138,6 +144,10 @@ Radius_position_set = {...
      
     [Signe 'Radius_TricepsBrachii2_o'], Radius_ElbowJointNode'+Pennestri2custom*[-0.025 0.02 -0.02]';...
     [Signe 'Thorax_TricepsBrachii2_i'],Radius_ElbowJointNode'+Pennestri2custom*[0.038 0.027 -0.02]';...
+
+    
+    [Signe 'Radius_Brachioradialis_i'],Mirror*Forearm_osim2antoine'.*(([0.0419;-0.221;0.0224])-CoM_radius);...
+
     
     % Wraps
     ['Wrap' Signe 'RadiusQuadratus'],Mirror*[0.0281 -0.1986 0.0288]'+Radius_ElbowJointNode';...
@@ -232,11 +242,11 @@ Human_model(incr_solid).mother=s_Radius_J2;
 Human_model(incr_solid).a=[0 1 0]';
 Human_model(incr_solid).joint=1;
 if Signe == 'R'
-    Human_model(incr_solid).limit_inf=0;
-    Human_model(incr_solid).limit_sup=pi;
+    Human_model(incr_solid).limit_inf=-pi/2;
+    Human_model(incr_solid).limit_sup=pi/2;
 else
-    Human_model(incr_solid).limit_inf=-pi;
-    Human_model(incr_solid).limit_sup=0;
+    Human_model(incr_solid).limit_inf=-pi/2;
+    Human_model(incr_solid).limit_sup=pi/2;
 end
 Human_model(incr_solid).ActiveJoint=1;
 Human_model(incr_solid).m=Radius_Mass;

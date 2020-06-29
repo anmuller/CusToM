@@ -40,7 +40,8 @@ for j=1:size(Regression,2)
         [~,joint_num]=intersect({BiomechanicalModel.OsteoArticularModel.name},['R', joint_name]);
         rangeq(:,k)=linspace(BiomechanicalModel.OsteoArticularModel(joint_num).limit_inf,BiomechanicalModel.OsteoArticularModel(joint_num).limit_sup,nb_points)';
 
-        B1=repmat(rangeq(:,k),nb_points^(k-1),1);
+        B1=repmat(rangeq(:,k),1,nb_points^(k-1));
+        B1=B1';
         B1=B1(:)';
         B2=repmat(B1,1,nb_points^(size(Regression(j).joints,2)-k));
         q(joint_num,:) = B2;
@@ -51,7 +52,9 @@ for j=1:size(Regression,2)
         
     end
     
-    
+   joint_name=Regression(j).axe;
+   [~,joint_num]=intersect({BiomechanicalModel.OsteoArticularModel.name},['R', joint_name]);
+
    parfor i=1:nb_points^size(Regression(j).joints,2)
         mac  = [mac  MomentArmsComputationNumMuscleJoint(BiomechanicalModel,q(:,i),0.0001,num_muscle,joint_num)];
     end
