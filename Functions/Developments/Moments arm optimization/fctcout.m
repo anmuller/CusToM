@@ -5,7 +5,10 @@ ideal_curve=[];
 
 [mac,BiomechanicalModel]=momentarmcurve(x,BiomechanicalModel,num_muscle,Regression,nb_points,'R',involved_solids(2:end-1),num_markersprov(2:end-1));
 
+
+mac_norme=[];
 for j=1:size(Regression,2)
+    ideal_curve_temp=[];
     rangeq=zeros(nb_points,size(Regression(j).joints,2));
      map_q=zeros(nb_points^size(Regression(j).joints,2),size(Regression(j).joints,2));
 
@@ -24,14 +27,36 @@ for j=1:size(Regression,2)
     
     c = ['equation',Regression(j).equation] ;
     fh = str2func(c);
-    ideal_curve=[ideal_curve fh(Regression(j).coeffs,map_q)];
+    
+    ideal_curve_temp=fh(Regression(j).coeffs,map_q);
+    
+    mini=min(ideal_curve_temp);
+    maxi=max(ideal_curve_temp);
+    ideal_curve_temp= 2*(ideal_curve_temp-mini)/(maxi-mini) -1;
+    
+    ideal_curve=[ ideal_curve  ideal_curve_temp];
+    
+    mac_temp=mac((j-1)*size(map_q,1)+1 : j*size(map_q,1));
+    
+    mac_temp= 2*(mac_temp-mini)/(maxi-mini) -1;
+    
+    mac_norme=[mac_norme mac_temp];
+    
+    
     
 end
 
 
 
-diff=norm((mac-ideal_curve).^2,2);
+%diff=norm((mac-ideal_curve).^2,2);
+diff=norm((mac_norme-ideal_curve).^2,2);
 
 
+% figure()
+% plot(mac_norme)
+% hold on
+% plot(ideal_curve)
+% legend("Actuelle","Ce quon veut atteindre")
+% ylabel("Moment arm (m)");
 
 end
