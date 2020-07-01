@@ -1,6 +1,10 @@
 %% Optimisation des bras de levier
 
+cmap=colormap(jet(3));
+set(groot, 'DefaultAxesColorOrder', cmap,'DefaultAxesFontSize',10,'DefaultLineLineWidth',3);
+
 %load('/home/clivet/Documents/Thèse/Developpement_CusToM/thesis/Fichiers_tests/Donnees a traiter/Ana Lucia Data - Sbj 1 - Trial 1 - Forearm model/BiomechanicalModel.mat')
+%load('BiomechanicalModel.mat')
 load('BiomechanicalModelOrigin.mat')
 %load('BiomechanicalModel_ED_full.mat');
 %load('BiomechanicalModel_BRD.mat')
@@ -32,18 +36,16 @@ all_muscles= {'Brachioradialis'};
 %all_muscles= {'ExtensorDigitorum'};
 for i=1:length(all_muscles)
     
-    %% Ajout des champs utiles pour l'ExtensorDigitorum
     
     load('BiomechanicalModelOrigin.mat')
     
     name_mus=all_muscles{i};
     MomentsArmRegression=MomentsArmRegression_creationRRN();
-   % MomentsArmRegression=MomentsArmRegression_creation();
     
     [~,involved_solids,num_markersprov,BiomechanicalModel]=MomentArmOptimisation(name_mus,BiomechanicalModel,MomentsArmRegression);
     
     
-    
+
     fileID = fopen('via_points.txt','a');
     
     solid_interet=involved_solids{1};
@@ -59,8 +61,8 @@ for i=1:length(all_muscles)
         
         nom_pt_passage=nom_pt_passage(2:end);
         fprintf(fileID,'[Signe ''%6s''], k*Mirror*[%6.4f ; %6.4f ; %6.4f] ;... \n',nom_pt_passage,pt_passage);
-        pt_passage=BiomechanicalModel.OsteoArticularModel(temp1).anat_position{temp2,2} -  BiomechanicalModel.OsteoArticularModel(temp1).c ;
-        fprintf(fileID,'[Signe ''%6s''], k*Mirror*[%6.4f ; %6.4f ; %6.4f] + COM ;... \n',nom_pt_passage,pt_passage);
+        pt_passage=BiomechanicalModel.OsteoArticularModel(temp1).anat_position{temp2,2} +  BiomechanicalModel.OsteoArticularModel(temp1).c ;
+        fprintf(fileID,'[Signe ''%6s''], k*Mirror*[%6.4f ; %6.4f ; %6.4f] - COM ;... \n',nom_pt_passage,pt_passage);
     end
     
     fclose(fileID);

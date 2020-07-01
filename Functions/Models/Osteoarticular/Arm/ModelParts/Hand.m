@@ -87,6 +87,14 @@ L_forearm = 0.2628;
 k_Pennestri2custom = L_forearm/(cr-dr)*k*Mirror; % Forearm length homotethy
 Pennestri2custom = k_Pennestri2custom*[0 0 1;-1 0 0;0 -1 0];
 
+
+% From OpenSim
+osim2antoine = [k (Hand_WristJointNode(2)-Hand_EndNode(2))/0.23559 k];
+CoM_hand = [ 0.00301314  0.0424993  -0.00112205]';
+
+
+
+
 %%              Definition of anatomical landmarks
 
 Hand_position_set= {...
@@ -117,18 +125,30 @@ Hand_position_set= {...
     [Signe 'HandPrediction10'], k*Mirror*[0.015 -0.06 0.03]';...
     [Signe 'HandPrediction11'], k*Mirror*[0.015 -0.01 0.05]';...
     % Muscles extracted from (Pennestri et al., 2007)
-    [Signe 'Hand_CubitalisAnterior_i'],Pennestri2custom*[0.006 0.0027 0.007]'+Hand_WristJointNode';
-    [Signe 'Hand_FlexorCarpiUlnaris_i'],Pennestri2custom*[0.005 0.03 0.007]'+Hand_WristJointNode'+k*Mirror*[0.01 0 0.02]'; %Addition of a correction
     
-    [Signe 'Hand_ExtensorCarpiUlnaris_i'],Pennestri2custom*[0.005 0.03 -0.007]'+Hand_WristJointNode'+k*Mirror*[-0.008 0.003 0]';%Addition of a correction
- 
-    [Signe 'Hand_ExtensorDigitorum_i'],Pennestri2custom*[0.038 0 -0.01]'+Hand_WristJointNode';%+k*Mirror*[-0.02 0.03 -0.005]';%Addition of a correction
-   
-    [Signe 'Hand_FlexorDigitorumSuperior_i'],Pennestri2custom*[0.005 -0.018 -0.006]'+Hand_WristJointNode'+k*Mirror*[0.07 -0.015 -0.02]';%Addition of a correction
- 
-    [Signe 'Hand_FlexorCapriRadialis_i'],Pennestri2custom*[0.003 0.012 0.005]'+Hand_WristJointNode'+k*Mirror*[0.01 0 0.02]';%Addition of a correction
+   % [Signe 'Hand_CubitalisAnterior_i'],Pennestri2custom*[0.006 0.0027 0.007]'+Hand_WristJointNode';
+    %[Signe 'Hand_FlexorCarpiUlnaris_i'],Pennestri2custom*[0.005 0.03
+    %0.007]'+Hand_WristJointNode'+k*Mirror*[0.01 0 0.02]'; %Addition of a correction
+%    [Signe 'Hand_ExtensorCarpiUlnaris_i'],Pennestri2custom*[0.005 0.03 -0.007]'+Hand_WristJointNode'+k*Mirror*[-0.008 0.003 0]';%Addition of a correction
+%[Signe 'Hand_ExtensorDigitorum_i'],Pennestri2custom*[0.038 0 -0.01]'+Hand_WristJointNode';%+k*Mirror*[-0.02 0.03 -0.005]';%Addition of a correction  
+%    [Signe 'Hand_FlexorDigitorumSuperior_i'],Pennestri2custom*[0.005 -0.018 -0.006]'+Hand_WristJointNode'+k*Mirror*[0.07 -0.015 -0.02]';%Addition of a correction
+ % [Signe 'Hand_FlexorCapriRadialis_i'],Pennestri2custom*[0.003 0.012 0.005]'+Hand_WristJointNode'+k*Mirror*[0.01 0 0.02]';%Addition of a correction
+ % [Signe 'Hand_AbductorDigitiV_i'],Pennestri2custom*[0.01 -0.018 -0.007]'+Hand_WristJointNode';
     
-    [Signe 'Hand_AbductorDigitiV_i'],Pennestri2custom*[0.01 -0.018 -0.007]'+Hand_WristJointNode';
+    
+    
+    
+    % Muscles from Holzbaur model
+    
+     [Signe 'Hand_ExtensorCarpiRadialisLongus_i'],Mirror*osim2antoine'.*(([0.01717;-0.02122;0.00583])-CoM_hand);...
+    [Signe 'Hand_ExtensorCarpiRadialisBrevis_i'],Mirror*osim2antoine'.*(([0.005;-0.01136;0.0085])-CoM_hand);...
+    [Signe 'Hand_ExtensorCarpiUlnaris_i'],Mirror*osim2antoine'.*(([-0.02251;-0.01401;-0.00128])-CoM_hand);...
+    [Signe 'Hand_FlexorCarpiRadialis_i'],Mirror*osim2antoine'.*(([0.01124;-0.01844;-0.00418])-CoM_hand);...
+    [Signe 'Hand_FlexorCarpiUlnaris_i'],Mirror*osim2antoine'.*(([-0.02036;-0.01765;-0.00752])-CoM_hand);...
+    [Signe 'Hand_PalmarisLongus_i'],Mirror*osim2antoine'.*(([0.00227;-0.03096;0.00493])-CoM_hand);...
+
+    
+    
     };
 
 
@@ -172,11 +192,11 @@ num_solid=0;
     OsteoArticularModel(incr_solid).a=[1 0 0]';
     OsteoArticularModel(incr_solid).joint=1;
     if Signe == 'R'
-        OsteoArticularModel(incr_solid).limit_inf=-pi/4;
-        OsteoArticularModel(incr_solid).limit_sup=pi/2;
+        OsteoArticularModel(incr_solid).limit_inf=-30*pi/180;
+        OsteoArticularModel(incr_solid).limit_sup=35*pi/180;
     else
-        OsteoArticularModel(incr_solid).limit_inf=-pi/2;
-        OsteoArticularModel(incr_solid).limit_sup=pi/4;
+        OsteoArticularModel(incr_solid).limit_inf=-35*pi/180;
+        OsteoArticularModel(incr_solid).limit_sup=30*pi/180;
     end
     OsteoArticularModel(incr_solid).m=Mass.Hand_Mass;
     OsteoArticularModel(incr_solid).b=[0 0 0]';
