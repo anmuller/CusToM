@@ -8,6 +8,7 @@ q4=q(:,4);
 
 if size(a,1)<18
     a=[a ; zeros(18-size(a,1),1)];
+    disp('Attention il manque des coeffs pour ce muscle (RRN14)');
 end
 
 y=a(1) + a(2)*q1 + a(3)*q1.^2 + a(4)*q1.^2 + a(5)*q2 + a(6)*q2.^3 +...
