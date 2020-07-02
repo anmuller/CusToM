@@ -61,17 +61,12 @@ deuxcoteoupas=1;
 nb_points=15;
 
 options = optimoptions(@fmincon,'Display','final','MaxFunEvals',100000);
-options2 = optimset('Display','final','MaxFunEvals',100000,'TolFun',1e-6,'TolX',1e-6);
 
-%x0=0.015*rand(3* numel(involved_solids{1}),1);
 x0=zeros(3* numel(involved_solids{1}),1);
 fun = @(x) fctcout(x,BiomechanicalModel,num_muscle(1),MomentsArmRegression(ind_mus_Regr).regression,nb_points,involved_solid{1},num_markers{1});
 
 x = fmincon(fun,x0,[],[],[],[],[],[],[],options);
 
-fctcoutx=fun(x);
-
-x = fminsearch(fun,x0,options2);
 fctcoutx=fun(x);
 
 
@@ -89,24 +84,7 @@ for k=1:numel(num_solid)
 end
 
 
-
-
-
-% ExtensorDigitorum TO BE SUPPRESSED
-% involved_solid{1}=[53;53;56;56;63;63];
-% involved_solid{2}=[66;66;69;69;76;76];
-% num_markers{1}=[49;63;12;13;30;26];
-% num_markers{2}=[49;63;12;13;30;26];
-
-% % Brachio
-%         involved_solid{1}=[53;53;56;56];
-%     involved_solid{2}=[66;66;69;69];
-%      num_markers{1}=[44;63;12;7];
-%      num_markers{2}=[44;63;12;7];
-
  MomentsArmComp(BiomechanicalModel,num_muscle(1),MomentsArmRegression(ind_mus_Regr).regression,nb_points,involved_solid{1},num_markers{1})
-
-
 
 
 

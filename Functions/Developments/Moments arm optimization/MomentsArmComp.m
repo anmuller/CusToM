@@ -98,13 +98,12 @@ end
 
 
 figure()
-plot(mac)
+plot(ideal_curve,'k')
 hold on
-plot(ideal_curve,'--')
+plot(mac,'--b')
 title(["Fct coût, " BiomechanicalModel.Muscles(num_muscle).name,liste_noms])
 legend("Actuelle","Ce quon veut atteindre")
 ylabel("Moment arm (m)");
-diff=norm((mac-ideal_curve).^2,2);
 
 ax=gca;
 ax.FontSize=30;
