@@ -1,4 +1,4 @@
-function MomentsArmComp(BiomechanicalModel,num_muscle,Regression,nb_points,involved_solids,num_markersprov)
+function RMS=MomentsArmComp(BiomechanicalModel,num_muscle,Regression,nb_points,involved_solids,num_markersprov)
 
 num_solid=involved_solids(2:end-1);
 num_markers=num_markersprov(2:end-1);
@@ -21,7 +21,6 @@ end
 
 
 Nb_q=numel(BiomechanicalModel.OsteoArticularModel)-6*(~isempty(intersect({BiomechanicalModel.OsteoArticularModel.name},'root0')));
-
 
 mac=[];
 
@@ -85,6 +84,10 @@ for j=1:size(Regression,2)
         ax.FontName='Utopia';
     end
     
+    RMS(j).rms=  sqrt(1/length(mactemp)*sum((ideal_curve_temp-mactemp).^2));
+    RMS(j).rmsr=  sqrt(1/length(mactemp)*sum((ideal_curve_temp-mactemp).^2))/(max(ideal_curve_temp)-min(ideal_curve_temp))*100;
+    RMS(j).axe=  Regression(j).axe;
+    
     ideal_curve=[ideal_curve ideal_curve_temp];
     
     liste_noms=[liste_noms ' '];
@@ -102,7 +105,7 @@ plot(ideal_curve,'k')
 hold on
 plot(mac,'--b')
 title(["Fct coût, " BiomechanicalModel.Muscles(num_muscle).name,liste_noms])
-legend("Actuelle","Ce quon veut atteindre")
+legend("Ce quon veut atteindre","Actuelle")
 ylabel("Moment arm (m)");
 
 ax=gca;
