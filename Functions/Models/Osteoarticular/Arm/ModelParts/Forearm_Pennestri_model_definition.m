@@ -95,6 +95,12 @@ Radius_UlnaJointNode = (k*[0 -0.0777 -0.0382])*Mirror;
 Ulna_HumerusJointNode = (k*[0 0.1088 0])*Mirror;
 Ulna_RadiusJointNode = (k*[0 -0.1430 0])*Mirror;
 
+% ------------------------- Definition of rotation axis
+Pro_supi_axis= Radius_ElbowJointNode - Radius_UlnaJointNode;
+Pro_supi_axis=Pro_supi_axis/norm(Pro_supi_axis);
+Zrot=[0;0;1];
+Xrot=cross(Pro_supi_axis,Zrot);
+Xrot=Xrot/norm(Xrot);
 
 % Adaptation of (Pennestri et al., 2007) node positions
 dr = 0.159;
@@ -219,7 +225,7 @@ Human_model(incr_solid).name=[Signe name];
 Human_model(incr_solid).sister=s_Ulna;
 Human_model(incr_solid).child=s_Radius_J2;
 Human_model(incr_solid).mother=s_mother;
-Human_model(incr_solid).a=[0 0 1]';
+Human_model(incr_solid).a=Zrot;
 Human_model(incr_solid).joint=1;
 Human_model(incr_solid).limit_inf=0;
 Human_model(incr_solid).limit_sup=150*pi/180;
@@ -238,7 +244,7 @@ Human_model(incr_solid).name=[Signe name];
 Human_model(incr_solid).sister=0;
 Human_model(incr_solid).child=s_Radius;
 Human_model(incr_solid).mother=s_Radius_J1;
-Human_model(incr_solid).a=[1 0 0]';
+Human_model(incr_solid).a=Xrot;
 Human_model(incr_solid).joint=1;
 Human_model(incr_solid).limit_inf=-pi/4;
 Human_model(incr_solid).limit_sup=pi/4;
@@ -257,7 +263,7 @@ Human_model(incr_solid).name=[Signe name];
 Human_model(incr_solid).sister=0;
 Human_model(incr_solid).child=0;
 Human_model(incr_solid).mother=s_Radius_J2;
-Human_model(incr_solid).a=[0 1 0]';
+Human_model(incr_solid).a=Pro_supi_axis;
 Human_model(incr_solid).joint=1;
 if Signe == 'R'
     Human_model(incr_solid).limit_inf=-pi/2;
