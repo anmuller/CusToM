@@ -438,7 +438,7 @@ for f=f_affich
             close(finv);
         else
             if f==f_affich(1)
-                hanat = patch(ax,'Faces',1:size(anat_pointsold,1),'Vertices',[anat_pointsold{:}]','FaceColor','None','FaceVertexCData',C_col_p,'EdgeColor',C_col_p);
+                hanat = patch(ax,'Faces',1:size(anat_pointsold,1),'Vertices',[anat_pointsold{:}]','FaceColor','None','FaceVertexCData',C_col_p,'EdgeColor','none');
                 hanat.Marker='o';
                 hanat.MarkerFaceColor='flat';
                 hanat.MarkerEdgeColor='k';
