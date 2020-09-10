@@ -13,7 +13,7 @@ k=k+1;
 %% TricepsMedial
 MomentsArmRegression(k).name='TricepsMed';
 MomentsArmRegression(k).regression(1).equation='RRN1';
-MomentsArmRegression(k).regression(1).joints={'Ulna','Radius'};
+MomentsArmRegression(k).regression(1).joints={'Ulna'};
 MomentsArmRegression(k).regression(1).axe='Ulna';
 MomentsArmRegression(k).regression(1).coeffs=[-2.02999e-2  -2.15606e-2  3.56484e-2  -1.78502e-2  2.6245e-3]';
 
@@ -21,7 +21,7 @@ k=k+1;
 %% TricepsLateral
 MomentsArmRegression(k).name='TricepsLat';
 MomentsArmRegression(k).regression(1).equation='RRN1';
-MomentsArmRegression(k).regression(1).joints={'Ulna','Radius'};
+MomentsArmRegression(k).regression(1).joints={'Ulna'};
 MomentsArmRegression(k).regression(1).axe='Ulna';
 MomentsArmRegression(k).regression(1).coeffs=[-2.02999e-2  -2.15606e-2  3.56484e-2  -1.78502e-2  2.6245e-3]';
 
@@ -30,7 +30,7 @@ k=k+1;
 %% Anconeus
 MomentsArmRegression(k).name='Anconeus';
 MomentsArmRegression(k).regression(1).equation='RRN1';
-MomentsArmRegression(k).regression(1).joints={'Ulna','Radius'};
+MomentsArmRegression(k).regression(1).joints={'Ulna'};
 MomentsArmRegression(k).regression(1).axe='Ulna';
 MomentsArmRegression(k).regression(1).coeffs=[-8.19456E-03  -1.27179E-02   8.20591E-03   2.90914E-03  -2.29252E-03 ]';
 
@@ -39,8 +39,8 @@ k=k+1;
 %% Brachialis
 MomentsArmRegression(k).name='Brachialis';
 MomentsArmRegression(k).regression(1).equation='RRN1';
-MomentsArmRegression(k).regression(1).joints={'Radius_J1','Radius'};
-MomentsArmRegression(k).regression(1).axe='Radius_J1';
+MomentsArmRegression(k).regression(1).joints={'Ulna'};
+MomentsArmRegression(k).regression(1).axe='Ulna';
 MomentsArmRegression(k).regression(1).coeffs=[9.84873e-3  1.01630e-2  -2.39557e-2  2.90329e-2  -9.24344e-3]';
 
 k=k+1;
@@ -72,20 +72,20 @@ MomentsArmRegression(k).regression(2).coeffs=[9.47956E-03  -9.28023E-15  3.97126
 
 
 k=k+1;
-%% PronatorQuadrus
-MomentsArmRegression(k).name='PronatorQuadrus';
+%% PronatorQuadratus
+MomentsArmRegression(k).name='PronatorQuadratus';
 MomentsArmRegression(k).regression(1).equation='RRN1';
-MomentsArmRegression(k).regression(1).joints={'Radius','Ulna'};
+MomentsArmRegression(k).regression(1).joints={'Radius'};
 MomentsArmRegression(k).regression(1).axe='Radius';
-MomentsArmRegression(k).regression(1).coeffs=[7.30854e-3  2.28126e-3  -2.81928e-3  -1.02119e-3  1.74483e-5]';
+MomentsArmRegression(k).regression(1).coeffs=-[7.30854e-3  2.28126e-3  -2.81928e-3  -1.02119e-3  1.74483e-5]';
 
 k=k+1;
 %% SupinatorBrevis
 MomentsArmRegression(k).name='SupinatorBrevis';
 MomentsArmRegression(k).regression(1).equation='RRN1';
-MomentsArmRegression(k).regression(1).joints={'Radius','Ulna'};
+MomentsArmRegression(k).regression(1).joints={'Radius'};
 MomentsArmRegression(k).regression(1).axe='Radius';
-MomentsArmRegression(k).regression(1).coeffs=[-7.67985E-03  4.08098E-04 1.45346E-03  -1.70151E-04  -5.01312E-04]';
+MomentsArmRegression(k).regression(1).coeffs=-[-7.67985E-03  4.08098E-04 1.45346E-03  -1.70151E-04  -5.01312E-04]';
 
 
 k=k+1;
@@ -94,7 +94,7 @@ MomentsArmRegression(k).name='ExtensorCarpiRadialisBrevis';
 MomentsArmRegression(k).regression(1).equation='RRN4';
 MomentsArmRegression(k).regression(1).joints={'Radius_J1','Radius'};
 MomentsArmRegression(k).regression(1).axe='Radius_J1';
-MomentsArmRegression(k).regression(1).coeffs=[5.64642E-03  - 1.74387E-03  -3.71495E-03  1.01268E-03  -5.29727E-05  1.84085E-04  1.87014E-05   -3.87485E-04  5.11181E-05  2.50652E-04  4.03295E-05   2.61368E-05]';
+MomentsArmRegression(k).regression(1).coeffs=[5.64642E-03  -1.74387E-03  -3.71495E-03  1.01268E-03  -5.29727E-05  1.84085E-04  1.87014E-05   -3.87485E-04  5.11181E-05  2.50652E-04  4.03295E-05   2.61368E-05]';
 MomentsArmRegression(k).regression(2).equation='RRN4';
 MomentsArmRegression(k).regression(2).joints={'Radius_J1','Radius'};
 MomentsArmRegression(k).regression(2).axe='Radius';
@@ -114,7 +114,7 @@ MomentsArmRegression(k).name='ExtensorCarpiRadialisLongus';
 MomentsArmRegression(k).regression(1).equation='RRN4';
 MomentsArmRegression(k).regression(1).joints={'Radius_J1','Radius'};
 MomentsArmRegression(k).regression(1).axe='Radius_J1';
-MomentsArmRegression(k).regression(1).coeffs=[6.784195E-03  4.25933E-03   1.08103E-02   -3.02892E-03  5.08279E-03  -3.08828E-04   -9.16923E-04   -4.83760E-03   2 .49206E-03  -1.02552E-03   -4.91622E-04  -4.50855E-04  ]';
+MomentsArmRegression(k).regression(1).coeffs=[6.784195E-03  4.25933E-03   1.08103E-02   -3.02892E-03  5.08279E-03  -3.08828E-04   -9.16923E-04   -4.83760E-03   2.49206E-03  -1.02552E-03   -4.91622E-04  4.50855E-04 ]';
 MomentsArmRegression(k).regression(2).equation='RRN4';
 MomentsArmRegression(k).regression(2).joints={'Radius_J1','Radius'};
 MomentsArmRegression(k).regression(2).axe='Radius';
@@ -126,7 +126,7 @@ MomentsArmRegression(k).regression(3).coeffs=[-2.14012E-02  3.26927E-02  -1.1390
 MomentsArmRegression(k).regression(4).equation='RRN4';
 MomentsArmRegression(k).regression(4).joints={'Hand','Wrist_J1'};
 MomentsArmRegression(k).regression(4).axe='Wrist_J1';
-MomentsArmRegression(k).regression(4).coeffs=[-1.98904E-02 1.410779E-02   -5.64345E-03  -4.25499E-03  1.09667E-02   -4.96348E-03  - 7.54046E-05  1.60476E-03   -5.13726E-03  - 7.44317E-03   4.86065E-03   8.54788E-03 ]';
+MomentsArmRegression(k).regression(4).coeffs=[-1.98904E-02 1.410779E-02   -5.64345E-03  -4.25499E-03  1.09667E-02   -4.96348E-03  -7.54046E-05  1.60476E-03   -5.13726E-03  -7.44317E-03   4.86065E-03   8.54788E-03 ]';
 
 
 k=k+1;
@@ -139,7 +139,7 @@ MomentsArmRegression(k).regression(1).coeffs=[-6.48E-03 -2.13E-03  4.01E-03   -7
 MomentsArmRegression(k).regression(2).equation='RRN4';
 MomentsArmRegression(k).regression(2).joints={'Radius_J1','Radius'};
 MomentsArmRegression(k).regression(2).axe='Radius';
-MomentsArmRegression(k).regression(2).coeffs=[ -6.83927E-04  4.81841E-10  -1.44939E-09  6.78194E-10  -2.61266E-03  3.40180E-04   4.37423E-04  1.38498E-09  -4.84425E-09  1.21106E-09   2.26670E-09  2.79839E-09 ];
+MomentsArmRegression(k).regression(2).coeffs=[ -6.83927E-04  4.81841E-10  -1.44939E-09  6.78194E-10  -2.61266E-03  3.40180E-04   4.37423E-04  1.38498E-09  -4.84425E-09  1.21106E-09   2.26670E-09  2.79839E-09 ]';
 MomentsArmRegression(k).regression(3).equation='RRN4';
 MomentsArmRegression(k).regression(3).joints={'Hand','Wrist_J1'};
 MomentsArmRegression(k).regression(3).axe='Hand';

@@ -4,7 +4,13 @@ function solids=solid_VP_choice(Human_model,solids_o_i,Regression,Sign)
 visu=find([Human_model.Visual]);
 
 sol_cons=zeros(size(Regression,2),2);
+
+if length(sp1)==1 ||  length(sp2)==1
+
 for k=1:size(Regression,2)
+%     if length(unique([sp1,sp2]))==2
+%         sol_cons(k,:)=unique([sp1,sp2]);
+%     else
     for kl=1:size(Regression(k).joints,2)
         joint_name=Regression(k).joints{kl};
         [~,joint_num]=intersect({Human_model.name},[Sign, joint_name]);
@@ -37,16 +43,20 @@ for k=1:size(Regression,2)
             end
         end
     end
-    
-
-    
-
-        
-        
+ %   end
+end
+else
+    sol_cons=solids_o_i;
 end
 
 
+
+
+
+
+
 solids=unique(sol_cons,'rows');
+
 
 
 solids=solids(:)';

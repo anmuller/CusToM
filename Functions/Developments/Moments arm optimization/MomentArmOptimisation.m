@@ -1,4 +1,4 @@
-function [fctcoutx,involved_solid,num_markers,BiomechanicalModel]=MomentArmOptimisation(name_mus,BiomechanicalModel,MomentsArmRegression,LengthRegression)
+function [fctcoutx,RMS,RMSlmt,involved_solid,num_markers,BiomechanicalModel]=MomentArmOptimisation(name_mus,BiomechanicalModel,MomentsArmRegression,LengthRegression)
 
 HumanModel=BiomechanicalModel.OsteoArticularModel;
 Muscles=BiomechanicalModel.Muscles;
@@ -59,15 +59,39 @@ deuxcoteoupas=1;
 
 
 nb_points=15;
+fctcoutx=0;
 
-options = optimoptions(@fmincon,'Display','final','MaxFunEvals',100000);
+insertion = BiomechanicalModel.OsteoArticularModel(involved_solid{1}(end)).anat_position{num_markers{1}(end),2}(2) +  BiomechanicalModel.OsteoArticularModel(involved_solid{1}(end)).c(2) ; 
+origin = abs(BiomechanicalModel.OsteoArticularModel(involved_solid{1}(1)).anat_position{num_markers{1}(1),2}(2) +  BiomechanicalModel.OsteoArticularModel(involved_solid{1}(1)).c(2)) ...
+                - abs( BiomechanicalModel.OsteoArticularModel( BiomechanicalModel.OsteoArticularModel(involved_solid{1}(1)).child).b(2)) ; 
 
-x0=0.1*rand(3* numel(involved_solids{1}),1);
+
+options = optimoptions(@fmincon,'Algorithm','sqp','Display','final','MaxFunEvals',100000,'TolCon',1e-6);%,'PlotFcn','optimplotfval');
+
+nonlcon=@(x) InCylinder(x,BiomechanicalModel.OsteoArticularModel,involved_solids{1},num_markersprov{1},sign(insertion),sign(origin),MomentsArmRegression(ind_mus_Regr).regression);
+
 fun = @(x) fctcout(x,BiomechanicalModel,num_muscle(1),MomentsArmRegression(ind_mus_Regr).regression,nb_points,involved_solid{1},num_markers{1});
 
-x = fmincon(fun,x0,[],[],[],[],[],[],[],options);
+x0=0*rand(3* numel(involved_solids{1}),1);
+ub=inf*ones(size(x0));
+lb=-inf*ones(size(x0));
+ub(2)=0;   
+lb(end-1)=0;
+
+    
+if strcmp(MomentsArmRegression(ind_mus_Regr).regression(1).axe,'Radius')
+   ub=inf*ones(size(x0));
+    lb=-inf*ones(size(x0));
+end
+
+while sum(nonlcon(x0)<0)<length(nonlcon(x0)) || sum(x0<=ub)<length(x0) || sum(x0>=lb)<length(x0)
+    x0=0.2*(0.5-rand(3* numel(involved_solids{1}),1));
+end
+
+x = fmincon(fun,x0,[],[],[],[],lb,ub,nonlcon,options);
 
 fctcoutx=fun(x);
+
 
 
 num_solid=involved_solids{1};
@@ -83,6 +107,12 @@ for k=1:numel(num_solid)
     end
 end
 
+
+
+
+if size({MomentsArmRegression(ind_mus_Regr).regression.equation},2)==1
+    [BiomechanicalModel]=LengthMinimisation(involved_solid,num_markers,BiomechanicalModel,MomentsArmRegression(ind_mus_Regr).regression,num_muscle(1),nb_points);
+end
 
 RMS= MomentsArmComp(BiomechanicalModel,num_muscle(1),MomentsArmRegression(ind_mus_Regr).regression,nb_points,involved_solid{1},num_markers{1});
 RMSlmt=MuscleLengthComp(BiomechanicalModel,num_muscle(1),LengthRegression(ind_mus_Regr).regression,nb_points,involved_solid{1},num_markers{1});

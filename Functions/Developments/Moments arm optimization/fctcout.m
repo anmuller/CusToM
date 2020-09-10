@@ -7,10 +7,12 @@ ideal_curve=[];
 
 
 mac_norme=[];
+ decalage=1;
+
 for j=1:size(Regression,2)
     ideal_curve_temp=[];
     rangeq=zeros(nb_points,size(Regression(j).joints,2));
-     map_q=zeros(nb_points^size(Regression(j).joints,2),size(Regression(j).joints,2));
+    map_q=zeros(nb_points^size(Regression(j).joints,2),size(Regression(j).joints,2));
 
     for k=1:size(Regression(j).joints,2)
         joint_name=Regression(j).joints{k};
@@ -30,13 +32,17 @@ for j=1:size(Regression,2)
     
     ideal_curve_temp=fh(Regression(j).coeffs,map_q);
     
-     norm_id=norm(ideal_curve_temp);
+    norm_id=norm(ideal_curve_temp);
 
-     ideal_curve_temp= ideal_curve_temp/norm_id;
+    ideal_curve_temp= ideal_curve_temp/norm_id;
     
     ideal_curve=[ ideal_curve  ideal_curve_temp];
     
-    mac_temp=mac((j-1)*size(map_q,1)+1 : j*size(map_q,1));
+    
+    mac_temp=mac(decalage: decalage + size(map_q,1) - 1);
+    decalage=decalage+size(map_q,1);
+
+    
     
     mac_temp= mac_temp/norm_id;
     
@@ -49,7 +55,9 @@ end
 
 
 %diff=norm((mac-ideal_curve).^2,2);
+
 diff=norm((mac_norme-ideal_curve).^2,2);
+
 % 
 %  figure()
 % plot(ideal_curve,'k')
