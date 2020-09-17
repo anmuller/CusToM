@@ -70,36 +70,38 @@ for j=1:size(Regression,2)
             Z(k,:) = ideal_curve_temp((k-1)*length(rangeq(:,1))+1:k*length(rangeq(:,1)));
             Zmac(k,:) = mactemp((k-1)*length(rangeq(:,1))+1:k*length(rangeq(:,1)));
         end
-%         figure()
-%         s = surf(rangeq(:,1),rangeq(:,2),Z,'FaceAlpha','0.5','EdgeColor','None');
-%         hold on
-%         surf(rangeq(:,1),rangeq(:,2),Zmac);
-%         s.FaceColor='interp';
-%         xlabel([Regression(j).joints{1},' (rad)'])
-%         ylabel([Regression(j).joints{2},' (rad)'])
-%         zlabel('Moment arm (m)')
-%         title([BiomechanicalModel.Muscles(num_muscle).name,' Moment arm along the ', Regression(j).axe,' axis'])
-%         legend('Reference','Model')
-%         ax=gca;
-%         ax.FontSize=50;
-%         ax.FontName='Utopia';
-%         
-%         
-%         figure()
-%         s = surf(rangeq(:,1),rangeq(:,2),Z-Zmac);
-%         s.FaceColor='interp';
-%         xlabel([Regression(j).joints{1},' (rad)'])
-%         ylabel([Regression(j).joints{2},' (rad)'])
-%         zlabel('Moment arm error (m)')
-%         title([BiomechanicalModel.Muscles(num_muscle).name,' Moment arm error along the ', Regression(j).axe,' axis'])
-%         ax=gca;
-%         ax.FontSize=50;
-%         ax.FontName='Utopia';
+        figure()
+        s = surf(rangeq(:,1),rangeq(:,2),Z,'FaceAlpha','0.5','EdgeColor','None');
+        hold on
+        surf(rangeq(:,1),rangeq(:,2),Zmac);
+        s.FaceColor='interp';
+        xlabel([Regression(j).joints{1},' (rad)'])
+        ylabel([Regression(j).joints{2},' (rad)'])
+        zlabel('Moment arm (m)')
+        title([BiomechanicalModel.Muscles(num_muscle).name,' Moment arm along the ', Regression(j).axe,' axis'])
+        legend('Reference','Model')
+        ax=gca;
+        ax.FontSize=50;
+        ax.FontName='Utopia';
+        
+        
+        figure()
+        s = surf(rangeq(:,1),rangeq(:,2),Z-Zmac);
+        s.FaceColor='interp';
+        xlabel([Regression(j).joints{1},' (rad)'])
+        ylabel([Regression(j).joints{2},' (rad)'])
+        zlabel('Moment arm error (m)')
+        title([BiomechanicalModel.Muscles(num_muscle).name,' Moment arm error along the ', Regression(j).axe,' axis'])
+        ax=gca;
+        ax.FontSize=50;
+        ax.FontName='Utopia';
     end
-    
+
+
     RMS(j).rms=  sqrt(1/length(mactemp)*sum((ideal_curve_temp-mactemp).^2));
     RMS(j).rmsr=  sqrt(1/length(mactemp)*sum((ideal_curve_temp-mactemp).^2))/sqrt(1/length(mactemp)*sum((ideal_curve_temp).^2))*100;
     RMS(j).axe=  Regression(j).axe;
+    
     
     ideal_curve=[ideal_curve ideal_curve_temp];
     
@@ -112,18 +114,18 @@ end
 
 
 
-% 
-% figure()
-% plot(ideal_curve,'k')
-% hold on
-% plot(mac,'--b')
-% title(["Fct coût, " BiomechanicalModel.Muscles(num_muscle).name,liste_noms])
-% legend("Ce quon veut atteindre","Actuelle")
-% ylabel("Moment arm (m)");
-% 
-% ax=gca;
-% ax.FontSize=30;
-% ax.FontName='Utopia';
+
+figure()
+plot(ideal_curve,'k')
+hold on
+plot(mac,'--b')
+title(["Fct coût, " BiomechanicalModel.Muscles(num_muscle).name,liste_noms])
+legend("Ce quon veut atteindre","Actuelle")
+ylabel("Moment arm (m)");
+
+ax=gca;
+ax.FontSize=30;
+ax.FontName='Utopia';
 
 
 

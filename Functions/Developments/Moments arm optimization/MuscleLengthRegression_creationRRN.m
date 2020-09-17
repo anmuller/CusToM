@@ -35,7 +35,7 @@ k=k+1;
 %% Brachialis
 MuscleLengthRegression(k).name='Brachialis';
 MuscleLengthRegression(k).regression(1).equation='RRN1';
-MuscleLengthRegression(k).regression(1).joints={'Radius_J1'};
+MuscleLengthRegression(k).regression(1).joints={'Ulna'};
 MuscleLengthRegression(k).regression(1).coeffs=[1.46058E-01 -1.20401E-02  3.59539E-03  -5.01862E-03  9.60102E-04 ]';
 
 k=k+1;

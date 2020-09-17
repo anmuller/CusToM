@@ -77,7 +77,7 @@ MomentsArmRegression(k).name='PronatorQuadratus';
 MomentsArmRegression(k).regression(1).equation='RRN1';
 MomentsArmRegression(k).regression(1).joints={'Radius'};
 MomentsArmRegression(k).regression(1).axe='Radius';
-MomentsArmRegression(k).regression(1).coeffs=-[7.30854e-3  2.28126e-3  -2.81928e-3  -1.02119e-3  1.74483e-5]';
+MomentsArmRegression(k).regression(1).coeffs=[7.30854e-3  2.28126e-3  -2.81928e-3  -1.02119e-3  1.74483e-5]';
 
 k=k+1;
 %% SupinatorBrevis
@@ -85,7 +85,7 @@ MomentsArmRegression(k).name='SupinatorBrevis';
 MomentsArmRegression(k).regression(1).equation='RRN1';
 MomentsArmRegression(k).regression(1).joints={'Radius'};
 MomentsArmRegression(k).regression(1).axe='Radius';
-MomentsArmRegression(k).regression(1).coeffs=-[-7.67985E-03  4.08098E-04 1.45346E-03  -1.70151E-04  -5.01312E-04]';
+MomentsArmRegression(k).regression(1).coeffs=[-7.67985E-03  4.08098E-04 1.45346E-03  -1.70151E-04  -5.01312E-04]';
 
 
 k=k+1;

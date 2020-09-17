@@ -62,13 +62,13 @@ nb_points=15;
 fctcoutx=0;
 
 insertion = BiomechanicalModel.OsteoArticularModel(involved_solid{1}(end)).anat_position{num_markers{1}(end),2}(2) +  BiomechanicalModel.OsteoArticularModel(involved_solid{1}(end)).c(2) ; 
-origin = abs(BiomechanicalModel.OsteoArticularModel(involved_solid{1}(1)).anat_position{num_markers{1}(1),2}(2) +  BiomechanicalModel.OsteoArticularModel(involved_solid{1}(1)).c(2)) ...
-                - abs( BiomechanicalModel.OsteoArticularModel( BiomechanicalModel.OsteoArticularModel(involved_solid{1}(1)).child).b(2)) ; 
+origin = BiomechanicalModel.OsteoArticularModel(involved_solid{1}(1)).anat_position{num_markers{1}(1),2}(2) +  BiomechanicalModel.OsteoArticularModel(involved_solid{1}(1)).c(2) ;
+plct_origin= abs(origin)  - abs( BiomechanicalModel.OsteoArticularModel( BiomechanicalModel.OsteoArticularModel(involved_solid{1}(1)).child).b(2)) ; 
 
 
 options = optimoptions(@fmincon,'Algorithm','sqp','Display','final','MaxFunEvals',100000,'TolCon',1e-6);%,'PlotFcn','optimplotfval');
 
-nonlcon=@(x) InCylinder(x,BiomechanicalModel.OsteoArticularModel,involved_solids{1},num_markersprov{1},sign(insertion),sign(origin),MomentsArmRegression(ind_mus_Regr).regression);
+nonlcon=@(x) InCylinder(x,BiomechanicalModel.OsteoArticularModel,involved_solids{1},num_markersprov{1},sign(insertion),sign(plct_origin),MomentsArmRegression(ind_mus_Regr).regression);
 
 fun = @(x) fctcout(x,BiomechanicalModel,num_muscle(1),MomentsArmRegression(ind_mus_Regr).regression,nb_points,involved_solid{1},num_markers{1});
 
@@ -80,12 +80,26 @@ lb(end-1)=0;
 
     
 if strcmp(MomentsArmRegression(ind_mus_Regr).regression(1).axe,'Radius')
-   ub=inf*ones(size(x0));
+    ub=inf*ones(size(x0));
     lb=-inf*ones(size(x0));
+    if origin-insertion >0
+        ub(2)=0;   
+        lb(end-1)=0;
+        lb(2)=-origin+insertion;
+        ub(end-1)=origin-insertion;
+    else
+        lb(2)=0;   
+        ub(end-1)=0;
+        ub(2)=-origin+insertion;
+        lb(end-1)=origin-insertion;
+   end
 end
 
 while sum(nonlcon(x0)<0)<length(nonlcon(x0)) || sum(x0<=ub)<length(x0) || sum(x0>=lb)<length(x0)
-    x0=0.2*(0.5-rand(3* numel(involved_solids{1}),1));
+    x0temp=0.2*(0.5-rand(3* numel(involved_solids{1}),1));
+    x0(1)=x0temp(1);
+    x0(end)=x0temp(end);
+    x0(3:end-2)=x0temp(3:end-2);
 end
 
 x = fmincon(fun,x0,[],[],[],[],lb,ub,nonlcon,options);
@@ -106,7 +120,6 @@ for k=1:numel(num_solid)
             BiomechanicalModel.OsteoArticularModel(temp1).anat_position{temp2,2}(pt)+x(cpt);
     end
 end
-
 
 
 
