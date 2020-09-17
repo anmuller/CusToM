@@ -1,11 +1,18 @@
 %% Optimisation des bras de levier
-clear all;
+clear variables;
 cmap=colormap(parula(3));
 set(groot, 'DefaultAxesColorOrder', cmap,'DefaultAxesFontSize',20,'DefaultLineLineWidth',3);
 close;
 format long
 
-load('BiomechanicalModelOrigin.mat')
+[ModelParameters,AnalysisParameters]=Parameters;
+
+save('ModelParameters.mat','ModelParameters');
+save('AnalysisParameters.mat','AnalysisParameters');
+
+Main;
+
+load('BiomechanicalModel.mat');
 
 temp={BiomechanicalModel.Muscles.name};
 for k=1:length(temp)
@@ -25,9 +32,9 @@ all_muscles= {'Brachioradialis',...
     'ExtensorCarpiRadialisBrevis',...
     'ExtensorCarpiUlnaris',...
     'FlexorCarpiUlnaris','FlexorCarpiRadialis',...
-    'PalmarisLongus' ,'PronatorTeres', ...
-    'Anconeus',...
-    'Brachialis',...
+     'PalmarisLongus' ,'PronatorTeres', ...
+     'Anconeus',...
+     'Brachialis',...
     'PronatorQuadratus' ,'SupinatorBrevis' ,'TricepsMed','TricepsLat'...
         };
 
@@ -41,7 +48,7 @@ for i=1:length(all_muscles)
     
     
     
-    fileID = fopen('via_points_avec_bornes_modele.txt','a');
+    fileID = fopen('via_points_final2.txt','a');
     
     solid_interet=involved_solids{1};
     markers_interet=num_markersprov{1};
