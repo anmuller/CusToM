@@ -120,7 +120,7 @@ for num_fil = 1:numel(AnalysisParameters.filename)
     Human_model(41).m=Human_model(41).m+0.4; %41 pour bf
     for i=1:nbframe
         if i==170
-                Human_model(41).m=Human_model(41).m-0.4;
+                Human_model(63).m=Human_model(63).m-0.4;
         end
         % setting position/speed/acceleration for each joint
         Human_model(1).p=p_pelvis(i,:)';

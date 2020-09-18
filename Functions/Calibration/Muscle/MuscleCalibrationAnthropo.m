@@ -7,7 +7,7 @@ if isfield(BiomechanicalModel,'Generalized_Coordinates')
     q=BiomechanicalModel.Generalized_Coordinates.q_complete;
     Nb_q= size(q,1);
 else
-    Nb_q = numel(Human_model)-6;
+    Nb_q = numel(BiomechanicalModel.OsteoArticularModel)-6;
 end
 
 Nb_m=length(RefBiomechanicalModel.Muscles);
