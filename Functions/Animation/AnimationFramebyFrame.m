@@ -946,7 +946,7 @@ for f=f_affich
     if isfield(AnimateParameters,'Mode')  && isequal(AnimateParameters.Mode, 'Figure')
         % drawing an saving
         drawnow;
-        M(f) = getframe(fig); %#ok<AGROW>
+        animStruct.M(f) = getframe(fig); %#ok<AGROW>
     end
     
     if isfield(AnimateParameters,'Mode')  && isequal(AnimateParameters.Mode, 'Picture')
