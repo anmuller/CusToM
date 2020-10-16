@@ -34,11 +34,10 @@ end
 
 
 %% Figure
-
 if isfield(AnimateParameters,'Mode')  && (isequal(AnimateParameters.Mode, 'Figure') ...
         || isequal(AnimateParameters.Mode, 'Picture'))
     fig=figure('outerposition',[483,60,456*1.5,466*1.5]);
-    %ax=gca;
+    ax=gca;
 elseif (isfield(AnimateParameters,'Mode')  &&  isequal(AnimateParameters.Mode, 'cFigure')) 
     fig=cFigure; % from GIBBON
     view(3); axis equal; axis tight; axis vis3d; grid on; box on;
