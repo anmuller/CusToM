@@ -75,7 +75,7 @@ animStruct.Set=cell(1,size(q,2));
 
 %% Animation frame by frame
 
-[animStruct]=AnimationFramebyFrame(ax,fig,filename,AnalysisParameters,ModelParameters,AnimateParameters,DataXSens,q,q6dof,PelvisPosition,PelvisOrientation,Markers_set,f_affich,Muscles,animStruct,real_markers,BiomechanicalModel,Human_model);
+[animStruct,M]=AnimationFramebyFrame(ax,fig,filename,AnalysisParameters,ModelParameters,AnimateParameters,DataXSens,q,q6dof,PelvisPosition,PelvisOrientation,Markers_set,f_affich,Muscles,animStruct,real_markers,BiomechanicalModel,Human_model);
 
 
 

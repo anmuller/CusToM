@@ -1,4 +1,4 @@
-function [animStruct]=AnimationFramebyFrame(ax,fig,filename,AnalysisParameters,ModelParameters,AnimateParameters,DataXSens,q,q6dof,PelvisPosition,PelvisOrientation,Markers_set,f_affich,Muscles,animStruct,real_markers,BiomechanicalModel,Human_model)
+function [animStruct,M]=AnimationFramebyFrame(ax,fig,filename,AnalysisParameters,ModelParameters,AnimateParameters,DataXSens,q,q6dof,PelvisPosition,PelvisOrientation,Markers_set,f_affich,Muscles,animStruct,real_markers,BiomechanicalModel,Human_model)
 % Computation of animation structure for animation
 %
 %   INPUT
@@ -35,7 +35,7 @@ function [animStruct]=AnimationFramebyFrame(ax,fig,filename,AnalysisParameters,M
 
 options=OptionsChoices(BiomechanicalModel,AnimateParameters);
 Colors=ColorsAnimation(filename,Muscles,AnimateParameters,Human_model,ModelParameters,AnalysisParameters,options,Markers_set);
-
+M=[];
 
 for f=f_affich
     
