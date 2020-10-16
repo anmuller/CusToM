@@ -35,7 +35,6 @@ function [animStruct,M]=AnimationFramebyFrame(ax,fig,filename,AnalysisParameters
 
 options=OptionsChoices(BiomechanicalModel,AnimateParameters);
 Colors=ColorsAnimation(filename,Muscles,AnimateParameters,Human_model,ModelParameters,AnalysisParameters,options,Markers_set);
-M=[];
 
 for f=f_affich
     
@@ -954,6 +953,10 @@ for f=f_affich
         close(fig);
     end
     
+end
+
+if ~exist('M')
+    M=[];
 end
 
 end
