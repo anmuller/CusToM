@@ -1,4 +1,4 @@
-function [animStruct,M]=AnimationFramebyFrame(ax,fig,filename,AnalysisParameters,ModelParameters,AnimateParameters,DataXSens,q,q6dof,PelvisPosition,PelvisOrientation,Markers_set,f_affich,Muscles,animStruct,real_markers,BiomechanicalModel,Human_model)
+function [animStruct]=AnimationFramebyFrame(ax,fig,filename,AnalysisParameters,ModelParameters,AnimateParameters,DataXSens,q,q6dof,PelvisPosition,PelvisOrientation,Markers_set,f_affich,Muscles,animStruct,real_markers,BiomechanicalModel,Human_model)
 % Computation of animation structure for animation
 %
 %   INPUT
@@ -945,7 +945,7 @@ for f=f_affich
     if isfield(AnimateParameters,'Mode')  && isequal(AnimateParameters.Mode, 'Figure')
         % drawing an saving
         drawnow;
-        M(f) = getframe(fig); %#ok<AGROW>
+        animStruct.M(f) = getframe(fig); %#ok<AGROW>
     end
     
     if isfield(AnimateParameters,'Mode')  && isequal(AnimateParameters.Mode, 'Picture')
@@ -955,8 +955,5 @@ for f=f_affich
     
 end
 
-if ~exist('M')
-    M=[];
-end
 
 end

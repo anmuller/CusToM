@@ -75,7 +75,7 @@ animStruct.Set=cell(1,size(q,2));
 
 %% Animation frame by frame
 
-[animStruct,M]=AnimationFramebyFrame(ax,fig,filename,AnalysisParameters,ModelParameters,AnimateParameters,DataXSens,q,q6dof,PelvisPosition,PelvisOrientation,Markers_set,f_affich,Muscles,animStruct,real_markers,BiomechanicalModel,Human_model);
+[animStruct]=AnimationFramebyFrame(ax,fig,filename,AnalysisParameters,ModelParameters,AnimateParameters,DataXSens,q,q6dof,PelvisPosition,PelvisOrientation,Markers_set,f_affich,Muscles,animStruct,real_markers,BiomechanicalModel,Human_model);
 
 
 
@@ -93,7 +93,7 @@ if isfield(AnimateParameters,'Mode')  && isequal(AnimateParameters.Mode, 'Figure
     v=VideoWriter([filename '.avi']);
     v.FrameRate=1/(3*ExperimentalData.Time(2));
     open(v)
-    writeVideo(v,M);
+    writeVideo(v,animStruct.M);
     close(v)
 elseif (isfield(AnimateParameters,'Mode')  && isequal(AnimateParameters.Mode, 'cFigure') ) 
     anim8(fig,animStruct);
