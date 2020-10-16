@@ -85,8 +85,8 @@ if options.Force_Prediction_points
         Colors.Prediction(i).points_prediction_efforts = AnalysisParameters.Prediction.ContactPoint{i}; %#ok<AGROW>
     end
     Colors.Prediction=verif_Prediction_Humanmodel(Human_model,Colors.Prediction);
-    NbPointsPrediction = numel(Colors.Prediction);
-    Colors.C_pt_p(1:NbPointsPrediction,:)=repmat([100,139,34]/255,[NbPointsPrediction 1]);
+    Colors.NbPointsPrediction = numel(Colors.Prediction);
+    Colors.C_pt_p(1:Colors.NbPointsPrediction,:)=repmat([100,139,34]/255,[Colors.NbPointsPrediction 1]);
 end
 
 if options.muscles_anim
