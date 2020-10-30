@@ -32,7 +32,7 @@ else
     q=qval;
 end
 
-if isfield(Biomechanical,'Coupling')
+if isfield(BiomechanicalModel,'Coupling')
     C=BiomechanicalModel.Coupling;
 else
     C= ones(nmr,length(q));
