@@ -63,8 +63,8 @@ end
 
 %Initialization animStruct
 animStruct=struct();
-if (isfield(AnimateParameters,'Mode')  && ~isequal(AnimateParameters.Mode, 'GenerateParameters') &&...
-        isfield(AnimateParameters,'Noc3d') &&  ~AnimateParameters.Noc3d)
+animStruct.Time = 1;
+if isfield(AnimateParameters,'Mode')  && ~isequal(AnimateParameters.Mode, 'GenerateParameters')
     animStruct.Time=ExperimentalData.Time;
 end
 
