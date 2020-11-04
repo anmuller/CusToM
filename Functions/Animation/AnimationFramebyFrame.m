@@ -652,7 +652,7 @@ for f=f_affich
             if  isempty(options.Segment)
                 liste=Colors.num_s_mass_center;
             else
-                liste=intersect(Colors.num_s_mass_center,options.Segment)';
+                liste=intersect(Colors.num_s_mass_center,options.Segment);
             end
         end
         for j=liste
