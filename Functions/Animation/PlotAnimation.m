@@ -34,7 +34,6 @@ end
 
 
 %% Figure
-
 if isfield(AnimateParameters,'Mode')  && (isequal(AnimateParameters.Mode, 'Figure') ...
         || isequal(AnimateParameters.Mode, 'Picture'))
     fig=figure('outerposition',[483,60,456*1.5,466*1.5]);
@@ -64,6 +63,7 @@ end
 
 %Initialization animStruct
 animStruct=struct();
+animStruct.Time=1;
 if (isfield(AnimateParameters,'Mode')  && ~isequal(AnimateParameters.Mode, 'GenerateParameters') &&...
         isfield(AnimateParameters,'Noc3d') &&  ~AnimateParameters.Noc3d)
     animStruct.Time=ExperimentalData.Time;
@@ -94,7 +94,7 @@ if isfield(AnimateParameters,'Mode')  && isequal(AnimateParameters.Mode, 'Figure
     v=VideoWriter([filename '.avi']);
     v.FrameRate=1/(3*ExperimentalData.Time(2));
     open(v)
-    writeVideo(v,M);
+    writeVideo(v,animStruct.M);
     close(v)
 elseif (isfield(AnimateParameters,'Mode')  && isequal(AnimateParameters.Mode, 'cFigure') ) 
     anim8(fig,animStruct);

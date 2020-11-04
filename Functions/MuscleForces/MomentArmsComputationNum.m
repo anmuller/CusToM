@@ -21,39 +21,40 @@ function [R] = MomentArmsComputationNum(BiomechanicalModel,qval,dp)
 Human_model=BiomechanicalModel.OsteoArticularModel;
 Muscles=BiomechanicalModel.Muscles;
 % nq=numel(qval);
-C=BiomechanicalModel.Coupling;
+
 idxm=find([Muscles.exist]);
 nmr=numel(idxm);
 
 %
-if length(qval)==numel(BiomechanicalModel.OsteoArticularModel(:)) && ~isempty(intersect({BiomechanicalModel.OsteoArticularModel.name},'root0'))  
+if length(qval)==numel(BiomechanicalModel.OsteoArticularModel(:)) && ~isempty(intersect({BiomechanicalModel.OsteoArticularModel.name},'root0'))
     q=qval(1:end-6); %only degrees of freedom of the body, not the floating base.
 else
     q=qval;
 end
+
+if isfield(BiomechanicalModel,'Coupling')
+    C=BiomechanicalModel.Coupling;
+else
+    C= ones(nmr,length(q));
+end
+[row,col] = find(C);
+
 %% Computation of moment arms
 R=zeros(nmr,length(q));%init R
 
-for i=1:length(q)
+for k=1:length(row)
+    i = col(k); % q indice
     dq=zeros(length(q),1); %differentiation step vector
     dq(i)=dp;
     
     Lpdq=zeros(nmr,1);
     Lmdq=zeros(nmr,1);
-    for j=1:nmr % for each muscle
-        if C(j,i)==1
-        % compute the length of the muscle at q+dq
-        Lpdq(j) = Muscle_lengthNum(Human_model,Muscles(idxm(j)),q+dq); 
-        % compute the length of the muscle at q-dq
-        Lmdq(j) = Muscle_lengthNum(Human_model,Muscles(idxm(j)),q-dq); 
-    %         R(:,i)=(-Lpdq+Lmdq)/(2*dp); % it is -dl/dq
-            % if Lpdq(j)~=0 || Lmdq(j)~=0
-            %     R(:,i)=(-Lpdq+Lmdq)/(2*dp); % it is -dl/dq
-            % else
-            %     R(:,i)=0;
-            % end
-        end
-    end
+    j= row(k) ; % muscle indice 
+    % compute the length of the muscle at q+dq
+    Lpdq(j) = Muscle_lengthNum(Human_model,Muscles(idxm(j)),q+dq);
+    % compute the length of the muscle at q-dq
+    Lmdq(j) = Muscle_lengthNum(Human_model,Muscles(idxm(j)),q-dq);
+
     R(:,i)=(-Lpdq+Lmdq)/(2*dp); % it is -dl/dq
 end
 % beware that the matrix is finally nq*nm

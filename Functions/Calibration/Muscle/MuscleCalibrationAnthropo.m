@@ -50,8 +50,8 @@ end
 % functions in the AnalysisParameters struct.
 F0_scaled = Maximal_Isometric_Force_Scaling_Steele(BiomechanicalModel.Muscles,ModelParameters);
 
-for ii=1:length(Nb_m)
-    BiomechanicalModelscaled.Muscles(ii).F0 = ...
+for ii=1:Nb_m
+    BiomechanicalModelscaled.Muscles(ii).f0 = ...
     F0_scaled(ii);
 end
 end

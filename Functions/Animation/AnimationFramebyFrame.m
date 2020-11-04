@@ -36,7 +36,6 @@ function [animStruct]=AnimationFramebyFrame(ax,fig,filename,AnalysisParameters,M
 options=OptionsChoices(BiomechanicalModel,AnimateParameters);
 Colors=ColorsAnimation(filename,Muscles,AnimateParameters,Human_model,ModelParameters,AnalysisParameters,options,Markers_set);
 
-
 for f=f_affich
     
     if isfield(AnimateParameters,'Mode')  && (isequal(AnimateParameters.Mode, 'Figure') || isequal(AnimateParameters.Mode, 'Picture'))
@@ -438,7 +437,7 @@ for f=f_affich
             close(finv);
         else
             if f==f_affich(1)
-                hanat = patch(ax,'Faces',1:size(anat_pointsold,1),'Vertices',[anat_pointsold{:}]','FaceColor','None','FaceVertexCData',C_col_p,'EdgeColor',C_col_p);
+                hanat = patch(ax,'Faces',1:size(anat_pointsold,1),'Vertices',[anat_pointsold{:}]','FaceColor','None','FaceVertexCData',C_col_p,'EdgeColor','none');
                 hanat.Marker='o';
                 hanat.MarkerFaceColor='flat';
                 hanat.MarkerEdgeColor='k';
@@ -653,7 +652,7 @@ for f=f_affich
             if  isempty(options.Segment)
                 liste=Colors.num_s_mass_center;
             else
-                liste=intersect(Colors.num_s_mass_center,options.Segment)';
+                liste=intersect(Colors.num_s_mass_center,options.Segment);
             end
         end
         for j=liste
@@ -946,7 +945,7 @@ for f=f_affich
     if isfield(AnimateParameters,'Mode')  && isequal(AnimateParameters.Mode, 'Figure')
         % drawing an saving
         drawnow;
-        M(f) = getframe(fig); %#ok<AGROW>
+        animStruct.M(f) = getframe(fig); %#ok<AGROW>
     end
     
     if isfield(AnimateParameters,'Mode')  && isequal(AnimateParameters.Mode, 'Picture')
@@ -955,5 +954,6 @@ for f=f_affich
     end
     
 end
+
 
 end

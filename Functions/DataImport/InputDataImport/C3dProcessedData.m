@@ -111,6 +111,13 @@ end
 for ii=1:length(list_marker_c3d)
     real_markers(ii).name=list_m_table(Ia(ii));
     real_markers(ii).position_c3d=markers.(list_marker_c3d{ii})/1000;
+    real_markers(ii).Occluded=find(real_markers(ii).position_c3d(:,1)==0);
+    real_markers(ii).IsOccluded=~isempty(real_markers(ii).Occluded);
+end
+
+if ~isempty(cat(1,real_markers.Occluded))
+    warning(['A least one marker is occluded in ' filename ', occluded markers :'])
+    disp([real_markers(cat(1,real_markers.IsOccluded)).name]')
 end
 
 [list_missing_markers_in_c3d]=setdiff(list_markers,[real_markers.name]');
