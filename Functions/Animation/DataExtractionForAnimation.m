@@ -57,8 +57,6 @@ if (isfield(AnimateParameters,'Mode') && isequal(AnimateParameters.Mode, 'Genera
     q = zeros(numel(Human_model)-6,1);
 else
     if ( isfield(AnimateParameters,'Noc3d') &&  AnimateParameters.Noc3d )
-        load('AnalysisParameters.mat'); %#ok<LOAD>
-        num_ext = numel(AnalysisParameters.General.Extension)-1;
         load('BiomechanicalModel.mat'); %#ok<LOAD>
         Human_model = BiomechanicalModel.OsteoArticularModel;
         if isempty(intersect({BiomechanicalModel.OsteoArticularModel.name},'root0'))  
