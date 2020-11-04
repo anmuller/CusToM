@@ -33,11 +33,9 @@ for qchoix=1:length(q)
     qm=q;
     qp(qchoix)=qp(qchoix)+dq;
     qm(qchoix)=qm(qchoix)-dq;
-    [~,dhp]=NonLinCon_ClosedLoop_Num(Human_model.OsteoArticularModel,Human_model.Generalized_Coordinates,solid_path1,solid_path2,num_solid,num_markers,qp,k);
-    [~,dhm]=NonLinCon_ClosedLoop_Num(Human_model.OsteoArticularModel,Human_model.Generalized_Coordinates,solid_path1,solid_path2,num_solid,num_markers,qm,k);
-    K(:,qchoix)=(dhp-dhm)/(2*dq);
-    
-    
+    [~,dhp]=NonLinCon_ClosedLoop_Num(Human_model.OsteoArticularModel,solid_path1,solid_path2,num_solid,num_markers,qp,k);
+    [~,dhm]=NonLinCon_ClosedLoop_Num(Human_model.OsteoArticularModel,solid_path1,solid_path2,num_solid,num_markers,qm,k);
+    K(:,qchoix)=(dhp-dhm)/(2*dq);   
 end
 
 
