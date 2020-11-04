@@ -277,8 +277,8 @@ OsteoArticularModel(incr_solid).L={[Signe 'Humerus_ghJointNode'];[Signe 'Humerus
 OsteoArticularModel(incr_solid).wrap(1).name=['Wrap' Signe 'HumerusDelt'];
 OsteoArticularModel(incr_solid).wrap(1).anat_position=['Wrap' Signe 'HumerusDelt'];
 OsteoArticularModel(incr_solid).wrap(1).type='C'; % C: Cylinder or S: Sphere
-OsteoArticularModel(incr_solid).wrap(1).radius=k*0.05;
-OsteoArticularModel(incr_solid).wrap(1).R=[ 0.4515   -0.2896    0.8440;
+OsteoArticularModel(incr_solid).wrap(1).R=k*0.05;
+OsteoArticularModel(incr_solid).wrap(1).orientation=[ 0.4515   -0.2896    0.8440;
                                     0.5805    0.8136   -0.0313;
                                     -0.6776    0.5041    0.5355];
 OsteoArticularModel(incr_solid).wrap(1).location=Mirror*osim2antoine'.*[-0.0139 -0.0127 -0.0262]'+Humerus_ghJointNode';

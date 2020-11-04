@@ -540,7 +540,17 @@ for f=f_affich
                 nbpts_mu = size(pts_mu,1);
                 if isfield(Muscles(mu),'wrap') && ~isempty(Muscles(mu).wrap) && ~isempty(Muscles(mu).wrap{1})
                     % find the wrap
-                    Wrap = [Human_model.wrap]; names = {Wrap.name}'; [~,ind]=intersect(names,Muscles(mu).wrap{1});
+                    j_wr=1;
+                    for i_wr=1:size(Human_model,2)
+                        if ~isempty(Human_model(i_wr).wrap)
+                            Solid_wrapped=Human_model(i_wr).wrap;
+                            for k_wr=1:size(Solid_wrapped,2)
+                                Wrap(j_wr)=Solid_wrapped(k_wr);
+                                j_wr=j_wr+1;
+                            end
+                        end
+                    end
+                    names = {Wrap.name}'; [~,ind]=intersect(names,Muscles(mu).wrap{1});
                     cur_Wrap=Wrap(ind);
                     % wrap object
                     T_Ri_Rw=[cur_Wrap.orientation,cur_Wrap.location;[0 0 0],1];
