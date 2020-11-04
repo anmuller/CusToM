@@ -1,5 +1,5 @@
-function [Human_model,Markers_set,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop]=...
-Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,j,Q,k,p_adapt,alpha,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop)
+function [Human_model,Markers_set,num_cut,numClosedLoop,c,ceq]=...
+Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,j,Q,k,p_adapt,alpha,num_cut,numClosedLoop,c,ceq)
 % Computation of a symbolic forward kinematics 
 %
 %   INPUT
@@ -34,8 +34,10 @@ Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,j,Q,k,p_adapt,alpha,
 %________________________________________________________
 
 if nargin<12
-    p_ClosedLoop={};
-    R_ClosedLoop={};
+%     p_ClosedLoop={};
+%     R_ClosedLoop={};
+    c={};
+    ceq={};
 end
 
 %%
@@ -130,9 +132,8 @@ if Human_model(j).mother ~= 0
                 break
             end
         end
-        [solid_path]=find_solid_path(Human_model,j,num_solid);
-        s = Human_model(num_solid).c + Human_model(num_solid).anat_position{num_markers,2}; % position par rapport  l'articulation du solide parent de la boucle ferm�e
-        [Human_model,p_ClosedLoop{numClosedLoop},R_ClosedLoop{numClosedLoop}] = ForwardKinematics_ClosedLoop(Human_model,1,s,solid_path,[0 0 0]',eye(3),Q,k);
+        [solid_path1,solid_path2]=find_solid_path(Human_model,j,num_solid);
+        [c{numClosedLoop},ceq{numClosedLoop}]=NonLinCon_ClosedLoop_Sym(Human_model,solid_path1,solid_path2,num_solid,num_markers,Q,k);
         numClosedLoop=numClosedLoop+1;
     end
     
@@ -149,7 +150,9 @@ for m=1:numel(Markers_set)
     end
 end
 
-[Human_model,Markers_set,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,Human_model(j).sister,Q,k,p_adapt,alpha,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop);
-[Human_model,Markers_set,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,Human_model(j).child,Q,k,p_adapt,alpha,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop);
+% [Human_model,Markers_set,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,Human_model(j).sister,Q,k,p_adapt,alpha,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop);
+% [Human_model,Markers_set,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,Human_model(j).child,Q,k,p_adapt,alpha,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop);
+[Human_model,Markers_set,num_cut,numClosedLoop,c,ceq]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,Human_model(j).sister,Q,k,p_adapt,alpha,num_cut,numClosedLoop,c,ceq);
+[Human_model,Markers_set,num_cut,numClosedLoop,c,ceq]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,Human_model(j).child,Q,k,p_adapt,alpha,num_cut,numClosedLoop,c,ceq);
 
 end

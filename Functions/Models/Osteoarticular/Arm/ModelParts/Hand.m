@@ -80,6 +80,13 @@ end
 Hand_WristJointNode = (k*[0 0.0528 0])*Mirror;
 Hand_EndNode = (k*[0 -0.1416 0])*Mirror;
 
+% Adaptation of Pennestri node positions
+dr = -0.159;
+cr = 0.071;
+L_forearm = 0.2628;
+k_Pennestri2custom = L_forearm/(cr-dr)*k*Mirror; % Forearm length homotethy
+Pennestri2custom = k_Pennestri2custom*[0 0 1;-1 0 0;0 -1 0];
+
 %%              Definition of anatomical landmarks
 
 Hand_position_set= {...
@@ -109,14 +116,14 @@ Hand_position_set= {...
     [Signe 'HandPrediction9'], k*Mirror*[0.015 -0.07 0]';...
     [Signe 'HandPrediction10'], k*Mirror*[0.015 -0.06 0.03]';...
     [Signe 'HandPrediction11'], k*Mirror*[0.015 -0.01 0.05]';...
-    % TO BE MODIFIED
-    [Signe 'Hand_CubitalisAnterior_i'],[0 0 0]';
-    [Signe 'Hand_FlexorCarpiUlnaris_i'],[0 0 0]';
-    [Signe 'Hand_ExtensorCarpiUlnaris_i'],[0 0 0]';
-    [Signe 'Hand_ExtensorDigitorum_i'],[0 0 0]';
-    [Signe 'Hand_FlexorDigitorumSuperior_i'],[0 0 0]';
-    [Signe 'Hand_FlexorCapriRadialis_i'],[0 0 0]';
-    [Signe 'Hand_AbductorDigitiV_i'],[0 0 0]';
+    % Muscles extracted from (Pennestri et al., 2007)
+    [Signe 'Hand_CubitalisAnterior_i'],Pennestri2custom*[0.006 0.0027 0.007]'+Hand_WristJointNode';
+    [Signe 'Hand_FlexorCarpiUlnaris_i'],Pennestri2custom*[0.005 0.03 0.007]'+Hand_WristJointNode';
+    [Signe 'Hand_ExtensorCarpiUlnaris_i'],Pennestri2custom*[0.005 0.03 -0.007]'+Hand_WristJointNode';
+    [Signe 'Hand_ExtensorDigitorum_i'],Pennestri2custom*[0.038 0 -0.01]'+Hand_WristJointNode';
+    [Signe 'Hand_FlexorDigitorumSuperior_i'],Pennestri2custom*[0.005 -0.018 -0.006]'+Hand_WristJointNode';
+    [Signe 'Hand_FlexorCapriRadialis_i'],Pennestri2custom*[0.003 0.012 0.005]'+Hand_WristJointNode';
+    [Signe 'Hand_AbductorDigitiV_i'],Pennestri2custom*[0.01 -0.018 -0.007]'+Hand_WristJointNode';
     };
 
 
