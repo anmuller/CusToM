@@ -45,7 +45,7 @@ elseif (isfield(AnimateParameters,'Mode')  &&  isequal(AnimateParameters.Mode, '
     ax=gca;
     ax.Clipping = 'off';
     drawnow;
-elseif isfield(AnimateParameters,'Mode')  &&  (isequal(AnimateParameters.Mode, 'GenerateAnimate') || isequal(AnimateParameters.Mode, 'GenerateParameters'))
+elseif isfield(AnimateParameters,'Mode')  &&  (isequal(AnimateParameters.Mode, 'GenerateAnimate') || isequal(AnimateParameters.Mode, 'Modelling') || isequal(AnimateParameters.Mode, 'GenerateParameters'))
     ax = AnimateParameters.ax; 
     fig=ax.Parent;
     camlight(ax, 'headlight'); lighting(ax,'gouraud');
@@ -55,6 +55,7 @@ end
 % Frames to display
 if isfield(AnimateParameters,'Mode') && (isequal(AnimateParameters.Mode, 'Picture') ...
         || isequal(AnimateParameters.Mode, 'GenerateAnimate') ...
+        || isequal(AnimateParameters.Mode, 'Modelling') ...
         || isequal(AnimateParameters.Mode, 'GenerateParameters'))
     f_affich = AnimateParameters.PictureFrame;
 else
@@ -64,7 +65,8 @@ end
 %Initialization animStruct
 animStruct=struct();
 animStruct.Time = 1;
-if isfield(AnimateParameters,'Mode')  && ~isequal(AnimateParameters.Mode, 'GenerateParameters')
+if isfield(AnimateParameters,'Mode')  && ~isequal(AnimateParameters.Mode, 'GenerateParameters') ...
+        && ~isequal(AnimateParameters.Mode, 'Modelling')
     animStruct.Time=ExperimentalData.Time;
 end
 
