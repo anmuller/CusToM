@@ -602,9 +602,9 @@ num_solid=0;
     OsteoArticularModel(incr_solid).wrap(1).name='WrapRThoraxGH';
     OsteoArticularModel(incr_solid).wrap(1).anat_position='WrapRThoraxGH';
     OsteoArticularModel(incr_solid).wrap(1).type='S'; % C: Cylinder or S: Sphere
-    OsteoArticularModel(incr_solid).wrap(1).radius=k*0.035;
-    OsteoArticularModel(incr_solid).wrap(1).R=eye(3);
-    OsteoArticularModel(incr_solid).wrap(1).location=Thorax_osim2antoine'.*([-0.0058 -0.0378 0.0096]')-Clavicle2Scapula';
+    OsteoArticularModel(incr_solid).wrap(1).R=k*0.035;
+    OsteoArticularModel(incr_solid).wrap(1).orientation=eye(3);
+    OsteoArticularModel(incr_solid).wrap(1).location=Thorax_osim2antoine'.*([-0.0058 -0.0378 0.0096]')-Scapula_CoM_osim'-Clavicle2Scapula';
     OsteoArticularModel(incr_solid).wrap(1).h=0;
     OsteoArticularModel(incr_solid).wrap(1).num_solid=incr_solid;
     
@@ -755,9 +755,9 @@ num_solid=0;
     OsteoArticularModel(incr_solid).wrap(1).name='WrapLThoraxGH';
     OsteoArticularModel(incr_solid).wrap(1).anat_position='WrapLThoraxGH';
     OsteoArticularModel(incr_solid).wrap(1).type='S'; % C: Cylinder or S: Sphere
-    OsteoArticularModel(incr_solid).wrap(1).radius=k*0.035;
-    OsteoArticularModel(incr_solid).wrap(1).R=eye(3);
-    OsteoArticularModel(incr_solid).wrap(1).location=[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.0058 -0.0378 0.0096]')-Clavicle2Scapula');
+    OsteoArticularModel(incr_solid).wrap(1).R=k*0.035;
+    OsteoArticularModel(incr_solid).wrap(1).orientation=eye(3);
+    OsteoArticularModel(incr_solid).wrap(1).location=[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.0058 -0.0378 0.0096]')-Scapula_CoM_osim'-Clavicle2Scapula');
     OsteoArticularModel(incr_solid).wrap(1).h=0;
     OsteoArticularModel(incr_solid).wrap(1).num_solid=incr_solid;
     

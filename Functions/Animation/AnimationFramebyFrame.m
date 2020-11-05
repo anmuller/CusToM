@@ -54,7 +54,7 @@ for f=f_affich
     animStruct.Handles{f}=[];
     animStruct.Props{f}={};
     animStruct.Set{f}={};
-    if  isfield(AnimateParameters,'Mode')  && ~isequal(AnimateParameters.Mode, 'GenerateAnimate') && ~isequal(AnimateParameters.Mode, 'GenerateParameters')
+    if  isfield(AnimateParameters,'Mode')  && ~isequal(AnimateParameters.Mode, 'GenerateAnimate') && ~isequal(AnimateParameters.Mode, 'GenerateParameters') && ~isequal(AnimateParameters.Mode, 'Modelling')
         hold on
     end
     
@@ -97,6 +97,7 @@ for f=f_affich
         end
         if isfield(AnimateParameters,'Mode')  && (isequal(AnimateParameters.Mode, 'Figure') ...
                 || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
+                || isequal(AnimateParameters.Mode, 'Modelling') ...
                 || isequal(AnimateParameters.Mode, 'GenerateAnimate'))
             finv = figure('visible','off');
             if F_seg(1)==0 && length(F_seg)==2
@@ -141,6 +142,7 @@ for f=f_affich
             end
             if isfield(AnimateParameters,'Mode')  && (isequal(AnimateParameters.Mode, 'Figure') ...
                     || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
+                    || isequal(AnimateParameters.Mode, 'Modelling') ...
                     || isequal(AnimateParameters.Mode, 'GenerateAnimate'))
                 finv = figure('visible','off');
                 hc = gpatch(Fbones,X(:,1:3),[227 218 201]/255*0.9,'none');
@@ -244,6 +246,7 @@ for f=f_affich
             
             if isfield(AnimateParameters,'Mode')  && (isequal(AnimateParameters.Mode, 'Figure') ...
                     || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
+                    || isequal(AnimateParameters.Mode, 'Modelling') ...
                     || isequal(AnimateParameters.Mode, 'GenerateAnimate'))
                 finv = figure('visible','off');
                 hanat = patch(ax,'Faces',1:size(anat_pointsold,1),'Vertices',[anat_pointsold{:}]','FaceColor','none','FaceVertexCData',C_col_p,'EdgeColor','none');
@@ -341,6 +344,7 @@ for f=f_affich
             end
             if isfield(AnimateParameters,'Mode')  && (isequal(AnimateParameters.Mode, 'Figure') ...
                     || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
+                    || isequal(AnimateParameters.Mode, 'Modelling') ...
                     || isequal(AnimateParameters.Mode, 'GenerateAnimate'))
                 finv = figure('visible','off');
                 if F_seg(1)==0 && length(F_seg)==2
@@ -416,6 +420,7 @@ for f=f_affich
         
         if isfield(AnimateParameters,'Mode')  && (isequal(AnimateParameters.Mode, 'Figure') ...
                 || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
+                || isequal(AnimateParameters.Mode, 'Modelling') ...
                 || isequal(AnimateParameters.Mode, 'GenerateAnimate'))
             finv = figure('visible','off');
             hanat = patch(ax,'Faces',1:size(anat_pointsold,1),'Vertices',[anat_pointsold{:}]','FaceColor','none','FaceVertexCData',C_col_p,'EdgeColor','none');
@@ -509,6 +514,7 @@ for f=f_affich
         end
         if isfield(AnimateParameters,'Mode')  && (isequal(AnimateParameters.Mode, 'Figure') ...
                 || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
+                || isequal(AnimateParameters.Mode, 'Modelling') ...
                 || isequal(AnimateParameters.Mode, 'GenerateAnimate'))
             finv = figure('visible','off');
             if F_seg(1)==0 && length(F_seg)==2
@@ -540,7 +546,17 @@ for f=f_affich
                 nbpts_mu = size(pts_mu,1);
                 if isfield(Muscles(mu),'wrap') && ~isempty(Muscles(mu).wrap) && ~isempty(Muscles(mu).wrap{1})
                     % find the wrap
-                    Wrap = [Human_model.wrap]; names = {Wrap.name}'; [~,ind]=intersect(names,Muscles(mu).wrap{1});
+                    j_wr=1;
+                    for i_wr=1:size(Human_model,2)
+                        if ~isempty(Human_model(i_wr).wrap)
+                            Solid_wrapped=Human_model(i_wr).wrap;
+                            for k_wr=1:size(Solid_wrapped,2)
+                                Wrap(j_wr)=Solid_wrapped(k_wr);
+                                j_wr=j_wr+1;
+                            end
+                        end
+                    end
+                    names = {Wrap.name}'; [~,ind]=intersect(names,Muscles(mu).wrap{1});
                     cur_Wrap=Wrap(ind);
                     % wrap object
                     T_Ri_Rw=[cur_Wrap.orientation,cur_Wrap.location;[0 0 0],1];
@@ -582,6 +598,7 @@ for f=f_affich
         end
         if isfield(AnimateParameters,'Mode')  && (isequal(AnimateParameters.Mode, 'Figure') ...
                 || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
+                || isequal(AnimateParameters.Mode, 'Modelling') ...
                 || isequal(AnimateParameters.Mode, 'GenerateAnimate'))
             finv = figure('visible','off');
             hmu=gpatch(Fmu,Vmu,[],CEmu,1,2);
@@ -594,42 +611,42 @@ for f=f_affich
         animStruct.Props{f} = {animStruct.Props{f}{:},'Faces','Vertices','FaceVertexCData'};
         animStruct.Set{f} = {animStruct.Set{f}{:},Fmu,Vmu,CEmu};
         
-        
-%         if isfield(Human_model,'wrap')
-%             Fw=[];
-%             CEw=[];
-%             Vw=[];
-%             Wraps = [Human_model.wrap];
-%             
-%             for i_w = 1:numel(Wraps)
-%                 num_solid=Wraps(i_w).num_solid;
-%                 if ~isempty(intersect(concerned_bones,num_solid))
-%                     T_Ri_Rw=[Wraps(i_w).orientation,Wraps(i_w).location;[0 0 0],1];
-%                     X = Human_model_bis(num_solid).Tc_R0_Ri*T_Ri_Rw;
-%                     [Fcyl,Vcyl]=PlotCylinder(Wraps(i_w).R,Wraps(i_w).h);
-%                     Vcyl_R0= (X*[Vcyl';ones(1,length(Vcyl))])';
-%                     tot_nb_F=length(Fw);
-%                     cur_nb_F=length(Fcyl);
-%                     tot_nb_V=length(Vw);
-%                     Fw((1:cur_nb_F)+tot_nb_F,:)=Fcyl+tot_nb_V;
-%                     Vw=[Vw ;Vcyl_R0(:,1:3)]; %#ok<AGROW>
-%                 end
-%             end
-%             if isfield(AnimateParameters,'Mode')  && (isequal(AnimateParameters.Mode, 'Figure') ...
-%                     || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
-%                     || isequal(AnimateParameters.Mode, 'GenerateAnimate'))
-%                 finv = figure('visible','off');
-%                 hw=gpatch(Fw,Vw,'c','none',0.75);
-%                 copyobj(hw,ax);
-%                 close(finv);
-%             elseif f==f_affich(1)
-%                 hw=gpatch(Fw,Vw,'c','none',0.75);
-%             end
-%             animStruct.Handles{f} = [animStruct.Handles{f} hw];
-%             animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices'};
-%             animStruct.Set{f} = {animStruct.Set{f}{:},Vw};
-%         end
-%         
+
+        if isfield(Human_model,'wrap')
+            Fw=[];
+            CEw=[];
+            Vw=[];
+            Wraps = [Human_model.wrap];
+            
+            for i_w = 1:numel(Wraps)
+                num_solid=Wraps(i_w).num_solid;
+                if ~isempty(intersect(concerned_bones,num_solid))
+                    T_Ri_Rw=[Wraps(i_w).orientation,Wraps(i_w).location;[0 0 0],1];
+                    X = Human_model_bis(num_solid).Tc_R0_Ri*T_Ri_Rw;
+                    [Fcyl,Vcyl]=PlotCylinder(Wraps(i_w).R,Wraps(i_w).h);
+                    Vcyl_R0= (X*[Vcyl';ones(1,length(Vcyl))])';
+                    tot_nb_F=length(Fw);
+                    cur_nb_F=length(Fcyl);
+                    tot_nb_V=length(Vw);
+                    Fw((1:cur_nb_F)+tot_nb_F,:)=Fcyl+tot_nb_V;
+                    Vw=[Vw ;Vcyl_R0(:,1:3)]; %#ok<AGROW>
+                end
+            end
+            if isfield(AnimateParameters,'Mode')  && (isequal(AnimateParameters.Mode, 'Figure') ...
+                    || isequal(AnimateParameters.Mode, 'GenerateParameters') ...     
+                    || isequal(AnimateParameters.Mode, 'Modelling') ...
+                    || isequal(AnimateParameters.Mode, 'GenerateAnimate'))
+                finv = figure('visible','off');
+                hw=gpatch(Fw,Vw,'c','none',0.75);
+                copyobj(hw,ax);
+                close(finv);
+            elseif f==f_affich(1)
+                hw=gpatch(Fw,Vw,'c','none',0.75);
+            end
+            animStruct.Handles{f} = [animStruct.Handles{f} hw];
+            animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices'};
+            animStruct.Set{f} = {animStruct.Set{f}{:},Vw};
+        end
         
         
         
@@ -733,7 +750,8 @@ for f=f_affich
             Ve=[Ve ;Vell_R0(:,1:3)]; %#ok<AGROW>
         end
         if isfield(AnimateParameters,'Mode')  &&  (isequal(AnimateParameters.Mode, 'Figure') ...
-                || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
+                || isequal(AnimateParameters.Mode, 'GenerateParameters') ...                
+                || isequal(AnimateParameters.Mode, 'Modelling') ...
                 || isequal(AnimateParameters.Mode, 'GenerateAnimate'))
             finv = figure('visible','off');
             he=gpatch(Fe,Ve,'c','none',0.3);
@@ -768,7 +786,8 @@ for f=f_affich
             Vw=[Vw ;Vcyl_R0(:,1:3)]; %#ok<AGROW>
         end
         if isfield(AnimateParameters,'Mode')  && (isequal(AnimateParameters.Mode, 'Figure') ...
-                || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
+                || isequal(AnimateParameters.Mode, 'GenerateParameters') ...               
+                || isequal(AnimateParameters.Mode, 'Modelling') ...
                 || isequal(AnimateParameters.Mode, 'GenerateAnimate'))
             finv = figure('visible','off');
             hw=gpatch(Fw,Vw,'c','none',0.75);
@@ -837,7 +856,8 @@ for f=f_affich
         end
         if isfield(AnimateParameters,'Mode')  && (isequal(AnimateParameters.Mode, 'Figure') ...
                 || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
-                || isequal(AnimateParameters.Mode, 'GenerateAnimate'))
+                || isequal(AnimateParameters.Mode, 'GenerateAnimate')...
+                || isequal(AnimateParameters.Mode, 'Modelling'))
             finv = figure('visible','off');
             hmu=gpatch(Fmu,Vmu,[],CEmu,1,2);
             copyobj(hmu,ax);
@@ -868,6 +888,7 @@ for f=f_affich
         end
         if isfield(AnimateParameters,'Mode')  && (isequal(AnimateParameters.Mode, 'Figure') ...
                 || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
+                || isequal(AnimateParameters.Mode, 'Modelling') ...
                 || isequal(AnimateParameters.Mode, 'GenerateAnimate'))
             finv = figure('visible','off');
             Ext = gpatch(F_ef,V_ef,[],Colors.color_vect_force,1,4);
@@ -899,6 +920,7 @@ for f=f_affich
         end
         if isfield(AnimateParameters,'Mode')  && (isequal(AnimateParameters.Mode, 'Figure') ...
                 || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
+                || isequal(AnimateParameters.Mode, 'Modelling') ...
                 || isequal(AnimateParameters.Mode, 'GenerateAnimate'))
             finv = figure('visible','off');
             Extp = gpatch(F_efp,V_efp,[],Colors.color_vect_force_p,1,4);

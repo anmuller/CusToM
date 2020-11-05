@@ -84,7 +84,7 @@ end
 % Computation of coordinates of the Wrap
 if numel(wrap_path)==1
     Wc = Human_model(Wrap.num_solid).c+Wrap.location; % wrap_center
-    R_i_w = Wrap.R;
+    R_i_w = Wrap.orientation;
     T_Ri_Rw = [R_i_w, Wc;[0 0 0],1];
 else
     for n=wrap_path(2:end)
@@ -102,7 +102,7 @@ else
     l = wrap_path(end);
     Human_model(l).c_global = Human_model(l).p + Human_model(l).R * Human_model(l).c;
     Wc = Human_model(l).c_global + Human_model(l).R * Wrap.location; % wrap_center
-    R_i_w = Human_model(l).R*Wrap.R;
+    R_i_w = Human_model(l).R*Wrap.orientation;
     T_Ri_Rw = [R_i_w, Wc;[0 0 0],1];
 end
 
@@ -130,8 +130,8 @@ Bw=T_Ri_Rw\[B;1];   Bw(4)=[];
 % between Aw and Bw
 % intersection_droite_cylindre(Aw, Bw, [0 0 0], Wrap.radius, -Wrap.h, +Wrap.h)
 if Wrap.type=='C'
-    if Intersect_line_cylinder(Aw, Bw, Wrap.radius) || EnforcedWrap
-       [L,~,~,~,wrapside]=CylinderWrapping(Aw, Bw, Wrap.radius, wrapside);
+    if Intersect_line_cylinder(Aw, Bw, Wrap.R) || EnforcedWrap
+        [L,~,~,~,wrapside]=CylinderWrapping(Aw, Bw, Wrap.R, wrapside);
         Typ = sign(Bw(2)-Aw(2));
     else
         %Distance between A and B
@@ -140,8 +140,8 @@ if Wrap.type=='C'
         wrapside=[];
     end
 elseif Wrap.type=='S'
-    if Intersect_line_sphere(Aw, Bw, Wrap.radius) || EnforcedWrap
-        [L,~,~,~,wrapside]=SphereWrapping(Aw, Bw, Wrap.radius, wrapside);
+    if Intersect_line_sphere(Aw, Bw, Wrap.R) || EnforcedWrap
+        [L,~,~,~,wrapside]=SphereWrapping(Aw, Bw, Wrap.R, wrapside);
         Typ = sign(Bw(2)-Aw(2));
     else
         %Distance between A and B
