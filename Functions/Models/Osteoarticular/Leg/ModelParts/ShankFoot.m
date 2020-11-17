@@ -68,7 +68,7 @@ else
     if OsteoArticularModel(s_mother).child == 0      % if the mother don't have any child
         OsteoArticularModel(s_mother).child = eval(['s_' list_solid{1}]);    % the child of this mother is this solid
     else
-        [OsteoArticularModel]=sister_actualize(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la dernière soeur
+        [OsteoArticularModel]=sister_actualize(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la derniï¿½re soeur
     end
 end
 
@@ -265,5 +265,6 @@ OsteoArticularModel(incr_solid).limit_alpha= [ 20 , 30;...
     -20, -30] ;
 OsteoArticularModel(incr_solid).v= [ [1; 0; 0] , [0 ;1;0] ] ;
 OsteoArticularModel(incr_solid).comment= 'Knee Flexion(-)/Extension(+)' ;
+OsteoArticularModel(incr_solid).FunctionalAngle= 'Knee Flexion(-)/Extension(+)' ;
 
 end

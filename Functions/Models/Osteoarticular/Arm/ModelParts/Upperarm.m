@@ -257,6 +257,7 @@ OsteoArticularModel(incr_solid).KinematicsCut=[];              % kinematic cut
 OsteoArticularModel(incr_solid).ClosedLoop=[];                 % if this solid close a closed-loop chain : {number of solid i on which is attached this solid ; attachement point (local frame of solid i}
 OsteoArticularModel(incr_solid).linear_constraint=[];
 OsteoArticularModel(incr_solid).Visual=0;
+OsteoArticularModel(incr_solid).FunctionalAngle='GH plane of elevation';
 
 % Glenohumeral_J2
 num_solid=num_solid+1;        % number of the solid ...
@@ -280,6 +281,8 @@ OsteoArticularModel(incr_solid).b=[0 0 0]';
 OsteoArticularModel(incr_solid).I=zeros(3,3);
 OsteoArticularModel(incr_solid).c=[0 0 0]';
 OsteoArticularModel(incr_solid).Visual=0;
+OsteoArticularModel(incr_solid).FunctionalAngle='Negative GH elevation angle';
+
 % OsteoArticularModel(incr_solid).anat_position=Scapula_position_set;
 
 % Humerus
@@ -302,6 +305,8 @@ OsteoArticularModel(incr_solid).anat_position=Humerus_position_set;
 OsteoArticularModel(incr_solid).Visual=1;
 OsteoArticularModel(incr_solid).visual_file = ['Holzbaur/humerus_' Signe '.mat'];
 OsteoArticularModel(incr_solid).L={[Signe 'Humerus_ghJointNode'];[Signe 'Humerus_ElbowJointNode']};
+OsteoArticularModel(incr_solid).FunctionalAngle='GH axial rotation';
+
 
 % Wrapping 1
 OsteoArticularModel(incr_solid).wrap(1).name=['Wrap' Signe 'HumerusDelt'];

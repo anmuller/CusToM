@@ -62,7 +62,7 @@ else
     if OsteoArticularModel(s_mother).child == 0      % if the mother don't have any child
         OsteoArticularModel(s_mother).child = eval(['s_' list_solid{1}]);    % the child of this mother is this solid
     else
-        [OsteoArticularModel]=sister_actualize(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la dernière soeur
+        [OsteoArticularModel]=sister_actualize(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la derniï¿½re soeur
     end
 end    
 
@@ -190,6 +190,7 @@ num_solid=0;
     OsteoArticularModel(incr_solid).m=0;                 
     OsteoArticularModel(incr_solid).I=zeros(3,3);
     OsteoArticularModel(incr_solid).comment='Trunk Flexion(-)/Extension(+)';
+    OsteoArticularModel(incr_solid).FunctionalAngle='Trunk Flexion(-)/Extension(+)';
 
     % UpperTrunk_J2
     num_solid=num_solid+1;        % number of the solid ...
@@ -210,6 +211,7 @@ num_solid=0;
     OsteoArticularModel(incr_solid).m=0;                 
     OsteoArticularModel(incr_solid).I=zeros(3,3);
     OsteoArticularModel(incr_solid).comment='Trunk Axial Rotation Right(+)/Left(-)';
+    OsteoArticularModel(incr_solid).FunctionalAngle='Trunk Axial Rotation Right(+)/Left(-)';
 
     % Thorax
     num_solid=num_solid+1;        % number of the solid ...
@@ -233,5 +235,6 @@ num_solid=0;
     OsteoArticularModel(incr_solid).L={'Pelvis_L5JointNode';'Thorax_T1C5'};
     OsteoArticularModel(incr_solid).visual_file = ['gait2354/torso.mat'];
     OsteoArticularModel(incr_solid).comment='Trunk Lateral Bending Right(+)/Left(-)';
+    OsteoArticularModel(incr_solid).FunctionalAngle='Trunk Lateral Bending Right(+)/Left(-)';
 
 end

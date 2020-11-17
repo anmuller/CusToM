@@ -68,7 +68,7 @@ else
     if OsteoArticularJoint(s_mother).child == 0      % if the mother don't have any child
         OsteoArticularJoint(s_mother).child = eval(['s_' list_solid{1}]);    % the child of this mother is this solid
     else
-        [OsteoArticularJoint]=sister_actualize(OsteoArticularJoint,OsteoArticularJoint(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la dernière soeur
+        [OsteoArticularJoint]=sister_actualize(OsteoArticularJoint,OsteoArticularJoint(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la derniï¿½re soeur
     end
 end
 
@@ -154,7 +154,7 @@ num_solid=0;
     OsteoArticularJoint(incr_solid).c=-Forearm_ElbowJointNode';
     OsteoArticularJoint(incr_solid).anat_position=Elbow_J1_position_set;
     OsteoArticularJoint(incr_solid).Visual=0;
-    
+    OsteoArticularJoint(incr_solid).FunctionalAngle='Elbow flexion(+)/extension(-)' ;
     % Forearm
     num_solid=num_solid+1;        % number of the solid ...
     name=list_solid{num_solid}; % nom du solide
@@ -168,9 +168,11 @@ num_solid=0;
     if Signe == 'R'
         OsteoArticularJoint(incr_solid).limit_inf=0;
         OsteoArticularJoint(incr_solid).limit_sup=pi;
+        OsteoArticularJoint(incr_solid).FunctionalAngle='Forearm pronation(+)/supination(-)';
     else
         OsteoArticularJoint(incr_solid).limit_inf=-pi;
         OsteoArticularJoint(incr_solid).limit_sup=0;
+        OsteoArticularJoint(incr_solid).FunctionalAngle='Forearm pronation(-)/supination(+)';
     end
     OsteoArticularJoint(incr_solid).m=Mass.Forearm_Mass;
     OsteoArticularJoint(incr_solid).b=[0 0 0]';
@@ -180,5 +182,6 @@ num_solid=0;
     OsteoArticularJoint(incr_solid).Visual=1;
     OsteoArticularJoint(incr_solid).visual_file = ['Holzbaur/radius_' Signe '.mat'];
     OsteoArticularJoint(incr_solid).L={[Signe 'Forearm_ElbowJointNode'];[Signe 'Forearm_WristJointNode']};
-    
+   
+
 end

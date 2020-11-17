@@ -209,6 +209,8 @@ OsteoArticularModel(incr_solid).b=pos_attachment_pt;
 OsteoArticularModel(incr_solid).I=zeros(3,3);
 OsteoArticularModel(incr_solid).c=[0 0 0]';
 OsteoArticularModel(incr_solid).Visual=0;
+OsteoArticularModel(incr_solid).FunctionalAngle='Wrist flexion(+)/extension(-)' ;
+
 
 % Hand
 num_solid=num_solid+1;        % number of the solid ...
@@ -223,9 +225,11 @@ OsteoArticularModel(incr_solid).joint=1;
 if Signe == 'R'
     OsteoArticularModel(incr_solid).limit_inf=-10*pi/180;
     OsteoArticularModel(incr_solid).limit_sup=25*pi/180;
+    OsteoArticularModel(incr_solid).FunctionalAngle='Wrist deviation ulnar(+)/radial(-)' ;
 else
     OsteoArticularModel(incr_solid).limit_inf=-25*pi/180;
     OsteoArticularModel(incr_solid).limit_sup=10*pi/180;
+    OsteoArticularModel(incr_solid).FunctionalAngle='Wrist deviation ulnar(-)/radial(+)' ;
 end
 OsteoArticularModel(incr_solid).m=Mass.Hand_Mass;
 OsteoArticularModel(incr_solid).b=[0 0 0]';

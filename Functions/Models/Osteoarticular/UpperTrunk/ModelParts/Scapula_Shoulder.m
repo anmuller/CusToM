@@ -208,6 +208,7 @@ syms phi lambda % latitude longitude
 f_tx = matlabFunction(Thorax_Rx*sin(lambda));
 Human_model(incr_solid).kinematic_dependancy.q=f_tx;
 Human_model(incr_solid).comment='to be completed';
+Human_model(incr_solid).FunctionalAngle=[Side name];
 
 % ScapuloThoracic_J2
 num_solid=num_solid+1;                                      % solid number
@@ -233,6 +234,8 @@ Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
 Human_model(incr_solid).linear_constraint=[];
 Human_model(incr_solid).Visual=0;
 Human_model(incr_solid).comment='to be completed';
+Human_model(incr_solid).FunctionalAngle=[Side name];
+
 % Dependancy
 Human_model(incr_solid).kinematic_dependancy.active=1;
 Human_model(incr_solid).kinematic_dependancy.Joint=[incr_solid+5; incr_solid+6]; % Thoracicellips
@@ -264,6 +267,8 @@ Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
 Human_model(incr_solid).linear_constraint=[];
 Human_model(incr_solid).Visual=0;
 Human_model(incr_solid).comment='to be completed';
+Human_model(incr_solid).FunctionalAngle=[Side name];
+
 % Dependancy
 Human_model(incr_solid).kinematic_dependancy.active=1;
 Human_model(incr_solid).kinematic_dependancy.Joint=[incr_solid+4; incr_solid+5]; % Thoracicellips
@@ -295,6 +300,8 @@ Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
 Human_model(incr_solid).linear_constraint=[];
 Human_model(incr_solid).Visual=0;
 Human_model(incr_solid).comment='to be completed';
+Human_model(incr_solid).FunctionalAngle=[Side name];
+
 
 % ScapuloThoracic_J5
 num_solid=num_solid+1;                                      % solid number
@@ -320,6 +327,8 @@ Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
 Human_model(incr_solid).linear_constraint=[];
 Human_model(incr_solid).Visual=0;
 Human_model(incr_solid).comment='to be completed';
+Human_model(incr_solid).FunctionalAngle=[Side name];
+
 
 % Scapula
 num_solid=num_solid+1;                                      % solid number
@@ -347,6 +356,8 @@ Human_model(incr_solid).anat_position=Scapula_position_set;
 Human_model(incr_solid).Visual=1;
 Human_model(incr_solid).visual_file=['Holzbaur/Scapula_' lower(Side) '.mat'];
 Human_model(incr_solid).comment='to be completed';
+Human_model(incr_solid).FunctionalAngle=[Side name];
+
 
 % ThoracicEllips_J1
 num_solid=num_solid+1;                                      % solid number
@@ -372,6 +383,8 @@ Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
 Human_model(incr_solid).linear_constraint=[];
 Human_model(incr_solid).Visual=0;
 Human_model(incr_solid).comment='to be completed';
+Human_model(incr_solid).FunctionalAngle=[Side name];
+
 
 % ThoracicEllips_J2
 num_solid=num_solid+1;                                      % solid number
@@ -397,6 +410,8 @@ Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
 Human_model(incr_solid).linear_constraint=[];
 Human_model(incr_solid).Visual=0;
 Human_model(incr_solid).comment='to be completed';
+Human_model(incr_solid).FunctionalAngle=[Side name];
+
 
 %% AcromioClavicular Joint
 
@@ -424,6 +439,8 @@ Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
 Human_model(incr_solid).linear_constraint=[];
 Human_model(incr_solid).Visual=0;
 Human_model(incr_solid).comment='to be completed';
+Human_model(incr_solid).FunctionalAngle=[Side name];
+
 
 % AcromioClavicular_J2
 num_solid=num_solid+1;                                      % solid number
@@ -449,6 +466,8 @@ Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
 Human_model(incr_solid).linear_constraint=[];
 Human_model(incr_solid).Visual=0;
 Human_model(incr_solid).comment='to be completed';
+Human_model(incr_solid).FunctionalAngle=[Side name];
+
 
 % AcromioClavicular_J3
 num_solid=num_solid+1;                                      % solid number
@@ -475,6 +494,8 @@ Human_model(incr_solid).ClosedLoop=[Side 'Clavicle_AcromioClavicularJointNode'];
 Human_model(incr_solid).linear_constraint=[];
 Human_model(incr_solid).Visual=0;
 Human_model(incr_solid).comment='to be completed';
+Human_model(incr_solid).FunctionalAngle=[Side name];
+
 
 
 
