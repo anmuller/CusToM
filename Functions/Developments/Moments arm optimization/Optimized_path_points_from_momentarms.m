@@ -14,12 +14,12 @@ Main;
 
 load('BiomechanicalModel.mat');
 
-temp={BiomechanicalModel.Muscles.name};
-for k=1:length(temp)
-    temp2=temp{k};
-    temp{k}=temp2(2:end);
-end
-all_muscles=unique(temp);
+% temp={BiomechanicalModel.Muscles.name};
+% for k=1:length(temp)
+%     temp2=temp{k};
+%     temp{k}=temp2(2:end);
+% end
+% all_muscles=unique(temp);
 
 %% Stockage dans un fichier texte
 
@@ -27,18 +27,21 @@ MomentsArmRegression=MomentsArmRegression_creationRRN();
 LengthRegression=MuscleLengthRegression_creationRRN();
 
 
-all_muscles= {'Brachioradialis',...
-%     'ExtensorCarpiRadialisLongus',...
-%     'ExtensorCarpiRadialisBrevis',...
-%     'ExtensorCarpiUlnaris',...
-%     'FlexorCarpiUlnaris','FlexorCarpiRadialis',...
-%      'PalmarisLongus' ,'PronatorTeres', ...
-%      'Anconeus',...
-%      'Brachialis',...
-%     'PronatorQuadratus' ,'SupinatorBrevis' ,'TricepsMed','TricepsLat'...
+all_muscles= {...
+    'Brachioradialis',...
+    'ExtensorCarpiRadialisLongus',...
+    'ExtensorCarpiRadialisBrevis',...
+    'ExtensorCarpiUlnaris',...
+    'FlexorCarpiUlnaris','FlexorCarpiRadialis',...
+     'PalmarisLongus' ,'PronatorTeres', ...
+      'Anconeus',...
+     'Brachialis',...
+   'PronatorQuadratus' ,...
+    'SupinatorBrevis',...
+    'TricepsMed','TricepsLat'...
         };
     
-    k=0.944444444444444444;
+    kcalib=0.944444444444444444;
 
 for i=1:length(all_muscles)
     
@@ -46,11 +49,11 @@ for i=1:length(all_muscles)
     
     name_mus=all_muscles{i};
     
-    [fctcoutx,RMS,RMSLmt,involved_solids,num_markersprov,BiomechanicalModel]=MomentArmOptimisation(name_mus,BiomechanicalModel,MomentsArmRegression,LengthRegression);
+    [fctcoutx,RMS,RMSLmt,involved_solids,num_markersprov,BiomechanicalModel,homocoeff]=MomentArmOptimisation(name_mus,BiomechanicalModel,MomentsArmRegression,LengthRegression);
     
+    homocoeff
     
-    
-    fileID = fopen('via_points_finaltest.txt','a');
+    fileID = fopen('via_points_finalAnconeus.txt','a');
     
     solid_interet=involved_solids{1};
     markers_interet=num_markersprov{1};
@@ -59,13 +62,10 @@ for i=1:length(all_muscles)
         temp1=solid_interet(k);
         temp2=markers_interet(k);
         nom_pt_passage=BiomechanicalModel.OsteoArticularModel(temp1).anat_position{temp2,1};
-        pt_passage=BiomechanicalModel.OsteoArticularModel(temp1).anat_position{temp2,2};
-        
-        
         nom_pt_passage=nom_pt_passage(2:end);
         pt_passage=BiomechanicalModel.OsteoArticularModel(temp1).anat_position{temp2,2} +  BiomechanicalModel.OsteoArticularModel(temp1).c ;
-        fprintf(fileID,'[Signe ''%6s''], k*Mirror*[%6.4f ; %6.4f ; %6.4f] - COM ;... \n',nom_pt_passage,pt_passage/k);
-        fprintf(fileID,'[Signe ''%6s''], [%6.4f  %6.4f  %6.4f] ;... \n',nom_pt_passage,[0 -1 0;0 0 -1; 1 0 0]*pt_passage/k);
+        fprintf(fileID,'[Signe ''%6s''], k*Mirror*[%6.4f ; %6.4f ; %6.4f] - COM ;... \n',nom_pt_passage,pt_passage/kcalib);
+        fprintf(fileID,'[Signe ''%6s''], [%6.4f  %6.4f  %6.4f] ;... \n',nom_pt_passage,[0 -1 0;0 0 -1; 1 0 0]*pt_passage/kcalib*100); %cm
         
     end
     
@@ -83,12 +83,12 @@ for i=1:length(all_muscles)
     fclose(fileID);
     
     
-    
+    save('BiomechanicalModel.mat','BiomechanicalModel');
+
     
 end
 
 
-save('BiomechanicalModel.mat','BiomechanicalModel');
 
 
 % % Affichage des correlations vs les longueurs

@@ -1,4 +1,4 @@
-function [fctcoutx,RMS,RMSlmt,involved_solid,num_markers,BiomechanicalModel]=MomentArmOptimisation(name_mus,BiomechanicalModel,MomentsArmRegression,LengthRegression)
+function [fctcoutx,RMS,RMSlmt,involved_solid,num_markers,BiomechanicalModel,homocoeff]=MomentArmOptimisation(name_mus,BiomechanicalModel,MomentsArmRegression,LengthRegression)
 
 HumanModel=BiomechanicalModel.OsteoArticularModel;
 Muscles=BiomechanicalModel.Muscles;
@@ -18,7 +18,7 @@ deuxcoteoupas=1;
     
     involved_solids{k}=solid_VP_choice(HumanModel,unique(Muscles(num_muscle(k)).num_solid),MomentsArmRegression(ind_mus_Regr).regression,Sign{k});
     involved_solid{k}=[Muscles(num_muscle(k)).num_solid; involved_solids{k}'];
-    num_markers{k}=[BiomechanicalModel.Muscles(num_muscle(k)).num_markers];
+    num_markers{k}=[Muscles(num_muscle(k)).num_markers];
     num_markersprov{k}=[];
     for j=1:size(involved_solids{k},2)
         
@@ -59,50 +59,31 @@ deuxcoteoupas=1;
 
 
 nb_points=15;
-fctcoutx=0;
 
 insertion = BiomechanicalModel.OsteoArticularModel(involved_solid{1}(end)).anat_position{num_markers{1}(end),2}(2) +  BiomechanicalModel.OsteoArticularModel(involved_solid{1}(end)).c(2) ; 
 origin = BiomechanicalModel.OsteoArticularModel(involved_solid{1}(1)).anat_position{num_markers{1}(1),2}(2) +  BiomechanicalModel.OsteoArticularModel(involved_solid{1}(1)).c(2) ;
-plct_origin= abs(origin)  - abs( BiomechanicalModel.OsteoArticularModel( BiomechanicalModel.OsteoArticularModel(involved_solid{1}(1)).child).b(2)) ; 
 
 
 options = optimoptions(@fmincon,'Algorithm','sqp','Display','final','MaxFunEvals',100000,'TolCon',1e-6);%,'PlotFcn','optimplotfval');
 
-nonlcon=@(x) InCylinder(x,BiomechanicalModel.OsteoArticularModel,involved_solids{1},num_markersprov{1},sign(insertion),sign(plct_origin),MomentsArmRegression(ind_mus_Regr).regression);
+par_case = 0;
+if strcmp(MomentsArmRegression(ind_mus_Regr).regression(1).joints,'Radius')    % size({MomentsArmRegression(ind_mus_Regr).regression.equation},2)==1
+    par_case = 1;
+end
+
+
+nonlcon=@(x) InCylinder(x,BiomechanicalModel.OsteoArticularModel,involved_solids{1},num_markersprov{1},insertion,origin,par_case);
 
 fun = @(x) fctcout(x,BiomechanicalModel,num_muscle(1),MomentsArmRegression(ind_mus_Regr).regression,nb_points,involved_solid{1},num_markers{1});
 
-x0=0*rand(3* numel(involved_solids{1}),1);
-ub=inf*ones(size(x0));
-lb=-inf*ones(size(x0));
-ub(2)=0;   
-lb(end-1)=0;
+x0=0*(0.5-rand(3* numel(involved_solids{1}),1));
 
-    
-if strcmp(MomentsArmRegression(ind_mus_Regr).regression(1).axe,'Radius')
-    ub=inf*ones(size(x0));
-    lb=-inf*ones(size(x0));
-    if origin-insertion >0
-        ub(2)=0;   
-        lb(end-1)=0;
-        lb(2)=-origin+insertion;
-        ub(end-1)=origin-insertion;
-    else
-        lb(2)=0;   
-        ub(end-1)=0;
-        ub(2)=-origin+insertion;
-        lb(end-1)=origin-insertion;
-   end
+
+while sum(nonlcon(x0)<=0)<length(nonlcon(x0))
+    x0=0.05*(0.5-rand(3* numel(involved_solids{1}),1));
 end
 
-while sum(nonlcon(x0)<0)<length(nonlcon(x0)) || sum(x0<=ub)<length(x0) || sum(x0>=lb)<length(x0)
-    x0temp=0.2*(0.5-rand(3* numel(involved_solids{1}),1));
-    x0(1)=x0temp(1);
-    x0(end)=x0temp(end);
-    x0(3:end-2)=x0temp(3:end-2);
-end
-
-x = fmincon(fun,x0,[],[],[],[],lb,ub,nonlcon,options);
+x = fmincon(fun,x0,[],[],[],[],[],[],nonlcon,options);
 
 fctcoutx=fun(x);
 
@@ -123,11 +104,33 @@ end
 
 
 
-if size({MomentsArmRegression(ind_mus_Regr).regression.equation},2)==1
+if par_case
     [BiomechanicalModel]=LengthMinimisation(involved_solid,num_markers,BiomechanicalModel,MomentsArmRegression(ind_mus_Regr).regression,num_muscle(1),nb_points);
 end
 
-RMS= MomentsArmComp(BiomechanicalModel,num_muscle(1),MomentsArmRegression(ind_mus_Regr).regression,nb_points,involved_solid{1},num_markers{1});
+
+
+solids = involved_solid{1};
+markers=  num_markers{1};
+
+
+funlength = @(k)LengthDifferenceMinimisationOI(k,BiomechanicalModel,num_muscle,LengthRegression(ind_mus_Regr).regression,nb_points,solids,markers);
+
+homocoeff = fmincon(funlength,0,[],[],[],[],0,[],[],options);
+
+BiomechanicalModel.OsteoArticularModel(solids(1)).anat_position{markers(1),2}= ...
+   homocoeff* (BiomechanicalModel.OsteoArticularModel(solids(1)).anat_position{markers(1),2} - BiomechanicalModel.OsteoArticularModel(solids(2)).anat_position{markers(2),2}) +...
+   BiomechanicalModel.OsteoArticularModel(solids(2)).anat_position{markers(2),2};
+
+BiomechanicalModel.OsteoArticularModel(solids(end)).anat_position{markers(end),2}= ...
+    homocoeff*(BiomechanicalModel.OsteoArticularModel(solids(end)).anat_position{markers(end),2}- BiomechanicalModel.OsteoArticularModel(solids(end-1)).anat_position{markers(end-1),2}) +...
+    BiomechanicalModel.OsteoArticularModel(solids(end-1)).anat_position{markers(end-1),2};
+
+
+
+
+
+RMS= MomentsArmComp(BiomechanicalModel,num_muscle(1),MomentsArmRegression(ind_mus_Regr).regression, LengthRegression(ind_mus_Regr).regression, nb_points,involved_solid{1},num_markers{1});
 RMSlmt=MuscleLengthComp(BiomechanicalModel,num_muscle(1),LengthRegression(ind_mus_Regr).regression,nb_points,involved_solid{1},num_markers{1});
 
 

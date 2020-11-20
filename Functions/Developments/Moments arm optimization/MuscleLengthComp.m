@@ -64,32 +64,32 @@ if size(Regression.joints,2)==2
         ZLmttot(k,:) = Lmttot((k-1)*length(rangeq(:,1))+1:k*length(rangeq(:,1)));
     end
     
-    figure() 
-    s =surf(rangeq(:,1),rangeq(:,2),Z,'FaceAlpha','0.5','EdgeColor','None');
-    hold on 
-    surf(rangeq(:,1),rangeq(:,2),ZLmttot); 
-    hold on
-    s.FaceColor='interp'; 
-    xlabel([Regression.joints{1},' (rad)'])
-    ylabel([Regression.joints{2},' (rad)']) 
-    zlabel('Longueur musculo-tendineuse (m)')
-    title(BiomechanicalModel.Muscles(num_muscle).name)
-    legend('Reference','Model') 
-    ax=gca; 
-    ax.FontSize=50;
-    ax.FontName='Utopia';
-    
-    
-    figure() 
-    s = surf(rangeq(:,1),rangeq(:,2),Z-ZLmttot);
-    s.FaceColor='interp'; 
-    xlabel([Regression.joints{1},' (rad)'])
-    ylabel([Regression.joints{2},' (rad)']) 
-    zlabel('Musculotendon length error (m)') 
-    title(BiomechanicalModel.Muscles(num_muscle).name)
-    ax=gca; 
-    ax.FontSize=50; 
-    ax.FontName='Utopia';
+%     figure() 
+%     s =surf(rangeq(:,1),rangeq(:,2),Z,'FaceAlpha','0.5','EdgeColor','None');
+%     hold on 
+%     surf(rangeq(:,1),rangeq(:,2),ZLmttot); 
+%     hold on
+%     s.FaceColor='interp'; 
+%     xlabel([Regression.joints{1},' (rad)'])
+%     ylabel([Regression.joints{2},' (rad)']) 
+%     zlabel('Longueur musculo-tendineuse (m)')
+%     title(BiomechanicalModel.Muscles(num_muscle).name)
+%     legend('Reference','Model') 
+%     ax=gca; 
+%     ax.FontSize=50;
+%     ax.FontName='Utopia';
+%     
+%     
+%     figure() 
+%     s = surf(rangeq(:,1),rangeq(:,2),Z-ZLmttot);
+%     s.FaceColor='interp'; 
+%     xlabel([Regression.joints{1},' (rad)'])
+%     ylabel([Regression.joints{2},' (rad)']) 
+%     zlabel('Musculotendon length error (m)') 
+%     title(BiomechanicalModel.Muscles(num_muscle).name)
+%     ax=gca; 
+%     ax.FontSize=50; 
+%     ax.FontName='Utopia';
 end
 
 %RMS.rms=  sqrt(1/length(Lmttot) * sum((ideal_curve - Lmttot).^2));
@@ -99,18 +99,18 @@ RMS.corr=  r(2,1);
 RMS.sign=sum(sign(ideal_curve - Lmttot));
 
 
-
-figure()
-plot(ideal_curve,'k')
-hold on
-plot(Lmttot,'--b')
-title(["Longueur musculo tendineuse " BiomechanicalModel.Muscles(num_muscle).name,liste_noms])
-legend("Ce quon veut atteindre","Actuelle")
-ylabel("Longueur musculo tendineuse (m)");
-
-ax=gca;
-ax.FontSize=30;
-ax.FontName='Utopia';
+% 
+% figure()
+% plot(ideal_curve,'k')
+% hold on
+% plot(Lmttot,'--b')
+% title(["Longueur musculo tendineuse " BiomechanicalModel.Muscles(num_muscle).name,liste_noms])
+% legend("Ce quon veut atteindre","Actuelle")
+% ylabel("Longueur musculo tendineuse (m)");
+% 
+% ax=gca;
+% ax.FontSize=30;
+% ax.FontName='Utopia';
 
 
 

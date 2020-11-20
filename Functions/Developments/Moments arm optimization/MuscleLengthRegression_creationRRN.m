@@ -66,7 +66,7 @@ k=k+1;
 MuscleLengthRegression(k).name='SupinatorBrevis';
 MuscleLengthRegression(k).regression(1).equation='RRN1';
 MuscleLengthRegression(k).regression(1).joints={'Radius'};
-MuscleLengthRegression(k).regression(1).coeffs=[2.42941E-04  7.65849E-03  -2.11783E-04  -4.12925E-04   4.86667E-05 ]';
+MuscleLengthRegression(k).regression(1).coeffs=[6.14041e-2 7.65849E-03  -2.11783E-04  -4.12925E-04   4.86667E-05 ]';
 
 
 k=k+1;
