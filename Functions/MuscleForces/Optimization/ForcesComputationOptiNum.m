@@ -41,11 +41,15 @@ torques =InverseDynamicsResults.JointTorques;
 
 
 Nb_q=size(q,1);
-Nb_frames=size(torques,2);
+Nb_frames=4;%size(torques,2);
 
 %existing muscles
 idm = logical([Muscles.exist]);
 Nb_muscles=numel(Muscles(idm));
+
+if ~isempty(intersect({BiomechanicalModel.OsteoArticularModel.name},'root0'))
+    BiomechanicalModel.OsteoArticularModel=BiomechanicalModel.OsteoArticularModel(1:end-6);
+end
 
 %% computation of muscle moment arms from joint posture
 L0=ones(Nb_muscles,1);
@@ -63,8 +67,7 @@ R(:,:,1)    =   MomentArmsComputationNum(BiomechanicalModel,q(:,1),0.0001); %dep
 
  for i=1:Nb_frames % for each frames
      Lmt(idm,i)   =   MuscleLengthComputationNum(BiomechanicalModel,q(:,i)); %dependant of every q (q_complete)
-    R(:,:,i)    =   MomentArmsComputationNum(BiomechanicalModel,q(:,i),0.0001); %depend on reduced set of q (q_red)
-%      R(:,:,i)    =   R(:,:,1);
+     R(:,:,i)    =   MomentArmsComputationNum(BiomechanicalModel,q(:,i),0.0001); %depend on reduced set of q (q_red)
  end
 % %load('/home/clivet/Documents/Thèse/Developpement_CusToM/thesis/Fichiers_tests/Donnees a traiter/Ana Lucia Data - Sbj 1 - Trial 1 - Forearm model/Throwing_1/MuscleForcesComputationResults.mat');
 % R=   MuscleForcesComputationResults.MuscleLeverArm ;
@@ -85,7 +88,7 @@ Vm = gradient(Lm_norm)*freq;
 % Optimisation parameters
 
 Amin = zeros(Nb_muscles,1);
-A0a  = zeros(Nb_muscles,1);
+A0  = zeros(Nb_muscles,1);
 for i=1:size(idm,2)
     Muscles(i).f0 = 100*Muscles(i).f0;
 end

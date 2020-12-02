@@ -8,7 +8,6 @@ ideal_curve=[];
 
 mac_norme=[];
  decalage=1;
- diff=0;
 
 for j=1:size(Regression,2)
     ideal_curve_temp=[];
@@ -18,7 +17,7 @@ for j=1:size(Regression,2)
     for k=1:size(Regression(j).joints,2)
         joint_name=Regression(j).joints{k};
         [~,joint_num]=intersect({BiomechanicalModel.OsteoArticularModel.name},['R', joint_name]);
-        rangeq(:,k)=linspace(BiomechanicalModel.OsteoArticularModel(joint_num).limit_inf,BiomechanicalModel.OsteoArticularModel(joint_num).limit_sup,nb_points)';
+        rangeq(:,k)=linspace(BiomechanicalModel.OsteoArticularModel(joint_num).limit_inf,BiomechanicalModel.OsteoArticularModel(joint_num).limit_sup,nb_points)'+0.002;
 
         B1=repmat(rangeq(:,k),1,nb_points^(k-1));
         B1=B1';
@@ -34,6 +33,8 @@ for j=1:size(Regression,2)
     ideal_curve_temp=fh(Regression(j).coeffs,map_q);
     
     norm_id=norm(ideal_curve_temp);
+
+    ideal_curve_temp= ideal_curve_temp/norm_id;
     
     ideal_curve=[ ideal_curve  ideal_curve_temp];
     
@@ -42,9 +43,12 @@ for j=1:size(Regression,2)
     decalage=decalage+size(map_q,1);
 
     
+    
+    mac_temp= mac_temp/norm_id;
+    
     mac_norme=[mac_norme mac_temp];
     
-    diff=diff + norm(mac_temp-ideal_curve_temp,2)^2/norm_id^2;
+    diff=norm((mac_norme-ideal_curve).^2,2);
 
     
 end

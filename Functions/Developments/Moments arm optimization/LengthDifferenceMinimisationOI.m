@@ -46,7 +46,7 @@ end
 
 
 
-diff=norm((Lmttot-ideal_curve).^2,2);
+diff=norm(Lmttot-ideal_curve,2)^2;
 
 
 

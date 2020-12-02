@@ -1,5 +1,18 @@
 function RMS=MomentsArmComp(BiomechanicalModel,num_muscle,MARegression, LRegression, nb_points,involved_solids,num_markersprov)
 
+
+violet = [169 90 161]/255;
+orange = [245 121 58]/255;
+bleufonce = [15 32 128]/255;
+bleuclair = [133 192 249]/255;
+
+cmap = [ linspace(bleufonce(1),violet(1),85)  linspace(violet(1),orange(1),85) linspace(orange(1),bleuclair(1),86) ;...
+                   linspace(bleufonce(2),violet(2),85)  linspace(violet(2),orange(2),85) linspace(orange(2),bleuclair(2),86) ;...
+                   linspace(bleufonce(3),violet(3),85)  linspace(violet(3),orange(3),85) linspace(orange(3),bleuclair(3),86) ]';
+               
+%colormap(cmap);
+
+
 num_solid=involved_solids(2:end-1);
 num_markers=num_markersprov(2:end-1);
 % Verification if a muscle as its origin or its insertion in the loop
@@ -97,7 +110,8 @@ for j=1:size(MARegression,2)
         ax.FontSize=20;
         ax.FontName='Utopia';
         
-        
+        colormap(cmap);
+
     elseif size(LRegression.joints,2)==1
 
         subplot(size(MARegression,2)+1, 2,2*j-1)
@@ -212,6 +226,8 @@ if size(LRegression.joints,2)==2
     ax=gca; 
     ax.FontSize=20; 
     ax.FontName='Utopia';
+    colormap(cmap);
+
 elseif size(LRegression.joints,2)==1
     
     
