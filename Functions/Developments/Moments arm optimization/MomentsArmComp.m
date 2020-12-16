@@ -1,15 +1,17 @@
 function RMS=MomentsArmComp(BiomechanicalModel,num_muscle,MARegression, LRegression, nb_points,involved_solids,num_markersprov)
 
 
+
+
 violet = [169 90 161]/255;
 orange = [245 121 58]/255;
 bleufonce = [15 32 128]/255;
 bleuclair = [133 192 249]/255;
 
 cmap = [ linspace(bleufonce(1),violet(1),85)  linspace(violet(1),orange(1),85) linspace(orange(1),bleuclair(1),86) ;...
-                   linspace(bleufonce(2),violet(2),85)  linspace(violet(2),orange(2),85) linspace(orange(2),bleuclair(2),86) ;...
-                   linspace(bleufonce(3),violet(3),85)  linspace(violet(3),orange(3),85) linspace(orange(3),bleuclair(3),86) ]';
-               
+    linspace(bleufonce(2),violet(2),85)  linspace(violet(2),orange(2),85) linspace(orange(2),bleuclair(2),86) ;...
+    linspace(bleufonce(3),violet(3),85)  linspace(violet(3),orange(3),85) linspace(orange(3),bleuclair(3),86) ]';
+
 %colormap(cmap);
 
 
@@ -31,7 +33,7 @@ for k=1:length(names_loops)
     end
 end
 
-figure()
+fig_a_sauver = figure('units','normalized','outerposition',[0 0 1 1]);
 
 
 Nb_q=numel(BiomechanicalModel.OsteoArticularModel)-6*(~isempty(intersect({BiomechanicalModel.OsteoArticularModel.name},'root0')));
@@ -75,6 +77,51 @@ for j=1:size(MARegression,2)
     end
     
     
+    for k=1:size(MARegression(j).joints,2)
+        if  strcmp(MARegression(j).joints{k},'Ulna') || strcmp(MARegression(j).joints{k},'Radius_J1')
+            MARegression(j).joints{k}= 'EFE';
+        else if strcmp(MARegression(j).joints{k},'Radius')
+                MARegression(j).joints{k}= 'PS';
+            else if strcmp(MARegression(j).joints{k},'Hand')
+                    MARegression(j).joints{k}= 'WDV';
+                else if strcmp(MARegression(j).joints{k},'Wrist_J1')
+                        MARegression(j).joints{k}= 'WFE';
+                    end
+                end
+            end
+        end
+    end
+    
+    if  strcmp( MARegression(j).axe,'Ulna') || strcmp(MARegression(j).axe,'Radius_J1')
+        MARegression(j).axe= 'EFE';
+    else if strcmp(MARegression(j).axe,'Radius')
+            MARegression(j).axe= 'PS';
+        else if strcmp(MARegression(j).axe,'Hand')
+                MARegression(j).axe= 'WDV';
+            else if strcmp(MARegression(j).axe,'Wrist_J1')
+                    MARegression(j).axe= 'WFE';
+                end
+            end
+        end
+    end
+    
+    
+    
+    
+    
+    
+    nb_row=2;
+    nb_col = size(MARegression,2)/2;
+    
+    if size(LRegression.joints,2)==2 || size(LRegression.joints,2)==1
+        if ceil(nb_col) == nb_col
+            nb_col = nb_col+1;
+        else
+            nb_col = ceil(nb_col);
+        end
+    end
+    
+    
     
     if size(MARegression(j).joints,2)==2
         
@@ -84,67 +131,53 @@ for j=1:size(MARegression,2)
             Z(k,:) = ideal_curve_temp((k-1)*length(rangeq(:,1))+1:k*length(rangeq(:,1)));
             Zmac(k,:) = mactemp((k-1)*length(rangeq(:,1))+1:k*length(rangeq(:,1)));
         end
-        subplot(size(MARegression,2)+1,2, 2*j-1)
+        subplot(nb_col,nb_row, j)
         s = surf(rangeq(:,1)*180/pi,rangeq(:,2)*180/pi,Z,'FaceAlpha','0.5','EdgeColor','None');
         hold on
         surf(rangeq(:,1)*180/pi,rangeq(:,2)*180/pi,Zmac);
         s.FaceColor='interp';
-        xlabel([MARegression(j).joints{1},' (deg)'])
-        ylabel([MARegression(j).joints{2},' (deg)'])
+        xlab=[MARegression(j).joints{1},' angle (deg)'];
+        xlabel(xlab)
+        ylabel([MARegression(j).joints{2},' angle (deg)'])
         zlabel('Moment arm (m)')
-        title([BiomechanicalModel.Muscles(num_muscle).name,' Moment arm along the ', MARegression(j).axe,' axis'])
+        title([' Moment arm along the ', MARegression(j).axe,' axis'])
         legend('Reference','Model')
         ax=gca;
         ax.FontSize=20;
         ax.FontName='Utopia';
         
-        
-        subplot(size(MARegression,2)+1,2, 2*j)
-        s = surf(rangeq(:,1)*180/pi,rangeq(:,2)*180/pi,Z-Zmac);
-        s.FaceColor='interp';
-        xlabel([MARegression(j).joints{1},' (deg)'])
-        ylabel([MARegression(j).joints{2},' (deg)'])
-        zlabel('Moment arm error (m)')
-        title([BiomechanicalModel.Muscles(num_muscle).name,' Moment arm error along the ', MARegression(j).axe,' axis'])
-        ax=gca;
-        ax.FontSize=20;
-        ax.FontName='Utopia';
+        grid on
+        ax.GridAlpha=0.5;
         
         colormap(cmap);
-
-    elseif size(LRegression.joints,2)==1
-
-        subplot(size(MARegression,2)+1, 2,2*j-1)
-        s = plot(rangeq(:,1)*180/pi,ideal_curve_temp);
+        
+    elseif size(MARegression(j).joints,2)==1
+        
+        subplot(nb_col,nb_row, j)
+        s = plot(rangeq(:,1)*180/pi,ideal_curve_temp,'Color',violet);
         hold on
-        plot(rangeq(:,1)*180/pi,mactemp);
-        xlabel([MARegression(j).joints,' (deg)'])
+        plot(rangeq(:,1)*180/pi,mactemp,'Color',orange,'LineStyle','--');
+        xlab={"";[MARegression(j).joints{1},' angle (deg)']};
+        xlabel(xlab)
         ylabel('Moment arm (m)')
-        title([BiomechanicalModel.Muscles(num_muscle).name,' Moment arm along the ', MARegression(j).axe,' axis'])
+        title([' Moment arm along the ', MARegression(j).axe,' axis'])
         legend('Reference','Model')
         ax=gca;
         ax.FontSize=20;
         ax.FontName='Utopia';
         
-        subplot(size(MARegression,2)+1,2, 2*j)
-        s = plot(rangeq(:,1)*180/pi,ideal_curve_temp-mactemp);
-        xlabel([MARegression(j).joints{1},' (deg)'])
-        ylabel('Moment arm error (m)')
-        title([BiomechanicalModel.Muscles(num_muscle).name,' Moment arm error along the ', MARegression(j).axe,' axis'])
-        ax=gca;
-        ax.FontSize=20;
-        ax.FontName='Utopia';
-        
+        grid on
+        ax.GridAlpha=0.5;
     end
-        
-        
-
-
+    
+    
+    
+    
     RMS(j).rms=  sqrt(1/length(mactemp)*sum((ideal_curve_temp-mactemp).^2));
     RMS(j).rmsr=  sqrt(1/length(mactemp)*sum((ideal_curve_temp-mactemp).^2))/sqrt(1/length(mactemp)*sum((ideal_curve_temp).^2))*100;
     RMS(j).axe=  MARegression(j).axe;
     
- 
+    
     
     ideal_curve=[ideal_curve ideal_curve_temp];
     
@@ -189,7 +222,20 @@ parfor i=1:nb_points^size(LRegression.joints,2)
     Lmttot  = [Lmttot Lmt];
 end
 
-
+for k=1:size(LRegression.joints,2)
+    if  strcmp(LRegression.joints{k},'Ulna') || strcmp(LRegression.joints{k},'Radius_J1')
+        LRegression.joints{k}= 'EFE';
+    else if strcmp(LRegression.joints{k},'Radius')
+            LRegression.joints{k}= 'PS';
+        else if strcmp(LRegression.joints{k},'Hand')
+                LRegression.joints{k}= 'WDV';
+            else if strcmp(LRegression.joints{k},'Wrist_J1')
+                    LRegression.joints{k}= 'WFE';
+                end
+            end
+        end
+    end
+end
 
 if size(LRegression.joints,2)==2
     
@@ -200,62 +246,45 @@ if size(LRegression.joints,2)==2
         ZLmttot(k,:) = Lmttot((k-1)*length(rangeq(:,1))+1:k*length(rangeq(:,1)));
     end
     
-    subplot(size(MARegression,2)+1, 2 ,2*size(MARegression,2)+1)    
+    subplot(nb_col,nb_row, nb_col*nb_row)
     s =surf(rangeq(:,1)*180/pi,rangeq(:,2)*180/pi,Z,'FaceAlpha','0.5','EdgeColor','None');
-    hold on 
-    surf(rangeq(:,1)*180/pi,rangeq(:,2)*180/pi,ZLmttot); 
     hold on
-    s.FaceColor='interp'; 
-    xlabel([LRegression.joints{1},' (deg)'])
-    ylabel([LRegression.joints{2},' (deg)']) 
-    zlabel('Longueur musculo-tendineuse (m)')
-    title(BiomechanicalModel.Muscles(num_muscle).name)
-    legend('Reference','Model') 
-    ax=gca; 
+    surf(rangeq(:,1)*180/pi,rangeq(:,2)*180/pi,ZLmttot);
+    hold on
+    s.FaceColor='interp';
+    xlabel([LRegression.joints{1},' angle (deg)'])
+    ylabel([LRegression.joints{2},' angle (deg)'])
+    zlabel('Length (m)')
+    title('Musculotendon length')
+    legend('Reference','Model')
+    ax=gca;
     ax.FontSize=20;
     ax.FontName='Utopia';
     
-    
-    subplot(size(MARegression,2)+1, 2,2*size(MARegression,2)+2)    
-    s = surf(rangeq(:,1)*180/pi,rangeq(:,2)*180/pi,Z-ZLmttot);
-    s.FaceColor='interp'; 
-    xlabel([LRegression.joints{1},' (deg)'])
-    ylabel([LRegression.joints{2},' (deg)']) 
-    zlabel('Musculotendon length error (m)') 
-    title(BiomechanicalModel.Muscles(num_muscle).name)
-    ax=gca; 
-    ax.FontSize=20; 
-    ax.FontName='Utopia';
     colormap(cmap);
-
+    
+    grid on
+    ax.GridAlpha=0.5;
 elseif size(LRegression.joints,2)==1
     
     
-    subplot(size(MARegression,2)+1, 2 , 2*size(MARegression,2)+1)    
-    s =plot(rangeq(:,1)*180/pi,ideal_curveLength);
-    hold on 
-    plot(rangeq(:,1)*180/pi, Lmttot); 
+    subplot(nb_col,nb_row, nb_col*nb_row)
+    s =plot(rangeq(:,1)*180/pi,ideal_curveLength,'Color',violet);
     hold on
-    xlabel([LRegression.joints,' (deg)'])
-    ylabel('Longueur musculo-tendineuse (m)')
-    title(BiomechanicalModel.Muscles(num_muscle).name)
-    legend('Reference','Model') 
-    ax=gca; 
+    plot(rangeq(:,1)*180/pi, Lmttot,'Color',orange,'LineStyle','--');
+    hold on
+    xlab={"";[LRegression.joints{:},' angle (deg)']};
+    xlabel(xlab)
+    ylabel('Length (m)')
+    title('Musculotendon length')
+    legend('Reference','Model')
+    ax=gca;
     ax.FontSize=20;
     ax.FontName='Utopia';
     
     
-    subplot(size(MARegression,2)+1, 2,2*size(MARegression,2)+2)    
-    s = plot(rangeq(:,1)*180/pi,ideal_curveLength-Lmttot);
-    xlabel([LRegression.joints,' (deg)'])
-    ylabel('Musculotendon length error (m)') 
-    title(BiomechanicalModel.Muscles(num_muscle).name)
-    ax=gca; 
-    ax.FontSize=20; 
-    ax.FontName='Utopia';
-    
-    
-    
+    grid on
+    ax.GridAlpha=0.5;
 end
 
 %RMS.rms=  sqrt(1/length(Lmttot) * sum((ideal_curveLength - Lmttot).^2));
@@ -264,36 +293,38 @@ end
 % RMS.corr=  r(2,1);
 % RMS.sign=sum(sign(ideal_curveLength - Lmttot));
 
+titlefig=[BiomechanicalModel.Muscles(num_muscle).name,'.png'];
+saveas(fig_a_sauver,titlefig);
 
 
-figure()
-plot(ideal_curveLength,'k')
-hold on
-plot(Lmttot,'--b')
-title(["Longueur musculo tendineuse " BiomechanicalModel.Muscles(num_muscle).name,liste_noms])
-legend("Ce quon veut atteindre","Actuelle")
-ylabel("Longueur musculo tendineuse (m)");
-
-ax=gca;
-ax.FontSize=30;
-ax.FontName='Utopia';
-
-
+% figure()
+% plot(ideal_curveLength,'k')
+% hold on
+% plot(Lmttot,'--b')
+% title(["Longueur musculo tendineuse " BiomechanicalModel.Muscles(num_muscle).name,liste_noms])
+% legend("Ce quon veut atteindre","Actuelle")
+% ylabel("Longueur musculo tendineuse (m)");
+%
+% ax=gca;
+% ax.FontSize=30;
+% ax.FontName='Utopia';
 
 
 
 
-figure()
-plot(ideal_curve,'k')
-hold on
-plot(mac,'--b')
-title(["Fct coût, " BiomechanicalModel.Muscles(num_muscle).name,liste_noms])
-legend("Ce quon veut atteindre","Actuelle")
-ylabel("Moment arm (m)");
 
-ax=gca;
-ax.FontSize=30;
-ax.FontName='Utopia';
+
+% figure()
+% plot(ideal_curve,'k')
+% hold on
+% plot(mac,'--b')
+% title(["Fct coût, " BiomechanicalModel.Muscles(num_muscle).name,liste_noms])
+% legend("Ce quon veut atteindre","Actuelle")
+% ylabel("Moment arm (m)");
+%
+% ax=gca;
+% ax.FontSize=30;
+% ax.FontName='Utopia';
 
 
 

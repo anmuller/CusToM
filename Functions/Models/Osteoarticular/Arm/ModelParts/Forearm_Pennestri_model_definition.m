@@ -273,7 +273,7 @@ Human_model(incr_solid).a=Pro_supi_axis;
 Human_model(incr_solid).joint=1;
 if Signe == 'R'
     Human_model(incr_solid).limit_inf=-pi/4;
-    Human_model(incr_solid).limit_sup=pi/2;
+    Human_model(incr_solid).limit_sup=pi/4;
     Human_model(incr_solid).FunctionalAngle='Forearm pronation(+)/supination(-)';
 else
     Human_model(incr_solid).limit_inf=-pi/4;

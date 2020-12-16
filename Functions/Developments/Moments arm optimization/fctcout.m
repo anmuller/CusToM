@@ -44,7 +44,7 @@ for j=1:size(Regression,2)
     
     mac_norme=[mac_norme mac_temp];
     
-    diff=diff + norm(mac_temp-ideal_curve_temp,2)^2/norm_id^2;
+    diff=diff + (norm(mac_temp-ideal_curve_temp,2)/norm_id)^2;
 
     
 end
