@@ -3,13 +3,18 @@ function diff=fctcout(x,BiomechanicalModel,num_muscle,Regression,nb_points,invol
 
 ideal_curve=[];
 
-[mac,BiomechanicalModel]=momentarmcurve(x,BiomechanicalModel,num_muscle,Regression,nb_points,'R',involved_solids(2:end-1),num_markersprov(2:end-1));
+[mac,BiomechanicalModel]=momentarmcurve(x,BiomechanicalModel,num_muscle,Regression,nb_points,involved_solids(2:end-1),num_markersprov(2:end-1));
 
 
 mac_norme=[];
  decalage=1;
  diff=0;
 
+[sp1,sp2]=find_solid_path(BiomechanicalModel.OsteoArticularModel,involved_solids(1),involved_solids(end));
+path = unique([sp1,sp2]);
+FunctionalAnglesofInterest = {BiomechanicalModel.OsteoArticularModel(path).FunctionalAngle};
+
+ 
 for j=1:size(Regression,2)
     ideal_curve_temp=[];
     rangeq=zeros(nb_points,size(Regression(j).joints,2));
@@ -17,7 +22,8 @@ for j=1:size(Regression,2)
 
     for k=1:size(Regression(j).joints,2)
         joint_name=Regression(j).joints{k};
-        [~,joint_num]=intersect({BiomechanicalModel.OsteoArticularModel.name},['R', joint_name]);
+        [~,joint_num]=intersect(FunctionalAnglesofInterest,joint_name);
+        joint_num=path(joint_num);
         rangeq(:,k)=linspace(BiomechanicalModel.OsteoArticularModel(joint_num).limit_inf,BiomechanicalModel.OsteoArticularModel(joint_num).limit_sup,nb_points)';
 
         B1=repmat(rangeq(:,k),1,nb_points^(k-1));

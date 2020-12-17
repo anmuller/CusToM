@@ -1,6 +1,6 @@
 function MomentsArmRegression=MomentsArmRegression_creation()
 
-% All coeffs non explained come from 
+% All coeffs  come from 
 % Ramsay, J. W., Hunter, B. V., & Gonzalez, R. V. (2009). 
 % Muscle moment arm and normalized moment contributions as reference
 % data for musculoskeletal elbow and wrist joint models. 

@@ -1,12 +1,19 @@
 function [BiomechanicalModel]=LengthMinimisation(involved_solids,num_markersprov,BiomechanicalModel,Regression,num_muscle,nb_points)
 
-inv_sol=involved_solids{1};
-num_markers=num_markersprov{1};
+inv_sol=involved_solids;
+num_markers=num_markersprov;
 joint_num=[];
+
+[sp1,sp2]=find_solid_path(BiomechanicalModel.OsteoArticularModel,involved_solids(1),involved_solids(end));
+path = unique([sp1,sp2]);
+FunctionalAnglesofInterest = {BiomechanicalModel.OsteoArticularModel(path).FunctionalAngle};
+
+
 for j=1:size(Regression,2)
     for k=1:size(Regression(j).joints,2)
         joint_name=Regression(j).joints{k};
-        [~,temp_joint_num]=intersect({BiomechanicalModel.OsteoArticularModel.name},['R', joint_name]);
+        [~,temp_joint_num]=intersect(FunctionalAnglesofInterest, joint_name);
+        temp_joint_num=path(temp_joint_num);
         joint_num=[joint_num temp_joint_num];
     end
 end
