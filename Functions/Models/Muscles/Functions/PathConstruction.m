@@ -3,8 +3,18 @@ function solids=PathConstruction(Human_model,solids_o_i,Regression)
 [sp1,sp2]=find_solid_path(Human_model,solids_o_i(1),solids_o_i(2));
 visu=find([Human_model.Visual]);
 
-path= unique([sp1,sp2]);
+            
+if length(sp1)~=1 && length(sp2)~=1
+    common_ancestor = intersect(sp1,sp2);
+    path = setdiff(unique([sp1,sp2]), common_ancestor);
+else
+    path =unique([sp1,sp2]);
+end
+
+  
 solids = intersect(path,visu);
+
+
 
 % sol_cons=zeros(size(Regression,2),2);
 % 

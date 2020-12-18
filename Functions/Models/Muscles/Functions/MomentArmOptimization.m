@@ -11,7 +11,7 @@ name_mus=name_mus(2:end);
 
 % %% Modification de la structure BiomechanicalModel
 
-involved_solids=PathConstruction(HumanModel,unique(Muscles(num_muscle).num_solid),RegressionStructure);
+involved_solids=PathConstruction(HumanModel,[Muscles(num_muscle).num_solid(1), Muscles(num_muscle).num_solid(end)],RegressionStructure);
 involved_solid=[Muscles(num_muscle).num_solid(1);  Muscles(num_muscle).num_solid(end);  involved_solids' ];
 num_markers=[Muscles(num_muscle).num_markers(1) ;  Muscles(num_muscle).num_markers(end) ];
 num_markersprov=[];
@@ -79,7 +79,7 @@ end
 
 nonlcon=@(x) MusclesInCylinder(x,BiomechanicalModel.OsteoArticularModel,involved_solids,num_markersprov,insertion,origin,par_case,radius);
 
-fun = @(x) fctcout(x,BiomechanicalModel,num_muscle,RegressionStructure,nb_points,involved_solid,num_markers);
+fun = @(x) MomentArmDifference(x,BiomechanicalModel,num_muscle,RegressionStructure,nb_points,involved_solid,num_markers);
 
 x0=zeros(3* numel(involved_solids),1);
 x=x0;
@@ -133,7 +133,7 @@ end
 
 
 
-if par_case
+if size({RegressionStructure.axe},2)==1
     [BiomechanicalModel]=LengthMinimisation(involved_solid,num_markers,BiomechanicalModel,RegressionStructure,num_muscle(1),nb_points);
 end
 

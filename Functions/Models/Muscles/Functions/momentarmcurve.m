@@ -29,7 +29,7 @@ for k=1:numel(num_solid)
 end
 
 Nb_q=numel(BiomechanicalModel.OsteoArticularModel)-6*(~isempty(intersect({BiomechanicalModel.OsteoArticularModel.name},'root0')));
-[sp1,sp2]=find_solid_path(BiomechanicalModel.OsteoArticularModel,involved_solids(1),involved_solids(end));
+[sp1,sp2]=find_solid_path(BiomechanicalModel.OsteoArticularModel,num_solid(1),num_solid(end));
 path = unique([sp1,sp2]);
 FunctionalAnglesofInterest = {BiomechanicalModel.OsteoArticularModel(path).FunctionalAngle};
 
