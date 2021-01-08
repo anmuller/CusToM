@@ -41,11 +41,15 @@ torques =InverseDynamicsResults.JointTorques;
 
 
 Nb_q=size(q,1);
-Nb_frames=size(torques,2);
+Nb_frames=4;%size(torques,2);
 
 %existing muscles
 idm = logical([Muscles.exist]);
 Nb_muscles=numel(Muscles(idm));
+
+if ~isempty(intersect({BiomechanicalModel.OsteoArticularModel.name},'root0'))
+    BiomechanicalModel.OsteoArticularModel=BiomechanicalModel.OsteoArticularModel(1:end-6);
+end
 
 %% computation of muscle moment arms from joint posture
 % L0=zeros(Nb_muscles,1);

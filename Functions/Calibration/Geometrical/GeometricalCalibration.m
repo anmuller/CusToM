@@ -53,7 +53,8 @@ end
 % v
 for i=1:size(AnalysisParameters.CalibIK.AxisDelete,1)
     [~,~,num_solid] = intersect(AnalysisParameters.CalibIK.AxisDelete{i,1},solid_names);
-    OsteoArticularModel(num_solid).v = setdiff(OsteoArticularModel(num_solid).v',AnalysisParameters.CalibIK.AxisDelete{i,2}','rows')';
+%     OsteoArticularModel(num_solid).v = setdiff(OsteoArticularModel(num_solid).v',AnalysisParameters.CalibIK.AxisDelete{i,2}','rows')';
+    OsteoArticularModel(num_solid).v=[];
 end
 for i=1:size(AnalysisParameters.CalibIK.AxisAdd,1)
     [~,~,num_solid] = intersect(AnalysisParameters.CalibIK.AxisAdd{i,1},solid_names);

@@ -136,6 +136,9 @@ options = optimoptions(@fmincon,'Algorithm','sqp','Display','off','GradObj','off
 
 %% Calcul frame par frame
 h = waitbar(0,['External Forces Prediction (' filename ')']);
+Mass = ModelParameters.Mass;
+PositionThreshold = AnalysisParameters.Prediction.PositionThreshold;
+VelocityThreshold = AnalysisParameters.Prediction.VelocityThreshold;
 for i=1:nbframe
     %attribution à chaque articulation de la position/vitesse/accélération (position/speed/acceleration for each joint)
     Human_model(1).p=p_pelvis(i,:)';
@@ -157,7 +160,7 @@ for i=1:nbframe
         Prediction(pred).py(i)=Prediction(pred).pos_anim(2);
         Prediction(pred).pz(i)=Prediction(pred).pos_anim(3);
         Prediction(pred).vitesse_temps(i)=sqrt(Prediction(pred).vitesse(1,:)^2+Prediction(pred).vitesse(2,:)^2+Prediction(pred).vitesse(3,:)^2); % Recuperation de la norme de la vitesse (repère monde)
-            Cpi = Force_max_TOR(Prediction(pred).pz(i),Prediction(pred).vitesse_temps(i),ModelParameters.Mass, AnalysisParameters.Prediction.PositionThreshold  , AnalysisParameters.Prediction.VelocityThreshold);
+            Cpi = Force_max_TOR(Prediction(pred).pz(i),Prediction(pred).vitesse_temps(i),Mass,PositionThreshold,VelocityThreshold);
             Fx(pred,i)=Cpi;
             Fy(pred,i)=Cpi;
             Fz(pred,i)=Cpi;

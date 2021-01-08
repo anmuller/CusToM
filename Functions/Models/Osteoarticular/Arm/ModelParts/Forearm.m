@@ -141,7 +141,7 @@ Forearm_position_set= {...
     ...[Signe 'Forearm_Brachioradialis_i'], (Forearm_ElbowJointNode+Forearm_Brachioradialis+(Humerus_ghJointNode-Humerus_ElbowJointNode))'; ...
     [Signe 'Forearm_Brachioradialis_i'], (k*Mirror*[0 -0.15 0.048]'); ... styloid lat
     ...[Signe 'Forearm_ECRL_i'], (Forearm_ElbowJointNode+Forearm_ECRL+(Humerus_ghJointNode-Humerus_ElbowJointNode))'; ...
-    [Signe 'Forearm_ECRL_i'], (Forearm_ElbowJointNode+Forearm_ECRL+(Humerus_ghJointNode-Humerus_ElbowJointNode))'; ...
+    [Signe 'Forearm_ExtensorCarpiRadialisLongus_i'], (Forearm_ElbowJointNode+Forearm_ECRL+(Humerus_ghJointNode-Humerus_ElbowJointNode))'; ...
     ...[Signe 'Forearm_PronatorTeres'], (Forearm_ElbowJointNode+Forearm_PronatorTeres+(Humerus_ghJointNode-Humerus_ElbowJointNode))'; ...
     [Signe 'Forearm_PronatorTeres_i'], (k*Mirror*[0 -0.15 0.048]'+(Humerus_ghJointNode+Humerus_RadiusJointNode)')/2; ... milieu epidondyle-styloid lat
     
@@ -246,7 +246,7 @@ num_solid=0;
     OsteoArticularJoint(incr_solid).c=-Forearm_ElbowJointNode';
     OsteoArticularJoint(incr_solid).anat_position=Elbow_J1_position_set;
     OsteoArticularJoint(incr_solid).Visual=0;
-    
+    OsteoArticularJoint(incr_solid).FunctionalAngle='Elbow flexion(+)/extension(-)' ;
     % Forearm
     num_solid=num_solid+1;        % number of the solid ...
     name=list_solid{num_solid}; % nom du solide
@@ -260,9 +260,11 @@ num_solid=0;
     if Signe == 'R'
         OsteoArticularJoint(incr_solid).limit_inf=0;
         OsteoArticularJoint(incr_solid).limit_sup=pi;
+        OsteoArticularJoint(incr_solid).FunctionalAngle='Forearm pronation(+)/supination(-)';
     else
         OsteoArticularJoint(incr_solid).limit_inf=-pi;
         OsteoArticularJoint(incr_solid).limit_sup=0;
+        OsteoArticularJoint(incr_solid).FunctionalAngle='Forearm pronation(-)/supination(+)';
     end
     OsteoArticularJoint(incr_solid).m=Mass.Forearm_Mass;
     OsteoArticularJoint(incr_solid).b=[0 0 0]';
@@ -272,5 +274,6 @@ num_solid=0;
     OsteoArticularJoint(incr_solid).Visual=1;
     OsteoArticularJoint(incr_solid).visual_file = ['Holzbaur/radius_' Signe '.mat'];
     OsteoArticularJoint(incr_solid).L={[Signe 'Forearm_ElbowJointNode'];[Signe 'Forearm_WristJointNode']};
-    
+   
+
 end

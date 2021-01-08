@@ -56,11 +56,11 @@ if ~isempty(find(contains(...
 end
 
 %% Symbolic functions
-disp('Preliminary Computations ...')
-[BiomechanicalModel.OsteoArticularModel] = Add6dof(BiomechanicalModel.OsteoArticularModel);
-[BiomechanicalModel.OsteoArticularModel, BiomechanicalModel.Jacob,...
-    BiomechanicalModel.Generalized_Coordinates] = SymbolicFunctionGenerationIK(BiomechanicalModel.OsteoArticularModel,BiomechanicalModel.Markers);
-disp('... Preliminary Computations done')
+% disp('Preliminary Computations ...')
+  [BiomechanicalModel.OsteoArticularModel] = Add6dof(BiomechanicalModel.OsteoArticularModel);
+% [BiomechanicalModel.OsteoArticularModel, BiomechanicalModel.Jacob,...
+%     BiomechanicalModel.Generalized_Coordinates] = SymbolicFunctionGenerationIK(BiomechanicalModel.OsteoArticularModel,BiomechanicalModel.Markers);
+% disp('... Preliminary Computations done')
 
 %% Inertial calibration
 if AnalysisParameters.CalibID.Active

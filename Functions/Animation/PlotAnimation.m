@@ -34,11 +34,10 @@ end
 
 
 %% Figure
-
 if isfield(AnimateParameters,'Mode')  && (isequal(AnimateParameters.Mode, 'Figure') ...
         || isequal(AnimateParameters.Mode, 'Picture'))
     fig=figure('outerposition',[483,60,456*1.5,466*1.5]);
-    %ax=gca;
+    ax=gca;
 elseif (isfield(AnimateParameters,'Mode')  &&  isequal(AnimateParameters.Mode, 'cFigure')) 
     fig=cFigure; % from GIBBON
     view(3); axis equal; axis tight; axis vis3d; grid on; box on;
@@ -46,7 +45,7 @@ elseif (isfield(AnimateParameters,'Mode')  &&  isequal(AnimateParameters.Mode, '
     ax=gca;
     ax.Clipping = 'off';
     drawnow;
-elseif isfield(AnimateParameters,'Mode')  &&  (isequal(AnimateParameters.Mode, 'GenerateAnimate') || isequal(AnimateParameters.Mode, 'GenerateParameters'))
+elseif isfield(AnimateParameters,'Mode')  &&  (isequal(AnimateParameters.Mode, 'GenerateAnimate') || isequal(AnimateParameters.Mode, 'Modelling') || isequal(AnimateParameters.Mode, 'GenerateParameters'))
     ax = AnimateParameters.ax; 
     fig=ax.Parent;
     camlight(ax, 'headlight'); lighting(ax,'gouraud');
@@ -56,6 +55,7 @@ end
 % Frames to display
 if isfield(AnimateParameters,'Mode') && (isequal(AnimateParameters.Mode, 'Picture') ...
         || isequal(AnimateParameters.Mode, 'GenerateAnimate') ...
+        || isequal(AnimateParameters.Mode, 'Modelling') ...
         || isequal(AnimateParameters.Mode, 'GenerateParameters'))
     f_affich = AnimateParameters.PictureFrame;
 else
@@ -64,8 +64,9 @@ end
 
 %Initialization animStruct
 animStruct=struct();
-if (isfield(AnimateParameters,'Mode')  && ~isequal(AnimateParameters.Mode, 'GenerateParameters') &&...
-        isfield(AnimateParameters,'Noc3d') &&  ~AnimateParameters.Noc3d)
+animStruct.Time = 1;
+if isfield(AnimateParameters,'Mode')  && ~isequal(AnimateParameters.Mode, 'GenerateParameters') ...
+        && ~isequal(AnimateParameters.Mode, 'Modelling')
     animStruct.Time=ExperimentalData.Time;
 end
 
@@ -94,7 +95,7 @@ if isfield(AnimateParameters,'Mode')  && isequal(AnimateParameters.Mode, 'Figure
     v=VideoWriter([filename '.avi']);
     v.FrameRate=1/(3*ExperimentalData.Time(2));
     open(v)
-    writeVideo(v,M);
+    writeVideo(v,animStruct.M);
     close(v)
 elseif (isfield(AnimateParameters,'Mode')  && isequal(AnimateParameters.Mode, 'cFigure') ) 
     anim8(fig,animStruct);

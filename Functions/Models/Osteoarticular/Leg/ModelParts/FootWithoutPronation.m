@@ -67,7 +67,7 @@ else
     if OsteoArticularModel(s_mother).child == 0      % if the mother don't have any child
         OsteoArticularModel(s_mother).child = eval(['s_' list_solid{1}]);    % the child of this mother is this solid
     else
-        [OsteoArticularModel]=sister_actualize(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la dernière soeur
+        [OsteoArticularModel]=sister_actualize(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la derniï¿½re soeur
     end
 end
 
@@ -75,7 +75,7 @@ end
 
 % --------------------------- Foot ----------------------------------------
 
-% Position du CoM par rapport au repère de référence
+% Position du CoM par rapport au repï¿½re de rï¿½fï¿½rence
 MetatarsalJoint2Node = (k*[0 -0.0725 0.015])*Mirror;
 MalleousLateralNode = (k*[0.065 0.053 0.025])*Mirror;
 CoM_Foot=0.5*(MetatarsalJoint2Node-MalleousLateralNode)+MalleousLateralNode;
@@ -173,4 +173,6 @@ OsteoArticularModel(incr_solid).L={[Signe 'Foot_AnkleJointNode'];[Signe 'Foot_To
                                           -30, -45] ;
     OsteoArticularModel(incr_solid).v= [ [1; 0; 0] , [0 ;1;0] ] ;
 OsteoArticularModel(incr_solid).comment='Ankle Flexion(+)/Extension(-)';
+OsteoArticularModel(incr_solid).FunctionalAngle='Ankle Flexion(+)/Extension(-)';
+
 end

@@ -1,4 +1,4 @@
-function affichage_bras_de_levier(nom_muscle,num_muscle,nom_arti,num_arti,minangledeg,maxangledeg,echelle)
+function affichage_bras_de_levier(BiomechanicalModel,nom_muscle,num_muscle,nom_arti,num_arti,minangledeg,maxangledeg,echelle)
 % Permet l'affichage des bras de levier pour un muscle donné et une
 % articulation donnée
 % Attention, à faire tourner dans le dossier où est placé le
@@ -78,8 +78,9 @@ else
             [~,num_arti(2)]=intersect(osnames,['L',nom_arti]);
     end
 end
+idxm=find([BiomechanicalModel.Muscles.exist]);
+Nb_muscles=numel(idxm);
 
-Nb_muscles=numel(BiomechanicalModel.Muscles);
 Nb_q=numel(HumanModel)-6*(~isempty(intersect(osnames,'root0')));
 
 Nb_ClosedLoop = sum(~cellfun('isempty',{HumanModel.ClosedLoop}));
@@ -152,8 +153,11 @@ for k=1:2
     
     R=R*echelle;
     
+    
+    ind=find(idxm==num_muscle(k));
+    
     subplot(2,1,k)
-    temp=R(num_arti(k),num_muscle(k),:);
+    temp=R(num_arti(k),ind,:);
     plot(angle,temp(:),'LineWidth',3)
     ax=gca;
     
