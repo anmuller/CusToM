@@ -107,16 +107,6 @@ Xrot=cross(Pro_supi_axis,Zrot);
 Xrot=Xrot'/norm(Xrot);
 
 
-% Vector between RadiusElbow and UlnaElbow
-Radius_Ulna_distal = (k*[0 0 -0.0382])*Mirror;
-
-% ------------------------- Definition of rotation axis
-Pro_supi_axis= Radius_ElbowJointNode - Radius_UlnaJointNode;
-Pro_supi_axis=Pro_supi_axis'/norm(Pro_supi_axis);
-Zrot=[0;0;1];
-Xrot=cross(Pro_supi_axis,Zrot);
-Xrot=Xrot'/norm(Xrot);
-
 % Adaptation of (Pennestri et al., 2007) node positions
 dr = 0.159;
 er = 0.081;

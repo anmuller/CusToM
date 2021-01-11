@@ -65,10 +65,18 @@ else
         Markers_set = BiomechanicalModel.Markers;
         Muscles = BiomechanicalModel.Muscles;
        q6dof = [0 0 0 pi -pi/2 pi/2]'; % rotation for visual
-        q = zeros(numel(Human_model)-6,1);       
+       
+       if isfield(BiomechanicalModel,'ClosedLoopData')
+        q = BiomechanicalModel.ClosedLoopData(1).startingq0(1:numel(Human_model)-6);
+       else
+         q = zeros(1:numel(Human_model)-6,1);
+       end
         if isfield(AnimateParameters,'sol_anim')
             q(AnimateParameters.sol_anim)=AnimateParameters.angle*pi/180;
         end
+        Temp = ForwardKinematicsConstrained(BiomechanicalModel,q);
+         q=[Temp.OsteoArticularModel(1:numel(Human_model)-6).q]';
+
     else
         load('AnalysisParameters.mat'); %#ok<LOAD>
         num_ext = numel(AnalysisParameters.General.Extension)-1;
