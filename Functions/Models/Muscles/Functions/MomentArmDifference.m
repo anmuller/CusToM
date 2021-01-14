@@ -1,4 +1,26 @@
 function diff=MomentArmDifference(x,BiomechanicalModel,num_muscle,Regression,nb_points,involved_solids,num_markersprov)
+% Root mean square difference between input moment arm and moment arm from the model 
+%
+%   INPUT
+%   - x : vector of via points positions;
+%   - BiomechanicalModel: musculoskeletal model
+%   - num_muscle : number of the muscle in the Muscles structure
+%   - Regression : structure of moment arm 
+%   - nb_points : number of point for coordinates discretization
+%   - involved_solids : vector of solids of origin, via, and insertion points 
+%   - num_markersprov : vector of anatomical positions of origin, via, and insertion points 
+%
+%   OUTPUT
+%   - diff : root mean square difference
+%________________________________________________________
+%
+% Licence
+% Toolbox distributed under GPL 3.0 Licence
+%________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 
 ideal_curve=[];
@@ -54,25 +76,6 @@ for j=1:size(Regression,2)
 
     
 end
-
-
-
-%diff=norm((mac-ideal_curve).^2,2);
-
-
-% 
-%  figure()
-% plot(ideal_curve,'k')
-% hold on
-% plot(mac_norme,'--b')
-% legend("Actuelle","Ce quon veut atteindre")
-% title("Fct coût")
-% legend("Actuelle","Ce quon veut atteindre")
-% ylabel("Moment arm normalisé");
-% 
-% ax=gca;
-% ax.FontSize=30;
-% ax.FontName='Utopia';
 
 
 end

@@ -1,9 +1,28 @@
 function [Human_model]=OnCircle(theta,joint_num,Human_model,involved_solids,num_markersprov)
+% Rotating via points of theta angle arounf joint_num
+%
+%   INPUT
+%   - theta : vector of rotation of via points
+%   - joint_num  : vector of solids around via points rotates of theta
+%   - Human_model: osteo-articular model (see the Documentation for the
+%   structure)
+%   - involved_solids : vector of solids of origin, via, and insertion points 
+%   - num_markersprov : vector of anatomical positions of origin, via, and insertion points 
+%
+%   OUTPUT
+%   - Human_model: osteo-articular model (see the Documentation for the
+%   structure)
+%________________________________________________________
+%
+% Licence
+% Toolbox distributed under GPL 3.0 Licence
+%________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 Nb_q=numel(Human_model)-6*(~isempty(intersect({Human_model.name},'root0')));
-
-c=[];
-format long;
 
 num_sol=involved_solids;
 num_mark= num_markersprov;

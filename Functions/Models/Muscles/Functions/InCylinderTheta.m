@@ -1,10 +1,32 @@
 function [c,ceq]=InCylinderTheta(theta,joint_num,HumanModel,num_solid,num_markers,sign_insertion,sign_origin,Regression)
+% Verifying that muscle via points are contained in a cylinder volume
+%
+%   INPUT
+%   - theta : vector of rotation of via points
+%   - joint_num  : vector of solids around via points rotates of theta
+%   - HumanModel : osteo-articular model (see the Documentation for
+%   the structure);
+%   - num_solid : vector of solids of origin, via, and insertion points 
+%   - num_markers: vector of anatomical positions of origin, via, and insertion points 
+%   - sign_insertion : sign of y insertion point  in its local frame
+%   - sign_origin : sign of y origin point  in its local frame
+%   - Regression : structure of  musculotendon length
+%
+%   OUTPUT
+%   - BiomechanicalModel: musculoskeletal model
+%________________________________________________________
+%
+% Licence
+% Toolbox distributed under GPL 3.0 Licence
+%________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 ceq=0;
 
 [HumanModel]=OnCircle(theta,joint_num,HumanModel,num_solid,num_markers);
-
-
 
 
 c=[];

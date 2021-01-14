@@ -1,4 +1,26 @@
 function [RMSElmt,BiomechanicalModel]=MusculotendonLengthOptimization(num_muscle,BiomechanicalModel,InputMusculotendonLength,nb_points)
+% Root mean square difference between input musculotendon length and musculotendon length from the model 
+%
+%   INPUT
+%   - num_muscle : number of the muscle in the Muscles structure
+%   - BiomechanicalModel: musculoskeletal model
+%   - InputMusculotendonLength : function handle of given moment arm as function of
+%   coordinates q
+%   - nb_points : number of point for coordinates discretization
+%
+%   OUTPUT
+%   - diff : root mean square difference
+%   - BiomechanicalModel: musculoskeletal model
+%________________________________________________________
+%
+% Licence
+% Toolbox distributed under GPL 3.0 Licence
+%________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
+
 
  [~,RegressionStructure]=InputMusculotendonLength({BiomechanicalModel.Muscles(num_muscle).name},[],[],[]);
 

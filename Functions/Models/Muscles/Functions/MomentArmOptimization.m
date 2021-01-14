@@ -1,4 +1,28 @@
 function [RMSE,BiomechanicalModel]=MomentArmOptimization(num_muscle,BiomechanicalModel,InputMomentArm,nb_points,radius)
+% Placing new via points for matching given moment arm
+%
+%   INPUT
+%   - num_muscle : number of the muscle in the Muscles structure
+%   - BiomechanicalModel: musculoskeletal model
+%   - InputMomentArm : function handle of given moment arm as function of
+%   coordinates q
+%   - nb_points : number of point for coordinates discretization
+%   - radius : vector of radius corresponding to the skin cylinder around each
+%   segment
+%
+%   OUTPUT
+%   - RMSE  : root mean square error between given moment arm and moment
+%   arm from the BiomechanicalModel
+%   - BiomechanicalModel: musculoskeletal model
+%________________________________________________________
+%
+% Licence
+% Toolbox distributed under GPL 3.0 Licence
+%________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 HumanModel=BiomechanicalModel.OsteoArticularModel;
 Muscles=BiomechanicalModel.Muscles;
@@ -9,9 +33,9 @@ name_mus = musnames{num_muscle};
 name_mus=name_mus(2:end);
  [~,RegressionStructure]=InputMomentArm(musnames(num_muscle),[],[],[]);
 
-% %% Modification de la structure BiomechanicalModel
+%% Modification of BiomechanicalModel  : adding new VP points : one at each side of joints
 
-involved_solids=PathConstruction(HumanModel,[Muscles(num_muscle).num_solid(1), Muscles(num_muscle).num_solid(end)],RegressionStructure);
+involved_solids=PathConstruction(HumanModel,[Muscles(num_muscle).num_solid(1), Muscles(num_muscle).num_solid(end)]);
 involved_solid=[Muscles(num_muscle).num_solid(1);  Muscles(num_muscle).num_solid(end);  involved_solids' ];
 num_markers=[Muscles(num_muscle).num_markers(1) ;  Muscles(num_muscle).num_markers(end) ];
 num_markersprov=[];
@@ -60,15 +84,13 @@ num_markers=D(:,2);
 
 
 
-% Mise en place de l'optimisation
-
-
+%% Optimisation : looking for via points positions to match the input moment arm
 
 insertion = BiomechanicalModel.OsteoArticularModel(involved_solid(end)).anat_position{num_markers(end),2}(2) +  BiomechanicalModel.OsteoArticularModel(involved_solid(end)).c(2) ;
 origin = BiomechanicalModel.OsteoArticularModel(involved_solid(1)).anat_position{num_markers(1),2}(2) +  BiomechanicalModel.OsteoArticularModel(involved_solid(1)).c(2) ;
 
 
-options = optimoptions(@fmincon,'Algorithm','sqp','Display','final','MaxFunEvals',100000,'TolCon',1e-6);%,'PlotFcn','optimplotfval');
+options = optimoptions(@fmincon,'Algorithm','sqp','Display','final','MaxFunEvals',100000,'TolCon',1e-6);
 
 par_case = 0;
 [sp1,sp2]=find_solid_path(BiomechanicalModel.OsteoArticularModel, involved_solid(1), involved_solid(end));
@@ -108,15 +130,13 @@ optionsgs = optimoptions(@fmincon,'MaxIter',1e10,'MaxFunEvals',1e10);%,'PlotFcn'
 gs = GlobalSearch('StartPointsToRun','bounds-ineqs','BasinRadiusFactor',0.2,'DistanceThresholdFactor',0.75);
 problem = createOptimProblem('fmincon','x0',x0,...
     'objective',fun,'nonlcon',nonlcon,'options',optionsgs);
-tic();
-%x = run(gs,problem);
-toc();
+x = run(gs,problem);
+
 
 %x = fmincon(fun,x0,[],[],[],[],[],[],nonlcon,options);
 
-fctcoutx=fun(x);
 
-
+%% Affecting via points found to BiomechanicalModel
 
 num_solid=involved_solids;
 num_mark= num_markersprov;
@@ -132,31 +152,10 @@ for k=1:numel(num_solid)
 end
 
 
-
+%% For muscle which path actuates at least one DOF
 if size({RegressionStructure.axe},2)==1
     [BiomechanicalModel]=LengthMinimisation(involved_solid,num_markers,BiomechanicalModel,RegressionStructure,num_muscle(1),nb_points);
 end
-
-
-%RMSlmtinter=MuscleLengthComp(BiomechanicalModel,num_muscle(1),LengthRegression(ind_mus_Regr).regression,nb_points,involved_solid{1},num_markers{1});
-
-
-
-%solids = involved_solid{1};
-%markers=  num_markers{1};
-
-% 
-% funlength = @(k)LengthDifferenceMinimisationOI(k,BiomechanicalModel,num_muscle,LengthRegression(ind_mus_Regr).regression,nb_points,solids,markers);
-% 
-% homocoeff = fmincon(funlength,0,[],[],[],[],0,[],[],options);
-% 
-% BiomechanicalModel.OsteoArticularModel(solids(1)).anat_position{markers(1),2}= ...
-%     homocoeff* (BiomechanicalModel.OsteoArticularModel(solids(1)).anat_position{markers(1),2} - BiomechanicalModel.OsteoArticularModel(solids(2)).anat_position{markers(2),2}) +...
-%     BiomechanicalModel.OsteoArticularModel(solids(2)).anat_position{markers(2),2};
-% 
-% BiomechanicalModel.OsteoArticularModel(solids(end)).anat_position{markers(end),2}= ...
-%     homocoeff*(BiomechanicalModel.OsteoArticularModel(solids(end)).anat_position{markers(end),2}- BiomechanicalModel.OsteoArticularModel(solids(end-1)).anat_position{markers(end-1),2}) +...
-%     BiomechanicalModel.OsteoArticularModel(solids(end-1)).anat_position{markers(end-1),2};
 
 
 

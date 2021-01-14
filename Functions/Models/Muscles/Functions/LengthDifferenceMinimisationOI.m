@@ -1,4 +1,27 @@
 function diff= LengthDifferenceMinimisationOI(x,BiomechanicalModel,num_muscle,Regression,nb_points,solids,markers)
+%Norm of the difference between input musculotendon length and musculotendon length from the model 
+%
+%   INPUT
+%   - x : homothety coefficient
+%   - BiomechanicalModel: musculoskeletal model
+%   - num_muscle : number of the muscle in the Muscles structure
+%   - Regression : structure of musculotendon length
+%   - nb_points : number of point for coordinates discretization
+%   - solids : vector of solids of origin, via, and insertion points 
+%   - markers : vector of anatomical positions of origin, via, and insertion points 
+%
+%   OUTPUT
+%   - diff : norm of the difference between musculotendon lengths
+%________________________________________________________
+%
+% Licence
+% Toolbox distributed under GPL 3.0 Licence
+%________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
+
 
 Nb_q=numel(BiomechanicalModel.OsteoArticularModel)-6*(~isempty(intersect({BiomechanicalModel.OsteoArticularModel.name},'root0')));
 

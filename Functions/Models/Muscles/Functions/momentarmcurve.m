@@ -1,20 +1,27 @@
 function [mac,BiomechanicalModel]=momentarmcurve(x,BiomechanicalModel,num_muscle,Regression,nb_points,num_solid,num_markers)
-
-% Verification if a muscle as its origin or its insertion in the loop
-names_list={BiomechanicalModel.OsteoArticularModel(num_solid).name};
-names_loops={BiomechanicalModel.OsteoArticularModel((~cellfun('isempty',{BiomechanicalModel.OsteoArticularModel.ClosedLoop}))).ClosedLoop};
-flag=0;
-for k=1:length(names_loops)
-    temp=names_loops{k};
-    temp(1)=''; %get rid of "R" and "L"
-    ind = find(temp=='_');
-    name_sol1= temp(1:ind-1);
-    ind_end = strfind(temp,'JointNode');
-    name_sol2 = temp(ind+1:ind_end-1);
-    if sum(contains(names_list,name_sol1)) || sum(contains(names_list,name_sol2))
-        flag=1;
-    end
-end
+% Computes the moment arm from BiomechanicalModel
+%
+%   INPUT
+%   - x : vector of via points positions;
+%   - BiomechanicalModel: musculoskeletal model
+%   - num_muscle : number of the muscle in the Muscles structure
+%   - Regression : structure of moment arm 
+%   - nb_points : number of point for coordinates discretization
+%   - involved_solids : vector of solids of origin, via, and insertion points 
+%   - num_markersprov : vector of anatomical positions of origin, via, and insertion points 
+%
+%   OUTPUT
+%   - mac : vector of moment arm
+%   - BiomechanicalModel: musculoskeletal model
+%________________________________________________________
+%
+% Licence
+% Toolbox distributed under GPL 3.0 Licence
+%________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 
 cpt=0;
@@ -52,9 +59,6 @@ for j=1:size(Regression,2)
     end
 
     
-    if flag %muscle origin and insertion in the loop
-        
-    end
     
    joint_name=Regression(j).axe;
    [~,joint_num]=intersect(FunctionalAnglesofInterest,joint_name);

@@ -1,4 +1,31 @@
 function [c,ceq]=MusclesInCylinder(x,HumanModel,num_solid,num_markers,yinsertion,yorigin,par_case,radius)
+% Verifying that muscle via points are contained in a cylinder volume
+%
+%   INPUT
+%   - x : vector of via points positions;
+%   - Human_model : osteo-articular model (see the Documentation for
+%   the structure);
+%   - num_solid : vector of solids of via points
+%   - num_markers : vector of anatomical positions of via points
+%   - yinsertion : y insertion position in the insertion local frame
+%   - yorigin : y origin position in the origin local frame
+%   - par_case : boolean
+%   - radius : vector of radius corresponding to the skin cylinder around each
+%   segment
+%
+%   OUTPUT
+%   - c : inequality constraint
+%   - ceq : equality constaint
+%________________________________________________________
+%
+% Licence
+% Toolbox distributed under GPL 3.0 Licence
+%________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
+
 
 ceq=0;
 

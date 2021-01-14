@@ -1,11 +1,34 @@
 function [MusculotendonLength,RegressionStructure]=RankinNeptune_Lengthcoeffs(mus_name,axis,joints_names,q)
-
-% All coeffs non explained come from
+% Computing of musculotendon length as a function of q and giving
+% regression structure for musculotendon length
+%
+% All coeffs come from
 %Rankin, J. W., & Neptune, R. R. (2012).
 %Musculotendon lengths and moment arms for a
 %three-dimensional upper-extremity model.
 %Journal of Biomechanics, 45(9), 1739–1744.
 %https://doi.org/10.1016/j.jbiomech.2012.03.010
+%
+%   INPUT
+%   - mus_name : name of the muscle concerned
+%   - axis : HAS TO BE REMOVED
+%   - joints_names : vector of names of the joints concerned by the
+%   musculotendon length
+%   - q : vector of coordinates at the current instant
+%
+%   OUTPUT
+%   - MusculotendonLength : value of musculotendon length
+%   - RegressionStructure : structure containing musculotendon length
+%   equations and coefficients
+%________________________________________________________
+%
+% Licence
+% Toolbox distributed under GPL 3.0 Licence
+%________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 mus_name = mus_name{:};
 mus_name = mus_name(2:end);

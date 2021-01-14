@@ -1,4 +1,28 @@
 function muscle_length=MinimizeLength(theta,BiomechanicalModel,involved_solids,num_markers,joint_num,num_muscle,Regression,nb_points)
+% Compute musculotendon length as via point position function
+%
+%   INPUT
+%   - theta : vector of rotation of via points
+%   - BiomechanicalModel: musculoskeletal model
+%   - involved_solids : vector of solids of origin, via, and insertion points 
+%   - num_markers : vector of anatomical positions of origin, via, and insertion points 
+%   - joint_num  : vector of solids around via points rotates of theta
+%   - num_muscle : number of the muscle in the Muscles structure
+%   - Regression : structure of  musculotendon length
+%   - nb_points : number of point for coordinates discretization
+%
+%   OUTPUT
+%   - muscle_length : vector of musculotendon length
+%________________________________________________________
+%
+% Licence
+% Toolbox distributed under GPL 3.0 Licence
+%________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
+
 
 Human_model=BiomechanicalModel.OsteoArticularModel;
 Muscles=BiomechanicalModel.Muscles;

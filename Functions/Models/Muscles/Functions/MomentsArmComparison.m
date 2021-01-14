@@ -1,38 +1,28 @@
 function RMSE=MomentsArmComparison(BiomechanicalModel,num_muscle,MARegression, nb_points,involved_solids,num_markersprov)
-
-
-
-
-violet = [169 90 161]/255;
-orange = [245 121 58]/255;
-bleufonce = [15 32 128]/255;
-bleuclair = [133 192 249]/255;
-
-cmap = [ linspace(bleufonce(1),violet(1),85)  linspace(violet(1),orange(1),85) linspace(orange(1),bleuclair(1),86) ;...
-    linspace(bleufonce(2),violet(2),85)  linspace(violet(2),orange(2),85) linspace(orange(2),bleuclair(2),86) ;...
-    linspace(bleufonce(3),violet(3),85)  linspace(violet(3),orange(3),85) linspace(orange(3),bleuclair(3),86) ]';
-
-%colormap(cmap);
-
+% Root mean square difference between input moment arm and moment arm from the model 
+%
+%   INPUT
+%   - BiomechanicalModel: musculoskeletal model
+%   - num_muscle : number of the muscle in the Muscles structure
+%   - MARegression : structure of moment arm 
+%   - nb_points : number of point for coordinates discretization
+%   - involved_solids : vector of solids of origin, via, and insertion points 
+%   - num_markersprov : vector of anatomical positions of origin, via, and insertion points 
+%
+%   OUTPUT
+%   - RMSE : root mean square difference
+%________________________________________________________
+%
+% Licence
+% Toolbox distributed under GPL 3.0 Licence
+%________________________________________________________
+%
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Georges Dumont
+%________________________________________________________
 
 num_solid=involved_solids(2:end-1);
 num_markers=num_markersprov(2:end-1);
-% Verification if a muscle as its origin or its insertion in the loop
-names_list={BiomechanicalModel.OsteoArticularModel(num_solid).name};
-names_loops={BiomechanicalModel.OsteoArticularModel((~cellfun('isempty',{BiomechanicalModel.OsteoArticularModel.ClosedLoop}))).ClosedLoop};
-flag=0;
-for k=1:length(names_loops)
-    temp=names_loops{k};
-    temp(1)=''; %get rid of "R" and "L"
-    ind = find(temp=='_');
-    name_sol1= temp(1:ind-1);
-    ind_end = strfind(temp,'JointNode');
-    name_sol2 = temp(ind+1:ind_end-1);
-    if sum(contains(names_list,name_sol1)) || sum(contains(names_list,name_sol2))
-        flag=1;
-    end
-end
-
 
 Nb_q=numel(BiomechanicalModel.OsteoArticularModel)-6*(~isempty(intersect({BiomechanicalModel.OsteoArticularModel.name},'root0')));
 
@@ -81,19 +71,9 @@ for j=1:size(MARegression,2)
     end
     
     
-   
-    
-    
-
-    
-    
     ideal_curve=[ideal_curve ideal_curve_temp];
     
-   
-    
     mac=[mac mactemp];
-    
-    
     
     
 end
@@ -101,7 +81,6 @@ end
 
 RMSE.rms=  sqrt(1/length(mac) * sum((ideal_curve - mac).^2));
 RMSE.rmsr=  sqrt(1/length(mac) * sum((ideal_curve - mac).^2))/ sqrt(1/length(mac) * sum((ideal_curve).^2))* 100;
-
 
 
 

@@ -5,14 +5,13 @@ function [Human_model] = rotation(Point1,Bone1,Human_model,q,joint_rotation,thet
 %   - Point1: position of the anatomical position of the first studied
 %   point on its solid
 %   - Bone1: number of the solid containing the first studied point
-%   - Point2: position of the anatomical position of the second studied
-%   point on its solid
-%   - Bone2: number of the solid containing the second studied point
 %   - Human_model: osteo-articular model (see the Documentation for the structure)
 %   - q: vector of joint coordinates at a given instant
+%   - joint_rotation : number of the solid of rotation
+%   - theta : angle of rotation
+%
 %   OUTPUT
-%   - L: distance between the two studied points
-%   - Typ: relative orientation of the two points (-1 ou 1)
+%   - Human_model: osteo-articular model (see the Documentation for the structure)
 %________________________________________________________
 %
 % Licence
