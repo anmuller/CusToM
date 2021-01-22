@@ -33,6 +33,7 @@ AnimateParameters.external_forces_anim = 0;
 AnimateParameters.external_forces_pred = 0;
 AnimateParameters.PictureFrame = 1;
 AnimateParameters.ax = XX;
+AnimateParameters.ellipsoid_anim = 1;
 PlotAnimation(ModelParameters, AnimateParameters);
 
 view(2); axis equal; axis tight; axis vis3d; grid on; box on;

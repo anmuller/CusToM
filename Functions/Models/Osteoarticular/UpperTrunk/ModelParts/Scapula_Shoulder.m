@@ -95,6 +95,9 @@ Scapula_acromion    = Thorax_osim2antoine.*Mirror*[-0.0142761 0.0131922 -0.00563
 Scapula_cluster1    = Thorax_osim2antoine.*Mirror*[-0.0860033 0.0298369 -0.00786593]' - Scapula_CoM;
 Scapula_cluster2    = Thorax_osim2antoine.*Mirror*[-0.0956621 0.0398035 -0.0552027]' - Scapula_CoM;
 Scapula_cluster3    = Thorax_osim2antoine.*Mirror*[-0.119492 0.0147336 -0.0385808]' - Scapula_CoM;
+Thorax_Rx           = Thorax_osim2antoine(1)*0.07;
+Thorax_Ry           = Thorax_osim2antoine(2).*0.15;
+Thorax_Rz           = Thorax_osim2antoine(3).*0.07;
 
 %% Definition of anatomical landmarThorax_osim2antoine.s (with respect to the center of mass of the solid)
 
@@ -108,6 +111,7 @@ Scapula_position_set = {...
     ['MTAC' Cote '1'], Scapula_cluster1;...
     ['MTAC' Cote '2'], Scapula_cluster2;...
     ['MTAC' Cote '3'], Scapula_cluster3;...
+    'ThoracicEllipsoid_radius', [Thorax_Rx Thorax_Ry Thorax_Rz]';...
     % Muscle paths
     
     % Muscles adapted from ArmMuscles
@@ -168,9 +172,6 @@ Scapula_position_set = {...
 Scapula_Mass_generic=0.70396;
 I_Scapula_generic=[0.0012429 0.0011504 0.0013651 0.0004494 Sign*0.00040922 Sign*0.0002411];
 I_Scapula=(norm(Thorax_osim2antoine)^2*Mass.Scapula_Mass/Scapula_Mass_generic)*I_Scapula_generic;
-Thorax_Rx=Thorax_osim2antoine(1)*0.07;
-Thorax_Ry=Thorax_osim2antoine(2).*0.15;
-Thorax_Rz=Thorax_osim2antoine(3).*0.07;
 
 %% "Human_model" structure generation
  
