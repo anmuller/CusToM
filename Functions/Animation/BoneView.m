@@ -38,7 +38,7 @@ else
 end
 bonespath=which('ModelGeneration.m');
 bonespath = fullfile(fileparts(bonespath),'Visual');
-for ii=intersect(find([Human_model.Visual]),Segment)
+for ii=find([Human_model.Visual]) %intersect(find([Human_model.Visual]),Segment)
     if isfield(Human_model,'visual_file')
         if numel(Human_model(ii).visual_file) % a visual could be associated to this solid
             if exist(fullfile(bonespath,Human_model(ii).visual_file),'file') % this visual exists
