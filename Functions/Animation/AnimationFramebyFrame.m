@@ -813,46 +813,46 @@ for f=f_affich
             mu=ind_mu(i_mu);
             pts_mu = Muscles_test(mu).pos_pts';
             nbpts_mu = size(pts_mu,1);
-            if  isfield(Muscles(mu),'wrap') && ~isempty(Muscles(mu).wrap) && ~isempty(Muscles(mu).wrap{1})
-                % find the wrap
-                Wrap = [Human_model.wrap]; names = {Wrap.name}'; [~,ind]=intersect(names,Muscles(mu).wrap{1});
-                cur_Wrap=Wrap(ind);
-                % wrap object
-                T_Ri_Rw=[cur_Wrap.orientation,cur_Wrap.location;[0 0 0],1];
-                T_R0_Rw = Human_model_bis(cur_Wrap.num_solid).Tc_R0_Ri*T_Ri_Rw;
-                % pts in Rw
-                pts_mu_inRw=T_R0_Rw\[pts_mu';ones(1,nbpts_mu)];
-                % verify if wrap.
-                for imw=1:nbpts_mu-1
-                    if Intersect_line_cylinder(pts_mu_inRw(1:3,imw)', pts_mu_inRw(1:3,imw+1)', cur_Wrap.R)
-                        [L(f),~,~,pt_wrap_inRw(:,:,imw)]=CylinderWrapping(pts_mu_inRw(1:3,imw), pts_mu_inRw(1:3,imw+1), cur_Wrap.R);
-                        tmp=T_R0_Rw*[pt_wrap_inRw(:,:,imw)';ones(1,size(pt_wrap_inRw,1))];
-                        pt_wrap(:,:,imw)=tmp(1:3,:)';
-                        % add the wrapping points
-                        nb_added_pts=size([pts_mu(imw,:);pt_wrap(:,:,imw)],1);
-                        cur_Fmu = repmat([1 2],[nb_added_pts-1 1])+(0:nb_added_pts-2)'+size(Vmu,1);
-                        Vmu=[Vmu;pts_mu(imw,:);pt_wrap(:,:,imw)];
-                        Fmu =[Fmu; cur_Fmu]; %#ok<AGROW>
-                        CEmu=[CEmu; repmat(color_mus(mu,:),[nb_added_pts 1])]; %#ok<AGROW>
-                    else
-                        if imw>1
-                            cur_Fmu = [1 2]+size(Vmu,1);
-                            Fmu =[Fmu; cur_Fmu]; %#ok<AGROW>
-                        end
-                        Vmu=[Vmu ;pts_mu(imw,:)]; %#ok<AGROW>
-                        CEmu=[CEmu; color_mus(mu,:)]; %#ok<AGROW>
-                    end
-                end
-                cur_Fmu = repmat([0 1],[1 1])+size(Vmu,1);
-                Fmu =[Fmu; cur_Fmu]; %#ok<AGROW>
-                Vmu=[Vmu ;pts_mu(end,:)]; %#ok<AGROW>
-                CEmu=[CEmu; color_mus(mu,:)]; %#ok<AGROW>
-            else
+%             if  isfield(Muscles(mu),'wrap') && ~isempty(Muscles(mu).wrap) && ~isempty(Muscles(mu).wrap{1})
+%                 % find the wrap
+%                 Wrap = [Human_model.wrap]; names = {Wrap.name}'; [~,ind]=intersect(names,Muscles(mu).wrap{1});
+%                 cur_Wrap=Wrap(ind);
+%                 % wrap object
+%                 T_Ri_Rw=[cur_Wrap.orientation,cur_Wrap.location;[0 0 0],1];
+%                 T_R0_Rw = Human_model_bis(cur_Wrap.num_solid).Tc_R0_Ri*T_Ri_Rw;
+%                 % pts in Rw
+%                 pts_mu_inRw=T_R0_Rw\[pts_mu';ones(1,nbpts_mu)];
+%                 % verify if wrap.
+%                 for imw=1:nbpts_mu-1
+%                     if Intersect_line_cylinder(pts_mu_inRw(1:3,imw)', pts_mu_inRw(1:3,imw+1)', cur_Wrap.R)
+%                         [L(f),~,~,pt_wrap_inRw(:,:,imw)]=CylinderWrapping(pts_mu_inRw(1:3,imw), pts_mu_inRw(1:3,imw+1), cur_Wrap.R);
+%                         tmp=T_R0_Rw*[pt_wrap_inRw(:,:,imw)';ones(1,size(pt_wrap_inRw,1))];
+%                         pt_wrap(:,:,imw)=tmp(1:3,:)';
+%                         % add the wrapping points
+%                         nb_added_pts=size([pts_mu(imw,:);pt_wrap(:,:,imw)],1);
+%                         cur_Fmu = repmat([1 2],[nb_added_pts-1 1])+(0:nb_added_pts-2)'+size(Vmu,1);
+%                         Vmu=[Vmu;pts_mu(imw,:);pt_wrap(:,:,imw)];
+%                         Fmu =[Fmu; cur_Fmu]; %#ok<AGROW>
+%                         CEmu=[CEmu; repmat(color_mus(mu,:),[nb_added_pts 1])]; %#ok<AGROW>
+%                     else
+%                         if imw>1
+%                             cur_Fmu = [1 2]+size(Vmu,1);
+%                             Fmu =[Fmu; cur_Fmu]; %#ok<AGROW>
+%                         end
+%                         Vmu=[Vmu ;pts_mu(imw,:)]; %#ok<AGROW>
+%                         CEmu=[CEmu; color_mus(mu,:)]; %#ok<AGROW>
+%                     end
+%                 end
+%                 cur_Fmu = repmat([0 1],[1 1])+size(Vmu,1);
+%                 Fmu =[Fmu; cur_Fmu]; %#ok<AGROW>
+%                 Vmu=[Vmu ;pts_mu(end,:)]; %#ok<AGROW>
+%                 CEmu=[CEmu; color_mus(mu,:)]; %#ok<AGROW>
+%             else
                 cur_Fmu = repmat([1 2],[nbpts_mu-1 1])+(0:nbpts_mu-2)'+size(Vmu,1);
                 Fmu =[Fmu; cur_Fmu]; %#ok<AGROW>
                 Vmu=[Vmu ;pts_mu]; %#ok<AGROW>
                 CEmu=[CEmu; repmat(color_mus(mu,:),[nbpts_mu 1])]; %#ok<AGROW>
-            end
+ %           end
             
         end
         if isfield(AnimateParameters,'Mode')  && (isequal(AnimateParameters.Mode, 'Figure') ...

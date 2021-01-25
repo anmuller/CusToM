@@ -27,7 +27,7 @@ nb_data = AnalysisParameters.Muscles.DatabaseDensity; %number of different joint
 %% loading variables
 Human_model = BiomechanicalModel.OsteoArticularModel;
 Muscles = BiomechanicalModel.Muscles;
-C = BiomechanicalModel.MuscularCoupling;
+C = BiomechanicalModel.Coupling;
 Moment_Arms = BiomechanicalModel.MomentArms;
 
 if isfield(BiomechanicalModel,'Generalized_Coordinates')
