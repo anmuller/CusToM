@@ -77,7 +77,7 @@ Vm = gradient(Lm_norm)*freq;
 Amin = zeros(Nb_muscles,1);
 A0  = 0.5*ones(Nb_muscles,1);
 for i=1:size(idm,2)
-    Muscles(i).f0 = 10*Muscles(i).f0;
+    Muscles(i).f0 = Muscles(i).f0;
 end
 Fmax = [Muscles(idm).f0]';
 Amax = ones(Nb_muscles,1);
