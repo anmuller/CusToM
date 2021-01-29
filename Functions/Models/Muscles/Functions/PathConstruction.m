@@ -30,6 +30,17 @@ else
 end
 
   
-solids = intersect(path,visu);
+solids_temp = intersect(path,visu);
+
+if length(solids_temp) >2
+    solids =  solids_temp(1);
+    for k = 2:length(solids_temp)-1
+        solids = [solids solids_temp(k) solids_temp(k)];
+    end
+    solids = [solids solids_temp(end)];
+else
+    solids = solids_temp;
+end
+
 
 end

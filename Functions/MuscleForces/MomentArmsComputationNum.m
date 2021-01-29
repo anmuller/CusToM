@@ -50,24 +50,22 @@ for k=1:length(row)
      i = col(k); % q indice
 
     %% Moment arm from litterature
-    musname = {BiomechanicalModel.Muscles(row(k)).name};
+    musname = {BiomechanicalModel.Muscles(idxm(row(k))).name};
     axis = BiomechanicalModel.OsteoArticularModel(i).FunctionalAngle;
     MomentArm = RankinNeptune(musname,axis,joints_names,q);
     if ~isempty(MomentArm)
-            R(:,i) = MomentArm;
+            R(row(k),i) = MomentArm;
     else
     dq=zeros(length(q),1); %differentiation step vector
     dq(i)=dp;
     
-    Lpdq=zeros(nmr,1);
-    Lmdq=zeros(nmr,1);
     j= row(k) ; % muscle indice 
     % compute the length of the muscle at q+dq
-    Lpdq(j) = Muscle_lengthNum(Human_model,Muscles(idxm(j)),q+dq);
+    Lpdq = Muscle_lengthNum(Human_model,Muscles(idxm(j)),q+dq);
     % compute the length of the muscle at q-dq
-    Lmdq(j) = Muscle_lengthNum(Human_model,Muscles(idxm(j)),q-dq);
+    Lmdq = Muscle_lengthNum(Human_model,Muscles(idxm(j)),q-dq);
 
-    R(:,i)=(-Lpdq+Lmdq)/(2*dp); % it is -dl/dq
+    R(j,i)=(-Lpdq+Lmdq)/(2*dp); % it is -dl/dq
     end
 end
 % beware that the matrix is finally nq*nm

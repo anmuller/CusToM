@@ -81,11 +81,11 @@ s=[s;{
     %     % Conservation du modèle de Holzbaur
 % on conserve les biceps du modèle de Holzbaur sauf qu'on part de la
     % scapula pour le biceps short et glénoïde pour le biceps long
-     [Signe 'BicepsL'],624.3,0.1157,4,0.2723,0,{[Signe 'Scapula_BicepsL_o'];[Signe 'Scapula_BicepsL_via1'];[Signe 'Humerus_BicepsL_via2'];[Signe 'Humerus_BicepsL_via3'];[Signe 'Humerus_BicepsL_via4'];[Signe 'Humerus_BicepsL_via5'];[Signe 'Humerus_BicepsL_via6'];[Signe 'Humerus_Biceps_via7'];[Signe 'Ulna_Biceps_i']},{};... arm26.osim       
-     [Signe 'BicepsS'],435.56,0.1321,4,0.1923,0,{[Signe 'Scapula_BicepsS_o'];[Signe 'Scapula_BicepsS_via1'];[Signe 'Humerus_BicepsS_via2'];[Signe 'Humerus_BicepsS_via3'];[Signe 'Humerus_Biceps_via7'];[Signe 'Ulna_Biceps_i']},{};... arm26.osim    
+     [Signe 'BicepsL'],624.3,0.1157,4,0.2723,0,{[Signe 'Scapula_BicepsL_o'];[Signe 'Scapula_BicepsL_via1'];[Signe 'Humerus_BicepsL_via2'];[Signe 'Humerus_BicepsL_via3'];[Signe 'Humerus_BicepsL_via4'];[Signe 'Humerus_BicepsL_via5'];[Signe 'Humerus_BicepsL_via6'];[Signe 'Humerus_Biceps_via7'];[Signe 'Radius_Biceps_i']},{};... arm26.osim       
+     [Signe 'BicepsS'],435.56,0.1321,4,0.1923,0,{[Signe 'Scapula_BicepsS_o'];[Signe 'Scapula_BicepsS_via1'];[Signe 'Humerus_BicepsS_via2'];[Signe 'Humerus_BicepsS_via3'];[Signe 'Humerus_Biceps_via7'];[Signe 'Radius_Biceps_i']},{};... arm26.osim    
 %     % on conserve les biceps du modèle de Holzbaur sauf qu'on part de la
 %     % scapula pour le triceps long
-%         [Signe 'TricepsLg'],798.5,0.134,4,0.143,0.209,{[Signe 'Scapula_Triceps_o'];[Signe 'Humerus_TricepsLg_via1'];[Signe 'Humerus_Triceps_via2'];[Signe 'Humerus_Triceps_via3'];[Signe 'Humerus_Triceps_via4'];[Signe 'Ulna_Triceps_via5'];[Signe 'Ulna_Triceps_i']},{};...       arm26.osim    
+     [Signe 'TricepsLg'],798.5,0.134,4,0.143,0.209,{[Signe 'Scapula_Triceps_o'];[Signe 'Humerus_TricepsLg_via1'];[Signe 'Humerus_Triceps_via2'];[Signe 'Humerus_Triceps_via3'];[Signe 'Humerus_Triceps_via4'];[Signe 'Ulna_TricepsMed_VP2'];[Signe 'Ulna_TricepsMed_i']},{};...       arm26.osim    
 %      [Signe 'TricepsLat'],624.3,0.114,4,0.098,0.157,{[Signe 'Humerus_TricepsLat_o'];[Signe 'Humerus_TricepsLat_via1'];[Signe 'Humerus_Triceps_via2'];[Signe 'Humerus_Triceps_via3'];[Signe 'Humerus_Triceps_via4'];[Signe 'Ulna_Triceps_via5'];[Signe 'Ulna_Triceps_i']},{};... arm26.osim   
 %      [Signe 'TricepsMed'],624.3,0.114,4,0.098,0.157,{[Signe 'Humerus_TricepsMed_o'];[Signe 'Humerus_TricepsMed_via1'];[Signe 'Humerus_Triceps_via2'];[Signe 'Humerus_Triceps_via3'];[Signe 'Humerus_Triceps_via4'];[Signe 'Ulna_Triceps_via5'];[Signe 'Ulna_Triceps_i']},{};... arm26.osim
   %         [Signe 'TricepsLg'],798.5,0.134,4,0.143,0.209,{[Signe 'Scapula_Triceps_o'];[Signe 'Humerus_TricepsLg_via1'];[Signe 'Humerus_Triceps_via2'];[Signe 'Humerus_Triceps_via3'];[Signe 'Humerus_Triceps_via4'];[Signe 'Ulna_Triceps_i']},{};...       arm26.osim    

@@ -36,7 +36,6 @@ s=[s;{
 %     [Signe 'Brachialis'],987.3,0.0858,4,0.0535,0,{[Signe 'Humerus_Brachialis_o'];[Signe 'Forearm_Brachialis']},{};...
 %     [Signe 'ECRL'],304.9,[],[],[],[],{[Signe 'Humerus_ECRL_o'];[Signe 'Forearm_ECRL_i']},{};...
 %     [Signe 'PronatorTeres'],566.2,[],[],[],[],{[Signe 'Humerus_PronatorTeres_o'];[Signe 'Forearm_PronatorTeres_i']},{};...
-%     [Signe 'TricepsLg'],798.5,0.134,4,0.143,0.209,{[Signe 'Thorax_Triceps_o'];[Signe 'Humerus_TricepsLg_via1'];[Signe 'Humerus_Triceps_via2'];[Signe 'Humerus_Triceps_via3'];[Signe 'Humerus_Triceps_via4'];[Signe 'Forearm_Triceps_via5'];[Signe 'Forearm_Triceps_i']},{};...       arm26.osim    
 %     [Signe 'TricepsLat'],624.3,0.114,4,0.098,0.157,{[Signe 'Humerus_TricepsLat_o'];[Signe 'Humerus_TricepsLat_via1'];[Signe 'Humerus_Triceps_via2'];[Signe 'Humerus_Triceps_via3'];[Signe 'Humerus_Triceps_via4'];[Signe 'Forearm_Triceps_via5'];[Signe 'Forearm_Triceps_i']},{};... arm26.osim   
 %     [Signe 'TricepsMed'],624.3,0.114,4,0.098,0.157,{[Signe 'Humerus_TricepsMed_o'];[Signe 'Humerus_TricepsMed_via1'];[Signe 'Humerus_Triceps_via2'];[Signe 'Humerus_Triceps_via3'];[Signe 'Humerus_Triceps_via4'];[Signe 'Forearm_Triceps_via5'];[Signe 'Forearm_Triceps_i']},{};... arm26.osim     
 %     
@@ -55,7 +54,10 @@ s=[s;{
     [Signe 'TricepsMed'],624.3,0.114,4,0.098,0.157,{[Signe 'Humerus_TricepsMed_o'];[Signe 'Humerus_TricepsMed_VP1'];[Signe 'Ulna_TricepsMed_VP2'];[Signe 'Ulna_TricepsMed_i']},{};... arm26.osim
     [Signe 'PalmarisLongus'],26.7,0.064,4,0.098,0.157,{[Signe 'Humerus_PalmarisLongus_o'];[Signe 'Humerus_PalmarisLongus_VP1'];[Signe 'Radius_PalmarisLongus_VP2'];[Signe 'Radius_PalmarisLongus_VP3'];[Signe 'Hand_PalmarisLongus_VP4'];[Signe 'Hand_PalmarisLongus_i']},{};...
 
-    
+     [Signe 'BicepsL'],624.3,0.1157,4,0.2723,0,{[Signe 'Scapula_BicepsL_o'];[Signe 'Scapula_BicepsL_via1'];[Signe 'Humerus_BicepsL_via2'];[Signe 'Humerus_BicepsL_via3'];[Signe 'Humerus_BicepsL_via4'];[Signe 'Humerus_BicepsL_via5'];[Signe 'Humerus_BicepsL_via6'];[Signe 'Humerus_Biceps_via7'];[Signe 'Radius_Biceps_i']},{};... arm26.osim       
+     [Signe 'BicepsS'],435.56,0.1321,4,0.1923,0,{[Signe 'Scapula_BicepsS_o'];[Signe 'Scapula_BicepsS_via1'];[Signe 'Humerus_BicepsS_via2'];[Signe 'Humerus_BicepsS_via3'];[Signe 'Humerus_Biceps_via7'];[Signe 'Radius_Biceps_i']},{};... arm26.osim    
+     [Signe 'TricepsLg'],798.5,0.134,4,0.143,0.209,{[Signe 'Scapula_Triceps_o'];[Signe 'Humerus_TricepsLg_via1'];[Signe 'Humerus_Triceps_via2'];[Signe 'Humerus_Triceps_via3'];[Signe 'Humerus_Triceps_via4'];[Signe 'Ulna_TricepsMed_VP2'];[Signe 'Ulna_TricepsMed_i']},{};...       arm26.osim    
+
     
     
     }];

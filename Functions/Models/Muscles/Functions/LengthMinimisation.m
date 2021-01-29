@@ -1,4 +1,4 @@
-function [BiomechanicalModel]=LengthMinimisation(involved_solids,num_markersprov,BiomechanicalModel,Regression,num_muscle,nb_points)
+pfunction [BiomechanicalModel]=LengthMinimisation(involved_solids,num_markersprov,BiomechanicalModel,Regression,num_muscle,nb_points)
 % Modifiying via point to minimize of musculotendon length of the model
 %
 %   INPUT
@@ -25,7 +25,11 @@ inv_sol=involved_solids;
 num_markers=num_markersprov;
 joint_num=[];
 
+par_case = 0;
 [sp1,sp2]=find_solid_path(BiomechanicalModel.OsteoArticularModel,involved_solids(1),involved_solids(end));
+if length(sp1)~=1 && length(sp2)~=1
+    par_case = 1;
+end
 path = unique([sp1,sp2]);
 FunctionalAnglesofInterest = {BiomechanicalModel.OsteoArticularModel(path).FunctionalAngle};
 
@@ -44,14 +48,13 @@ theta0=0*ones(size(joint_num));
 
 
 insertion = BiomechanicalModel.OsteoArticularModel(inv_sol(end)).anat_position{num_markers(end),2}(2) +  BiomechanicalModel.OsteoArticularModel(inv_sol(end)).c(2) ; 
-origin = abs(BiomechanicalModel.OsteoArticularModel(inv_sol(1)).anat_position{num_markers(1),2}(2) +  BiomechanicalModel.OsteoArticularModel(inv_sol(1)).c(2)) ...
-                - abs( BiomechanicalModel.OsteoArticularModel( BiomechanicalModel.OsteoArticularModel(inv_sol(1)).child).b(2)) ; 
+origin = BiomechanicalModel.OsteoArticularModel(inv_sol(1)).anat_position{num_markers(1),2}(2) +  BiomechanicalModel.OsteoArticularModel(inv_sol(1)).c(2);
 
 
 % Cost function and non linear constraints
 
 muscle_length = @(theta)MinimizeLength(theta,BiomechanicalModel,inv_sol,num_markers,joint_num,num_muscle,Regression,nb_points);
-nonlcon=@(theta) InCylinderTheta(theta,joint_num,BiomechanicalModel.OsteoArticularModel,inv_sol(2:end-1),num_markers(2:end-1),sign(insertion),sign(origin),Regression);
+nonlcon=@(theta) InCylinderTheta(theta,joint_num,BiomechanicalModel.OsteoArticularModel,inv_sol(2:end-1),num_markers(2:end-1),insertion,origin,par_case);
 
 
 options =  optimoptions(@fmincon,'Algorithm','sqp','TolCon',1e-6,'Display','final','MaxIterations',1000000);%,'PlotFcn','optimplotfval');

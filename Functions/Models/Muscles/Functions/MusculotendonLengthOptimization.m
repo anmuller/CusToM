@@ -20,7 +20,7 @@ function [RMSElmt,BiomechanicalModel]=MusculotendonLengthOptimization(num_muscle
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
 % Georges Dumont
 %________________________________________________________
-
+format long;
 
  [~,RegressionStructure]=InputMusculotendonLength({BiomechanicalModel.Muscles(num_muscle).name},[],[],[]);
 

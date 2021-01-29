@@ -41,7 +41,7 @@ torques =InverseDynamicsResults.JointTorques;
 
 
 Nb_q=size(q,1);
-Nb_frames=4;%size(torques,2);
+Nb_frames=size(torques,2);
 
 %existing muscles
 idm = logical([Muscles.exist]);
@@ -65,8 +65,6 @@ for i=1:Nb_frames % for each frames
     R(:,:,i)    =   MomentArmsComputationNum(BiomechanicalModel,q(:,i),0.0001); %depend on reduced set of q (q_red)
 end
 
-%load('/home/clivet/Documents/Thèse/Developpement_CusToM/thesis/Fichiers_tests/Donnees a traiter/Ana Lucia Data - Sbj 1 - Trial 1 - Forearm model/Throwing_1/MuscleForcesComputationResults.mat');
-%R= MuscleForcesComputationResults.MuscleLeverArm;
 idxj=find(sum(R(:,:,1),2)~=0)';
 
 % Lm = Lmt./(Ls./L0+1);
@@ -101,19 +99,33 @@ k=ones(size(q,1),1);
 dependancies=KinematicDependancy(BiomechanicalModel.OsteoArticularModel);
 % Closed-loop constraints
 KT=ConstraintsJacobian(BiomechanicalModel,q(:,1),solid_path1,solid_path2,num_solid,num_markers,k,0.0001,dependancies)';
-G = null(KT(idxj,:)');
-%G=eye(size(G));
+lambda = zeros(size(KT,2),1);
+
+if isempty(lambda)
+    idxj = [38 39 40 41]; % BO : elbow to hand
+else
+    idxj = 38:47; % BF : elbow to hand
+end
+
+
+%G = null(KT(idxj,:)');
+%G=eye(size(KT));
 % Moment arms and Active forces
 % Aeq = G'*R(idq,:,1).*Fa(:,1)' ;
-Aeq = G'*R(idxj,:,1).*Fmax' ;
+%Aeq = [G'*R(idxj,:,1).*Fmax' , G'*KT(idxj,:)] ;
+Aeq = [R(idxj,:,1).*Fmax' , KT(idxj,:)] ;
 % Joint Torques
 %beq = G'*(torques(idq,1) - R(idq,:,1)*Fp(:,1));
-beq = G'*torques(idxj,1);
+beq = torques(idxj,1);
 % First frame optimization
-[Aopt(:,1)] = AnalysisParameters.Muscles.Costfunction(A0, Aeq, beq, Amin, Amax, options1, AnalysisParameters.Muscles.CostfunctionOptions, Fmax, Fmax);
+
+Amin = [Amin; -inf*ones(size(lambda))];
+Amax = [Amax; inf*ones(size(lambda))];
+[X(:,1)] = AnalysisParameters.Muscles.Costfunction([A0 ; lambda], Aeq, beq, Amin, Amax, options1, AnalysisParameters.Muscles.CostfunctionOptions, Fmax, Fmax);
 %[Aopt(:,1)] = AnalysisParameters.Muscles.Costfunction(A0, Aeq, beq, Amin, Amax, options1, AnalysisParameters.Muscles.CostfunctionOptions, Fa(:,1), Fmax);
 % Muscular activiy
-A0 = Aopt(:,1);
+Aopt(:,1) = X(1:Nb_muscles,1);
+A0 = X(:,1);
 Fopt(:,1) = Fmax.*Aopt(:,1);
 %Fopt(:,1) = Fa(:,1).*Aopt(1:Nb_muscles,1)+Fp(:,1);
 
@@ -122,20 +134,21 @@ waitbar(1/Nb_frames)
 for i=2:Nb_frames % for following frames
     % Closed-loop constraints
     KT=ConstraintsJacobian(BiomechanicalModel,q(:,i),solid_path1,solid_path2,num_solid,num_markers,k,0.0001,dependancies)';
-    G = null(KT(idxj,:)');
-   % G=eye(size(G));
+    %G = null(KT(idxj,:)');
+    %G=eye(size(KT));
 
     % Moment arms and Active forces
    % Aeq = G'*R(idq,:,i).*Fa(:,i)';
-    Aeq = G'*R(idxj,:,1).*Fmax';
+    Aeq = [R(idxj,:,i).*Fmax' , KT(idxj,:)] ;
     % Joint Torques
 %    beq=G'*(torques(idq,i)- R(idq,:,1)*Fp(:,i));
-    beq=G'*torques(idxj,i);
+    beq=torques(idxj,i);
     % Optimization
 %    [Aopt(:,i)] = AnalysisParameters.Muscles.Costfunction(A0, Aeq, beq, Amin, Amax, options2, AnalysisParameters.Muscles.CostfunctionOptions, Fa(:,i), Fmax);
-    [Aopt(:,i)] = AnalysisParameters.Muscles.Costfunction(A0, Aeq, beq, Amin, Amax, options1, AnalysisParameters.Muscles.CostfunctionOptions, Fmax, Fmax);
+    [X(:,i)] = AnalysisParameters.Muscles.Costfunction(A0, Aeq, beq, Amin, Amax, options1, AnalysisParameters.Muscles.CostfunctionOptions, Fmax, Fmax);
     % Muscular activity
-    A0=Aopt(:,i);
+    Aopt(:,i) = X(1:Nb_muscles,i);
+    A0=X(:,i);
     Fopt(:,i) = Fmax.*Aopt(:,i);
 %    Fopt(:,i) = Fa(:,i).*Aopt(1:Nb_muscles,i)+Fp(:,i);
     

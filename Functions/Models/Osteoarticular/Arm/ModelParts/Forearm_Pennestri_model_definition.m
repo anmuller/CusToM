@@ -166,7 +166,7 @@ Radius_position_set = {...
 %     [Signe 'Radius_SupinatorBrevis_o'],Mirror*Forearm_osim2antoine'.*([0.01201;-0.0517;-0.00107]) + Radius_origin + Radius_Ulna_distal'   + Radius_ElbowJointNode';...
 %     [Signe 'Radius_PronatorQuadratus_o'],Mirror*Forearm_osim2antoine'.*([0.03245;-0.19998;0.01962]) + Radius_origin + Radius_Ulna_distal'   + Radius_ElbowJointNode';...
 %      [Signe 'Radius_PronatorTeres_i'],Mirror*Forearm_osim2antoine'.*([0.0254;-0.1088;0.0198])+ Radius_origin + Radius_Ulna_distal'   + Radius_ElbowJointNode';...
-                 
+          [Signe 'Radius_Biceps_i'],Mirror*Forearm_osim2antoine'.*([-0.002;-0.0375;-0.002])+ Radius_origin + Radius_Ulna_distal'   + Radius_ElbowJointNode';...
 
     % Muscles from moment arm and musculotendon length optimization
     
@@ -226,8 +226,8 @@ Ulna_position_set = {...
 
     % Muscles from moment arm and musculotendon length optimization
     
-        [Signe 'Ulna_Anconeus_VP2'], k*Mirror*[-0.0217 ; -0.0008 ; 0.0009] + Ulna_HumerusJointNode' ;... 
-        [Signe 'Ulna_Anconeus_i'], k*Mirror*[-0.0225 ; -0.0009 ; 0.0020] + Ulna_HumerusJointNode' ;... 
+         [Signe 'Ulna_Anconeus_VP2'], k*Mirror*[-0.0217 ; -0.0008 ; 0.0009] + Ulna_HumerusJointNode' ;... 
+         [Signe 'Ulna_Anconeus_i'], k*Mirror*[-0.0225 ; -0.0009 ; 0.0020] + Ulna_HumerusJointNode' ;... 
         [Signe 'Ulna_Brachialis_VP2'], k*Mirror*[0.0171 ; -0.0185 ; 0.0054] + Ulna_HumerusJointNode' ;... 
         [Signe 'Ulna_Brachialis_i'], k*Mirror*[0.0008 ; -0.0251 ; 0.0018] + Ulna_HumerusJointNode' ;... 
         [Signe 'Ulna_PronatorQuadratus_VP2'], k*Mirror*[0.0066 ; -0.2342 ; -0.0023] + Ulna_HumerusJointNode' ;... 
@@ -294,7 +294,7 @@ Human_model(incr_solid).name=[Signe name];
 Human_model(incr_solid).sister=0;
 Human_model(incr_solid).child=s_Radius;
 Human_model(incr_solid).mother=s_Radius_J1;
-Human_model(incr_solid).a=Xrot;
+Human_model(incr_solid).a=Xrot';
 Human_model(incr_solid).joint=1;
 Human_model(incr_solid).limit_inf=-pi/4;
 Human_model(incr_solid).limit_sup=pi/4;
@@ -317,12 +317,12 @@ Human_model(incr_solid).mother=s_Radius_J2;
 Human_model(incr_solid).a=Pro_supi_axis;
 Human_model(incr_solid).joint=1;
 if Signe == 'R'
-    Human_model(incr_solid).limit_inf=-pi/4;
-    Human_model(incr_solid).limit_sup=pi/4;
+    Human_model(incr_solid).limit_inf=-pi/2;
+    Human_model(incr_solid).limit_sup=pi/2;
     Human_model(incr_solid).FunctionalAngle='Forearm pronation(+)/supination(-)';
 else
-    Human_model(incr_solid).limit_inf=-pi/4;
-    Human_model(incr_solid).limit_sup=pi/4;
+    Human_model(incr_solid).limit_inf=-pi/2;
+    Human_model(incr_solid).limit_sup=pi/2;
     Human_model(incr_solid).FunctionalAngle='Forearm pronation(-)/supination(+)';
 end
 Human_model(incr_solid).ActiveJoint=1;

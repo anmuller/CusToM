@@ -79,7 +79,7 @@ if strcmp(mus_name,'TricepsLat')
 end
 
 
-%% TricepsLateral
+%% TricepsLong
 if strcmp(mus_name,'TricepsLg')
     if strcmp(axis,'Elbow flexion(+)/extension(-)')
         [~,ind] = intersect(joints_names,{'Elbow flexion(+)/extension(-)'});
@@ -364,7 +364,7 @@ end
 
 
 %% ExtensorCarpiElbow flexion(+)/extension(-)ris
-if strcmp(mus_name,'ExtensorCarpiElbow flexion(+)/extension(-)ris')
+if strcmp(mus_name,'ExtensorCarpiUlnaris')
     
     RegressionStructure(1).equation='RRN1';
     RegressionStructure(1).joints={'Elbow flexion(+)/extension(-)'};
@@ -481,7 +481,7 @@ end
 
 
 %% FlexorCarpiElbow flexion(+)/extension(-)ris
-if strcmp(mus_name,'FlexorCarpiElbow flexion(+)/extension(-)ris')
+if strcmp(mus_name,'FlexorCarpiUlnaris')
 
     RegressionStructure(1).equation='RRN4';
     RegressionStructure(1).joints={'Elbow flexion(+)/extension(-)','Forearm pronation(+)/supination(-)'};

@@ -23,6 +23,7 @@ function [RMSE,BiomechanicalModel]=MomentArmOptimization(num_muscle,Biomechanica
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
 % Georges Dumont
 %________________________________________________________
+format long
 
 HumanModel=BiomechanicalModel.OsteoArticularModel;
 Muscles=BiomechanicalModel.Muscles;
@@ -47,7 +48,9 @@ VP_name= [osnames{involved_solids(j)},'_',name_mus,'_VP',num2str(j)];
 BiomechanicalModel.Muscles(num_muscle).path{end+1}= VP_name;
 BiomechanicalModel.OsteoArticularModel(involved_solids(j)).anat_position{end+1,1}= VP_name;
 
-BiomechanicalModel.OsteoArticularModel(involved_solids(j)).anat_position{end,2}= BiomechanicalModel.OsteoArticularModel(involved_solid(1)).anat_position{num_markers(1), 2};
+ind= find(involved_solid==involved_solids(j));
+ind = ind(1);
+BiomechanicalModel.OsteoArticularModel(involved_solids(j)).anat_position{end,2}= BiomechanicalModel.OsteoArticularModel(involved_solid(ind)).anat_position{num_markers(ind), 2};
 num_markersprov=[num_markersprov ;size(BiomechanicalModel.OsteoArticularModel(involved_solids(j)).anat_position,1)];
 
 for j=2:size(involved_solids,2)-1
@@ -65,7 +68,9 @@ VP_name= [osnames{involved_solids(j)},'_',name_mus,'_VP',num2str(j)];
 BiomechanicalModel.Muscles(num_muscle).path{end+1}= VP_name;
 BiomechanicalModel.OsteoArticularModel(involved_solids(j)).anat_position{end+1,1}= VP_name;
 
-BiomechanicalModel.OsteoArticularModel(involved_solids(j)).anat_position{end,2}= BiomechanicalModel.OsteoArticularModel(involved_solid(2)).anat_position{num_markers(2), 2};
+ind = find(involved_solid==involved_solids(j));
+ind = ind(1);
+BiomechanicalModel.OsteoArticularModel(involved_solids(j)).anat_position{end,2}= BiomechanicalModel.OsteoArticularModel(involved_solid(ind)).anat_position{num_markers(ind), 2};
 num_markersprov=[num_markersprov ;size(BiomechanicalModel.OsteoArticularModel(involved_solids(j)).anat_position,1)];
 
 BiomechanicalModel.Muscles(num_muscle).path{end+1} = BiomechanicalModel.OsteoArticularModel(involved_solid(2)).anat_position{num_markers(2), 1};
@@ -80,7 +85,6 @@ BiomechanicalModel.Muscles(num_muscle).num_solid=D(:,1);
 BiomechanicalModel.Muscles(num_muscle).num_markers=D(:,2);
 involved_solid=D(:,1);
 num_markers=D(:,2);
-
 
 
 
@@ -104,7 +108,6 @@ nonlcon=@(x) MusclesInCylinder(x,BiomechanicalModel.OsteoArticularModel,involved
 fun = @(x) MomentArmDifference(x,BiomechanicalModel,num_muscle,RegressionStructure,nb_points,involved_solid,num_markers);
 
 x0=zeros(3* numel(involved_solids),1);
-x=x0;
 
 cond_resp = nonlcon(x0);
 while sum(cond_resp<=0)<length(cond_resp)
@@ -131,9 +134,6 @@ gs = GlobalSearch('StartPointsToRun','bounds-ineqs','BasinRadiusFactor',0.2,'Dis
 problem = createOptimProblem('fmincon','x0',x0,...
     'objective',fun,'nonlcon',nonlcon,'options',optionsgs);
 x = run(gs,problem);
-
-
-%x = fmincon(fun,x0,[],[],[],[],[],[],nonlcon,options);
 
 
 %% Affecting via points found to BiomechanicalModel

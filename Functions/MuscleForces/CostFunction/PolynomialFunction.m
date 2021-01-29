@@ -35,6 +35,7 @@ cost_function = @(A) sum((Fa./Fmax.*A).^(options));
 else
     % ClosedLoop case
     ind_act=find(isinf(Amax)); % first element to be infinite in Fmax
+    ind_act = ind_act(1);
     cost_function = @(A) sum((Fa./Fmax(1:ind_act-1).*A(1:ind_act-1)).^(options));
 end
 % Optimization
