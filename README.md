@@ -1,4 +1,6 @@
 ﻿## CusToM: a Matlab toolbox for musculoskeletal simulation
+ 
+![alt text](https://github.com/anmuller/CusToM/blob/master/logo_custom.png)
 
 **CusToM Status:** [![status](http://joss.theoj.org/papers/4b412d584fbfa911edfae882146e2cd3/status.svg)](http://joss.theoj.org/papers/4b412d584fbfa911edfae882146e2cd3)
 
