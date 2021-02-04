@@ -59,25 +59,35 @@ else
     if ( isfield(AnimateParameters,'Noc3d') &&  AnimateParameters.Noc3d )
         load('BiomechanicalModel.mat'); %#ok<LOAD>
         Human_model = BiomechanicalModel.OsteoArticularModel;
-        if isempty(intersect({BiomechanicalModel.OsteoArticularModel.name},'root0'))  
-                [Human_model] = Add6dof(Human_model);
+        if isempty(intersect({BiomechanicalModel.OsteoArticularModel.name},'root0'))
+            [Human_model] = Add6dof(Human_model);
         end
         Markers_set = BiomechanicalModel.Markers;
         Muscles = BiomechanicalModel.Muscles;
-       q6dof = [0 0 0 pi -pi/2 pi/2]'; % rotation for visual
-       q = zeros(numel(Human_model)-6,1);
-       
-       % Forward kinematics
-        if isfield(AnimateParameters,'sol_anim')
-            q(AnimateParameters.sol_anim)=AnimateParameters.angle*pi/180;
-        end
+        q6dof = [0 0 0 pi -pi/2 pi/2]'; % rotation for visual
         
-       % Forward kinematics constrained
+        % Forward kinematics constrained
         if isfield(BiomechanicalModel,'ClosedLoopData')
-            Temp = ForwardKinematicsConstrained(BiomechanicalModel,q);
+            if isfield(BiomechanicalModel,'Generalized_Coordinates')
+                q = zeros(numel(Human_model),1);
+                % Forward kinematics
+                if isfield(AnimateParameters,'sol_anim')
+                    q(AnimateParameters.sol_anim)=AnimateParameters.angle*pi/180;
+                end
+                
+                Temp = ForwardKinematicsConstrained(BiomechanicalModel,BiomechanicalModel.Generalized_Coordinates.q_map'*q);
+            else
+                q = zeros(numel(Human_model)-6,1);
+                % Forward kinematics
+                if isfield(AnimateParameters,'sol_anim')
+                    q(AnimateParameters.sol_anim)=AnimateParameters.angle*pi/180;
+                end
+                
+                Temp = ForwardKinematicsConstrained(BiomechanicalModel,q');
+            end
             q=[Temp.OsteoArticularModel(1:numel(Human_model)-6).q]';
         end
-
+        
     else
         load('AnalysisParameters.mat'); %#ok<LOAD>
         num_ext = numel(AnalysisParameters.General.Extension)-1;

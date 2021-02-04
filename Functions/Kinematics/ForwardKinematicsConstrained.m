@@ -49,7 +49,11 @@ for jdx = 1:length(BiomechanicalModel.ClosedLoopData)
 end
 
 % Interpolation 
-qlin = repmat(startingq0,1,nb_prog);
+if size(startingq0,1) ==1
+    qlin = repmat(startingq0',1,nb_prog);
+else
+    qlin = repmat(startingq0,1,nb_prog);
+end
 
 for k=1:length(numqu)
     qlin(numqu(k),:) = linspace(startingq0(numqu(k)),q0(numqu(k)),nb_prog);
@@ -69,20 +73,26 @@ for jdx = 1:length(BiomechanicalModel.ClosedLoopData)
         
         qtot = qlin(:,idx-1);
         cpt=1;
-        while h(qtot')'*h(qtot') >1e-8 && cpt<10000
+%         figure()
+%         hold on
+%         plot(cpt, h(qtot)'*h(qtot),'o')
+
+        while h(qtot)'*h(qtot) >1e-8 && cpt<10000
             
             %%Newton-Raphson
-            Jvnum=Jv(qtot');
-            deltaqvnum = -Jvnum\h(qtot');
+            Jvnum=Jv(qtot);
+            deltaqvnum = -Jvnum\h(qtot);
             qtot(numqv) = qtot(numqv) + deltaqvnum;
             
-            for jj=1:length(BiomechanicalModel.OsteoArticularModel)-6*sum(strcmp('root0',{BiomechanicalModel.OsteoArticularModel.name}))
-                if BiomechanicalModel.OsteoArticularModel(jj).joint==1
-                    qtot(jj) = mod(qtot(jj),2*pi);
-                end
-            end
+%             for jj=1:length(q0)
+%                 if BiomechanicalModel.OsteoArticularModel(jj).joint==1
+%                     qtot(jj) = mod(qtot(jj),2*pi);
+%                 end
+%             end
             
-            cpt = cpt+1;
+             cpt = cpt+1;
+%             pause(0.2);
+%             plot(cpt, h(qtot)'*h(qtot),'o')
        end
         
         if cpt==10000
@@ -103,9 +113,22 @@ end
 
 
 %% Update of the BiomechanicalModel.OsteoArticularModel with found coordinates
-for k=1:length(BiomechanicalModel.OsteoArticularModel)-6*sum(strcmp({BiomechanicalModel.OsteoArticularModel.name},'root0'))
-    BiomechanicalModel.OsteoArticularModel(k).q = qtot(k);
+
+if isfield(BiomechanicalModel,'Generalized_Coordinates')
+    q_complet=BiomechanicalModel.Generalized_Coordinates.q_map*qtot; % real_coordinates
+    fq_dep=BiomechanicalModel.Generalized_Coordinates.fq_dep;
+    q_dep_map=BiomechanicalModel.Generalized_Coordinates.q_dep_map;
+    for ii=1:size(qtot,2)
+        q_complet(:,ii)=q_complet(:,ii)+q_dep_map*fq_dep(qtot(:,ii)); % add dependancies
+    end
+else
+    q_complet = qtot;
 end
+
+for k=1:length(q_complet)
+    BiomechanicalModel.OsteoArticularModel(k).q = q_complet(k);
+end
+
 
  BiomechanicalModel.ClosedLoopData(1).startingq0 = qtot; %For faster displaying
 

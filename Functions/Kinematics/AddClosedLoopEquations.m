@@ -20,8 +20,10 @@ function BiomechanicalModel = AddClosedLoopEquations(BiomechanicalModel,k,vararg
 
 HumanModel = BiomechanicalModel.OsteoArticularModel;
 
-syms q [1 length(HumanModel) ] real;
+syms q qred real;
 
+q = BiomechanicalModel.Generalized_Coordinates.q_complete;
+qred = BiomechanicalModel.Generalized_Coordinates.q_red;
 
 [solid_path1,solid_path2,num_solid,num_markers]=Data_ClosedLoop(HumanModel);
 
@@ -36,56 +38,51 @@ else
     end
 end
 
-%% Find constraint equations from kinematic dependancies
-
-if isfield(BiomechanicalModel.OsteoArticularModel,'kinematic_dependancy')
-    for iddx=1: length(BiomechanicalModel.OsteoArticularModel)-6*sum(strcmp('root0',{BiomechanicalModel.OsteoArticularModel.name}))
-        if ~isempty(BiomechanicalModel.OsteoArticularModel(iddx).kinematic_dependancy)
-            if BiomechanicalModel.OsteoArticularModel(iddx).kinematic_dependancy.active
-                foncq= BiomechanicalModel.OsteoArticularModel(iddx).kinematic_dependancy.q;
-                if length(BiomechanicalModel.OsteoArticularModel(iddx).kinematic_dependancy.Joint)==1
-                    secondmember = foncq( eval( ['q',num2str(BiomechanicalModel.OsteoArticularModel(iddx).kinematic_dependancy.Joint)] ) );
-                    ConstraintEq = [ConstraintEq eval(['q',num2str(iddx),'-',char(secondmember)])];
-                else
-                    if length(BiomechanicalModel.OsteoArticularModel(iddx).kinematic_dependancy.Joint)==2
-                        secondmember = foncq( eval( ['q',num2str(BiomechanicalModel.OsteoArticularModel(iddx).kinematic_dependancy.Joint(1))]),...
-                            eval( ['q',num2str(BiomechanicalModel.OsteoArticularModel(iddx).kinematic_dependancy.Joint(2))]));
-                        ConstraintEq = [ConstraintEq eval(['q',num2str(iddx),'-',char(secondmember)])];
-                    else
-                        if length(BiomechanicalModel.OsteoArticularModel(iddx).kinematic_dependancy.Joint)==3
-                            secondmember = foncq( eval( ['q',num2str(BiomechanicalModel.OsteoArticularModel(iddx).kinematic_dependancy.Joint(1))]),...
-                                eval( ['q',num2str(BiomechanicalModel.OsteoArticularModel(iddx).kinematic_dependancy.Joint(2))]),...
-                                eval( ['q',num2str(BiomechanicalModel.OsteoArticularModel(iddx).kinematic_dependancy.Joint(3))]) );
-                            ConstraintEq = [ConstraintEq eval(['q',num2str(iddx),'-',char(secondmember)])];
-                        end
-                    end
-                end
-            end
-        end
-    end
-end
 
 ConstraintEq = ConstraintEq';
 ConstraintEq = simplify(ConstraintEq);
-K=jacobian(ConstraintEq,q);
+K=jacobian(ConstraintEq,qred);
 
 
 %% Find a first solution of constraints
-middlestartingq= ([HumanModel.limit_inf] + [HumanModel.limit_sup])/2+0.05;
+
+% Joint limits
+if isfield(BiomechanicalModel,'Generalized_Coordinates')
+    q_map=BiomechanicalModel.Generalized_Coordinates.q_map;
+    l_inf1=[HumanModel.limit_inf]';
+    l_sup1=[HumanModel.limit_sup]';
+    % to handle infinity
+    ind_infinf=not(isfinite(l_inf1));
+    ind_infsup=not(isfinite(l_sup1));
+    % tip to handle inflinity with a complex number.
+    l_inf1(ind_infinf)=1i;
+    l_sup1(ind_infsup)=1i;
+    % new indexing
+    l_inf1=q_map'*l_inf1;
+    l_sup1=q_map'*l_sup1;
+    %find 1i to replay by inf
+    l_inf1(l_inf1==1i)=-inf;
+    l_sup1(l_sup1==1i)=+inf;
+else
+    l_inf1=[HumanModel.limit_inf]';
+    l_sup1=[HumanModel.limit_sup]';
+end
+
+middlestartingq= ( l_inf1+ l_sup1)/2+0.05;
 middlestartingq(isnan(middlestartingq))=0.05;
-fcctout =  matlabFunction(sum(ConstraintEq.^2),  'vars', {q});
+fcctout =  matlabFunction(sum(ConstraintEq.^2),  'vars', {qred});
 options  = optimset('MaxFunEvals',300000,'MaxIter',300000 ,'Algorithm', 'interior-point','Display','off');
-oneqset = fmincon(fcctout , ones(1,length(middlestartingq)), [], [], [], [], [HumanModel.limit_inf], [HumanModel.limit_sup],[],options);
+oneqset = fmincon(fcctout ,middlestartingq, [], [], [], [], l_inf1, l_sup1,[],options);
 
 
 %% Coordinate partitionning
 
 % Finding null columns (obvious independant coordinates)
 [~,col] = find(K);
-qindep = setdiff(1:length(q), unique(col));
+qindep = setdiff(1:length(qred), unique(col));
 qinddep =[];
 
-Kartisym = matlabFunction(K,  'vars', {q});
+Kartisym = matlabFunction(K,  'vars', {qred});
 Karti = Kartisym(oneqset);
 
 % User choice
@@ -98,7 +95,7 @@ if length(qinddep) <  size(Karti,2) - rank(Karti)
     
     nvK = K(:,starting_columns);
     
-    Kartisym = matlabFunction(nvK,  'vars', {q});
+    Kartisym = matlabFunction(nvK,  'vars', {qred});
     Karti = Kartisym(oneqset);
     
     [~,~,P]= lu(Karti);
@@ -128,17 +125,10 @@ if length(qinddep) <  size(Karti,2) - rank(Karti)
     qdep = setdiff(nvq,qinddep)';
     
     % Adding partitionning to BiomechanicalModel
-    
-    syms qsymdep;
-    qsymdep=[];
-    for idx=1:length(qdep)
-        qsymdep =[qsymdep eval( ['q',num2str(qdep(idx))])];
-    end
-    
     idxp = 1;
-    Jv = jacobian(ConstraintEq,qsymdep);
-    BiomechanicalModel.ClosedLoopData(idxp).ConstraintEq = matlabFunction(ConstraintEq,  'vars', {q});
-    BiomechanicalModel.ClosedLoopData(idxp).Jv = matlabFunction(Jv,  'vars', {q});
+    Jv = jacobian(ConstraintEq,qred(qdep));
+    BiomechanicalModel.ClosedLoopData(idxp).ConstraintEq = matlabFunction(ConstraintEq,  'vars', {qred});
+    BiomechanicalModel.ClosedLoopData(idxp).Jv = matlabFunction(Jv,  'vars', {qred});
     BiomechanicalModel.ClosedLoopData(idxp).drivingqu = qinddep;
     BiomechanicalModel.ClosedLoopData(idxp).drivedqv = qdep;
     
@@ -154,24 +144,22 @@ else
     end
     
     Jv = jacobian(ConstraintEq,qsymdep);
-    BiomechanicalModel.ClosedLoopData(1).ConstraintEq = matlabFunction(ConstraintEq,  'vars', {q});
-    BiomechanicalModel.ClosedLoopData(1).Jv = matlabFunction(Jv,  'vars', {q});
+    BiomechanicalModel.ClosedLoopData(1).ConstraintEq = matlabFunction(ConstraintEq,  'vars', {qred});
+    BiomechanicalModel.ClosedLoopData(1).Jv = matlabFunction(Jv,  'vars', {qred});
     BiomechanicalModel.ClosedLoopData(1).drivingqu = qinddep;
     BiomechanicalModel.ClosedLoopData(1).drivedqv = qdep;
     
 end
 
-BiomechanicalModel.ClosedLoopData(1).startingq0 = zeros(length(HumanModel),1) ;
+BiomechanicalModel.ClosedLoopData(1).startingq0 = zeros(1,length(qred)) ;
 BiomechanicalModel.ClosedLoopData(1).startingq0(unique(col)) = oneqset(unique(col))';
 
 % Define startingq0 at the middle range of each joint
 
-middlestartingq=zeros(length(HumanModel),1);
-middlestartingq(qinddep) = ([HumanModel(qinddep).limit_inf] + [HumanModel(qinddep).limit_sup])/2+0.05;
+middlestartingq=zeros(1,length(qred));
+middlestartingq(qinddep) =  ( l_inf1(qinddep)+ l_sup1(qinddep))/2+0.05;
 middlestartingq(isnan(middlestartingq))=0.05;
 Temp = ForwardKinematicsConstrained(BiomechanicalModel,middlestartingq);
-q=[Temp.OsteoArticularModel(1:numel(HumanModel)-6*sum(strcmp('root0',{HumanModel.name}))).q]';
-
-BiomechanicalModel.ClosedLoopData(1).startingq0 = q;
+BiomechanicalModel.ClosedLoopData(1).startingq0 = Temp.ClosedLoopData(1).startingq0; 
 
 end
