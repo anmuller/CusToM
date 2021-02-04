@@ -61,7 +61,8 @@ for num_fil = 1:numel(AnalysisParameters.filename)
 
     %% D�finition des donn�es cin�matiques du pelvis
     % (position / vitesse / acc�l�ration / orientation / vitesse angulaire / acc�l�ration angulaire)
-    % Kinematical data for Pelvis (Position/speed/acceleration/angles/angular speed/angular acceleration)
+    % Kinematical data for Pelvis (Position/speed/acceleration/angles/angular speed
+    % and kinetic energy
 
     if isfield(InverseKinematicsResults,'FreeJointCoordinates')
         p_pelvis=q6dof(:,1:3);  % frame i : p_pelvis(i,:)
@@ -107,25 +108,25 @@ KEt=0;
         Human_model(1).v0=v0(i,:)';
         Human_model(1).w=w(i,:)';
         c=Human_model(1).R*Human_model(1).c+Human_model(1).p;
-     I=Human_model(1).R*Human_model(1).I*Human_model(1).R'; % tenseur d'inertie exprimé au centre de masse
+     I=Human_model(1).R*Human_model(1).I*Human_model(1).R'; %Inertia tensor at the center of mass
     vc=(Human_model(1).v0+cross(Human_model(1).w,c));
     Human_model(1).KE=0.5*Human_model(1).m*(vc'*vc)...
-                    +0.5*Human_model(1).w'*(I*Human_model(1).w); % quantité de mouvement 
+                    +0.5*Human_model(1).w'*(I*Human_model(1).w); % Kinetic energy of the pelvis
         for j=2:numel(Human_model)
-            Human_model(j).q=q(i,j); %#ok<*SAGROW>
+            Human_model(j).q=q(i,j); 
             Human_model(j).dq=dq(i,j);
             Human_model(j).ddq=ddq(i,j);
         end
         Human_model = ForwardAllKinematicsKE(Human_model,1);
         
                 for j=1:numel(Human_model)
-                KEt=KEt+Human_model(j).KE;
+                KEt=KEt+Human_model(j).KE;%summing kinetic energy of all segments
                 end
-        KE(i)=KEt;
+        KE(i)=KEt;% storing KE
         waitbar(i/nbframe)
     end
     close(h)
-   
+   % saving KE
     save([filename '/KE'],'KE');
 %     
     disp(['... Kinetic Energy (' filename ') done'])
