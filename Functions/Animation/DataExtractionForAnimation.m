@@ -65,34 +65,40 @@ else
         Markers_set = BiomechanicalModel.Markers;
         Muscles = BiomechanicalModel.Muscles;
         q6dof = [0 0 0 pi -pi/2 pi/2]'; % rotation for visual
-        
+        q = zeros(numel(Human_model),1);
+        % Forward kinematics
+        if isfield(AnimateParameters,'sol_anim')
+            q(AnimateParameters.sol_anim)=AnimateParameters.angle*pi/180;
+        end
         % Forward kinematics constrained
-        if isfield(BiomechanicalModel,'ClosedLoopData')
-            if isfield(BiomechanicalModel,'Generalized_Coordinates')
-                q = zeros(numel(Human_model),1);
-                % Forward kinematics
-                if isfield(AnimateParameters,'sol_anim')
-                    q(AnimateParameters.sol_anim)=AnimateParameters.angle*pi/180;
-                end
+         if isfield(BiomechanicalModel,'Generalized_Coordinates')
+
+                 if isfield(BiomechanicalModel,'ClosedLoopData')
                 
-                [~,qtot] = ForwardKinematicsConstrained(BiomechanicalModel,BiomechanicalModel.Generalized_Coordinates.q_map'*q);
-                q_complet=BiomechanicalModel.Generalized_Coordinates.q_map*qtot; % real_coordinates
-                fq_dep=BiomechanicalModel.Generalized_Coordinates.fq_dep;
-                q_dep_map=BiomechanicalModel.Generalized_Coordinates.q_dep_map;
-                for ii=1:size(qtot,2)
-                    q_complet(:,ii)=q_complet(:,ii)+q_dep_map*fq_dep(qtot(:,ii)); % add dependancies
-                end
-                q=q_complet(1:end-6);
-            else
-                q = zeros(numel(Human_model)-6,1);
-                % Forward kinematics
-                if isfield(AnimateParameters,'sol_anim')
-                    q(AnimateParameters.sol_anim)=AnimateParameters.angle*pi/180;
-                end
-                
-                [~,q] = ForwardKinematicsConstrained(BiomechanicalModel,q');
-                
-            end
+                    [~,qtot] = ForwardKinematicsConstrained(BiomechanicalModel,BiomechanicalModel.Generalized_Coordinates.q_map'*q);
+                    q_complet=BiomechanicalModel.Generalized_Coordinates.q_map*qtot; % real_coordinates
+                    fq_dep=BiomechanicalModel.Generalized_Coordinates.fq_dep;
+                    q_dep_map=BiomechanicalModel.Generalized_Coordinates.q_dep_map;
+                    for ii=1:size(qtot,2)
+                        q_complet(:,ii)=q_complet(:,ii)+q_dep_map*fq_dep(qtot(:,ii)); % add dependancies
+                    end
+                    q=q_complet(1:end-6);
+                 else
+
+                    qtot = BiomechanicalModel.Generalized_Coordinates.q_map'*q;
+                    q_complet=BiomechanicalModel.Generalized_Coordinates.q_map*qtot; % real_coordinates
+                    fq_dep=BiomechanicalModel.Generalized_Coordinates.fq_dep;
+                    q_dep_map=BiomechanicalModel.Generalized_Coordinates.q_dep_map;
+                    for ii=1:size(qtot,2)
+                        q_complet(:,ii)=q_complet(:,ii)+q_dep_map*fq_dep(qtot(:,ii)); % add dependancies
+                    end
+                    q=q_complet(1:end-6);
+                 end
+         else
+                     if isfield(BiomechanicalModel,'ClosedLoopData')
+                        [~,q] = ForwardKinematicsConstrained(BiomechanicalModel,q);
+                        q = q(1:end-6);
+                     end
         end
         
         

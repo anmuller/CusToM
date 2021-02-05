@@ -91,14 +91,12 @@ options2 = optimoptions(@fmincon,'Algorithm','sqp','Display','final','GradObj','
 
 h = waitbar(0,['Forces Computation (' filename ')']);
 
-% TO BE CHANGED AFTER CALIBRATION
-k=ones(size(q,1),1);
 
 [solid_path1,solid_path2,num_solid,num_markers]=Data_ClosedLoop(BiomechanicalModel.OsteoArticularModel);
 
 dependancies=KinematicDependancy(BiomechanicalModel.OsteoArticularModel);
 % Closed-loop constraints
-KT=ConstraintsJacobian(BiomechanicalModel,q(:,1),solid_path1,solid_path2,num_solid,num_markers,k,0.0001,dependancies)';
+KT=ConstraintsJacobian(BiomechanicalModel,q(:,1),solid_path1,solid_path2,num_solid,num_markers,ones(size(q,1),1),0.0001,dependancies)';
 lambda = zeros(size(KT,2),1);
 
 if isempty(lambda)

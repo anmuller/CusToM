@@ -1,4 +1,4 @@
-function [error] = CostFunctionSymbolicIKandClosedLoop(q,nb_cut,real_markers,f,list_function,list_function_markers,Rcut,pcut)
+function [error] = CostFunctionSymbolicIKandClosedLoop(q,nb_cut,real_markers,f,list_function,list_function_markers,Rcut,pcut,startingq0,numqu,numqv,Jv,h)
 % Cost function used for the inverse kinematics step using an optimization method
 %   
 %   INPUT
@@ -26,6 +26,8 @@ function [error] = CostFunctionSymbolicIKandClosedLoop(q,nb_cut,real_markers,f,l
 for c=1:nb_cut
 	[Rcut(:,:,c),pcut(:,:,c)]=list_function{c}(q,pcut,Rcut);
 end
+
+q = ForwardKConstrained(q,startingq0,numqu,numqv,Jv,h);
 
 error=0;
 for m=1:numel(list_function_markers)
