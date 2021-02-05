@@ -1,4 +1,4 @@
-function BiomechanicalModel = ForwardKinematicsConstrained(BiomechanicalModel,q0)
+function [BiomechanicalModel,qtot] = ForwardKinematicsConstrained(BiomechanicalModel,q0)
 % Forward kinematics constrained from a command q0
 %
 %   INPUT
@@ -77,7 +77,7 @@ for jdx = 1:length(BiomechanicalModel.ClosedLoopData)
 %         hold on
 %         plot(cpt, h(qtot)'*h(qtot),'o')
 
-        while h(qtot)'*h(qtot) >1e-8 && cpt<10000
+        while h(qtot)'*h(qtot) >1e-10 && cpt<10000
             
             %%Newton-Raphson
             Jvnum=Jv(qtot);
@@ -114,7 +114,7 @@ end
 
 %% Update of the BiomechanicalModel.OsteoArticularModel with found coordinates
 
-if isfield(BiomechanicalModel,'Generalized_Coordinates')
+if isfield(BiomechanicalModel,'Generalized_Coordinates') && length(qtot)~=length(BiomechanicalModel.OsteoArticularModel)
     q_complet=BiomechanicalModel.Generalized_Coordinates.q_map*qtot; % real_coordinates
     fq_dep=BiomechanicalModel.Generalized_Coordinates.fq_dep;
     q_dep_map=BiomechanicalModel.Generalized_Coordinates.q_dep_map;

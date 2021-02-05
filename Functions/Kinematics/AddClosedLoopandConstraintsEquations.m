@@ -20,7 +20,7 @@ function BiomechanicalModel = AddClosedLoopandConstraintsEquations(Biomechanical
 
 HumanModel = BiomechanicalModel.OsteoArticularModel;
 
-syms q [1 length(HumanModel) ] real;
+syms q [length(HumanModel) 1] real;
 
 
 [solid_path1,solid_path2,num_solid,num_markers]=Data_ClosedLoop(HumanModel);
@@ -75,7 +75,7 @@ middlestartingq= ([HumanModel.limit_inf] + [HumanModel.limit_sup])/2+0.05;
 middlestartingq(isnan(middlestartingq))=0.05;
 fcctout =  matlabFunction(sum(ConstraintEq.^2),  'vars', {q});
 options  = optimset('MaxFunEvals',300000,'MaxIter',300000 ,'Algorithm', 'interior-point','Display','off');
-oneqset = fmincon(fcctout , ones(1,length(middlestartingq)), [], [], [], [], [HumanModel.limit_inf], [HumanModel.limit_sup],[],options);
+oneqset = fmincon(fcctout , ones(length(middlestartingq),1), [], [], [], [], [HumanModel.limit_inf], [HumanModel.limit_sup],[],options);
 
 
 %% Coordinate partitionning

@@ -159,7 +159,7 @@ BiomechanicalModel.ClosedLoopData(1).startingq0(unique(col)) = oneqset(unique(co
 middlestartingq=zeros(1,length(qred));
 middlestartingq(qinddep) =  ( l_inf1(qinddep)+ l_sup1(qinddep))/2+0.05;
 middlestartingq(isnan(middlestartingq))=0.05;
-Temp = ForwardKinematicsConstrained(BiomechanicalModel,middlestartingq);
-BiomechanicalModel.ClosedLoopData(1).startingq0 = Temp.ClosedLoopData(1).startingq0; 
+BiomechanicalModel = ForwardKinematicsConstrained(BiomechanicalModel,middlestartingq);
+%BiomechanicalModel.ClosedLoopData(1).startingq0 = Temp.ClosedLoopData(1).startingq0; 
 
 end
