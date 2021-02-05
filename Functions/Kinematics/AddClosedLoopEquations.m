@@ -1,4 +1,4 @@
-function BiomechanicalModel = AddClosedLoopEquations(BiomechanicalModel,k,varargin)
+function BiomechanicalModel = AddClosedLoopEquations(BiomechanicalModel,varargin)
 % Adding closed-loop equations to the biomechanical model for direct kinematics
 %
 %   INPUT
@@ -29,12 +29,12 @@ qred = BiomechanicalModel.Generalized_Coordinates.q_red;
 
 %% Find constraint equations for closing the loop
 if size(solid_path1)==[1 1]
-    [~,ConstraintEq]=NonLinCon_ClosedLoop_Sym(HumanModel,solid_path1{1},solid_path2{1},num_solid,num_markers,q,k);
+    [~,ConstraintEq]=NonLinCon_ClosedLoop_Sym(HumanModel,solid_path1{1},solid_path2{1},num_solid,num_markers,q,ones(1,length(q)));
     ConstraintEq=ConstraintEq';
 else
     ConstraintEq =[];
     for idx= 1:length(num_solid)
-        [~,ConstraintEq1]=NonLinCon_ClosedLoop_Sym(HumanModel,solid_path1{idx},solid_path2{idx},num_solid(idx),num_markers(idx),q,k);
+        [~,ConstraintEq1]=NonLinCon_ClosedLoop_Sym(HumanModel,solid_path1{idx},solid_path2{idx},num_solid(idx),num_markers(idx),q,ones(1,length(q)));
         ConstraintEq = [ConstraintEq ConstraintEq1'];
     end
 end
