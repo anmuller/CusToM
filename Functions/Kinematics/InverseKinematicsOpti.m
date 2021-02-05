@@ -50,6 +50,7 @@ end
 [real_markers, nb_frame, Firstframe, Lastframe,f_mocap] = Get_real_markers(filename,list_markers, AnalysisParameters); %#ok<ASGLU>
 
 %% Root position
+nb_frame = 100;
 Base_position=cell(nb_frame,1);
 Base_rotation=cell(nb_frame,1);
 for ii=1:nb_frame
@@ -92,8 +93,8 @@ end
 
 %% Inverse kinematics frame per frame
 
-options1 = optimoptions(@fmincon,'Display','final','TolFun',1e-6,'MaxFunEvals',10000000,'GradObj','off','GradConstr','off');
-options2 = optimoptions(@fmincon,'Algorithm','interior-point','Display','final','TolFun',1e-6,'MaxFunEvals',2000000,'GradObj','off','GradConstr','off');
+options1 = optimoptions(@fmincon,'Display','final','TolFun',1e-6,'MaxFunEvals',10000000,'MaxIterations',10000,'GradObj','off','GradConstr','off');
+options2 = optimoptions(@fmincon,'Algorithm','interior-point','Display','final','TolFun',1e-6,'MaxFunEvals',2000000,'MaxIterations',5000,'GradObj','off','GradConstr','off');
 
 q=zeros(nb_solid,nb_frame);
 ceq=zeros(7*nbClosedLoop,nb_frame);
