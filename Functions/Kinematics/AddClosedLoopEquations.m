@@ -30,6 +30,7 @@ qred = BiomechanicalModel.Generalized_Coordinates.q_red;
 %% Find constraint equations for closing the loop
 if size(solid_path1)==[1 1]
     [~,ConstraintEq]=NonLinCon_ClosedLoop_Sym(HumanModel,solid_path1{1},solid_path2{1},num_solid,num_markers,q,k);
+    ConstraintEq=ConstraintEq';
 else
     ConstraintEq =[];
     for idx= 1:length(num_solid)
@@ -121,7 +122,7 @@ if length(qinddep) <  size(Karti,2) - rank(Karti)
     [~,Q2] = completepivoting(Karti(:,nvidx));
     nvq = Q2' * starting_columns(nvidx);
     
-    qinddep = [useq'  nvq(rank(Karti) +1 : end)'];
+    qinddep = [useq'  nvq(rank(Karti) +1 : end)' qindep];
     qdep = setdiff(nvq,qinddep)';
     
     % Adding partitionning to BiomechanicalModel

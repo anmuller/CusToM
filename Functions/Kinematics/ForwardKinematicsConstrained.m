@@ -114,28 +114,28 @@ end
 
 %% Update of the BiomechanicalModel.OsteoArticularModel with found coordinates
 
-if isfield(BiomechanicalModel,'Generalized_Coordinates') && length(qtot)~=length(BiomechanicalModel.OsteoArticularModel)
-    q_complet=BiomechanicalModel.Generalized_Coordinates.q_map*qtot; % real_coordinates
-    fq_dep=BiomechanicalModel.Generalized_Coordinates.fq_dep;
-    q_dep_map=BiomechanicalModel.Generalized_Coordinates.q_dep_map;
-    for ii=1:size(qtot,2)
-        q_complet(:,ii)=q_complet(:,ii)+q_dep_map*fq_dep(qtot(:,ii)); % add dependancies
-    end
-else
-    q_complet = qtot;
-end
+% if isfield(BiomechanicalModel,'Generalized_Coordinates') && length(qtot)~=length(BiomechanicalModel.OsteoArticularModel)
+%     q_complet=BiomechanicalModel.Generalized_Coordinates.q_map*qtot; % real_coordinates
+%     fq_dep=BiomechanicalModel.Generalized_Coordinates.fq_dep;
+%     q_dep_map=BiomechanicalModel.Generalized_Coordinates.q_dep_map;
+%     for ii=1:size(qtot,2)
+%         q_complet(:,ii)=q_complet(:,ii)+q_dep_map*fq_dep(qtot(:,ii)); % add dependancies
+%     end
+% else
+%     q_complet = qtot;
+% end
 
-for k=1:length(q_complet)
-    BiomechanicalModel.OsteoArticularModel(k).q = q_complet(k);
-end
+% for k=1:length(q_complet)
+%     BiomechanicalModel.OsteoArticularModel(k).q = q_complet(k);
+% end
 
 
  BiomechanicalModel.ClosedLoopData(1).startingq0 = qtot; %For faster displaying
 
-BiomechanicalModel.OsteoArticularModel(1).p=[0 0 0]';
-BiomechanicalModel.OsteoArticularModel(1).R=eye(3);
-
-[BiomechanicalModel.OsteoArticularModel] = ForwardPositions(BiomechanicalModel.OsteoArticularModel,1);
+% BiomechanicalModel.OsteoArticularModel(1).p=[0 0 0]';
+% BiomechanicalModel.OsteoArticularModel(1).R=eye(3);
+% 
+% [BiomechanicalModel.OsteoArticularModel] = ForwardPositions(BiomechanicalModel.OsteoArticularModel,1);
 
 end
 

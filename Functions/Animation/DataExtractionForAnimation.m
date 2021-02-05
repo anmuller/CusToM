@@ -75,7 +75,14 @@ else
                     q(AnimateParameters.sol_anim)=AnimateParameters.angle*pi/180;
                 end
                 
-                Temp = ForwardKinematicsConstrained(BiomechanicalModel,BiomechanicalModel.Generalized_Coordinates.q_map'*q);
+                [~,qtot] = ForwardKinematicsConstrained(BiomechanicalModel,BiomechanicalModel.Generalized_Coordinates.q_map'*q);
+                q_complet=BiomechanicalModel.Generalized_Coordinates.q_map*qtot; % real_coordinates
+                fq_dep=BiomechanicalModel.Generalized_Coordinates.fq_dep;
+                q_dep_map=BiomechanicalModel.Generalized_Coordinates.q_dep_map;
+                for ii=1:size(qtot,2)
+                    q_complet(:,ii)=q_complet(:,ii)+q_dep_map*fq_dep(qtot(:,ii)); % add dependancies
+                end
+                q=q_complet(1:end-6);
             else
                 q = zeros(numel(Human_model)-6,1);
                 % Forward kinematics
@@ -83,10 +90,11 @@ else
                     q(AnimateParameters.sol_anim)=AnimateParameters.angle*pi/180;
                 end
                 
-                Temp = ForwardKinematicsConstrained(BiomechanicalModel,q');
+                [~,q] = ForwardKinematicsConstrained(BiomechanicalModel,q');
+                
             end
-            q=[Temp.OsteoArticularModel(1:numel(Human_model)-6).q]';
         end
+        
         
     else
         load('AnalysisParameters.mat'); %#ok<LOAD>
