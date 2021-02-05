@@ -141,11 +141,12 @@ for num_fil = 1:numel(AnalysisParameters.filename)
                 COMt=CalcCoM(Human_model);%center of mass
                 COM(:,i)=COMt; % storing CoM
             end
+            waitbar(i/nbframe)        
     end
+        close(h)
 
-        waitbar(i/nbframe)
-    end
-    close(h)
+         disp(['... Kinetics (' filename ') done'])
+
    % saving KE & COM
     if numel(KinType)==2
         save([filename '/KE'],'KE');
@@ -156,8 +157,7 @@ for num_fil = 1:numel(AnalysisParameters.filename)
         save([filename '/COM'],'COM');
     end
     
-%     
-    disp(['... Kinetics (' filename ') done'])
+end
     
 end
 
