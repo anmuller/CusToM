@@ -667,12 +667,12 @@ num_solid=0;
     OsteoArticularModel(incr_solid).comment='Scapula protraction';
     OsteoArticularModel(incr_solid).FunctionalAngle='Scapula protraction';
     % Dependancy
-    Human_model(incr_solid).kinematic_dependancy.active=1;
-    Human_model(incr_solid).kinematic_dependancy.Joint=[incr_solid+13];
+    OsteoArticularModel(incr_solid).kinematic_dependancy.active=1;
+    OsteoArticularModel(incr_solid).kinematic_dependancy.Joint=[incr_solid+13];
     % Kinematic dependancy function
     syms Hz 
     f_z = matlabFunction(27.939*pi/180+0.088*Hz);
-    Human_model(incr_solid).kinematic_dependancy.q=f_z;
+    OsteoArticularModel(incr_solid).kinematic_dependancy.q=f_z;
     
     % RScapula_J2
     num_solid=num_solid+1;        % number of the solid ...
@@ -694,11 +694,11 @@ num_solid=0;
     OsteoArticularModel(incr_solid).comment='Scapula Latero Rotation';
     OsteoArticularModel(incr_solid).FunctionalAngle='Scapula Latero Rotation';
     % Dependancy
-    Human_model(incr_solid).kinematic_dependancy.active=1;
-    Human_model(incr_solid).kinematic_dependancy.Joint=[incr_solid+12]; % Thoracicellips
+    OsteoArticularModel(incr_solid).kinematic_dependancy.active=1;
+    OsteoArticularModel(incr_solid).kinematic_dependancy.Joint=[incr_solid+12]; % Thoracicellips
     % Kinematic dependancy function
     f_x = matlabFunction(-6.970*pi/180+0.220*Hz);
-    Human_model(incr_solid).kinematic_dependancy.q=f_x;
+    OsteoArticularModel(incr_solid).kinematic_dependancy.q=f_x;
 %     
     % RScapula
     num_solid=num_solid+1;        % number of the solid ...
@@ -721,11 +721,11 @@ num_solid=0;
     OsteoArticularModel(incr_solid).comment='Scapula Tilt';
     OsteoArticularModel(incr_solid).FunctionalAngle='Scapula Tilt';
     % Dependancy
-    Human_model(incr_solid).kinematic_dependancy.active=1;
-    Human_model(incr_solid).kinematic_dependancy.Joint=[incr_solid+11]; % Thoracicellips
+    OsteoArticularModel(incr_solid).kinematic_dependancy.active=1;
+    OsteoArticularModel(incr_solid).kinematic_dependancy.Joint=[incr_solid+11]; % Thoracicellips
     % Kinematic dependancy function
     f_y = matlabFunction(-4.884*pi/180+0.145*Hz);
-    Human_model(incr_solid).kinematic_dependancy.q=f_y;
+    OsteoArticularModel(incr_solid).kinematic_dependancy.q=f_y;
 
     %% Lclavicle
     % LClavicle_J1
@@ -824,11 +824,11 @@ num_solid=0;
     OsteoArticularModel(incr_solid).comment='Scapula Protraction';
     OsteoArticularModel(incr_solid).FunctionalAngle='Scapula Protraction';
     % Dependancy
-    Human_model(incr_solid).kinematic_dependancy.active=1;
-    Human_model(incr_solid).kinematic_dependancy.Joint=[incr_solid+20]; % Thoracicellips
+    OsteoArticularModel(incr_solid).kinematic_dependancy.active=1;
+    OsteoArticularModel(incr_solid).kinematic_dependancy.Joint=[incr_solid+14]; % Thoracicellips
     % Kinematic dependancy function
     f_z = matlabFunction(-(27.939*pi/180+0.088*Hz));
-    Human_model(incr_solid).kinematic_dependancy.q=f_z;
+    OsteoArticularModel(incr_solid).kinematic_dependancy.q=f_z;
     
     % LScapula_J2
     num_solid=num_solid+1;        % number of the solid ...
@@ -850,11 +850,11 @@ num_solid=0;
     OsteoArticularModel(incr_solid).comment='Scapula Latero Rotation';
     OsteoArticularModel(incr_solid).FunctionalAngle='Scapula Latero Rotation';
     % Dependancy
-    Human_model(incr_solid).kinematic_dependancy.active=1;
-    Human_model(incr_solid).kinematic_dependancy.Joint=[incr_solid+20]; % Thoracicellips
+    OsteoArticularModel(incr_solid).kinematic_dependancy.active=1;
+    OsteoArticularModel(incr_solid).kinematic_dependancy.Joint=[incr_solid+13]; % Thoracicellips
     % Kinematic dependancy function
     f_x = matlabFunction(-6.970*pi/180+0.220*Hz);
-    Human_model(incr_solid).kinematic_dependancy.q=f_x;
+    OsteoArticularModel(incr_solid).kinematic_dependancy.q=f_x;
     
     % LScapula
     num_solid=num_solid+1;        % number of the solid ...
@@ -877,9 +877,9 @@ num_solid=0;
     OsteoArticularModel(incr_solid).comment='Scapula Tilt';
     OsteoArticularModel(incr_solid).FunctionalAngle='Scapula Tilt';
     % Dependancy
-    Human_model(incr_solid).kinematic_dependancy.active=1;
-    Human_model(incr_solid).kinematic_dependancy.Joint=[incr_solid+20]; % Thoracicellips
+    OsteoArticularModel(incr_solid).kinematic_dependancy.active=1;
+    OsteoArticularModel(incr_solid).kinematic_dependancy.Joint=[incr_solid+12]; % Thoracicellips
     % Kinematic dependancy function
     f_y = matlabFunction(-4.884*pi/180+0.145*Hz);
-    Human_model(incr_solid).kinematic_dependancy.q=f_y;
+    OsteoArticularModel(incr_solid).kinematic_dependancy.q=f_y;
 end
