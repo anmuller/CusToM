@@ -73,18 +73,18 @@ end
 Aeq_ik=zeros(nb_solid);  
 beq_ik=zeros(nb_solid,1);
 if isfield(BiomechanicalModel,'Generalized_Coordinates')
-    solid_red = (BiomechanicalModel.Generalized_Coordinates.q_map'*(1:size(Human_model,2))')';;
+    solid_red = (BiomechanicalModel.Generalized_Coordinates.q_map'*(1:size(Human_model,2))')';
 else
     solid_red=1:size(Human_model,2);  % Number of solids
 end
 for i=1:length(solid_red)
     jj=solid_red(i);
-    if size(OsteoArticularModel(jj).linear_constraint) ~= [0 0] %#ok<BDSCA>
+    if size(Human_model(jj).linear_constraint) ~= [0 0] %#ok<BDSCA>
         Aeq_ik(i,i)=-1;
-        ind_col = OsteoArticularModel(jj).linear_constraint(1,1);
+        ind_col = Human_model(jj).linear_constraint(1,1);
         [~,c]=find(GC.q_map(ind_col,:));
         
-        ind_val = OsteoArticularModel(jj).linear_constraint(2,1);
+        ind_val = Human_model(jj).linear_constraint(2,1);
         [~,cc]=find(GC.q_map(ind_val,:));
         Aeq_ik(i,c)=cc;
     end
