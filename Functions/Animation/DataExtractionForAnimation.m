@@ -75,7 +75,7 @@ else
 
                  if isfield(BiomechanicalModel,'ClosedLoopData')
                 
-                    [~,qtot] = ForwardKinematicsConstrained(BiomechanicalModel,BiomechanicalModel.Generalized_Coordinates.q_map'*q);
+                    [~,qtot] = ForwardKinematicsConstrained(BiomechanicalModel,BiomechanicalModel.ClosedLoopData(1).startingq0);
                     q_complet=BiomechanicalModel.Generalized_Coordinates.q_map*qtot; % real_coordinates
                     fq_dep=BiomechanicalModel.Generalized_Coordinates.fq_dep;
                     q_dep_map=BiomechanicalModel.Generalized_Coordinates.q_dep_map;
