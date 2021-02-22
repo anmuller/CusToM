@@ -1,0 +1,34 @@
+HOW TO INSTALL BTK FOR MATLAB UNDER LINUX 64-BIT
+------------------------------------------------
+
+The Matlab functions are mainly MEX function which depend
+on the following BTK dynamic libraries:
+ - libBTKCommon.so
+ - libBTKIO.so
+ - libBTKBasicFilters.so
+
+Without them on your computer, Matlab will send you messages such as:
+"??? Invalid MEX-file '/home/xyz/packages/btk/btkReadAcquisition.mexa64':
+libBTKIO.so.0.1: cannot open shared object file: No such file or directory."
+
+So you need to install all the files related to the dynamic libraries into a directory
+known by Linux. The easiest is to move the files from the folder <package_btk_path>/lib into
+the folder /usr/local/lib (ubuntu) or /usr/lib64 (Fedora). Note that you must copy only the
+files and not the folder.
+IMPORTANT: You must use the command 'sudo ldconfig' in a terminal afterwards.
+
+Then, the content of the folder <package_btk_path>/Matlab can be copied anywhere on you
+computer. The most important when using it for the first time in Matlab is to add its
+location in the list of known paths by Matlab (Menu File > Set Path, or use the command
+addpath in Matlab). 
+
+HOW TO FIX THE MATLAB ERROR RELATED TO GLIBCXX
+----------------------------------------------
+
+If Matlab send you an error about an unknown version of GLIBCXX, it is because Matlab embeds
+is own version and conflicts with the version in your computer. The only way found to fix
+this is to move the files libstdc++.so.6.* from the folder MATLABXY/sys/os/glnx(86|a64) to
+another folder, for example MATLABXY/sys/os/glnx(86|a64)/_btk_fix_glibcxx.
+
+Note: In a more recent version of Maltab (R2012a) the libstdc++.so.6.* files are in the
+folder MATLABXY/bin/glnxa64.You still need to move the files to another folder.
