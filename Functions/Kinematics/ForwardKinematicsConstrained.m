@@ -25,7 +25,7 @@ function [BiomechanicalModel,qtot] = ForwardKinematicsConstrained(BiomechanicalM
 %% Interpolating  from the startingq0 position to the command q0
 
 startingq0 = BiomechanicalModel.ClosedLoopData(1).startingq0;
-step = 0.1;
+step = 0.05;
 nb_prog = 0;
 
 % Find the number of interpolation needed
@@ -77,7 +77,7 @@ for jdx = 1:length(BiomechanicalModel.ClosedLoopData)
 %         hold on
 %         plot(cpt, h(qtot)'*h(qtot),'o')
 
-        while h(qtot)'*h(qtot) >1e-10 && cpt<10000
+        while h(qtot)'*h(qtot) >1e-15 && cpt<10000
             
             %%Newton-Raphson
             Jvnum=Jv(qtot);

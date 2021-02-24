@@ -176,7 +176,7 @@ else
             %             nonlcon=@(qvar)NonLinCon_ClosedLoop_Num(Human_model,solid_path1,solid_path2,num_solid,num_markers,qvar,k);
       %      [q(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,nonlcon,options1);
             [q(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,-2*pi*ones(size(l_inf1)),2*pi*ones(size(l_inf1)),nonlcon,options1);
-            
+            startingq0 = q(:,f);
         else
             if f > 2
                 delta=q(:,f-1)-q(:,f-2);
