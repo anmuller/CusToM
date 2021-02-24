@@ -18,11 +18,11 @@ function [c,ceq] = ClosedLoop(q,nb_ClosedLoop) %#ok<*INUSL>
 %________________________________________________________
 
 c=[];
-ceq=zeros(nb_ClosedLoop*7,1); % number of equations = number of closed loop * 9 (9 terms in the rotation matrix)
+ceq=zeros(nb_ClosedLoop*9,1); % number of equations = number of closed loop * 9 (9 terms in the rotation matrix)
 
 for i=1:nb_ClosedLoop
     eval(['[ci,ceqi] = fCL' num2str(i) '(q);'])  
-    ceq(1+7*(i-1):7*i,1) = ceqi;     
+    ceq(1+9*(i-1):9*i,1) = ceqi;     
 end
 
 end

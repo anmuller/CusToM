@@ -91,11 +91,11 @@ end
 
 %% Inverse kinematics frame per frame
 
-options1 = optimoptions(@fmincon,'Display','final','TolFun',1e-6,'MaxFunEvals',10000000,'MaxIter',1000,'GradObj','off','GradConstr','off');
-options2 = optimoptions(@fmincon,'Algorithm','interior-point','Display','final','TolFun',1e-6,'MaxFunEvals',2000000,'GradObj','off','GradConstr','off');
+options1 = optimoptions(@fmincon,'Algorithm','sqp','Display','final','TolFun',1e-6,'MaxFunEvals',10000000,'MaxIter',3000000);%,'PlotFcn','optimplotfval' );
+options2 = optimoptions(@fmincon,'Algorithm','sqp','Display','final','TolFun',1e-6,'MaxFunEvals',2000000,'MaxIter',30000);%,'PlotFcn','optimplotfval' );
 
 q=zeros(nb_solid,nb_frame);
-ceq=zeros(7*nbClosedLoop,nb_frame);
+ceq=zeros(9*nbClosedLoop,nb_frame);
 addpath('Symbolic_function')
 % k=ones(nb_solid,1);
 
@@ -174,7 +174,8 @@ else
             nonlcon=@(qvar)ClosedLoop(qvar,nbClosedLoop);
             %             q=Generalized_Coordinates.q_dep_map*Generalized_Coordinates.fq_dep(q_red)+Generalized_Coordinates.q_map*q_red;
             %             nonlcon=@(qvar)NonLinCon_ClosedLoop_Num(Human_model,solid_path1,solid_path2,num_solid,num_markers,qvar,k);
-            [q(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,nonlcon,options1);
+      %      [q(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,nonlcon,options1);
+            [q(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,-2*pi*ones(size(l_inf1)),2*pi*ones(size(l_inf1)),nonlcon,options1);
             
         else
             if f > 2
@@ -189,7 +190,8 @@ else
 %             nonlcon=@(qvar)NonLinCon_ClosedLoop(qvar,nb_cut,list_function,pcut,Rcut);
             nonlcon=@(qvar)ClosedLoop(qvar,nbClosedLoop);
 %             nonlcon=@(qvar)NonLinCon_ClosedLoop_Num(Human_model,BiomechanicalModel.Generalized_Coordinates,solid_path1,solid_path2,num_solid,num_markers,qvar,k);
-            [q(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf,l_sup,nonlcon,options2);
+        %    [q(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf,l_sup,nonlcon,options2);
+            [q(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,-2*pi*ones(size(l_inf1)),2*pi*ones(size(l_inf1)),nonlcon,options2);
 
             % Optimization without nonlcon
             %             q0=q(:,f-1);
@@ -223,6 +225,7 @@ else
     %     nonlcon2=@(qvar)NonLinCon_ClosedLoop(qvar,nb_cut,list_function,pcut,Rcut);
     for f=1:nb_frame
         q(:,f) = ForwardKConstrained(q(:,f),startingq0,numqu,numqv,Jv,hconstr);
+        startingq0 = q(:,f);
         [KinematicsError(:,f)] = ErrorMarkersIK(q(:,f),nb_cut,real_markers,f,list_markers,Rcut,pcut);
         [~,ceq(:,f)]=nonlcon(q(:,f));
         %         [~,ceq2(:,f)]=nonlcon2(q(:,f));

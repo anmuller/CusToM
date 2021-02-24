@@ -69,10 +69,6 @@ if AnalysisParameters.CalibID.Active
     disp('... Dynamic Calibration done')
 end
 
-%% Closedloop equations
-disp('Closed loop equations ...')
-BiomechanicalModel = AddClosedLoopEquations(BiomechanicalModel);
-disp('... Closed loop equations  done')
 
 %% Moment arms matrix et muscular coupling
 % not applicable here
@@ -118,4 +114,13 @@ dp=0.001;
  
  
 save('BiomechanicalModel','BiomechanicalModel');
+
+
+%% Closedloop equations
+disp('Closed loop equations ...')
+BiomechanicalModel = AddClosedLoopEquations(BiomechanicalModel);
+disp('... Closed loop equations  done')
+
+save('BiomechanicalModel','BiomechanicalModel');
+
 end

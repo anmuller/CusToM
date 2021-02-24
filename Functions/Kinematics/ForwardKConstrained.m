@@ -68,7 +68,7 @@ end
 %         hold on
 %         plot(cpt, h(qtot)'*h(qtot),'o')
 
-        while h(qtot)'*h(qtot) >1e-10 && cpt<200
+        while h(qtot)'*h(qtot) >1e-15 && cpt<200
             
             %%Newton-Raphson
             Jvnum=Jv(qtot);

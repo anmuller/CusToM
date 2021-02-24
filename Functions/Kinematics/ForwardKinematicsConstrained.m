@@ -25,7 +25,7 @@ function [BiomechanicalModel,qtot] = ForwardKinematicsConstrained(BiomechanicalM
 %% Interpolating  from the startingq0 position to the command q0
 
 startingq0 = BiomechanicalModel.ClosedLoopData(1).startingq0;
-step = 0.05;
+step = 0.1;
 nb_prog = 0;
 
 % Find the number of interpolation needed

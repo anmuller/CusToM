@@ -75,6 +75,9 @@ fcctout =  matlabFunction(sum(ConstraintEq.^2),  'vars', {qred});
 options  = optimset('MaxFunEvals',300000,'MaxIter',300000 ,'Algorithm', 'interior-point','Display','off');
 oneqset = fmincon(fcctout ,middlestartingq, [], [], [], [], l_inf1, l_sup1,[],options);
 
+% fcctout =  matlabFunction(sum(ConstraintEq.^2),  'vars', {qred'});
+% options = optimoptions('particleswarm','SwarmSize',50,'HybridFcn',@fmincon,'PlotFcn','pswplotbestf');
+% x = particleswarm(fcctout,length(middlestartingq),l_inf1,l_sup1,options);
 
 %% Coordinate partitionning
 
