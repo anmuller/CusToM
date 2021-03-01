@@ -96,9 +96,9 @@ Scapula_acromion    = Thorax_osim2antoine.*Mirror*[-0.0142761 0.0131922 -0.00563
 Scapula_cluster_med = Thorax_osim2antoine.*Mirror*[-0.0860033 0.0298369 -0.00786593]' - Scapula_CoM;
 Scapula_cluster_lat = Thorax_osim2antoine.*Mirror*[-0.0956621 0.0398035 -0.0552027]' - Scapula_CoM;
 Scapula_cluster_mid = Thorax_osim2antoine.*Mirror*[-0.119492 0.0147336 -0.0385808]' - Scapula_CoM;
-Thorax_Rx           = Thorax_osim2antoine(1)*0.07;
-Thorax_Ry           = Thorax_osim2antoine(2).*0.15;
-Thorax_Rz           = Sign*Thorax_osim2antoine(3).*0.07;
+Thorax_Rx           = Mirror(1,1)*Thorax_osim2antoine(1)*0.07;
+Thorax_Ry           = Mirror(2,2)*Thorax_osim2antoine(2)*0.15;
+Thorax_Rz           = Mirror(3,3)*Thorax_osim2antoine(3)*0.07;
 
 %% Definition of anatomical landmarThorax_osim2antoine.s (with respect to the center of mass of the solid)
 
@@ -394,7 +394,7 @@ eval(['incr_solid=s_' name ';'])                            % solid number in mo
 Human_model(incr_solid).name=[Side name];          % solid name with side
 Human_model(incr_solid).sister=0;                   % Solid's sister
 Human_model(incr_solid).child=s_AcromioClavicular_J2;         % Solid's child
-Human_model(incr_solid).mother=s_ScapuloThoracic_J5;            % Solid's mother
+Human_model(incr_solid).mother=s_Scapula;            % Solid's mother
 Human_model(incr_solid).a=[0 1 0]';                          
 Human_model(incr_solid).joint=1;
 Human_model(incr_solid).limit_inf=-pi;
