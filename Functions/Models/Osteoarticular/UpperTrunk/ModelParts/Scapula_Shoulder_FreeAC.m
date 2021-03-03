@@ -1,4 +1,4 @@
-function [Human_model]= Scapula_Shoulder(Human_model,k,Mass,Side,AttachmentPoint)
+function [Human_model]= Scapula_Shoulder_FreeAC(Human_model,k,Mass,Side,AttachmentPoint)
 % Addition of a thorax model
 %   INPUT
 %   - Human_model: osteo-articular model of an already existing
@@ -22,7 +22,7 @@ function [Human_model]= Scapula_Shoulder(Human_model,k,Mass,Side,AttachmentPoint
 %________________________________________________________
 %% Solid list
 
-list_solid={'ScapuloThoracic_J1' 'ScapuloThoracic_J2' 'ScapuloThoracic_J3' 'ScapuloThoracic_J4' 'ScapuloThoracic_J5' 'ScapuloThoracic_J6' 'Scapula' 'AcromioClavicular_J1' 'AcromioClavicular_J2' 'AcromioClavicular_J3'};
+list_solid={'ScapuloThoracic_J1' 'ScapuloThoracic_J2' 'ScapuloThoracic_J3' 'ScapuloThoracic_J4' 'ScapuloThoracic_J5' 'ScapuloThoracic_J6' 'Scapula' 'AcromioClavicular_J1' 'AcromioClavicular_J2' 'AcromioClavicular_J3' 'AcromioClavicular_J4' 'AcromioClavicular_J5' 'AcromioClavicular_J6'};
 
 %% Choix jambe droite ou gauche
 if Side == 'R'
@@ -446,12 +446,92 @@ name=list_solid{num_solid};                                 % solid name
 eval(['incr_solid=s_' name ';'])                            % solid number in model tree
 Human_model(incr_solid).name=[Side name];          % solid name with side
 Human_model(incr_solid).sister=0;                   % Solid's sister
-Human_model(incr_solid).child=0;         % Solid's child
+Human_model(incr_solid).child=s_AcromioClavicular_J4;         % Solid's child
 Human_model(incr_solid).mother=s_AcromioClavicular_J2;            % Solid's mother
 Human_model(incr_solid).a=[0 1 0]';                          
 Human_model(incr_solid).joint=1;
 Human_model(incr_solid).limit_inf=-pi;
 Human_model(incr_solid).limit_sup=pi;
+Human_model(incr_solid).ActiveJoint=1;
+Human_model(incr_solid).m=0;        % Reference mass
+Human_model(incr_solid).b=[0 0 0]';        % Attachment point position in mother's frame
+Human_model(incr_solid).I=zeros(3,3);               % Reference inertia matrix
+Human_model(incr_solid).c=[0 0 0]';                 % Centre of mass position in local frame
+Human_model(incr_solid).calib_k_constraint=[];
+Human_model(incr_solid).u=[];                       % fixed rotation with respect to u axis of theta angle
+Human_model(incr_solid).theta=[];
+Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
+Human_model(incr_solid).linear_constraint=[];
+Human_model(incr_solid).Visual=0;
+Human_model(incr_solid).comment='to be completed';
+Human_model(incr_solid).FunctionalAngle=[Side name];
+
+% AcromioClavicular_J4
+num_solid=num_solid+1;                                      % solid number
+name=list_solid{num_solid};                                 % solid name
+eval(['incr_solid=s_' name ';'])                            % solid number in model tree
+Human_model(incr_solid).name=[Side name];          % solid name with side
+Human_model(incr_solid).sister=0;                   % Solid's sister
+Human_model(incr_solid).child=s_AcromioClavicular_J5;         % Solid's child
+Human_model(incr_solid).mother=s_AcromioClavicular_J3;            % Solid's mother
+Human_model(incr_solid).a=[1 0 0]';                          
+Human_model(incr_solid).joint=2;
+Human_model(incr_solid).limit_inf=-1e-2;
+Human_model(incr_solid).limit_sup=1e-2;
+Human_model(incr_solid).ActiveJoint=1;
+Human_model(incr_solid).m=0;                        % Reference mass
+Human_model(incr_solid).b=[0 0 0]';        % Attachment point position in mother's frame
+Human_model(incr_solid).I=zeros(3,3);               % Reference inertia matrix
+Human_model(incr_solid).c=[0 0 0]';                 % Centre of mass position in local frame
+Human_model(incr_solid).calib_k_constraint=[];
+Human_model(incr_solid).u=[];                       % fixed rotation with respect to u axis of theta angle
+Human_model(incr_solid).theta=[];
+Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
+Human_model(incr_solid).linear_constraint=[];
+Human_model(incr_solid).Visual=0;
+Human_model(incr_solid).comment='to be completed';
+Human_model(incr_solid).FunctionalAngle=[Side name];
+
+
+% AcromioClavicular_J5
+num_solid=num_solid+1;                                      % solid number
+name=list_solid{num_solid};                                 % solid name
+eval(['incr_solid=s_' name ';'])                            % solid number in model tree
+Human_model(incr_solid).name=[Side name];          % solid name with side
+Human_model(incr_solid).sister=0;                   % Solid's sister
+Human_model(incr_solid).child=s_AcromioClavicular_J6;            % Solid's child
+Human_model(incr_solid).mother=s_AcromioClavicular_J4;            % Solid's mother
+Human_model(incr_solid).a=[0 1 0]';                          
+Human_model(incr_solid).joint=2;
+Human_model(incr_solid).limit_inf=-1e-2;
+Human_model(incr_solid).limit_sup=1e-2;
+Human_model(incr_solid).ActiveJoint=1;
+Human_model(incr_solid).m=0;                        % Reference mass
+Human_model(incr_solid).b=[0 0 0]';        % Attachment point position in mother's frame
+Human_model(incr_solid).I=zeros(3,3);               % Reference inertia matrix
+Human_model(incr_solid).c=[0 0 0]';                 % Centre of mass position in local frame
+Human_model(incr_solid).calib_k_constraint=[];
+Human_model(incr_solid).u=[];                       % fixed rotation with respect to u axis of theta angle
+Human_model(incr_solid).theta=[];
+Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
+Human_model(incr_solid).linear_constraint=[];
+Human_model(incr_solid).Visual=0;
+Human_model(incr_solid).comment='to be completed';
+Human_model(incr_solid).FunctionalAngle=[Side name];
+
+
+% AcromioClavicular_J6
+num_solid=num_solid+1;                                      % solid number
+name=list_solid{num_solid};                                 % solid name
+eval(['incr_solid=s_' name ';'])                            % solid number in model tree
+Human_model(incr_solid).name=[Side name];          % solid name with side
+Human_model(incr_solid).sister=0;                   % Solid's sister
+Human_model(incr_solid).child=0;         % Solid's child
+Human_model(incr_solid).mother=s_AcromioClavicular_J5;            % Solid's mother
+Human_model(incr_solid).a=[0 0 1]';                          
+Human_model(incr_solid).joint=2;
+Human_model(incr_solid).limit_inf=-1e-2;
+Human_model(incr_solid).limit_sup=1e-2;
 Human_model(incr_solid).ActiveJoint=1;
 Human_model(incr_solid).m=0;        % Reference mass
 Human_model(incr_solid).b=[0 0 0]';        % Attachment point position in mother's frame
