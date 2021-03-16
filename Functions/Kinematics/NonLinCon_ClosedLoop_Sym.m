@@ -28,7 +28,7 @@ function [c,ceq]=NonLinCon_ClosedLoop_Sym(Human_model,solid_path1,solid_path2,nu
 
 % Contraints initialization
 c=[];
-ceq=sym('ceq',[9,1]);
+ceq=sym('ceq',[6,1]);
     
 if isempty(solid_path2) % if the beginning coincides with the end of the loop
 
@@ -45,12 +45,12 @@ if isempty(solid_path2) % if the beginning coincides with the end of the loop
         ceq(1)=Rtemp(1,1);
         ceq(2)=Rtemp(2,2);
         ceq(3)=Rtemp(3,3);
-        ceq(4)=Rtemp(1,2);
-        ceq(5)=Rtemp(1,3);
-        ceq(6)=Rtemp(2,3);
-        ceq(7)=ptemp(1);
-        ceq(8)=ptemp(2);
-        ceq(9)=ptemp(3);
+%         ceq(4)=Rtemp(1,2);
+%         ceq(5)=Rtemp(1,3);
+%         ceq(6)=Rtemp(2,3);
+        ceq(4)=ptemp(1);
+        ceq(5)=ptemp(2);
+        ceq(6)=ptemp(3);
 
     % Quaternion expression of rotation matrix   
 %     r=1/2*sqrt(1+Rtemp(1,1)+Rtemp(2,2)+Rtemp(3,3));
@@ -79,12 +79,12 @@ else
             ceq(1)=Rtemp(1,1);
             ceq(2)=Rtemp(2,2);
             ceq(3)=Rtemp(3,3);
-            ceq(4)=Rtemp(1,2);
-            ceq(5)=Rtemp(1,3);
-            ceq(6)=Rtemp(2,3);
-            ceq(7)=ptemp(1);
-            ceq(8)=ptemp(2);
-            ceq(9)=ptemp(3);
+%             ceq(4)=Rtemp(1,2);
+%             ceq(5)=Rtemp(1,3);
+%             ceq(6)=Rtemp(2,3);
+            ceq(4)=ptemp(1);
+            ceq(5)=ptemp(2);
+            ceq(6)=ptemp(3);
 
         % Quaternion expression of rotation matrix   
 %         r=1/2*sqrt(1+Rtemp(1,1)+Rtemp(2,2)+Rtemp(3,3));
@@ -117,12 +117,12 @@ else
             ceq(1)=Rtemp(1,1);
             ceq(2)=Rtemp(2,2);
             ceq(3)=Rtemp(3,3);
-            ceq(4)=Rtemp(1,2);
-            ceq(5)=Rtemp(1,3);
-            ceq(6)=Rtemp(2,3);
-            ceq(7)=ptemp(1);
-            ceq(8)=ptemp(2);
-            ceq(9)=ptemp(3);
+%             ceq(4)=Rtemp(1,2);
+%             ceq(5)=Rtemp(1,3);
+%             ceq(6)=Rtemp(2,3);
+            ceq(4)=ptemp(1);
+            ceq(5)=ptemp(2);
+            ceq(6)=ptemp(3);
 
         % Quaternion expression of rotation matrix   
 %         r=1/2*sqrt(1+Rtemp(1,1)+Rtemp(2,2)+Rtemp(3,3));

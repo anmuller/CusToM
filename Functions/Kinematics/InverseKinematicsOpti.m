@@ -95,7 +95,7 @@ options1 = optimoptions(@fmincon,'Algorithm','interior-point','Display','final',
 options2 = optimoptions(@fmincon,'Algorithm','interior-point','Display','final','TolFun',1e-6,'MaxFunEvals',2000000,'MaxIter',3000);%,'PlotFcn','optimplotfval' );
 
 q=zeros(nb_solid,nb_frame);
-ceq=zeros(9*nbClosedLoop,nb_frame);
+ceq=zeros(6*nbClosedLoop,nb_frame);
 addpath('Symbolic_function')
 % k=ones(nb_solid,1);
 
@@ -224,8 +224,8 @@ if nbClosedLoop == 0
 else
     %     nonlcon2=@(qvar)NonLinCon_ClosedLoop(qvar,nb_cut,list_function,pcut,Rcut);
     for f=1:nb_frame
-        q(:,f) = ForwardKConstrained(q(:,f),startingq0,numqu,numqv,Jv,hconstr);
-        startingq0 = q(:,f);
+%         q(:,f) = ForwardKConstrained(q(:,f),startingq0,numqu,numqv,Jv,hconstr);
+%         startingq0 = q(:,f);
         [KinematicsError(:,f)] = ErrorMarkersIK(q(:,f),nb_cut,real_markers,f,list_markers,Rcut,pcut);
         [~,ceq(:,f)]=nonlcon(q(:,f));
         %         [~,ceq2(:,f)]=nonlcon2(q(:,f));

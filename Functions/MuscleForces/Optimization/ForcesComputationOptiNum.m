@@ -96,7 +96,14 @@ h = waitbar(0,['Forces Computation (' filename ')']);
 
 dependancies=KinematicDependancy(BiomechanicalModel.OsteoArticularModel);
 % Closed-loop constraints
+
 KT=ConstraintsJacobian(BiomechanicalModel,q(:,1),solid_path1,solid_path2,num_solid,num_markers,ones(size(q,1),1),0.0001,dependancies)';
+
+% tic();
+% KT2 = FullConstraintsJacobian(BiomechanicalModel,q(:,1),solid_path1,solid_path2,num_solid,num_markers,ones(size(q,1),1),0.0000001,dependancies)';
+% toc();
+
+
 lambda = zeros(size(KT,2),1);
 
 if isempty(lambda)
@@ -131,7 +138,7 @@ waitbar(1/Nb_frames)
 
 for i=2:Nb_frames % for following frames
     % Closed-loop constraints
-    KT=ConstraintsJacobian(BiomechanicalModel,q(:,i),solid_path1,solid_path2,num_solid,num_markers,k,0.0001,dependancies)';
+    KT=ConstraintsJacobian(BiomechanicalModel,q(:,i),solid_path1,solid_path2,num_solid,num_markers,ones(size(q,1),1),0.0001,dependancies)';
     %G = null(KT(idxj,:)');
     %G=eye(size(KT));
 
@@ -158,6 +165,7 @@ MuscleForcesComputationResults.MuscleActivations(idm,:) = Aopt(1:Nb_muscles,:);
 MuscleForcesComputationResults.MuscleForces(idm,:) = Fopt;
 MuscleForcesComputationResults.MuscleLengths= Lmt;
 MuscleForcesComputationResults.MuscleLeverArm = R;
+MuscleForcesComputationResults.Lambda = X(Nb_muscles+1:end,:);
 
 close(h)
 

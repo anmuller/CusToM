@@ -1,4 +1,4 @@
-pfunction [BiomechanicalModel]=LengthMinimisation(involved_solids,num_markersprov,BiomechanicalModel,Regression,num_muscle,nb_points)
+function [BiomechanicalModel]=LengthMinimisation(involved_solids,num_markersprov,BiomechanicalModel,Regression,num_muscle,nb_points)
 % Modifiying via point to minimize of musculotendon length of the model
 %
 %   INPUT

@@ -72,7 +72,7 @@ end
 options1 = optimoptions(@fmincon,'Display','off','TolFun',1e-3,'MaxFunEvals',50000,'GradObj','off','GradConstr','off');
 
 q=zeros(nb_solid,nb_frame);
-ceq=zeros(9*nbClosedLoop,nb_frame);
+ceq=zeros(6*nbClosedLoop,nb_frame);
 
 addpath('Symbolic_function')
 
@@ -165,7 +165,7 @@ for f = 2:nb_frame
     Jcutcut(indexesNumericJcutcut) = nonNumericJcutcut(q(:,f-1),pcut,Rcut);
     % J
     J = Jfq + Jfcut*dJcutq(Jcutcut,Jcutq); J(:,RmvInd_q)=[];
-    % dq (Levenberg–Marquardt)
+    % dq (Levenbergï¿½Marquardt)
     Jt = transpose(J);
     JtJ = Jt*J;
     A=(JtJ+lambda * diag(diag(JtJ)));
@@ -192,7 +192,7 @@ if nbClosedLoop == 0
         [KinematicsError(:,f)] = ErrorMarkersIK(q(:,f),nb_cut,real_markers,f,list_markers,Rcut,pcut);
     end
 else
-    nonlcon=@(qvar)NonLinCon_ClosedLoop(qvar,nb_cut,list_function,pcut,Rcut);
+    nonlcon=@(qvar)ClosedLoop(qvar,nbClosedLoop);
     for f=1:nb_frame
         [KinematicsError(:,f)] = ErrorMarkersIK(q(:,f),nb_cut,real_markers,f,list_markers,Rcut,pcut);
         [~,ceq(:,f)]=nonlcon(q(:,f));
