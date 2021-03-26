@@ -1,4 +1,4 @@
-function [Human_model]= Scapula_Shoulder(Human_model,k,Mass,Side,AttachmentPoint)
+function [Human_model]= Scapula_Shoulder(Human_model,k,Mass,Side,AttachmentPoint,varargin)
 % Addition of a thorax model
 %   INPUT
 %   - Human_model: osteo-articular model of an already existing
@@ -20,6 +20,7 @@ function [Human_model]= Scapula_Shoulder(Human_model,k,Mass,Side,AttachmentPoint
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
 % Georges Dumont
 %________________________________________________________
+
 %% Solid list
 
 list_solid={'ScapuloThoracic_J1' 'ScapuloThoracic_J2' 'ScapuloThoracic_J3' 'ScapuloThoracic_J4' 'ScapuloThoracic_J5' 'ScapuloThoracic_J6' 'Scapula'};
@@ -114,9 +115,6 @@ Scapula_position_set = {...
     ['MTAC' Cote 'M'], Scapula_cluster_med;...
     ['MTAC' Cote 'B'], Scapula_cluster_mid;...
     ['MTAC' Cote 'L'], Scapula_cluster_lat;...
-    ['ScapLoc_AA_' Side], Scapula_locator_AA;...
-    ['ScapLoc_AI_' Side], Scapula_locator_AI;...
-    ['ScapLoc_TS_' Side], Scapula_locator_TS;...
     'ThoracicEllipsoid_radius', [Thorax_Rx Thorax_Ry Thorax_Rz]';...
     % Muscle paths
     
@@ -171,6 +169,30 @@ Scapula_position_set = {...
     % Wraps
     };
     
+if ~isempty(varargin)
+    Scapulalocator = varargin{1};
+    Scapulalocator = Scapulalocator{1, 1};
+    if Scapulalocator.active
+        if ~isempty(find(strcmp(Scapulalocator.side,Side),1))
+            vec_1 = Scapula_locator_AA - Scapula_locator_AI;
+            vec_2 = Scapula_locator_TS - Scapula_locator_AI;
+            normal= Sign*cross(vec_1,vec_2)/norm(cross(vec_1,vec_2));
+            ind = find(strcmp(Scapulalocator.side,Side),1);
+            Scapula_locator_AA = Scapula_locator_AA + Scapulalocator.height(ind)*normal*1e-2;
+            Scapula_locator_AI = Scapula_locator_AI + Scapulalocator.height(ind)*normal*1e-2;
+            Scapula_locator_TS = Scapula_locator_TS + Scapulalocator.height(ind)*normal*1e-2;
+            
+            Scapula_position_set =  [Scapula_position_set ; ...
+            {['ScapLoc_AA_' Side]}, {Scapula_locator_AA};...
+            {['ScapLoc_AI_' Side]}, {Scapula_locator_AI};...
+            {['ScapLoc_TS_' Side]}, {Scapula_locator_TS};...
+            ];
+            
+        end
+    end
+end
+
+
 
 %%                     Scaling inertial parameters
 

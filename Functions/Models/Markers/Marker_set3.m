@@ -1,4 +1,4 @@
-function [Markers]=Marker_set3(nb_markers_hand)
+function [Markers]=Marker_set3(nb_markers_hand,varargin)
 % Definition of the markers set used in the M2S with VR glasses
 %
 %   INPUT
