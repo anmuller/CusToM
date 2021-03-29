@@ -305,7 +305,7 @@ Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
 Human_model(incr_solid).linear_constraint=[];
 Human_model(incr_solid).Visual=0;
 Human_model(incr_solid).FunctionalAngle=[Side name];
-Human_model(incr_solid).comment='Scapulothoracic ellipsoid latitude';
+Human_model(incr_solid).comment='Scapula abduction - adduction';
 
 
 % ScapuloThoracic_J5
@@ -332,7 +332,7 @@ Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
 Human_model(incr_solid).linear_constraint=[];
 Human_model(incr_solid).Visual=0;
 Human_model(incr_solid).FunctionalAngle=[Side name];
-Human_model(incr_solid).comment='Scapulothoracic ellipsoid longitude';
+Human_model(incr_solid).comment='Scapula elevation - depression';
 
 
 % ScapuloThoracic_J6
