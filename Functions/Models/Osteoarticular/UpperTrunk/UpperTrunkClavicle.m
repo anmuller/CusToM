@@ -1,4 +1,4 @@
-function [OsteoArticularModel]= UpperTrunkClavicle(OsteoArticularModel,k,Mass,AttachmentPoint)
+function [OsteoArticularModel]= UpperTrunkClavicle(OsteoArticularModel,k,Mass,AttachmentPoint,varargin)
 % Addition of an upper trunk model
 %   This upper trunk model contains 3 solids (thorax, right clavicle and
 %   left clavicle), exhibits 3 dof for lower trunk / upper trunk joint, 3

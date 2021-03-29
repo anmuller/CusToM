@@ -1,4 +1,4 @@
-function [OsteoArticularModel]= UpperTrunkShoulderFreeAC(OsteoArticularModel,k,Mass,AttachmentPoint)
+function [OsteoArticularModel]= UpperTrunkShoulderFreeAC(OsteoArticularModel,k,Mass,AttachmentPoint,varargin)
 % Addition of an upper trunk model
 %   This upper trunk model contains 5 solids (thorax, clavicles, and
 %   scapulae), exhibits 3 dof for lower trunk / upper trunk joint, 3
@@ -36,8 +36,8 @@ function [OsteoArticularModel]= UpperTrunkShoulderFreeAC(OsteoArticularModel,k,M
 
 % Right-sided shoulder solids
 [OsteoArticularModel] = Clavicle_Shoulder(OsteoArticularModel,k,Mass,'R','Thorax_scjJointRightNode');
-[OsteoArticularModel] = Scapula_Shoulder_FreeAC(OsteoArticularModel,k,Mass,'R','R_Thorax_EllipsoidNode');
+[OsteoArticularModel] = Scapula_Shoulder_FreeAC(OsteoArticularModel,k,Mass,'R','R_Thorax_EllipsoidNode',varargin);
 
 % Left-sided shoulder solids
 [OsteoArticularModel] = Clavicle_Shoulder(OsteoArticularModel,k,Mass,'L','Thorax_scjJointLeftNode');
-[OsteoArticularModel] = Scapula_Shoulder_FreeAC(OsteoArticularModel,k,Mass,'L','L_Thorax_EllipsoidNode');
+[OsteoArticularModel] = Scapula_Shoulder_FreeAC(OsteoArticularModel,k,Mass,'L','L_Thorax_EllipsoidNode',varargin);

@@ -5,7 +5,7 @@ function [OsteoArticularModel, Markers, Muscles, EnableModel] = ModelGeneration(
 %	
 %	Based on:
 %   - Kajita, S., Sakka, S., Hirukawa, H., Harada, K., & Yokoi, K., 2009.
-%	Introduction à la commande des robots humanoïdes: De la modélisation à la génération du mouvement. Springer Science & Business Media.
+%	Introduction ï¿½ la commande des robots humanoï¿½des: De la modï¿½lisation ï¿½ la gï¿½nï¿½ration du mouvement. Springer Science & Business Media.
 %
 %   INPUT
 %   - ModelParameters: parameters of the musculoskeletal model, automatically
@@ -45,12 +45,16 @@ EnableModel = zeros(6,1);
 %% Pelvis / LowerTrunk
 [OsteoArticularModel] = ModelParameters.PelvisLowerTrunk(OsteoArticularModel,k,Mass,[]);
     
-%% UpperTrunk
-try
-    [OsteoArticularModel] = ModelParameters.UpperTrunk(OsteoArticularModel,k,Mass,'LowerTrunk_UpperTrunkNode');
-catch
-    EnableModel(1) = 1;
+if ~isfield(ModelParameters,'Scapulalocator')
+    ModelParameters.Scapulalocator.active=0;
 end
+   
+%% UpperTrunk
+%try
+    [OsteoArticularModel] = ModelParameters.UpperTrunk(OsteoArticularModel,k,Mass,'LowerTrunk_UpperTrunkNode',ModelParameters.Scapulalocator);
+% catch
+%     EnableModel(1) = 1;
+% end
 
 %% Head
 try
@@ -93,7 +97,7 @@ if nargout==3 && ~strcmp(OsteoArticularModel([OsteoArticularModel.mother]==0).na
 end
 
 %% Markers
-[Markers] = ModelParameters.Markers(ModelParameters.MarkersOptions);
+[Markers] = ModelParameters.Markers(ModelParameters.MarkersOptions,ModelParameters.Scapulalocator);
 
 % We remove markers
 [Markers] = Remove_markers(Markers,ModelParameters.MarkersRemoved);

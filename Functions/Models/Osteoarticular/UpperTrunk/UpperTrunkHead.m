@@ -1,4 +1,4 @@
-function [OsteoArticularModel]=UpperTrunkHead(OsteoArticularModel,k,Mass,AttachmentPoint)
+function [OsteoArticularModel]=UpperTrunkHead(OsteoArticularModel,k,Mass,AttachmentPoint,varargin)
 % Addition of an upper trunk / head model
 %   This upper trunk / head model contains one solid (thorax/head),
 %   exhibits 3 dof for lower trunk / thorax joint 
