@@ -1,0 +1,19 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  GeometricalCalibration -> ClosedLoopCalib;
+  GeometricalCalibration -> CostFunctionSymbolicCalib;
+  GeometricalCalibration -> ErrorMarkersCalib;
+  GeometricalCalibration -> OptCalibrationSymbolic;
+  GeometricalCalibration -> SymbolicFunctionGeneration_A;
+  OptCalibrationSymbolic -> CostFunctionSymbolicCalib;
+  SymbolicFunctionGeneration_A -> Symbolic_ForwardKinematicsCoupure_A;
+  Symbolic_ForwardKinematicsCoupure_A -> Symbolic_ForwardKinematicsCoupure_A;
+
+  ClosedLoopCalib [URL="ClosedLoopCalib.html"];
+  CostFunctionSymbolicCalib [URL="CostFunctionSymbolicCalib.html"];
+  ErrorMarkersCalib [URL="ErrorMarkersCalib.html"];
+  GeometricalCalibration [URL="GeometricalCalibration.html"];
+  OptCalibrationSymbolic [URL="OptCalibrationSymbolic.html"];
+  SymbolicFunctionGeneration_A [URL="SymbolicFunctionGeneration_A.html"];
+  Symbolic_ForwardKinematicsCoupure_A [URL="Symbolic_ForwardKinematicsCoupure_A.html"];
+}

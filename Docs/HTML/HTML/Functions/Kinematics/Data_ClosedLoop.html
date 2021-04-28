@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Data_ClosedLoop</title>
+  <meta name="keywords" content="Data_ClosedLoop">
+  <meta name="description" content="Return data fixed by the model about closing loop">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html Kinematics -->
+<h1>Data_ClosedLoop
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Return data fixed by the model about closing loop</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [solid_path1,solid_path2,num_solid,num_markers]=Data_ClosedLoop(Human_model) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Return data fixed by the model about closing loop</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Functions/AlgoMathsModel/find_solid_path.html" class="code" title="function [solid_1_path,solid_2_path]=find_solid_path(Human_model,i,k)">find_solid_path</a>	Identification of the hierarchical path between two solids</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Functions/MuscleForces/Optimization/ForcesComputationOptiNum.html" class="code" title="function [MuscleForcesComputationResults] = ForcesComputationOptiNum(filename, BiomechanicalModel, AnalysisParameters)">ForcesComputationOptiNum</a>	Computation of the muscle forces estimation step by using an optimization method</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [solid_path1,solid_path2,num_solid,num_markers]=Data_ClosedLoop(Human_model)</a>
+0002 <span class="comment">% Return data fixed by the model about closing loop</span>
+0003 
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%  - Human_model: osteo-articular model (see the Documentation for the</span>
+0006 <span class="comment">%   structure)</span>
+0007 
+0008 <span class="comment">%   OUTPUT</span>
+0009 <span class="comment">%   - solid_path1 : vector of one of the two paths to close the loop</span>
+0010 <span class="comment">%   - solid_path2 : vector of the other of the two paths to close the loop</span>
+0011 <span class="comment">%   - num_solid : vector of the number of solid where the anatomical point must join the</span>
+0012 <span class="comment">%   origin of another joint to close the loo</span>
+0013 <span class="comment">%   - num_markers : vector of the position in the list &quot;anat_position&quot; that</span>
+0014 <span class="comment">%   corresponds to the point to close the loop</span>
+0015 
+0016 
+0017 solid_path1={};
+0018 solid_path2={};
+0019 num_solid=[];
+0020 num_markers=[];
+0021 <span class="keyword">for</span> j=1:numel(Human_model)
+0022     <span class="keyword">if</span> size(Human_model(j).ClosedLoop) ~= [0 0] <span class="comment">%#ok&lt;BDSCA&gt;</span>
+0023         <span class="comment">% we find the solid and the position where there was a cut</span>
+0024         name=Human_model(j).ClosedLoop;
+0025         test=0;
+0026         <span class="keyword">for</span> pp=1:numel(Human_model)
+0027             <span class="keyword">for</span> kk=1:size(Human_model(pp).anat_position,1)
+0028                 <span class="keyword">if</span> strcmp(name,Human_model(pp).anat_position(kk,1))
+0029                     num_solid=[num_solid pp];
+0030                     num_markers=[num_markers kk];
+0031                     test=1;
+0032                     <span class="keyword">break</span>
+0033                 <span class="keyword">end</span>
+0034             <span class="keyword">end</span>
+0035             <span class="keyword">if</span> test == 1
+0036                 <span class="keyword">break</span>
+0037             <span class="keyword">end</span>
+0038         <span class="keyword">end</span>
+0039         [path1,path2]=<a href="../../Functions/AlgoMathsModel/find_solid_path.html" class="code" title="function [solid_1_path,solid_2_path]=find_solid_path(Human_model,i,k)">find_solid_path</a>(Human_model,j,num_solid(end));
+0040         solid_path1=[solid_path1 path1];
+0041         solid_path2=[solid_path2 path2];
+0042     <span class="keyword">end</span>
+0043 <span class="keyword">end</span>
+0044 
+0045 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

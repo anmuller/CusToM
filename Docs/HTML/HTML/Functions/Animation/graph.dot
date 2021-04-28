@@ -1,0 +1,32 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  AnimationFramebyFrame -> ColorsAnimation;
+  AnimationFramebyFrame -> ForwardKinematicsAnimation8;
+  AnimationFramebyFrame -> ForwardKinematicsAnimation8XSens;
+  AnimationFramebyFrame -> OptionsChoices;
+  AnimationFramebyFrame -> PlotCylinder;
+  AnimationFramebyFrame -> PlotFrame;
+  ForwardKinematicsAnimation8 -> ForwardKinematicsAnimation8;
+  ForwardKinematicsAnimation8XSens -> ForwardKinematicsAnimation8XSens;
+  PlotAnimation -> AnimationFramebyFrame;
+  PlotAnimation -> BoneView;
+  PlotAnimation -> DataExtractionForAnimation;
+  PlotAnimation -> OptionsChoices;
+  PlotAnimation -> anat_position_solid_repere;
+  ViewTheModel -> PlotAnimation;
+  anat_position_solid_repere -> anat_position_solid_repere;
+
+  AnimationFramebyFrame [URL="AnimationFramebyFrame.html"];
+  BoneView [URL="BoneView.html"];
+  ColorsAnimation [URL="ColorsAnimation.html"];
+  DataExtractionForAnimation [URL="DataExtractionForAnimation.html"];
+  ForwardKinematicsAnimation8 [URL="ForwardKinematicsAnimation8.html"];
+  ForwardKinematicsAnimation8XSens [URL="ForwardKinematicsAnimation8XSens.html"];
+  OptionsChoices [URL="OptionsChoices.html"];
+  PlotAnimation [URL="PlotAnimation.html"];
+  PlotCylinder [URL="PlotCylinder.html"];
+  PlotFrame [URL="PlotFrame.html"];
+  PlotSphere [URL="PlotSphere.html"];
+  ViewTheModel [URL="ViewTheModel.html"];
+  anat_position_solid_repere [URL="anat_position_solid_repere.html"];
+}

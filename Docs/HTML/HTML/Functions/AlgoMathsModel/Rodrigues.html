@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Rodrigues</title>
+  <meta name="keywords" content="Rodrigues">
+  <meta name="description" content="Computation of the Rodrigues equation">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html AlgoMathsModel -->
+<h1>Rodrigues
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Computation of the Rodrigues equation</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function R = Rodrigues(a,q) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Computation of the Rodrigues equation
+
+   INPUT
+   - a: axis of rotation
+   - q: rotation angle
+   OUTPUT
+   - R: rotation matrix
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="Rodrigues_from_two_axes.html" class="code" title="function [R]=Rodrigues_from_two_axes(a1,a2)">Rodrigues_from_two_axes</a>	Computation of the Rodrigues equation</li><li><a href="distance_point.html" class="code" title="function [L,Typ] = distance_point(Point1,Bone1,Point2,Bone2,Human_model,q)">distance_point</a>	Computation of the distance between two points</li><li><a href="distance_point_wrap.html" class="code" title="function [L,Typ,wrapside] = distance_point_wrap(Point1,Bone1,Point2,Bone2,Human_model,q,Wrap,wrapside,EnforcedWrap)">distance_point_wrap</a>	Computation of the distance between two points</li><li><a href="../../Functions/Animation/ForwardKinematicsAnimation8.html" class="code" title="function [Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation8(Human_model,Markers_set,Muscles,q,j,seg_anim,muscles_anim,mod_marker_anim)">ForwardKinematicsAnimation8</a>	Computation of a forward kinematics step for the animation8</li><li><a href="../../Functions/Animation/ForwardKinematicsAnimation8XSens.html" class="code" title="function [Human_model]=ForwardKinematicsAnimation8XSens(Human_model,q,j)">ForwardKinematicsAnimation8XSens</a>	Computation of a forward kinematics step for the animation8 (adapted for</li><li><a href="../../Functions/Calibration/Dynamics/DynCalibOptimization.html" class="code" title="function [Human_model] = DynCalibOptimization(ModelParameters, AnalysisParameters, BiomechanicalModel)">DynCalibOptimization</a>	Calibration of the inertial parameters</li><li><a href="../../Functions/Calibration/Dynamics/distance_point_anthropo.html" class="code" title="function [L] = distance_point_anthropo(Point1,Bone1,Human_model,q,s)">distance_point_anthropo</a>	Computation of the distance between a point and the center of mass of a solid</li><li><a href="../../Functions/Calibration/Geometrical/GeometricalCalibration.html" class="code" title="function [Human_model_calib, calib_parameters, Markers_set] = GeometricalCalibration(OsteoArticularModel, Markers_set, AnalysisParameters)">GeometricalCalibration</a>	Calibration of the geometrical parameters</li><li><a href="../../Functions/Calibration/Geometrical/Symbolic_ForwardKinematicsCoupure_A.html" class="code" title="function [Human_model,Markers_set,num_cut,numClosedLoop,c,ceq]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,j,Q,k,p_adapt,alpha,num_cut,numClosedLoop,c,ceq)">Symbolic_ForwardKinematicsCoupure_A</a>	Computation of a symbolic forward kinematics</li><li><a href="../../Functions/DataImport/InputDataImport/ImportKinect.html" class="code" title="function [real_markers, nb_frame, Firstframe, Lastframe,f]=ImportKinect(filename, list_markers, varargin)">ImportKinect</a>	Extraction of experimental data from a Kinect</li><li><a href="../../Functions/Developments/ComplementaryData/BaseOfSupport.html" class="code" title="function [] = BaseOfSupport(AnalysisParameters)">BaseOfSupport</a>	Computation of the base of support</li><li><a href="../../Functions/Developments/ComplementaryData/ForwardKinematics.html" class="code" title="function [Human_model] = ForwardKinematics(Human_model,j)">ForwardKinematics</a>	Forward kinematics</li><li><a href="../../Functions/Developments/ComplementaryData/JointPositions.html" class="code" title="function [] = JointPositions(AnalysisParameters)">JointPositions</a>	</li><li><a href="../../Functions/Dynamics/ForwardAllKinematics.html" class="code" title="function [Human_model] = ForwardAllKinematics(Human_model,j)">ForwardAllKinematics</a>	Computation of spacial position, velocity and acceleration for each solid</li><li><a href="../../Functions/Dynamics/InverseDynamics.html" class="code" title="function []=InverseDynamics(AnalysisParameters)">InverseDynamics</a>	Computation of the inverse dynamics step</li><li><a href="../../Functions/Dynamics/Kinetics.html" class="code" title="function []=Kinetics(AnalysisParameters,KinType)">Kinetics</a>	Computation of the kinetic energy</li><li><a href="../../Functions/ExternalForces/ExternalForcesPrediction.html" class="code" title="function [ExternalForcesComputationResults] = ExternalForcesPrediction(filename, AnalysisParameters, BiomechanicalModel, ModelParameters)">ExternalForcesPrediction</a>	Prediction of ground reaction forces</li><li><a href="../../Functions/ExternalForces/Prediction/ForwardAllKinematicsPrediction.html" class="code" title="function [Human_model,Prediction] = ForwardAllKinematicsPrediction(Human_model,Prediction,j)">ForwardAllKinematicsPrediction</a>	Computation of spacial position, velocity and acceleration for each solid used for the prediction of ground reaction forces</li><li><a href="../../Functions/Interface/ForwardKinematicsAnimation_Interf.html" class="code" title="function [Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation_Interf(Human_model,Markers_set,Muscles,q,j,seg_anim,muscles_anim,mod_marker_anim,RPelvis)">ForwardKinematicsAnimation_Interf</a>	Computation of a forward kinematics step for the interface</li><li><a href="../../Functions/Kinematics/ForwardKinematics_ClosedLoop.html" class="code" title="function [Human_model,p,R] = ForwardKinematics_ClosedLoop(Human_model,n,s,solid_path,p,R,q,k)">ForwardKinematics_ClosedLoop</a>	Computation of a symbolic forward kinematics</li><li><a href="../../Functions/Kinematics/ForwardPositions.html" class="code" title="function [Human_model] = ForwardPositions(Human_model,j)">ForwardPositions</a>	Computation of spacial position and rotation for each solid starting from</li><li><a href="../../Functions/Kinematics/Symbolic_ForwardKinematicsCoupure.html" class="code" title="function [Human_model,Markers_set,num_cut,numClosedLoop,c,ceq]=Symbolic_ForwardKinematicsCoupure(Human_model,Markers_set,j,q,k,p_adapt,num_cut,numClosedLoop,c,ceq)">Symbolic_ForwardKinematicsCoupure</a>	Computation of a symbolic forward kinematics</li><li><a href="../../Functions/Models/Osteoarticular/Leg/ModelParts/ShankFoot.html" class="code" title="function [OsteoArticularModel]= ShankFoot(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)">ShankFoot</a>	Addition of a shank/foot model</li><li><a href="../../Functions/MuscleForces/ForwardKinematicsPoint.html" class="code" title="function [p] = ForwardKinematicsPoint(Human_model,num_solid_repere,num_solid,num_point,q)">ForwardKinematicsPoint</a>	Computation of the position of a point according to a reference solid</li><li><a href="../../Functions/MuscleForces/ForwardKinematicsR.html" class="code" title="function [Human_model]=ForwardKinematicsR(Human_model,j,q)">ForwardKinematicsR</a>	Computation of a forward kinematics step to obtained all matrix rotation</li><li><a href="../../Functions/XSens/XSens_Visual.html" class="code" title="function [] = XSens_Visual(OsteoArticularModel, tree)">XSens_Visual</a>	Visual generation for XSens data</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function R = Rodrigues(a,q)</a>
+0002 <span class="comment">% Computation of the Rodrigues equation</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - a: axis of rotation</span>
+0006 <span class="comment">%   - q: rotation angle</span>
+0007 <span class="comment">%   OUTPUT</span>
+0008 <span class="comment">%   - R: rotation matrix</span>
+0009 <span class="comment">%________________________________________________________</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% Licence</span>
+0012 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0013 <span class="comment">%________________________________________________________</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0016 <span class="comment">% Georges Dumont</span>
+0017 <span class="comment">%________________________________________________________</span>
+0018 
+0019 <span class="keyword">if</span> isequal(size(a),[0 0]) || isequal(size(q),[0 0])
+0020     R=eye(3);
+0021 <span class="keyword">else</span>
+0022     ap=[0 -a(3) a(2);<span class="keyword">...</span>
+0023          a(3) 0 -a(1);<span class="keyword">...</span>
+0024         -a(2) a(1) 0];
+0025     R=[1 0 0;0 1 0;0 0 1]+ap*sin(q)+ap*ap*(1-cos(q));
+0026 <span class="keyword">end</span>
+0027 
+0028 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

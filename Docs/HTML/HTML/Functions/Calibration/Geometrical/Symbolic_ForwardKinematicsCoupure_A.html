@@ -1,0 +1,235 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Symbolic_ForwardKinematicsCoupure_A</title>
+  <meta name="keywords" content="Symbolic_ForwardKinematicsCoupure_A">
+  <meta name="description" content="Computation of a symbolic forward kinematics">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- ../menu.html Calibration --><!-- menu.html Geometrical -->
+<h1>Symbolic_ForwardKinematicsCoupure_A
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Computation of a symbolic forward kinematics</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [Human_model,Markers_set,num_cut,numClosedLoop,c,ceq]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,j,Q,k,p_adapt,alpha,num_cut,numClosedLoop,c,ceq) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Computation of a symbolic forward kinematics 
+
+   INPUT
+   - Human_model: osteo-articular model (see the Documentation for the
+   structure) 
+   - Markers_set: set of markers (see the Documentation for the structure)
+   - j: current solid
+   - Q: vector of joint coordinates
+   - k: vector of homothety coefficient
+   - p_adapt: vector of variation of local model markers position
+   - alpha : joint axis of rotation
+   - num_cut: number of geometrical cut done in the osteo-articular model
+   - numClosedLoop: number of closed loop in the model
+   - p_ClosedLoop: position of the closed loops
+   - R_ClosedLoop: matrix rotatio of the closed loops
+   OUTPUT
+   - Human_model: osteo-articular model (see the Documentation for the
+   structure) 
+   - Markers_set: set of markers (see the Documentation for the structure)
+   - num_cut: number of geometrical cut done in the osteo-articular model
+   - numClosedLoop: number of closed loop in the model
+   - p_ClosedLoop: position of the closed loops
+   - R_ClosedLoop: matrix rotatio of the closed loops
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Functions/AlgoMathsModel/NbSolidUpstream.html" class="code" title="function [k]=NbSolidUpstream(Human_model,j,k)">NbSolidUpstream</a>	Computation of the number of solids hierarchically higher than the solid j</li><li><a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>	Computation of the Rodrigues equation</li><li><a href="../../../Functions/AlgoMathsModel/find_solid_path.html" class="code" title="function [solid_1_path,solid_2_path]=find_solid_path(Human_model,i,k)">find_solid_path</a>	Identification of the hierarchical path between two solids</li><li><a href="Symbolic_ForwardKinematicsCoupure_A.html" class="code" title="function [Human_model,Markers_set,num_cut,numClosedLoop,c,ceq]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,j,Q,k,p_adapt,alpha,num_cut,numClosedLoop,c,ceq)">Symbolic_ForwardKinematicsCoupure_A</a>	Computation of a symbolic forward kinematics</li><li><a href="../../../Functions/Kinematics/NonLinCon_ClosedLoop_Sym.html" class="code" title="function [c,ceq]=NonLinCon_ClosedLoop_Sym(Human_model,solid_path1,solid_path2,num_solid,num_markers,q,k)">NonLinCon_ClosedLoop_Sym</a>	Non-linear equation used in the inverse kinematics step for closed loops</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="SymbolicFunctionGeneration_A.html" class="code" title="function [Human_model,nbClosedLoop,Generalized_Coordinates,nb_k,k_map,nb_p,p_map,nb_alpha,alpha_map,A_norm,b_norm]=SymbolicFunctionGeneration_A(Human_model, Markers_set)">SymbolicFunctionGeneration_A</a>	Generation of symbolic function containing the position of markers according to joint coordinates and geometrical parameters</li><li><a href="Symbolic_ForwardKinematicsCoupure_A.html" class="code" title="function [Human_model,Markers_set,num_cut,numClosedLoop,c,ceq]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,j,Q,k,p_adapt,alpha,num_cut,numClosedLoop,c,ceq)">Symbolic_ForwardKinematicsCoupure_A</a>	Computation of a symbolic forward kinematics</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Human_model,Markers_set,num_cut,numClosedLoop,c,ceq]=</a><span class="keyword">...</span>
+0002 <a href="Symbolic_ForwardKinematicsCoupure_A.html" class="code" title="function [Human_model,Markers_set,num_cut,numClosedLoop,c,ceq]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,j,Q,k,p_adapt,alpha,num_cut,numClosedLoop,c,ceq)">Symbolic_ForwardKinematicsCoupure_A</a>(Human_model,Markers_set,j,Q,k,p_adapt,alpha,num_cut,numClosedLoop,c,ceq)
+0003 <span class="comment">% Computation of a symbolic forward kinematics</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   INPUT</span>
+0006 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the</span>
+0007 <span class="comment">%   structure)</span>
+0008 <span class="comment">%   - Markers_set: set of markers (see the Documentation for the structure)</span>
+0009 <span class="comment">%   - j: current solid</span>
+0010 <span class="comment">%   - Q: vector of joint coordinates</span>
+0011 <span class="comment">%   - k: vector of homothety coefficient</span>
+0012 <span class="comment">%   - p_adapt: vector of variation of local model markers position</span>
+0013 <span class="comment">%   - alpha : joint axis of rotation</span>
+0014 <span class="comment">%   - num_cut: number of geometrical cut done in the osteo-articular model</span>
+0015 <span class="comment">%   - numClosedLoop: number of closed loop in the model</span>
+0016 <span class="comment">%   - p_ClosedLoop: position of the closed loops</span>
+0017 <span class="comment">%   - R_ClosedLoop: matrix rotatio of the closed loops</span>
+0018 <span class="comment">%   OUTPUT</span>
+0019 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the</span>
+0020 <span class="comment">%   structure)</span>
+0021 <span class="comment">%   - Markers_set: set of markers (see the Documentation for the structure)</span>
+0022 <span class="comment">%   - num_cut: number of geometrical cut done in the osteo-articular model</span>
+0023 <span class="comment">%   - numClosedLoop: number of closed loop in the model</span>
+0024 <span class="comment">%   - p_ClosedLoop: position of the closed loops</span>
+0025 <span class="comment">%   - R_ClosedLoop: matrix rotatio of the closed loops</span>
+0026 <span class="comment">%________________________________________________________</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">% Licence</span>
+0029 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0030 <span class="comment">%________________________________________________________</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0033 <span class="comment">% Georges Dumont</span>
+0034 <span class="comment">%________________________________________________________</span>
+0035 
+0036 <span class="keyword">if</span> nargin&lt;12
+0037 <span class="comment">%     p_ClosedLoop={};</span>
+0038 <span class="comment">%     R_ClosedLoop={};</span>
+0039     c={};
+0040     ceq={};
+0041 <span class="keyword">end</span>
+0042 
+0043 <span class="comment">%%</span>
+0044 <span class="keyword">if</span> j==0
+0045     <span class="keyword">return</span>;
+0046 <span class="keyword">end</span>
+0047 
+0048 <span class="comment">%%</span>
+0049 <span class="keyword">if</span> Human_model(j).mother ~= 0
+0050     i=Human_model(j).mother;
+0051     
+0052     <span class="comment">% regarder combien il y a de m�res avant (sans coupure) (how many Mothers/antecedent without finding a cut)</span>
+0053     num_solid=<a href="../../../Functions/AlgoMathsModel/NbSolidUpstream.html" class="code" title="function [k]=NbSolidUpstream(Human_model,j,k)">NbSolidUpstream</a>(Human_model,j,1);
+0054     
+0055     <span class="comment">% angle = alpha*qi si exist(linear_constraint) sinon angle=qj</span>
+0056     <span class="keyword">if</span> size(Human_model(j).linear_constraint) == [0 0]  <span class="comment">% si coordonn�e articulaire fonction lin�aire d'une autre coordonn�e articulaire (if an articular coordinate if function of another one)</span>
+0057         q=Q(j);
+0058     <span class="keyword">else</span>
+0059         q=Human_model(j).linear_constraint(2)*Q(Human_model(j).linear_constraint(1)); <span class="comment">% qj=alpha*q</span>
+0060     <span class="keyword">end</span>
+0061     
+0062     <span class="comment">%Axe</span>
+0063     <span class="comment">%On fait varier la position de ces axes selon</span>
+0064     <span class="keyword">if</span> ~isfield(Human_model,<span class="string">'v'</span>) || isempty(Human_model(j).v)
+0065         axe = Human_model(j).a;
+0066     <span class="keyword">else</span>
+0067         <span class="comment">%Angles</span>
+0068         alpha_j=alpha(2*j-1:2*j);
+0069         <span class="comment">% Nouvel axe</span>
+0070         axe = <a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).v(:,2),alpha_j(2))*<a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).v(:,1),alpha_j(1))*Human_model(j).a;
+0071     <span class="keyword">end</span>
+0072    
+0073    
+0074    
+0075     <span class="comment">% si c'est sup�rieur � 10 : alors on coupe --&gt; position de la m�re picoupure, rotation de la m�re : Ricoupure</span>
+0076     <span class="comment">% If &gt; 10, then proceed to a cut in the chain =&gt; position of the Mother picoupure, rotation of the Mother Ricoupure</span>
+0077     <span class="keyword">if</span> num_solid &gt; 6 <span class="comment">% mother : coupure</span>
+0078        Human_model(i).KinematicsCut=num_cut;
+0079        
+0080        
+0081         eval([<span class="string">'p'</span> num2str(num_cut) <span class="string">'cut = sym([''p'' num2str(num_cut) ''cut''], [3 1]);'</span>])
+0082         eval([<span class="string">'R'</span> num2str(num_cut) <span class="string">'cut = sym([''R'' num2str(num_cut) ''cut''], [3 3]);'</span>])
+0083         <span class="keyword">for</span> zz=1:3   <span class="comment">% d�calaration des variables de coupure</span>
+0084             eval([<span class="string">'assume(p'</span> num2str(num_cut) <span class="string">'cut('</span> num2str(zz) <span class="string">',1),''real'');'</span>])
+0085             <span class="keyword">for</span> z=1:3
+0086                 eval([<span class="string">'assume(R'</span> num2str(num_cut) <span class="string">'cut('</span> num2str(zz) <span class="string">','</span> num2str(z) <span class="string">'),''real'');'</span>])
+0087             <span class="keyword">end</span>
+0088         <span class="keyword">end</span>
+0089             <span class="keyword">if</span> Human_model(j).joint == 1    <span class="comment">% liaison pivot (pin joint)</span>
+0090 <span class="comment">%        Human_model(j).p=eval(['R' num2str(num_cut) 'cut'])*(k(i)*Human_model(j).b)+eval(['p' num2str(num_cut) 'cut']); % position du rep�re (reference frame position)</span>
+0091        Human_model(j).p=eval([<span class="string">'R'</span> num2str(num_cut) <span class="string">'cut'</span>])*(k(i)*Human_model(j).b)+eval([<span class="string">'p'</span> num2str(num_cut) <span class="string">'cut'</span>]); <span class="comment">% position du rep�re (reference frame position)</span>
+0092        Human_model(j).R=eval([<span class="string">'R'</span> num2str(num_cut) <span class="string">'cut'</span>])*<a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(axe,q)*<a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).u,Human_model(j).theta); <span class="comment">% orientation du rep�re (reference frame orientation)</span>
+0093             <span class="keyword">end</span>
+0094             <span class="keyword">if</span> Human_model(j).joint == 2    <span class="comment">% liaison glissi�re (slide joint)</span>
+0095 <span class="comment">%        Human_model(j).p=eval(['R' num2str(num_cut) 'cut'])*(k(i)*Human_model(j).b + angle*Human_model(j).a)+eval(['p' num2str(num_cut) 'cut']);</span>
+0096        Human_model(j).p=eval([<span class="string">'R'</span> num2str(num_cut) <span class="string">'cut'</span>])*(k(i)*Human_model(j).b + q*axe)+eval([<span class="string">'p'</span> num2str(num_cut) <span class="string">'cut'</span>]);         
+0097        Human_model(j).R=eval([<span class="string">'R'</span> num2str(num_cut) <span class="string">'cut'</span>])*<a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).u,Human_model(j).theta);         
+0098             <span class="keyword">end</span>
+0099        num_cut=num_cut+1; <span class="comment">% incr�mentation du num�ro de coupure</span>
+0100     <span class="keyword">else</span>   
+0101             <span class="keyword">if</span> Human_model(j).joint == 1    <span class="comment">% liaison pivot (pin joint)</span>
+0102 <span class="comment">%         Human_model(j).p=Human_model(i).R*(k(i)*Human_model(j).b)+Human_model(i).p; % position du rep�re</span>
+0103         Human_model(j).p=Human_model(i).R*(k(i)*Human_model(j).b)+Human_model(i).p; <span class="comment">% position du rep�re</span>
+0104 <span class="comment">%         Human_model(j).R=Human_model(i).R*Rodrigues(Human_model(j).a,angle)*Rodrigues(Human_model(j).u,Human_model(j).theta); % orientation du rep�re</span>
+0105         Human_model(j).R=Human_model(i).R*<a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(axe,q)*<a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).u,Human_model(j).theta); <span class="comment">% orientation du rep�re</span>
+0106             <span class="keyword">end</span>
+0107             <span class="keyword">if</span> Human_model(j).joint == 2    <span class="comment">% liaison glissi�re (slide joint)</span>
+0108 <span class="comment">%         Human_model(j).p = Human_model(i).R *( k(i)*Human_model(j).b + angle* Human_model(j).a) + Human_model(i).p;</span>
+0109         Human_model(j).p = Human_model(i).R *( k(i)*Human_model(j).b + q* axe ) + Human_model(i).p;
+0110         <span class="comment">% l'orientation de l'axe de rotation d�pend de a, et d'une</span>
+0111         <span class="comment">% variation d'orientation</span>
+0112         Human_model(j).R = Human_model(i).R * <a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>( Human_model(j).u , Human_model(j).theta );
+0113             <span class="keyword">end</span>
+0114     <span class="keyword">end</span>
+0115     
+0116     <span class="comment">% Si fermeture de boucle</span>
+0117     <span class="keyword">if</span> size(Human_model(j).ClosedLoop) ~= [0 0] <span class="comment">%#ok&lt;BDSCA&gt;</span>
+0118         <span class="comment">% on trouve le solide et la position du point o� il y a eu la coupure</span>
+0119         <span class="comment">% Finding the solid and the point�s position where the cut was performed</span>
+0120         name=Human_model(j).ClosedLoop;
+0121         test=0;
+0122         <span class="keyword">for</span> pp=1:numel(Human_model)
+0123             <span class="keyword">for</span> kk=1:size(Human_model(pp).anat_position,1)
+0124                 <span class="keyword">if</span> strcmp(name,Human_model(pp).anat_position(kk,1))
+0125                     num_solid=pp;
+0126                     num_markers=kk;
+0127                     test=1;
+0128                     <span class="keyword">break</span>
+0129                 <span class="keyword">end</span>
+0130             <span class="keyword">end</span>
+0131             <span class="keyword">if</span> test == 1
+0132                 <span class="keyword">break</span>
+0133             <span class="keyword">end</span>
+0134         <span class="keyword">end</span>
+0135         [solid_path1,solid_path2]=<a href="../../../Functions/AlgoMathsModel/find_solid_path.html" class="code" title="function [solid_1_path,solid_2_path]=find_solid_path(Human_model,i,k)">find_solid_path</a>(Human_model,j,num_solid);
+0136         [c{numClosedLoop},ceq{numClosedLoop}]=<a href="../../../Functions/Kinematics/NonLinCon_ClosedLoop_Sym.html" class="code" title="function [c,ceq]=NonLinCon_ClosedLoop_Sym(Human_model,solid_path1,solid_path2,num_solid,num_markers,q,k)">NonLinCon_ClosedLoop_Sym</a>(Human_model,solid_path1,solid_path2,num_solid,num_markers,Q,k);
+0137         numClosedLoop=numClosedLoop+1;
+0138     <span class="keyword">end</span>
+0139     
+0140 <span class="keyword">end</span>
+0141 
+0142 <span class="comment">%% Calcul de la position des marqueurs (computation of markers position)</span>
+0143 <span class="keyword">for</span> m=1:numel(Markers_set)
+0144     <span class="keyword">if</span> Markers_set(m).exist
+0145         <span class="keyword">if</span> Markers_set(m).num_solid == j
+0146             Markers_set(m).position_symbolic=( Human_model(j).p + <span class="keyword">...</span>
+0147                                     Human_model(j).R*(k(j)*( Human_model(j).c + Human_model(Markers_set(m).num_solid).anat_position{Markers_set(m).num_markers,2} + <span class="keyword">...</span>
+0148                                     p_adapt(sum([Markers_set(1:m).exist]),:)') ) );
+0149         <span class="keyword">end</span>
+0150     <span class="keyword">end</span>
+0151 <span class="keyword">end</span>
+0152 
+0153 <span class="comment">% [Human_model,Markers_set,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,Human_model(j).sister,Q,k,p_adapt,alpha,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop);</span>
+0154 <span class="comment">% [Human_model,Markers_set,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,Human_model(j).child,Q,k,p_adapt,alpha,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop);</span>
+0155 [Human_model,Markers_set,num_cut,numClosedLoop,c,ceq]=<a href="Symbolic_ForwardKinematicsCoupure_A.html" class="code" title="function [Human_model,Markers_set,num_cut,numClosedLoop,c,ceq]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,j,Q,k,p_adapt,alpha,num_cut,numClosedLoop,c,ceq)">Symbolic_ForwardKinematicsCoupure_A</a>(Human_model,Markers_set,Human_model(j).sister,Q,k,p_adapt,alpha,num_cut,numClosedLoop,c,ceq);
+0156 [Human_model,Markers_set,num_cut,numClosedLoop,c,ceq]=<a href="Symbolic_ForwardKinematicsCoupure_A.html" class="code" title="function [Human_model,Markers_set,num_cut,numClosedLoop,c,ceq]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,j,Q,k,p_adapt,alpha,num_cut,numClosedLoop,c,ceq)">Symbolic_ForwardKinematicsCoupure_A</a>(Human_model,Markers_set,Human_model(j).child,Q,k,p_adapt,alpha,num_cut,numClosedLoop,c,ceq);
+0157 
+0158 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

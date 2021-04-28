@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of InverseDynamicsSolid</title>
+  <meta name="keywords" content="InverseDynamicsSolid">
+  <meta name="description" content="Computation of the inverse dynamics step on one solid">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html Dynamics -->
+<h1>InverseDynamicsSolid
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Computation of the inverse dynamics step on one solid</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Human_model,f,t]=InverseDynamicsSolid(Human_model,external_forces,g,j) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Computation of the inverse dynamics step on one solid
+   
+   INPUT
+   - Human_model: osteo-articular model (see the Documentation for the structure)
+   - external_forces: external forces applied on the subject
+   - g: vector of gravity
+   - j: number of the solid to study
+   OUTPUT
+   - Human_model: osteo-articular model with additional joint torques (see the Documentation for the structure)
+   - f: dynamic residuals (forces)
+   - t: dynamic residuals (torques)
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Functions/AlgoMathsModel/wedge.html" class="code" title="function w_wedged=wedge(w)">wedge</a>	Cross product operator</li><li><a href="InverseDynamicsSolid.html" class="code" title="function [Human_model,f,t]=InverseDynamicsSolid(Human_model,external_forces,g,j)">InverseDynamicsSolid</a>	Computation of the inverse dynamics step on one solid</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Functions/Calibration/Dynamics/DynCalibOptimization_costfunction1.html" class="code" title="function [y] = DynCalibOptimization_costfunction1(X,Human_model,frame_opti,q,dq,ddq,p_pelvis,r_pelvis,v0,w,dv0,dw,BW,H,external_forces,g,nbframe)">DynCalibOptimization_costfunction1</a>	Cost function for the inertial calibration</li><li><a href="InverseDynamics.html" class="code" title="function []=InverseDynamics(AnalysisParameters)">InverseDynamics</a>	Computation of the inverse dynamics step</li><li><a href="InverseDynamicsSolid.html" class="code" title="function [Human_model,f,t]=InverseDynamicsSolid(Human_model,external_forces,g,j)">InverseDynamicsSolid</a>	Computation of the inverse dynamics step on one solid</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Human_model,f,t]=InverseDynamicsSolid(Human_model,external_forces,g,j)</a>
+0002 <span class="comment">% Computation of the inverse dynamics step on one solid</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the structure)</span>
+0006 <span class="comment">%   - external_forces: external forces applied on the subject</span>
+0007 <span class="comment">%   - g: vector of gravity</span>
+0008 <span class="comment">%   - j: number of the solid to study</span>
+0009 <span class="comment">%   OUTPUT</span>
+0010 <span class="comment">%   - Human_model: osteo-articular model with additional joint torques (see the Documentation for the structure)</span>
+0011 <span class="comment">%   - f: dynamic residuals (forces)</span>
+0012 <span class="comment">%   - t: dynamic residuals (torques)</span>
+0013 <span class="comment">%________________________________________________________</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Licence</span>
+0016 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0017 <span class="comment">%________________________________________________________</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0020 <span class="comment">% Georges Dumont</span>
+0021 <span class="comment">%________________________________________________________</span>
+0022 
+0023 <span class="keyword">if</span> j==0
+0024     f=[0 0 0]';
+0025     t=[0 0 0]';
+0026 <span class="keyword">return</span>;
+0027 <span class="keyword">end</span>
+0028 
+0029 c=Human_model(j).R*Human_model(j).c+Human_model(j).p; <span class="comment">% centre de masse</span>
+0030 I=Human_model(j).R*Human_model(j).I*Human_model(j).R'; <span class="comment">% tenseur d'inertie exprim�au centre de masse</span>
+0031 c_hat=<a href="../../Functions/AlgoMathsModel/wedge.html" class="code" title="function w_wedged=wedge(w)">wedge</a>(c);
+0032 I=I+Human_model(j).m*(c_hat*c_hat'); <span class="comment">% tenseur d'inertie exprim�au rep�e global</span>
+0033 P=Human_model(j).m*(Human_model(j).v0+cross(Human_model(j).w,c)); <span class="comment">% quantit�de mouvement</span>
+0034 L=Human_model(j).m*cross(c,Human_model(j).v0)+I*Human_model(j).w; <span class="comment">% moment cin�ique</span>
+0035 
+0036 <span class="comment">%%computation of the external forces --&gt;external forces+gravity+previous body forces</span>
+0037 f0=Human_model(j).m*(Human_model(j).dv0+cross(Human_model(j).dw,c))+cross(Human_model(j).w,P)<span class="keyword">...</span>
+0038     - external_forces(j).fext(:,1) - Human_model(j).m*g;
+0039 t0=Human_model(j).m*cross(c,Human_model(j).dv0)+I*Human_model(j).dw+cross(Human_model(j).v0,P)+cross(Human_model(j).w,L)<span class="keyword">...</span>
+0040     - external_forces(j).fext(:,2) - cross(c,Human_model(j).m*g);
+0041 
+0042 [Human_model,f1,t1]=<a href="InverseDynamicsSolid.html" class="code" title="function [Human_model,f,t]=InverseDynamicsSolid(Human_model,external_forces,g,j)">InverseDynamicsSolid</a>(Human_model,external_forces,g,Human_model(j).child);
+0043 f=f0+f1;
+0044 t=t0+t1;
+0045 
+0046 <span class="keyword">if</span> j~=1
+0047     Human_model(j).f=f;
+0048     Human_model(j).t=t;
+0049     Human_model(j).torques=Human_model(j).sv'*f+Human_model(j).sw'*t;
+0050 <span class="keyword">end</span>
+0051 
+0052 [Human_model,f2,t2]=<a href="InverseDynamicsSolid.html" class="code" title="function [Human_model,f,t]=InverseDynamicsSolid(Human_model,external_forces,g,j)">InverseDynamicsSolid</a>(Human_model,external_forces,g,Human_model(j).sister);
+0053 f=f+f2;
+0054 t=t+t2;
+0055 
+0056 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

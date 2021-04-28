@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of MomentArmsComputation</title>
+  <meta name="keywords" content="MomentArmsComputation">
+  <meta name="description" content="Computation of the moment arms matrix">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html MuscleForces -->
+<h1>MomentArmsComputation
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Computation of the moment arms matrix</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Moment_Arms_sub,C,L] = MomentArmsComputation(BiomechanicalModel) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Computation of the moment arms matrix
+
+   INPUT
+   - Human_model: osteo-articular model (see the Documentation for the structure)
+   - Muscles: set of muscles (see the Documentation for the structure)
+   OUTPUT
+   - Moment_Arms: moment arms matrix
+   - C: muscular coupling matrix
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+ Modification : Pierre Puchaud 
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="Muscle_length.html" class="code" title="function [Lmt] = Muscle_length(Human_model,Muscles,q)">Muscle_length</a>	Computation of the muscle/tendon length</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Functions/Calibration/CalibrateModelGeneration.html" class="code" title="function [] = CalibrateModelGeneration(ModelParameters,AnalysisParameters)">CalibrateModelGeneration</a>	Generation of the calibrated musculoskeletal model</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Moment_Arms_sub,C,L] = MomentArmsComputation(BiomechanicalModel)</a>
+0002 <span class="comment">% Computation of the moment arms matrix</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the structure)</span>
+0006 <span class="comment">%   - Muscles: set of muscles (see the Documentation for the structure)</span>
+0007 <span class="comment">%   OUTPUT</span>
+0008 <span class="comment">%   - Moment_Arms: moment arms matrix</span>
+0009 <span class="comment">%   - C: muscular coupling matrix</span>
+0010 <span class="comment">%________________________________________________________</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Licence</span>
+0013 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0014 <span class="comment">%________________________________________________________</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0017 <span class="comment">% Georges Dumont</span>
+0018 <span class="comment">% Modification : Pierre Puchaud</span>
+0019 <span class="comment">%________________________________________________________</span>
+0020 Human_model=BiomechanicalModel.OsteoArticularModel;
+0021 Muscles=BiomechanicalModel.Muscles;
+0022 
+0023 <span class="comment">%</span>
+0024 <span class="keyword">if</span>  ~isempty(intersect({BiomechanicalModel.OsteoArticularModel.name},<span class="string">'root0'</span>)) <span class="comment">%&amp;&amp; length(q0)==numel(BiomechanicalModel.OsteoArticularModel(:))</span>
+0025     Nb_q = numel(Human_model)-6 ;<span class="comment">%only degrees of freedom of the body, not the floating base.</span>
+0026 <span class="keyword">else</span>
+0027      Nb_q= numel(Human_model);
+0028 <span class="keyword">end</span>
+0029 
+0030 q = sym(<span class="string">'q'</span>,[Nb_q,1],<span class="string">'real'</span>); <span class="comment">% nb de degrees of freedom</span>
+0031 Nb_m = numel(Muscles);
+0032 
+0033 <span class="comment">%% Compute muscle lengths</span>
+0034 
+0035 L = sym(zeros(Nb_m,1));
+0036 <span class="keyword">for</span> i_m=1:Nb_m <span class="comment">% for each muscle</span>
+0037     <span class="keyword">if</span> Muscles(i_m).exist<span class="comment">% if this muscle exist on the model</span>
+0038         <span class="comment">% compute the length of the muscle</span>
+0039         L(i_m) = <a href="Muscle_length.html" class="code" title="function [Lmt] = Muscle_length(Human_model,Muscles,q)">Muscle_length</a>(Human_model,Muscles(i_m),q);
+0040     <span class="keyword">end</span>
+0041 <span class="keyword">end</span>
+0042 
+0043 <span class="comment">%% Computation of moment arms</span>
+0044 
+0045 R=-jacobian(L,q)';
+0046 R=R(:);
+0047 sizeMA_Lin=Nb_q*Nb_m; <span class="comment">% Last 6 degrees of freedom are not taken into account after the jacobian</span>
+0048 sizeMA_Sub=[Nb_q Nb_m];
+0049 Moment_Arms_lin=num2cell(zeros(sizeMA_Lin,1));
+0050 Moment_Arms_sub=cell(sizeMA_Sub);
+0051 
+0052 ind = find(R~=0);
+0053 R_temp = R(ind); sizeMA_Lin_temp= length(ind);
+0054 Moment_Arms_lin_temp = cell(sizeMA_Lin_temp,1);
+0055 
+0056 parfor ii=1:sizeMA_Lin_temp 
+0057     <span class="comment">%     Moment_Arms_lin_temp{ii} = matlabFunction(simplify(R_temp(ii)),'Vars',{q});</span>
+0058     Moment_Arms_lin_temp{ii} = matlabFunction(R_temp(ii),<span class="string">'Vars'</span>,{q});
+0059 <span class="keyword">end</span>
+0060 Moment_Arms_lin(ind)=Moment_Arms_lin_temp;
+0061 
+0062 <span class="comment">% Reordering the matrix</span>
+0063 <span class="keyword">for</span> ii=1:sizeMA_Lin <span class="comment">%subscript indexing</span>
+0064     [I,J]=ind2sub(sizeMA_Sub,ii);
+0065     Moment_Arms_sub{I,J}=Moment_Arms_lin{ii};
+0066 <span class="keyword">end</span>
+0067 
+0068 <span class="comment">%% Computation of muscular coupling matrix</span>
+0069 sizeCSub=[Nb_q Nb_q];
+0070 C = zeros(sizeCSub);
+0071 dR = jacobian(R,q);
+0072 <span class="keyword">for</span> ii=1:Nb_q
+0073     ind = find(dR(:,ii)~=0);
+0074     [I,~]=ind2sub(sizeMA_Sub,ind); <span class="comment">% corresponding indexing</span>
+0075     C(ii,I)=1; C(I,ii)=1;
+0076 <span class="keyword">end</span>
+0077 
+0078 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

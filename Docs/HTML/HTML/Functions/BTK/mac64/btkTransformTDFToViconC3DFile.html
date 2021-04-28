@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of btkTransformTDFToViconC3DFile</title>
+  <meta name="keywords" content="btkTransformTDFToViconC3DFile">
+  <meta name="description" content="BTKTRANSFORMTDFTOVICONC3DFILE transforms a TDF file (BTS Bioengineering) to a compatible Vicon C3D file.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- # BTK --><!-- menu.html mac64 -->
+<h1>btkTransformTDFToViconC3DFile
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>BTKTRANSFORMTDFTOVICONC3DFILE transforms a TDF file (BTS Bioengineering) to a compatible Vicon C3D file.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function btkTransformTDFToViconC3DFile(TDF_INPUT, C3D_OUTPUT) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">BTKTRANSFORMTDFTOVICONC3DFILE transforms a TDF file (BTS Bioengineering) to a compatible Vicon C3D file.
+  
+  Several modifications are done in the data file:
+   - First the data are transformed in millimeters and Newton-millimeters.
+   - The coordinates of the markers and the geometry of the force 
+     plateforms are also modified to have the Z axis as the vertical axis.
+     These modifications correspond to a rotation of 90 degrees around 
+     the X axis.
+   - The force plates are converted from type I (FX/FY/FZ/PX/PY/MZ) to 
+     type II (FX/FY/FZ/MX/MY/MZ). 
+   - Finally, the analog channels used by the original force plates are
+     deleted.
+
+  BTKTRANSFORMTDFTOVICONC3DFILE(TDF_INPUT) transforms the file and write 
+  it in the same folder but the extension C3D is concatenated to the
+  filename.
+
+  BTKTRANSFORMTDFTOVICONC3DFILE(TDF_INPUT, C3D_OUTPUT) transforms the file
+  and write it in the given output filename. The given pathname (aka
+  folders) must exist. Be sure that the given output has a final C3D
+  extension. Otherwise, the ouput file could be in another format or raise
+  an exception if the extension is not recognized.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Functions/BTK/linux64/@BasicFilters/btkGetForcePlatformWrenches.html" class="code" title="function FPW = btkGetForcePlatformWrenches(h, threshold) %#ok">btkGetForcePlatformWrenches</a>	BTKGETFORCEPLATFORMWRENCHES Extract force platform wrenches (FPW) from a biomechanical acquisition in the global frame.</li><li><a href="../../../Functions/BTK/linux64/@Common/btkAppendMetaData.html" class="code" title="function btkAppendMetaData(h, label, sublabel, ..., info) %#ok">btkAppendMetaData</a>	BTKAPPENDMETADATA Append a new metada and return an updated list of the metadata in the acquisition.</li><li><a href="../../../Functions/BTK/linux64/@Common/btkClearMetaData.html" class="code" title="function btkClearMetaData(h) %#ok">btkClearMetaData</a>	BTKCLEARMETADATA Clear acquisition's events.</li><li><a href="../../../Functions/BTK/linux64/@Common/btkGetAnalogs.html" class="code" title="function [analogs analogsInfo] = btkGetAnalogs(h) %#ok">btkGetAnalogs</a>	BTKGETANALOGS Extract analogs from a biomechanical acquisition</li><li><a href="../../../Functions/BTK/linux64/@Common/btkGetForcePlatforms.html" class="code" title="function [forceplates forceplatesInfo] = btkGetForcePlatforms(h) %#ok">btkGetForcePlatforms</a>	BTKGETFORCEPLATFORMS Extract force platforms' informations from a biomechanical acquisition</li><li><a href="../../../Functions/BTK/linux64/@Common/btkGetMarkersValues.html" class="code" title="function v = btkGetMarkersValues(h) %#ok">btkGetMarkersValues</a>	BTKGETMARKERSVALUES Extract markers' coordinates and store them in a matrix</li><li><a href="../../../Functions/BTK/linux64/@Common/btkGetPointNumber.html" class="code" title="function pn = btkGetPointNumber(h) %#ok">btkGetPointNumber</a>	BTKGETPOINTNUMBER Returns number of points.</li><li><a href="../../../Functions/BTK/linux64/@Common/btkRemoveAnalog.html" class="code" title="function btkRemoveAnalog(h, idx_or_label) %#ok">btkRemoveAnalog</a>	BTKREMOVEANALOG Delete the analog channel with the given index or label.</li><li><a href="../../../Functions/BTK/linux64/@Common/btkSetMarkersValues.html" class="code" title="function btkSetMarkersValues(h, v) %#ok">btkSetMarkersValues</a>	BTKSETMARKERSVALUES Sets markers' coordinates from a matrix</li><li><a href="../../../Functions/BTK/linux64/@Common/btkSetPointsUnit.html" class="code" title="function btkSetPointsUnit(h, type, unit) %#ok">btkSetPointsUnit</a>	BTKSETPOINTUNIT Modify point's unit.</li><li><a href="../../../Functions/BTK/linux64/@IO/btkReadAcquisition.html" class="code" title="function h = btkReadAcquisition(filename) %#ok">btkReadAcquisition</a>	BTKREADACQUISITION Read an acquisition's file (C3D, TRC, ...)</li><li><a href="../../../Functions/BTK/linux64/@IO/btkWriteAcquisition.html" class="code" title="function h = btkWriteAcquisition(filename) %#ok">btkWriteAcquisition</a>	BTKWRITEACQUISITION Write acquisition's data into file (C3D, TRC, ...)</li><li><a href="../../../Functions/BTK/linux64/btkAppendForcePlatformType2.html" class="code" title="function btkAppendForcePlatformType2(h, forces, moments, corners, origin, localFrame)">btkAppendForcePlatformType2</a>	BTKAPPENDFORCEPLATFORMTYPE2 Append a virtual force platform of type 2.</li><li><a href="../../../Functions/BTK/linux64/btkGetVersion.html" class="code" title="function v = btkGetVersion()">btkGetVersion</a>	V = BTKGETVERSION returns the release number of BTK.</li><li><a href="../../../Functions/BTK/linux64/btkMetaDataInfo.html" class="code" title="function info = btkMetaDataInfo(format, values, numdims)">btkMetaDataInfo</a>	BTKMETADATAINFO Create a structure containing the required fields for the informations of a metadata.</li><li><a href="../../../Functions/BTK/mac64/@BasicFilters/btkGetForcePlatformWrenches.html" class="code" title="function FPW = btkGetForcePlatformWrenches(h, threshold) %#ok">btkGetForcePlatformWrenches</a>	BTKGETFORCEPLATFORMWRENCHES Extract force platform wrenches (FPW) from a biomechanical acquisition in the global frame.</li><li><a href="../../../Functions/BTK/mac64/@Common/btkAppendMetaData.html" class="code" title="function btkAppendMetaData(h, label, sublabel, ..., info) %#ok">btkAppendMetaData</a>	BTKAPPENDMETADATA Append a new metada and return an updated list of the metadata in the acquisition.</li><li><a href="../../../Functions/BTK/mac64/@Common/btkClearMetaData.html" class="code" title="function btkClearMetaData(h) %#ok">btkClearMetaData</a>	BTKCLEARMETADATA Clear acquisition's events.</li><li><a href="../../../Functions/BTK/mac64/@Common/btkGetAnalogs.html" class="code" title="function [analogs analogsInfo] = btkGetAnalogs(h) %#ok">btkGetAnalogs</a>	BTKGETANALOGS Extract analogs from a biomechanical acquisition</li><li><a href="../../../Functions/BTK/mac64/@Common/btkGetForcePlatforms.html" class="code" title="function [forceplates forceplatesInfo] = btkGetForcePlatforms(h) %#ok">btkGetForcePlatforms</a>	BTKGETFORCEPLATFORMS Extract force platforms' informations from a biomechanical acquisition</li><li><a href="../../../Functions/BTK/mac64/@Common/btkGetMarkersValues.html" class="code" title="function v = btkGetMarkersValues(h) %#ok">btkGetMarkersValues</a>	BTKGETMARKERSVALUES Extract markers' coordinates and store them in a matrix</li><li><a href="../../../Functions/BTK/mac64/@Common/btkGetPointNumber.html" class="code" title="function pn = btkGetPointNumber(h) %#ok">btkGetPointNumber</a>	BTKGETPOINTNUMBER Returns number of points.</li><li><a href="../../../Functions/BTK/mac64/@Common/btkRemoveAnalog.html" class="code" title="function btkRemoveAnalog(h, idx_or_label) %#ok">btkRemoveAnalog</a>	BTKREMOVEANALOG Delete the analog channel with the given index or label.</li><li><a href="../../../Functions/BTK/mac64/@Common/btkSetMarkersValues.html" class="code" title="function btkSetMarkersValues(h, v) %#ok">btkSetMarkersValues</a>	BTKSETMARKERSVALUES Sets markers' coordinates from a matrix</li><li><a href="../../../Functions/BTK/mac64/@Common/btkSetPointsUnit.html" class="code" title="function btkSetPointsUnit(h, type, unit) %#ok">btkSetPointsUnit</a>	BTKSETPOINTUNIT Modify point's unit.</li><li><a href="../../../Functions/BTK/mac64/@IO/btkReadAcquisition.html" class="code" title="function h = btkReadAcquisition(filename) %#ok">btkReadAcquisition</a>	BTKREADACQUISITION Read an acquisition's file (C3D, TRC, ...)</li><li><a href="../../../Functions/BTK/mac64/@IO/btkWriteAcquisition.html" class="code" title="function h = btkWriteAcquisition(filename) %#ok">btkWriteAcquisition</a>	BTKWRITEACQUISITION Write acquisition's data into file (C3D, TRC, ...)</li><li><a href="btkAppendForcePlatformType2.html" class="code" title="function btkAppendForcePlatformType2(h, forces, moments, corners, origin, localFrame)">btkAppendForcePlatformType2</a>	BTKAPPENDFORCEPLATFORMTYPE2 Append a virtual force platform of type 2.</li><li><a href="btkGetVersion.html" class="code" title="function v = btkGetVersion()">btkGetVersion</a>	V = BTKGETVERSION returns the release number of BTK.</li><li><a href="btkMetaDataInfo.html" class="code" title="function info = btkMetaDataInfo(format, values, numdims)">btkMetaDataInfo</a>	BTKMETADATAINFO Create a structure containing the required fields for the informations of a metadata.</li><li><a href="../../../Functions/BTK/win64/@BasicFilters/btkGetForcePlatformWrenches.html" class="code" title="function FPW = btkGetForcePlatformWrenches(h, threshold) %#ok">btkGetForcePlatformWrenches</a>	BTKGETFORCEPLATFORMWRENCHES Extract force platform wrenches (FPW) from a biomechanical acquisition in the global frame.</li><li><a href="../../../Functions/BTK/win64/@Common/btkAppendMetaData.html" class="code" title="function btkAppendMetaData(h, label, sublabel, ..., info) %#ok">btkAppendMetaData</a>	BTKAPPENDMETADATA Append a new metada and return an updated list of the metadata in the acquisition.</li><li><a href="../../../Functions/BTK/win64/@Common/btkClearMetaData.html" class="code" title="function btkClearMetaData(h) %#ok">btkClearMetaData</a>	BTKCLEARMETADATA Clear acquisition's events.</li><li><a href="../../../Functions/BTK/win64/@Common/btkGetAnalogs.html" class="code" title="function [analogs analogsInfo] = btkGetAnalogs(h) %#ok">btkGetAnalogs</a>	BTKGETANALOGS Extract analogs from a biomechanical acquisition</li><li><a href="../../../Functions/BTK/win64/@Common/btkGetForcePlatforms.html" class="code" title="function [forceplates forceplatesInfo] = btkGetForcePlatforms(h) %#ok">btkGetForcePlatforms</a>	BTKGETFORCEPLATFORMS Extract force platforms' informations from a biomechanical acquisition</li><li><a href="../../../Functions/BTK/win64/@Common/btkGetMarkersValues.html" class="code" title="function v = btkGetMarkersValues(h) %#ok">btkGetMarkersValues</a>	BTKGETMARKERSVALUES Extract markers' coordinates and store them in a matrix</li><li><a href="../../../Functions/BTK/win64/@Common/btkGetPointNumber.html" class="code" title="function pn = btkGetPointNumber(h) %#ok">btkGetPointNumber</a>	BTKGETPOINTNUMBER Returns number of points.</li><li><a href="../../../Functions/BTK/win64/@Common/btkRemoveAnalog.html" class="code" title="function btkRemoveAnalog(h, idx_or_label) %#ok">btkRemoveAnalog</a>	BTKREMOVEANALOG Delete the analog channel with the given index or label.</li><li><a href="../../../Functions/BTK/win64/@Common/btkSetMarkersValues.html" class="code" title="function btkSetMarkersValues(h, v) %#ok">btkSetMarkersValues</a>	BTKSETMARKERSVALUES Sets markers' coordinates from a matrix</li><li><a href="../../../Functions/BTK/win64/@Common/btkSetPointsUnit.html" class="code" title="function btkSetPointsUnit(h, type, unit) %#ok">btkSetPointsUnit</a>	BTKSETPOINTUNIT Modify point's unit.</li><li><a href="../../../Functions/BTK/win64/@IO/btkReadAcquisition.html" class="code" title="function h = btkReadAcquisition(filename) %#ok">btkReadAcquisition</a>	BTKREADACQUISITION Read an acquisition's file (C3D, TRC, ...)</li><li><a href="../../../Functions/BTK/win64/@IO/btkWriteAcquisition.html" class="code" title="function h = btkWriteAcquisition(filename) %#ok">btkWriteAcquisition</a>	BTKWRITEACQUISITION Write acquisition's data into file (C3D, TRC, ...)</li><li><a href="../../../Functions/BTK/win64/btkAppendForcePlatformType2.html" class="code" title="function btkAppendForcePlatformType2(h, forces, moments, corners, origin, localFrame)">btkAppendForcePlatformType2</a>	BTKAPPENDFORCEPLATFORMTYPE2 Append a virtual force platform of type 2.</li><li><a href="../../../Functions/BTK/win64/btkGetVersion.html" class="code" title="function v = btkGetVersion()">btkGetVersion</a>	V = BTKGETVERSION returns the release number of BTK.</li><li><a href="../../../Functions/BTK/win64/btkMetaDataInfo.html" class="code" title="function info = btkMetaDataInfo(format, values, numdims)">btkMetaDataInfo</a>	BTKMETADATAINFO Create a structure containing the required fields for the informations of a metadata.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function btkTransformTDFToViconC3DFile(TDF_INPUT, C3D_OUTPUT)</a>
+0002 <span class="comment">%BTKTRANSFORMTDFTOVICONC3DFILE transforms a TDF file (BTS Bioengineering) to a compatible Vicon C3D file.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%  Several modifications are done in the data file:</span>
+0005 <span class="comment">%   - First the data are transformed in millimeters and Newton-millimeters.</span>
+0006 <span class="comment">%   - The coordinates of the markers and the geometry of the force</span>
+0007 <span class="comment">%     plateforms are also modified to have the Z axis as the vertical axis.</span>
+0008 <span class="comment">%     These modifications correspond to a rotation of 90 degrees around</span>
+0009 <span class="comment">%     the X axis.</span>
+0010 <span class="comment">%   - The force plates are converted from type I (FX/FY/FZ/PX/PY/MZ) to</span>
+0011 <span class="comment">%     type II (FX/FY/FZ/MX/MY/MZ).</span>
+0012 <span class="comment">%   - Finally, the analog channels used by the original force plates are</span>
+0013 <span class="comment">%     deleted.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%  BTKTRANSFORMTDFTOVICONC3DFILE(TDF_INPUT) transforms the file and write</span>
+0016 <span class="comment">%  it in the same folder but the extension C3D is concatenated to the</span>
+0017 <span class="comment">%  filename.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%  BTKTRANSFORMTDFTOVICONC3DFILE(TDF_INPUT, C3D_OUTPUT) transforms the file</span>
+0020 <span class="comment">%  and write it in the given output filename. The given pathname (aka</span>
+0021 <span class="comment">%  folders) must exist. Be sure that the given output has a final C3D</span>
+0022 <span class="comment">%  extension. Otherwise, the ouput file could be in another format or raise</span>
+0023 <span class="comment">%  an exception if the extension is not recognized.</span>
+0024 
+0025 <span class="comment">%  History</span>
+0026 <span class="comment">%  -------</span>
+0027 <span class="comment">%   - 2012/06/04: Initial version</span>
+0028 <span class="comment">%   - 2012/06/04: Clear only the analog channels used by the forceplates</span>
+0029 <span class="comment">%   - 2012/08/09: Check if the analog channels configured for each forceplates</span>
+0030 <span class="comment">%                 exists really before trying to remove them.</span>
+0031 
+0032 <span class="comment">%  Author: A. Barré</span>
+0033 <span class="comment">%  Copyright 2009-2013 Biomechanical ToolKit (BTK).</span>
+0034 
+0035 <span class="keyword">if</span> (nargin &lt; 2)
+0036     C3D_OUTPUT = [TDF_INPUT,<span class="string">'.c3d'</span>];
+0037 <span class="keyword">end</span>
+0038 <span class="keyword">if</span> (nargin &lt; 1)
+0039     error(<span class="string">'Missing input argument. You must give the path of the TDF file'</span>);
+0040 <span class="keyword">end</span>
+0041 
+0042 <span class="comment">% Read the TDF file</span>
+0043 warning(<span class="string">'OFF'</span>, <span class="string">'btk:ReadAcquisition'</span>);
+0044 acq = <a href="../../../Functions/BTK/linux64/@IO/btkReadAcquisition.html" class="code" title="function h = btkReadAcquisition(filename) %#ok">btkReadAcquisition</a>(TDF_INPUT);
+0045 warning(<span class="string">'ON'</span>, <span class="string">'btk:ReadAcquisition'</span>);
+0046 <span class="comment">% Convert the unit of the markers in millimeters (as Vicon does not read correctly values in meters: no scale)</span>
+0047 <span class="comment">% AND also transfert the coordinates Y and Z to have the Z axis as the</span>
+0048 <span class="comment">% vertical. This is like have a rotation of 90 degree around the axis X</span>
+0049 data = <a href="../../../Functions/BTK/linux64/@Common/btkGetMarkersValues.html" class="code" title="function v = btkGetMarkersValues(h) %#ok">btkGetMarkersValues</a>(acq)*1000;
+0050 numMarkers = <a href="../../../Functions/BTK/linux64/@Common/btkGetPointNumber.html" class="code" title="function pn = btkGetPointNumber(h) %#ok">btkGetPointNumber</a>(acq); <span class="comment">% IT IS ASSUMED THAT THERE IS ONLY MARKERS IN THE ACQUISITION</span>
+0051 idxCoordNew = zeros(3*numMarkers,1);
+0052 idxCoordOpp = zeros(numMarkers,1);
+0053 <span class="keyword">for</span> i = 1:numMarkers
+0054     idxCoordNew(((i-1)*3)+1:i*3) = [1 3 2] + (i-1)*3;
+0055     idxCoordOpp(i) = (i-1)*3+2;
+0056 <span class="keyword">end</span>
+0057 data = data(:,idxCoordNew);
+0058 data(:,idxCoordOpp) = data(:,idxCoordOpp) * -1;
+0059 <a href="../../../Functions/BTK/linux64/@Common/btkSetMarkersValues.html" class="code" title="function btkSetMarkersValues(h, v) %#ok">btkSetMarkersValues</a>(acq, data);
+0060 <a href="../../../Functions/BTK/linux64/@Common/btkSetPointsUnit.html" class="code" title="function btkSetPointsUnit(h, type, unit) %#ok">btkSetPointsUnit</a>(acq, <span class="string">'marker'</span>,<span class="string">'mm'</span>);
+0061 <span class="comment">% Extract force platform data (channels and geometry)</span>
+0062 warning(<span class="string">'OFF'</span>, <span class="string">'btk:GetForcePlatforms'</span>);
+0063 fp = <a href="../../../Functions/BTK/linux64/@Common/btkGetForcePlatforms.html" class="code" title="function [forceplates forceplatesInfo] = btkGetForcePlatforms(h) %#ok">btkGetForcePlatforms</a>(acq);
+0064 warning(<span class="string">'OFF'</span>, <span class="string">'btk:GetForcePlatforms'</span>);
+0065 <span class="comment">% Extract force platform wrenches (force, moment, position) for each forceplate</span>
+0066 warning(<span class="string">'OFF'</span>, <span class="string">'btk:GetForcePlatformWrenches'</span>);
+0067 fpw = <a href="../../../Functions/BTK/linux64/@BasicFilters/btkGetForcePlatformWrenches.html" class="code" title="function FPW = btkGetForcePlatformWrenches(h, threshold) %#ok">btkGetForcePlatformWrenches</a>(acq,0);
+0068 warning(<span class="string">'OFF'</span>, <span class="string">'btk:GetForcePlatformWrenches'</span>);
+0069 <span class="keyword">if</span> (strcmp(<a href="btkGetVersion.html" class="code" title="function v = btkGetVersion()">btkGetVersion</a>(), <span class="string">'0.1.10'</span>))
+0070     <span class="comment">% BUG: Because, it is force platform Type I, the position is not set to the</span>
+0071     <span class="comment">% origin, but measured to the COP. The moment must be corrected!</span>
+0072     <span class="comment">% Will be corrected in the next version of BTK.</span>
+0073     <span class="keyword">for</span> i = 1:length(fpw)
+0074         fpw(i).M(:,1) = fpw(i).M(:,1) - (fpw(i).F(:,2) .* fpw(i).P(:,3) - fpw(i).P(:,2) .* fpw(i).F(:,3));
+0075         fpw(i).M(:,2) = fpw(i).M(:,2) - (fpw(i).F(:,3) .* fpw(i).P(:,1) - fpw(i).P(:,3) .* fpw(i).F(:,1));
+0076         fpw(i).M(:,3) = fpw(i).M(:,3) - (fpw(i).F(:,1) .* fpw(i).P(:,2) - fpw(i).P(:,1) .* fpw(i).F(:,2));
+0077     <span class="keyword">end</span>
+0078 <span class="keyword">end</span>
+0079 <span class="comment">% Transfer the coordinates Y and Z of the forceplates' geometry</span>
+0080 <span class="comment">% And suppress the analog channels used by the forceplates</span>
+0081 analogLabels = fieldnames(<a href="../../../Functions/BTK/linux64/@Common/btkGetAnalogs.html" class="code" title="function [analogs analogsInfo] = btkGetAnalogs(h) %#ok">btkGetAnalogs</a>(acq));
+0082 <span class="keyword">for</span> i = 1:length(fp)
+0083     fp(i).corners([2,3],:) = fp(i).corners([3,2],:);
+0084     fp(i).corners(2,:) = -1*fp(i).corners(2,:);
+0085     fp(i).origin([2,3]) = fp(i).origin([3,2]);
+0086     fp(i).origin(2) = -1*fp(i).origin(2);
+0087     fpChannels = fieldnames(fp(i).channels);
+0088     <span class="keyword">for</span> j = 1:length(fpChannels)
+0089         <span class="keyword">if</span> (isfield(analogLabels, fpChannels{j}))
+0090             <a href="../../../Functions/BTK/linux64/@Common/btkRemoveAnalog.html" class="code" title="function btkRemoveAnalog(h, idx_or_label) %#ok">btkRemoveAnalog</a>(acq,fpChannels{j});
+0091         <span class="keyword">end</span>
+0092     <span class="keyword">end</span>
+0093 <span class="keyword">end</span>
+0094 <span class="comment">% Remove the metadata (for TDF file, it contains only force platforms configuration)</span>
+0095 <a href="../../../Functions/BTK/linux64/@Common/btkClearMetaData.html" class="code" title="function btkClearMetaData(h) %#ok">btkClearMetaData</a>(acq);
+0096 <span class="comment">% Create the new force plateforms</span>
+0097 <span class="keyword">for</span> i = 1:length(fpw)
+0098     <span class="comment">% Add a new force platform based on the data of the first force platform</span>
+0099     <span class="comment">% WARNING: Moments are converted in newtons-millimeters!</span>
+0100     <span class="comment">% WARNING: Geometry is converted in millimeters!</span>
+0101     <a href="btkAppendForcePlatformType2.html" class="code" title="function btkAppendForcePlatformType2(h, forces, moments, corners, origin, localFrame)">btkAppendForcePlatformType2</a>(acq,fpw(i).F,fpw(i).M*1000,fp(i).corners'*1000,fp(i).origin*1000,1);
+0102 <span class="keyword">end</span>
+0103 <span class="comment">% Set the coordinate axes for the screen (to have the good orientation of the ground in Mokka)</span>
+0104 <a href="../../../Functions/BTK/linux64/@Common/btkAppendMetaData.html" class="code" title="function btkAppendMetaData(h, label, sublabel, ..., info) %#ok">btkAppendMetaData</a>(acq,<span class="string">'POINT'</span>,<span class="string">'X_SCREEN'</span>,<a href="btkMetaDataInfo.html" class="code" title="function info = btkMetaDataInfo(format, values, numdims)">btkMetaDataInfo</a>(<span class="string">'Char'</span>,{<span class="string">'+X'</span>}));
+0105 <a href="../../../Functions/BTK/linux64/@Common/btkAppendMetaData.html" class="code" title="function btkAppendMetaData(h, label, sublabel, ..., info) %#ok">btkAppendMetaData</a>(acq,<span class="string">'POINT'</span>,<span class="string">'Y_SCREEN'</span>,<a href="btkMetaDataInfo.html" class="code" title="function info = btkMetaDataInfo(format, values, numdims)">btkMetaDataInfo</a>(<span class="string">'Char'</span>,{<span class="string">'+Z'</span>}));
+0106 <span class="comment">% Create the C3D file</span>
+0107 <a href="../../../Functions/BTK/linux64/@IO/btkWriteAcquisition.html" class="code" title="function h = btkWriteAcquisition(filename) %#ok">btkWriteAcquisition</a>(acq, C3D_OUTPUT);</pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

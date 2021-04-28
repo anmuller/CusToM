@@ -1,0 +1,222 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of crop_borders</title>
+  <meta name="keywords" content="crop_borders">
+  <meta name="description" content="CROP_BORDERS Crop the borders of an image or stack of images">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- # ExternLibrary --><!-- menu.html export_fig -->
+<h1>crop_borders
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>CROP_BORDERS Crop the borders of an image or stack of images</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [A, vA, vB, bb_rel] = crop_borders(A, bcol, padding, crop_amounts) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">CROP_BORDERS Crop the borders of an image or stack of images
+
+   [B, vA, vB, bb_rel] = crop_borders(A, bcol, [padding])
+
+IN:
+   A - HxWxCxN stack of images.
+   bcol - Cx1 background colour vector.
+   padding - scalar indicating how much padding to have in relation to
+             the cropped-image-size (0&lt;=padding&lt;=1). Default: 0
+   crop_amounts - 4-element vector of crop amounts: [top,right,bottom,left]
+             where NaN/Inf indicate auto-cropping, 0 means no cropping,
+             and any other value mean cropping in pixel amounts.
+
+OUT:
+   B - JxKxCxN cropped stack of images.
+   vA     - coordinates in A that contain the cropped image
+   vB     - coordinates in B where the cropped version of A is placed
+   bb_rel - relative bounding box (used for eps-cropping)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="export_fig.html" class="code" title="function [imageData, alpha] = export_fig(varargin) %#ok<*STRCL1>">export_fig</a>	EXPORT_FIG  Exports figures in a publication-quality format</li><li><a href="im2gif.html" class="code" title="function im2gif(A, varargin)">im2gif</a>	IM2GIF Convert a multiframe image to an animated GIF file</li><li><a href="print2eps.html" class="code" title="function print2eps(name, fig, export_options, varargin)">print2eps</a>	PRINT2EPS  Prints figures to eps with improved line styles</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function A = col(A)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [A, vA, vB, bb_rel] = crop_borders(A, bcol, padding, crop_amounts)</a>
+0002 <span class="comment">%CROP_BORDERS Crop the borders of an image or stack of images</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   [B, vA, vB, bb_rel] = crop_borders(A, bcol, [padding])</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%IN:</span>
+0007 <span class="comment">%   A - HxWxCxN stack of images.</span>
+0008 <span class="comment">%   bcol - Cx1 background colour vector.</span>
+0009 <span class="comment">%   padding - scalar indicating how much padding to have in relation to</span>
+0010 <span class="comment">%             the cropped-image-size (0&lt;=padding&lt;=1). Default: 0</span>
+0011 <span class="comment">%   crop_amounts - 4-element vector of crop amounts: [top,right,bottom,left]</span>
+0012 <span class="comment">%             where NaN/Inf indicate auto-cropping, 0 means no cropping,</span>
+0013 <span class="comment">%             and any other value mean cropping in pixel amounts.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%OUT:</span>
+0016 <span class="comment">%   B - JxKxCxN cropped stack of images.</span>
+0017 <span class="comment">%   vA     - coordinates in A that contain the cropped image</span>
+0018 <span class="comment">%   vB     - coordinates in B where the cropped version of A is placed</span>
+0019 <span class="comment">%   bb_rel - relative bounding box (used for eps-cropping)</span>
+0020 
+0021 <span class="comment">%{</span>
+0022 <span class="comment">% 06/03/15: Improved image cropping thanks to Oscar Hartogensis</span>
+0023 <span class="comment">% 08/06/15: Fixed issue #76: case of transparent figure bgcolor</span>
+0024 <span class="comment">% 21/02/16: Enabled specifying non-automated crop amounts</span>
+0025 <span class="comment">% 04/04/16: Fix per Luiz Carvalho for old Matlab releases</span>
+0026 <span class="comment">% 23/10/16: Fixed issue #175: there used to be a 1px minimal padding in case of crop, now removed</span>
+0027 <span class="comment">%}</span>
+0028 
+0029     <span class="keyword">if</span> nargin &lt; 3
+0030         padding = 0;
+0031     <span class="keyword">end</span>
+0032     <span class="keyword">if</span> nargin &lt; 4
+0033         crop_amounts = nan(1,4);  <span class="comment">% =auto-cropping</span>
+0034     <span class="keyword">end</span>
+0035     crop_amounts(end+1:4) = NaN;  <span class="comment">% fill missing values with NaN</span>
+0036 
+0037     [h, w, c, n] = size(A);
+0038     <span class="keyword">if</span> isempty(bcol)  <span class="comment">% case of transparent bgcolor</span>
+0039         bcol = A(ceil(end/2),1,:,1);
+0040     <span class="keyword">end</span>
+0041     <span class="keyword">if</span> isscalar(bcol)
+0042         bcol = bcol(ones(c, 1));
+0043     <span class="keyword">end</span>
+0044 
+0045     <span class="comment">% Crop margin from left</span>
+0046     <span class="keyword">if</span> ~isfinite(crop_amounts(4))
+0047         bail = false;
+0048         <span class="keyword">for</span> l = 1:w
+0049             <span class="keyword">for</span> a = 1:c
+0050                 <span class="keyword">if</span> ~all(<a href="#_sub1" class="code" title="subfunction A = col(A)">col</a>(A(:,l,a,:)) == bcol(a))
+0051                     bail = true;
+0052                     <span class="keyword">break</span>;
+0053                 <span class="keyword">end</span>
+0054             <span class="keyword">end</span>
+0055             <span class="keyword">if</span> bail
+0056                 <span class="keyword">break</span>;
+0057             <span class="keyword">end</span>
+0058         <span class="keyword">end</span>
+0059     <span class="keyword">else</span>
+0060         l = 1 + abs(crop_amounts(4));
+0061     <span class="keyword">end</span>
+0062 
+0063     <span class="comment">% Crop margin from right</span>
+0064     <span class="keyword">if</span> ~isfinite(crop_amounts(2))
+0065         bcol = A(ceil(end/2),w,:,1);
+0066         bail = false;
+0067         <span class="keyword">for</span> r = w:-1:l
+0068             <span class="keyword">for</span> a = 1:c
+0069                 <span class="keyword">if</span> ~all(<a href="#_sub1" class="code" title="subfunction A = col(A)">col</a>(A(:,r,a,:)) == bcol(a))
+0070                     bail = true;
+0071                     <span class="keyword">break</span>;
+0072                 <span class="keyword">end</span>
+0073             <span class="keyword">end</span>
+0074             <span class="keyword">if</span> bail
+0075                 <span class="keyword">break</span>;
+0076             <span class="keyword">end</span>
+0077         <span class="keyword">end</span>
+0078     <span class="keyword">else</span>
+0079         r = w - abs(crop_amounts(2));
+0080     <span class="keyword">end</span>
+0081 
+0082     <span class="comment">% Crop margin from top</span>
+0083     <span class="keyword">if</span> ~isfinite(crop_amounts(1))
+0084         bcol = A(1,ceil(end/2),:,1);
+0085         bail = false;
+0086         <span class="keyword">for</span> t = 1:h
+0087             <span class="keyword">for</span> a = 1:c
+0088                 <span class="keyword">if</span> ~all(<a href="#_sub1" class="code" title="subfunction A = col(A)">col</a>(A(t,:,a,:)) == bcol(a))
+0089                     bail = true;
+0090                     <span class="keyword">break</span>;
+0091                 <span class="keyword">end</span>
+0092             <span class="keyword">end</span>
+0093             <span class="keyword">if</span> bail
+0094                 <span class="keyword">break</span>;
+0095             <span class="keyword">end</span>
+0096         <span class="keyword">end</span>
+0097     <span class="keyword">else</span>
+0098         t = 1 + abs(crop_amounts(1));
+0099     <span class="keyword">end</span>
+0100 
+0101     <span class="comment">% Crop margin from bottom</span>
+0102     bcol = A(h,ceil(end/2),:,1);
+0103     <span class="keyword">if</span> ~isfinite(crop_amounts(3))
+0104         bail = false;
+0105         <span class="keyword">for</span> b = h:-1:t
+0106             <span class="keyword">for</span> a = 1:c
+0107                 <span class="keyword">if</span> ~all(<a href="#_sub1" class="code" title="subfunction A = col(A)">col</a>(A(b,:,a,:)) == bcol(a))
+0108                     bail = true;
+0109                     <span class="keyword">break</span>;
+0110                 <span class="keyword">end</span>
+0111             <span class="keyword">end</span>
+0112             <span class="keyword">if</span> bail
+0113                 <span class="keyword">break</span>;
+0114             <span class="keyword">end</span>
+0115         <span class="keyword">end</span>
+0116     <span class="keyword">else</span>
+0117         b = h - abs(crop_amounts(3));
+0118     <span class="keyword">end</span>
+0119 
+0120     <span class="keyword">if</span> padding == 0  <span class="comment">% no padding</span>
+0121         <span class="comment">% Issue #175: there used to be a 1px minimal padding in case of crop, now removed</span>
+0122         <span class="comment">%{</span>
+0123         <span class="keyword">if</span> ~isequal([t b l r], [1 h 1 w]) <span class="comment">% Check if we're actually croppping</span>
+0124             padding = 1; <span class="comment">% Leave one boundary pixel to avoid bleeding on resize</span>
+0125             bcol(:) = nan;  <span class="comment">% make the 1px padding transparent</span>
+0126         <span class="keyword">end</span>
+0127         <span class="comment">%}</span>
+0128     <span class="keyword">elseif</span> abs(padding) &lt; 1  <span class="comment">% pad value is a relative fraction of image size</span>
+0129         padding = sign(padding)*round(mean([b-t r-l])*abs(padding)); <span class="comment">% ADJUST PADDING</span>
+0130     <span class="keyword">else</span>  <span class="comment">% pad value is in units of 1/72&quot; points</span>
+0131         padding = round(padding);  <span class="comment">% fix cases of non-integer pad value</span>
+0132     <span class="keyword">end</span>
+0133 
+0134     <span class="keyword">if</span> padding &gt; 0  <span class="comment">% extra padding</span>
+0135         <span class="comment">% Create an empty image, containing the background color, that has the</span>
+0136         <span class="comment">% cropped image size plus the padded border</span>
+0137         B = repmat(bcol,[(b-t)+1+padding*2,(r-l)+1+padding*2,1,n]);  <span class="comment">% Fix per Luiz Carvalho</span>
+0138         <span class="comment">% vA - coordinates in A that contain the cropped image</span>
+0139         vA = [t b l r];
+0140         <span class="comment">% vB - coordinates in B where the cropped version of A will be placed</span>
+0141         vB = [padding+1, (b-t)+1+padding, padding+1, (r-l)+1+padding];
+0142         <span class="comment">% Place the original image in the empty image</span>
+0143         B(vB(1):vB(2), vB(3):vB(4), :, :) = A(vA(1):vA(2), vA(3):vA(4), :, :);
+0144         A = B;
+0145     <span class="keyword">else</span>  <span class="comment">% extra cropping</span>
+0146         vA = [t-padding b+padding l-padding r+padding];
+0147         A = A(vA(1):vA(2), vA(3):vA(4), :, :);
+0148         vB = [NaN NaN NaN NaN];
+0149     <span class="keyword">end</span>
+0150 
+0151     <span class="comment">% For EPS cropping, determine the relative BoundingBox - bb_rel</span>
+0152     bb_rel = [l-1 h-b-1 r+1 h-t+1]./[w h w h];
+0153 <span class="keyword">end</span>
+0154 
+0155 <a name="_sub1" href="#_subfunctions" class="code">function A = col(A)</a>
+0156     A = A(:);
+0157 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

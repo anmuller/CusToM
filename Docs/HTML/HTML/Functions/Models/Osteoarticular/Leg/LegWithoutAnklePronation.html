@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of LegWithoutAnklePronation</title>
+  <meta name="keywords" content="LegWithoutAnklePronation">
+  <meta name="description" content="Addition of a leg model">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html Functions --><!-- ../../menu.html Models --><!-- ../menu.html Osteoarticular --><!-- menu.html Leg -->
+<h1>LegWithoutAnklePronation
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>Addition of a leg model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [OsteoArticularModel]= LegWithoutAnklePronation(OsteoArticularModel,k,Signe,Mass,AttachmentPoint) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Addition of a leg model
+   This leg model contains 3 solids (thigh, shank and foot),
+   exhibits 3 dof for the hip, 1 dof for the knee and 1 dof for the
+   ankle
+
+    Based on:
+    - Damsgaard, M., Rasmussen, J., Christensen, S. T., Surma, E., &amp; De Zee, M., 2006.
+     Analysis of musculoskeletal systems in the AnyBody Modeling System. Simulation Modelling Practice and Theory, 14(8), 1100-1111.
+
+   INPUT
+   - OsteoArticularModel: osteo-articular model of an already existing
+   model (see the Documentation for the structure)
+   - k: homothety coefficient for the geometrical parameters (defined as
+   the subject size in cm divided by 180)
+   - Signe: side of the leg model ('R' for right side or 'L' for left side)
+   - Mass: mass of the solids
+   - AttachmentPoint: name of the attachment point of the model on the
+   already existing model (character string)
+   OUTPUT
+   - OsteoArticularModel: new osteo-articular model (see the Documentation
+   for the structure)
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Functions/Models/Osteoarticular/Leg/ModelParts/FootWithoutPronation.html" class="code" title="function [OsteoArticularModel]= FootWithoutPronation(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)">FootWithoutPronation</a>	Addition of a foot model</li><li><a href="../../../../Functions/Models/Osteoarticular/Leg/ModelParts/Shank.html" class="code" title="function [OsteoArticularModel]= Shank(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)">Shank</a>	Addition of a shank model</li><li><a href="../../../../Functions/Models/Osteoarticular/Leg/ModelParts/Thigh.html" class="code" title="function [OsteoArticularModel]= Thigh(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)">Thigh</a>	Addition of a thigh model</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [OsteoArticularModel]= LegWithoutAnklePronation(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)</a>
+0002 <span class="comment">% Addition of a leg model</span>
+0003 <span class="comment">%   This leg model contains 3 solids (thigh, shank and foot),</span>
+0004 <span class="comment">%   exhibits 3 dof for the hip, 1 dof for the knee and 1 dof for the</span>
+0005 <span class="comment">%   ankle</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%    Based on:</span>
+0008 <span class="comment">%    - Damsgaard, M., Rasmussen, J., Christensen, S. T., Surma, E., &amp; De Zee, M., 2006.</span>
+0009 <span class="comment">%     Analysis of musculoskeletal systems in the AnyBody Modeling System. Simulation Modelling Practice and Theory, 14(8), 1100-1111.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%   INPUT</span>
+0012 <span class="comment">%   - OsteoArticularModel: osteo-articular model of an already existing</span>
+0013 <span class="comment">%   model (see the Documentation for the structure)</span>
+0014 <span class="comment">%   - k: homothety coefficient for the geometrical parameters (defined as</span>
+0015 <span class="comment">%   the subject size in cm divided by 180)</span>
+0016 <span class="comment">%   - Signe: side of the leg model ('R' for right side or 'L' for left side)</span>
+0017 <span class="comment">%   - Mass: mass of the solids</span>
+0018 <span class="comment">%   - AttachmentPoint: name of the attachment point of the model on the</span>
+0019 <span class="comment">%   already existing model (character string)</span>
+0020 <span class="comment">%   OUTPUT</span>
+0021 <span class="comment">%   - OsteoArticularModel: new osteo-articular model (see the Documentation</span>
+0022 <span class="comment">%   for the structure)</span>
+0023 <span class="comment">%________________________________________________________</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">% Licence</span>
+0026 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0027 <span class="comment">%________________________________________________________</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0030 <span class="comment">% Georges Dumont</span>
+0031 <span class="comment">%________________________________________________________</span>
+0032 [OsteoArticularModel]= <a href="../../../../Functions/Models/Osteoarticular/Leg/ModelParts/Thigh.html" class="code" title="function [OsteoArticularModel]= Thigh(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)">Thigh</a>(OsteoArticularModel,k,Signe,Mass,AttachmentPoint);
+0033 [OsteoArticularModel]= <a href="../../../../Functions/Models/Osteoarticular/Leg/ModelParts/Shank.html" class="code" title="function [OsteoArticularModel]= Shank(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)">Shank</a>(OsteoArticularModel,k,Signe,Mass,[Signe <span class="string">'Thigh_KneeJointNode'</span>]);
+0034 [OsteoArticularModel]= <a href="../../../../Functions/Models/Osteoarticular/Leg/ModelParts/FootWithoutPronation.html" class="code" title="function [OsteoArticularModel]= FootWithoutPronation(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)">FootWithoutPronation</a>(OsteoArticularModel,k,Signe,Mass,[Signe <span class="string">'Shank_AnkleJointNode'</span>]);
+0035 
+0036 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

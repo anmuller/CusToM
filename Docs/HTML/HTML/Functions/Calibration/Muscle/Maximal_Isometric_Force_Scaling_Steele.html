@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Maximal_Isometric_Force_Scaling_Steele</title>
+  <meta name="keywords" content="Maximal_Isometric_Force_Scaling_Steele">
+  <meta name="description" content="MAXIMAL_ISOMETRIC_FORCE_SCALING_ Summary of this function goes here">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- ../menu.html Calibration --><!-- menu.html Muscle -->
+<h1>Maximal_Isometric_Force_Scaling_Steele
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>MAXIMAL_ISOMETRIC_FORCE_SCALING_ Summary of this function goes here</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [F_scaled] = Maximal_Isometric_Force_Scaling_Steele(Muscles,ModelParameters,H_ref) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">MAXIMAL_ISOMETRIC_FORCE_SCALING_ Summary of this function goes here
+   Detailed explanation goes here</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="MuscleCalibrationAnthropo.html" class="code" title="function [BiomechanicalModelscaled]=MuscleCalibrationAnthropo(ModelParameters,AnalysisParameters,BiomechanicalModel)">MuscleCalibrationAnthropo</a>	% Model of reference</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [F_scaled] = Maximal_Isometric_Force_Scaling_Steele</a><span class="keyword">...</span>
+0002     (Muscles,ModelParameters,H_ref)
+0003 <span class="comment">%MAXIMAL_ISOMETRIC_FORCE_SCALING_ Summary of this function goes here</span>
+0004 <span class="comment">%   Detailed explanation goes here</span>
+0005 
+0006 <span class="comment">% REF</span>
+0007 <span class="comment">%   - Steele, K.M., van der Krogt, M.M., Schwartz, M.H., Delp, S.L., 2012.</span>
+0008 <span class="comment">%       How much muscle strength is required to walk in a crouch gait?</span>
+0009 <span class="comment">%       Journal of Biomechanics 45, 2564�2569.</span>
+0010 
+0011 F0 = [Muscles.f0]';
+0012 
+0013 H_subject = ModelParameters.Size;
+0014 
+0015 <span class="keyword">if</span> nargin&lt;3
+0016     H_ref = 1.80;
+0017 <span class="keyword">end</span>
+0018 
+0019 k = (H_subject/H_ref)^2;
+0020 
+0021 F_scaled = k*F0 ;
+0022 
+0023 <span class="keyword">end</span>
+0024</pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of distance_point</title>
+  <meta name="keywords" content="distance_point">
+  <meta name="description" content="Computation of the distance between two points">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html AlgoMathsModel -->
+<h1>distance_point
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Computation of the distance between two points</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [L,Typ] = distance_point(Point1,Bone1,Point2,Bone2,Human_model,q) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Computation of the distance between two points
+
+   INPUT
+   - Point1: position of the anatomical position of the first studied
+   point on its solid
+   - Bone1: number of the solid containing the first studied point
+   - Point2: position of the anatomical position of the second studied
+   point on its solid
+   - Bone2: number of the solid containing the second studied point
+   - Human_model: osteo-articular model (see the Documentation for the structure)
+   - q: vector of joint coordinates at a given instant
+   OUTPUT
+   - L: distance between the two studied points
+   - Typ: relative orientation of the two points (-1 ou 1)
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>	Computation of the Rodrigues equation</li><li><a href="find_solid_path.html" class="code" title="function [solid_1_path,solid_2_path]=find_solid_path(Human_model,i,k)">find_solid_path</a>	Identification of the hierarchical path between two solids</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Functions/Calibration/Dynamics/FindInitDynParam.html" class="code" title="function [Human_model] = FindInitDynParam(Human_model)">FindInitDynParam</a>	Identification of the stadium solid parameters from inertial parameters</li><li><a href="../../Functions/Models/Osteoarticular/UpperTrunk/ModelParts/Thorax_Shoulder.html" class="code" title="function [Human_model]= Thorax_Shoulder(Human_model,k,Mass,AttachmentPoint)">Thorax_Shoulder</a>	Addition of a thorax model</li><li><a href="../../Functions/Models/Osteoarticular/UpperTrunk/UpperTrunk.html" class="code" title="function [OsteoArticularModel]= UpperTrunk(OsteoArticularModel,k,Mass,AttachmentPoint)">UpperTrunk</a>	Addition of an upper trunk model</li><li><a href="../../Functions/Models/Osteoarticular/UpperTrunk/UpperTrunkClavicle.html" class="code" title="function [OsteoArticularModel]= UpperTrunkClavicle(OsteoArticularModel,k,Mass,AttachmentPoint)">UpperTrunkClavicle</a>	Addition of an upper trunk model</li><li><a href="../../Functions/Models/Osteoarticular/UpperTrunk/UpperTrunkHead.html" class="code" title="function [OsteoArticularModel]=UpperTrunkHead(OsteoArticularModel,k,Mass,AttachmentPoint)">UpperTrunkHead</a>	Addition of an upper trunk / head model</li><li><a href="../../Functions/MuscleForces/Muscle_length.html" class="code" title="function [Lmt] = Muscle_length(Human_model,Muscles,q)">Muscle_length</a>	Computation of the muscle/tendon length</li><li><a href="../../Functions/MuscleForces/Muscle_lengthNum.html" class="code" title="function [Lmt,Wrapside] = Muscle_lengthNum(Human_model,Muscles,q)">Muscle_lengthNum</a>	Computation of the muscle/tendon length</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [L,Typ] = distance_point(Point1,Bone1,Point2,Bone2,Human_model,q)</a>
+0002 <span class="comment">% Computation of the distance between two points</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - Point1: position of the anatomical position of the first studied</span>
+0006 <span class="comment">%   point on its solid</span>
+0007 <span class="comment">%   - Bone1: number of the solid containing the first studied point</span>
+0008 <span class="comment">%   - Point2: position of the anatomical position of the second studied</span>
+0009 <span class="comment">%   point on its solid</span>
+0010 <span class="comment">%   - Bone2: number of the solid containing the second studied point</span>
+0011 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the structure)</span>
+0012 <span class="comment">%   - q: vector of joint coordinates at a given instant</span>
+0013 <span class="comment">%   OUTPUT</span>
+0014 <span class="comment">%   - L: distance between the two studied points</span>
+0015 <span class="comment">%   - Typ: relative orientation of the two points (-1 ou 1)</span>
+0016 <span class="comment">%________________________________________________________</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% Licence</span>
+0019 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0020 <span class="comment">%________________________________________________________</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0023 <span class="comment">% Georges Dumont</span>
+0024 <span class="comment">%________________________________________________________</span>
+0025 
+0026 <span class="keyword">if</span> Bone1 == Bone2
+0027     A=Human_model(Bone1).anat_position{Point1,2};
+0028     B=Human_model(Bone2).anat_position{Point2,2};
+0029     L = norm(B-A);
+0030     Typ = sign(B(2)-A(2));
+0031     <span class="keyword">return</span>
+0032 <span class="keyword">end</span>
+0033 
+0034 <span class="comment">% finding the index of common antecedent (ppac:plus proche antecedent commun)</span>
+0035 
+0036 <span class="keyword">if</span> Bone1&gt;Bone2
+0037 [solid1,solid2] = <a href="find_solid_path.html" class="code" title="function [solid_1_path,solid_2_path]=find_solid_path(Human_model,i,k)">find_solid_path</a>(Human_model,Bone1,Bone2);
+0038 <span class="keyword">else</span>
+0039     [solid2,solid1] = <a href="find_solid_path.html" class="code" title="function [solid_1_path,solid_2_path]=find_solid_path(Human_model,i,k)">find_solid_path</a>(Human_model,Bone2,Bone1);
+0040 <span class="keyword">end</span>
+0041 ppac=solid1(1);
+0042 
+0043 
+0044 <span class="comment">% Direct kinematics initialization (Initialisation de la cin�matique directe)</span>
+0045 Human_model(ppac).p = zeros(3,1);
+0046 Human_model(ppac).R = eye(3);
+0047 
+0048 <span class="comment">% Computation of coordinates of point A (calcul des coordonn�es du point A)</span>
+0049 <span class="keyword">if</span> numel(solid1)==1
+0050     A = Human_model(Bone1).c+Human_model(Bone1).anat_position{Point1,2};
+0051 <span class="keyword">else</span>
+0052     <span class="keyword">for</span> n=solid1(2:end)
+0053         m = Human_model(n).mother;
+0054         <span class="keyword">if</span> Human_model(n).joint == 1
+0055             Human_model(n).p = Human_model(m).R * Human_model(n).b + Human_model(m).p;
+0056             Human_model(n).R = Human_model(m).R * <a href="Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(n).a,q(n)) * <a href="Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(n).u,Human_model(n).theta);
+0057         <span class="keyword">end</span>
+0058         <span class="keyword">if</span> Human_model(n).joint == 2
+0059             Human_model(n).p = Human_model(m).R * Human_model(n).b + Human_model(m).p+ q(n)*Human_model(n).a;
+0060             Human_model(n).R = Human_model(m).R * <a href="Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(n).a,q(n)) * <a href="Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(n).u,Human_model(n).theta);
+0061         <span class="keyword">end</span>
+0062     <span class="keyword">end</span>
+0063     l = solid1(end);
+0064     Human_model(l).c_global = Human_model(l).p + Human_model(l).R * Human_model(l).c;
+0065     A = Human_model(l).c_global + Human_model(l).R * Human_model(Bone1).anat_position{Point1,2};
+0066 <span class="keyword">end</span>
+0067 
+0068 <span class="comment">% Computation of coordinates of point B (calcul des coordonn�es du point B)</span>
+0069 <span class="keyword">if</span> numel(solid2)==1
+0070     B = Human_model(Bone2).c+Human_model(Bone2).anat_position{Point2,2};
+0071 <span class="keyword">else</span>
+0072     <span class="keyword">for</span> n=solid2(2:end)
+0073         m = Human_model(n).mother;        
+0074         <span class="keyword">if</span> Human_model(n).joint == 1
+0075             Human_model(n).p = Human_model(m).R * Human_model(n).b + Human_model(m).p;
+0076             Human_model(n).R = Human_model(m).R * <a href="Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(n).a,q(n)) * <a href="Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(n).u,Human_model(n).theta);
+0077         <span class="keyword">end</span>
+0078         <span class="keyword">if</span> Human_model(n).joint == 2
+0079             Human_model(n).p = Human_model(m).R * Human_model(n).b + Human_model(m).p+ q(n)*Human_model(n).a;
+0080             Human_model(n).R = Human_model(m).R * <a href="Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(n).a,q(n)) * <a href="Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(n).u,Human_model(n).theta);
+0081         <span class="keyword">end</span>
+0082     <span class="keyword">end</span>
+0083     l = solid2(end);
+0084     Human_model(l).c_global = Human_model(l).p + Human_model(l).R * Human_model(l).c;
+0085     B = Human_model(l).c_global + Human_model(l).R * Human_model(Bone2).anat_position{Point2,2};
+0086 <span class="keyword">end</span>
+0087 
+0088 <span class="comment">%Distance between A and B</span>
+0089 L = norm(B-A);
+0090 Typ = sign(B(2)-A(2));
+0091 
+0092 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

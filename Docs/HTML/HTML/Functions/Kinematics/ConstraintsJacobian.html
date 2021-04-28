@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ConstraintsJacobian</title>
+  <meta name="keywords" content="ConstraintsJacobian">
+  <meta name="description" content="Return the constraint matrix K, which is the jacobian of the constraints">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html Kinematics -->
+<h1>ConstraintsJacobian
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Return the constraint matrix K, which is the jacobian of the constraints</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function K=ConstraintsJacobian(Human_model,q,solid_path1,solid_path2,num_solid,num_markers,k,dq,dependancies) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Return the constraint matrix K, which is the jacobian of the constraints
+ by q</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="NonLinCon_ClosedLoop_Num.html" class="code" title="function [c,ceq]=NonLinCon_ClosedLoop_Num(Human_model,solid_path1,solid_path2,num_solid,num_markers,q,k)">NonLinCon_ClosedLoop_Num</a>	Non-linear equation used in the inverse kinematics step for closed loops</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Functions/MuscleForces/Optimization/ForcesComputationOptiNum.html" class="code" title="function [MuscleForcesComputationResults] = ForcesComputationOptiNum(filename, BiomechanicalModel, AnalysisParameters)">ForcesComputationOptiNum</a>	Computation of the muscle forces estimation step by using an optimization method</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function K=ConstraintsJacobian(Human_model,q,solid_path1,solid_path2,num_solid,num_markers,k,dq,dependancies)</a>
+0002 <span class="comment">% Return the constraint matrix K, which is the jacobian of the constraints</span>
+0003 <span class="comment">% by q</span>
+0004 
+0005 <span class="comment">%   INPUT</span>
+0006 <span class="comment">%  - Human_model: osteo-articular model (see the Documentation for the</span>
+0007 <span class="comment">%   structure)</span>
+0008 <span class="comment">%   - q: vector of joint coordinates at a given instant</span>
+0009 <span class="comment">%   - solid_path1 : vector of one of the two paths to close the loop</span>
+0010 <span class="comment">%   - solid_path2 : vector of the other of the two paths to close the loop</span>
+0011 <span class="comment">%   - num_solid : vector of the number of solid where the anatomical point must join the</span>
+0012 <span class="comment">%   origin of another joint to close the loo</span>
+0013 <span class="comment">%   - num_markers : vector of the position in the list &quot;anat_position&quot; that</span>
+0014 <span class="comment">%   corresponds to the point to close the loop</span>
+0015 <span class="comment">%   - k: vector of homothety coefficient</span>
+0016 <span class="comment">%   - dp: differentiation step</span>
+0017 <span class="comment">%   - dependancies: structure where are defined all kinematic dependancies</span>
+0018 
+0019 <span class="comment">%   OUTPUT</span>
+0020 <span class="comment">%   - K : matrix of the derivatives of the constraints by q</span>
+0021 <span class="comment">%________________________________________________________</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% Licence</span>
+0024 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0025 <span class="comment">%________________________________________________________</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0028 <span class="comment">% Georges Dumont</span>
+0029 <span class="comment">%________________________________________________________</span>
+0030 
+0031 <span class="keyword">for</span> qchoix=1:length(q)
+0032     qp=q;
+0033     qm=q;
+0034     qp(qchoix)=qp(qchoix)+dq;
+0035     qm(qchoix)=qm(qchoix)-dq;
+0036     [~,dhp]=<a href="NonLinCon_ClosedLoop_Num.html" class="code" title="function [c,ceq]=NonLinCon_ClosedLoop_Num(Human_model,solid_path1,solid_path2,num_solid,num_markers,q,k)">NonLinCon_ClosedLoop_Num</a>(Human_model.OsteoArticularModel,solid_path1,solid_path2,num_solid,num_markers,qp,k);
+0037     [~,dhm]=<a href="NonLinCon_ClosedLoop_Num.html" class="code" title="function [c,ceq]=NonLinCon_ClosedLoop_Num(Human_model,solid_path1,solid_path2,num_solid,num_markers,q,k)">NonLinCon_ClosedLoop_Num</a>(Human_model.OsteoArticularModel,solid_path1,solid_path2,num_solid,num_markers,qm,k);
+0038     K(:,qchoix)=(dhp-dhm)/(2*dq);   
+0039 <span class="keyword">end</span>
+0040 
+0041 
+0042 <span class="keyword">if</span> ~isempty(dependancies)
+0043     <span class="keyword">for</span> pp=1:size(dependancies,2)
+0044         K(size(K,1)+1,dependancies(pp).solid) = -1;
+0045         <span class="keyword">for</span> j=1:size(dependancies(pp).Joint,1)
+0046             qchoix=dependancies(pp).Joint(j);
+0047             qp=q;
+0048             qm=q;
+0049             qp(qchoix)=qp(qchoix)+dq;
+0050             qm(qchoix)=qm(qchoix)-dq;
+0051             f=dependancies(pp).q;
+0052             <span class="keyword">if</span> size(dependancies(pp).Joint,1)==1
+0053                 dhp=f(qp(dependancies(pp).Joint(1)));
+0054                 dhm=f(qm(dependancies(pp).Joint(1)));
+0055                 
+0056             <span class="keyword">else</span>
+0057                 <span class="keyword">if</span> size(dependancies(pp).Joint,1)==2
+0058                     dhp=f(qp(dependancies(pp).Joint(1)),qp(dependancies(pp).Joint(2)));
+0059                     dhm=f(qm(dependancies(pp).Joint(1)),qm(dependancies(pp).Joint(2)));
+0060                 <span class="keyword">end</span>
+0061             <span class="keyword">end</span>
+0062                 K(size(K,1),qchoix)=(dhp-dhm)/(2*dq);
+0063             
+0064         <span class="keyword">end</span>
+0065     <span class="keyword">end</span>
+0066 <span class="keyword">end</span>
+0067 
+0068 
+0069 
+0070 
+0071 
+0072 
+0073 
+0074 
+0075 
+0076 
+0077 
+0078 
+0079 
+0080 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

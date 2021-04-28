@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of MuscleLengthComputationNum</title>
+  <meta name="keywords" content="MuscleLengthComputationNum">
+  <meta name="description" content="Computation of the moment arms matrix (numerical version)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html MuscleForces -->
+<h1>MuscleLengthComputationNum
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Computation of the moment arms matrix (numerical version)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [L] = MuscleLengthComputationNum(BiomechanicalModel,q) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Computation of the moment arms matrix (numerical version)
+
+   INPUT
+   - Biomechanical model: osteo-articular model (see the Documentation for the structure)
+   - q : current coordinates of the model
+   OUTPUT
+   - L: muscle lengths vector at the current frame
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="Muscle_lengthNum.html" class="code" title="function [Lmt,Wrapside] = Muscle_lengthNum(Human_model,Muscles,q)">Muscle_lengthNum</a>	Computation of the muscle/tendon length</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Functions/Calibration/Muscle/MuscleCalibrationAnthropo.html" class="code" title="function [BiomechanicalModelscaled]=MuscleCalibrationAnthropo(ModelParameters,AnalysisParameters,BiomechanicalModel)">MuscleCalibrationAnthropo</a>	% Model of reference</li><li><a href="../../Functions/MuscleForces/Optimization/ForcesComputationOptiNum.html" class="code" title="function [MuscleForcesComputationResults] = ForcesComputationOptiNum(filename, BiomechanicalModel, AnalysisParameters)">ForcesComputationOptiNum</a>	Computation of the muscle forces estimation step by using an optimization method</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [L] = MuscleLengthComputationNum(BiomechanicalModel,q)</a>
+0002 <span class="comment">% Computation of the moment arms matrix (numerical version)</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - Biomechanical model: osteo-articular model (see the Documentation for the structure)</span>
+0006 <span class="comment">%   - q : current coordinates of the model</span>
+0007 <span class="comment">%   OUTPUT</span>
+0008 <span class="comment">%   - L: muscle lengths vector at the current frame</span>
+0009 <span class="comment">%________________________________________________________</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% Licence</span>
+0012 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0013 <span class="comment">%________________________________________________________</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0016 <span class="comment">% Georges Dumont</span>
+0017 <span class="comment">%________________________________________________________</span>
+0018 Human_model=BiomechanicalModel.OsteoArticularModel;
+0019 Muscles=BiomechanicalModel.Muscles;
+0020 Muscles_list = [Muscles.exist];
+0021 nmr=sum(Muscles_list);
+0022 <span class="comment">%% Compute muscle lengths at current frame</span>
+0023 <span class="comment">% The current muscle lengths are important for the muscle force computation</span>
+0024 L = ones(nmr,1);
+0025 <span class="keyword">for</span> j=1:nmr <span class="comment">% for each muscle</span>
+0026     <span class="keyword">if</span> Muscles_list(j)
+0027         <span class="comment">% compute the length of the muscle</span>
+0028         L(j) = <a href="Muscle_lengthNum.html" class="code" title="function [Lmt,Wrapside] = Muscle_lengthNum(Human_model,Muscles,q)">Muscle_lengthNum</a>(Human_model,Muscles(j),q);
+0029     <span class="keyword">end</span>
+0030 <span class="keyword">end</span>
+0031 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

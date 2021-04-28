@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of CompteNaN</title>
+  <meta name="keywords" content="CompteNaN">
+  <meta name="description" content="Identification of NaN to do not take into account them for the geometrical calibration">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html Pretraitement -->
+<h1>CompteNaN
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Identification of NaN to do not take into account them for the geometrical calibration</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [real_markers]=CompteNaN(real_markers,champ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Identification of NaN to do not take into account them for the geometrical calibration
+   
+   INPUT
+   - real_markers: 3D position of experimental markers
+   - champ: real_markers field where we have to identify the NaN 
+   OUTPUT
+   - real_markers: 3D position of experimental markers with identifying NaN
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="Supress_NaN_frames.html" class="code" title="function [real_markers, nb_frames]=Supress_NaN_frames(real_markers)">Supress_NaN_frames</a>	Eliminination of frames with NaN</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [real_markers]=CompteNaN(real_markers,champ)</a>
+0002 <span class="comment">% Identification of NaN to do not take into account them for the geometrical calibration</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - real_markers: 3D position of experimental markers</span>
+0006 <span class="comment">%   - champ: real_markers field where we have to identify the NaN</span>
+0007 <span class="comment">%   OUTPUT</span>
+0008 <span class="comment">%   - real_markers: 3D position of experimental markers with identifying NaN</span>
+0009  <span class="comment">%________________________________________________________</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% Licence</span>
+0012 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0013 <span class="comment">%________________________________________________________</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0016 <span class="comment">% Georges Dumont</span>
+0017 <span class="comment">%________________________________________________________</span>
+0018 newfield = [champ <span class="string">'_NaN'</span>];
+0019  <span class="keyword">for</span> i=1:numel(real_markers)
+0020      real_markers(i).(newfield) = isnan(real_markers(i).(champ));
+0021      real_markers(i).([newfield <span class="string">'_detail'</span>]) = find(real_markers(i).(newfield)(:,1)==1);
+0022  <span class="keyword">end</span>
+0023  
+0024 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

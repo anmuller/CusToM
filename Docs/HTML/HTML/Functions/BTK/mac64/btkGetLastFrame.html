@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of btkGetLastFrame</title>
+  <meta name="keywords" content="btkGetLastFrame">
+  <meta name="description" content="BTKGETLASTFRAME Returns acquisition's last frame index.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- # BTK --><!-- menu.html mac64 -->
+<h1>btkGetLastFrame
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>BTKGETLASTFRAME Returns acquisition's last frame index.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function lf = btkGetLastFrame(h) %#ok </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">BTKGETLASTFRAME Returns acquisition's last frame index.
+ 
+  LF = BTKGETLASTFRAME(H) returns the last frame index of the acquisition.
+  The acquistion is represented by the handle H, obtained by the use of a 
+  btk* function.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Functions/BTK/linux64/@Common/btkGetFirstFrame.html" class="code" title="function ff = btkGetFirstFrame(h) %#ok">btkGetFirstFrame</a>	BTKGETFIRSTFRAME Returns acquisition's first frame index.</li><li><a href="../../../Functions/BTK/linux64/@Common/btkGetPointFrameNumber.html" class="code" title="function pfn = btkGetPointFrameNumber(h) %#ok">btkGetPointFrameNumber</a>	BTKGETPOINTFRAMENUMBER Returns the number of frames for the points.</li><li><a href="../../../Functions/BTK/mac64/@Common/btkGetFirstFrame.html" class="code" title="function ff = btkGetFirstFrame(h) %#ok">btkGetFirstFrame</a>	BTKGETFIRSTFRAME Returns acquisition's first frame index.</li><li><a href="../../../Functions/BTK/mac64/@Common/btkGetPointFrameNumber.html" class="code" title="function pfn = btkGetPointFrameNumber(h) %#ok">btkGetPointFrameNumber</a>	BTKGETPOINTFRAMENUMBER Returns the number of frames for the points.</li><li><a href="../../../Functions/BTK/win64/@Common/btkGetFirstFrame.html" class="code" title="function ff = btkGetFirstFrame(h) %#ok">btkGetFirstFrame</a>	BTKGETFIRSTFRAME Returns acquisition's first frame index.</li><li><a href="../../../Functions/BTK/win64/@Common/btkGetPointFrameNumber.html" class="code" title="function pfn = btkGetPointFrameNumber(h) %#ok">btkGetPointFrameNumber</a>	BTKGETPOINTFRAMENUMBER Returns the number of frames for the points.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Functions/BTK/linux64/btkCropAcquisition.html" class="code" title="function btkCropAcquisition(h, startAt, numFrames)">btkCropAcquisition</a>	BTKCROPACQUISITION Crop the acquisition and adapt the events' frame/time.</li><li><a href="../../../Functions/BTK/linux64/btkEmulateC3Dserver.html" class="code" title="function itf = btkEmulateC3Dserver()">btkEmulateC3Dserver</a>	BTKEMULATEC3DSERVER Creates an emulated COM object for C3Dserver.</li><li><a href="btkCropAcquisition.html" class="code" title="function btkCropAcquisition(h, startAt, numFrames)">btkCropAcquisition</a>	BTKCROPACQUISITION Crop the acquisition and adapt the events' frame/time.</li><li><a href="btkEmulateC3Dserver.html" class="code" title="function itf = btkEmulateC3Dserver()">btkEmulateC3Dserver</a>	BTKEMULATEC3DSERVER Creates an emulated COM object for C3Dserver.</li><li><a href="../../../Functions/BTK/win64/btkCropAcquisition.html" class="code" title="function btkCropAcquisition(h, startAt, numFrames)">btkCropAcquisition</a>	BTKCROPACQUISITION Crop the acquisition and adapt the events' frame/time.</li><li><a href="../../../Functions/BTK/win64/btkEmulateC3Dserver.html" class="code" title="function itf = btkEmulateC3Dserver()">btkEmulateC3Dserver</a>	BTKEMULATEC3DSERVER Creates an emulated COM object for C3Dserver.</li><li><a href="../../../Functions/DataImport/InputDataImport/C3dProcessedData.html" class="code" title="function [real_markers, nb_frame, Firstframe, Lastframe, f, list_missing_markers_in_c3d]=C3dProcessedData(filename, list_markers, varargin)">C3dProcessedData</a>	Extraction of experimental data in a processed c3d</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function lf = btkGetLastFrame(h) </a><span class="comment">%#ok</span>
+0002 <span class="comment">%BTKGETLASTFRAME Returns acquisition's last frame index.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%  LF = BTKGETLASTFRAME(H) returns the last frame index of the acquisition.</span>
+0005 <span class="comment">%  The acquistion is represented by the handle H, obtained by the use of a</span>
+0006 <span class="comment">%  btk* function.</span>
+0007 
+0008 <span class="comment">%  Author: A. Barré</span>
+0009 <span class="comment">%  Copyright 2009-2013 Biomechanical ToolKit (BTK).</span>
+0010 
+0011 lf = <a href="../../../Functions/BTK/linux64/@Common/btkGetFirstFrame.html" class="code" title="function ff = btkGetFirstFrame(h) %#ok">btkGetFirstFrame</a>(h) + <a href="../../../Functions/BTK/linux64/@Common/btkGetPointFrameNumber.html" class="code" title="function pfn = btkGetPointFrameNumber(h) %#ok">btkGetPointFrameNumber</a>(h) - 1;
+0012 
+0013 <span class="comment">% [EOF] btkGetFirstFrame.m</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

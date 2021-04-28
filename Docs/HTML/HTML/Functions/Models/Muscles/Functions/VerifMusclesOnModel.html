@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of VerifMusclesOnModel</title>
+  <meta name="keywords" content="VerifMusclesOnModel">
+  <meta name="description" content="Verification that each muscle is correctly defined on the osteo-articular model">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html Functions --><!-- ../../menu.html Models --><!-- ../menu.html Muscles --><!-- menu.html Functions -->
+<h1>VerifMusclesOnModel
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>Verification that each muscle is correctly defined on the osteo-articular model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [Muscles]=VerifMusclesOnModel(Human_model,Muscles) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Verification that each muscle is correctly defined on the osteo-articular model
+   Each anatomical position used in the set of muscles has to be defined
+   on the osteo-articular model. If it is not the case, the corresponded
+   muscle will be not considered. 
+   
+   INPUT
+   - Human_model: osteo-articular model (see the Documentation for the structure)
+   - Muscles: set of muscles (see the Documentation for the structure)
+   OUTPUT
+   - Muscles: set of muscles with additional informations about the position
+   of the anatomatical positions on the osteo-articular model (see the
+   Documentation for the structure)
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Functions/Models/ModelGeneration.html" class="code" title="function [OsteoArticularModel, Markers, Muscles, EnableModel] = ModelGeneration(ModelParameters)">ModelGeneration</a>	Generation of the anthropometric model</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Muscles]=VerifMusclesOnModel(Human_model,Muscles)</a>
+0002 <span class="comment">% Verification that each muscle is correctly defined on the osteo-articular model</span>
+0003 <span class="comment">%   Each anatomical position used in the set of muscles has to be defined</span>
+0004 <span class="comment">%   on the osteo-articular model. If it is not the case, the corresponded</span>
+0005 <span class="comment">%   muscle will be not considered.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   INPUT</span>
+0008 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the structure)</span>
+0009 <span class="comment">%   - Muscles: set of muscles (see the Documentation for the structure)</span>
+0010 <span class="comment">%   OUTPUT</span>
+0011 <span class="comment">%   - Muscles: set of muscles with additional informations about the position</span>
+0012 <span class="comment">%   of the anatomatical positions on the osteo-articular model (see the</span>
+0013 <span class="comment">%   Documentation for the structure)</span>
+0014 <span class="comment">%________________________________________________________</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% Licence</span>
+0017 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0018 <span class="comment">%________________________________________________________</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0021 <span class="comment">% Georges Dumont</span>
+0022 <span class="comment">%________________________________________________________</span>
+0023 muscles_ex=cell(0);
+0024 <span class="keyword">for</span> i=1:numel(Muscles) <span class="comment">% for each muscle</span>
+0025     test=zeros(size(Muscles(i).path,1),1);
+0026     <span class="keyword">for</span> p=1:size(Muscles(i).path,1) <span class="comment">% for each points used by the muscle</span>
+0027         name=Muscles(i).path{p,1};
+0028         <span class="keyword">for</span> j=1:numel(Human_model)
+0029             <span class="keyword">for</span> k=1:size(Human_model(j).anat_position,1)
+0030                 <span class="keyword">if</span> strcmp(name,Human_model(j).anat_position(k,1))
+0031                     Muscles(i).num_solid(p,1)=j;
+0032                     Muscles(i).num_markers(p,1)=k;
+0033                     test(p,1)=1;
+0034                 <span class="keyword">end</span>
+0035             <span class="keyword">end</span>
+0036             <span class="keyword">if</span> min(test) == 1
+0037                 Muscles(i).exist=1;
+0038                 <span class="keyword">break</span>
+0039             <span class="keyword">end</span>
+0040         <span class="keyword">end</span>
+0041     <span class="keyword">end</span>
+0042     <span class="keyword">if</span> min(test) == 0
+0043         muscles_ex{end+1,1}=Muscles(i).name; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0044         Muscles(i).exist=0;
+0045     <span class="keyword">end</span> 
+0046 
+0047 <span class="keyword">end</span>
+0048 <span class="keyword">if</span> numel(muscles_ex) ~= 0
+0049     warning(<span class="string">'No existent muscles: '</span>)
+0050     disp(muscles_ex)
+0051 <span class="keyword">end</span>
+0052 
+0053 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

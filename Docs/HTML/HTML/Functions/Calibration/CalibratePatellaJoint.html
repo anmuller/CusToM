@@ -1,0 +1,221 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of CalibratePatellaJoint</title>
+  <meta name="keywords" content="CalibratePatellaJoint">
+  <meta name="description" content="Generation of the function between Knee Angle and Patella Angle with the">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html Calibration -->
+<h1>CalibratePatellaJoint
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Generation of the function between Knee Angle and Patella Angle with the</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [BiomechanicalModel]=CalibratePatellaJoint(BiomechanicalModel) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Generation of the function between Knee Angle and Patella Angle with the
+ femur based on newton algorithm: length of the patellar tendon as
+ to remain constant
+
+   INPUT
+   - BiomechanicalModel with its field OsteoarticularModel is need
+   OUTPUT
+   The musculoskeletal model is automatically actualized in the variable
+   'BiomechanicalModel'.
+   Author
+   Pierre Puchaud
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Functions/MuscleForces/ForwardKinematicsPoint.html" class="code" title="function [p] = ForwardKinematicsPoint(Human_model,num_solid_repere,num_solid,num_point,q)">ForwardKinematicsPoint</a>	Computation of the position of a point according to a reference solid</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="CalibrateModelGeneration.html" class="code" title="function [] = CalibrateModelGeneration(ModelParameters,AnalysisParameters)">CalibrateModelGeneration</a>	Generation of the calibrated musculoskeletal model</li><li><a href="CalibrateModelGenerationNum.html" class="code" title="function [] = CalibrateModelGenerationNum(ModelParameters,AnalysisParameters)">CalibrateModelGenerationNum</a>	Generation of the calibrated musculoskeletal model</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [BiomechanicalModel]=CalibratePatellaJoint(BiomechanicalModel)</a>
+0002 <span class="comment">% Generation of the function between Knee Angle and Patella Angle with the</span>
+0003 <span class="comment">% femur based on newton algorithm: length of the patellar tendon as</span>
+0004 <span class="comment">% to remain constant</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   INPUT</span>
+0007 <span class="comment">%   - BiomechanicalModel with its field OsteoarticularModel is need</span>
+0008 <span class="comment">%   OUTPUT</span>
+0009 <span class="comment">%   The musculoskeletal model is automatically actualized in the variable</span>
+0010 <span class="comment">%   'BiomechanicalModel'.</span>
+0011 <span class="comment">%   Author</span>
+0012 <span class="comment">%   Pierre Puchaud</span>
+0013 <span class="comment">%________________________________________________________</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Licence</span>
+0016 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0017 <span class="comment">%________________________________________________________</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0020 <span class="comment">% Georges Dumont</span>
+0021 <span class="comment">%________________________________________________________</span>
+0022 
+0023 
+0024 OsteoArticularModel=BiomechanicalModel.OsteoArticularModel;
+0025 solid_list={OsteoArticularModel.name}';
+0026 
+0027 side={<span class="string">'R'</span>,<span class="string">'L'</span>};
+0028 <span class="keyword">for</span> i_s=1:2
+0029     [~,ind1]=intersect(solid_list,[side{i_s} <span class="string">'Patella'</span>]);
+0030     <span class="keyword">if</span> ~isempty(ind1)
+0031          <span class="comment">% Add the kinematic _dependancy field.</span>
+0032         <span class="keyword">if</span> isfield(OsteoArticularModel,<span class="string">'kinematic_dependancy'</span>)
+0033             OsteoArticularModel(ind1).kinematic_dependancy.Active=1;
+0034         <span class="keyword">else</span>
+0035             <span class="keyword">for</span> ii=1:numel(OsteoArticularModel)
+0036                 OsteoArticularModel(ii).kinematic_dependancy = [];
+0037             <span class="keyword">end</span>
+0038             OsteoArticularModel(ind1).kinematic_dependancy.Active=1;
+0039         <span class="keyword">end</span>
+0040 
+0041         [~,ind11]=<span class="keyword">...</span>
+0042             intersect(OsteoArticularModel(ind1).anat_position(:,1),<span class="keyword">...</span>
+0043             [side{i_s} <span class="string">'PatellarLigament1'</span>]);
+0044         
+0045         [~,ind2]=intersect(solid_list,[side{i_s} <span class="string">'Shank'</span>]);
+0046         [~,ind22]=<span class="keyword">...</span>
+0047             intersect(OsteoArticularModel(ind2).anat_position(:,1),<span class="keyword">...</span>
+0048             [side{i_s} <span class="string">'PatellarLigament2'</span>]);
+0049         
+0050         [~,ind_Rthigh]=intersect(solid_list,[side{i_s} <span class="string">'Thigh'</span>]);
+0051         
+0052         <span class="comment">%Initialisation</span>
+0053         <span class="comment">% On calcule la longueur du ligament patellaire pour les valeurs d'angles</span>
+0054         <span class="comment">% nulles, configuration initiale</span>
+0055         q0=zeros(length(OsteoArticularModel),1);
+0056         [p1]=<a href="../../Functions/MuscleForces/ForwardKinematicsPoint.html" class="code" title="function [p] = ForwardKinematicsPoint(Human_model,num_solid_repere,num_solid,num_point,q)">ForwardKinematicsPoint</a>(OsteoArticularModel,ind_Rthigh,ind1,ind11,q0);
+0057         [p2]=<a href="../../Functions/MuscleForces/ForwardKinematicsPoint.html" class="code" title="function [p] = ForwardKinematicsPoint(Human_model,num_solid_repere,num_solid,num_point,q)">ForwardKinematicsPoint</a>(OsteoArticularModel,ind_Rthigh,ind2,ind22,q0);
+0058         <span class="comment">%Longeur du ligament</span>
+0059         L0 = norm(p1 - p2);
+0060         
+0061         <span class="comment">% On cr� les variables du probl�e</span>
+0062         <span class="comment">% les coordonn�s articulaires</span>
+0063         q_config =sym(<span class="string">'q'</span>,[numel(OsteoArticularModel) 1]);
+0064         <span class="comment">% theta_p symbolique</span>
+0065         theta_p=sym(<span class="string">'theta_p'</span>,<span class="string">'real'</span>);
+0066         q_config(ind1,:)=theta_p;
+0067         <span class="comment">% theta_g symbolique</span>
+0068         theta_g=sym(<span class="string">'theta_g'</span>,<span class="string">'real'</span>);
+0069         q_config(ind2,:)=theta_g;
+0070         <span class="comment">% tous les autres valeurs nulles</span>
+0071         X=intersect([1:ind1-1,ind1+1:numel(OsteoArticularModel)],[1:ind2-1,ind2+1:numel(OsteoArticularModel)]);
+0072         q_config(X)=0;
+0073         
+0074         <span class="comment">% Calcul de la position du ligament patellaire dans le rep�e femur</span>
+0075         <span class="comment">% depends de theta_p et theta_g</span>
+0076         [p1]=<a href="../../Functions/MuscleForces/ForwardKinematicsPoint.html" class="code" title="function [p] = ForwardKinematicsPoint(Human_model,num_solid_repere,num_solid,num_point,q)">ForwardKinematicsPoint</a>(OsteoArticularModel,ind_Rthigh,ind1,ind11,q_config);
+0077         [p2]=<a href="../../Functions/MuscleForces/ForwardKinematicsPoint.html" class="code" title="function [p] = ForwardKinematicsPoint(Human_model,num_solid_repere,num_solid,num_point,q)">ForwardKinematicsPoint</a>(OsteoArticularModel,ind_Rthigh,ind2,ind22,q_config);
+0078         fp2=matlabFunction(p2);
+0079         
+0080         <span class="comment">% theta_p pour theta_g [-pi,pi] [flexion,extension]</span>
+0081         theta_g=[-pi:pi/180:pi/4]';
+0082         <span class="comment">%nombre de boucle pour la m�hode de newton</span>
+0083         n_bcle=3; <span class="comment">% plus de variation apr� 4 chiffre apr� la virgule</span>
+0084         <span class="comment">% initialisation des theta_p estim�</span>
+0085         theta_p_est=zeros(length(theta_g),n_bcle);
+0086         theta_p_est(1,1)=theta_g(1);
+0087         
+0088         <span class="keyword">for</span> ii =1:length(theta_g)
+0089             <span class="comment">% Calcul de la position du ligament patellaire dans le rep�e femur</span>
+0090             <span class="comment">% depends de theta_g</span>
+0091             <span class="comment">% On le recalcule pour chaque nouvelle valeur la position du point 2.</span>
+0092             <span class="comment">% Longueur du ligament estim�.</span>
+0093             L = norm(p1 - fp2(theta_g(ii))); <span class="comment">%fonction de theta_p</span>
+0094             <span class="comment">% On souhaite cette longueur constante depend de la configuration</span>
+0095             <span class="comment">% initiale.</span>
+0096             <span class="comment">% fonction de theta_p</span>
+0097             e = L-L0; <span class="comment">% erreur</span>
+0098             de = diff(e,<span class="string">'theta_p'</span>); <span class="comment">%de/dtheta_p variation de l'erreur</span>
+0099             
+0100             <span class="comment">% On cr� les fonction qui dependent de theta_p pour les reestimer �            % chaque nouvelle estimation de theta_p</span>
+0101             fe=matlabFunction(e);
+0102             fde=matlabFunction(de);
+0103             
+0104             <span class="comment">% Algorihtme de Newton</span>
+0105             <span class="comment">% x(i+1)=x(i)-e(x(i))/de(x(i));</span>
+0106             <span class="keyword">for</span> jj=1:n_bcle
+0107                 theta_p_est(ii,jj+1)=theta_p_est(ii,jj)<span class="keyword">...</span>
+0108                     - double(fe(theta_p_est(ii,jj))) / double(fde(theta_p_est(ii,jj)));
+0109                 <span class="comment">%         plot(theta_g(ii), theta_p_est(ii,jj+1),'r*')</span>
+0110                 <span class="comment">%         hold on</span>
+0111             <span class="keyword">end</span>
+0112             <span class="comment">% la solution initiale de la valeur d'angle suivante est celle de la</span>
+0113             <span class="comment">% pr��ente.</span>
+0114             <span class="keyword">if</span> ii~=length(theta_g)
+0115                 theta_p_est(ii+1,1)=theta_p_est(ii,n_bcle);
+0116             <span class="keyword">end</span>
+0117         <span class="keyword">end</span>
+0118         
+0119         theta_p_fin=theta_p_est(:,n_bcle);
+0120         OsteoArticularModel(ind1).kinematic_dependancy.Joint=ind2;
+0121         OsteoArticularModel(ind1).kinematic_dependancy.numerical_estimates=[theta_g ,theta_p_fin];
+0122         
+0123         <span class="comment">% Regression 5 order polynome</span>
+0124         [p,S]=polyfit(theta_g,theta_p_fin,5);
+0125         [y, delta]=polyval(p,theta_g,S);
+0126         alpha_g=sym(<span class="string">'alpha_g'</span>,<span class="string">'real'</span>);
+0127         
+0128         alpha_p=sym(zeros(1,1));
+0129         order=length(p);
+0130         <span class="keyword">for</span> ii=1:length(p)
+0131             alpha_p = alpha_g^(order-ii)*p(ii) + alpha_p;
+0132         <span class="keyword">end</span>
+0133         <span class="comment">% Handle function</span>
+0134         q=matlabFunction(alpha_p);
+0135         OsteoArticularModel(ind1).kinematic_dependancy.q=q;
+0136 
+0137         OsteoArticularModel(ind1).kinematic_dependancy.L_tendon=L0;
+0138         
+0139     <span class="keyword">end</span>
+0140 <span class="keyword">end</span>
+0141 BiomechanicalModel.OsteoArticularModel=OsteoArticularModel;
+0142 <span class="keyword">end</span>
+0143 <span class="comment">% plot(theta_g,theta_p_fin,'k-')</span>
+0144 <span class="comment">% xlabel('Angle du genou (rad)')</span>
+0145 <span class="comment">% ylabel('Angle de la patella')</span>
+0146 <span class="comment">% title ('Angle de la patella en fonction du genou pour longueur de ligament patellaire constant')</span>
+0147 <span class="comment">%</span>
+0148 <span class="comment">% % On recupere la cin�atique de la patella pour un essai donn�% load('C:\These_Safran\GitLab\Problem_new_version\POCH_TLEM\marche01\InverseKinematicsResults.mat');</span>
+0149 <span class="comment">% % On r�up�e l'angle du genou</span>
+0150 <span class="comment">% xq=InverseKinematicsResults.JointCoordinates(ind2,:);</span>
+0151 <span class="comment">% % On interpole sur la courbe pour obtenir les valeurs d'angle de la patella</span>
+0152 <span class="comment">% vq = interp1(theta_g,theta_p_fin,xq,'pchip');</span>
+0153 <span class="comment">%</span>
+0154 <span class="comment">%</span>
+0155 <span class="comment">%</span>
+0156 <span class="comment">% plot(xq,vq,'*')</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

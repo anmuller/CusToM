@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of btkGetAnalogResolution</title>
+  <meta name="keywords" content="btkGetAnalogResolution">
+  <meta name="description" content="BTKGETANALOGRESOLUTION Returns the ADC resolution.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html Functions --><!-- # BTK --><!-- ../menu.html linux64 --><!-- menu.html @Common -->
+<h1>btkGetAnalogResolution
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>BTKGETANALOGRESOLUTION Returns the ADC resolution.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function ar = btkGetAnalogResolution(h) %#ok </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">BTKGETANALOGRESOLUTION Returns the ADC resolution.
+ 
+  AR = BTKGETANALOGRESOLUTION(H) returns the resolution of the analog to
+  digital converter. The acquisition is represented by the handle H.  
+  This handle is obtained by the use of a btk* function.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Functions/BTK/linux64/btkAppendForcePlatformType2.html" class="code" title="function btkAppendForcePlatformType2(h, forces, moments, corners, origin, localFrame)">btkAppendForcePlatformType2</a>	BTKAPPENDFORCEPLATFORMTYPE2 Append a virtual force platform of type 2.</li><li><a href="../../../../Functions/BTK/linux64/btkGetAnalogsResolution.html" class="code" title="function ar = btkGetAnalogsResolution(h)">btkGetAnalogsResolution</a>	BTKGETANALOGSRESOLUTION Returns the ADC resolution.</li><li><a href="../../../../Functions/BTK/mac64/btkAppendForcePlatformType2.html" class="code" title="function btkAppendForcePlatformType2(h, forces, moments, corners, origin, localFrame)">btkAppendForcePlatformType2</a>	BTKAPPENDFORCEPLATFORMTYPE2 Append a virtual force platform of type 2.</li><li><a href="../../../../Functions/BTK/mac64/btkGetAnalogsResolution.html" class="code" title="function ar = btkGetAnalogsResolution(h)">btkGetAnalogsResolution</a>	BTKGETANALOGSRESOLUTION Returns the ADC resolution.</li><li><a href="../../../../Functions/BTK/win64/btkAppendForcePlatformType2.html" class="code" title="function btkAppendForcePlatformType2(h, forces, moments, corners, origin, localFrame)">btkAppendForcePlatformType2</a>	BTKAPPENDFORCEPLATFORMTYPE2 Append a virtual force platform of type 2.</li><li><a href="../../../../Functions/BTK/win64/btkGetAnalogsResolution.html" class="code" title="function ar = btkGetAnalogsResolution(h)">btkGetAnalogsResolution</a>	BTKGETANALOGSRESOLUTION Returns the ADC resolution.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function ar = btkGetAnalogResolution(h) </a><span class="comment">%#ok</span>
+0002 <span class="comment">%BTKGETANALOGRESOLUTION Returns the ADC resolution.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%  AR = BTKGETANALOGRESOLUTION(H) returns the resolution of the analog to</span>
+0005 <span class="comment">%  digital converter. The acquisition is represented by the handle H.</span>
+0006 <span class="comment">%  This handle is obtained by the use of a btk* function.</span>
+0007 
+0008 <span class="comment">%  Author: A. Barré</span>
+0009 <span class="comment">%  Copyright 2009-2013 Biomechanical ToolKit (BTK).</span>
+0010 
+0011 <span class="comment">% The following comment, MATLAB compiler pragma, is necessary to avoid</span>
+0012 <span class="comment">% compiling this M-file instead of linking against the MEX-file.  Don't remove.</span>
+0013 <span class="comment">%# mex</span>
+0014 
+0015 error(generatemsgid(<span class="string">'NotSupported'</span>),<span class="string">'MEX file for function BTKGETANALOGRESOLUTION not found'</span>);
+0016 
+0017 <span class="comment">% [EOF] btkGetAnalogResolution.m</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

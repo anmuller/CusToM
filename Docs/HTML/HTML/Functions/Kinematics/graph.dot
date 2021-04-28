@@ -1,0 +1,40 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  ConstraintsJacobian -> NonLinCon_ClosedLoop_Num;
+  ForwardKinematics_ClosedLoop -> ForwardKinematics_ClosedLoop;
+  ForwardPositions -> ForwardPositions;
+  InverseKinematics -> InverseKinematicsLM;
+  InverseKinematics -> InverseKinematicsOpti;
+  InverseKinematicsLM -> CostFunctionSymbolicIK;
+  InverseKinematicsLM -> ErrorMarkersIK;
+  InverseKinematicsLM -> NonLinCon_ClosedLoop;
+  InverseKinematicsLM -> dJcutq;
+  InverseKinematicsOpti -> ClosedLoop;
+  InverseKinematicsOpti -> CostFunctionSymbolicIK;
+  InverseKinematicsOpti -> ErrorMarkersIK;
+  NonLinCon_ClosedLoop_Num -> ForwardKinematics_ClosedLoop;
+  NonLinCon_ClosedLoop_Sym -> ForwardKinematics_ClosedLoop;
+  SymbolicFunctionGenerationIK -> Symbolic_ForwardKinematicsCoupure;
+  Symbolic_ForwardKinematicsCoupure -> NonLinCon_ClosedLoop_Sym;
+  Symbolic_ForwardKinematicsCoupure -> Symbolic_ForwardKinematicsCoupure;
+
+  Add6dof [URL="Add6dof.html"];
+  ClosedLoop [URL="ClosedLoop.html"];
+  ConstraintsJacobian [URL="ConstraintsJacobian.html"];
+  CostFunctionSymbolicIK [URL="CostFunctionSymbolicIK.html"];
+  Data_ClosedLoop [URL="Data_ClosedLoop.html"];
+  ErrorMarkersIK [URL="ErrorMarkersIK.html"];
+  ForwardKinematics_ClosedLoop [URL="ForwardKinematics_ClosedLoop.html"];
+  ForwardPositions [URL="ForwardPositions.html"];
+  Gen_NonLinCon_ClosedLoop [URL="Gen_NonLinCon_ClosedLoop.html"];
+  InverseKinematics [URL="InverseKinematics.html"];
+  InverseKinematicsLM [URL="InverseKinematicsLM.html"];
+  InverseKinematicsOpti [URL="InverseKinematicsOpti.html"];
+  KinematicDependancy [URL="KinematicDependancy.html"];
+  NonLinCon_ClosedLoop [URL="NonLinCon_ClosedLoop.html"];
+  NonLinCon_ClosedLoop_Num [URL="NonLinCon_ClosedLoop_Num.html"];
+  NonLinCon_ClosedLoop_Sym [URL="NonLinCon_ClosedLoop_Sym.html"];
+  SymbolicFunctionGenerationIK [URL="SymbolicFunctionGenerationIK.html"];
+  Symbolic_ForwardKinematicsCoupure [URL="Symbolic_ForwardKinematicsCoupure.html"];
+  dJcutq [URL="dJcutq.html"];
+}

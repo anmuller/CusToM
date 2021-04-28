@@ -1,0 +1,263 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ghostscript</title>
+  <meta name="keywords" content="ghostscript">
+  <meta name="description" content="GHOSTSCRIPT  Calls a local GhostScript executable with the input command">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- # ExternLibrary --><!-- menu.html export_fig -->
+<h1>ghostscript
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>GHOSTSCRIPT  Calls a local GhostScript executable with the input command</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function varargout = ghostscript(cmd) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">GHOSTSCRIPT  Calls a local GhostScript executable with the input command
+
+ Example:
+   [status result] = ghostscript(cmd)
+
+ Attempts to locate a ghostscript executable, finally asking the user to
+ specify the directory ghostcript was installed into. The resulting path
+ is stored for future reference.
+ 
+ Once found, the executable is called with the input command string.
+
+ This function requires that you have Ghostscript installed on your
+ system. You can download this from: http://www.ghostscript.com
+
+ IN:
+   cmd - Command string to be passed into ghostscript.
+
+ OUT:
+   status - 0 iff command ran without problem.
+   result - Output from ghostscript.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="user_string.html" class="code" title="function string = user_string(string_name, string)">user_string</a>	USER_STRING  Get/set a user specific string</li><li><a href="using_hg2.html" class="code" title="function tf = using_hg2(fig)">using_hg2</a>	USING_HG2 Determine if the HG2 graphics engine is used</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="append_pdfs.html" class="code" title="function append_pdfs(varargin)">append_pdfs</a>	APPEND_PDFS Appends/concatenates multiple PDF files</li><li><a href="eps2pdf.html" class="code" title="function eps2pdf(source, dest, crop, append, gray, quality, gs_options)">eps2pdf</a>	EPS2PDF  Convert an eps file to pdf format using ghostscript</li><li><a href="print2array.html" class="code" title="function [A, bcol] = print2array(fig, res, renderer, gs_options)">print2array</a>	PRINT2ARRAY  Exports a figure to an image array</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function path_ = gs_path</a></li><li><a href="#_sub2" class="code">function good = check_store_gs_path(path_)</a></li><li><a href="#_sub3" class="code">function good = check_gs_path(path_)</a></li><li><a href="#_sub4" class="code">function cmd = gs_command(path_)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout = ghostscript(cmd)</a>
+0002 <span class="comment">%GHOSTSCRIPT  Calls a local GhostScript executable with the input command</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Example:</span>
+0005 <span class="comment">%   [status result] = ghostscript(cmd)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Attempts to locate a ghostscript executable, finally asking the user to</span>
+0008 <span class="comment">% specify the directory ghostcript was installed into. The resulting path</span>
+0009 <span class="comment">% is stored for future reference.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% Once found, the executable is called with the input command string.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% This function requires that you have Ghostscript installed on your</span>
+0014 <span class="comment">% system. You can download this from: http://www.ghostscript.com</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% IN:</span>
+0017 <span class="comment">%   cmd - Command string to be passed into ghostscript.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% OUT:</span>
+0020 <span class="comment">%   status - 0 iff command ran without problem.</span>
+0021 <span class="comment">%   result - Output from ghostscript.</span>
+0022 
+0023 <span class="comment">% Copyright: Oliver Woodford, 2009-2015, Yair Altman 2015-</span>
+0024 <span class="comment">%{</span>
+0025 <span class="comment">% Thanks to Jonas Dorn for the fix for the title of the uigetdir window on Mac OS.</span>
+0026 <span class="comment">% Thanks to Nathan Childress for the fix to default location on 64-bit Windows systems.</span>
+0027 <span class="comment">% 27/04/11 - Find 64-bit Ghostscript on Windows. Thanks to Paul Durack and</span>
+0028 <span class="comment">%            Shaun Kline for pointing out the issue</span>
+0029 <span class="comment">% 04/05/11 - Thanks to David Chorlian for pointing out an alternative</span>
+0030 <span class="comment">%            location for gs on linux.</span>
+0031 <span class="comment">% 12/12/12 - Add extra executable name on Windows. Thanks to Ratish</span>
+0032 <span class="comment">%            Punnoose for highlighting the issue.</span>
+0033 <span class="comment">% 28/06/13 - Fix error using GS 9.07 in Linux. Many thanks to Jannick</span>
+0034 <span class="comment">%            Steinbring for proposing the fix.</span>
+0035 <span class="comment">% 24/10/13 - Fix error using GS 9.07 in Linux. Many thanks to Johannes</span>
+0036 <span class="comment">%            for the fix.</span>
+0037 <span class="comment">% 23/01/14 - Add full path to ghostscript.txt in warning. Thanks to Koen</span>
+0038 <span class="comment">%            Vermeer for raising the issue.</span>
+0039 <span class="comment">% 27/02/15 - If Ghostscript croaks, display suggested workarounds</span>
+0040 <span class="comment">% 30/03/15 - Improved performance by caching status of GS path check, if ok</span>
+0041 <span class="comment">% 14/05/15 - Clarified warning message in case GS path could not be saved</span>
+0042 <span class="comment">% 29/05/15 - Avoid cryptic error in case the ghostscipt path cannot be saved (issue #74)</span>
+0043 <span class="comment">% 10/11/15 - Custom GS installation webpage for MacOS. Thanks to Andy Hueni via FEX</span>
+0044 <span class="comment">%}</span>
+0045 
+0046     <span class="keyword">try</span>
+0047         <span class="comment">% Call ghostscript</span>
+0048         [varargout{1:nargout}] = system([<a href="#_sub4" class="code" title="subfunction cmd = gs_command(path_)">gs_command</a>(<a href="#_sub1" class="code" title="subfunction path_ = gs_path">gs_path</a>()) cmd]);
+0049     <span class="keyword">catch</span> err
+0050         <span class="comment">% Display possible workarounds for Ghostscript croaks</span>
+0051         url1 = <span class="string">'https://github.com/altmany/export_fig/issues/12#issuecomment-61467998'</span>;  <span class="comment">% issue #12</span>
+0052         url2 = <span class="string">'https://github.com/altmany/export_fig/issues/20#issuecomment-63826270'</span>;  <span class="comment">% issue #20</span>
+0053         hg2_str = <span class="string">''</span>; <span class="keyword">if</span> <a href="using_hg2.html" class="code" title="function tf = using_hg2(fig)">using_hg2</a>, hg2_str = <span class="string">' or Matlab R2014a'</span>; <span class="keyword">end</span>
+0054         fprintf(2, <span class="string">'Ghostscript error. Rolling back to GS 9.10%s may possibly solve this:\n * &lt;a href=&quot;%s&quot;&gt;%s&lt;/a&gt; '</span>,hg2_str,url1,url1);
+0055         <span class="keyword">if</span> <a href="using_hg2.html" class="code" title="function tf = using_hg2(fig)">using_hg2</a>
+0056             fprintf(2, <span class="string">'(GS 9.10)\n * &lt;a href=&quot;%s&quot;&gt;%s&lt;/a&gt; (R2014a)'</span>,url2,url2);
+0057         <span class="keyword">end</span>
+0058         fprintf(<span class="string">'\n\n'</span>);
+0059         <span class="keyword">if</span> ismac || isunix
+0060             url3 = <span class="string">'https://github.com/altmany/export_fig/issues/27'</span>;  <span class="comment">% issue #27</span>
+0061             fprintf(2, <span class="string">'Alternatively, this may possibly be due to a font path issue:\n * &lt;a href=&quot;%s&quot;&gt;%s&lt;/a&gt;\n\n'</span>,url3,url3);
+0062             <span class="comment">% issue #20</span>
+0063             fpath = which(mfilename);
+0064             <span class="keyword">if</span> isempty(fpath), fpath = [mfilename(<span class="string">'fullpath'</span>) <span class="string">'.m'</span>]; <span class="keyword">end</span>
+0065             fprintf(2, <span class="string">'Alternatively, if you are using csh, modify shell_cmd from &quot;export...&quot; to &quot;setenv ...&quot;\nat the bottom of &lt;a href=&quot;matlab:opentoline(''%s'',174)&quot;&gt;%s&lt;/a&gt;\n\n'</span>,fpath,fpath);
+0066         <span class="keyword">end</span>
+0067         rethrow(err);
+0068     <span class="keyword">end</span>
+0069 <span class="keyword">end</span>
+0070 
+0071 <a name="_sub1" href="#_subfunctions" class="code">function path_ = gs_path</a>
+0072     <span class="comment">% Return a valid path</span>
+0073     <span class="comment">% Start with the currently set path</span>
+0074     path_ = <a href="user_string.html" class="code" title="function string = user_string(string_name, string)">user_string</a>(<span class="string">'ghostscript'</span>);
+0075     <span class="comment">% Check the path works</span>
+0076     <span class="keyword">if</span> <a href="#_sub3" class="code" title="subfunction good = check_gs_path(path_)">check_gs_path</a>(path_)
+0077         <span class="keyword">return</span>
+0078     <span class="keyword">end</span>
+0079     <span class="comment">% Check whether the binary is on the path</span>
+0080     <span class="keyword">if</span> ispc
+0081         bin = {<span class="string">'gswin32c.exe'</span>, <span class="string">'gswin64c.exe'</span>, <span class="string">'gs'</span>};
+0082     <span class="keyword">else</span>
+0083         bin = {<span class="string">'gs'</span>};
+0084     <span class="keyword">end</span>
+0085     <span class="keyword">for</span> a = 1:numel(bin)
+0086         path_ = bin{a};
+0087         <span class="keyword">if</span> <a href="#_sub2" class="code" title="subfunction good = check_store_gs_path(path_)">check_store_gs_path</a>(path_)
+0088             <span class="keyword">return</span>
+0089         <span class="keyword">end</span>
+0090     <span class="keyword">end</span>
+0091     <span class="comment">% Search the obvious places</span>
+0092     <span class="keyword">if</span> ispc
+0093         default_location = <span class="string">'C:\Program Files\gs\'</span>;
+0094         dir_list = dir(default_location);
+0095         <span class="keyword">if</span> isempty(dir_list)
+0096             default_location = <span class="string">'C:\Program Files (x86)\gs\'</span>; <span class="comment">% Possible location on 64-bit systems</span>
+0097             dir_list = dir(default_location);
+0098         <span class="keyword">end</span>
+0099         executable = {<span class="string">'\bin\gswin32c.exe'</span>, <span class="string">'\bin\gswin64c.exe'</span>};
+0100         ver_num = 0;
+0101         <span class="comment">% If there are multiple versions, use the newest</span>
+0102         <span class="keyword">for</span> a = 1:numel(dir_list)
+0103             ver_num2 = sscanf(dir_list(a).name, <span class="string">'gs%g'</span>);
+0104             <span class="keyword">if</span> ~isempty(ver_num2) &amp;&amp; ver_num2 &gt; ver_num
+0105                 <span class="keyword">for</span> b = 1:numel(executable)
+0106                     path2 = [default_location dir_list(a).name executable{b}];
+0107                     <span class="keyword">if</span> exist(path2, <span class="string">'file'</span>) == 2
+0108                         path_ = path2;
+0109                         ver_num = ver_num2;
+0110                     <span class="keyword">end</span>
+0111                 <span class="keyword">end</span>
+0112             <span class="keyword">end</span>
+0113         <span class="keyword">end</span>
+0114         <span class="keyword">if</span> <a href="#_sub2" class="code" title="subfunction good = check_store_gs_path(path_)">check_store_gs_path</a>(path_)
+0115             <span class="keyword">return</span>
+0116         <span class="keyword">end</span>
+0117     <span class="keyword">else</span>
+0118         executable = {<span class="string">'/usr/bin/gs'</span>, <span class="string">'/usr/local/bin/gs'</span>};
+0119         <span class="keyword">for</span> a = 1:numel(executable)
+0120             path_ = executable{a};
+0121             <span class="keyword">if</span> <a href="#_sub2" class="code" title="subfunction good = check_store_gs_path(path_)">check_store_gs_path</a>(path_)
+0122                 <span class="keyword">return</span>
+0123             <span class="keyword">end</span>
+0124         <span class="keyword">end</span>
+0125     <span class="keyword">end</span>
+0126     <span class="comment">% Ask the user to enter the path</span>
+0127     <span class="keyword">while</span> true
+0128         <span class="keyword">if</span> strncmp(computer, <span class="string">'MAC'</span>, 3) <span class="comment">% Is a Mac</span>
+0129             <span class="comment">% Give separate warning as the uigetdir dialogue box doesn't have a</span>
+0130             <span class="comment">% title</span>
+0131             uiwait(warndlg(<span class="string">'Ghostscript not found. Please locate the program.'</span>))
+0132         <span class="keyword">end</span>
+0133         base = uigetdir(<span class="string">'/'</span>, <span class="string">'Ghostcript not found. Please locate the program.'</span>);
+0134         <span class="keyword">if</span> isequal(base, 0)
+0135             <span class="comment">% User hit cancel or closed window</span>
+0136             <span class="keyword">break</span>;
+0137         <span class="keyword">end</span>
+0138         base = [base filesep]; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0139         bin_dir = {<span class="string">''</span>, [<span class="string">'bin'</span> filesep], [<span class="string">'lib'</span> filesep]};
+0140         <span class="keyword">for</span> a = 1:numel(bin_dir)
+0141             <span class="keyword">for</span> b = 1:numel(bin)
+0142                 path_ = [base bin_dir{a} bin{b}];
+0143                 <span class="keyword">if</span> exist(path_, <span class="string">'file'</span>) == 2
+0144                     <span class="keyword">if</span> <a href="#_sub2" class="code" title="subfunction good = check_store_gs_path(path_)">check_store_gs_path</a>(path_)
+0145                         <span class="keyword">return</span>
+0146                     <span class="keyword">end</span>
+0147                 <span class="keyword">end</span>
+0148             <span class="keyword">end</span>
+0149         <span class="keyword">end</span>
+0150     <span class="keyword">end</span>
+0151     <span class="keyword">if</span> ismac
+0152         error(<span class="string">'Ghostscript not found. Have you installed it (http://pages.uoregon.edu/koch)?'</span>);
+0153     <span class="keyword">else</span>
+0154         error(<span class="string">'Ghostscript not found. Have you installed it from www.ghostscript.com?'</span>);
+0155     <span class="keyword">end</span>
+0156 <span class="keyword">end</span>
+0157 
+0158 <a name="_sub2" href="#_subfunctions" class="code">function good = check_store_gs_path(path_)</a>
+0159     <span class="comment">% Check the path is valid</span>
+0160     good = <a href="#_sub3" class="code" title="subfunction good = check_gs_path(path_)">check_gs_path</a>(path_);
+0161     <span class="keyword">if</span> ~good
+0162         <span class="keyword">return</span>
+0163     <span class="keyword">end</span>
+0164     <span class="comment">% Update the current default path to the path found</span>
+0165     <span class="keyword">if</span> ~<a href="user_string.html" class="code" title="function string = user_string(string_name, string)">user_string</a>(<span class="string">'ghostscript'</span>, path_)
+0166         filename = fullfile(fileparts(which(<span class="string">'user_string.m'</span>)), <span class="string">'.ignore'</span>, <span class="string">'ghostscript.txt'</span>);
+0167         warning(<span class="string">'Path to ghostscript installation could not be saved in %s (perhaps a permissions issue). You can manually create this file and set its contents to %s, to improve performance in future invocations (this warning is safe to ignore).'</span>, filename, path_);
+0168         <span class="keyword">return</span>
+0169     <span class="keyword">end</span>
+0170 <span class="keyword">end</span>
+0171 
+0172 <a name="_sub3" href="#_subfunctions" class="code">function good = check_gs_path(path_)</a>
+0173     <span class="keyword">persistent</span> isOk
+0174     <span class="keyword">if</span> isempty(path_)
+0175         isOk = false;
+0176     <span class="keyword">elseif</span> ~isequal(isOk,true)
+0177         <span class="comment">% Check whether the path is valid</span>
+0178         [status, message] = system([<a href="#_sub4" class="code" title="subfunction cmd = gs_command(path_)">gs_command</a>(path_) <span class="string">'-h'</span>]); <span class="comment">%#ok&lt;ASGLU&gt;</span>
+0179         isOk = status == 0;
+0180     <span class="keyword">end</span>
+0181     good = isOk;
+0182 <span class="keyword">end</span>
+0183 
+0184 <a name="_sub4" href="#_subfunctions" class="code">function cmd = gs_command(path_)</a>
+0185     <span class="comment">% Initialize any required system calls before calling ghostscript</span>
+0186     <span class="comment">% TODO: in Unix/Mac, find a way to determine whether to use &quot;export&quot; (bash) or &quot;setenv&quot; (csh/tcsh)</span>
+0187     shell_cmd = <span class="string">''</span>;
+0188     <span class="keyword">if</span> isunix
+0189         shell_cmd = <span class="string">'export LD_LIBRARY_PATH=&quot;&quot;; '</span>; <span class="comment">% Avoids an error on Linux with GS 9.07</span>
+0190     <span class="keyword">end</span>
+0191     <span class="keyword">if</span> ismac
+0192         shell_cmd = <span class="string">'export DYLD_LIBRARY_PATH=&quot;&quot;; '</span>;  <span class="comment">% Avoids an error on Mac with GS 9.07</span>
+0193     <span class="keyword">end</span>
+0194     <span class="comment">% Construct the command string</span>
+0195     cmd = sprintf(<span class="string">'%s&quot;%s&quot; '</span>, shell_cmd, path_);
+0196 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

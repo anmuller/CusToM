@@ -1,0 +1,9 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  Maj_Human_model -> Maj_Human_model;
+  ModelGeneration -> ChangeRoot;
+
+  ChangeRoot [URL="ChangeRoot.html"];
+  Maj_Human_model [URL="Maj_Human_model.html"];
+  ModelGeneration [URL="ModelGeneration.html"];
+}

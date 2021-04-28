@@ -1,0 +1,7 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+
+  btkGetForcePlatformWrenches [URL="btkGetForcePlatformWrenches.html"];
+  btkGetGroundReactionWrenches [URL="btkGetGroundReactionWrenches.html"];
+  btkMergeAcquisitions [URL="btkMergeAcquisitions.html"];
+}

@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of CalcKE</title>
+  <meta name="keywords" content="CalcKE">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html Dynamics -->
+<h1>CalcKE
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function KE=CalcKE(Human_model,j) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="CalcKE.html" class="code" title="function KE=CalcKE(Human_model,j)">CalcKE</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="CalcKE.html" class="code" title="function KE=CalcKE(Human_model,j)">CalcKE</a>	</li><li><a href="Kinetics.html" class="code" title="function []=Kinetics(AnalysisParameters,KinType)">Kinetics</a>	Computation of the kinetic energy</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function KE=CalcKE(Human_model,j)</a>
+0002 <span class="keyword">if</span> j==0
+0003     KE=0;
+0004 <span class="keyword">else</span>
+0005     c=Human_model(j).R*Human_model(j).c+Human_model(j).p;
+0006     I=Human_model(j).R*Human_model(j).I*Human_model(j).R'; <span class="comment">% Inertia tensor</span>
+0007     vc=(Human_model(j).v0+cross(Human_model(j).w,c));
+0008     KE=0.5*Human_model(j).m*(vc'*vc)<span class="keyword">...</span>
+0009                     +0.5*Human_model(j).w'*(I*Human_model(j).w); <span class="comment">% kinetic energy of the jth segment</span>
+0010     KE=KE+<a href="CalcKE.html" class="code" title="function KE=CalcKE(Human_model,j)">CalcKE</a>(Human_model,Human_model(j).sister)+<a href="CalcKE.html" class="code" title="function KE=CalcKE(Human_model,j)">CalcKE</a>(Human_model,Human_model(j).child);
+0011 <span class="keyword">end</span>
+0012 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

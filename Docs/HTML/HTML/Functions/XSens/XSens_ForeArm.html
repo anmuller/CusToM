@@ -1,0 +1,231 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of XSens_ForeArm</title>
+  <meta name="keywords" content="XSens_ForeArm">
+  <meta name="description" content="Addition of a forearm model">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html XSens -->
+<h1>XSens_ForeArm
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Addition of a forearm model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [OsteoArticularJoint]= XSens_ForeArm(OsteoArticularJoint,tree,Signe,Mass,AttachmentPoint,pose) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Addition of a forearm model
+
+   INPUT
+   - OsteoArticularModel: osteo-articular model of an already existing
+   model (see the Documentation for the structure)
+   - tree: data extracted from a MVNX file
+   - Signe : right or left ('R' or 'L')
+   - Mass: mass of the solids
+   - AttachmentPoint: name of the attachment point of the model on the
+   already existing model (character string)
+   - name of the pose use to generate the osteo-articular model
+   OUTPUT
+   - OsteoArticularModel: new osteo-articular model (see the Documentation
+   for the structure) 
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>	Computation of inertia matrix from radius of gyration</li><li><a href="../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>	Addition of a sister to a solid</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="MVNXModelGeneration.html" class="code" title="function [OsteoArticularModel] = MVNXModelGeneration(ModelParameters, AnalysisParameters)">MVNXModelGeneration</a>	Generation of the osteo-articular model from a MVNX file</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [OsteoArticularJoint]= XSens_ForeArm(OsteoArticularJoint,tree,Signe,Mass,AttachmentPoint,pose)</a>
+0002 <span class="comment">% Addition of a forearm model</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - OsteoArticularModel: osteo-articular model of an already existing</span>
+0006 <span class="comment">%   model (see the Documentation for the structure)</span>
+0007 <span class="comment">%   - tree: data extracted from a MVNX file</span>
+0008 <span class="comment">%   - Signe : right or left ('R' or 'L')</span>
+0009 <span class="comment">%   - Mass: mass of the solids</span>
+0010 <span class="comment">%   - AttachmentPoint: name of the attachment point of the model on the</span>
+0011 <span class="comment">%   already existing model (character string)</span>
+0012 <span class="comment">%   - name of the pose use to generate the osteo-articular model</span>
+0013 <span class="comment">%   OUTPUT</span>
+0014 <span class="comment">%   - OsteoArticularModel: new osteo-articular model (see the Documentation</span>
+0015 <span class="comment">%   for the structure)</span>
+0016 <span class="comment">%________________________________________________________</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% Licence</span>
+0019 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0020 <span class="comment">%________________________________________________________</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0023 <span class="comment">% Georges Dumont</span>
+0024 <span class="comment">%________________________________________________________</span>
+0025 
+0026 points = tree.subject.segments.segment;
+0027 
+0028 list_solid={<span class="string">'ForeArm_J1'</span> <span class="string">'ForeArm_J2'</span> <span class="string">'ForeArm'</span>};
+0029 
+0030 <span class="comment">%% Right or left</span>
+0031 <span class="keyword">if</span> Signe == <span class="string">'R'</span>
+0032     SigneC = <span class="string">'Right'</span>;
+0033 <span class="keyword">elseif</span> Signe == <span class="string">'L'</span>
+0034     SigneC = <span class="string">'Left'</span>;
+0035 <span class="keyword">end</span>
+0036 
+0037 <span class="comment">%% Solids number incrementation</span>
+0038 
+0039 s=size(OsteoArticularJoint,2)+1;  <span class="comment">%#ok&lt;NASGU&gt; % number of the 1st solid</span>
+0040 <span class="keyword">for</span> i=1:size(list_solid,2)      <span class="comment">% numerotation of each solid</span>
+0041     <span class="keyword">if</span> i==1
+0042         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s;'</span>))
+0043     <span class="keyword">else</span>
+0044         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s_'</span>,list_solid{i-1},<span class="string">'+1;'</span>))
+0045     <span class="keyword">end</span>
+0046 <span class="keyword">end</span>
+0047 
+0048 <span class="comment">% find the number of the mother from the attachment point name</span>
+0049 <span class="keyword">if</span> ~numel(AttachmentPoint)
+0050     s_mother=0;
+0051     pos_attachment_pt=[0 0 0]';
+0052 <span class="keyword">else</span>
+0053     test=0;
+0054     <span class="keyword">for</span> i=1:numel(OsteoArticularJoint)
+0055         <span class="keyword">for</span> j=1:size(OsteoArticularJoint(i).anat_position,1)
+0056             <span class="keyword">if</span> strcmp(AttachmentPoint,OsteoArticularJoint(i).anat_position{j,1})
+0057                s_mother=i;
+0058                pos_attachment_pt=OsteoArticularJoint(i).anat_position{j,2}+OsteoArticularJoint(s_mother).c;
+0059                test=1;
+0060                <span class="keyword">break</span>
+0061             <span class="keyword">end</span>
+0062         <span class="keyword">end</span>
+0063         <span class="keyword">if</span> i==numel(OsteoArticularJoint) &amp;&amp; test==0
+0064             error([AttachmentPoint <span class="string">' is no existent'</span>])        
+0065         <span class="keyword">end</span>       
+0066     <span class="keyword">end</span>
+0067     <span class="keyword">if</span> OsteoArticularJoint(s_mother).child == 0      <span class="comment">% if the mother has no child</span>
+0068         OsteoArticularJoint(s_mother).child = eval([<span class="string">'s_'</span> list_solid{1}]);    <span class="comment">% the child of this mother is this solid</span>
+0069     <span class="keyword">else</span>
+0070         [OsteoArticularJoint]=<a href="../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>(OsteoArticularJoint,OsteoArticularJoint(s_mother).child,eval([<span class="string">'s_'</span> list_solid{1}]));
+0071     <span class="keyword">end</span>
+0072 <span class="keyword">end</span>
+0073 
+0074 <span class="comment">%% Segment orientation</span>
+0075 
+0076 [~,p] = intersect({points.label},[SigneC list_solid{end}]);
+0077 [~,num_npose] = intersect({tree.subject.frames.frame.type},pose);
+0078 quat = tree.subject.frames.frame(num_npose).orientation(1,(p-1)*4+1:p*4);
+0079 rotm = quat2rotm(quat);
+0080 
+0081 <span class="comment">%% Definition of the anatomical positions</span>
+0082 
+0083 [~,~,num_solid]=intersect([SigneC <span class="string">'ForeArm'</span>],{points.label});
+0084 anatomicalpoints = points(num_solid).points.point;
+0085 ForeArm_position_set = cell(numel(anatomicalpoints),2);
+0086 FieldNames = fieldnames(anatomicalpoints);
+0087 Pos_points = eval([<span class="string">'{anatomicalpoints.'</span> FieldNames{2} <span class="string">'};'</span>]);
+0088 <span class="keyword">for</span> i = 1:numel(anatomicalpoints)
+0089     ForeArm_position_set(i,:) = {[SigneC <span class="string">'ForeArm_'</span> anatomicalpoints(i).label], rotm' * Pos_points{i}'};
+0090 <span class="comment">%     ForeArm_position_set(i,:) = {[SigneC 'ForeArm_' anatomicalpoints(i).label], Pos_points{i}'};</span>
+0091 <span class="keyword">end</span>
+0092 
+0093 <span class="comment">%% Inertial parameters</span>
+0094 
+0095 [~,~,num_pos1]=intersect([<span class="string">'j'</span> SigneC <span class="string">'Elbow'</span>],{anatomicalpoints.label});
+0096 [~,~,num_pos2]=intersect([<span class="string">'j'</span> SigneC <span class="string">'Wrist'</span>],{anatomicalpoints.label});
+0097 
+0098 Length_ForeArm=norm(Pos_points{num_pos1}-Pos_points{num_pos2});
+0099 Mass_ForeArm = 0.0162*Mass;
+0100 [I_ForeArm]=<a href="../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>([27.6 26.5 12.1 0 0 0], Mass_ForeArm, [0 0 0], Length_ForeArm, Signe);  
+0101 c=(45.74*ForeArm_position_set{num_pos2,2})/100;
+0102 
+0103 <span class="keyword">for</span> i = 1:numel(anatomicalpoints)
+0104     ForeArm_position_set{i,2} = ForeArm_position_set{i,2} - c;
+0105 <span class="keyword">end</span>
+0106 
+0107 <span class="comment">%% Osteo-articular model generation</span>
+0108 
+0109 num_solid=0;
+0110 <span class="comment">%% Forearm</span>
+0111     <span class="comment">% Forearm_J1</span>
+0112     num_solid=num_solid+1;        <span class="comment">% solid number</span>
+0113     name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0114     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% solid number in the model</span>
+0115     OsteoArticularJoint(incr_solid).name=[SigneC name];   
+0116     OsteoArticularJoint(incr_solid).sister=0;                
+0117     OsteoArticularJoint(incr_solid).child=s_ForeArm_J2;                   
+0118     OsteoArticularJoint(incr_solid).mother=s_mother;           
+0119     OsteoArticularJoint(incr_solid).a=[0 1 0]';
+0120     OsteoArticularJoint(incr_solid).joint=1;
+0121     OsteoArticularJoint(incr_solid).ActiveJoint=1;
+0122     OsteoArticularJoint(incr_solid).m=0;                 
+0123     OsteoArticularJoint(incr_solid).b=pos_attachment_pt;  
+0124     OsteoArticularJoint(incr_solid).I=zeros(3,3);
+0125     OsteoArticularJoint(incr_solid).c=[0 0 0]';
+0126     OsteoArticularJoint(incr_solid).Visual=0;
+0127     
+0128     <span class="comment">% Forearm_J2</span>
+0129     num_solid=num_solid+1;        <span class="comment">% solid number</span>
+0130     name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0131     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% solid number in the model</span>
+0132     OsteoArticularJoint(incr_solid).name=[SigneC name];   
+0133     OsteoArticularJoint(incr_solid).sister=0;                
+0134     OsteoArticularJoint(incr_solid).child=s_ForeArm;                   
+0135     OsteoArticularJoint(incr_solid).mother=s_ForeArm_J1;           
+0136     OsteoArticularJoint(incr_solid).a=[1 0 0]';
+0137     OsteoArticularJoint(incr_solid).joint=1;
+0138     OsteoArticularJoint(incr_solid).ActiveJoint=1;
+0139     OsteoArticularJoint(incr_solid).m=0;                 
+0140     OsteoArticularJoint(incr_solid).b=[0 0 0]';  
+0141     OsteoArticularJoint(incr_solid).I=zeros(3,3);
+0142     OsteoArticularJoint(incr_solid).c=[0 0 0]';
+0143     OsteoArticularJoint(incr_solid).Visual=0;
+0144     
+0145     <span class="comment">% Forearm</span>
+0146     num_solid=num_solid+1;        <span class="comment">% solid number</span>
+0147     name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0148     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% solid number in the model</span>
+0149     OsteoArticularJoint(incr_solid).name=[SigneC name];
+0150     OsteoArticularJoint(incr_solid).sister=0;    
+0151     OsteoArticularJoint(incr_solid).child=0;
+0152     OsteoArticularJoint(incr_solid).mother=s_ForeArm_J2;
+0153     OsteoArticularJoint(incr_solid).a=[0 0 1]';
+0154     OsteoArticularJoint(incr_solid).joint=1;
+0155     OsteoArticularJoint(incr_solid).ActiveJoint=1;
+0156     OsteoArticularJoint(incr_solid).m=Mass_ForeArm;
+0157     OsteoArticularJoint(incr_solid).b=[0 0 0]';
+0158     OsteoArticularJoint(incr_solid).I=[I_ForeArm(1) I_ForeArm(4) I_ForeArm(5); I_ForeArm(4) I_ForeArm(2) I_ForeArm(6); I_ForeArm(5) I_ForeArm(6) I_ForeArm(3)];
+0159     OsteoArticularJoint(incr_solid).c= c;
+0160     OsteoArticularJoint(incr_solid).anat_position=ForeArm_position_set;
+0161     OsteoArticularJoint(incr_solid).Visual=1;
+0162     
+0163 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

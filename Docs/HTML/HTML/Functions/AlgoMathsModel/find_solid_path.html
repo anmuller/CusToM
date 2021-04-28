@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of find_solid_path</title>
+  <meta name="keywords" content="find_solid_path">
+  <meta name="description" content="Identification of the hierarchical path between two solids">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html AlgoMathsModel -->
+<h1>find_solid_path
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Identification of the hierarchical path between two solids</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [solid_1_path,solid_2_path]=find_solid_path(Human_model,i,k) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Identification of the hierarchical path between two solids
+
+   INPUT
+   - Human_model: osteo-articular model (see the Documentation for the
+   structure)
+   - i: number of the first solid 
+   - k: number of the second solid
+   OUTPUT
+   - solid_1_path: hierarchical path from first solid to nearest ancestor
+   - solid_2_path: hierarchical path from second solid to nearest ancestor
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="distance_point.html" class="code" title="function [L,Typ] = distance_point(Point1,Bone1,Point2,Bone2,Human_model,q)">distance_point</a>	Computation of the distance between two points</li><li><a href="distance_point_wrap.html" class="code" title="function [L,Typ,wrapside] = distance_point_wrap(Point1,Bone1,Point2,Bone2,Human_model,q,Wrap,wrapside,EnforcedWrap)">distance_point_wrap</a>	Computation of the distance between two points</li><li><a href="../../Functions/Animation/AnimationFramebyFrame.html" class="code" title="function [animStruct]=AnimationFramebyFrame(ax,fig,filename,AnalysisParameters,ModelParameters,AnimateParameters,DataXSens,q,q6dof,PelvisPosition,PelvisOrientation,Markers_set,f_affich,Muscles,animStruct,real_markers,BiomechanicalModel,Human_model)">AnimationFramebyFrame</a>	Computation of animation structure for animation</li><li><a href="../../Functions/Calibration/Dynamics/distance_point_anthropo.html" class="code" title="function [L] = distance_point_anthropo(Point1,Bone1,Human_model,q,s)">distance_point_anthropo</a>	Computation of the distance between a point and the center of mass of a solid</li><li><a href="../../Functions/Calibration/Geometrical/Symbolic_ForwardKinematicsCoupure_A.html" class="code" title="function [Human_model,Markers_set,num_cut,numClosedLoop,c,ceq]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,j,Q,k,p_adapt,alpha,num_cut,numClosedLoop,c,ceq)">Symbolic_ForwardKinematicsCoupure_A</a>	Computation of a symbolic forward kinematics</li><li><a href="../../Functions/Kinematics/Data_ClosedLoop.html" class="code" title="function [solid_path1,solid_path2,num_solid,num_markers]=Data_ClosedLoop(Human_model)">Data_ClosedLoop</a>	Return data fixed by the model about closing loop</li><li><a href="../../Functions/Kinematics/Symbolic_ForwardKinematicsCoupure.html" class="code" title="function [Human_model,Markers_set,num_cut,numClosedLoop,c,ceq]=Symbolic_ForwardKinematicsCoupure(Human_model,Markers_set,j,q,k,p_adapt,num_cut,numClosedLoop,c,ceq)">Symbolic_ForwardKinematicsCoupure</a>	Computation of a symbolic forward kinematics</li><li><a href="../../Functions/MuscleForces/ForwardKinematicsPoint.html" class="code" title="function [p] = ForwardKinematicsPoint(Human_model,num_solid_repere,num_solid,num_point,q)">ForwardKinematicsPoint</a>	Computation of the position of a point according to a reference solid</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function solid_root_path=find_solid_root_path(Human_model,i,solid_root_path)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [solid_1_path,solid_2_path]=find_solid_path(Human_model,i,k)</a>
+0002 <span class="comment">% Identification of the hierarchical path between two solids</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the</span>
+0006 <span class="comment">%   structure)</span>
+0007 <span class="comment">%   - i: number of the first solid</span>
+0008 <span class="comment">%   - k: number of the second solid</span>
+0009 <span class="comment">%   OUTPUT</span>
+0010 <span class="comment">%   - solid_1_path: hierarchical path from first solid to nearest ancestor</span>
+0011 <span class="comment">%   - solid_2_path: hierarchical path from second solid to nearest ancestor</span>
+0012 <span class="comment">%________________________________________________________</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Licence</span>
+0015 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0016 <span class="comment">%________________________________________________________</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0019 <span class="comment">% Georges Dumont</span>
+0020 <span class="comment">%________________________________________________________</span>
+0021 
+0022 <span class="comment">% Path to tree root starting from solid i</span>
+0023 solid_1_root_path = <a href="#_sub1" class="code" title="subfunction solid_root_path=find_solid_root_path(Human_model,i,solid_root_path)">find_solid_root_path</a>(Human_model,i);
+0024 
+0025 <span class="comment">% Path to tree root starting from solid k</span>
+0026 solid_2_root_path = <a href="#_sub1" class="code" title="subfunction solid_root_path=find_solid_root_path(Human_model,i,solid_root_path)">find_solid_root_path</a>(Human_model,k);
+0027 
+0028 
+0029 <span class="comment">% Finding closest common solid to both root paths</span>
+0030 
+0031 common_ancestors = intersect(solid_1_root_path,solid_2_root_path);
+0032 nearest_ancestor = max(common_ancestors);
+0033 solid_1_ancestor_ind = find(solid_1_root_path==nearest_ancestor);
+0034 solid_2_ancestor_ind = find(solid_2_root_path==nearest_ancestor);
+0035 
+0036 <span class="keyword">if</span> i&gt;k <span class="comment">% Starting from smallest solid increment</span>
+0037     solid_1_path = solid_1_root_path(solid_1_ancestor_ind:end);
+0038     solid_2_path = sort(solid_2_root_path(solid_2_ancestor_ind:end),<span class="string">'ascend'</span>);
+0039 <span class="keyword">else</span>
+0040     solid_1_path = solid_2_root_path(solid_2_ancestor_ind:end);
+0041     solid_2_path = sort(solid_1_root_path(solid_1_ancestor_ind:end),<span class="string">'ascend'</span>);
+0042 <span class="keyword">end</span>
+0043 
+0044 <span class="comment">% end</span>
+0045 
+0046 <span class="keyword">end</span>
+0047 
+0048 <a name="_sub1" href="#_subfunctions" class="code">function solid_root_path=find_solid_root_path(Human_model,i,solid_root_path)</a>
+0049 
+0050 <span class="keyword">if</span> nargin &lt; 3   <span class="comment">% if first incrementation</span>
+0051     solid_root_path=i;
+0052     <span class="keyword">if</span> i==1
+0053         <span class="keyword">return</span>
+0054     <span class="keyword">end</span>
+0055     
+0056 <span class="keyword">elseif</span> i==1
+0057     solid_root_path = [1 solid_root_path];
+0058     <span class="keyword">return</span>
+0059 <span class="keyword">end</span>
+0060 
+0061 
+0062 j=Human_model(i).mother; <span class="comment">% number of the mother</span>
+0063 
+0064 solid_root_path=[j solid_root_path]; <span class="comment">% Number (dent) of the mother is added into the global path</span>
+0065 
+0066 <span class="keyword">if</span> j == 1  <span class="comment">% If Mother corresponds to the solid that closes the loop</span>
+0067     <span class="keyword">return</span>;
+0068 <span class="keyword">else</span>
+0069     [solid_root_path]=<a href="#_sub1" class="code" title="subfunction solid_root_path=find_solid_root_path(Human_model,i,solid_root_path)">find_solid_root_path</a>(Human_model,j,solid_root_path);
+0070 <span class="keyword">end</span>
+0071 
+0072 <span class="keyword">end</span>
+0073</pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

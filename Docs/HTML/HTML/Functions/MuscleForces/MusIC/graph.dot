@@ -1,0 +1,15 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  ForcesComputationMusIC -> InterpnVector;
+  ForcesComputationMusIC -> KKT_projection;
+  InterpnVector -> cartprod;
+  MusICDatabaseGeneration -> cartprod;
+  cartprod -> ind2subVect;
+
+  ForcesComputationMusIC [URL="ForcesComputationMusIC.html"];
+  InterpnVector [URL="InterpnVector.html"];
+  KKT_projection [URL="KKT_projection.html"];
+  MusICDatabaseGeneration [URL="MusICDatabaseGeneration.html"];
+  cartprod [URL="cartprod.html"];
+  ind2subVect [URL="ind2subVect.html"];
+}
