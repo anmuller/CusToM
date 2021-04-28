@@ -129,8 +129,7 @@ for i_s=1:2
         OsteoArticularModel(ind1).kinematic_dependancy.numerical_estimates=[theta_g ,theta_p_fin];
         
         % 5th degree polynomial regression
-        [p,S]=polyfit(theta_g,theta_p_fin,5);
-        [y, delta]=polyval(p,theta_g,S);
+        [p]=polyfit(theta_g,theta_p_fin,5);
         alpha_g=sym('alpha_g','real');
         
         alpha_p=sym(zeros(1,1));
