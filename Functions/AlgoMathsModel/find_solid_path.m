@@ -41,8 +41,6 @@ else
     solid_2_path = sort(solid_1_root_path(solid_1_ancestor_ind:end),'ascend');
 end
 
-% end
-
 end
 
 function solid_root_path=find_solid_root_path(Human_model,i,solid_root_path)

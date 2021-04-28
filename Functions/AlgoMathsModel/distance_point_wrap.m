@@ -1,5 +1,7 @@
 function [L,Typ,wrapside] = distance_point_wrap(Point1,Bone1,Point2,Bone2,Human_model,q,Wrap,wrapside,EnforcedWrap)
-% Computation of the distance between two points
+% Computation of the distance between two points. The commented
+% "Vizualisation wrapping" section is addressed to developpers to vizualize
+% and to check correct wrapping.
 %
 %   INPUT
 %   - Point1: position of the anatomical position of the first studied
@@ -20,7 +22,7 @@ function [L,Typ,wrapside] = distance_point_wrap(Point1,Bone1,Point2,Bone2,Human_
 % Toolbox distributed under GPL 3.0 Licence
 %________________________________________________________
 %
-% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud, Pauline Morin and
 % Georges Dumont
 %________________________________________________________
 
@@ -99,13 +101,16 @@ else
     T_Ri_Rw = [R_i_w, Wc;[0 0 0],1];
 end
 
-% fastscatter3(A); hold on;
-% fastscatter3(B)
-% fastscatter3(Wc)
+
 
 % Compute A and B in Wrap frame
 Aw=T_Ri_Rw\[A;1];   Aw(4)=[];
 Bw=T_Ri_Rw\[B;1];   Bw(4)=[];
+
+%% Vizualisation of wraping 
+% fastscatter3(A); hold on;
+% fastscatter3(B)
+% fastscatter3(Wc)
 
 % subplot(1,2,2)
 % fastscatter3(Aw); hold on;
@@ -117,7 +122,7 @@ Bw=T_Ri_Rw\[B;1];   Bw(4)=[];
 % fastscatter3(A); hold on;
 % fastscatter3(B)
 % fastscatter3(Wc)
-
+%%
 
 % Is there an intersection between the cylinder and the straight line
 % between Aw and Bw

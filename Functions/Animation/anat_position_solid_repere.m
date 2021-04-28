@@ -14,15 +14,15 @@ function [Human_model] = anat_position_solid_repere(Human_model,i)
 % Toolbox distributed under GPL 3.0 Licence
 %________________________________________________________
 %
-% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud, Pauline Morin and
 % Georges Dumont
 %________________________________________________________
 
-if i == 0 % bout de chaine
+if i == 0 % end of the kinematic chain
     return;
 end
 
-j=Human_model(i).mother; % number of the mother
+j=Human_model(i).mother; % number of the mother solid
 if j == 0 % initialization : first time this function is called
     Human_model(i).pos_solid_visual=[]; % init of a new domain    
 end

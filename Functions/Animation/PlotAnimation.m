@@ -29,7 +29,7 @@ end
 
 %% Mesh of bones
 if options.bone_anim
-    [Human_model]=BoneView(DataXSens,Human_model,BiomechanicalModel,ModelParameters,options.Segment);
+    [Human_model]=BoneView(DataXSens,Human_model,BiomechanicalModel,ModelParameters);
 end
 
 
@@ -79,17 +79,6 @@ animStruct.Set=cell(1,size(q,2));
 
 [animStruct]=AnimationFramebyFrame(ax,fig,filename,AnalysisParameters,ModelParameters,AnimateParameters,DataXSens,q,q6dof,PelvisPosition,PelvisOrientation,Markers_set,f_affich,Muscles,animStruct,real_markers,BiomechanicalModel,Human_model);
 
-
-
-
-
-
-
-
-
-
-
-
 if isfield(AnimateParameters,'Mode')  && isequal(AnimateParameters.Mode, 'Figure')
     close all
     v=VideoWriter([filename '.avi']);
@@ -107,9 +96,6 @@ if isfield(AnimateParameters,'Mode')  && isequal(AnimateParameters.Mode, 'Genera
     varargout{2} = Markers_set;
     varargout{3} = EnableModel;
 end
-% save('L','L')
-
-
 
 
 end

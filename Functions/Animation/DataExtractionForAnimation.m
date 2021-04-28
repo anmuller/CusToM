@@ -57,7 +57,7 @@ if (isfield(AnimateParameters,'Mode') && isequal(AnimateParameters.Mode, 'Genera
     q = zeros(numel(Human_model)-6,1);
 else
     if ( isfield(AnimateParameters,'Noc3d') &&  AnimateParameters.Noc3d )
-        load('AnalysisParameters.mat'); %#ok<LOAD>
+        load('AnalysisParameters.mat'); 
         num_ext = numel(AnalysisParameters.General.Extension)-1;
         load('BiomechanicalModel.mat'); %#ok<LOAD>
         Human_model = BiomechanicalModel.OsteoArticularModel;
@@ -72,16 +72,16 @@ else
             q(AnimateParameters.sol_anim)=AnimateParameters.angle*pi/180;
         end
     else
-        load('AnalysisParameters.mat'); %#ok<LOAD>
+        load('AnalysisParameters.mat');
         num_ext = numel(AnalysisParameters.General.Extension)-1;
         % Filename
         filename = AnimateParameters.filename(1:end-num_ext);
         % Files loading
-        load('BiomechanicalModel.mat'); %#ok<LOAD>
+        load('BiomechanicalModel.mat'); 
         Human_model = BiomechanicalModel.OsteoArticularModel;
-        load([filename '/InverseKinematicsResults.mat']); %#ok<LOAD>
+        load([filename '/InverseKinematicsResults.mat']);
         q = InverseKinematicsResults.JointCoordinates;
-        load([filename '/ExperimentalData.mat']); %#ok<LOAD>
+        load([filename '/ExperimentalData.mat']);
         if isfield(InverseKinematicsResults,'FreeJointCoordinates')
             q6dof = InverseKinematicsResults.FreeJointCoordinates;
             Markers_set = BiomechanicalModel.Markers;
@@ -97,7 +97,7 @@ end
 
 % exclude non used markers
 if ~DataXSens
-    Markers_set=Markers_set(find([Markers_set.exist])); %#ok<FNDSB>
+    Markers_set=Markers_set(find([Markers_set.exist])); 
 end
 
 end

@@ -31,17 +31,17 @@ if j == 0
     return;
 end
 
-i=Human_model(j).mother; % number (ident) of mother
+i=Human_model(j).mother; % number (ident) of mother solid
 if i == 0
     Human_model(j).p = zeros(3,1);
     Human_model(j).R = eye(3,3);
     Human_model(j).pos_pts_anim=[]; % initialization of a new domain
 else
-    if Human_model(j).joint == 1     % hinge          
+    if Human_model(j).joint == 1  % hinge          
         Human_model(j).p = Human_model(i).R * Human_model(j).b + Human_model(i).p;
         Human_model(j).R = Human_model(i).R * Rodrigues(Human_model(j).a,q(j)) * Rodrigues(Human_model(j).u,Human_model(j).theta);
     end
-    if Human_model(j).joint == 2    % slider
+    if Human_model(j).joint == 2    % prismatic joint
         Human_model(j).p = Human_model(i).R * (Human_model(j).b + q(j)*Human_model(j).a) + Human_model(i).p;
         Human_model(j).R = Human_model(i).R * Rodrigues(Human_model(j).u,Human_model(j).theta);
     end
@@ -53,10 +53,10 @@ Human_model(j).Tc_R0_Ri=[Human_model(j).R, Human_model(j).pc ; [0 0 0 1]];
 if seg_anim
     if Human_model(j).Visual == 1
         X = [Human_model(j).p ,Human_model(j).pos_pts_anim (Human_model(j).R * Human_model(j).c + Human_model(j).p) ];
-        Human_model(j).pos_pts_anim = [Human_model(j).pos_pts_anim unique(X','rows','sorted')']; % repère origine du solide
+        Human_model(j).pos_pts_anim = [Human_model(j).pos_pts_anim unique(X','rows','sorted')']; % solid frame located on the origin solid (repère origine du solide)
         
         for n = 1:size(Human_model(j).pos_solid_visual,2)
-            Human_model(j).pos_pts_anim = [Human_model(j).pos_pts_anim (Human_model(j).R * Human_model(j).pos_solid_visual(:,n) + Human_model(j).p)]; % autre pts
+            Human_model(j).pos_pts_anim = [Human_model(j).pos_pts_anim (Human_model(j).R * Human_model(j).pos_solid_visual(:,n) + Human_model(j).p)]; % other points
         end
         % markers (if there is a solid at chain’s extremity with center of mass
     % at the same location as origin)

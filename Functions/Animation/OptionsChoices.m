@@ -31,10 +31,6 @@ function options=OptionsChoices(BiomechanicalModel,AnimateParameters)
 %________________________________________________________
 
 
-
-
-
-
 if isfield(AnimateParameters, 'seg_anim')
     options.seg_anim = AnimateParameters.seg_anim;
 else

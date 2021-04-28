@@ -117,8 +117,8 @@ for i_s=1:2
                     - double(fe(theta_p_est(ii,jj))) / double(fde(theta_p_est(ii,jj)));
             end
             % Initial solution is the solution of the previous frame
-            % (la solution initiale de la valeur d'angle suivante est celle de la
-            % précédente.)
+            % la solution initiale de la valeur d'angle suivante est celle de la
+            % précédente.
             if ii~=length(theta_g)
                 theta_p_est(ii+1,1)=theta_p_est(ii,n_bcle);
             end
@@ -128,7 +128,7 @@ for i_s=1:2
         OsteoArticularModel(ind1).kinematic_dependancy.Joint=ind2;
         OsteoArticularModel(ind1).kinematic_dependancy.numerical_estimates=[theta_g ,theta_p_fin];
         
-        % 5th degree polynomial regression
+        % Regression 5 order polynome
         [p,S]=polyfit(theta_g,theta_p_fin,5);
         [y, delta]=polyval(p,theta_g,S);
         alpha_g=sym('alpha_g','real');
@@ -138,7 +138,6 @@ for i_s=1:2
         for ii=1:length(p)
             alpha_p = alpha_g^(order-ii)*p(ii) + alpha_p;
         end
-        
         % Handle function
         q=matlabFunction(alpha_p);
         OsteoArticularModel(ind1).kinematic_dependancy.q=q;
