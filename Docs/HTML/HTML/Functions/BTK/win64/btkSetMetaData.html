@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of btkSetMetaData</title>
+  <meta name="keywords" content="btkSetMetaData">
+  <meta name="description" content="BTKSETMETADATA  Set an existing metada and return an updated list of the metadata in the acquisition.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- # BTK --><!-- menu.html win64 -->
+<h1>btkSetMetaData
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>BTKSETMETADATA  Set an existing metada and return an updated list of the metadata in the acquisition.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function md = btkSetMetaData(h, varargin) %#ok </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">BTKSETMETADATA  Set an existing metada and return an updated list of the metadata in the acquisition.
+
+  In case you are not sure the metadata to set does exist you can use instead
+  the method BTKAPPENDMETADATA. This last method is able to set new information if
+  the metadata exists or will create a new one.
+
+  BTKSETMETADATA(H, LABEL, SUBLABEL, ..., INFO) sets a metadata with additional 
+  informations INFO.  This additionnal information is a structure:
+   - INFO.FORMAT: contains a string (Char, Byte, Integer or Real) with the format of the information
+   - INFO.VALUES: contains an array of numerical values or a cell of strings.
+                  - The array is used for information with the format Byte, Integer or Real.
+                  - The cell of strings is only use for information with the format Char.
+  The stucture INFO should be constructed with the use of the function &lt;a href=&quot;matlab:help btkMetaDataInfo&quot;&gt;btkMetaDataInfo&lt;/a&gt;.  
+
+  This function can also returns an updated list of metadata.
+  MD = BTKSETMETADATA(H, LABEL, SUBLABEL, ..., INFO)
+  The format of MD is the same than using the function &lt;a href=&quot;matlab:help btkGetMetaData&quot;&gt;btkGetMetaData&lt;/a&gt;.
+
+  The acquisition is represented by the handle H.  This handle is obtained
+  by the use of a btk* function.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Functions/BTK/linux64/@Common/btkAppendMetaData.html" class="code" title="function btkAppendMetaData(h, label, sublabel, ..., info) %#ok">btkAppendMetaData</a>	BTKAPPENDMETADATA Append a new metada and return an updated list of the metadata in the acquisition.</li><li><a href="../../../Functions/BTK/linux64/btkFindMetaData.html" class="code" title="function md = btkFindMetaData(h,label,varargin)">btkFindMetaData</a>	BTKFINDMETADATA Return the searched metadata or 0 if not found.</li><li><a href="../../../Functions/BTK/mac64/@Common/btkAppendMetaData.html" class="code" title="function btkAppendMetaData(h, label, sublabel, ..., info) %#ok">btkAppendMetaData</a>	BTKAPPENDMETADATA Append a new metada and return an updated list of the metadata in the acquisition.</li><li><a href="../../../Functions/BTK/mac64/btkFindMetaData.html" class="code" title="function md = btkFindMetaData(h,label,varargin)">btkFindMetaData</a>	BTKFINDMETADATA Return the searched metadata or 0 if not found.</li><li><a href="../../../Functions/BTK/win64/@Common/btkAppendMetaData.html" class="code" title="function btkAppendMetaData(h, label, sublabel, ..., info) %#ok">btkAppendMetaData</a>	BTKAPPENDMETADATA Append a new metada and return an updated list of the metadata in the acquisition.</li><li><a href="btkFindMetaData.html" class="code" title="function md = btkFindMetaData(h,label,varargin)">btkFindMetaData</a>	BTKFINDMETADATA Return the searched metadata or 0 if not found.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Functions/BTK/linux64/btkSetMetaDataValues.html" class="code" title="function md = btkSetMetaDataValues(h, varargin) %#ok">btkSetMetaDataValues</a>	BTKSETMETADATAVALUES  Set values of an existing metadata.</li><li><a href="../../../Functions/BTK/mac64/btkSetMetaDataValues.html" class="code" title="function md = btkSetMetaDataValues(h, varargin) %#ok">btkSetMetaDataValues</a>	BTKSETMETADATAVALUES  Set values of an existing metadata.</li><li><a href="btkSetMetaDataValues.html" class="code" title="function md = btkSetMetaDataValues(h, varargin) %#ok">btkSetMetaDataValues</a>	BTKSETMETADATAVALUES  Set values of an existing metadata.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function md = btkSetMetaData(h, varargin) </a><span class="comment">%#ok</span>
+0002 <span class="comment">%BTKSETMETADATA  Set an existing metada and return an updated list of the metadata in the acquisition.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%  In case you are not sure the metadata to set does exist you can use instead</span>
+0005 <span class="comment">%  the method BTKAPPENDMETADATA. This last method is able to set new information if</span>
+0006 <span class="comment">%  the metadata exists or will create a new one.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%  BTKSETMETADATA(H, LABEL, SUBLABEL, ..., INFO) sets a metadata with additional</span>
+0009 <span class="comment">%  informations INFO.  This additionnal information is a structure:</span>
+0010 <span class="comment">%   - INFO.FORMAT: contains a string (Char, Byte, Integer or Real) with the format of the information</span>
+0011 <span class="comment">%   - INFO.VALUES: contains an array of numerical values or a cell of strings.</span>
+0012 <span class="comment">%                  - The array is used for information with the format Byte, Integer or Real.</span>
+0013 <span class="comment">%                  - The cell of strings is only use for information with the format Char.</span>
+0014 <span class="comment">%  The stucture INFO should be constructed with the use of the function &lt;a href=&quot;matlab:help btkMetaDataInfo&quot;&gt;btkMetaDataInfo&lt;/a&gt;.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%  This function can also returns an updated list of metadata.</span>
+0017 <span class="comment">%  MD = BTKSETMETADATA(H, LABEL, SUBLABEL, ..., INFO)</span>
+0018 <span class="comment">%  The format of MD is the same than using the function &lt;a href=&quot;matlab:help btkGetMetaData&quot;&gt;btkGetMetaData&lt;/a&gt;.</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%  The acquisition is represented by the handle H.  This handle is obtained</span>
+0021 <span class="comment">%  by the use of a btk* function.</span>
+0022 
+0023 <span class="comment">%  Author: A. Barré</span>
+0024 <span class="comment">%  Copyright 2009-2013 Biomechanical ToolKit (BTK).</span>
+0025 
+0026 <span class="keyword">if</span> (nargin &lt; 3)
+0027     error(<span class="string">'At least three inputs are required.'</span>);
+0028 <span class="keyword">end</span>
+0029 <span class="keyword">if</span> (nargout &gt; 1)
+0030     error(<span class="string">'Too many output arguments.'</span>);
+0031 <span class="keyword">end</span>
+0032 
+0033 <span class="keyword">if</span> (~isstruct(<a href="btkFindMetaData.html" class="code" title="function md = btkFindMetaData(h,label,varargin)">btkFindMetaData</a>(h, varargin{1:end-1})))
+0034   name = varargin{1};
+0035   <span class="keyword">for</span> i = 2:length(varargin)-1
+0036     name = [name, <span class="string">':'</span>, varargin{i}];
+0037   <span class="keyword">end</span>
+0038   error([<span class="string">'The metadata '</span>,name,<span class="string">' was not found.'</span>]);
+0039 <span class="keyword">end</span>
+0040 
+0041 md = <a href="../../../Functions/BTK/linux64/@Common/btkAppendMetaData.html" class="code" title="function btkAppendMetaData(h, label, sublabel, ..., info) %#ok">btkAppendMetaData</a>(h, varargin{:});
+0042 
+0043 <span class="comment">% [EOF] btkSetMetaData.m</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

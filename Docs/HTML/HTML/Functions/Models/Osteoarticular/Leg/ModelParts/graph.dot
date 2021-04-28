@@ -1,0 +1,21 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+
+  Femur_gait2354 [URL="Femur_gait2354.html"];
+  Foot [URL="Foot.html"];
+  FootBallJoint [URL="FootBallJoint.html"];
+  FootWithoutPronation [URL="FootWithoutPronation.html"];
+  Foot_TLEM [URL="Foot_TLEM.html"];
+  Patella_TLEM [URL="Patella_TLEM.html"];
+  Shank [URL="Shank.html"];
+  ShankBallJoint [URL="ShankBallJoint.html"];
+  ShankFoot [URL="ShankFoot.html"];
+  Shank_TLEM [URL="Shank_TLEM.html"];
+  Talus_TLEM [URL="Talus_TLEM.html"];
+  Thigh [URL="Thigh.html"];
+  Thigh_TLEM [URL="Thigh_TLEM.html"];
+  Tibia_gait2354 [URL="Tibia_gait2354.html"];
+  calcn_gait2354 [URL="calcn_gait2354.html"];
+  talus_gait2354 [URL="talus_gait2354.html"];
+  toes_gait2354 [URL="toes_gait2354.html"];
+}

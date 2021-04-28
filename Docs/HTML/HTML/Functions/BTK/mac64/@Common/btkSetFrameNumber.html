@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of btkSetFrameNumber</title>
+  <meta name="keywords" content="btkSetFrameNumber">
+  <meta name="description" content="BTKSETFRAMENUMBER Set points and analogs frames number.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html Functions --><!-- # BTK --><!-- ../menu.html mac64 --><!-- menu.html @Common -->
+<h1>btkSetFrameNumber
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>BTKSETFRAMENUMBER Set points and analogs frames number.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function btkSetFrameNumber(h, num) %#ok </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">BTKSETFRAMENUMBER Set points and analogs frames number.
+ 
+  BTKSETFRAMENUMBER(H, NUM) resizes the frame number with 
+  the value NUM for the given acquisition's handle H. Points' frames 
+  number corresponds to the value NUM. Analogs' frames number corresponds
+  to R * NUM, where R is the number of analog samples per point frame 
+  This handle is obtained by using a btk* function.
+
+  BTKSETFRAMENUMBER(H, NUM, R) resizes the frame number of the analog
+  by the product R * NUM. R must be an integer greater or equal than 1.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Functions/BTK/linux64/btkCropAcquisition.html" class="code" title="function btkCropAcquisition(h, startAt, numFrames)">btkCropAcquisition</a>	BTKCROPACQUISITION Crop the acquisition and adapt the events' frame/time.</li><li><a href="../../../../Functions/BTK/linux64/btkEmulateC3Dserver.html" class="code" title="function itf = btkEmulateC3Dserver()">btkEmulateC3Dserver</a>	BTKEMULATEC3DSERVER Creates an emulated COM object for C3Dserver.</li><li><a href="../../../../Functions/BTK/mac64/btkCropAcquisition.html" class="code" title="function btkCropAcquisition(h, startAt, numFrames)">btkCropAcquisition</a>	BTKCROPACQUISITION Crop the acquisition and adapt the events' frame/time.</li><li><a href="../../../../Functions/BTK/mac64/btkEmulateC3Dserver.html" class="code" title="function itf = btkEmulateC3Dserver()">btkEmulateC3Dserver</a>	BTKEMULATEC3DSERVER Creates an emulated COM object for C3Dserver.</li><li><a href="../../../../Functions/BTK/win64/btkCropAcquisition.html" class="code" title="function btkCropAcquisition(h, startAt, numFrames)">btkCropAcquisition</a>	BTKCROPACQUISITION Crop the acquisition and adapt the events' frame/time.</li><li><a href="../../../../Functions/BTK/win64/btkEmulateC3Dserver.html" class="code" title="function itf = btkEmulateC3Dserver()">btkEmulateC3Dserver</a>	BTKEMULATEC3DSERVER Creates an emulated COM object for C3Dserver.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function btkSetFrameNumber(h, num) </a><span class="comment">%#ok</span>
+0002 <span class="comment">%BTKSETFRAMENUMBER Set points and analogs frames number.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%  BTKSETFRAMENUMBER(H, NUM) resizes the frame number with</span>
+0005 <span class="comment">%  the value NUM for the given acquisition's handle H. Points' frames</span>
+0006 <span class="comment">%  number corresponds to the value NUM. Analogs' frames number corresponds</span>
+0007 <span class="comment">%  to R * NUM, where R is the number of analog samples per point frame</span>
+0008 <span class="comment">%  This handle is obtained by using a btk* function.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%  BTKSETFRAMENUMBER(H, NUM, R) resizes the frame number of the analog</span>
+0011 <span class="comment">%  by the product R * NUM. R must be an integer greater or equal than 1.</span>
+0012 
+0013 <span class="comment">%  Author: A. Barré</span>
+0014 <span class="comment">%  Copyright 2009-2013 Biomechanical ToolKit (BTK).</span>
+0015 
+0016 <span class="comment">% The following comment, MATLAB compiler pragma, is necessary to avoid</span>
+0017 <span class="comment">% compiling this M-file instead of linking against the MEX-file.  Don't remove.</span>
+0018 <span class="comment">%# mex</span>
+0019 
+0020 error(generatemsgid(<span class="string">'NotSupported'</span>),<span class="string">'MEX file for BTKSETFRAMENUMBER not found'</span>);
+0021 
+0022 <span class="comment">% [EOF] btkSetFrameNumber.m</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

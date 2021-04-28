@@ -1,0 +1,8 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+
+  ._btkReadAcquisition [URL="._btkReadAcquisition.html"];
+  ._btkWriteAcquisition [URL="._btkWriteAcquisition.html"];
+  btkReadAcquisition [URL="btkReadAcquisition.html"];
+  btkWriteAcquisition [URL="btkWriteAcquisition.html"];
+}

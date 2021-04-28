@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Force_max_TOR</title>
+  <meta name="keywords" content="Force_max_TOR">
+  <meta name="description" content="Maximal force available at a contact point for the prediction of the ground reaction forces">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- ../menu.html ExternalForces --><!-- menu.html Prediction -->
+<h1>Force_max_TOR
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Maximal force available at a contact point for the prediction of the ground reaction forces</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function Cpi = Force_max_TOR(pz,vp,Mass, zcrit, vcrit) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Maximal force available at a contact point for the prediction of the ground reaction forces
+   if the vertical position and the normal of the velocity of the point is
+   lower than thresholds, the maximal force available is equal to 40% of
+   the subject weight
+
+   INPUT
+   - pz: vectical position of the point
+   - vp: norm of the velocity of the point
+   - Mass: subject mass
+   - zcrit: vectical position threshold
+   - vcrit: norm of the velocity threshold
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Functions/ExternalForces/ExternalForcesPrediction.html" class="code" title="function [ExternalForcesComputationResults] = ExternalForcesPrediction(filename, AnalysisParameters, BiomechanicalModel, ModelParameters)">ExternalForcesPrediction</a>	Prediction of ground reaction forces</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function Cpi = Force_max_TOR(pz,vp,Mass, zcrit, vcrit)</a>
+0002 <span class="comment">% Maximal force available at a contact point for the prediction of the ground reaction forces</span>
+0003 <span class="comment">%   if the vertical position and the normal of the velocity of the point is</span>
+0004 <span class="comment">%   lower than thresholds, the maximal force available is equal to 40% of</span>
+0005 <span class="comment">%   the subject weight</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   INPUT</span>
+0008 <span class="comment">%   - pz: vectical position of the point</span>
+0009 <span class="comment">%   - vp: norm of the velocity of the point</span>
+0010 <span class="comment">%   - Mass: subject mass</span>
+0011 <span class="comment">%   - zcrit: vectical position threshold</span>
+0012 <span class="comment">%   - vcrit: norm of the velocity threshold</span>
+0013 <span class="comment">%________________________________________________________</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Licence</span>
+0016 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0017 <span class="comment">%________________________________________________________</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0020 <span class="comment">% Georges Dumont</span>
+0021 <span class="comment">%________________________________________________________</span>
+0022 
+0023 prop=0.4;
+0024 
+0025 <span class="keyword">if</span> pz&lt;zcrit &amp;&amp; abs(vp)&lt;vcrit 
+0026     Cpi=prop* Mass*9.81; 
+0027 <span class="keyword">else</span>
+0028     Cpi=0;
+0029 <span class="keyword">end</span>
+0030 
+0031 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

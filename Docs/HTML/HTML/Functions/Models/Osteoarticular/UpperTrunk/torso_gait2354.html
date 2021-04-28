@@ -1,0 +1,287 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of torso_gait2354</title>
+  <meta name="keywords" content="torso_gait2354">
+  <meta name="description" content="CREDIT">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html Functions --><!-- ../../menu.html Models --><!-- ../menu.html Osteoarticular --><!-- menu.html UpperTrunk -->
+<h1>torso_gait2354
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>CREDIT</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [OsteoArticularModel]= torso_gait2354(OsteoArticularModel,k,Mass,AttachmentPoint) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">    CREDIT
+   Delp S.L., Loan J.P., Hoy M.G., Zajac F.E., Topp E.L., Rosen J.M., Thelen D.G., Anderson F.C., Seth A. 
+   NOTES
+   3D, 23 DOF gait model created by D.G. Thelen, Univ. of Wisconsin-Madison, and Ajay Seth, Frank C. Anderson, and Scott L. Delp, Stanford University. Lower extremity joint defintions based on Delp et al. (1990). Low back joint and anthropometry based on Anderson and Pandy (1999, 2001). Planar knee model of Yamaguchi and Zajac (1989). Seth replaced tibia translation constraints with a CustomJoint for the knee and removed the patella to eliminate all kinematic constraints; insertions of the quadrucepts are handled with moving points in the tibia frame as defined by Delp 1990. 
+   LINK
+   http://simtk-confluence.stanford.edu:8080/display/OpenSim/Gait+2392+and+2354+Models
+   Based on: 
+   - Delp, S.L., Loan, J.P., Hoy, M.G., Zajac, F.E., Topp E.L., Rosen, J.M.: An interactive graphics-based model of the lower extremity to study orthopaedic surgical procedures, IEEE Transactions on Biomedical Engineering, vol. 37, pp. 757-767, 1990. 
+   - Yamaguchi G.T., Zajac F.E.: A planar model of the knee joint to characterize the knee extensor mechanism.&quot; J . Biomech. vol. 22. pp. 1-10. 1989. 
+   - Anderson F.C., Pandy M.G.: A dynamic optimization solution for vertical jumping in three dimensions. Computer Methods in Biomechanics and Biomedical Engineering 2:201-231, 1999. Anderson F.C., Pandy M.G.: Dynamic optimization of human walking. Journal of Biomechanical Engineering 123:381-390, 2001.
+   INPUT
+   - OsteoArticularModel: osteo-articular model of an already existing
+   model (see the Documentation for the structure)
+   - k: homothety coefficient for the geometrical parameters (defined as
+   the subject size in cm divided by 180)
+   - Signe: side of the thigh model ('R' for right side or 'L' for left side)
+   - Mass: mass of the solids
+   - AttachmentPoint: name of the attachment point of the model on the
+   already existing model (character string)
+   OUTPUT
+   - OsteoArticularModel: new osteo-articular model (see the Documentation
+   for the structure) 
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Functions/AlgoMathsModel/Huygens.html" class="code" title="function [Io] = Huygens(OG,Ig,m)">Huygens</a>	Computation of inertia matrix at point O</li><li><a href="../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>	Computation of inertia matrix from radius of gyration</li><li><a href="../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>	Addition of a sister to a solid</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [OsteoArticularModel]= torso_gait2354(OsteoArticularModel,k,Mass,AttachmentPoint)</a>
+0002 
+0003 <span class="comment">%    CREDIT</span>
+0004 <span class="comment">%   Delp S.L., Loan J.P., Hoy M.G., Zajac F.E., Topp E.L., Rosen J.M., Thelen D.G., Anderson F.C., Seth A.</span>
+0005 <span class="comment">%   NOTES</span>
+0006 <span class="comment">%   3D, 23 DOF gait model created by D.G. Thelen, Univ. of Wisconsin-Madison, and Ajay Seth, Frank C. Anderson, and Scott L. Delp, Stanford University. Lower extremity joint defintions based on Delp et al. (1990). Low back joint and anthropometry based on Anderson and Pandy (1999, 2001). Planar knee model of Yamaguchi and Zajac (1989). Seth replaced tibia translation constraints with a CustomJoint for the knee and removed the patella to eliminate all kinematic constraints; insertions of the quadrucepts are handled with moving points in the tibia frame as defined by Delp 1990.</span>
+0007 <span class="comment">%   LINK</span>
+0008 <span class="comment">%   http://simtk-confluence.stanford.edu:8080/display/OpenSim/Gait+2392+and+2354+Models</span>
+0009 <span class="comment">%   Based on:</span>
+0010 <span class="comment">%   - Delp, S.L., Loan, J.P., Hoy, M.G., Zajac, F.E., Topp E.L., Rosen, J.M.: An interactive graphics-based model of the lower extremity to study orthopaedic surgical procedures, IEEE Transactions on Biomedical Engineering, vol. 37, pp. 757-767, 1990.</span>
+0011 <span class="comment">%   - Yamaguchi G.T., Zajac F.E.: A planar model of the knee joint to characterize the knee extensor mechanism.&quot; J . Biomech. vol. 22. pp. 1-10. 1989.</span>
+0012 <span class="comment">%   - Anderson F.C., Pandy M.G.: A dynamic optimization solution for vertical jumping in three dimensions. Computer Methods in Biomechanics and Biomedical Engineering 2:201-231, 1999. Anderson F.C., Pandy M.G.: Dynamic optimization of human walking. Journal of Biomechanical Engineering 123:381-390, 2001.</span>
+0013 <span class="comment">%   INPUT</span>
+0014 <span class="comment">%   - OsteoArticularModel: osteo-articular model of an already existing</span>
+0015 <span class="comment">%   model (see the Documentation for the structure)</span>
+0016 <span class="comment">%   - k: homothety coefficient for the geometrical parameters (defined as</span>
+0017 <span class="comment">%   the subject size in cm divided by 180)</span>
+0018 <span class="comment">%   - Signe: side of the thigh model ('R' for right side or 'L' for left side)</span>
+0019 <span class="comment">%   - Mass: mass of the solids</span>
+0020 <span class="comment">%   - AttachmentPoint: name of the attachment point of the model on the</span>
+0021 <span class="comment">%   already existing model (character string)</span>
+0022 <span class="comment">%   OUTPUT</span>
+0023 <span class="comment">%   - OsteoArticularModel: new osteo-articular model (see the Documentation</span>
+0024 <span class="comment">%   for the structure)</span>
+0025 <span class="comment">%________________________________________________________</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% Licence</span>
+0028 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0029 <span class="comment">%________________________________________________________</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0032 <span class="comment">% Georges Dumont</span>
+0033 <span class="comment">%________________________________________________________</span>
+0034 
+0035 <span class="comment">%% Variables de sortie :</span>
+0036 <span class="comment">% &quot;enrichissement de la structure &quot;Human_model&quot;&quot;</span>
+0037 list_solid={<span class="string">'lumbar_extension'</span> <span class="string">'lumbar_bending'</span> <span class="string">'torso'</span>};
+0038    
+0039 <span class="comment">%% solid numbering incremation</span>
+0040 
+0041 s=size(OsteoArticularModel,2)+1;  <span class="comment">%#ok&lt;NASGU&gt; % number of the first solid</span>
+0042 <span class="keyword">for</span> i=1:size(list_solid,2)      <span class="comment">% each solid numbering: s_&quot;nom du solide&quot;</span>
+0043     <span class="keyword">if</span> i==1
+0044         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s;'</span>))
+0045     <span class="keyword">else</span>
+0046         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s_'</span>,list_solid{i-1},<span class="string">'+1;'</span>))
+0047     <span class="keyword">end</span>
+0048 <span class="keyword">end</span>  
+0049     
+0050 <span class="comment">% find the number of the mother from the attachment point: 'attachment_pt'</span>
+0051 <span class="keyword">if</span> ~numel(AttachmentPoint)
+0052     s_mother=0;
+0053     pos_attachment_pt=[0 0 0]';
+0054 <span class="keyword">else</span>
+0055     test=0;
+0056     <span class="keyword">for</span> i=1:numel(OsteoArticularModel)
+0057         <span class="keyword">for</span> j=1:size(OsteoArticularModel(i).anat_position,1)
+0058             <span class="keyword">if</span> strcmp(AttachmentPoint,OsteoArticularModel(i).anat_position{j,1})
+0059                s_mother=i;
+0060                pos_attachment_pt=OsteoArticularModel(i).anat_position{j,2}+OsteoArticularModel(s_mother).c;
+0061                test=1;
+0062                <span class="keyword">break</span>
+0063             <span class="keyword">end</span>
+0064         <span class="keyword">end</span>
+0065         <span class="keyword">if</span> i==numel(OsteoArticularModel) &amp;&amp; test==0
+0066             error([AttachmentPoint <span class="string">' is no existent'</span>])        
+0067         <span class="keyword">end</span>       
+0068     <span class="keyword">end</span>
+0069     <span class="keyword">if</span> OsteoArticularModel(s_mother).child == 0      <span class="comment">% if the mother don't have any child</span>
+0070         OsteoArticularModel(s_mother).child = eval([<span class="string">'s_'</span> list_solid{1}]);    <span class="comment">% the child of this mother is this solid</span>
+0071     <span class="keyword">else</span>
+0072         [OsteoArticularModel]=<a href="../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval([<span class="string">'s_'</span> list_solid{1}]));   <span class="comment">% recherche de la derni�e soeur</span>
+0073     <span class="keyword">end</span>
+0074 <span class="keyword">end</span>    
+0075 <span class="comment">%%</span>
+0076 <span class="comment">% Center of mass</span>
+0077 CoM_bary = k*[-0.03 0.32 0]';
+0078 
+0079     <span class="comment">%%                     Definition of anatomical landmarks</span>
+0080 <span class="comment">% ------------------------- Thorax ----------------------------------------</span>
+0081 LowerTrunk_UpperTrunkNode = [0 0 0];
+0082 Thorax_T12L1JointNode = k*[0.012 0.138 0] - CoM_bary;
+0083 Skull_NeckNode=k*([-0.0748473 0.413762 0]')-CoM_bary;
+0084 Skull_TopOfHead=k*([0.00084;0.657;0])-CoM_bary;
+0085 <span class="comment">%% Definition of anatomical landmarks</span>
+0086 
+0087 Thorax_position_set= {<span class="keyword">...</span>
+0088     [<span class="string">'CLAV'</span>],k*([0.0384447; 0.36731; 0])-CoM_bary;<span class="keyword">...</span>
+0089     [<span class="string">'RSHO'</span>],k*([-0.03;0.44;0.15])-CoM_bary;<span class="keyword">...</span>
+0090     [<span class="string">'LSHO'</span>],k*([-0.03;0.44;-0.15])-CoM_bary;<span class="keyword">...</span>
+0091     [<span class="string">'STRN'</span>],k*([0.0967584; 0.215844; 0])-CoM_bary;<span class="keyword">...</span>
+0092     <span class="string">'C7'</span>, k*[-0.0748473 0.413762 0]'-CoM_bary;<span class="keyword">...</span>
+0093     [<span class="string">'Skull_TopOfHead'</span>],k*([0.00084;0.657;0])-CoM_bary;<span class="keyword">...</span>
+0094     [<span class="string">'ercspn_r-P2'</span>],k*([-0.055;0.11;0.0241])-CoM_bary;<span class="keyword">...</span>
+0095     [<span class="string">'ercspn_l-P2'</span>],k*([-0.055;0.11;-0.0241])-CoM_bary;<span class="keyword">...</span>
+0096     [<span class="string">'intobl_r-P2'</span>],k*([0.07;0.16;0.015])-CoM_bary;<span class="keyword">...</span>
+0097     [<span class="string">'intobl_l-P2'</span>],k*([0.07;0.16;-0.015])-CoM_bary;<span class="keyword">...</span>
+0098     [<span class="string">'extobl_r-P2'</span>],k*([0.065;0.11;0.11])-CoM_bary;<span class="keyword">...</span>
+0099     [<span class="string">'extobl_l-P2'</span>],k*([0.065;0.11;-0.11])-CoM_bary;<span class="keyword">...</span>
+0100     <span class="string">'Thorax_T12L1JointNode'</span>, Thorax_T12L1JointNode; <span class="keyword">...</span>
+0101  <span class="keyword">...</span><span class="comment">%   'RFHD', RFHD'; ...</span>
+0102  <span class="keyword">...</span><span class="comment">%   'LFHD', LFHD'; ...</span>
+0103  <span class="keyword">...</span><span class="comment">%   'RBHD', RBHD'; ...</span>
+0104  <span class="keyword">...</span><span class="comment">%   'LBHD', LBHD'; ...</span>
+0105     <span class="string">'Skull_TopOfHead'</span>, k*([0.00084;0.657;0])-CoM_bary; <span class="keyword">...</span>
+0106     <span class="string">'Skull_NeckNode'</span>, k*([-0.019; 0.41; 0])-CoM_bary; <span class="keyword">...</span>
+0107     <span class="string">'CoM_bary'</span>, CoM_bary;<span class="keyword">...</span>
+0108     };
+0109 <span class="comment">%%                     Scaling inertial parameters</span>
+0110 
+0111 <span class="comment">% distance between 'Pelvis_L5JointNode' and 'Thorax_T1C5'</span>
+0112 Lpts={<span class="string">'Pelvis_LowerTrunkNode'</span>;<span class="string">'LowerTrunk_UpperTrunkNode'</span>};
+0113 <span class="keyword">for</span> pp=1:2
+0114     test=0;
+0115     <span class="keyword">for</span> i=1:numel(OsteoArticularModel)
+0116         <span class="keyword">for</span> j=1:size(OsteoArticularModel(i).anat_position,1)
+0117             <span class="keyword">if</span> strcmp(Lpts{pp},OsteoArticularModel(i).anat_position{j,1})
+0118                Lpts{pp,2}=i; <span class="comment">% solid number</span>
+0119                Lpts{pp,3}=j; <span class="comment">% number of the anatomical landmarks</span>
+0120                test=1;
+0121                <span class="keyword">break</span>
+0122             <span class="keyword">end</span>
+0123         <span class="keyword">end</span>
+0124         <span class="keyword">if</span> i==numel(OsteoArticularModel) &amp;&amp; test==0
+0125             error([Lpts{pp} <span class="string">' is no existent'</span>])        
+0126         <span class="keyword">end</span>       
+0127     <span class="keyword">end</span>
+0128 <span class="keyword">end</span>
+0129 Lenght_Thorax = norm(Skull_NeckNode - [0 0 0]); <span class="comment">% CJC to LJC</span>
+0130 Lenght_Skull = norm(Skull_TopOfHead - Skull_NeckNode);
+0131 
+0132     <span class="comment">%% [&quot;Adjustments to McConville et al. and Young et al. body segment inertial parameters&quot;] R. Dumas</span>
+0133     <span class="comment">% ------------------------- Thorax ----------------------------------------</span>
+0134     [I_Thorax]=<a href="../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>([27 25 28 18 2 4*1i], Mass.Thorax_Mass, [0 0 0], Lenght_Thorax);
+0135     <span class="comment">% ------------------------- Skull ----------------------------------------</span>
+0136     [I_Skull]=<a href="../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>([31 25 33 9*1i 2*1i 3],Mass.Skull_Mass, [0 0 0], Lenght_Skull); 
+0137 
+0138 Ihead=[I_Skull(1) I_Skull(4) I_Skull(5); I_Skull(4) I_Skull(2) I_Skull(6); I_Skull(5) I_Skull(6) I_Skull(3)];
+0139 Ithorax=[I_Thorax(1) I_Thorax(4) I_Thorax(5); I_Thorax(4) I_Thorax(2) I_Thorax(6); I_Thorax(5) I_Thorax(6) I_Thorax(3)];
+0140 
+0141 Ihead_dep=<a href="../../../../Functions/AlgoMathsModel/Huygens.html" class="code" title="function [Io] = Huygens(OG,Ig,m)">Huygens</a>(Skull_NeckNode-CoM_bary,Ihead,Mass.Skull_Mass);
+0142 Ithorax_dep=<a href="../../../../Functions/AlgoMathsModel/Huygens.html" class="code" title="function [Io] = Huygens(OG,Ig,m)">Huygens</a>(Thorax_T12L1JointNode-CoM_bary,Ithorax,Mass.Thorax_Mass);
+0143 Iglob=Ihead_dep+Ithorax_dep;
+0144                     <span class="comment">%% %% &quot;Human_model&quot; structure generation</span>
+0145  
+0146 num_solid=0;
+0147 <span class="comment">%% Thorax</span>
+0148     <span class="comment">% UpperTrunk_J1</span>
+0149     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0150     name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0151     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0152     OsteoArticularModel(incr_solid).name=name;               <span class="comment">% solid name</span>
+0153     OsteoArticularModel(incr_solid).sister=0;                
+0154     OsteoArticularModel(incr_solid).child=s_lumbar_bending;                   
+0155     OsteoArticularModel(incr_solid).mother=s_mother;           
+0156     OsteoArticularModel(incr_solid).a=[0 0 1]'; 
+0157     OsteoArticularModel(incr_solid).joint=1;  
+0158     OsteoArticularModel(incr_solid).limit_inf=-0.2;
+0159     OsteoArticularModel(incr_solid).limit_sup=0.2;
+0160     OsteoArticularModel(incr_solid).linear_constraint=[];
+0161     OsteoArticularModel(incr_solid).Visual=0;
+0162     OsteoArticularModel(incr_solid).b=pos_attachment_pt;
+0163     OsteoArticularModel(incr_solid).c=[0 0 0]';
+0164     OsteoArticularModel(incr_solid).m=0;                 
+0165     OsteoArticularModel(incr_solid).I=zeros(3,3);
+0166     OsteoArticularModel(incr_solid).comment=<span class="string">'Trunk Flexion(-)/Extension(+)'</span>;
+0167 
+0168     <span class="comment">% UpperTrunk_J2</span>
+0169     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0170     name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0171     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0172     OsteoArticularModel(incr_solid).name=name;               <span class="comment">% solid name</span>
+0173     OsteoArticularModel(incr_solid).sister=0;                
+0174     OsteoArticularModel(incr_solid).child=s_torso;                   
+0175     OsteoArticularModel(incr_solid).mother=s_lumbar_extension;           
+0176     OsteoArticularModel(incr_solid).a=[1 0 0]';
+0177     OsteoArticularModel(incr_solid).joint=1;
+0178     OsteoArticularModel(incr_solid).limit_inf=-0.2;
+0179     OsteoArticularModel(incr_solid).limit_sup=0.2;
+0180     OsteoArticularModel(incr_solid).linear_constraint=[];
+0181     OsteoArticularModel(incr_solid).Visual=0;
+0182     OsteoArticularModel(incr_solid).b=[0 0 0]';  
+0183     OsteoArticularModel(incr_solid).c=[0 0 0]';
+0184     OsteoArticularModel(incr_solid).m=0;                 
+0185     OsteoArticularModel(incr_solid).I=zeros(3,3);
+0186     OsteoArticularModel(incr_solid).comment=<span class="string">'Trunk Axial Rotation Right(+)/Left(-)'</span>;
+0187 
+0188     <span class="comment">% Thorax</span>
+0189     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0190     name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0191     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0192     OsteoArticularModel(incr_solid).name=name;               <span class="comment">% solid name</span>
+0193     OsteoArticularModel(incr_solid).sister=0;                
+0194     OsteoArticularModel(incr_solid).child=0;                   
+0195     OsteoArticularModel(incr_solid).mother=s_lumbar_bending;           
+0196     OsteoArticularModel(incr_solid).a=[0 1 0]';    
+0197     OsteoArticularModel(incr_solid).joint=1;
+0198     OsteoArticularModel(incr_solid).limit_inf=-0.2;
+0199     OsteoArticularModel(incr_solid).limit_sup=0.2;
+0200     OsteoArticularModel(incr_solid).Visual=1;
+0201     OsteoArticularModel(incr_solid).calib_k_constraint=[];
+0202     OsteoArticularModel(incr_solid).b=[0 0 0]';  
+0203     OsteoArticularModel(incr_solid).c=CoM_bary;
+0204     OsteoArticularModel(incr_solid).m=Mass.Thorax_Mass+Mass.Skull_Mass;
+0205     OsteoArticularModel(incr_solid).I=Iglob;
+0206     OsteoArticularModel(incr_solid).anat_position=Thorax_position_set;
+0207     OsteoArticularModel(incr_solid).L={<span class="string">'Pelvis_L5JointNode'</span>;<span class="string">'Thorax_T1C5'</span>};
+0208     OsteoArticularModel(incr_solid).visual_file = [<span class="string">'gait2354/torso.mat'</span>];
+0209     OsteoArticularModel(incr_solid).comment=<span class="string">'Trunk Lateral Bending Right(+)/Left(-)'</span>;
+0210 
+0211 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

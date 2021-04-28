@@ -1,0 +1,364 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of SymbolicFunctionGenerationIK</title>
+  <meta name="keywords" content="SymbolicFunctionGenerationIK">
+  <meta name="description" content="Computation of function used in the inverse kinematics step">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html Kinematics -->
+<h1>SymbolicFunctionGenerationIK
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Computation of function used in the inverse kinematics step</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Human_model,Jacob,Generalized_Coordinates]=SymbolicFunctionGenerationIK(Human_model,Markers_set) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Computation of function used in the inverse kinematics step
+   Generated functions contain the global position of each marker and its
+   Jacobian matrix. All functions are evaluated according to the joint
+   coordinates
+
+   INPUT
+   - Human_model: osteo-articular model (see the Documentation for the
+   structure)
+   - Markers_set: set of markers (see the Documentation for the structure)
+   OUPUT
+   - Human_model: osteo-articular model with additionnal informations about
+   the generated functions (see the Documentation for the structure)
+   - Jacob: structure containing functions related to the Jacobian matrix
+   - nbClosedLoop: number of closed loop contained in the model
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________
+
+ Modification : Pierre Puchaud 2018
+ Jacobian matrix generation more efficient.
+
+% list of markers from the model</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="Symbolic_ForwardKinematicsCoupure.html" class="code" title="function [Human_model,Markers_set,num_cut,numClosedLoop,c,ceq]=Symbolic_ForwardKinematicsCoupure(Human_model,Markers_set,j,q,k,p_adapt,num_cut,numClosedLoop,c,ceq)">Symbolic_ForwardKinematicsCoupure</a>	Computation of a symbolic forward kinematics</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Functions/Calibration/CalibrateModelGeneration.html" class="code" title="function [] = CalibrateModelGeneration(ModelParameters,AnalysisParameters)">CalibrateModelGeneration</a>	Generation of the calibrated musculoskeletal model</li><li><a href="../../Functions/Calibration/CalibrateModelGenerationNum.html" class="code" title="function [] = CalibrateModelGenerationNum(ModelParameters,AnalysisParameters)">CalibrateModelGenerationNum</a>	Generation of the calibrated musculoskeletal model</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Human_model,Jacob,Generalized_Coordinates]=SymbolicFunctionGenerationIK(Human_model,Markers_set)</a>
+0002 <span class="comment">% Computation of function used in the inverse kinematics step</span>
+0003 <span class="comment">%   Generated functions contain the global position of each marker and its</span>
+0004 <span class="comment">%   Jacobian matrix. All functions are evaluated according to the joint</span>
+0005 <span class="comment">%   coordinates</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   INPUT</span>
+0008 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the</span>
+0009 <span class="comment">%   structure)</span>
+0010 <span class="comment">%   - Markers_set: set of markers (see the Documentation for the structure)</span>
+0011 <span class="comment">%   OUPUT</span>
+0012 <span class="comment">%   - Human_model: osteo-articular model with additionnal informations about</span>
+0013 <span class="comment">%   the generated functions (see the Documentation for the structure)</span>
+0014 <span class="comment">%   - Jacob: structure containing functions related to the Jacobian matrix</span>
+0015 <span class="comment">%   - nbClosedLoop: number of closed loop contained in the model</span>
+0016 <span class="comment">%________________________________________________________</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% Licence</span>
+0019 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0020 <span class="comment">%________________________________________________________</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0023 <span class="comment">% Georges Dumont</span>
+0024 <span class="comment">%________________________________________________________</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% Modification : Pierre Puchaud 2018</span>
+0027 <span class="comment">% Jacobian matrix generation more efficient.</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%% list of markers from the model</span>
+0030 list_markers={};
+0031 <span class="keyword">for</span> i=1:numel(Markers_set)
+0032     <span class="keyword">if</span> Markers_set(i).exist
+0033         list_markers=[list_markers;Markers_set(i).name]; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0034     <span class="keyword">end</span>
+0035 <span class="keyword">end</span>
+0036 
+0037 <span class="comment">%% variables initialization</span>
+0038 q = sym(<span class="string">'q'</span>, [numel(Human_model) 1]);  <span class="comment">% joint coordinates initialization (number of solids - 1 (pelvis))</span>
+0039 assume(q,<span class="string">'real'</span>)
+0040 
+0041 q_map=eye(numel(Human_model));
+0042 q_dep_map=zeros(numel(Human_model));
+0043 
+0044 bool_kd = isfield(Human_model,<span class="string">'kinematic_dependancy'</span>);
+0045 <span class="keyword">if</span> bool_kd
+0046     X={Human_model.kinematic_dependancy};
+0047     ind_q=find(~cellfun(@isempty,X)==1);
+0048     <span class="keyword">for</span> ii=1:length(ind_q)
+0049         q_map(ind_q(ii),ind_q(ii))=0;<span class="comment">% q is reduced in case of dependant variables.</span>
+0050         q_dep_map(ind_q(ii),ind_q(ii))=1;<span class="comment">% indexing</span>
+0051     <span class="keyword">end</span>
+0052 <span class="keyword">end</span>
+0053 s_root=find([Human_model.mother]==0);
+0054 q_map(s_root,s_root)=0;
+0055 
+0056 [~,col]=find(sum(q_map,1)==0); q_map(:,col)=[];
+0057 <span class="comment">% q_map=orth(q_map); %kernel of A in A*K=K (Kernal of A matrix)</span>
+0058 [~,col]=find(sum(q_dep_map,1)==0); q_dep_map(:,col)=[];
+0059 <span class="comment">%q_dep_map=orth(q_dep_map); %kernel of A in A*K=K (Kernal of A matrix)</span>
+0060 <span class="comment">% matrix mapping coordinates without the moving basis.</span>
+0061 q_map_unsix=q_map;[~,col]=find(q_map_unsix(end-5:<span class="keyword">end</span>,:));
+0062     q_map_unsix(:,col)=[];
+0063 
+0064 q_red=q_map'*q;
+0065 q_dep=q_dep_map'*q;
+0066 
+0067 <span class="keyword">for</span> ii=1:size(q_dep_map,2)
+0068     ind_q_dependancy=Human_model(logical(q_dep_map(:,ii))).kinematic_dependancy.Joint;
+0069     q_handle=Human_model(logical(q_dep_map(:,ii))).kinematic_dependancy.q;
+0070     q_dependancy = q(ind_q_dependancy);
+0071     q_handle_input = cell(length(q_dependancy),1);
+0072     <span class="keyword">for</span> jj=1:size(q_handle_input)
+0073         q_handle_input{jj} = q_dependancy(jj);
+0074     <span class="keyword">end</span>
+0075     q_dep(ii)=q_handle(q_handle_input{:});
+0076 <span class="keyword">end</span>
+0077 
+0078 fq_dep=matlabFunction(q_dep,<span class="string">'vars'</span>,{q_red});
+0079 q_complete=q_dep_map*q_dep+ q_map*q_red;
+0080 
+0081 Generalized_Coordinates.q_red=q_red;
+0082 Generalized_Coordinates.q_dep=q_dep;
+0083 Generalized_Coordinates.fq_dep=fq_dep;
+0084 Generalized_Coordinates.q_map=q_map;
+0085 Generalized_Coordinates.q_map_unsix=q_map_unsix;
+0086 Generalized_Coordinates.q_dep_map=q_dep_map;
+0087 Generalized_Coordinates.q_complete=q_complete;
+0088 
+0089 k=ones(numel(Human_model),1);
+0090 p_adapt=zeros(sum([Markers_set.exist]),3);
+0091 pPelvis=zeros(3,1);
+0092 RPelvis=eye(3,3);
+0093 
+0094 
+0095 <span class="comment">%% Symbolic function generation for each coordinate frame position</span>
+0096 s_root=find([Human_model.mother]==0); <span class="comment">% number of the root solid</span>
+0097 
+0098 <span class="comment">% initialization of the pelvis position and rotation</span>
+0099 Human_model(s_root).p=pPelvis;
+0100 Human_model(s_root).R=RPelvis;
+0101 
+0102 <span class="comment">% Computation of the symbolic markers position</span>
+0103 <span class="comment">%[Human_model,Markers_set,~,~,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure(Human_model,Markers_set,s_root,q,k,p_adapt,1,1);</span>
+0104 [Human_model,Markers_set,~,~,c_ClosedLoop,ceq_ClosedLoop]=<a href="Symbolic_ForwardKinematicsCoupure.html" class="code" title="function [Human_model,Markers_set,num_cut,numClosedLoop,c,ceq]=Symbolic_ForwardKinematicsCoupure(Human_model,Markers_set,j,q,k,p_adapt,num_cut,numClosedLoop,c,ceq)">Symbolic_ForwardKinematicsCoupure</a>(Human_model,Markers_set,s_root,q_complete,k,p_adapt,1,1);
+0105 
+0106 <span class="comment">% position and rotation of the solids used as cuts</span>
+0107 <span class="keyword">for</span> ii=1:max([Human_model.KinematicsCut])
+0108     eval([<span class="string">'p'</span> num2str(ii) <span class="string">'cut = sym([''p'' num2str(ii) ''cut''], [3 1]);'</span>])
+0109     eval([<span class="string">'R'</span> num2str(ii) <span class="string">'cut = sym([''R'' num2str(ii) ''cut''], [3 3]);'</span>])
+0110     <span class="keyword">for</span> i=1:3
+0111         eval([<span class="string">'assume(p'</span> num2str(ii) <span class="string">'cut('</span> num2str(i) <span class="string">',1),''real'');'</span>])
+0112         <span class="keyword">for</span> z=1:3
+0113             eval([<span class="string">'assume(R'</span> num2str(ii) <span class="string">'cut('</span> num2str(i) <span class="string">','</span> num2str(z) <span class="string">'),''real'');'</span>])
+0114         <span class="keyword">end</span>
+0115     <span class="keyword">end</span>
+0116     pcut(:,:,ii)=eval([<span class="string">'p'</span> num2str(ii) <span class="string">'cut'</span>]); <span class="comment">%#ok&lt;AGROW&gt;</span>
+0117     Rcut(:,:,ii)=eval([<span class="string">'R'</span> num2str(ii) <span class="string">'cut'</span>]); <span class="comment">%#ok&lt;AGROW&gt;</span>
+0118 <span class="keyword">end</span>
+0119 
+0120 <span class="comment">% &quot;Symbolic_function&quot; folder generation</span>
+0121 <span class="keyword">if</span> exist([cd <span class="string">'/Symbolic_function'</span>])~=7 <span class="comment">%#ok&lt;EXIST&gt;</span>
+0122     mkdir(<span class="string">'Symbolic_function'</span>)
+0123 <span class="keyword">end</span>
+0124 
+0125 <span class="comment">%% Jacobian matrix computation (thanks to several matrix)</span>
+0126 E = [Markers_set.exist]';
+0127 ind_mk = find(E==1);
+0128 pos_root =find([Human_model.mother]==0);
+0129 <span class="comment">% ind_s = 1:numel(Human_model)~=pos_root;</span>
+0130 ind_s = logical(q_map'*(1:numel(Human_model)~=pos_root)');
+0131 
+0132 <span class="comment">% what if cuts are not in the reduce set ???</span>
+0133 ind_Kcut = find(cellfun(@isempty,{Human_model.KinematicsCut} )==0);
+0134 <span class="comment">% ind_Kcut = logical(q_map'*not(cellfun(@isempty,{Human_model.KinematicsCut} ))');</span>
+0135 
+0136 <span class="comment">%Nb_q = numel(Human_model)-1;</span>
+0137 Nb_q = numel(q_red);<span class="comment">%-1;</span>
+0138 Nb_mk=numel(list_markers);
+0139 Nb_dir_mk=3*Nb_mk;
+0140 
+0141 <span class="comment">% Array of marker functions for each direction of space x,y,z</span>
+0142 f=sym(zeros(Nb_dir_mk,1));
+0143 <span class="keyword">for</span> ii=1:Nb_mk
+0144     iie = ind_mk(ii);
+0145     <span class="keyword">for</span> jj=1:3
+0146         ind = sub2ind([3 Nb_mk],jj,ii);
+0147         f(ind) = Markers_set(iie).position_symbolic(jj);
+0148     <span class="keyword">end</span>
+0149 <span class="keyword">end</span>
+0150 
+0151 <span class="comment">% Jfq</span>
+0152 Jfq_sym = jacobian(f,q_red(ind_s));
+0153 <span class="comment">%Jfq_sym = jacobian(f,q(ind_s)); q_complete</span>
+0154 
+0155 Jfq =zeros(Nb_dir_mk,Nb_q);
+0156 <span class="comment">% idx=Jfq_sym(:)==0;</span>
+0157 <span class="comment">% Jfq(idx)=0;</span>
+0158 idx=Jfq_sym(:)==1;
+0159 Jfq(idx)=1;
+0160 
+0161 indexesNumericJfq = find(Jfq_sym~=0 &amp; Jfq_sym~=1)';
+0162 <span class="comment">% nonNumericJfq = matlabFunction(Jfq_sym(indexesNumericJfq), 'Vars', {q,pcut,Rcut});</span>
+0163 nonNumericJfq = matlabFunction(Jfq_sym(indexesNumericJfq), <span class="string">'Vars'</span>, {q_red,pcut,Rcut});
+0164 
+0165 <span class="comment">% Jfcut</span>
+0166 Nb_cut = size(pcut,3);
+0167 Nb_param_1cut= 12; <span class="comment">%3 coordinates in translations, 9 in rotations</span>
+0168 Nb_param_cut = Nb_param_1cut*Nb_cut;
+0169 
+0170 <span class="comment">% kinematic cuts parameters</span>
+0171 param=[pcut,permute(Rcut,[2,1,3])];
+0172 
+0173 Jfcut_sym = jacobian(f,param(:));
+0174 
+0175 Jfcut = zeros(Nb_dir_mk,Nb_param_cut);
+0176 <span class="comment">% idx=Jfcut_sym(:)==0;</span>
+0177 <span class="comment">% Jfcut(idx)=0;</span>
+0178 idx=Jfcut_sym(:)==1;
+0179 Jfcut(idx)=1;
+0180 
+0181 indexesNumericJfcut = find(Jfcut_sym~=0 &amp; Jfcut_sym~=1)';
+0182 <span class="comment">%nonNumericJfcut = matlabFunction(Jfcut_sym(indexesNumericJfcut), 'Vars', {q,pcut,Rcut});</span>
+0183 nonNumericJfcut = matlabFunction(Jfcut_sym(indexesNumericJfcut), <span class="string">'Vars'</span>, {q_red,pcut,Rcut});
+0184 
+0185 <span class="comment">% Fonctions pcut and Rcut for kinematic cut indices</span>
+0186 fcut=sym(zeros(Nb_param_1cut,Nb_cut));
+0187 num_cut = [Human_model(ind_Kcut).KinematicsCut];
+0188 <span class="keyword">for</span> ii=1:Nb_cut
+0189     i_cut=ind_Kcut(ii);
+0190     fpcut = [Human_model(i_cut).p];
+0191     fpcut = fpcut(:);
+0192     
+0193     fRcut = [Human_model(i_cut).R];
+0194     fRcut = permute(fRcut,[2,1,3]);
+0195     fRcut = fRcut(:);
+0196     fcut(:,num_cut(ii))=[fpcut;fRcut]; <span class="comment">% ordered by the number of the cut</span>
+0197 <span class="keyword">end</span>
+0198 fcut=fcut(:);
+0199 
+0200 <span class="comment">% Jcutq</span>
+0201 Jcutq_sym = jacobian(fcut,q_red(ind_s));
+0202 <span class="comment">% Jcutq_sym=jacobian(fcut,q(ind_s)); %complete</span>
+0203 
+0204 Jcutq = zeros(Nb_param_cut,Nb_q); 
+0205 <span class="comment">% idx=Jcutq_sym(:)==0;</span>
+0206 <span class="comment">% Jcutq(idx)=0;</span>
+0207 idx=Jcutq_sym(:)==1;
+0208 Jcutq(idx)=1;
+0209 
+0210 indexesNumericJcutq=find(Jcutq_sym~=0 &amp; Jcutq_sym~=1);
+0211 <span class="comment">% nonNumericJcutq = matlabFunction(Jcutq_sym(indexesNumericJcutq), 'Vars', {q,pcut,Rcut});</span>
+0212 nonNumericJcutq = matlabFunction(Jcutq_sym(indexesNumericJcutq), <span class="string">'Vars'</span>, {q_red,pcut,Rcut});
+0213 
+0214 <span class="comment">% Jcutcut</span>
+0215 Jcutcut_sym=jacobian(fcut,param(:));
+0216 
+0217 Jcutcut = eye(Nb_param_cut,Nb_param_cut);
+0218 <span class="comment">% Diagonal terms are the derivatives of themselves</span>
+0219 <span class="comment">% dy/dy=1</span>
+0220 <span class="comment">% idx=Jcutcut_sym(:)==0;</span>
+0221 <span class="comment">% Jcutcut(idx)=0;</span>
+0222 idx=Jcutcut_sym(:)==1;
+0223 Jcutcut(idx)=1;
+0224 
+0225 indexesNumericJcutcut=find(Jcutcut_sym~=0 &amp; Jcutcut_sym~=1);
+0226 <span class="comment">% if ~isempty(indexesNumericJcutcut)</span>
+0227 <span class="comment">%     nonNumericJcutcut = matlabFunction(Jcutcut_sym(indexesNumericJcutcut), 'Vars', {q,pcut,Rcut});</span>
+0228 nonNumericJcutcut = matlabFunction(Jcutcut_sym(indexesNumericJcutcut), <span class="string">'Vars'</span>, {q_red,pcut,Rcut});
+0229 <span class="comment">% end</span>
+0230 
+0231 <span class="comment">% Find solides without marqueurs at the end of the chains.</span>
+0232 RmvInd_q = intersect(find(sum(Jcutq_sym,1)==0),find(sum(Jfq_sym,1)==0));
+0233 <span class="comment">%% Sauvegarde des donn�s relatives �la matrice Jacobienne</span>
+0234 Jacob.Jfq = Jfq;
+0235 Jacob.indexesNumericJfq = indexesNumericJfq;
+0236 Jacob.nonNumericJfq = nonNumericJfq;
+0237 Jacob.Jfcut = Jfcut;
+0238 Jacob.indexesNumericJfcut = indexesNumericJfcut;
+0239 Jacob.nonNumericJfcut = nonNumericJfcut;
+0240 Jacob.Jcutq = Jcutq;
+0241 Jacob.indexesNumericJcutq = indexesNumericJcutq;
+0242 Jacob.nonNumericJcutq = nonNumericJcutq;
+0243 Jacob.Jcutcut = Jcutcut;
+0244 Jacob.indexesNumericJcutcut = indexesNumericJcutcut;
+0245 Jacob.nonNumericJcutcut = nonNumericJcutcut;
+0246 Jacob.RmvInd_q=RmvInd_q;
+0247 <span class="comment">%% Cr�tion des fonctions pour chaque marqueurs et chaque solide de coupure</span>
+0248 
+0249 <span class="keyword">for</span> ii=1:length(ind_mk)
+0250     m = ind_mk(ii);
+0251 <span class="comment">%     matlabFunction(Markers_set(m).position_symbolic,'file',['Symbolic_function/' Markers_set(m).name '_Position.m'],'vars',{q,pcut,Rcut});</span>
+0252     matlabFunction(Markers_set(m).position_symbolic,<span class="string">'file'</span>,[<span class="string">'Symbolic_function/'</span> Markers_set(m).name <span class="string">'_Position.m'</span>],<span class="string">'vars'</span>,{q_red,pcut,Rcut});
+0253 <span class="keyword">end</span>
+0254 
+0255 <span class="comment">% Cut solid</span>
+0256 <span class="keyword">for</span> ii=1:length(ind_Kcut) <span class="comment">% solide i</span>
+0257     i_Kc = ind_Kcut(ii);
+0258 <span class="comment">%     matlabFunction(Human_model(i_Kc).R,Human_model(i_Kc).p,'File',['Symbolic_function/f' num2str(Human_model(i_Kc).KinematicsCut) 'cut.m'],...</span>
+0259 <span class="comment">%         'Outputs',{['R' num2str(num2str(Human_model(i_Kc).KinematicsCut)) 'cut' ],['p' num2str(num2str(Human_model(i_Kc).KinematicsCut)) 'cut' ]},...;</span>
+0260 <span class="comment">%         'vars',{q,pcut,Rcut});</span>
+0261     matlabFunction(Human_model(i_Kc).R,Human_model(i_Kc).p,<span class="string">'File'</span>,[<span class="string">'Symbolic_function/f'</span> num2str(Human_model(i_Kc).KinematicsCut) <span class="string">'cut.m'</span>],<span class="keyword">...</span>
+0262         <span class="string">'Outputs'</span>,{[<span class="string">'R'</span> num2str(num2str(Human_model(i_Kc).KinematicsCut)) <span class="string">'cut'</span> ],[<span class="string">'p'</span> num2str(num2str(Human_model(i_Kc).KinematicsCut)) <span class="string">'cut'</span> ]},<span class="keyword">...</span><span class="comment">;</span>
+0263         <span class="string">'vars'</span>,{q_red,pcut,Rcut});
+0264 <span class="keyword">end</span>
+0265 
+0266 <span class="comment">% Closed loops</span>
+0267 <span class="keyword">for</span> i=1:numel(c_ClosedLoop)
+0268     matlabFunction(c_ClosedLoop{i},ceq_ClosedLoop{i},<span class="string">'File'</span>,[<span class="string">'Symbolic_function/fCL'</span> num2str(i) <span class="string">'.m'</span>],<span class="keyword">...</span>
+0269             <span class="string">'Outputs'</span>,{<span class="string">'c'</span>,<span class="string">'ceq'</span>},<span class="string">'vars'</span>,{q_red});   
+0270 <span class="keyword">end</span>
+0271 
+0272 <span class="comment">%We delete p and R fields</span>
+0273 Human_model = rmfield(Human_model, <span class="string">'p'</span>);
+0274 Human_model = rmfield(Human_model, <span class="string">'R'</span>);
+0275 
+0276 <span class="comment">%% find kinematic cuts to add them again to human model</span>
+0277 <span class="comment">% if bool_kd</span>
+0278 <span class="comment">%     ind_reduce = find(~cellfun(@isempty,{Human_model.KinematicsCut}')==1);</span>
+0279 <span class="comment">%     for ii=1:length(ind_reduce)</span>
+0280 <span class="comment">%         [~,ind_complete]=intersect({Human_model_save.name}',Human_model(ind_reduce(ii)).name);</span>
+0281 <span class="comment">%         Human_model_save(ind_complete).KinematicsCut=Human_model(ind_reduce(ii)).KinematicsCut;</span>
+0282 <span class="comment">%     end</span>
+0283 <span class="comment">%     Human_model = Human_model_save;</span>
+0284 <span class="comment">% end</span>
+0285 
+0286 <span class="keyword">end</span>
+0287 
+0288 
+0289 
+0290 
+0291</pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

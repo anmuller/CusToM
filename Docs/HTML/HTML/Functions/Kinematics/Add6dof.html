@@ -1,0 +1,191 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Add6dof</title>
+  <meta name="keywords" content="Add6dof">
+  <meta name="description" content="Addition of a 6 dof joint">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html Kinematics -->
+<h1>Add6dof
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Addition of a 6 dof joint</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Human_model] = Add6dof(Human_model) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Addition of a 6 dof joint
+   A 6 dof joint (3 translations and 3 rotations) is added between the
+   global frame and the biomechanical model root
+
+   INPUT
+   - Human_model: osteo-articular model (see the Documentation for the
+   structure).
+   OUTPUT
+   - Human_model: osteo-articular model with the added 6 dof joint (see the
+   Documentation for the structure).
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Functions/Animation/DataExtractionForAnimation.html" class="code" title="function [filename,DataXSens,q,q6dof,Markers_set,Muscles,real_markers,PelvisPosition,PelvisOrientation,EnableModel,Human_model,AnalysisParameters,InverseKinematicsResults,ExperimentalData,BiomechanicalModel]=DataExtractionForAnimation(AnimateParameters,ModelParameters)">DataExtractionForAnimation</a>	Extraction of useful data for animation</li><li><a href="../../Functions/Calibration/CalibrateModelGeneration.html" class="code" title="function [] = CalibrateModelGeneration(ModelParameters,AnalysisParameters)">CalibrateModelGeneration</a>	Generation of the calibrated musculoskeletal model</li><li><a href="../../Functions/Calibration/CalibrateModelGenerationNum.html" class="code" title="function [] = CalibrateModelGenerationNum(ModelParameters,AnalysisParameters)">CalibrateModelGenerationNum</a>	Generation of the calibrated musculoskeletal model</li><li><a href="../../Functions/Calibration/Geometrical/GeometricalCalibration.html" class="code" title="function [Human_model_calib, calib_parameters, Markers_set] = GeometricalCalibration(OsteoArticularModel, Markers_set, AnalysisParameters)">GeometricalCalibration</a>	Calibration of the geometrical parameters</li><li><a href="../../Functions/Calibration/Muscle/GenerateGenericModel.html" class="code" title="function BiomechanicalModel=GenerateGenericModel(ModelParameters)">GenerateGenericModel</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Human_model] = Add6dof(Human_model)</a>
+0002 <span class="comment">% Addition of a 6 dof joint</span>
+0003 <span class="comment">%   A 6 dof joint (3 translations and 3 rotations) is added between the</span>
+0004 <span class="comment">%   global frame and the biomechanical model root</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   INPUT</span>
+0007 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the</span>
+0008 <span class="comment">%   structure).</span>
+0009 <span class="comment">%   OUTPUT</span>
+0010 <span class="comment">%   - Human_model: osteo-articular model with the added 6 dof joint (see the</span>
+0011 <span class="comment">%   Documentation for the structure).</span>
+0012 <span class="comment">%________________________________________________________</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Licence</span>
+0015 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0016 <span class="comment">%________________________________________________________</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0019 <span class="comment">% Georges Dumont</span>
+0020 <span class="comment">%________________________________________________________</span>
+0021 
+0022 <span class="comment">%% Numerotation incrementation and root parameters changement</span>
+0023 
+0024 s_root=find([Human_model.mother]==0); <span class="comment">% number of the root solid</span>
+0025 list_solid={<span class="string">'root0'</span> <span class="string">'6dofTx'</span> <span class="string">'6dofTy'</span> <span class="string">'6dofTz'</span> <span class="string">'6dofRx'</span> <span class="string">'6dofRy'</span>};  <span class="comment">% list of the degrees of freedom</span>
+0026 <span class="keyword">for</span> i=1:numel(list_solid)  <span class="comment">% numbers incrementation</span>
+0027     eval([<span class="string">'s_'</span> list_solid{i} <span class="string">'=numel(Human_model)+i;'</span>])    
+0028 <span class="keyword">end</span>
+0029 <span class="comment">% Adding the field mother to the root</span>
+0030 eval([<span class="string">'Human_model(s_root).mother=s_'</span> list_solid{end} <span class="string">';'</span>])
+0031 Human_model(s_root).a=[0 0 1]';
+0032 Human_model(s_root).limit_inf=-Inf;
+0033 Human_model(s_root).limit_sup=Inf;
+0034 Human_model(s_root).comment=<span class="string">'Rotation - Z-Rotation - Anterior(-)/Posterior(+)'</span>;<span class="comment">%</span>
+0035 
+0036 <span class="comment">%% Solids definition of the 6-dof joint</span>
+0037 
+0038 Human_model(s_root0).name=<span class="string">'root0'</span>;   
+0039 Human_model(s_root0).sister=0;        
+0040 Human_model(s_root0).child=s_6dofTx; 
+0041 Human_model(s_root0).mother=0;                 
+0042 Human_model(s_root0).a=[0 0 0]';            
+0043 Human_model(s_root0).limit_inf=0;    
+0044 Human_model(s_root0).limit_sup=0;   
+0045 Human_model(s_root0).Visual=0;
+0046 Human_model(s_root0).m=0;                  
+0047 Human_model(s_root0).b=[0 0 0]';       
+0048 Human_model(s_root0).I=zeros(3,3);  
+0049 Human_model(s_root0).c=[0 0 0]';   
+0050 Human_model(s_root0).comment=<span class="string">''</span>;<span class="comment">%</span>
+0051 
+0052 Human_model(s_6dofTx).name=<span class="string">'6dofTx'</span>;   
+0053 Human_model(s_6dofTx).sister=0;        
+0054 Human_model(s_6dofTx).child=s_6dofTy; 
+0055 Human_model(s_6dofTx).mother=s_root0;                 
+0056 Human_model(s_6dofTx).a=[1 0 0]';            
+0057 Human_model(s_6dofTx).joint=2;
+0058 Human_model(s_6dofTx).limit_inf=-Inf;    
+0059 Human_model(s_6dofTx).limit_sup=Inf; 
+0060 Human_model(s_6dofTx).Visual=0;
+0061 Human_model(s_6dofTx).m=0;                  
+0062 Human_model(s_6dofTx).b=[0 0 0]';       
+0063 Human_model(s_6dofTx).I=zeros(3,3);  
+0064 Human_model(s_6dofTx).c=[0 0 0]'; 
+0065 Human_model(s_6dofTx).comment=<span class="string">'Antero-Posterior Translation'</span>;<span class="comment">%</span>
+0066 
+0067 Human_model(s_6dofTy).name=<span class="string">'6dofTy'</span>;   
+0068 Human_model(s_6dofTy).sister=0;        
+0069 Human_model(s_6dofTy).child=s_6dofTz; 
+0070 Human_model(s_6dofTy).mother=s_6dofTx;                 
+0071 Human_model(s_6dofTy).a=[0 1 0]';            
+0072 Human_model(s_6dofTy).joint=2;
+0073 Human_model(s_6dofTy).limit_inf=-Inf;    
+0074 Human_model(s_6dofTy).limit_sup=Inf; 
+0075 Human_model(s_6dofTy).Visual=0;
+0076 Human_model(s_6dofTy).m=0;                  
+0077 Human_model(s_6dofTy).b=[0 0 0]';       
+0078 Human_model(s_6dofTy).I=zeros(3,3);  
+0079 Human_model(s_6dofTy).c=[0 0 0]';  
+0080 Human_model(s_6dofTy).comment=<span class="string">'Vertical Translation'</span>;<span class="comment">%</span>
+0081 
+0082 Human_model(s_6dofTz).name=<span class="string">'6dofTz'</span>;   
+0083 Human_model(s_6dofTz).sister=0;        
+0084 Human_model(s_6dofTz).child=s_6dofRx; 
+0085 Human_model(s_6dofTz).mother=s_6dofTy;                 
+0086 Human_model(s_6dofTz).a=[0 0 1]';            
+0087 Human_model(s_6dofTz).joint=2;
+0088 Human_model(s_6dofTz).limit_inf=-Inf;    
+0089 Human_model(s_6dofTz).limit_sup=Inf;
+0090 Human_model(s_6dofTz).Visual=0;
+0091 Human_model(s_6dofTz).m=0;                  
+0092 Human_model(s_6dofTz).b=[0 0 0]';       
+0093 Human_model(s_6dofTz).I=zeros(3,3);  
+0094 Human_model(s_6dofTz).c=[0 0 0]';
+0095 Human_model(s_6dofTz).comment=<span class="string">'Mediolateral Translation'</span>;<span class="comment">%</span>
+0096 
+0097 Human_model(s_6dofRx).name=<span class="string">'6dofRx'</span>;   
+0098 Human_model(s_6dofRx).sister=0;        
+0099 Human_model(s_6dofRx).child=s_6dofRy; 
+0100 Human_model(s_6dofRx).mother=s_6dofTz;                 
+0101 Human_model(s_6dofRx).a=[1 0 0]';            
+0102 Human_model(s_6dofRx).joint=1;
+0103 Human_model(s_6dofRx).limit_inf=-Inf;    
+0104 Human_model(s_6dofRx).limit_sup=Inf;  
+0105 Human_model(s_6dofRx).Visual=0;
+0106 Human_model(s_6dofRx).m=0;                  
+0107 Human_model(s_6dofRx).b=[0 0 0]';       
+0108 Human_model(s_6dofRx).I=zeros(3,3);  
+0109 Human_model(s_6dofRx).c=[0 0 0]';
+0110 Human_model(s_6dofRx).comment=<span class="string">'Obliquity - X-Rotation - Right(-)/Left(+))'</span>;<span class="comment">%</span>
+0111 
+0112 Human_model(s_6dofRy).name=<span class="string">'6dofRy'</span>;   
+0113 Human_model(s_6dofRy).sister=0;        
+0114 Human_model(s_6dofRy).child=s_root; 
+0115 Human_model(s_6dofRy).mother=s_6dofRx;                 
+0116 Human_model(s_6dofRy).a=[0 1 0]';            
+0117 Human_model(s_6dofRy).joint=1;
+0118 Human_model(s_6dofRy).limit_inf=-Inf;    
+0119 Human_model(s_6dofRy).limit_sup=Inf;  
+0120 Human_model(s_6dofRy).Visual=0;
+0121 Human_model(s_6dofRy).m=0;                  
+0122 Human_model(s_6dofRy).b=[0 0 0]';       
+0123 Human_model(s_6dofRy).I=zeros(3,3);  
+0124 Human_model(s_6dofRy).c=[0 0 0]';
+0125 Human_model(s_6dofRy).comment=<span class="string">'Rotation - Y-Rotation - Internal(-)/External(+))'</span>;<span class="comment">%</span>
+0126 
+0127 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

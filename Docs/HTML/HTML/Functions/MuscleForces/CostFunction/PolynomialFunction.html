@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of PolynomialFunction</title>
+  <meta name="keywords" content="PolynomialFunction">
+  <meta name="description" content="Optimization used for the force sharing problem: polynomial function">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- ../menu.html MuscleForces --><!-- menu.html CostFunction -->
+<h1>PolynomialFunction
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Optimization used for the force sharing problem: polynomial function</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [Aopt] = PolynomialFunction(A0, Aeq, beq, Amin, Amax, fmincon_options, options, Fa, Fmax, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Optimization used for the force sharing problem: polynomial function
+   
+    Based on :
+    -Pedotti, A., Krishnan, V. V., &amp; Stark, L., 1978. 
+    Optimization of muscle-force sequencing in human locomotion. Mathematical Biosciences, 38(1-2), 57-76.
+    -Herzog, W., 1987. 
+    Individual muscle force estimations using a non-linear optimal design. Journal of Neuroscience Methods, 21(2-4), 167-179.
+    -Happee, R., 1994. 
+    Inverse dynamic optimization including muscular dynamics, a new simulation method applied to goal directed movements. Journal of Biomechanics, 27(7), 953-960.
+
+   INPUT
+   - F0: initial solution
+   - Aeq / beq: matrix used for the equality contraints: Aeq*X=beq
+   - Fmin: lower bounds 
+   - Fmax: upper bounds
+   - fmincon_options: options for the fmincon optimization function
+   - options: degree of the polynomial function
+   - Fmaxbis: upper boundss
+   OUTPUT
+   - Fopt: solution of the optimization problem
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Aopt] = PolynomialFunction(A0, Aeq, beq, Amin, Amax, fmincon_options, options, Fa, Fmax, varargin)</a>
+0002 <span class="comment">% Optimization used for the force sharing problem: polynomial function</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%    Based on :</span>
+0005 <span class="comment">%    -Pedotti, A., Krishnan, V. V., &amp; Stark, L., 1978.</span>
+0006 <span class="comment">%    Optimization of muscle-force sequencing in human locomotion. Mathematical Biosciences, 38(1-2), 57-76.</span>
+0007 <span class="comment">%    -Herzog, W., 1987.</span>
+0008 <span class="comment">%    Individual muscle force estimations using a non-linear optimal design. Journal of Neuroscience Methods, 21(2-4), 167-179.</span>
+0009 <span class="comment">%    -Happee, R., 1994.</span>
+0010 <span class="comment">%    Inverse dynamic optimization including muscular dynamics, a new simulation method applied to goal directed movements. Journal of Biomechanics, 27(7), 953-960.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%   INPUT</span>
+0013 <span class="comment">%   - F0: initial solution</span>
+0014 <span class="comment">%   - Aeq / beq: matrix used for the equality contraints: Aeq*X=beq</span>
+0015 <span class="comment">%   - Fmin: lower bounds</span>
+0016 <span class="comment">%   - Fmax: upper bounds</span>
+0017 <span class="comment">%   - fmincon_options: options for the fmincon optimization function</span>
+0018 <span class="comment">%   - options: degree of the polynomial function</span>
+0019 <span class="comment">%   - Fmaxbis: upper boundss</span>
+0020 <span class="comment">%   OUTPUT</span>
+0021 <span class="comment">%   - Fopt: solution of the optimization problem</span>
+0022 <span class="comment">%________________________________________________________</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% Licence</span>
+0025 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0026 <span class="comment">%________________________________________________________</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0029 <span class="comment">% Georges Dumont</span>
+0030 <span class="comment">%________________________________________________________</span>
+0031 
+0032 <span class="comment">% Cost function</span>
+0033 <span class="keyword">if</span> ~sum(isinf(Amax))
+0034 cost_function = @(A) sum((Fa./Fmax.*A).^(options));
+0035 <span class="keyword">else</span>
+0036     <span class="comment">% ClosedLoop case</span>
+0037     ind_act=find(isinf(Amax)); <span class="comment">% first element to be infinite in Fmax</span>
+0038     cost_function = @(A) sum((Fa./Fmax(1:ind_act-1).*A(1:ind_act-1)).^(options));<span class="comment">%+sum(A(ind_act:end).^2);</span>
+0039 <span class="keyword">end</span>
+0040 <span class="comment">% Optimization</span>
+0041 Aopt = fmincon(cost_function,A0,[],[],Aeq,beq,Amin,Amax,[],fmincon_options);
+0042 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

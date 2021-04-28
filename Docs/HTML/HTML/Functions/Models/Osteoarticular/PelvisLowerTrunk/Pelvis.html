@@ -1,0 +1,272 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Pelvis</title>
+  <meta name="keywords" content="Pelvis">
+  <meta name="description" content="Addition of a pelvis/lower trunk model">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html Functions --><!-- ../../menu.html Models --><!-- ../menu.html Osteoarticular --><!-- menu.html PelvisLowerTrunk -->
+<h1>Pelvis
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>Addition of a pelvis/lower trunk model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [OsteoArticularModel]= Pelvis(OsteoArticularModel,k,Mass,AttachmentPoint) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Addition of a pelvis/lower trunk model
+   This pelvis/lower trunk model contains 2 solids (pelvis and lower
+   trunk), exhibits 3 dofs for pelvis/lower trunk joint
+
+    Based on:
+    - Damsgaard, M., Rasmussen, J., Christensen, S. T., Surma, E., &amp; De Zee, M., 2006.
+     Analysis of musculoskeletal systems in the AnyBody Modeling System. Simulation Modelling Practice and Theory, 14(8), 1100-1111.
+
+   INPUT
+   - OsteoArticularModel: osteo-articular model of an already existing
+   model (see the Documentation for the structure)
+   - k: homothety coefficient for the geometrical parameters (defined as
+   the subject size in cm divided by 180)
+   - Mass: mass of the solids
+   - AttachmentPoint: name of the attachment point of the model on the
+   already existing model (character string)
+   OUTPUT
+   - OsteoArticularModel: new osteo-articular model (see the Documentation
+   for the structure) 
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>	Addition of a sister to a solid</li><li><a href="PelvisNoTrunk.html" class="code" title="function [OsteoArticularModel]= PelvisNoTrunk(OsteoArticularModel,k,Mass,AttachmentPoint)">PelvisNoTrunk</a>	Addition of a pelvis model</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [OsteoArticularModel]= Pelvis(OsteoArticularModel,k,Mass,AttachmentPoint)</a>
+0002 <span class="comment">% Addition of a pelvis/lower trunk model</span>
+0003 <span class="comment">%   This pelvis/lower trunk model contains 2 solids (pelvis and lower</span>
+0004 <span class="comment">%   trunk), exhibits 3 dofs for pelvis/lower trunk joint</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%    Based on:</span>
+0007 <span class="comment">%    - Damsgaard, M., Rasmussen, J., Christensen, S. T., Surma, E., &amp; De Zee, M., 2006.</span>
+0008 <span class="comment">%     Analysis of musculoskeletal systems in the AnyBody Modeling System. Simulation Modelling Practice and Theory, 14(8), 1100-1111.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   INPUT</span>
+0011 <span class="comment">%   - OsteoArticularModel: osteo-articular model of an already existing</span>
+0012 <span class="comment">%   model (see the Documentation for the structure)</span>
+0013 <span class="comment">%   - k: homothety coefficient for the geometrical parameters (defined as</span>
+0014 <span class="comment">%   the subject size in cm divided by 180)</span>
+0015 <span class="comment">%   - Mass: mass of the solids</span>
+0016 <span class="comment">%   - AttachmentPoint: name of the attachment point of the model on the</span>
+0017 <span class="comment">%   already existing model (character string)</span>
+0018 <span class="comment">%   OUTPUT</span>
+0019 <span class="comment">%   - OsteoArticularModel: new osteo-articular model (see the Documentation</span>
+0020 <span class="comment">%   for the structure)</span>
+0021 <span class="comment">%________________________________________________________</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% Licence</span>
+0024 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0025 <span class="comment">%________________________________________________________</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0028 <span class="comment">% Georges Dumont</span>
+0029 <span class="comment">%________________________________________________________</span>
+0030 [OsteoArticularModel]= <a href="PelvisNoTrunk.html" class="code" title="function [OsteoArticularModel]= PelvisNoTrunk(OsteoArticularModel,k,Mass,AttachmentPoint)">PelvisNoTrunk</a>(OsteoArticularModel,k,Mass,AttachmentPoint);
+0031 
+0032 list_solid={<span class="string">'LowerTrunk_J1'</span> <span class="string">'LowerTrunk_J2'</span> <span class="string">'LowerTrunk'</span>};
+0033     
+0034 <span class="comment">%% solid numbering incremation</span>
+0035 
+0036 s=size(OsteoArticularModel,2)+1;  <span class="comment">%#ok&lt;NASGU&gt; % number of the first solid</span>
+0037 <span class="keyword">for</span> i=1:size(list_solid,2)      <span class="comment">% each solid numbering: s_&quot;nom du solide&quot;</span>
+0038     <span class="keyword">if</span> i==1
+0039         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s;'</span>))
+0040     <span class="keyword">else</span>
+0041         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s_'</span>,list_solid{i-1},<span class="string">'+1;'</span>))
+0042     <span class="keyword">end</span>
+0043 <span class="keyword">end</span>  
+0044     
+0045 <span class="comment">% find the number of the mother from the attachment point: 'attachment_pt'</span>
+0046 attachment_pt = <span class="string">'Pelvis_LowerTrunkNode'</span>;
+0047 test=0;
+0048 <span class="keyword">for</span> i=1:numel(OsteoArticularModel)
+0049     <span class="keyword">for</span> j=1:size(OsteoArticularModel(i).anat_position,1)
+0050         <span class="keyword">if</span> strcmp(attachment_pt,OsteoArticularModel(i).anat_position{j,1})
+0051            s_mother=i;
+0052            pos_attachment_pt=OsteoArticularModel(i).anat_position{j,2}+OsteoArticularModel(s_mother).c;
+0053            test=1;
+0054            <span class="keyword">break</span>
+0055         <span class="keyword">end</span>
+0056     <span class="keyword">end</span>
+0057     <span class="keyword">if</span> i==numel(OsteoArticularModel) &amp;&amp; test==0
+0058         error([attachment_pt <span class="string">' is no existent'</span>])        
+0059     <span class="keyword">end</span>       
+0060 <span class="keyword">end</span>
+0061 <span class="keyword">if</span> OsteoArticularModel(s_mother).child == 0      <span class="comment">% if the mother don't have any child</span>
+0062     OsteoArticularModel(s_mother).child = eval([<span class="string">'s_'</span> list_solid{1}]);    <span class="comment">% the child of this mother is this solid</span>
+0063 <span class="keyword">else</span>
+0064     [OsteoArticularModel]=<a href="../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval([<span class="string">'s_'</span> list_solid{1}]));   <span class="comment">% recherche de la derni�e soeur</span>
+0065 <span class="keyword">end</span>   
+0066 
+0067 
+0068 <span class="comment">%%                     Definition of anatomical landmarks</span>
+0069 
+0070 <span class="comment">% ------------------------- L5 --------------------------------------------</span>
+0071 
+0072 <span class="comment">% Center of mass location with respect to the reference frame</span>
+0073 CoM_L5 = k*[0.051 0.009 0];
+0074 
+0075 <span class="comment">% Node locations</span>
+0076 L5_SacrumJointNode = k*[0.043 -0.005 0] - CoM_L5;
+0077 L5_L4JointNode = k*[0.050 0.027 0] - CoM_L5;
+0078 Lenght_L5=norm(L5_L4JointNode-L5_SacrumJointNode); <span class="comment">%#ok&lt;NASGU&gt;</span>
+0079 
+0080 <span class="comment">% ------------------------- L4 --------------------------------------------</span>
+0081 
+0082 <span class="comment">% Center of mass location with respect to the reference frame</span>
+0083 CoM_L4 = k*[0.056 0.044 0];
+0084 
+0085 <span class="comment">% Node locations</span>
+0086 L4_L5JointNode = k*[0.050 0.027 0] - CoM_L4;
+0087 L4_L3JointNode = k*[0.050 0.061 0] - CoM_L4;
+0088 Lenght_L4=norm(L4_L3JointNode-L4_L5JointNode); <span class="comment">%#ok&lt;NASGU&gt;</span>
+0089 
+0090 <span class="comment">% ------------------------- L3 --------------------------------------------</span>
+0091 
+0092 <span class="comment">% Center of mass location with respect to the reference frame</span>
+0093 CoM_L3 = k*[0.051 0.079 0];
+0094 
+0095 <span class="comment">% Node locations</span>
+0096 L3_L4JointNode = k*[0.050 0.061 0] - CoM_L3;
+0097 L3_L2JointNode = k*[0.044 0.094 0] - CoM_L3;
+0098 Lenght_L3=norm(L3_L2JointNode-L3_L4JointNode); <span class="comment">%#ok&lt;NASGU&gt;</span>
+0099 
+0100 <span class="comment">% ------------------------- L2 --------------------------------------------</span>
+0101 
+0102 <span class="comment">% Center of mass location with respect to the reference frame</span>
+0103 CoM_L2 = k*[0.043 0.110 0];
+0104 
+0105 <span class="comment">% Node locations</span>
+0106 L2_L3JointNode = k*[0.044 0.094 0] - CoM_L2;
+0107 L2_L1JointNode = k*[0.034 0.123 0] - CoM_L2;
+0108 Lenght_L2=norm(L2_L1JointNode-L2_L3JointNode); <span class="comment">%#ok&lt;NASGU&gt;</span>
+0109 
+0110 <span class="comment">% ------------------------- L1 --------------------------------------------</span>
+0111 
+0112 <span class="comment">% Center of mass location with respect to the reference frame</span>
+0113 CoM_L1 = k*[0.031 0.139 0];
+0114 
+0115 <span class="comment">% Node locations</span>
+0116 L1_L2JointNode = k*[0.034 0.123 0] - CoM_L1;
+0117 L1_T12JointNode = k*[0.022 0.154 0] - CoM_L1;
+0118 Lenght_L1=norm(L1_T12JointNode-L1_L2JointNode); <span class="comment">%#ok&lt;NASGU&gt;</span>
+0119 
+0120 <span class="comment">%% Definition of anatomical landmarks</span>
+0121 
+0122 LowerTrunk_position_set= {<span class="keyword">...</span>
+0123     <span class="string">'LowerTrunk_UpperTrunkNode'</span>, (L5_L4JointNode-L5_SacrumJointNode)' + (L4_L3JointNode-L4_L5JointNode)' + <span class="keyword">...</span>
+0124         (L3_L2JointNode-L3_L4JointNode)' + (L2_L1JointNode-L2_L3JointNode)' + (L1_T12JointNode-L1_L2JointNode)'; <span class="keyword">...</span>
+0125     <span class="string">'LowerTrunk_Origin'</span>, [0 0 0]'; <span class="keyword">...</span>
+0126     };
+0127 
+0128 <span class="comment">%%                     Scaling inertial parameters</span>
+0129 
+0130     <span class="comment">%% [&quot;Adjustments to McConville et al. and Young et al. body segment inertial parameters&quot;] R. Dumas</span>
+0131     <span class="comment">% ------------------------- LowerTrunk ----------------------------------------</span>
+0132     I_LowerTrunk=[0 0 0 0 0 0];
+0133 
+0134                     <span class="comment">%% %% &quot;Human_model&quot; structure generation</span>
+0135  
+0136 num_solid=0;
+0137 <span class="comment">%% Lower Trunk</span>
+0138 
+0139     <span class="comment">% LowerTrunk_J1</span>
+0140     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0141     name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0142     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0143     OsteoArticularModel(incr_solid).name=name;               <span class="comment">% solid name</span>
+0144     OsteoArticularModel(incr_solid).sister=0;                
+0145     OsteoArticularModel(incr_solid).child=s_LowerTrunk_J2;                   
+0146     OsteoArticularModel(incr_solid).mother=s_mother;           
+0147     OsteoArticularModel(incr_solid).a=[0 0 1]'; 
+0148     OsteoArticularModel(incr_solid).joint=1;  
+0149     OsteoArticularModel(incr_solid).limit_inf=-pi/3;
+0150     OsteoArticularModel(incr_solid).limit_sup=pi/4;
+0151     OsteoArticularModel(incr_solid).linear_constraint=[];
+0152     OsteoArticularModel(incr_solid).Visual=0;
+0153     OsteoArticularModel(incr_solid).b=pos_attachment_pt;
+0154     OsteoArticularModel(incr_solid).c=[0 0 0]';
+0155     OsteoArticularModel(incr_solid).m=0;                 
+0156     OsteoArticularModel(incr_solid).I=zeros(3,3);
+0157 
+0158     <span class="comment">% LowerTrunk_J2</span>
+0159     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0160     name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0161     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0162     OsteoArticularModel(incr_solid).name=name;               <span class="comment">% solid name</span>
+0163     OsteoArticularModel(incr_solid).sister=0;                
+0164     OsteoArticularModel(incr_solid).child=s_LowerTrunk;                   
+0165     OsteoArticularModel(incr_solid).mother=s_LowerTrunk_J1;           
+0166     OsteoArticularModel(incr_solid).a=[1 0 0]';
+0167     OsteoArticularModel(incr_solid).joint=1;
+0168     OsteoArticularModel(incr_solid).limit_inf=-pi/4;
+0169     OsteoArticularModel(incr_solid).limit_sup=pi/4;
+0170     OsteoArticularModel(incr_solid).linear_constraint=[];
+0171     OsteoArticularModel(incr_solid).Visual=0;
+0172     OsteoArticularModel(incr_solid).b=[0 0 0]';  
+0173     OsteoArticularModel(incr_solid).c=[0 0 0]';
+0174     OsteoArticularModel(incr_solid).m=0;                 
+0175     OsteoArticularModel(incr_solid).I=zeros(3,3);
+0176 
+0177     <span class="comment">% LowerTrunk</span>
+0178     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0179     name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0180     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0181     OsteoArticularModel(incr_solid).name=name;               <span class="comment">% solid name</span>
+0182     OsteoArticularModel(incr_solid).sister=0;                
+0183     OsteoArticularModel(incr_solid).child=0;                   
+0184     OsteoArticularModel(incr_solid).mother=s_LowerTrunk_J2;           
+0185     OsteoArticularModel(incr_solid).a=[0 1 0]'; 
+0186     OsteoArticularModel(incr_solid).joint=1;
+0187     OsteoArticularModel(incr_solid).limit_inf=-pi/2;
+0188     OsteoArticularModel(incr_solid).limit_sup=pi/2;
+0189     OsteoArticularModel(incr_solid).linear_constraint=[];
+0190     OsteoArticularModel(incr_solid).Visual=1;
+0191     OsteoArticularModel(incr_solid).calib_k_constraint=[];
+0192     OsteoArticularModel(incr_solid).b=[0 0 0]';  
+0193     OsteoArticularModel(incr_solid).c=[0 0 0]';
+0194     OsteoArticularModel(incr_solid).m=Mass.LowerTrunk_Mass;                 
+0195     OsteoArticularModel(incr_solid).I=[I_LowerTrunk(1) I_LowerTrunk(4) I_LowerTrunk(5); I_LowerTrunk(4) I_LowerTrunk(2) I_LowerTrunk(6); I_LowerTrunk(5) I_LowerTrunk(6) I_LowerTrunk(3)];
+0196     OsteoArticularModel(incr_solid).anat_position=LowerTrunk_position_set;
+0197     OsteoArticularModel(incr_solid).L={<span class="string">'LowerTrunk_Origin'</span>;<span class="string">'LowerTrunk_UpperTrunkNode'</span>};
+0198     
+0199 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

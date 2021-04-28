@@ -1,0 +1,569 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of anim8</title>
+  <meta name="keywords" content="anim8">
+  <meta name="description" content="function hf=anim8(hf,animStruct)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html Functions --><!-- # ExternLibrary --><!-- # GIBBON --><!-- menu.html functions -->
+<h1>anim8
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function hf=anim8(hf,animStruct)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function hf=anim8(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> function hf=anim8(hf,animStruct)
+ ------------------------------------------------------------------------
+ 
+ Change log: 
+ 2019/05/20 Added loading of saved anim8 figure by using the path to the
+ figure as sole input (or no input which triggers uigetfile)
+ 2019/08/09 Changed to use uicontrol slider rather than java slider due
+ to future removal of javacomponent
+ 2019/10/13 Fixed bug in relation to handling a single time step (no
+ annimation), fixed by copying state twice and animating clones states. 
+ ------------------------------------------------------------------------</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="efw.html" class="code" title="function efw(varargin)">efw</a>	function efw(hf)</li><li><a href="exportGifAnim8.html" class="code" title="function exportGifAnim8(varargin)">exportGifAnim8</a>	%</li><li><a href="vcw.html" class="code" title="function [varargout]=vcw(varargin)">vcw</a>	function vcw(hf,buttonOpt)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Functions/Animation/PlotAnimation.html" class="code" title="function [varargout] = PlotAnimation(ModelParameters, AnimateParameters)">PlotAnimation</a>	Generation of an animation</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function figResize(~,~,inputCell)</a></li><li><a href="#_sub2" class="code">function helpFunc(~,~)</a></li><li><a href="#_sub3" class="code">function playFunc(~,~,inputCell)</a></li><li><a href="#_sub4" class="code">function timeFunc(~,~,inputCell)</a></li><li><a href="#_sub5" class="code">function saveAnimationFunc(~,~,inputCell)</a></li><li><a href="#_sub6" class="code">function figKeyPressFunc(~,eventData,inputCell)</a></li><li><a href="#_sub7" class="code">function updateViewFunc(~,~,hf)</a></li><li><a href="#_sub8" class="code">function shiftSlider(hSlider,shiftMag)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function hf=anim8(varargin)</a>
+0002 
+0003 <span class="comment">% function hf=anim8(hf,animStruct)</span>
+0004 <span class="comment">% ------------------------------------------------------------------------</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Change log:</span>
+0007 <span class="comment">% 2019/05/20 Added loading of saved anim8 figure by using the path to the</span>
+0008 <span class="comment">% figure as sole input (or no input which triggers uigetfile)</span>
+0009 <span class="comment">% 2019/08/09 Changed to use uicontrol slider rather than java slider due</span>
+0010 <span class="comment">% to future removal of javacomponent</span>
+0011 <span class="comment">% 2019/10/13 Fixed bug in relation to handling a single time step (no</span>
+0012 <span class="comment">% annimation), fixed by copying state twice and animating clones states.</span>
+0013 <span class="comment">% ------------------------------------------------------------------------</span>
+0014 
+0015 <span class="comment">%% Parse input</span>
+0016 
+0017 <span class="keyword">switch</span> nargin
+0018     <span class="keyword">case</span> {0,1} <span class="comment">%Load previous</span>
+0019         <span class="keyword">if</span> nargin==1 <span class="comment">%If path to figure is specified</span>
+0020             figureFullPath=varargin{1};
+0021         <span class="keyword">else</span> <span class="comment">%If no path is specified</span>
+0022             [figureFileName,figurePath]=uigetfile;
+0023             figureFullPath=fullfile(figurePath,figureFileName);
+0024         <span class="keyword">end</span>
+0025         hf=open(figureFullPath); <span class="comment">%Open figure and keep handle</span>
+0026           
+0027         <span class="comment">%Add view control widget</span>
+0028         hp=<a href="vcw.html" class="code" title="function [varargout]=vcw(varargin)">vcw</a>(hf);
+0029         hf.UserData.cFigure.Handles.vcw=hp;
+0030         
+0031         <span class="comment">%Add export figure widget</span>
+0032         <a href="efw.html" class="code" title="function efw(varargin)">efw</a>(hf);
+0033         
+0034         <span class="keyword">if</span> ~isfield(hf.UserData,<span class="string">'anim8'</span>)
+0035             error(<span class="string">'Loaded figure lacks an anim8 structure as UserData'</span>);
+0036         <span class="keyword">else</span>
+0037             animStruct=hf.UserData.anim8.animStruct; <span class="comment">%Get anim8 structure</span>
+0038         <span class="keyword">end</span>
+0039         
+0040         <span class="keyword">try</span> <span class="comment">%Try to remove a slider if present</span>
+0041             hSlider=hf.UserData.anim8.sliderHandles{1};
+0042             <span class="keyword">if</span> isa(hSlider,<span class="string">'matlab.ui.control.UIControl'</span>)
+0043                 delete(hSlider)
+0044             <span class="keyword">else</span> <span class="comment">%Old jSlider type</span>
+0045                 <span class="keyword">try</span> <span class="comment">%javacomponent is scheduled to be removed but try it here for old slider bar type</span>
+0046                     warning off <span class="comment">%Disable all warnings</span>
+0047                     [~,hc]=javacomponent(hSlider);
+0048                     delete(hc);
+0049                     warning on <span class="comment">%Enable warnings again</span>
+0050                 <span class="keyword">catch</span>
+0051                     <span class="comment">%No fix if the above throws an error</span>
+0052                 <span class="keyword">end</span>
+0053             <span class="keyword">end</span>
+0054         <span class="keyword">catch</span> <span class="comment">%Nothing to delete</span>
+0055         <span class="keyword">end</span>
+0056         
+0057         <span class="keyword">try</span> <span class="comment">%Try to remove text label above slider if present</span>
+0058             delete(hf.UserData.anim8.ButtonHandles.hTextTime)
+0059         <span class="keyword">catch</span> <span class="comment">%Nothing to delete</span>
+0060         <span class="keyword">end</span>        
+0061         
+0062     <span class="keyword">case</span> 2 <span class="comment">%Create new</span>
+0063         hf=varargin{1}; <span class="comment">%Figure handle</span>
+0064         animStruct=varargin{2}; <span class="comment">%The anim8 structure</span>
+0065 <span class="keyword">end</span>
+0066 
+0067 <span class="comment">%% Visualisation settings</span>
+0068 
+0069 <span class="comment">% fontColor='w';</span>
+0070 fontSize=15;
+0071 <span class="comment">% cMap=gjet(250);</span>
+0072 scrollBarWidth=30;
+0073 
+0074 <span class="comment">%% Defining slider</span>
+0075 figure(hf); drawnow;
+0076 
+0077 <span class="keyword">if</span> numel(animStruct.Time)==1
+0078     warning(<span class="string">'Only 1 step for animation'</span>);
+0079     animStruct.Time(end+1)=animStruct.Time(end);
+0080     animStruct.Handles{end+1}=animStruct.Handles{end}; <span class="comment">%Handles of objects to animate</span>
+0081     animStruct.Props{end+1}=animStruct.Props{end}; <span class="comment">%Properties of objects to animate</span>
+0082     animStruct.Set{end+1}=animStruct.Set{end};
+0083 <span class="keyword">end</span>
+0084 
+0085 animTime=animStruct.Time(:);
+0086 sliceIndexI=numel(animTime); <span class="comment">%Initial index at end</span>
+0087 sliderStep=[1/(numel(animTime)-1) 1/(numel(animTime)-1)]; <span class="comment">%Slider step sizes</span>
+0088 
+0089 <span class="comment">%Initialize slider</span>
+0090 hSlider= uicontrol(hf,<span class="string">'Style'</span>,<span class="string">'slider'</span>,<span class="string">'Position'</span>,[0,0,round(hf.Position(3)),scrollBarWidth]);
+0091 set(hSlider,<span class="string">'Value'</span>,sliceIndexI,<span class="string">'Min'</span>,1,<span class="string">'Max'</span>,numel(animTime),<span class="string">'SliderStep'</span>,sliderStep);
+0092 hSlider.Callback={@<a href="#_sub7" class="code" title="subfunction updateViewFunc(~,~,hf)">updateViewFunc</a>,hf};
+0093 <span class="comment">% hSlider.KeyPressFcn={@updateViewFunc,hf};</span>
+0094 addlistener(hSlider,<span class="string">'ContinuousValueChange'</span>,@(hObject, event) <a href="#_sub7" class="code" title="subfunction updateViewFunc(~,~,hf)">updateViewFunc</a>(hObject, event,hf));
+0095 addlistener(hSlider,<span class="string">'Value'</span>,<span class="string">'PostSet'</span>,@(hObject, event) <a href="#_sub7" class="code" title="subfunction updateViewFunc(~,~,hf)">updateViewFunc</a>(hObject, event,hf));
+0096 
+0097 <span class="comment">%% Set resize function</span>
+0098 
+0099 <span class="comment">% set(hf,'ResizeFcn',{@figResize,{hf,scrollBarWidth,hSlider}});</span>
+0100 <span class="comment">% set(hf,'ResizeFcn',@(h,e)figResize(h,e,{hf,scrollBarWidth,hSlider}));</span>
+0101 
+0102 hFunc=get(hf,<span class="string">'ResizeFcn'</span>);
+0103 
+0104 <span class="keyword">if</span> iscell(hFunc)
+0105     warning(<span class="string">'anim8 replaced the ResizeFcn function. Specify your ResizeFcn in the form @(h,e)figResize(h,e,c) to avoid this behavior'</span>);    
+0106     set(hf,<span class="string">'ResizeFcn'</span>,@(a,b)<a href="#_sub1" class="code" title="subfunction figResize(~,~,inputCell)">figResize</a>(a,b,{hf,scrollBarWidth,hSlider}));
+0107 <span class="keyword">else</span>
+0108     <span class="keyword">if</span> isempty(hFunc)
+0109         set(hf,<span class="string">'ResizeFcn'</span>,@(a,b)<a href="#_sub1" class="code" title="subfunction figResize(~,~,inputCell)">figResize</a>(a,b,{hf,scrollBarWidth,hSlider}));
+0110     <span class="keyword">else</span>        
+0111         set(hf,<span class="string">'ResizeFcn'</span>,@(a,b)(cellfun(@(x)feval(x,a,b),{hFunc,@(a,b)<a href="#_sub1" class="code" title="subfunction figResize(~,~,inputCell)">figResize</a>(a,b,{hf,scrollBarWidth,hSlider})})));
+0112     <span class="keyword">end</span>
+0113 <span class="keyword">end</span>
+0114 
+0115 
+0116 <span class="comment">%% Initialize figure callbacks</span>
+0117 
+0118 set(hf,<span class="string">'KeyPressFcn'</span>, {@<a href="#_sub6" class="code" title="subfunction figKeyPressFunc(~,eventData,inputCell)">figKeyPressFunc</a>,{hf}});<span class="comment">%'WindowButtonDownFcn', {@figMouseDown,{hf}},'WindowButtonUpFcn', {@mouseup,hf});</span>
+0119 
+0120 <span class="comment">%% Initialise tool bar and buttons</span>
+0121 
+0122 filePath=mfilename(<span class="string">'fullpath'</span>);
+0123 toolboxPath=fileparts(fileparts(filePath));
+0124 iconPath=fullfile(toolboxPath,<span class="string">'icons'</span>);
+0125 
+0126 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0127 <span class="comment">%Toolbar</span>
+0128 toolbarTag=<span class="string">'anim8_toolbar'</span>;
+0129 
+0130 <span class="comment">%Remove existing anim8 toolbar</span>
+0131 hb = findall(hf,<span class="string">'Tag'</span>,toolbarTag); <span class="comment">% hb = findall(hf,'Type','uitoolbar');</span>
+0132 <span class="keyword">if</span> ~isempty(hb)     
+0133     delete(hb)
+0134 <span class="keyword">else</span>    
+0135     <span class="comment">%Find all toolbars</span>
+0136     hb = findall(hf,<span class="string">'Type'</span>,<span class="string">'uitoolbar'</span>);
+0137     
+0138     <span class="comment">%Remove them if they are not the default bar</span>
+0139     <span class="keyword">if</span> ~isempty(hb)
+0140         <span class="keyword">for</span> q=1:1:numel(hb)
+0141             <span class="keyword">if</span> ~strcmp(hb(q).Tag,<span class="string">'FigureToolBar'</span>)
+0142                 delete(hb(q));
+0143             <span class="keyword">end</span>
+0144         <span class="keyword">end</span>
+0145     <span class="keyword">end</span>    
+0146 <span class="keyword">end</span>
+0147 
+0148 <span class="comment">%Create new anim8 toolbar</span>
+0149 hb = uitoolbar(hf);
+0150 hb.Tag=toolbarTag;
+0151 
+0152 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0153 <span class="comment">%Help button</span>
+0154 
+0155 <span class="comment">%get icon</span>
+0156 D=importdata(fullfile(iconPath,<span class="string">'help.jpg'</span>));
+0157 S=double(D);
+0158 S=S-min(S(:));
+0159 S=S./max(S(:));
+0160 S(S==1)=NaN;
+0161 <span class="keyword">if</span> size(S,3)==1
+0162     S=repmat(S,[1 1 3]);
+0163 <span class="keyword">end</span>
+0164 <span class="comment">% Create a uipushtool in the toolbar</span>
+0165 uipushtool(hb,<span class="string">'TooltipString'</span>,<span class="string">'Help'</span>,<span class="string">'CData'</span>,S,<span class="string">'Tag'</span>,<span class="string">'help_button'</span>,<span class="string">'ClickedCallback'</span>,@<a href="#_sub2" class="code" title="subfunction helpFunc(~,~)">helpFunc</a>,<span class="string">'Separator'</span>,<span class="string">'on'</span>);
+0166 
+0167 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0168 <span class="comment">%Play button</span>
+0169 
+0170 <span class="comment">%get icon 1</span>
+0171 D=importdata(fullfile(iconPath,<span class="string">'play.jpg'</span>));
+0172 S=double(D);
+0173 S=S-min(S(:));
+0174 S=S./max(S(:));
+0175 S(S==1)=NaN;
+0176 <span class="keyword">if</span> size(S,3)==1
+0177     S=repmat(S,[1 1 3]);
+0178 <span class="keyword">end</span>
+0179 iconPlay=S;
+0180 
+0181 <span class="comment">%get icon 2</span>
+0182 D=importdata(fullfile(iconPath,<span class="string">'stop.jpg'</span>));
+0183 S=double(D);
+0184 S=S-min(S(:));
+0185 S=S./max(S(:));
+0186 S(S==1)=NaN;
+0187 <span class="keyword">if</span> size(S,3)==1
+0188     S=repmat(S,[1 1 3]);
+0189 <span class="keyword">end</span>
+0190 iconStop=S;
+0191 
+0192 <span class="comment">% Create a uitoggletool in the toolbar</span>
+0193 hPlay=uitoggletool(hb,<span class="string">'TooltipString'</span>,<span class="string">'Play'</span>,<span class="string">'CData'</span>,iconPlay,<span class="string">'Tag'</span>,<span class="string">'play_button'</span>,<span class="string">'ClickedCallback'</span>,{@<a href="#_sub3" class="code" title="subfunction playFunc(~,~,inputCell)">playFunc</a>,{hf}});
+0194 
+0195 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0196 <span class="comment">%Time button</span>
+0197 
+0198 <span class="comment">%get icon</span>
+0199 D=importdata(fullfile(iconPath,<span class="string">'time.jpg'</span>));
+0200 S=double(D);
+0201 S=S-min(S(:));
+0202 S=S./max(S(:));
+0203 S(S==1)=NaN;
+0204 <span class="keyword">if</span> size(S,3)==1
+0205     S=repmat(S,[1 1 3]);
+0206 <span class="keyword">end</span>
+0207 <span class="comment">% Create a uipushtool in the toolbar</span>
+0208 uipushtool(hb,<span class="string">'TooltipString'</span>,<span class="string">'Time'</span>,<span class="string">'CData'</span>,S,<span class="string">'Tag'</span>,<span class="string">'time_button'</span>,<span class="string">'ClickedCallback'</span>,{@<a href="#_sub4" class="code" title="subfunction timeFunc(~,~,inputCell)">timeFunc</a>,{hf}}); <span class="comment">%,'Separator','on'</span>
+0209 
+0210 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0211 <span class="comment">%Cycle button</span>
+0212 
+0213 <span class="comment">%get icon</span>
+0214 D=importdata(fullfile(iconPath,<span class="string">'cycle.jpg'</span>));
+0215 S=double(D);
+0216 S=S-min(S(:));
+0217 S=S./max(S(:));
+0218 S(S==1)=NaN;
+0219 <span class="keyword">if</span> size(S,3)==1
+0220     S=repmat(S,[1 1 3]);
+0221 <span class="keyword">end</span>
+0222 <span class="comment">% Create a uitoggletool in the toolbar</span>
+0223 hCycle=uitoggletool(hb,<span class="string">'TooltipString'</span>,<span class="string">'Cycle forward-backward'</span>,<span class="string">'CData'</span>,S,<span class="string">'Tag'</span>,<span class="string">'cycle_button'</span>);
+0224 
+0225 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0226 <span class="comment">%Save animation button</span>
+0227 
+0228 <span class="comment">%get icon</span>
+0229 D=importdata(fullfile(iconPath,<span class="string">'saveAnimation.jpg'</span>));
+0230 S=double(D);
+0231 S=S-min(S(:));
+0232 S=S./max(S(:));
+0233 S(S==1)=NaN;
+0234 <span class="keyword">if</span> size(S,3)==1
+0235     S=repmat(S,[1 1 3]);
+0236 <span class="keyword">end</span>
+0237 <span class="comment">% Create a uipushtool in the toolbar</span>
+0238 uipushtool(hb,<span class="string">'TooltipString'</span>,<span class="string">'Save .gif animation'</span>,<span class="string">'CData'</span>,S,<span class="string">'Tag'</span>,<span class="string">'saveAnimation_button'</span>,<span class="string">'ClickedCallback'</span>,{@<a href="#_sub5" class="code" title="subfunction saveAnimationFunc(~,~,inputCell)">saveAnimationFunc</a>,{hf}}); <span class="comment">%,'Separator','on'</span>
+0239 
+0240 <span class="comment">%% Text fields</span>
+0241 
+0242 <span class="comment">% title(sprintf('%6.16e ',T),'FontSize',hf.UserData.anim8.fontSize);</span>
+0243 <span class="comment">% title(sprintf('%f',T),'FontSize',hf.UserData.anim8.fontSize);</span>
+0244 
+0245 hTextTime = uicontrol(hf,<span class="string">'Style'</span>,<span class="string">'text'</span>,<span class="keyword">...</span>
+0246     <span class="string">'String'</span>,[<span class="string">' Time: '</span>,sprintf(<span class="string">'%f'</span>,animTime(1))],<span class="keyword">...</span>
+0247     <span class="string">'Position'</span>,[0 scrollBarWidth round(hf.Position(3)) scrollBarWidth],<span class="keyword">...</span>
+0248     <span class="string">'BackgroundColor'</span>,[1 1 1],<span class="string">'HorizontalAlignment'</span>,<span class="string">'Left'</span>,<span class="keyword">...</span>
+0249     <span class="string">'fontSize'</span>,fontSize);
+0250 
+0251 <span class="comment">%% Set figure UserData</span>
+0252 
+0253 hf.UserData.anim8.sliderHandles={hSlider};
+0254 <span class="comment">% hf.UserData.anim8.ButtonHandles.Sample=hSample;</span>
+0255 hf.UserData.anim8.animStruct=animStruct;
+0256 hf.UserData.anim8.fontSize=fontSize;
+0257 <span class="comment">% animHandles=animStruct.Handles; %Handles of objects to animate</span>
+0258 <span class="comment">% animProps=animStruct.Props; %Properties of objects to animate</span>
+0259 <span class="comment">% animSets=animStruct.Set; %Property values for to set in order to animate</span>
+0260 <span class="comment">% animTime=animStruct.Time;</span>
+0261 hf.UserData.anim8.playDir=1;
+0262 hf.UserData.anim8.ButtonHandles.Play=hPlay;
+0263 hf.UserData.anim8.ButtonHandles.hCycle=hCycle;
+0264 hf.UserData.anim8.ButtonHandles.hTextTime=hTextTime;
+0265 hf.UserData.anim8.pauseTime=1/numel(animStruct.Time);<span class="comment">%mean(diff(animStruct.Time));</span>
+0266 hf.UserData.anim8.shiftMag=1;<span class="comment">%ceil(numel(animStruct.Time)/20);</span>
+0267 hf.UserData.anim8.icons.play=iconPlay;
+0268 hf.UserData.anim8.icons.stop=iconStop;
+0269 
+0270 <span class="comment">% Store current settings</span>
+0271 hf.UserData.anim8.WindowButtonDownFcn=hf.WindowButtonDownFcn;
+0272 hf.UserData.anim8.WindowButtonUpFcn=hf.WindowButtonUpFcn;
+0273 hf.UserData.anim8.KeyPressFcn=hf.KeyPressFcn;
+0274 hf.UserData.anim8.WindowScrollWheelFcn=hf.WindowScrollWheelFcn;
+0275 hf.UserData.anim8.BusyAction=hf.BusyAction;
+0276 
+0277 <span class="comment">%Export figure widget settings</span>
+0278 hf.UserData.efw.defaultPath=fullfile(cd,<span class="string">'efw'</span>);
+0279 hf.UserData.efw.imName=[<span class="string">'figure'</span>,num2str(get(hf,<span class="string">'Number'</span>))];
+0280 hf.UserData.efw.imExt=<span class="string">'png'</span>;
+0281 hf.UserData.efw.imRes=<span class="string">'50'</span>;
+0282 hf.UserData.efw.exportFigOpt=<span class="string">'-nocrop'</span>;
+0283 hf.UserData.efw.exportGifOpt=<span class="string">'1'</span>;
+0284 
+0285 <span class="comment">%% Initialize slider locations</span>
+0286 set(hSlider,<span class="string">'Value'</span>,round(sliceIndexI/2));
+0287 set(hSlider,<span class="string">'Value'</span>,sliceIndexI);
+0288 drawnow;
+0289 
+0290 <span class="keyword">end</span>
+0291 
+0292 <span class="comment">%% Scroll bar resizing</span>
+0293 
+0294 <a name="_sub1" href="#_subfunctions" class="code">function figResize(~,~,inputCell)</a>
+0295 hf=inputCell{1};
+0296 scrollBarWidth=inputCell{2};
+0297 
+0298 hSlider=inputCell{3};
+0299 <span class="keyword">if</span> isa(hSlider,<span class="string">'matlab.ui.control.UIControl'</span>) <span class="comment">%Check if its a MATLAB style slider</span>
+0300     set(hSlider,<span class="string">'Position'</span>,[0,0,round(hf.Position(3)), scrollBarWidth]);
+0301     set(hf.UserData.anim8.ButtonHandles.hTextTime,<span class="string">'Position'</span>,[0 scrollBarWidth round(hf.Position(3)) scrollBarWidth]);    
+0302 <span class="keyword">else</span> <span class="comment">%Old JAVA jSlider</span>
+0303 <span class="comment">%     try</span>
+0304 <span class="comment">% %         delete(hSlider)</span>
+0305 <span class="comment">%     catch</span>
+0306 <span class="comment">%     end</span>
+0307 <span class="comment">%     try %javacomponent is scheduled to be removed but try it here for old slider bar type</span>
+0308 <span class="comment">%         jc=javacomponent(hSlider,[0,0,round(hf.Position(3)), scrollBarWidth]);</span>
+0309 <span class="comment">%         jc.delete</span>
+0310 <span class="comment">%     catch</span>
+0311 <span class="comment">%         %No fix if the above throws an error</span>
+0312 <span class="comment">%     end</span>
+0313 <span class="keyword">end</span>
+0314 
+0315 <span class="keyword">end</span>
+0316 
+0317 <span class="comment">%% Help</span>
+0318 
+0319 <a name="_sub2" href="#_subfunctions" class="code">function helpFunc(~,~)</a>
+0320 
+0321 msgText={<span class="string">'* Play button or press the space bar -&gt; Start animation'</span>,<span class="keyword">...</span>
+0322     <span class="string">'* Stop button or press the space bar -&gt; Stop animation'</span>,<span class="keyword">...</span>
+0323     <span class="string">'* Time button -&gt; Change time stepping settings'</span>,<span class="keyword">...</span>
+0324     <span class="string">'* Cycle button -&gt; Toggle forward / forward-backward mode'</span>,<span class="keyword">...</span>
+0325     <span class="string">'* Save button -&gt; Export snap shorts (e.g. jpg) and animated .gif files'</span>,<span class="keyword">...</span>
+0326     <span class="string">'* Press the v key to activate the view control widget (vcw), note that vcw changes key press functions until vcw is deactivated'</span>,<span class="keyword">...</span>
+0327     };
+0328 helpdlg(msgText,<span class="string">'Help information'</span>);
+0329 
+0330 <span class="keyword">end</span>
+0331 
+0332 <span class="comment">%% play</span>
+0333 
+0334 <a name="_sub3" href="#_subfunctions" class="code">function playFunc(~,~,inputCell)</a>
+0335 hf=inputCell{1};
+0336 shiftMag=hf.UserData.anim8.shiftMag;
+0337 
+0338 set(hf.UserData.anim8.ButtonHandles.Play,<span class="string">'CData'</span>,hf.UserData.anim8.icons.stop,<span class="string">'TooltipString'</span>,<span class="string">'Stop'</span>);
+0339 
+0340 <span class="keyword">while</span> strcmp(get(hf.UserData.anim8.ButtonHandles.Play,<span class="string">'State'</span>),<span class="string">'on'</span>)
+0341     tic
+0342     <span class="keyword">if</span> strcmp(get(hf.UserData.anim8.ButtonHandles.hCycle,<span class="string">'State'</span>),<span class="string">'on'</span>)        
+0343         hSlider=hf.UserData.anim8.sliderHandles{1};
+0344         
+0345         sliderValue=get(hSlider,<span class="string">'Value'</span>);
+0346         sliderValueNew=sliderValue+(shiftMag*hf.UserData.anim8.playDir);
+0347         
+0348         sliderMax=get(hSlider,<span class="string">'Max'</span>);
+0349         sliderMin=get(hSlider,<span class="string">'Min'</span>);
+0350         
+0351         <span class="keyword">if</span> sliderValueNew&lt;sliderMin
+0352             hf.UserData.anim8.playDir=hf.UserData.anim8.playDir*-1;
+0353             sliderValueNew=sliderValue+(shiftMag*hf.UserData.anim8.playDir);
+0354         <span class="keyword">elseif</span> sliderValueNew&gt;sliderMax
+0355             hf.UserData.anim8.playDir=hf.UserData.anim8.playDir*-1;
+0356             sliderValueNew=sliderValue+(shiftMag*hf.UserData.anim8.playDir);
+0357         <span class="keyword">end</span>        
+0358         set(hSlider,<span class="string">'Value'</span>,sliderValueNew);        
+0359     <span class="keyword">else</span>
+0360         <a href="#_sub8" class="code" title="subfunction shiftSlider(hSlider,shiftMag)">shiftSlider</a>(hf.UserData.anim8.sliderHandles{1},shiftMag);
+0361     <span class="keyword">end</span>
+0362     <a href="#_sub7" class="code" title="subfunction updateViewFunc(~,~,hf)">updateViewFunc</a>([],[],hf);
+0363     drawnow;
+0364     
+0365     t=toc;
+0366     tPause=hf.UserData.anim8.pauseTime-t; 
+0367     <span class="keyword">if</span> tPause&gt;0
+0368         pause(tPause);
+0369     <span class="keyword">end</span>
+0370 <span class="keyword">end</span>
+0371 
+0372 set(hf.UserData.anim8.ButtonHandles.Play,<span class="string">'CData'</span>,hf.UserData.anim8.icons.play,<span class="string">'TooltipString'</span>,<span class="string">'Play'</span>);
+0373 
+0374 <span class="keyword">end</span>
+0375 
+0376 <span class="comment">%% Time</span>
+0377 <a name="_sub4" href="#_subfunctions" class="code">function timeFunc(~,~,inputCell)</a>
+0378 hf=inputCell{1};
+0379 
+0380 prompt = {<span class="string">'Enter pause time:'</span>,<span class="string">'Enter step size:'</span>};
+0381 dlg_title = <span class="string">'Time stepping settings'</span>;
+0382 defaultOptions = {num2str(hf.UserData.anim8.pauseTime),num2str(hf.UserData.anim8.shiftMag)};
+0383 s=40+max([cellfun(@numel,prompt) cellfun(@numel,defaultOptions)]);
+0384 Q = inputdlg(prompt,dlg_title,[1 s],defaultOptions);
+0385 <span class="keyword">if</span> ~isempty(Q)
+0386     <span class="keyword">if</span> ~isempty(Q{1})
+0387         hf.UserData.anim8.pauseTime=str2double(Q{1});
+0388     <span class="keyword">end</span>
+0389     <span class="keyword">if</span> ~isempty(Q{2})
+0390         hf.UserData.anim8.shiftMag=str2double(Q{2});
+0391     <span class="keyword">end</span>
+0392 <span class="keyword">end</span>
+0393 
+0394 <span class="keyword">end</span>
+0395 
+0396 <span class="comment">%% Save Animation</span>
+0397 
+0398 <a name="_sub5" href="#_subfunctions" class="code">function saveAnimationFunc(~,~,inputCell)</a>
+0399 
+0400 hf=inputCell{1};
+0401 defStruct=hf.UserData.efw; <span class="comment">%Default option structure</span>
+0402 <a href="exportGifAnim8.html" class="code" title="function exportGifAnim8(varargin)">exportGifAnim8</a>(hf,defStruct,1); <span class="comment">%Export gif data</span>
+0403 
+0404 <span class="keyword">end</span>
+0405 
+0406 <span class="comment">%% Figure key press</span>
+0407 
+0408 <a name="_sub6" href="#_subfunctions" class="code">function figKeyPressFunc(~,eventData,inputCell)</a>
+0409 
+0410 hf=inputCell{1}; <span class="comment">%Figure handle</span>
+0411     
+0412 <span class="comment">% Key input options</span>
+0413 <span class="keyword">switch</span> eventData.Key
+0414     <span class="keyword">case</span> {<span class="string">'leftarrow'</span>,<span class="string">'downarrow'</span>}
+0415         <a href="#_sub8" class="code" title="subfunction shiftSlider(hSlider,shiftMag)">shiftSlider</a>(hf.UserData.anim8.sliderHandles{1},-1*hf.UserData.anim8.shiftMag);
+0416         <a href="#_sub7" class="code" title="subfunction updateViewFunc(~,~,hf)">updateViewFunc</a>([],[],hf);
+0417     <span class="keyword">case</span> {<span class="string">'rightarrow'</span>,<span class="string">'uparrow'</span>}
+0418         <a href="#_sub8" class="code" title="subfunction shiftSlider(hSlider,shiftMag)">shiftSlider</a>(hf.UserData.anim8.sliderHandles{1},1*hf.UserData.anim8.shiftMag);
+0419         <a href="#_sub7" class="code" title="subfunction updateViewFunc(~,~,hf)">updateViewFunc</a>([],[],hf);
+0420     <span class="keyword">case</span> <span class="string">'home'</span> <span class="comment">% Go to the start</span>
+0421         hSlider=hf.UserData.anim8.sliderHandles{1};
+0422         sliderVal=get(hSlider,<span class="string">'Min'</span>);
+0423         set(hSlider,<span class="string">'Value'</span>,sliderVal);        
+0424         <a href="#_sub7" class="code" title="subfunction updateViewFunc(~,~,hf)">updateViewFunc</a>([],[],hf);
+0425     <span class="keyword">case</span> <span class="string">'end'</span> <span class="comment">% Go to the end</span>
+0426         hSlider=hf.UserData.anim8.sliderHandles{1};
+0427         sliderVal=get(hSlider,<span class="string">'Max'</span>);
+0428         set(hSlider,<span class="string">'Value'</span>,sliderVal);
+0429         <a href="#_sub7" class="code" title="subfunction updateViewFunc(~,~,hf)">updateViewFunc</a>([],[],hf);
+0430     <span class="keyword">case</span> <span class="string">'v'</span> <span class="comment">% Activate vcw</span>
+0431         set(hf.UserData.cFigure.Handles.vcw,<span class="string">'State'</span>,<span class="string">'On'</span>);
+0432     <span class="keyword">case</span>'space'
+0433         <span class="keyword">if</span> strcmp(get(hf.UserData.anim8.ButtonHandles.Play,<span class="string">'State'</span>),<span class="string">'off'</span>)
+0434             set(hf.UserData.anim8.ButtonHandles.Play,<span class="string">'State'</span>,<span class="string">'on'</span>);
+0435             <a href="#_sub3" class="code" title="subfunction playFunc(~,~,inputCell)">playFunc</a>([],[],{hf});
+0436         <span class="keyword">else</span>
+0437             set(hf.UserData.anim8.ButtonHandles.Play,<span class="string">'State'</span>,<span class="string">'off'</span>);
+0438         <span class="keyword">end</span>
+0439 <span class="keyword">end</span>
+0440 
+0441 <span class="keyword">end</span>
+0442 
+0443 <span class="comment">%% updateViewFunc</span>
+0444 
+0445 <a name="_sub7" href="#_subfunctions" class="code">function updateViewFunc(~,~,hf)</a>
+0446 
+0447 animStruct=hf.UserData.anim8.animStruct;
+0448 hSlider=hf.UserData.anim8.sliderHandles{1};
+0449 sliderValue=round(get(hSlider,<span class="string">'Value'</span>));
+0450 set(hSlider,<span class="string">'Value'</span>,sliderValue);
+0451 
+0452 T=animStruct.Time(sliderValue);
+0453 H=animStruct.Handles{sliderValue};<span class="comment">%e.g. [hp,hp]; %Handles of objects to animate</span>
+0454 P=animStruct.Props{sliderValue};<span class="comment">% e.g. {'FaceColor','Vertices'}; %Properties of objects to animate</span>
+0455 S=animStruct.Set{sliderValue};<span class="comment">%e.g.{c(q,:),V}; %Property values for to set in order to animate</span>
+0456 
+0457 set(hf.UserData.anim8.ButtonHandles.hTextTime,<span class="string">'String'</span>,[<span class="string">' Time: '</span>,sprintf(<span class="string">'%f'</span>,T)],<span class="string">'FontSize'</span>,hf.UserData.anim8.fontSize);
+0458 
+0459 <span class="keyword">for</span> q=1:1:numel(H)
+0460     h=H(q); <span class="comment">% Current graphics handle</span>
+0461     p=P{q}; <span class="comment">% Current graphics property</span>
+0462     s=S{q}; <span class="comment">% Current property setting</span>
+0463     h.(p)=s;<span class="comment">% Setting the property</span>
+0464 <span class="keyword">end</span>
+0465 
+0466 <span class="keyword">end</span>
+0467 
+0468 <span class="comment">%% Shift slider</span>
+0469 
+0470 <a name="_sub8" href="#_subfunctions" class="code">function shiftSlider(hSlider,shiftMag)</a>
+0471 
+0472 sliderValue=get(hSlider,<span class="string">'Value'</span>);
+0473 sliderValueNew=sliderValue+shiftMag;
+0474 
+0475 sliderMax=get(hSlider,<span class="string">'Max'</span>);
+0476 sliderMin=get(hSlider,<span class="string">'Min'</span>);
+0477 
+0478 <span class="keyword">if</span> sliderValueNew&lt;sliderMin
+0479     set(hSlider,<span class="string">'Value'</span>,sliderMax);
+0480 <span class="keyword">elseif</span> sliderValueNew&gt;sliderMax
+0481     set(hSlider,<span class="string">'Value'</span>,1);
+0482 <span class="keyword">else</span>
+0483     set(hSlider,<span class="string">'Value'</span>,sliderValueNew);
+0484 <span class="keyword">end</span>
+0485 
+0486 <span class="keyword">end</span>
+0487 
+0488  
+0489 <span class="comment">%%</span>
+0490 <span class="comment">% _*GIBBON footer text*_</span>
+0491 <span class="comment">%</span>
+0492 <span class="comment">% License: &lt;https://github.com/gibbonCode/GIBBON/blob/master/LICENSE&gt;</span>
+0493 <span class="comment">%</span>
+0494 <span class="comment">% GIBBON: The Geometry and Image-based Bioengineering add-On. A toolbox for</span>
+0495 <span class="comment">% image segmentation, image-based modeling, meshing, and finite element</span>
+0496 <span class="comment">% analysis.</span>
+0497 <span class="comment">%</span>
+0498 <span class="comment">% Copyright (C) 2019  Kevin Mattheus Moerman</span>
+0499 <span class="comment">%</span>
+0500 <span class="comment">% This program is free software: you can redistribute it and/or modify</span>
+0501 <span class="comment">% it under the terms of the GNU General Public License as published by</span>
+0502 <span class="comment">% the Free Software Foundation, either version 3 of the License, or</span>
+0503 <span class="comment">% (at your option) any later version.</span>
+0504 <span class="comment">%</span>
+0505 <span class="comment">% This program is distributed in the hope that it will be useful,</span>
+0506 <span class="comment">% but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+0507 <span class="comment">% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+0508 <span class="comment">% GNU General Public License for more details.</span>
+0509 <span class="comment">%</span>
+0510 <span class="comment">% You should have received a copy of the GNU General Public License</span>
+0511 <span class="comment">% along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

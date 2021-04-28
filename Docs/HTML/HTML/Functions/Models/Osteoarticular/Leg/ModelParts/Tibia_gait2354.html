@@ -1,0 +1,412 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Tibia_gait2354</title>
+  <meta name="keywords" content="Tibia_gait2354">
+  <meta name="description" content="CREDIT">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../../menu.html Functions --><!-- ../../../menu.html Models --><!-- ../../menu.html Osteoarticular --><!-- ../menu.html Leg --><!-- menu.html ModelParts -->
+<h1>Tibia_gait2354
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>CREDIT</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function [Human_model]= Tibia_gait2354(Human_model,k,Signe,Mass,AttachmentPoint) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">    CREDIT
+   Delp S.L., Loan J.P., Hoy M.G., Zajac F.E., Topp E.L., Rosen J.M., Thelen D.G., Anderson F.C., Seth A. 
+   NOTES
+   3D, 23 DOF gait model created by D.G. Thelen, Univ. of Wisconsin-Madison, and Ajay Seth, Frank C. Anderson, and Scott L. Delp, Stanford University. Lower extremity joint defintions based on Delp et al. (1990). Low back joint and anthropometry based on Anderson and Pandy (1999, 2001). Planar knee model of Yamaguchi and Zajac (1989). Seth replaced tibia translation constraints with a CustomJoint for the knee and removed the patella to eliminate all kinematic constraints; insertions of the quadrucepts are handled with moving points in the tibia frame as defined by Delp 1990. 
+   LINK
+   http://simtk-confluence.stanford.edu:8080/display/OpenSim/Gait+2392+and+2354+Models
+   Based on: 
+   - Delp, S.L., Loan, J.P., Hoy, M.G., Zajac, F.E., Topp E.L., Rosen, J.M.: An interactive graphics-based model of the lower extremity to study orthopaedic surgical procedures, IEEE Transactions on Biomedical Engineering, vol. 37, pp. 757-767, 1990. 
+   - Yamaguchi G.T., Zajac F.E.: A planar model of the knee joint to characterize the knee extensor mechanism.&quot; J . Biomech. vol. 22. pp. 1-10. 1989. 
+   - Anderson F.C., Pandy M.G.: A dynamic optimization solution for vertical jumping in three dimensions. Computer Methods in Biomechanics and Biomedical Engineering 2:201-231, 1999. Anderson F.C., Pandy M.G.: Dynamic optimization of human walking. Journal of Biomechanical Engineering 123:381-390, 2001.
+   INPUT
+   - OsteoArticularModel: osteo-articular model of an already existing
+   model (see the Documentation for the structure)
+   - k: homothety coefficient for the geometrical parameters (defined as
+   the subject size in cm divided by 180)
+   - Signe: side of the thigh model ('R' for right side or 'L' for left side)
+   - Mass: mass of the solids
+   - AttachmentPoint: name of the attachment point of the model on the
+   already existing model (character string)
+   OUTPUT
+   - OsteoArticularModel: new osteo-articular model (see the Documentation
+   for the structure)
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="../../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>	Computation of inertia matrix from radius of gyration</li><li><a href="../../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>	Addition of a sister to a solid</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="../../../../../Functions/Models/Osteoarticular/Leg/Leg_gait2354.html" class="code" title="function [OsteoArticularModel]= Leg_gait2354(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)">Leg_gait2354</a>	Addition of a leg model</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Human_model]= Tibia_gait2354(Human_model,k,Signe,Mass,AttachmentPoint)</a>
+0002 
+0003 <span class="comment">%    CREDIT</span>
+0004 <span class="comment">%   Delp S.L., Loan J.P., Hoy M.G., Zajac F.E., Topp E.L., Rosen J.M., Thelen D.G., Anderson F.C., Seth A.</span>
+0005 <span class="comment">%   NOTES</span>
+0006 <span class="comment">%   3D, 23 DOF gait model created by D.G. Thelen, Univ. of Wisconsin-Madison, and Ajay Seth, Frank C. Anderson, and Scott L. Delp, Stanford University. Lower extremity joint defintions based on Delp et al. (1990). Low back joint and anthropometry based on Anderson and Pandy (1999, 2001). Planar knee model of Yamaguchi and Zajac (1989). Seth replaced tibia translation constraints with a CustomJoint for the knee and removed the patella to eliminate all kinematic constraints; insertions of the quadrucepts are handled with moving points in the tibia frame as defined by Delp 1990.</span>
+0007 <span class="comment">%   LINK</span>
+0008 <span class="comment">%   http://simtk-confluence.stanford.edu:8080/display/OpenSim/Gait+2392+and+2354+Models</span>
+0009 <span class="comment">%   Based on:</span>
+0010 <span class="comment">%   - Delp, S.L., Loan, J.P., Hoy, M.G., Zajac, F.E., Topp E.L., Rosen, J.M.: An interactive graphics-based model of the lower extremity to study orthopaedic surgical procedures, IEEE Transactions on Biomedical Engineering, vol. 37, pp. 757-767, 1990.</span>
+0011 <span class="comment">%   - Yamaguchi G.T., Zajac F.E.: A planar model of the knee joint to characterize the knee extensor mechanism.&quot; J . Biomech. vol. 22. pp. 1-10. 1989.</span>
+0012 <span class="comment">%   - Anderson F.C., Pandy M.G.: A dynamic optimization solution for vertical jumping in three dimensions. Computer Methods in Biomechanics and Biomedical Engineering 2:201-231, 1999. Anderson F.C., Pandy M.G.: Dynamic optimization of human walking. Journal of Biomechanical Engineering 123:381-390, 2001.</span>
+0013 <span class="comment">%   INPUT</span>
+0014 <span class="comment">%   - OsteoArticularModel: osteo-articular model of an already existing</span>
+0015 <span class="comment">%   model (see the Documentation for the structure)</span>
+0016 <span class="comment">%   - k: homothety coefficient for the geometrical parameters (defined as</span>
+0017 <span class="comment">%   the subject size in cm divided by 180)</span>
+0018 <span class="comment">%   - Signe: side of the thigh model ('R' for right side or 'L' for left side)</span>
+0019 <span class="comment">%   - Mass: mass of the solids</span>
+0020 <span class="comment">%   - AttachmentPoint: name of the attachment point of the model on the</span>
+0021 <span class="comment">%   already existing model (character string)</span>
+0022 <span class="comment">%   OUTPUT</span>
+0023 <span class="comment">%   - OsteoArticularModel: new osteo-articular model (see the Documentation</span>
+0024 <span class="comment">%   for the structure)</span>
+0025 <span class="comment">%________________________________________________________</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% Licence</span>
+0028 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0029 <span class="comment">%________________________________________________________</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0032 <span class="comment">% Georges Dumont</span>
+0033 <span class="comment">%________________________________________________________</span>
+0034 
+0035 
+0036 <span class="comment">%% Variables de sortie :</span>
+0037 <span class="comment">% &quot;enrichissement de la structure &quot;Human_model&quot;&quot;</span>
+0038 
+0039 <span class="comment">%% Liste des solides</span>
+0040 list_solid={<span class="string">'Knee_Tx'</span>,<span class="string">'Knee_Ty'</span>,<span class="string">'tibia'</span>};
+0041 
+0042 <span class="comment">%% Choix jambe droite ou gauche</span>
+0043 <span class="keyword">if</span> Signe == <span class="string">'R'</span>
+0044     Mirror=[1 0 0; 0 1 0; 0 0 1];
+0045 <span class="keyword">else</span>
+0046     <span class="keyword">if</span> Signe == <span class="string">'L'</span>
+0047         Mirror=[1 0 0; 0 1 0; 0 0 -1];
+0048     <span class="keyword">end</span>
+0049 <span class="keyword">end</span>
+0050 
+0051 <span class="comment">% %% Incr�entation du num�o des groupes</span>
+0052 <span class="comment">% n_group=0;</span>
+0053 <span class="comment">% for i=1:numel(Human_model)</span>
+0054 <span class="comment">%     if size(Human_model(i).Group) ~= [0 0] %#ok&lt;BDSCA&gt;</span>
+0055 <span class="comment">%         n_group=max(n_group,Human_model(i).Group(1,1));</span>
+0056 <span class="comment">%     end</span>
+0057 <span class="comment">% end</span>
+0058 <span class="comment">% n_group=n_group+1;</span>
+0059 
+0060 <span class="comment">%% Incr�entation de la num�otation des solides</span>
+0061 
+0062 s=size(Human_model,2)+1;  <span class="comment">%#ok&lt;NASGU&gt; % num�o du premier solide</span>
+0063 <span class="keyword">for</span> i=1:size(list_solid,2)      <span class="comment">% num�otation de chaque solide : s_&quot;nom du solide&quot;</span>
+0064     <span class="keyword">if</span> i==1
+0065         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s;'</span>))
+0066     <span class="keyword">else</span>
+0067         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s_'</span>,list_solid{i-1},<span class="string">'+1;'</span>))
+0068     <span class="keyword">end</span>
+0069 <span class="keyword">end</span>
+0070 
+0071 <span class="comment">% trouver le num�o de la m�e �partir du nom du point d'attache : 'attachment_pt'</span>
+0072 <span class="keyword">if</span> numel(Human_model) == 0
+0073     s_mother=0;
+0074     pos_attachment_pt=[0 0 0]';
+0075 <span class="keyword">else</span>
+0076     test=0;
+0077     <span class="keyword">for</span> i=1:numel(Human_model)
+0078         <span class="keyword">for</span> j=1:size(Human_model(i).anat_position,1)
+0079             <span class="keyword">if</span> strcmp(AttachmentPoint,Human_model(i).anat_position{j,1})
+0080                 s_mother=i;
+0081                 pos_attachment_pt=Human_model(i).anat_position{j,2}+Human_model(s_mother).c;
+0082                 test=1;
+0083                 <span class="keyword">break</span>
+0084             <span class="keyword">end</span>
+0085         <span class="keyword">end</span>
+0086         <span class="keyword">if</span> i==numel(Human_model) &amp;&amp; test==0
+0087             error([AttachmentPoint <span class="string">' is no existent'</span>])
+0088         <span class="keyword">end</span>
+0089     <span class="keyword">end</span>
+0090     <span class="keyword">if</span> Human_model(s_mother).child == 0      <span class="comment">% si la m�e n'a pas d'enfant</span>
+0091         Human_model(s_mother).child = eval([<span class="string">'s_'</span> list_solid{1}]);    <span class="comment">% l'enfant de cette m�e est ce solide</span>
+0092     <span class="keyword">else</span>
+0093         [Human_model]=<a href="../../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>(Human_model,Human_model(s_mother).child,eval([<span class="string">'s_'</span> list_solid{1}]));   <span class="comment">% recherche de la derni�e soeur</span>
+0094     <span class="keyword">end</span>
+0095 <span class="keyword">end</span>
+0096 
+0097 <span class="comment">%%                      D�inition des noeuds (articulaires)</span>
+0098 <span class="comment">% --------------------------- Shank ---------------------------------------</span>
+0099 
+0100 <span class="comment">% centre de masse dans le rep�e de r��ence du segment</span>
+0101 CoM_tibia=k*Mirror*[0   -0.1867         0]';
+0102 
+0103 <span class="comment">% Position des noeuds</span>
+0104 Shank_KneeJointNode = (k*Mirror*[0 ;    0    ;0])  -CoM_tibia;
+0105 Shank_TalocruralJointNode = (k*Mirror*[0 -0.43 0]')-CoM_tibia;
+0106 
+0107 <span class="comment">% MedialCondyle =    k*Mirror*[0 ; 0.32146 ;-0.038646 ]              -CoM_tibia;</span>
+0108 <span class="comment">% LateralCondyle=    k*Mirror*[0.016 ; 0.3194  ; 0.038646 ]              -CoM_tibia;</span>
+0109 <span class="comment">% TibialTuberosity=    k*Mirror*[0.032171 ; 0.27476  ; 0.097883 ] -CoM_tibia;</span>
+0110 <span class="comment">% FibularHead=    k*Mirror*[-0.028328 ;0.31974 ;0.031814 ]        -CoM_tibia;</span>
+0111 <span class="comment">% MedialMalleolus=    k*Mirror*[0.017065 ;0.049672 ;-0.027608 ]  -CoM_tibia;</span>
+0112 <span class="comment">% LateralMalleolus=    k*Mirror*[-0.017065 ;-0.049672 ; 0.027608 ]-CoM_tibia;</span>
+0113 
+0114 ANI=    k*Mirror*([0.06;-0.3888;-0.038])-CoM_tibia;
+0115 ANE=    k*Mirror*([-0.05;-0.41;0.053])-CoM_tibia;
+0116 KNI =    k*Mirror*[.06 .145 -.0475]';
+0117 
+0118 <span class="comment">%% D�inition des positions anatomiques</span>
+0119 
+0120 Shank_position_set= {<span class="keyword">...</span>
+0121     [Signe <span class="string">'ANE'</span>], ANE; <span class="keyword">...</span>
+0122     [Signe <span class="string">'ANI'</span>], ANI; <span class="keyword">...</span>
+0123     [Signe <span class="string">'KNI'</span>], KNI; <span class="keyword">...</span>
+0124     [Signe <span class="string">'Shank.Upper'</span> ],k*Mirror*([0.05;-0.065;0.05])-CoM_tibia;<span class="keyword">...</span>
+0125     [Signe <span class="string">'Shank.Front'</span> ],k*Mirror*([0.05;-0.08;0])-CoM_tibia;<span class="keyword">...</span>
+0126     [Signe <span class="string">'Shank.Rear'</span> ],k*Mirror*([0.02;-0.13;0.05])-CoM_tibia;<span class="keyword">...</span>
+0127     [Signe <span class="string">'Shank_KneeJointNode'</span>], Shank_KneeJointNode; <span class="keyword">...</span>
+0128     [Signe <span class="string">'Shank_TalocruralJointNode'</span>], Shank_TalocruralJointNode; <span class="keyword">...</span>
+0129     [<span class="string">'bifemlh_'</span> lower(Signe) <span class="string">'-P2'</span>],k*Mirror*([-0.0301;-0.036;0.02943])-CoM_tibia;<span class="keyword">...</span>
+0130     [<span class="string">'bifemlh_'</span> lower(Signe) <span class="string">'-P3'</span>],k*Mirror*([-0.0234;-0.0563;0.0343])-CoM_tibia;<span class="keyword">...</span>
+0131     [<span class="string">'bifemsh_'</span> lower(Signe) <span class="string">'-P2'</span>],k*Mirror*([-0.0301;-0.036;0.02943])-CoM_tibia;<span class="keyword">...</span>
+0132     [<span class="string">'bifemsh_'</span> lower(Signe) <span class="string">'-P3'</span>],k*Mirror*([-0.0234;-0.0563;0.0343])-CoM_tibia;<span class="keyword">...</span>
+0133     [<span class="string">'sar_'</span> lower(Signe) <span class="string">'-P3'</span>],k*Mirror*([-0.056;-0.0419;-0.0399])-CoM_tibia;<span class="keyword">...</span>
+0134     [<span class="string">'sar_'</span> lower(Signe) <span class="string">'-P4'</span>],k*Mirror*([0.06;-0.0589;-0.0383])-CoM_tibia;<span class="keyword">...</span>
+0135     [<span class="string">'sar_'</span> lower(Signe) <span class="string">'-P5'</span>],k*Mirror*([0.0243;-0.084;-0.0252])-CoM_tibia;<span class="keyword">...</span>
+0136     [<span class="string">'tfl_'</span> lower(Signe) <span class="string">'-P4'</span>],k*Mirror*([0.06;-0.0487;0.0297])-CoM_tibia;<span class="keyword">...</span>
+0137     [<span class="string">'grac_'</span> lower(Signe) <span class="string">'-P3'</span>],k*Mirror*([-0.01943;-0.05153;-0.0358])-CoM_tibia;<span class="keyword">...</span>
+0138     [<span class="string">'grac_'</span> lower(Signe) <span class="string">'-P4'</span>],k*Mirror*([0.06;-0.0836;-0.0228])-CoM_tibia;<span class="keyword">...</span>
+0139     [<span class="string">'soleus_'</span> lower(Signe) <span class="string">'-P1'</span>],k*Mirror*([-0.024;-0.1533;0.071])-CoM_tibia;<span class="keyword">...</span>
+0140     [<span class="string">'tib_post_'</span> lower(Signe) <span class="string">'-P1'</span>],k*Mirror*([-0.094;-0.1348;0.019])-CoM_tibia;<span class="keyword">...</span>
+0141     [<span class="string">'tib_post_'</span> lower(Signe) <span class="string">'-P2'</span>],k*Mirror*([-0.0144;-0.4051;-0.0229])-CoM_tibia;<span class="keyword">...</span>
+0142     [<span class="string">'tib_ant_'</span> lower(Signe) <span class="string">'-P1'</span>],k*Mirror*([0.0179;-0.1624;0.0115])-CoM_tibia;<span class="keyword">...</span>
+0143     [<span class="string">'tib_ant_'</span> lower(Signe) <span class="string">'-P2'</span>],k*Mirror*([0.0329;-0.3951;-0.0177])-CoM_tibia;<span class="keyword">...</span>
+0144     [<span class="string">'rect_fem_'</span> lower(Signe) <span class="string">'-P3'</span>],k*Mirror*([0.0617576; 0.020984; -0.0014])-CoM_tibia;<span class="keyword">...</span>
+0145     };
+0146 
+0147 <span class="comment">%%                     Mise �l'�helle des inerties</span>
+0148 <span class="comment">%% [&quot;Adjustments to McConville et al. and Young et al. body segment inertial parameters&quot;] R. Dumas</span>
+0149 <span class="comment">% --------------------------- Shank ---------------------------------------</span>
+0150 Length_Shank=norm(Shank_TalocruralJointNode    -Shank_KneeJointNode);
+0151 [I_Shank]=<a href="../../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>([28 10 28 4*1i 2*1i 5], Mass.Shank_Mass, [0 0 0], Length_Shank, Signe);
+0152 
+0153 <span class="comment">%% Cr�tion de la structure &quot;Human_model&quot;</span>
+0154 
+0155 num_solid=0;
+0156 <span class="comment">%% Knee_Tx</span>
+0157 num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0158 name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0159 eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0160 Human_model(incr_solid).name=[Signe name];
+0161 Human_model(incr_solid).sister=0;
+0162 Human_model(incr_solid).child=s_Knee_Ty;
+0163 Human_model(incr_solid).mother=s_mother;
+0164 Human_model(incr_solid).a=[1 0 0]';
+0165 Human_model(incr_solid).joint=2;
+0166 Human_model(incr_solid).limit_inf=-1;
+0167 Human_model(incr_solid).limit_sup=1;
+0168 Human_model(incr_solid).Visual=0;
+0169 Human_model(incr_solid).m=0;
+0170 Human_model(incr_solid).b=pos_attachment_pt;
+0171 Human_model(incr_solid).I=zeros(3,3);
+0172 Human_model(incr_solid).c=[0 0 0]';
+0173 Human_model(incr_solid).comment=<span class="string">'Knee Antero-Posterior Translation'</span>;
+0174 <span class="comment">% Dependancy</span>
+0175 Human_model(incr_solid).kinematic_dependancy.active=1;
+0176 Human_model(incr_solid).kinematic_dependancy.Joint=[incr_solid+2]; <span class="comment">% tibia_r</span>
+0177 
+0178 <span class="comment">% numerical values</span>
+0179 theta_g = [-2.09440,-1.745330,-1.396260,-1.04720,-0.6981320,-0.3490660,-0.1745330,0.1973440,0.3373950,0.4901780,1.521460,2.09440]';
+0180 tx =k*[-0.0032000,0.0017900,0.0041100,0.0041000,0.0021200,-0.0010000,-0.0031000,-0.0052270,-0.0054350,-0.0055740,-0.0054350,-0.0052500]';
+0181 <span class="comment">% plot(theta_g,tx,'bo','linewidth',3); title('knee angle function of x translation')</span>
+0182 Human_model(incr_solid).kinematic_dependancy.numerical_estimates=[theta_g ,tx];
+0183 
+0184 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0185 <span class="comment">% Polynomial fitting</span>
+0186 <span class="comment">%%%%% not efficient %%%%%%</span>
+0187 <span class="comment">% %not efficient [p,S]=polyfit(theta_g,tx,4);</span>
+0188 <span class="comment">% [y, delta]=polyval(p,theta_g(1):0.01:theta_g(end),S); plot(theta_g(1):0.01:theta_g(end),y,'r-','linewidth',3);</span>
+0189 
+0190 <span class="comment">%%%%%%%%%</span>
+0191 <span class="comment">% spline</span>
+0192 <span class="comment">%%%%%%</span>
+0193 <span class="comment">% Efficient mais galere avec les fonctions par morceaux</span>
+0194 <span class="comment">%%%%%%%%%%%%%%%%%%%%</span>
+0195 <span class="comment">% pp=spline(theta_g,tx);</span>
+0196 <span class="comment">% yy=spline(theta_g,tx,theta_g(1):0.01:theta_g(end))</span>
+0197 <span class="comment">% plot(theta_g(1):0.01:theta_g(end),yy,'g--','linewidth',3); hold on;</span>
+0198 <span class="comment">% Coef(:,1) = pp.coefs(:,1);</span>
+0199 <span class="comment">% Coef(:,2) = -3*pp.coefs(:,1).*pp.breaks(1:end-1)' + pp.coefs(:,2);</span>
+0200 <span class="comment">% Coef(:,3) = 3*pp.coefs(:,1).*(pp.breaks(1:end-1)').^2 - 2*pp.coefs(:,2).*(pp.breaks(1:end-1)')...</span>
+0201 <span class="comment">%     + pp.coefs(:,3);</span>
+0202 <span class="comment">% Coef(:,4) = -pp.coefs(:,1).*(pp.breaks(1:end-1)').^3 + pp.coefs(:,2).*(pp.breaks(1:end-1)').^2 ...</span>
+0203 <span class="comment">%     - pp.coefs(:,3).*(pp.breaks(1:end-1)') + pp.coefs(:,4);</span>
+0204 <span class="comment">% f_tx_sym=PiecewisePolyFunction(theta_g,Coef);</span>
+0205 <span class="comment">% Verif</span>
+0206 <span class="comment">% for ij=theta_g(1):0.01:theta_g(end)</span>
+0207 <span class="comment">%     yy=subs(f_tx_sym,X,ij);</span>
+0208 <span class="comment">%     plot(ij,yy,'.'); hold on</span>
+0209 <span class="comment">% end</span>
+0210 
+0211 <span class="comment">% f_tx=matlabFunction(f_tx_sym,'vars',{X}) impossible to save piecewise</span>
+0212 <span class="comment">% symbolic functions in workspace.</span>
+0213 <span class="comment">% syms X real</span>
+0214 <span class="comment">% f_tx=matlabFunction(f_tx_sym,'File',...</span>
+0215 <span class="comment">%     [Signe '_' name '.m'],...</span>
+0216 <span class="comment">%     'Outputs',{'ftx'},'vars',{X});</span>
+0217 <span class="comment">% plot(theta_g(1):0.01:theta_g(end),f_tx(theta_g(1)),'.')</span>
+0218 <span class="comment">% Handle function</span>
+0219 <span class="comment">% Human_model(incr_solid).kinematic_dependancy.q=f_tx;</span>
+0220 <span class="comment">% Human_model(incr_solid).kinematic_dependancy.q_sym=f_tx_sym;</span>
+0221 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0222 <span class="comment">%%%%% polynome au cas ou</span>
+0223 <span class="comment">% %Just in case</span>
+0224 <span class="comment">%[p,S]=polyfit(theta_g,tx,4)</span>
+0225 <span class="comment">%alpha_g=sym('alpha_g','real');</span>
+0226 <span class="comment">%f_tx=sym(zeros(1,1));</span>
+0227 <span class="comment">%order=length(p);</span>
+0228 <span class="comment">%for ii=1:order</span>
+0229 <span class="comment">%    f_tx = alpha_g^(order-ii)*p(ii) + f_tx;</span>
+0230 <span class="comment">%end</span>
+0231 <span class="comment">% Handle function</span>
+0232 <span class="comment">%q=matlabFunction(f_tx);</span>
+0233 <span class="comment">%Human_model(incr_solid).kinematic_dependancy.q=q;</span>
+0234 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0235 <span class="comment">% FOURRIER</span>
+0236 <span class="comment">%%%%%%% Fonctionne pas trop mal %%%%%%%</span>
+0237 <span class="comment">% four=fit(theta_g,tx,'fourier3')</span>
+0238 <span class="comment">% plot(four);</span>
+0239 <span class="comment">% xlim([min(theta_g) max(theta_g)])</span>
+0240 <span class="comment">% ylim([min(tx) max(tx)])</span>
+0241 <span class="comment">%</span>
+0242 <span class="comment">% str = strtrim(formula(four));</span>
+0243 <span class="comment">% c = coeffnames(four); v=coeffvalues(four);</span>
+0244 <span class="comment">% f_four=matlabFunction(str2sym(str));</span>
+0245 <span class="comment">% sym X;</span>
+0246 <span class="comment">%</span>
+0247 <span class="comment">% for ii=1:length(c)</span>
+0248 <span class="comment">% eval([c{ii} '=' num2str(v(ii)) ';']);</span>
+0249 <span class="comment">% end</span>
+0250 <span class="comment">%%%%%%%%%%% On donne directement les coefficients.</span>
+0251 syms X real;
+0252 a0 = k*-0.003014  ;
+0253 a1 =   k*0.0005659  ;
+0254 b1 =  k*-0.0001508  ;
+0255 a2 =    k*0.001183  ;
+0256 b2 =   k*-0.005434  ;
+0257 a3 =   k*-0.002767  ;
+0258 b3 =    k*0.000915  ;
+0259 w  =        0.75  ;
+0260 f_tx = matlabFunction(a0 + a1*cos(X*w) + b1*sin(X*w) + a2*cos(2*X*w) + b2*sin(2*X*w) + a3*cos(3*X*w) + b3*sin(3*X*w));
+0261 Human_model(incr_solid).kinematic_dependancy.q=f_tx;
+0262 <span class="comment">%% Knee_Ty</span>
+0263 
+0264 num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0265 name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0266 eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0267 Human_model(incr_solid).name=[Signe name];
+0268 Human_model(incr_solid).sister=0;
+0269 Human_model(incr_solid).child=s_tibia;
+0270 Human_model(incr_solid).mother=s_Knee_Tx;
+0271 Human_model(incr_solid).a=[0 1 0]';
+0272 Human_model(incr_solid).joint=2;
+0273 Human_model(incr_solid).limit_inf=-1;
+0274 Human_model(incr_solid).limit_sup=1;
+0275 Human_model(incr_solid).Visual=0;
+0276 Human_model(incr_solid).m=0;
+0277 Human_model(incr_solid).b=[0 0 0]';
+0278 Human_model(incr_solid).I=zeros(3,3);
+0279 Human_model(incr_solid).c=[0 0 0]';
+0280 Human_model(incr_solid).comment=<span class="string">'Knee Longitudinal Translation'</span>;
+0281 
+0282 <span class="comment">% Dependancy</span>
+0283 Human_model(incr_solid).kinematic_dependancy.active=1;
+0284 Human_model(incr_solid).kinematic_dependancy.Joint=incr_solid+1; <span class="comment">% tibia_r</span>
+0285 
+0286 <span class="comment">% numerical values</span>
+0287 theta_g = [-2.09440,-1.221730,-0.5235990,-0.3490660,-0.1745330,0.1591490,2.09440];
+0288 ty = k*[-0.42260,-0.40820,-0.3990,-0.39760,-0.39660,-0.3952640,-0.3960]+0.3958;
+0289 <span class="comment">% plot(theta_g,ty,'bo','linewidth',3); title('knee angle function of y translation')</span>
+0290 Human_model(incr_solid).kinematic_dependancy.numerical_estimates=[theta_g ,ty];
+0291 
+0292 [p,S]=polyfit(theta_g,ty,5); 
+0293 <span class="comment">% yy=spline(theta_g,ty,theta_g(1):0.01:theta_g(end))</span>
+0294 <span class="comment">% plot(theta_g(1):0.01:theta_g(end),yy,'g--','linewidth',3);</span>
+0295 <span class="comment">% hold on; [y, delta]=polyval(p,theta_g(1):0.01:theta_g(end),S); plot(theta_g(1):0.01:theta_g(end),y,'r-','linewidth',3);</span>
+0296 alpha_g=sym(<span class="string">'alpha_g'</span>,<span class="string">'real'</span>); 
+0297 f_ty=sym(zeros(1,1));
+0298 order=length(p);
+0299 <span class="keyword">for</span> ii=1:order
+0300     f_ty = alpha_g^(order-ii)*p(ii) + f_ty;
+0301 <span class="keyword">end</span>
+0302 <span class="comment">% Handle function</span>
+0303 q=matlabFunction(f_ty);
+0304 Human_model(incr_solid).kinematic_dependancy.q=q;
+0305 
+0306 <span class="comment">%% Tibia</span>
+0307 num_solid=num_solid+1;        <span class="comment">% solide num�o ...</span>
+0308 name=list_solid{num_solid}; <span class="comment">% nom du solide</span>
+0309 eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% num�o du solide dans le mod�e</span>
+0310 Human_model(incr_solid).name=[name <span class="string">'_'</span> lower(Signe)];
+0311 Human_model(incr_solid).sister=0;
+0312 Human_model(incr_solid).child=0;
+0313 Human_model(incr_solid).mother=s_Knee_Ty;
+0314 Human_model(incr_solid).a=[Mirror(3,3)*0    Mirror(3,3)*0    1]';
+0315 Human_model(incr_solid).joint=1;
+0316 Human_model(incr_solid).limit_inf=-pi;
+0317 Human_model(incr_solid).limit_sup=pi;
+0318 Human_model(incr_solid).ActiveJoint=1;
+0319 Human_model(incr_solid).Visual=1;
+0320 Human_model(incr_solid).visual_file = [<span class="string">'gait2354/tibia_'</span>  lower(Signe) <span class="string">'.mat'</span>];
+0321 <span class="comment">% Human_model(incr_solid).Group=[n_group 2];</span>
+0322 Human_model(incr_solid).m=Mass.Shank_Mass;
+0323 Human_model(incr_solid).b=[0;0;0];
+0324 Human_model(incr_solid).I=[I_Shank(1) I_Shank(4) I_Shank(5); I_Shank(4) I_Shank(2) I_Shank(6); I_Shank(5) I_Shank(6) I_Shank(3)];
+0325 Human_model(incr_solid).c=-Shank_KneeJointNode; <span class="comment">% dans le rep�e du joint pr��ent</span>
+0326 Human_model(incr_solid).anat_position=Shank_position_set;
+0327 Human_model(incr_solid).L={[Signe <span class="string">'Shank_KneeJointNode'</span>];[Signe <span class="string">'Shank_TalocruralJointNode'</span>]};
+0328 Human_model(incr_solid).limit_alpha= [10 , -10;<span class="keyword">...</span>
+0329     10, -10];
+0330 <span class="comment">%     OsteoArticularModel(incr_solid).v= [ [1; 0; 0] , [0 ;1;0] ] ;</span>
+0331 Human_model(incr_solid).v= [] ;
+0332 Human_model(incr_solid).calib_a=1;
+0333 Human_model(incr_solid).comment=<span class="string">'Knee Flexion(-)/Extension(-)'</span>;
+0334 
+0335 
+0336 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

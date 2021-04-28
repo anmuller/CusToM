@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of TrunkSegMass</title>
+  <meta name="keywords" content="TrunkSegMass">
+  <meta name="description" content="Trunk mass distribution between each segment">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- ../menu.html Models --><!-- menu.html Osteoarticular -->
+<h1>TrunkSegMass
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Trunk mass distribution between each segment</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [Pelvis_Mass, LowerTrunk_Mass, Thorax_Mass, Skull_Mass,Scapula_Mass,Clavicle_Mass]= TrunkSegMass(Trunk_Mass) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Trunk mass distribution between each segment
+
+    Based on:
+       Dumas, R., Cheze, L., &amp; Verriest, J. P., 2007.
+       Adjustments to McConville et al. and Young et al. body segment inertial parameters. Journal of biomechanics, 40(3), 543-553.
+
+       Klein Breteler, M. D., Spoor, C. W., &amp; Van der Helm, F. C. T. (1999). 
+       Measuring muscle and joint geometry parameters of a shoulder for modeling purposes. Journal of Biomechanics, 32(11), 1191�1197.
+
+   INPUT
+   - Trunk_Mass: total mass of the trunk
+   OUTPUT
+   - Pelvis_Mass: mass of the pelvis
+   - LowerTrunk_Mass: mass of the lower trunk
+   - UpperTrunk_Mass: mass of the upper trunk
+   - Skull_Mass: mass of the skull
+   - Scapula_Mass: mass of a scapula
+   - Clavicle_Mass: mass of a clavicle
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Functions/Models/ModelGeneration.html" class="code" title="function [OsteoArticularModel, Markers, Muscles, EnableModel] = ModelGeneration(ModelParameters)">ModelGeneration</a>	Generation of the anthropometric model</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Pelvis_Mass, LowerTrunk_Mass, Thorax_Mass, Skull_Mass,Scapula_Mass,Clavicle_Mass]= TrunkSegMass(Trunk_Mass)</a>
+0002 <span class="comment">% Trunk mass distribution between each segment</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%    Based on:</span>
+0005 <span class="comment">%       Dumas, R., Cheze, L., &amp; Verriest, J. P., 2007.</span>
+0006 <span class="comment">%       Adjustments to McConville et al. and Young et al. body segment inertial parameters. Journal of biomechanics, 40(3), 543-553.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%       Klein Breteler, M. D., Spoor, C. W., &amp; Van der Helm, F. C. T. (1999).</span>
+0009 <span class="comment">%       Measuring muscle and joint geometry parameters of a shoulder for modeling purposes. Journal of Biomechanics, 32(11), 1191�1197.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%   INPUT</span>
+0012 <span class="comment">%   - Trunk_Mass: total mass of the trunk</span>
+0013 <span class="comment">%   OUTPUT</span>
+0014 <span class="comment">%   - Pelvis_Mass: mass of the pelvis</span>
+0015 <span class="comment">%   - LowerTrunk_Mass: mass of the lower trunk</span>
+0016 <span class="comment">%   - UpperTrunk_Mass: mass of the upper trunk</span>
+0017 <span class="comment">%   - Skull_Mass: mass of the skull</span>
+0018 <span class="comment">%   - Scapula_Mass: mass of a scapula</span>
+0019 <span class="comment">%   - Clavicle_Mass: mass of a clavicle</span>
+0020 <span class="comment">%________________________________________________________</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% Licence</span>
+0023 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0024 <span class="comment">%________________________________________________________</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0027 <span class="comment">% Georges Dumont</span>
+0028 <span class="comment">%________________________________________________________</span>
+0029 Pelvis_Mass = 0.26*Trunk_Mass;
+0030 LowerTrunk_Mass = 0;
+0031 Thorax_Mass = 0.573*Trunk_Mass;
+0032 Skull_Mass = 0.13*Trunk_Mass;
+0033 
+0034 <span class="comment">% Shoulder elements mass adapted from (Klein Breteler et al., 1999)</span>
+0035 Scapula_Mass = 0.0152*Trunk_Mass;
+0036 Clavicle_Mass = 0.00327*Trunk_Mass;
+0037 <span class="keyword">end</span>
+0038 
+0039 
+0040 
+0041</pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

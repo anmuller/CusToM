@@ -1,0 +1,1640 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of export_fig</title>
+  <meta name="keywords" content="export_fig">
+  <meta name="description" content="EXPORT_FIG  Exports figures in a publication-quality format">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- # ExternLibrary --><!-- menu.html export_fig -->
+<h1>export_fig
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>EXPORT_FIG  Exports figures in a publication-quality format</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [imageData, alpha] = export_fig(varargin) %#ok<*STRCL1> </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EXPORT_FIG  Exports figures in a publication-quality format
+
+ Examples:
+   imageData = export_fig
+   [imageData, alpha] = export_fig
+   export_fig filename
+   export_fig filename -format1 -format2
+   export_fig ... -nocrop
+   export_fig ... -c[&lt;val&gt;,&lt;val&gt;,&lt;val&gt;,&lt;val&gt;]
+   export_fig ... -transparent
+   export_fig ... -native
+   export_fig ... -m&lt;val&gt;
+   export_fig ... -r&lt;val&gt;
+   export_fig ... -a&lt;val&gt;
+   export_fig ... -q&lt;val&gt;
+   export_fig ... -p&lt;val&gt;
+   export_fig ... -d&lt;gs_option&gt;
+   export_fig ... -depsc
+   export_fig ... -&lt;renderer&gt;
+   export_fig ... -&lt;colorspace&gt;
+   export_fig ... -append
+   export_fig ... -bookmark
+   export_fig ... -clipboard
+   export_fig ... -update
+   export_fig ... -nofontswap
+   export_fig ... -font_space &lt;char&gt;
+   export_fig ... -linecaps
+   export_fig ... -noinvert
+   export_fig(..., handle)
+
+ This function saves a figure or single axes to one or more vector and/or
+ bitmap file formats, and/or outputs a rasterized version to the workspace,
+ with the following properties:
+   - Figure/axes reproduced as it appears on screen
+   - Cropped borders (optional)
+   - Embedded fonts (vector formats)
+   - Improved line and grid line styles
+   - Anti-aliased graphics (bitmap formats)
+   - Render images at native resolution (optional for bitmap formats)
+   - Transparent background supported (pdf, eps, png, tiff)
+   - Semi-transparent patch objects supported (png, tiff)
+   - RGB, CMYK or grayscale output (CMYK only with pdf, eps, tiff)
+   - Variable image compression, including lossless (pdf, eps, jpg)
+   - Optional rounded line-caps (pdf, eps)
+   - Optionally append to file (pdf, tiff)
+   - Vector formats: pdf, eps
+   - Bitmap formats: png, tiff, jpg, bmp, export to workspace
+
+ This function is especially suited to exporting figures for use in
+ publications and presentations, because of the high quality and
+ portability of media produced.
+
+ Note that the background color and figure dimensions are reproduced
+ (the latter approximately, and ignoring cropping &amp; magnification) in the
+ output file. For transparent background (and semi-transparent patch
+ objects), use the -transparent option or set the figure 'Color' property
+ to 'none'. To make axes transparent set the axes 'Color' property to
+ 'none'. PDF, EPS, TIF &amp; PNG are the only formats that support a transparent
+ background; only TIF &amp; PNG formats support transparency of patch objects.
+
+ The choice of renderer (opengl, zbuffer or painters) has a large impact
+ on the quality of output. The default value (opengl for bitmaps, painters
+ for vector formats) generally gives good results, but if you aren't
+ satisfied then try another renderer.  Notes: 1) For vector formats (EPS,
+ PDF), only painters generates vector graphics. 2) For bitmaps, only
+ opengl can render transparent patch objects correctly. 3) For bitmaps,
+ only painters will correctly scale line dash and dot lengths when
+ magnifying or anti-aliasing. 4) Fonts may be substitued with Courier when
+ using painters.
+
+ When exporting to vector format (PDF &amp; EPS) and bitmap format using the
+ painters renderer, this function requires that ghostscript is installed
+ on your system. You can download this from:
+   http://www.ghostscript.com
+ When exporting to eps it additionally requires pdftops, from the Xpdf
+ suite of functions. You can download this from:
+   http://www.foolabs.com/xpdf
+
+ Inputs:
+   filename - string containing the name (optionally including full or
+              relative path) of the file the figure is to be saved as. If
+              a path is not specified, the figure is saved in the current
+              directory. If no name and no output arguments are specified,
+              the default name, 'export_fig_out', is used. If neither a
+              file extension nor a format are specified, a &quot;.png&quot; is added
+              and the figure saved in that format.
+   -format1, -format2, etc. - strings containing the extensions of the
+                              file formats the figure is to be saved as.
+                              Valid options are: '-pdf', '-eps', '-png',
+                              '-tif', '-jpg' and '-bmp'. All combinations
+                              of formats are valid.
+   -nocrop - option indicating that the borders of the output are not to
+             be cropped.
+   -c[&lt;val&gt;,&lt;val&gt;,&lt;val&gt;,&lt;val&gt;] - option indicating crop amounts. Must be
+             a 4-element vector of numeric values: [top,right,bottom,left]
+             where NaN/Inf indicate auto-cropping, 0 means no cropping,
+             and any other value mean cropping in pixel amounts.
+   -transparent - option indicating that the figure background is to be
+                  made transparent (png, pdf, tif and eps output only).
+   -m&lt;val&gt; - option where val indicates the factor to magnify the
+             on-screen figure pixel dimensions by when generating bitmap
+             outputs (does not affect vector formats). Default: '-m1'.
+   -r&lt;val&gt; - option val indicates the resolution (in pixels per inch) to
+             export bitmap and vector outputs at, keeping the dimensions
+             of the on-screen figure. Default: '-r864' (for vector output
+             only). Note that the -m option overides the -r option for
+             bitmap outputs only.
+   -native - option indicating that the output resolution (when outputting
+             a bitmap format) should be such that the vertical resolution
+             of the first suitable image found in the figure is at the
+             native resolution of that image. To specify a particular
+             image to use, give it the tag 'export_fig_native'. Notes:
+             This overrides any value set with the -m and -r options. It
+             also assumes that the image is displayed front-to-parallel
+             with the screen. The output resolution is approximate and
+             should not be relied upon. Anti-aliasing can have adverse
+             effects on image quality (disable with the -a1 option).
+   -a1, -a2, -a3, -a4 - option indicating the amount of anti-aliasing to
+                        use for bitmap outputs. '-a1' means no anti-
+                        aliasing; '-a4' is the maximum amount (default).
+   -&lt;renderer&gt; - option to force a particular renderer (painters, opengl or
+                 zbuffer). Default value: opengl for bitmap formats or
+                 figures with patches and/or transparent annotations;
+                 painters for vector formats without patches/transparencies.
+   -&lt;colorspace&gt; - option indicating which colorspace color figures should
+                   be saved in: RGB (default), CMYK or gray. CMYK is only
+                   supported in pdf, eps and tiff output.
+   -q&lt;val&gt; - option to vary bitmap image quality (in pdf, eps and jpg
+             files only).  Larger val, in the range 0-100, gives higher
+             quality/lower compression. val &gt; 100 gives lossless
+             compression. Default: '-q95' for jpg, ghostscript prepress
+             default for pdf &amp; eps. Note: lossless compression can
+             sometimes give a smaller file size than the default lossy
+             compression, depending on the type of images.
+   -p&lt;val&gt; - option to pad a border of width val to exported files, where
+             val is either a relative size with respect to cropped image
+             size (i.e. p=0.01 adds a 1% border). For EPS &amp; PDF formats,
+             val can also be integer in units of 1/72&quot; points (abs(val)&gt;1).
+             val can be positive (padding) or negative (extra cropping).
+             If used, the -nocrop flag will be ignored, i.e. the image will
+             always be cropped and then padded. Default: 0 (i.e. no padding).
+   -append - option indicating that if the file (pdfs only) already
+             exists, the figure is to be appended as a new page, instead
+             of being overwritten (default).
+   -bookmark - option to indicate that a bookmark with the name of the
+               figure is to be created in the output file (pdf only).
+   -clipboard - option to save output as an image on the system clipboard.
+                Note: background transparency is not preserved in clipboard
+   -d&lt;gs_option&gt; - option to indicate a ghostscript setting. For example,
+                   -dMaxBitmap=0 or -dNoOutputFonts (Ghostscript 9.15+).
+   -depsc -  option to use EPS level-3 rather than the default level-2 print
+             device. This solves some bugs with Matlab's default -depsc2 device
+             such as discolored subplot lines on images (vector formats only).
+   -update - option to download and install the latest version of export_fig
+   -nofontswap - option to avoid font swapping. Font swapping is automatically
+             done in vector formats (only): 11 standard Matlab fonts are
+             replaced by the original figure fonts. This option prevents this.
+   -font_space &lt;char&gt; - option to set a spacer character for font-names that
+             contain spaces, used by EPS/PDF. Default: ''
+   -linecaps - option to create rounded line-caps (vector formats only).
+   -noinvert - option to avoid setting figure's InvertHardcopy property to
+             'off' during output (this solves some problems of empty outputs).
+   handle -  The handle of the figure, axes or uipanels (can be an array of
+             handles, but the objects must be in the same figure) to be
+             saved. Default: gcf.
+
+ Outputs:
+   imageData - MxNxC uint8 image array of the exported image.
+   alpha     - MxN single array of alphamatte values in the range [0,1],
+               for the case when the background is transparent.
+
+   Some helpful examples and tips can be found at:
+      https://github.com/altmany/export_fig
+
+   See also PRINT, SAVEAS, ScreenCapture (on the Matlab File Exchange)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="copyfig.html" class="code" title="function fh = copyfig(fh)">copyfig</a>	COPYFIG Create a copy of a figure, without changing the figure</li><li><a href="crop_borders.html" class="code" title="function [A, vA, vB, bb_rel] = crop_borders(A, bcol, padding, crop_amounts)">crop_borders</a>	CROP_BORDERS Crop the borders of an image or stack of images</li><li><a href="eps2pdf.html" class="code" title="function eps2pdf(source, dest, crop, append, gray, quality, gs_options)">eps2pdf</a>	EPS2PDF  Convert an eps file to pdf format using ghostscript</li><li><a href="isolate_axes.html" class="code" title="function fh = isolate_axes(ah, vis)">isolate_axes</a>	ISOLATE_AXES Isolate the specified axes in a figure on their own</li><li><a href="pdf2eps.html" class="code" title="function pdf2eps(source, dest)">pdf2eps</a>	PDF2EPS  Convert a pdf file to eps format using pdftops</li><li><a href="print2array.html" class="code" title="function [A, bcol] = print2array(fig, res, renderer, gs_options)">print2array</a>	PRINT2ARRAY  Exports a figure to an image array</li><li><a href="print2eps.html" class="code" title="function print2eps(name, fig, export_options, varargin)">print2eps</a>	PRINT2EPS  Prints figures to eps with improved line styles</li><li><a href="read_write_entire_textfile.html" class="code" title="function fstrm = read_write_entire_textfile(fname, fstrm)">read_write_entire_textfile</a>	READ_WRITE_ENTIRE_TEXTFILE Read or write a whole text file to/from memory</li><li><a href="using_hg2.html" class="code" title="function tf = using_hg2(fig)">using_hg2</a>	USING_HG2 Determine if the HG2 graphics engine is used</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Functions/ExternLibrary/GIBBON/functions/efw.html" class="code" title="function efw(varargin)">efw</a>	function efw(hf)</li><li><a href="../../../Functions/ExternLibrary/GIBBON/functions/exportGifAnim8.html" class="code" title="function exportGifAnim8(varargin)">exportGifAnim8</a>	%</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function options = default_options()</a></li><li><a href="#_sub2" class="code">function [fig, options] = parse_args(nout, fig, varargin)</a></li><li><a href="#_sub3" class="code">function value = str2char(value)</a></li><li><a href="#_sub4" class="code">function A = downsize(A, factor)</a></li><li><a href="#_sub5" class="code">function A = rgb2grey(A)</a></li><li><a href="#_sub6" class="code">function A = check_greyscale(A)</a></li><li><a href="#_sub7" class="code">function eps_remove_background(fname, count)</a></li><li><a href="#_sub8" class="code">function b = isvector(options)</a></li><li><a href="#_sub9" class="code">function b = isbitmap(options)</a></li><li><a href="#_sub10" class="code">function A = make_cell(A)</a></li><li><a href="#_sub11" class="code">function add_bookmark(fname, bookmark_text)</a></li><li><a href="#_sub12" class="code">function set_tick_mode(Hlims, ax)</a></li><li><a href="#_sub13" class="code">function change_rgb_to_cmyk(fname)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [imageData, alpha] = export_fig(varargin) </a><span class="comment">%#ok&lt;*STRCL1&gt;</span>
+0002 <span class="comment">%EXPORT_FIG  Exports figures in a publication-quality format</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Examples:</span>
+0005 <span class="comment">%   imageData = export_fig</span>
+0006 <span class="comment">%   [imageData, alpha] = export_fig</span>
+0007 <span class="comment">%   export_fig filename</span>
+0008 <span class="comment">%   export_fig filename -format1 -format2</span>
+0009 <span class="comment">%   export_fig ... -nocrop</span>
+0010 <span class="comment">%   export_fig ... -c[&lt;val&gt;,&lt;val&gt;,&lt;val&gt;,&lt;val&gt;]</span>
+0011 <span class="comment">%   export_fig ... -transparent</span>
+0012 <span class="comment">%   export_fig ... -native</span>
+0013 <span class="comment">%   export_fig ... -m&lt;val&gt;</span>
+0014 <span class="comment">%   export_fig ... -r&lt;val&gt;</span>
+0015 <span class="comment">%   export_fig ... -a&lt;val&gt;</span>
+0016 <span class="comment">%   export_fig ... -q&lt;val&gt;</span>
+0017 <span class="comment">%   export_fig ... -p&lt;val&gt;</span>
+0018 <span class="comment">%   export_fig ... -d&lt;gs_option&gt;</span>
+0019 <span class="comment">%   export_fig ... -depsc</span>
+0020 <span class="comment">%   export_fig ... -&lt;renderer&gt;</span>
+0021 <span class="comment">%   export_fig ... -&lt;colorspace&gt;</span>
+0022 <span class="comment">%   export_fig ... -append</span>
+0023 <span class="comment">%   export_fig ... -bookmark</span>
+0024 <span class="comment">%   export_fig ... -clipboard</span>
+0025 <span class="comment">%   export_fig ... -update</span>
+0026 <span class="comment">%   export_fig ... -nofontswap</span>
+0027 <span class="comment">%   export_fig ... -font_space &lt;char&gt;</span>
+0028 <span class="comment">%   export_fig ... -linecaps</span>
+0029 <span class="comment">%   export_fig ... -noinvert</span>
+0030 <span class="comment">%   export_fig(..., handle)</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">% This function saves a figure or single axes to one or more vector and/or</span>
+0033 <span class="comment">% bitmap file formats, and/or outputs a rasterized version to the workspace,</span>
+0034 <span class="comment">% with the following properties:</span>
+0035 <span class="comment">%   - Figure/axes reproduced as it appears on screen</span>
+0036 <span class="comment">%   - Cropped borders (optional)</span>
+0037 <span class="comment">%   - Embedded fonts (vector formats)</span>
+0038 <span class="comment">%   - Improved line and grid line styles</span>
+0039 <span class="comment">%   - Anti-aliased graphics (bitmap formats)</span>
+0040 <span class="comment">%   - Render images at native resolution (optional for bitmap formats)</span>
+0041 <span class="comment">%   - Transparent background supported (pdf, eps, png, tiff)</span>
+0042 <span class="comment">%   - Semi-transparent patch objects supported (png, tiff)</span>
+0043 <span class="comment">%   - RGB, CMYK or grayscale output (CMYK only with pdf, eps, tiff)</span>
+0044 <span class="comment">%   - Variable image compression, including lossless (pdf, eps, jpg)</span>
+0045 <span class="comment">%   - Optional rounded line-caps (pdf, eps)</span>
+0046 <span class="comment">%   - Optionally append to file (pdf, tiff)</span>
+0047 <span class="comment">%   - Vector formats: pdf, eps</span>
+0048 <span class="comment">%   - Bitmap formats: png, tiff, jpg, bmp, export to workspace</span>
+0049 <span class="comment">%</span>
+0050 <span class="comment">% This function is especially suited to exporting figures for use in</span>
+0051 <span class="comment">% publications and presentations, because of the high quality and</span>
+0052 <span class="comment">% portability of media produced.</span>
+0053 <span class="comment">%</span>
+0054 <span class="comment">% Note that the background color and figure dimensions are reproduced</span>
+0055 <span class="comment">% (the latter approximately, and ignoring cropping &amp; magnification) in the</span>
+0056 <span class="comment">% output file. For transparent background (and semi-transparent patch</span>
+0057 <span class="comment">% objects), use the -transparent option or set the figure 'Color' property</span>
+0058 <span class="comment">% to 'none'. To make axes transparent set the axes 'Color' property to</span>
+0059 <span class="comment">% 'none'. PDF, EPS, TIF &amp; PNG are the only formats that support a transparent</span>
+0060 <span class="comment">% background; only TIF &amp; PNG formats support transparency of patch objects.</span>
+0061 <span class="comment">%</span>
+0062 <span class="comment">% The choice of renderer (opengl, zbuffer or painters) has a large impact</span>
+0063 <span class="comment">% on the quality of output. The default value (opengl for bitmaps, painters</span>
+0064 <span class="comment">% for vector formats) generally gives good results, but if you aren't</span>
+0065 <span class="comment">% satisfied then try another renderer.  Notes: 1) For vector formats (EPS,</span>
+0066 <span class="comment">% PDF), only painters generates vector graphics. 2) For bitmaps, only</span>
+0067 <span class="comment">% opengl can render transparent patch objects correctly. 3) For bitmaps,</span>
+0068 <span class="comment">% only painters will correctly scale line dash and dot lengths when</span>
+0069 <span class="comment">% magnifying or anti-aliasing. 4) Fonts may be substitued with Courier when</span>
+0070 <span class="comment">% using painters.</span>
+0071 <span class="comment">%</span>
+0072 <span class="comment">% When exporting to vector format (PDF &amp; EPS) and bitmap format using the</span>
+0073 <span class="comment">% painters renderer, this function requires that ghostscript is installed</span>
+0074 <span class="comment">% on your system. You can download this from:</span>
+0075 <span class="comment">%   http://www.ghostscript.com</span>
+0076 <span class="comment">% When exporting to eps it additionally requires pdftops, from the Xpdf</span>
+0077 <span class="comment">% suite of functions. You can download this from:</span>
+0078 <span class="comment">%   http://www.foolabs.com/xpdf</span>
+0079 <span class="comment">%</span>
+0080 <span class="comment">% Inputs:</span>
+0081 <span class="comment">%   filename - string containing the name (optionally including full or</span>
+0082 <span class="comment">%              relative path) of the file the figure is to be saved as. If</span>
+0083 <span class="comment">%              a path is not specified, the figure is saved in the current</span>
+0084 <span class="comment">%              directory. If no name and no output arguments are specified,</span>
+0085 <span class="comment">%              the default name, 'export_fig_out', is used. If neither a</span>
+0086 <span class="comment">%              file extension nor a format are specified, a &quot;.png&quot; is added</span>
+0087 <span class="comment">%              and the figure saved in that format.</span>
+0088 <span class="comment">%   -format1, -format2, etc. - strings containing the extensions of the</span>
+0089 <span class="comment">%                              file formats the figure is to be saved as.</span>
+0090 <span class="comment">%                              Valid options are: '-pdf', '-eps', '-png',</span>
+0091 <span class="comment">%                              '-tif', '-jpg' and '-bmp'. All combinations</span>
+0092 <span class="comment">%                              of formats are valid.</span>
+0093 <span class="comment">%   -nocrop - option indicating that the borders of the output are not to</span>
+0094 <span class="comment">%             be cropped.</span>
+0095 <span class="comment">%   -c[&lt;val&gt;,&lt;val&gt;,&lt;val&gt;,&lt;val&gt;] - option indicating crop amounts. Must be</span>
+0096 <span class="comment">%             a 4-element vector of numeric values: [top,right,bottom,left]</span>
+0097 <span class="comment">%             where NaN/Inf indicate auto-cropping, 0 means no cropping,</span>
+0098 <span class="comment">%             and any other value mean cropping in pixel amounts.</span>
+0099 <span class="comment">%   -transparent - option indicating that the figure background is to be</span>
+0100 <span class="comment">%                  made transparent (png, pdf, tif and eps output only).</span>
+0101 <span class="comment">%   -m&lt;val&gt; - option where val indicates the factor to magnify the</span>
+0102 <span class="comment">%             on-screen figure pixel dimensions by when generating bitmap</span>
+0103 <span class="comment">%             outputs (does not affect vector formats). Default: '-m1'.</span>
+0104 <span class="comment">%   -r&lt;val&gt; - option val indicates the resolution (in pixels per inch) to</span>
+0105 <span class="comment">%             export bitmap and vector outputs at, keeping the dimensions</span>
+0106 <span class="comment">%             of the on-screen figure. Default: '-r864' (for vector output</span>
+0107 <span class="comment">%             only). Note that the -m option overides the -r option for</span>
+0108 <span class="comment">%             bitmap outputs only.</span>
+0109 <span class="comment">%   -native - option indicating that the output resolution (when outputting</span>
+0110 <span class="comment">%             a bitmap format) should be such that the vertical resolution</span>
+0111 <span class="comment">%             of the first suitable image found in the figure is at the</span>
+0112 <span class="comment">%             native resolution of that image. To specify a particular</span>
+0113 <span class="comment">%             image to use, give it the tag 'export_fig_native'. Notes:</span>
+0114 <span class="comment">%             This overrides any value set with the -m and -r options. It</span>
+0115 <span class="comment">%             also assumes that the image is displayed front-to-parallel</span>
+0116 <span class="comment">%             with the screen. The output resolution is approximate and</span>
+0117 <span class="comment">%             should not be relied upon. Anti-aliasing can have adverse</span>
+0118 <span class="comment">%             effects on image quality (disable with the -a1 option).</span>
+0119 <span class="comment">%   -a1, -a2, -a3, -a4 - option indicating the amount of anti-aliasing to</span>
+0120 <span class="comment">%                        use for bitmap outputs. '-a1' means no anti-</span>
+0121 <span class="comment">%                        aliasing; '-a4' is the maximum amount (default).</span>
+0122 <span class="comment">%   -&lt;renderer&gt; - option to force a particular renderer (painters, opengl or</span>
+0123 <span class="comment">%                 zbuffer). Default value: opengl for bitmap formats or</span>
+0124 <span class="comment">%                 figures with patches and/or transparent annotations;</span>
+0125 <span class="comment">%                 painters for vector formats without patches/transparencies.</span>
+0126 <span class="comment">%   -&lt;colorspace&gt; - option indicating which colorspace color figures should</span>
+0127 <span class="comment">%                   be saved in: RGB (default), CMYK or gray. CMYK is only</span>
+0128 <span class="comment">%                   supported in pdf, eps and tiff output.</span>
+0129 <span class="comment">%   -q&lt;val&gt; - option to vary bitmap image quality (in pdf, eps and jpg</span>
+0130 <span class="comment">%             files only).  Larger val, in the range 0-100, gives higher</span>
+0131 <span class="comment">%             quality/lower compression. val &gt; 100 gives lossless</span>
+0132 <span class="comment">%             compression. Default: '-q95' for jpg, ghostscript prepress</span>
+0133 <span class="comment">%             default for pdf &amp; eps. Note: lossless compression can</span>
+0134 <span class="comment">%             sometimes give a smaller file size than the default lossy</span>
+0135 <span class="comment">%             compression, depending on the type of images.</span>
+0136 <span class="comment">%   -p&lt;val&gt; - option to pad a border of width val to exported files, where</span>
+0137 <span class="comment">%             val is either a relative size with respect to cropped image</span>
+0138 <span class="comment">%             size (i.e. p=0.01 adds a 1% border). For EPS &amp; PDF formats,</span>
+0139 <span class="comment">%             val can also be integer in units of 1/72&quot; points (abs(val)&gt;1).</span>
+0140 <span class="comment">%             val can be positive (padding) or negative (extra cropping).</span>
+0141 <span class="comment">%             If used, the -nocrop flag will be ignored, i.e. the image will</span>
+0142 <span class="comment">%             always be cropped and then padded. Default: 0 (i.e. no padding).</span>
+0143 <span class="comment">%   -append - option indicating that if the file (pdfs only) already</span>
+0144 <span class="comment">%             exists, the figure is to be appended as a new page, instead</span>
+0145 <span class="comment">%             of being overwritten (default).</span>
+0146 <span class="comment">%   -bookmark - option to indicate that a bookmark with the name of the</span>
+0147 <span class="comment">%               figure is to be created in the output file (pdf only).</span>
+0148 <span class="comment">%   -clipboard - option to save output as an image on the system clipboard.</span>
+0149 <span class="comment">%                Note: background transparency is not preserved in clipboard</span>
+0150 <span class="comment">%   -d&lt;gs_option&gt; - option to indicate a ghostscript setting. For example,</span>
+0151 <span class="comment">%                   -dMaxBitmap=0 or -dNoOutputFonts (Ghostscript 9.15+).</span>
+0152 <span class="comment">%   -depsc -  option to use EPS level-3 rather than the default level-2 print</span>
+0153 <span class="comment">%             device. This solves some bugs with Matlab's default -depsc2 device</span>
+0154 <span class="comment">%             such as discolored subplot lines on images (vector formats only).</span>
+0155 <span class="comment">%   -update - option to download and install the latest version of export_fig</span>
+0156 <span class="comment">%   -nofontswap - option to avoid font swapping. Font swapping is automatically</span>
+0157 <span class="comment">%             done in vector formats (only): 11 standard Matlab fonts are</span>
+0158 <span class="comment">%             replaced by the original figure fonts. This option prevents this.</span>
+0159 <span class="comment">%   -font_space &lt;char&gt; - option to set a spacer character for font-names that</span>
+0160 <span class="comment">%             contain spaces, used by EPS/PDF. Default: ''</span>
+0161 <span class="comment">%   -linecaps - option to create rounded line-caps (vector formats only).</span>
+0162 <span class="comment">%   -noinvert - option to avoid setting figure's InvertHardcopy property to</span>
+0163 <span class="comment">%             'off' during output (this solves some problems of empty outputs).</span>
+0164 <span class="comment">%   handle -  The handle of the figure, axes or uipanels (can be an array of</span>
+0165 <span class="comment">%             handles, but the objects must be in the same figure) to be</span>
+0166 <span class="comment">%             saved. Default: gcf.</span>
+0167 <span class="comment">%</span>
+0168 <span class="comment">% Outputs:</span>
+0169 <span class="comment">%   imageData - MxNxC uint8 image array of the exported image.</span>
+0170 <span class="comment">%   alpha     - MxN single array of alphamatte values in the range [0,1],</span>
+0171 <span class="comment">%               for the case when the background is transparent.</span>
+0172 <span class="comment">%</span>
+0173 <span class="comment">%   Some helpful examples and tips can be found at:</span>
+0174 <span class="comment">%      https://github.com/altmany/export_fig</span>
+0175 <span class="comment">%</span>
+0176 <span class="comment">%   See also PRINT, SAVEAS, ScreenCapture (on the Matlab File Exchange)</span>
+0177 
+0178 <span class="comment">%{</span>
+0179 <span class="comment">% Copyright (C) Oliver Woodford 2008-2014, Yair Altman 2015-</span>
+0180 
+0181 <span class="comment">% The idea of using ghostscript is inspired by Peder Axensten's SAVEFIG</span>
+0182 <span class="comment">% (fex id: 10889) which is itself inspired by EPS2PDF (fex id: 5782).</span>
+0183 <span class="comment">% The idea for using pdftops came from the MATLAB newsgroup (id: 168171).</span>
+0184 <span class="comment">% The idea of editing the EPS file to change line styles comes from Jiro</span>
+0185 <span class="comment">% Doke's FIXPSLINESTYLE (fex id: 17928).</span>
+0186 <span class="comment">% The idea of changing dash length with line width came from comments on</span>
+0187 <span class="comment">% fex id: 5743, but the implementation is mine :)</span>
+0188 <span class="comment">% The idea of anti-aliasing bitmaps came from Anders Brun's MYAA (fex id:</span>
+0189 <span class="comment">% 20979).</span>
+0190 <span class="comment">% The idea of appending figures in pdfs came from Matt C in comments on the</span>
+0191 <span class="comment">% FEX (id: 23629)</span>
+0192 
+0193 <span class="comment">% Thanks to Roland Martin for pointing out the colour MATLAB</span>
+0194 <span class="comment">% bug/feature with colorbar axes and transparent backgrounds.</span>
+0195 <span class="comment">% Thanks also to Andrew Matthews for describing a bug to do with the figure</span>
+0196 <span class="comment">% size changing in -nodisplay mode. I couldn't reproduce it, but included a</span>
+0197 <span class="comment">% fix anyway.</span>
+0198 <span class="comment">% Thanks to Tammy Threadgill for reporting a bug where an axes is not</span>
+0199 <span class="comment">% isolated from gui objects.</span>
+0200 <span class="comment">%}</span>
+0201 <span class="comment">%{</span>
+0202 <span class="comment">% 23/02/12: Ensure that axes limits don't change during printing</span>
+0203 <span class="comment">% 14/03/12: Fix bug in fixing the axes limits (thanks to Tobias Lamour for reporting it).</span>
+0204 <span class="comment">% 02/05/12: Incorporate patch of Petr Nechaev (many thanks), enabling bookmarking of figures in pdf files.</span>
+0205 <span class="comment">% 09/05/12: Incorporate patch of Arcelia Arrieta (many thanks), to keep tick marks fixed.</span>
+0206 <span class="comment">% 12/12/12: Add support for isolating uipanels. Thanks to michael for suggesting it.</span>
+0207 <span class="comment">% 25/09/13: Add support for changing resolution in vector formats. Thanks to Jan Jaap Meijer for suggesting it.</span>
+0208 <span class="comment">% 07/05/14: Add support for '~' at start of path. Thanks to Sally Warner for suggesting it.</span>
+0209 <span class="comment">% 24/02/15: Fix Matlab R2014b bug (issue #34): plot markers are not displayed when ZLimMode='manual'</span>
+0210 <span class="comment">% 25/02/15: Fix issue #4 (using HG2 on R2014a and earlier)</span>
+0211 <span class="comment">% 25/02/15: Fix issue #21 (bold TeX axes labels/titles in R2014b)</span>
+0212 <span class="comment">% 26/02/15: If temp dir is not writable, use the user-specified folder for temporary EPS/PDF files (Javier Paredes)</span>
+0213 <span class="comment">% 27/02/15: Modified repository URL from github.com/ojwoodford to /altmany</span>
+0214 <span class="comment">%           Indented main function</span>
+0215 <span class="comment">%           Added top-level try-catch block to display useful workarounds</span>
+0216 <span class="comment">% 28/02/15: Enable users to specify optional ghostscript options (issue #36)</span>
+0217 <span class="comment">% 06/03/15: Improved image padding &amp; cropping thanks to Oscar Hartogensis</span>
+0218 <span class="comment">% 26/03/15: Fixed issue #49 (bug with transparent grayscale images); fixed out-of-memory issue</span>
+0219 <span class="comment">% 26/03/15: Fixed issue #42: non-normalized annotations on HG1</span>
+0220 <span class="comment">% 26/03/15: Fixed issue #46: Ghostscript crash if figure units &lt;&gt; pixels</span>
+0221 <span class="comment">% 27/03/15: Fixed issue #39: bad export of transparent annotations/patches</span>
+0222 <span class="comment">% 28/03/15: Fixed issue #50: error on some Matlab versions with the fix for issue #42</span>
+0223 <span class="comment">% 29/03/15: Fixed issue #33: bugs in Matlab's print() function with -cmyk</span>
+0224 <span class="comment">% 29/03/15: Improved processing of input args (accept space between param name &amp; value, related to issue #51)</span>
+0225 <span class="comment">% 30/03/15: When exporting *.fig files, then saveas *.fig if figure is open, otherwise export the specified fig file</span>
+0226 <span class="comment">% 30/03/15: Fixed edge case bug introduced yesterday (commit #ae1755bd2e11dc4e99b95a7681f6e211b3fa9358)</span>
+0227 <span class="comment">% 09/04/15: Consolidated header comment sections; initialize output vars only if requested (nargout&gt;0)</span>
+0228 <span class="comment">% 14/04/15: Workaround for issue #45: lines in image subplots are exported in invalid color</span>
+0229 <span class="comment">% 15/04/15: Fixed edge-case in parsing input parameters; fixed help section to show the -depsc option (issue #45)</span>
+0230 <span class="comment">% 21/04/15: Bug fix: Ghostscript croaks on % chars in output PDF file (reported by Sven on FEX page, 15-Jul-2014)</span>
+0231 <span class="comment">% 22/04/15: Bug fix: Pdftops croaks on relative paths (reported by Tintin Milou on FEX page, 19-Jan-2015)</span>
+0232 <span class="comment">% 04/05/15: Merged fix #63 (Kevin Mattheus Moerman): prevent tick-label changes during export</span>
+0233 <span class="comment">% 07/05/15: Partial fix for issue #65: PDF export used painters rather than opengl renderer (thanks Nguyenr)</span>
+0234 <span class="comment">% 08/05/15: Fixed issue #65: bad PDF append since commit #e9f3cdf 21/04/15 (thanks Robert Nguyen)</span>
+0235 <span class="comment">% 12/05/15: Fixed issue #67: exponent labels cropped in export, since fix #63 (04/05/15)</span>
+0236 <span class="comment">% 28/05/15: Fixed issue #69: set non-bold label font only if the string contains symbols (\beta etc.), followup to issue #21</span>
+0237 <span class="comment">% 29/05/15: Added informative error message in case user requested SVG output (issue #72)</span>
+0238 <span class="comment">% 09/06/15: Fixed issue #58: -transparent removed anti-aliasing when exporting to PNG</span>
+0239 <span class="comment">% 19/06/15: Added -update option to download and install the latest version of export_fig</span>
+0240 <span class="comment">% 07/07/15: Added -nofontswap option to avoid font-swapping in EPS/PDF</span>
+0241 <span class="comment">% 16/07/15: Fixed problem with anti-aliasing on old Matlab releases</span>
+0242 <span class="comment">% 11/09/15: Fixed issue #103: magnification must never become negative; also fixed reported error msg in parsing input params</span>
+0243 <span class="comment">% 26/09/15: Alert if trying to export transparent patches/areas to non-PNG outputs (issue #108)</span>
+0244 <span class="comment">% 04/10/15: Do not suggest workarounds for certain errors that have already been handled previously</span>
+0245 <span class="comment">% 01/11/15: Fixed issue #112: use same renderer in print2eps as export_fig (thanks to Jesús Pestana Puerta)</span>
+0246 <span class="comment">% 10/11/15: Custom GS installation webpage for MacOS. Thanks to Andy Hueni via FEX</span>
+0247 <span class="comment">% 19/11/15: Fixed clipboard export in R2015b (thanks to Dan K via FEX)</span>
+0248 <span class="comment">% 21/02/16: Added -c option for indicating specific crop amounts (idea by Cedric Noordam on FEX)</span>
+0249 <span class="comment">% 08/05/16: Added message about possible error reason when groot.Units~=pixels (issue #149)</span>
+0250 <span class="comment">% 17/05/16: Fixed case of image YData containing more than 2 elements (issue #151)</span>
+0251 <span class="comment">% 08/08/16: Enabled exporting transparency to TIF, in addition to PNG/PDF (issue #168)</span>
+0252 <span class="comment">% 11/12/16: Added alert in case of error creating output PDF/EPS file (issue #179)</span>
+0253 <span class="comment">% 13/12/16: Minor fix to the commit for issue #179 from 2 days ago</span>
+0254 <span class="comment">% 22/03/17: Fixed issue #187: only set manual ticks when no exponent is present</span>
+0255 <span class="comment">% 09/04/17: Added -linecaps option (idea by Baron Finer, issue #192)</span>
+0256 <span class="comment">% 15/09/17: Fixed issue #205: incorrect tick-labels when Ticks number don't match the TickLabels number</span>
+0257 <span class="comment">% 15/09/17: Fixed issue #210: initialize alpha map to ones instead of zeros when -transparent is not used</span>
+0258 <span class="comment">% 18/09/17: Added -font_space option to replace font-name spaces in EPS/PDF (workaround for issue #194)</span>
+0259 <span class="comment">% 18/09/17: Added -noinvert option to solve some export problems with some graphic cards (workaround for issue #197)</span>
+0260 <span class="comment">% 08/11/17: Fixed issue #220: axes exponent is removed in HG1 when TickMode is 'manual' (internal Matlab bug)</span>
+0261 <span class="comment">% 08/11/17: Fixed issue #221: alert if the requested folder does not exist</span>
+0262 <span class="comment">% 19/11/17: Workaround for issue #207: alert when trying to use transparent bgcolor with -opengl</span>
+0263 <span class="comment">% 29/11/17: Workaround for issue #206: warn if exporting PDF/EPS for a figure that contains an image</span>
+0264 <span class="comment">% 11/12/17: Fixed issue #230: use OpenGL renderer when exported image contains transparency (also see issue #206)</span>
+0265 <span class="comment">% 30/01/18: Updated SVG message to point to https://github.com/kupiqu/plot2svg and display user-selected filename if available</span>
+0266 <span class="comment">% 27/02/18: Fixed issue #236: axes exponent cropped from output if on right-hand axes</span>
+0267 <span class="comment">% 29/05/18: Fixed issue #245: process &quot;string&quot; inputs just like 'char' inputs</span>
+0268 <span class="comment">%}</span>
+0269 
+0270     <span class="keyword">if</span> nargout
+0271         [imageData, alpha] = deal([]);
+0272     <span class="keyword">end</span>
+0273     hadError = false;
+0274     displaySuggestedWorkarounds = true;
+0275 
+0276     <span class="comment">% Ensure the figure is rendered correctly _now_ so that properties like axes limits are up-to-date</span>
+0277     drawnow;
+0278     pause(0.05);  <span class="comment">% this solves timing issues with Java Swing's EDT (http://undocumentedmatlab.com/blog/solving-a-matlab-hang-problem)</span>
+0279 
+0280     <span class="comment">% Parse the input arguments</span>
+0281     fig = get(0, <span class="string">'CurrentFigure'</span>);
+0282     [fig, options] = <a href="#_sub2" class="code" title="subfunction [fig, options] = parse_args(nout, fig, varargin)">parse_args</a>(nargout, fig, varargin{:});
+0283 
+0284     <span class="comment">% Ensure that we have a figure handle</span>
+0285     <span class="keyword">if</span> isequal(fig,-1)
+0286         <span class="keyword">return</span>;  <span class="comment">% silent bail-out</span>
+0287     <span class="keyword">elseif</span> isempty(fig)
+0288         error(<span class="string">'No figure found'</span>);
+0289     <span class="keyword">end</span>
+0290 
+0291     <span class="comment">% Isolate the subplot, if it is one</span>
+0292     cls = all(ismember(get(fig, <span class="string">'Type'</span>), {<span class="string">'axes'</span>, <span class="string">'uipanel'</span>}));
+0293     <span class="keyword">if</span> cls
+0294         <span class="comment">% Given handles of one or more axes, so isolate them from the rest</span>
+0295         fig = <a href="isolate_axes.html" class="code" title="function fh = isolate_axes(ah, vis)">isolate_axes</a>(fig);
+0296     <span class="keyword">else</span>
+0297         <span class="comment">% Check we have a figure</span>
+0298         <span class="keyword">if</span> ~isequal(get(fig, <span class="string">'Type'</span>), <span class="string">'figure'</span>)
+0299             error(<span class="string">'Handle must be that of a figure, axes or uipanel'</span>);
+0300         <span class="keyword">end</span>
+0301         <span class="comment">% Get the old InvertHardcopy mode</span>
+0302         old_mode = get(fig, <span class="string">'InvertHardcopy'</span>);
+0303     <span class="keyword">end</span>
+0304 
+0305     <span class="comment">% Hack the font units where necessary (due to a font rendering bug in print?).</span>
+0306     <span class="comment">% This may not work perfectly in all cases.</span>
+0307     <span class="comment">% Also it can change the figure layout if reverted, so use a copy.</span>
+0308     magnify = options.magnify * options.aa_factor;
+0309     <span class="keyword">if</span> <a href="#_sub9" class="code" title="subfunction b = isbitmap(options)">isbitmap</a>(options) &amp;&amp; magnify ~= 1
+0310         fontu = findall(fig, <span class="string">'FontUnits'</span>, <span class="string">'normalized'</span>);
+0311         <span class="keyword">if</span> ~isempty(fontu)
+0312             <span class="comment">% Some normalized font units found</span>
+0313             <span class="keyword">if</span> ~cls
+0314                 fig = <a href="copyfig.html" class="code" title="function fh = copyfig(fh)">copyfig</a>(fig);
+0315                 set(fig, <span class="string">'Visible'</span>, <span class="string">'off'</span>);
+0316                 fontu = findall(fig, <span class="string">'FontUnits'</span>, <span class="string">'normalized'</span>);
+0317                 cls = true;
+0318             <span class="keyword">end</span>
+0319             set(fontu, <span class="string">'FontUnits'</span>, <span class="string">'points'</span>);
+0320         <span class="keyword">end</span>
+0321     <span class="keyword">end</span>
+0322 
+0323     <span class="keyword">try</span>
+0324         <span class="comment">% MATLAB &quot;feature&quot;: axes limits and tick marks can change when printing</span>
+0325         Hlims = findall(fig, <span class="string">'Type'</span>, <span class="string">'axes'</span>);
+0326         <span class="keyword">if</span> ~cls
+0327             <span class="comment">% Record the old axes limit and tick modes</span>
+0328             Xlims = <a href="#_sub10" class="code" title="subfunction A = make_cell(A)">make_cell</a>(get(Hlims, <span class="string">'XLimMode'</span>));
+0329             Ylims = <a href="#_sub10" class="code" title="subfunction A = make_cell(A)">make_cell</a>(get(Hlims, <span class="string">'YLimMode'</span>));
+0330             Zlims = <a href="#_sub10" class="code" title="subfunction A = make_cell(A)">make_cell</a>(get(Hlims, <span class="string">'ZLimMode'</span>));
+0331             Xtick = <a href="#_sub10" class="code" title="subfunction A = make_cell(A)">make_cell</a>(get(Hlims, <span class="string">'XTickMode'</span>));
+0332             Ytick = <a href="#_sub10" class="code" title="subfunction A = make_cell(A)">make_cell</a>(get(Hlims, <span class="string">'YTickMode'</span>));
+0333             Ztick = <a href="#_sub10" class="code" title="subfunction A = make_cell(A)">make_cell</a>(get(Hlims, <span class="string">'ZTickMode'</span>));
+0334             Xlabel = <a href="#_sub10" class="code" title="subfunction A = make_cell(A)">make_cell</a>(get(Hlims, <span class="string">'XTickLabelMode'</span>)); 
+0335             Ylabel = <a href="#_sub10" class="code" title="subfunction A = make_cell(A)">make_cell</a>(get(Hlims, <span class="string">'YTickLabelMode'</span>)); 
+0336             Zlabel = <a href="#_sub10" class="code" title="subfunction A = make_cell(A)">make_cell</a>(get(Hlims, <span class="string">'ZTickLabelMode'</span>)); 
+0337         <span class="keyword">end</span>
+0338 
+0339         <span class="comment">% Set all axes limit and tick modes to manual, so the limits and ticks can't change</span>
+0340         <span class="comment">% Fix Matlab R2014b bug (issue #34): plot markers are not displayed when ZLimMode='manual'</span>
+0341         set(Hlims, <span class="string">'XLimMode'</span>, <span class="string">'manual'</span>, <span class="string">'YLimMode'</span>, <span class="string">'manual'</span>);
+0342         <a href="#_sub12" class="code" title="subfunction set_tick_mode(Hlims, ax)">set_tick_mode</a>(Hlims, <span class="string">'X'</span>);
+0343         <a href="#_sub12" class="code" title="subfunction set_tick_mode(Hlims, ax)">set_tick_mode</a>(Hlims, <span class="string">'Y'</span>);
+0344         <span class="keyword">if</span> ~<a href="using_hg2.html" class="code" title="function tf = using_hg2(fig)">using_hg2</a>(fig)
+0345             set(Hlims,<span class="string">'ZLimMode'</span>, <span class="string">'manual'</span>);
+0346             <a href="#_sub12" class="code" title="subfunction set_tick_mode(Hlims, ax)">set_tick_mode</a>(Hlims, <span class="string">'Z'</span>);
+0347         <span class="keyword">end</span>
+0348     <span class="keyword">catch</span>
+0349         <span class="comment">% ignore - fix issue #4 (using HG2 on R2014a and earlier)</span>
+0350     <span class="keyword">end</span>
+0351 
+0352     <span class="comment">% Fix issue #21 (bold TeX axes labels/titles in R2014b when exporting to EPS/PDF)</span>
+0353     <span class="keyword">try</span>
+0354         <span class="keyword">if</span> <a href="using_hg2.html" class="code" title="function tf = using_hg2(fig)">using_hg2</a>(fig) &amp;&amp; <a href="#_sub8" class="code" title="subfunction b = isvector(options)">isvector</a>(options)
+0355             <span class="comment">% Set the FontWeight of axes labels/titles to 'normal'</span>
+0356             <span class="comment">% Fix issue #69: set non-bold font only if the string contains symbols (\beta etc.)</span>
+0357             texLabels = findall(fig, <span class="string">'type'</span>,<span class="string">'text'</span>, <span class="string">'FontWeight'</span>,<span class="string">'bold'</span>);
+0358             symbolIdx = ~cellfun(<span class="string">'isempty'</span>,strfind({texLabels.String},<span class="string">'\'</span>));
+0359             set(texLabels(symbolIdx), <span class="string">'FontWeight'</span>,<span class="string">'normal'</span>);
+0360         <span class="keyword">end</span>
+0361     <span class="keyword">catch</span>
+0362         <span class="comment">% ignore</span>
+0363     <span class="keyword">end</span>
+0364 
+0365     <span class="comment">% Fix issue #42: non-normalized annotations on HG1 (internal Matlab bug)</span>
+0366     annotationHandles = [];
+0367     <span class="keyword">try</span>
+0368         <span class="keyword">if</span> ~<a href="using_hg2.html" class="code" title="function tf = using_hg2(fig)">using_hg2</a>(fig)
+0369             annotationHandles = findall(fig,<span class="string">'Type'</span>,<span class="string">'hggroup'</span>,<span class="string">'-and'</span>,<span class="string">'-property'</span>,<span class="string">'Units'</span>,<span class="string">'-and'</span>,<span class="string">'-not'</span>,<span class="string">'Units'</span>,<span class="string">'norm'</span>);
+0370             <span class="keyword">try</span>  <span class="comment">% suggested by Jesús Pestana Puerta (jespestana) 30/9/2015</span>
+0371                 originalUnits = get(annotationHandles,<span class="string">'Units'</span>);
+0372                 set(annotationHandles,<span class="string">'Units'</span>,<span class="string">'norm'</span>);
+0373             <span class="keyword">catch</span>
+0374             <span class="keyword">end</span>
+0375         <span class="keyword">end</span>
+0376     <span class="keyword">catch</span>
+0377         <span class="comment">% should never happen, but ignore in any case - issue #50</span>
+0378     <span class="keyword">end</span>
+0379 
+0380     <span class="comment">% Fix issue #46: Ghostscript crash if figure units &lt;&gt; pixels</span>
+0381     oldFigUnits = get(fig,<span class="string">'Units'</span>);
+0382     set(fig,<span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0383 
+0384     <span class="comment">% Set to print exactly what is there</span>
+0385     <span class="keyword">if</span> options.invert_hardcopy
+0386         set(fig, <span class="string">'InvertHardcopy'</span>, <span class="string">'off'</span>);
+0387     <span class="keyword">end</span>
+0388     <span class="comment">% Set the renderer</span>
+0389     <span class="keyword">switch</span> options.renderer
+0390         <span class="keyword">case</span> 1
+0391             renderer = <span class="string">'-opengl'</span>;
+0392         <span class="keyword">case</span> 2
+0393             renderer = <span class="string">'-zbuffer'</span>;
+0394         <span class="keyword">case</span> 3
+0395             renderer = <span class="string">'-painters'</span>;
+0396         <span class="keyword">otherwise</span>
+0397             renderer = <span class="string">'-opengl'</span>; <span class="comment">% Default for bitmaps</span>
+0398     <span class="keyword">end</span>
+0399 
+0400     hImages = findall(fig,<span class="string">'type'</span>,<span class="string">'image'</span>);
+0401 
+0402     <span class="comment">% Handle transparent patches</span>
+0403     hasTransparency = ~isempty(findall(fig,<span class="string">'-property'</span>,<span class="string">'FaceAlpha'</span>,<span class="string">'-and'</span>,<span class="string">'-not'</span>,<span class="string">'FaceAlpha'</span>,1));
+0404     hasPatches      = ~isempty(findall(fig,<span class="string">'type'</span>,<span class="string">'patch'</span>));
+0405     <span class="keyword">if</span> hasTransparency
+0406         <span class="comment">% Alert if trying to export transparent patches/areas to non-supported outputs (issue #108)</span>
+0407         <span class="comment">% http://www.mathworks.com/matlabcentral/answers/265265-can-export_fig-or-else-draw-vector-graphics-with-transparent-surfaces</span>
+0408         <span class="comment">% TODO - use transparency when exporting to PDF by not passing via print2eps</span>
+0409         msg = <span class="string">'export_fig currently supports transparent patches/areas only in PNG output. '</span>;
+0410         <span class="keyword">if</span> options.pdf
+0411             warning(<span class="string">'export_fig:transparency'</span>, <span class="string">'%s\nTo export transparent patches/areas to PDF, use the print command:\n print(gcf, ''-dpdf'', ''%s.pdf'');'</span>, msg, options.name);
+0412         <span class="keyword">elseif</span> ~options.png &amp;&amp; ~options.tif  <span class="comment">% issue #168</span>
+0413             warning(<span class="string">'export_fig:transparency'</span>, <span class="string">'%s\nTo export the transparency correctly, try using the ScreenCapture utility on the Matlab File Exchange: http://bit.ly/1QFrBip'</span>, msg);
+0414         <span class="keyword">end</span>
+0415     <span class="keyword">elseif</span> ~isempty(hImages)
+0416         <span class="comment">% Fix for issue #230: use OpenGL renderer when exported image contains transparency</span>
+0417         <span class="keyword">for</span> idx = 1 : numel(hImages)
+0418             cdata = get(hImages(idx),<span class="string">'CData'</span>);
+0419             <span class="keyword">if</span> any(isnan(cdata(:)))
+0420                 hasTransparency = true;
+0421                 <span class="keyword">break</span>
+0422             <span class="keyword">end</span>
+0423         <span class="keyword">end</span>
+0424     <span class="keyword">end</span>
+0425 
+0426     <span class="keyword">try</span>
+0427         <span class="comment">% Do the bitmap formats first</span>
+0428         <span class="keyword">if</span> <a href="#_sub9" class="code" title="subfunction b = isbitmap(options)">isbitmap</a>(options)
+0429             <span class="keyword">if</span> abs(options.bb_padding) &gt; 1
+0430                 displaySuggestedWorkarounds = false;
+0431                 error(<span class="string">'For bitmap output (png,jpg,tif,bmp) the padding value (-p) must be between -1&lt;p&lt;1'</span>)
+0432             <span class="keyword">end</span>
+0433             <span class="comment">% Get the background colour</span>
+0434             <span class="keyword">if</span> options.transparent &amp;&amp; (options.png || options.alpha)
+0435                 <span class="comment">% Get out an alpha channel</span>
+0436                 <span class="comment">% MATLAB &quot;feature&quot;: black colorbar axes can change to white and vice versa!</span>
+0437                 hCB = findall(fig, <span class="string">'Type'</span>,<span class="string">'axes'</span>, <span class="string">'Tag'</span>,<span class="string">'Colorbar'</span>);
+0438                 <span class="keyword">if</span> isempty(hCB)
+0439                     yCol = [];
+0440                     xCol = [];
+0441                 <span class="keyword">else</span>
+0442                     yCol = get(hCB, <span class="string">'YColor'</span>);
+0443                     xCol = get(hCB, <span class="string">'XColor'</span>);
+0444                     <span class="keyword">if</span> iscell(yCol)
+0445                         yCol = cell2mat(yCol);
+0446                         xCol = cell2mat(xCol);
+0447                     <span class="keyword">end</span>
+0448                     yCol = sum(yCol, 2);
+0449                     xCol = sum(xCol, 2);
+0450                 <span class="keyword">end</span>
+0451                 <span class="comment">% MATLAB &quot;feature&quot;: apparently figure size can change when changing</span>
+0452                 <span class="comment">% colour in -nodisplay mode</span>
+0453                 pos = get(fig, <span class="string">'Position'</span>);
+0454                 <span class="comment">% Set the background colour to black, and set size in case it was</span>
+0455                 <span class="comment">% changed internally</span>
+0456                 tcol = get(fig, <span class="string">'Color'</span>);
+0457                 set(fig, <span class="string">'Color'</span>, <span class="string">'k'</span>, <span class="string">'Position'</span>, pos);
+0458                 <span class="comment">% Correct the colorbar axes colours</span>
+0459                 set(hCB(yCol==0), <span class="string">'YColor'</span>, [0 0 0]);
+0460                 set(hCB(xCol==0), <span class="string">'XColor'</span>, [0 0 0]);
+0461 
+0462                 <span class="comment">% The following code might cause out-of-memory errors</span>
+0463                 <span class="keyword">try</span>
+0464                     <span class="comment">% Print large version to array</span>
+0465                     B = <a href="print2array.html" class="code" title="function [A, bcol] = print2array(fig, res, renderer, gs_options)">print2array</a>(fig, magnify, renderer);
+0466                     <span class="comment">% Downscale the image</span>
+0467                     B = <a href="#_sub4" class="code" title="subfunction A = downsize(A, factor)">downsize</a>(single(B), options.aa_factor);
+0468                 <span class="keyword">catch</span>
+0469                     <span class="comment">% This is more conservative in memory, but kills transparency (issue #58)</span>
+0470                     B = single(<a href="print2array.html" class="code" title="function [A, bcol] = print2array(fig, res, renderer, gs_options)">print2array</a>(fig, magnify/options.aa_factor, renderer));
+0471                 <span class="keyword">end</span>
+0472 
+0473                 <span class="comment">% Set background to white (and set size)</span>
+0474                 set(fig, <span class="string">'Color'</span>, <span class="string">'w'</span>, <span class="string">'Position'</span>, pos);
+0475                 <span class="comment">% Correct the colorbar axes colours</span>
+0476                 set(hCB(yCol==3), <span class="string">'YColor'</span>, [1 1 1]);
+0477                 set(hCB(xCol==3), <span class="string">'XColor'</span>, [1 1 1]);
+0478 
+0479                 <span class="comment">% The following code might cause out-of-memory errors</span>
+0480                 <span class="keyword">try</span>
+0481                     <span class="comment">% Print large version to array</span>
+0482                     A = <a href="print2array.html" class="code" title="function [A, bcol] = print2array(fig, res, renderer, gs_options)">print2array</a>(fig, magnify, renderer);
+0483                     <span class="comment">% Downscale the image</span>
+0484                     A = <a href="#_sub4" class="code" title="subfunction A = downsize(A, factor)">downsize</a>(single(A), options.aa_factor);
+0485                 <span class="keyword">catch</span>
+0486                     <span class="comment">% This is more conservative in memory, but kills transparency (issue #58)</span>
+0487                     A = single(<a href="print2array.html" class="code" title="function [A, bcol] = print2array(fig, res, renderer, gs_options)">print2array</a>(fig, magnify/options.aa_factor, renderer));
+0488                 <span class="keyword">end</span>
+0489 
+0490                 <span class="comment">% Set the background colour (and size) back to normal</span>
+0491                 set(fig, <span class="string">'Color'</span>, tcol, <span class="string">'Position'</span>, pos);
+0492                 <span class="comment">% Compute the alpha map</span>
+0493                 alpha = round(sum(B - A, 3)) / (255 * 3) + 1;
+0494                 A = alpha;
+0495                 A(A==0) = 1;
+0496                 A = B ./ A(:,:,[1 1 1]);
+0497                 clear B
+0498                 <span class="comment">% Convert to greyscale</span>
+0499                 <span class="keyword">if</span> options.colourspace == 2
+0500                     A = <a href="#_sub5" class="code" title="subfunction A = rgb2grey(A)">rgb2grey</a>(A);
+0501                 <span class="keyword">end</span>
+0502                 A = uint8(A);
+0503                 <span class="comment">% Crop the background</span>
+0504                 <span class="keyword">if</span> options.crop
+0505                     <span class="comment">%[alpha, v] = crop_borders(alpha, 0, 1, options.crop_amounts);</span>
+0506                     <span class="comment">%A = A(v(1):v(2),v(3):v(4),:);</span>
+0507                     [alpha, vA, vB] = <a href="crop_borders.html" class="code" title="function [A, vA, vB, bb_rel] = crop_borders(A, bcol, padding, crop_amounts)">crop_borders</a>(alpha, 0, options.bb_padding, options.crop_amounts);
+0508                     <span class="keyword">if</span> ~any(isnan(vB)) <span class="comment">% positive padding</span>
+0509                         B = repmat(uint8(zeros(1,1,size(A,3))),size(alpha));
+0510                         B(vB(1):vB(2), vB(3):vB(4), :) = A(vA(1):vA(2), vA(3):vA(4), :); <span class="comment">% ADDED BY OH</span>
+0511                         A = B;
+0512                     <span class="keyword">else</span>  <span class="comment">% negative padding</span>
+0513                         A = A(vA(1):vA(2), vA(3):vA(4), :);
+0514                     <span class="keyword">end</span>
+0515                 <span class="keyword">end</span>
+0516                 <span class="keyword">if</span> options.png
+0517                     <span class="comment">% Compute the resolution</span>
+0518                     res = options.magnify * get(0, <span class="string">'ScreenPixelsPerInch'</span>) / 25.4e-3;
+0519                     <span class="comment">% Save the png</span>
+0520                     imwrite(A, [options.name <span class="string">'.png'</span>], <span class="string">'Alpha'</span>, double(alpha), <span class="string">'ResolutionUnit'</span>, <span class="string">'meter'</span>, <span class="string">'XResolution'</span>, res, <span class="string">'YResolution'</span>, res);
+0521                     <span class="comment">% Clear the png bit</span>
+0522                     options.png = false;
+0523                 <span class="keyword">end</span>
+0524                 <span class="comment">% Return only one channel for greyscale</span>
+0525                 <span class="keyword">if</span> <a href="#_sub9" class="code" title="subfunction b = isbitmap(options)">isbitmap</a>(options)
+0526                     A = <a href="#_sub6" class="code" title="subfunction A = check_greyscale(A)">check_greyscale</a>(A);
+0527                 <span class="keyword">end</span>
+0528                 <span class="keyword">if</span> options.alpha
+0529                     <span class="comment">% Store the image</span>
+0530                     imageData = A;
+0531                     <span class="comment">% Clear the alpha bit</span>
+0532                     options.alpha = false;
+0533                 <span class="keyword">end</span>
+0534                 <span class="comment">% Get the non-alpha image</span>
+0535                 <span class="keyword">if</span> <a href="#_sub9" class="code" title="subfunction b = isbitmap(options)">isbitmap</a>(options)
+0536                     alph = alpha(:,:,ones(1, size(A, 3)));
+0537                     A = uint8(single(A) .* alph + 255 * (1 - alph));
+0538                     clear alph
+0539                 <span class="keyword">end</span>
+0540                 <span class="keyword">if</span> options.im
+0541                     <span class="comment">% Store the new image</span>
+0542                     imageData = A;
+0543                 <span class="keyword">end</span>
+0544             <span class="keyword">else</span>
+0545                 <span class="comment">% Print large version to array</span>
+0546                 <span class="keyword">if</span> options.transparent
+0547                     <span class="comment">% MATLAB &quot;feature&quot;: apparently figure size can change when changing</span>
+0548                     <span class="comment">% colour in -nodisplay mode</span>
+0549                     pos = get(fig, <span class="string">'Position'</span>);
+0550                     tcol = get(fig, <span class="string">'Color'</span>);
+0551                     set(fig, <span class="string">'Color'</span>, <span class="string">'w'</span>, <span class="string">'Position'</span>, pos);
+0552                     A = <a href="print2array.html" class="code" title="function [A, bcol] = print2array(fig, res, renderer, gs_options)">print2array</a>(fig, magnify, renderer);
+0553                     set(fig, <span class="string">'Color'</span>, tcol, <span class="string">'Position'</span>, pos);
+0554                     tcol = 255;
+0555                 <span class="keyword">else</span>
+0556                     [A, tcol] = <a href="print2array.html" class="code" title="function [A, bcol] = print2array(fig, res, renderer, gs_options)">print2array</a>(fig, magnify, renderer);
+0557                 <span class="keyword">end</span>
+0558                 <span class="comment">% Crop the background</span>
+0559                 <span class="keyword">if</span> options.crop
+0560                     A = <a href="crop_borders.html" class="code" title="function [A, vA, vB, bb_rel] = crop_borders(A, bcol, padding, crop_amounts)">crop_borders</a>(A, tcol, options.bb_padding, options.crop_amounts);
+0561                 <span class="keyword">end</span>
+0562                 <span class="comment">% Downscale the image</span>
+0563                 A = <a href="#_sub4" class="code" title="subfunction A = downsize(A, factor)">downsize</a>(A, options.aa_factor);
+0564                 <span class="keyword">if</span> options.colourspace == 2
+0565                     <span class="comment">% Convert to greyscale</span>
+0566                     A = <a href="#_sub5" class="code" title="subfunction A = rgb2grey(A)">rgb2grey</a>(A);
+0567                 <span class="keyword">else</span>
+0568                     <span class="comment">% Return only one channel for greyscale</span>
+0569                     A = <a href="#_sub6" class="code" title="subfunction A = check_greyscale(A)">check_greyscale</a>(A);
+0570                 <span class="keyword">end</span>
+0571                 <span class="comment">% Outputs</span>
+0572                 <span class="keyword">if</span> options.im
+0573                     imageData = A;
+0574                 <span class="keyword">end</span>
+0575                 <span class="keyword">if</span> options.alpha
+0576                     imageData = A;
+0577                     alpha = ones(size(A, 1), size(A, 2), <span class="string">'single'</span>);
+0578                 <span class="keyword">end</span>
+0579             <span class="keyword">end</span>
+0580             <span class="comment">% Save the images</span>
+0581             <span class="keyword">if</span> options.png
+0582                 res = options.magnify * get(0, <span class="string">'ScreenPixelsPerInch'</span>) / 25.4e-3;
+0583                 imwrite(A, [options.name <span class="string">'.png'</span>], <span class="string">'ResolutionUnit'</span>, <span class="string">'meter'</span>, <span class="string">'XResolution'</span>, res, <span class="string">'YResolution'</span>, res);
+0584             <span class="keyword">end</span>
+0585             <span class="keyword">if</span> options.bmp
+0586                 imwrite(A, [options.name <span class="string">'.bmp'</span>]);
+0587             <span class="keyword">end</span>
+0588             <span class="comment">% Save jpeg with given quality</span>
+0589             <span class="keyword">if</span> options.jpg
+0590                 quality = options.quality;
+0591                 <span class="keyword">if</span> isempty(quality)
+0592                     quality = 95;
+0593                 <span class="keyword">end</span>
+0594                 <span class="keyword">if</span> quality &gt; 100
+0595                     imwrite(A, [options.name <span class="string">'.jpg'</span>], <span class="string">'Mode'</span>, <span class="string">'lossless'</span>);
+0596                 <span class="keyword">else</span>
+0597                     imwrite(A, [options.name <span class="string">'.jpg'</span>], <span class="string">'Quality'</span>, quality);
+0598                 <span class="keyword">end</span>
+0599             <span class="keyword">end</span>
+0600             <span class="comment">% Save tif images in cmyk if wanted (and possible)</span>
+0601             <span class="keyword">if</span> options.tif
+0602                 <span class="keyword">if</span> options.colourspace == 1 &amp;&amp; size(A, 3) == 3
+0603                     A = double(255 - A);
+0604                     K = min(A, [], 3);
+0605                     K_ = 255 ./ max(255 - K, 1);
+0606                     C = (A(:,:,1) - K) .* K_;
+0607                     M = (A(:,:,2) - K) .* K_;
+0608                     Y = (A(:,:,3) - K) .* K_;
+0609                     A = uint8(cat(3, C, M, Y, K));
+0610                     clear C M Y K K_
+0611                 <span class="keyword">end</span>
+0612                 append_mode = {<span class="string">'overwrite'</span>, <span class="string">'append'</span>};
+0613                 imwrite(A, [options.name <span class="string">'.tif'</span>], <span class="string">'Resolution'</span>, options.magnify*get(0, <span class="string">'ScreenPixelsPerInch'</span>), <span class="string">'WriteMode'</span>, append_mode{options.append+1});
+0614             <span class="keyword">end</span>
+0615         <span class="keyword">end</span>
+0616 
+0617         <span class="comment">% Now do the vector formats</span>
+0618         <span class="keyword">if</span> <a href="#_sub8" class="code" title="subfunction b = isvector(options)">isvector</a>(options)
+0619             <span class="comment">% Set the default renderer to painters</span>
+0620             <span class="keyword">if</span> ~options.renderer
+0621                 <span class="keyword">if</span> hasTransparency || hasPatches
+0622                     <span class="comment">% This is *MUCH* slower, but more accurate for patches and transparent annotations (issue #39)</span>
+0623                     renderer = <span class="string">'-opengl'</span>;
+0624                 <span class="keyword">else</span>
+0625                     renderer = <span class="string">'-painters'</span>;
+0626                 <span class="keyword">end</span>
+0627             <span class="keyword">end</span>
+0628             options.rendererStr = renderer;  <span class="comment">% fix for issue #112</span>
+0629             <span class="comment">% Generate some filenames</span>
+0630             tmp_nam = [tempname <span class="string">'.eps'</span>];
+0631             <span class="keyword">try</span>
+0632                 <span class="comment">% Ensure that the temp dir is writable (Javier Paredes 30/1/15)</span>
+0633                 fid = fopen(tmp_nam,<span class="string">'w'</span>);
+0634                 fwrite(fid,1);
+0635                 fclose(fid);
+0636                 delete(tmp_nam);
+0637                 isTempDirOk = true;
+0638             <span class="keyword">catch</span>
+0639                 <span class="comment">% Temp dir is not writable, so use the user-specified folder</span>
+0640                 [dummy,fname,fext] = fileparts(tmp_nam); <span class="comment">%#ok&lt;ASGLU&gt;</span>
+0641                 fpath = fileparts(options.name);
+0642                 tmp_nam = fullfile(fpath,[fname fext]);
+0643                 isTempDirOk = false;
+0644             <span class="keyword">end</span>
+0645             <span class="keyword">if</span> isTempDirOk
+0646                 pdf_nam_tmp = [tempname <span class="string">'.pdf'</span>];
+0647             <span class="keyword">else</span>
+0648                 pdf_nam_tmp = fullfile(fpath,[fname <span class="string">'.pdf'</span>]);
+0649             <span class="keyword">end</span>
+0650             <span class="keyword">if</span> options.pdf
+0651                 pdf_nam = [options.name <span class="string">'.pdf'</span>];
+0652                 <span class="keyword">try</span> copyfile(pdf_nam, pdf_nam_tmp, <span class="string">'f'</span>); <span class="keyword">catch</span>, <span class="keyword">end</span>  <span class="comment">% fix for issue #65</span>
+0653             <span class="keyword">else</span>
+0654                 pdf_nam = pdf_nam_tmp;
+0655             <span class="keyword">end</span>
+0656             <span class="comment">% Generate the options for print</span>
+0657             p2eArgs = {renderer, sprintf(<span class="string">'-r%d'</span>, options.resolution)};
+0658             <span class="keyword">if</span> options.colourspace == 1  <span class="comment">% CMYK</span>
+0659                 <span class="comment">% Issue #33: due to internal bugs in Matlab's print() function, we can't use its -cmyk option</span>
+0660                 <span class="comment">%p2eArgs{end+1} = '-cmyk';</span>
+0661             <span class="keyword">end</span>
+0662             <span class="keyword">if</span> ~options.crop
+0663                 <span class="comment">% Issue #56: due to internal bugs in Matlab's print() function, we can't use its internal cropping mechanism,</span>
+0664                 <span class="comment">% therefore we always use '-loose' (in print2eps.m) and do our own cropping (in crop_borders)</span>
+0665                 <span class="comment">%p2eArgs{end+1} = '-loose';</span>
+0666             <span class="keyword">end</span>
+0667             <span class="keyword">if</span> any(strcmpi(varargin,<span class="string">'-depsc'</span>))
+0668                 <span class="comment">% Issue #45: lines in image subplots are exported in invalid color.</span>
+0669                 <span class="comment">% The workaround is to use the -depsc parameter instead of the default -depsc2</span>
+0670                 p2eArgs{end+1} = <span class="string">'-depsc'</span>;
+0671             <span class="keyword">end</span>
+0672             <span class="keyword">try</span>
+0673                 <span class="comment">% Remove background if requested (issue #207)</span>
+0674                 <span class="keyword">if</span> options.transparent <span class="comment">%&amp;&amp; ~isequal(get(fig, 'Color'), 'none')</span>
+0675                     <span class="keyword">if</span> options.renderer == 1  <span class="comment">% OpenGL</span>
+0676                         warning(<span class="string">'export_fig:openglTransparentBG'</span>, <span class="string">'-opengl sometimes fails to produce transparent backgrounds; try -painters instead'</span>);
+0677                     <span class="keyword">else</span>
+0678                         originalBgColor = get(fig, <span class="string">'Color'</span>);
+0679                         set(fig,<span class="string">'Color'</span>,<span class="string">'none'</span>);
+0680                     <span class="keyword">end</span>
+0681                 <span class="keyword">end</span>
+0682                 <span class="comment">% Generate an eps</span>
+0683                 <a href="print2eps.html" class="code" title="function print2eps(name, fig, export_options, varargin)">print2eps</a>(tmp_nam, fig, options, p2eArgs{:});
+0684                 <span class="comment">% {</span>
+0685                 <span class="comment">% Remove the background, if desired</span>
+0686                 <span class="keyword">if</span> options.transparent <span class="comment">%&amp;&amp; ~isequal(get(fig, 'Color'), 'none')</span>
+0687                     <a href="#_sub7" class="code" title="subfunction eps_remove_background(fname, count)">eps_remove_background</a>(tmp_nam, 1 + <a href="using_hg2.html" class="code" title="function tf = using_hg2(fig)">using_hg2</a>(fig));
+0688                 <span class="keyword">end</span>
+0689                 <span class="comment">%}</span>
+0690                 <span class="comment">% Restore the figure's previous background color (if modified)</span>
+0691                 <span class="keyword">try</span> set(fig,<span class="string">'Color'</span>,originalBgColor); drawnow; <span class="keyword">catch</span>, <span class="keyword">end</span>
+0692                 <span class="comment">% Fix colorspace to CMYK, if requested (workaround for issue #33)</span>
+0693                 <span class="keyword">if</span> options.colourspace == 1  <span class="comment">% CMYK</span>
+0694                     <span class="comment">% Issue #33: due to internal bugs in Matlab's print() function, we can't use its -cmyk option</span>
+0695                     <a href="#_sub13" class="code" title="subfunction change_rgb_to_cmyk(fname)  ">change_rgb_to_cmyk</a>(tmp_nam);
+0696                 <span class="keyword">end</span>
+0697                 <span class="comment">% Add a bookmark to the PDF if desired</span>
+0698                 <span class="keyword">if</span> options.bookmark
+0699                     fig_nam = get(fig, <span class="string">'Name'</span>);
+0700                     <span class="keyword">if</span> isempty(fig_nam)
+0701                         warning(<span class="string">'export_fig:EmptyBookmark'</span>, <span class="string">'Bookmark requested for figure with no name. Bookmark will be empty.'</span>);
+0702                     <span class="keyword">end</span>
+0703                     <a href="#_sub11" class="code" title="subfunction add_bookmark(fname, bookmark_text)">add_bookmark</a>(tmp_nam, fig_nam);
+0704                 <span class="keyword">end</span>
+0705                 <span class="comment">% Generate a pdf</span>
+0706                 <a href="eps2pdf.html" class="code" title="function eps2pdf(source, dest, crop, append, gray, quality, gs_options)">eps2pdf</a>(tmp_nam, pdf_nam_tmp, 1, options.append, options.colourspace==2, options.quality, options.gs_options);
+0707                 <span class="comment">% Ghostscript croaks on % chars in the output PDF file, so use tempname and then rename the file</span>
+0708                 <span class="keyword">try</span>
+0709                     <span class="comment">% Rename the file (except if it is already the same)</span>
+0710                     <span class="comment">% Abbie K's comment on the commit for issue #179 (#commitcomment-20173476)</span>
+0711                     <span class="keyword">if</span> ~isequal(pdf_nam_tmp, pdf_nam)
+0712                         movefile(pdf_nam_tmp, pdf_nam, <span class="string">'f'</span>);
+0713                     <span class="keyword">end</span>
+0714                 <span class="keyword">catch</span>
+0715                     <span class="comment">% Alert in case of error creating output PDF/EPS file (issue #179)</span>
+0716                     <span class="keyword">if</span> exist(pdf_nam_tmp, <span class="string">'file'</span>)
+0717                         error([<span class="string">'Could not create '</span> pdf_nam <span class="string">' - perhaps the folder does not exist, or you do not have write permissions'</span>]);
+0718                     <span class="keyword">else</span>
+0719                         error(<span class="string">'Could not generate the intermediary EPS file.'</span>);
+0720                     <span class="keyword">end</span>
+0721                 <span class="keyword">end</span>
+0722             <span class="keyword">catch</span> ex
+0723                 <span class="comment">% Delete the eps</span>
+0724                 delete(tmp_nam);
+0725                 rethrow(ex);
+0726             <span class="keyword">end</span>
+0727             <span class="comment">% Delete the eps</span>
+0728             delete(tmp_nam);
+0729             <span class="keyword">if</span> options.eps || options.linecaps
+0730                 <span class="keyword">try</span>
+0731                     <span class="comment">% Generate an eps from the pdf</span>
+0732                     <span class="comment">% since pdftops can't handle relative paths (e.g., '..\'), use a temp file</span>
+0733                     eps_nam_tmp = strrep(pdf_nam_tmp,<span class="string">'.pdf'</span>,<span class="string">'.eps'</span>);
+0734                     <a href="pdf2eps.html" class="code" title="function pdf2eps(source, dest)">pdf2eps</a>(pdf_nam, eps_nam_tmp);
+0735 
+0736                     <span class="comment">% Issue #192: enable rounded line-caps</span>
+0737                     <span class="keyword">if</span> options.linecaps
+0738                         fstrm = <a href="read_write_entire_textfile.html" class="code" title="function fstrm = read_write_entire_textfile(fname, fstrm)">read_write_entire_textfile</a>(eps_nam_tmp);
+0739                         fstrm = regexprep(fstrm, <span class="string">'[02] J'</span>, <span class="string">'1 J'</span>);
+0740                         <a href="read_write_entire_textfile.html" class="code" title="function fstrm = read_write_entire_textfile(fname, fstrm)">read_write_entire_textfile</a>(eps_nam_tmp, fstrm);
+0741                         <span class="keyword">if</span> options.pdf
+0742                             <a href="eps2pdf.html" class="code" title="function eps2pdf(source, dest, crop, append, gray, quality, gs_options)">eps2pdf</a>(eps_nam_tmp, pdf_nam, 1, options.append, options.colourspace==2, options.quality, options.gs_options);
+0743                         <span class="keyword">end</span>
+0744                     <span class="keyword">end</span>
+0745 
+0746                     <span class="keyword">if</span> options.eps
+0747                         movefile(eps_nam_tmp, [options.name <span class="string">'.eps'</span>], <span class="string">'f'</span>);
+0748                     <span class="keyword">else</span>  <span class="comment">% if options.pdf</span>
+0749                         <span class="keyword">try</span> delete(eps_nam_tmp); <span class="keyword">catch</span>, <span class="keyword">end</span>
+0750                     <span class="keyword">end</span>
+0751                 <span class="keyword">catch</span> ex
+0752                     <span class="keyword">if</span> ~options.pdf
+0753                         <span class="comment">% Delete the pdf</span>
+0754                         delete(pdf_nam);
+0755                     <span class="keyword">end</span>
+0756                     <span class="keyword">try</span> delete(eps_nam_tmp); <span class="keyword">catch</span>, <span class="keyword">end</span>
+0757                     rethrow(ex);
+0758                 <span class="keyword">end</span>
+0759                 <span class="keyword">if</span> ~options.pdf
+0760                     <span class="comment">% Delete the pdf</span>
+0761                     delete(pdf_nam);
+0762                 <span class="keyword">end</span>
+0763             <span class="keyword">end</span>
+0764             <span class="comment">% Issue #206: warn if the figure contains an image</span>
+0765             <span class="keyword">if</span> ~isempty(hImages) &amp;&amp; strcmpi(renderer,<span class="string">'-opengl'</span>)  <span class="comment">% see addendum to issue #206</span>
+0766                 warnMsg = [<span class="string">'exporting images to PDF/EPS may result in blurry images on some viewers. '</span> <span class="keyword">...</span>
+0767                            <span class="string">'If so, try to change viewer, or increase the image''s CData resolution, or use -opengl renderer, or export via the print function. '</span> <span class="keyword">...</span>
+0768                            <span class="string">'See &lt;a href=&quot;matlab:web(''https://github.com/altmany/export_fig/issues/206'',''-browser'');&quot;&gt;issue #206&lt;/a&gt; for details.'</span>];
+0769                 warning(<span class="string">'export_fig:pdf_eps:blurry_image'</span>, warnMsg);
+0770             <span class="keyword">end</span>
+0771         <span class="keyword">end</span>
+0772 
+0773         <span class="comment">% Revert the figure or close it (if requested)</span>
+0774         <span class="keyword">if</span> cls || options.closeFig
+0775             <span class="comment">% Close the created figure</span>
+0776             close(fig);
+0777         <span class="keyword">else</span>
+0778             <span class="comment">% Reset the hardcopy mode</span>
+0779             set(fig, <span class="string">'InvertHardcopy'</span>, old_mode);
+0780             <span class="comment">% Reset the axes limit and tick modes</span>
+0781             <span class="keyword">for</span> a = 1:numel(Hlims)
+0782                 <span class="keyword">try</span>
+0783                     set(Hlims(a), <span class="string">'XLimMode'</span>, Xlims{a}, <span class="string">'YLimMode'</span>, Ylims{a}, <span class="string">'ZLimMode'</span>, Zlims{a},<span class="keyword">...</span><span class="comment"> </span>
+0784                                   <span class="string">'XTickMode'</span>, Xtick{a}, <span class="string">'YTickMode'</span>, Ytick{a}, <span class="string">'ZTickMode'</span>, Ztick{a},<span class="keyword">...</span>
+0785                                   <span class="string">'XTickLabelMode'</span>, Xlabel{a}, <span class="string">'YTickLabelMode'</span>, Ylabel{a}, <span class="string">'ZTickLabelMode'</span>, Zlabel{a}); 
+0786                 <span class="keyword">catch</span>
+0787                     <span class="comment">% ignore - fix issue #4 (using HG2 on R2014a and earlier)</span>
+0788                 <span class="keyword">end</span>
+0789             <span class="keyword">end</span>
+0790             <span class="comment">% Revert the tex-labels font weights</span>
+0791             <span class="keyword">try</span> set(texLabels, <span class="string">'FontWeight'</span>,<span class="string">'bold'</span>); <span class="keyword">catch</span>, <span class="keyword">end</span>
+0792             <span class="comment">% Revert annotation units</span>
+0793             <span class="keyword">for</span> handleIdx = 1 : numel(annotationHandles)
+0794                 <span class="keyword">try</span>
+0795                     oldUnits = originalUnits{handleIdx};
+0796                 <span class="keyword">catch</span>
+0797                     oldUnits = originalUnits;
+0798                 <span class="keyword">end</span>
+0799                 <span class="keyword">try</span> set(annotationHandles(handleIdx),<span class="string">'Units'</span>,oldUnits); <span class="keyword">catch</span>, <span class="keyword">end</span>
+0800             <span class="keyword">end</span>
+0801             <span class="comment">% Revert figure units</span>
+0802             set(fig,<span class="string">'Units'</span>,oldFigUnits);
+0803         <span class="keyword">end</span>
+0804 
+0805         <span class="comment">% Output to clipboard (if requested)</span>
+0806         <span class="keyword">if</span> options.clipboard
+0807             <span class="comment">% Delete the output file if unchanged from the default name ('export_fig_out.png')</span>
+0808             <span class="keyword">if</span> strcmpi(options.name,<span class="string">'export_fig_out'</span>)
+0809                 <span class="keyword">try</span>
+0810                     fileInfo = dir(<span class="string">'export_fig_out.png'</span>);
+0811                     <span class="keyword">if</span> ~isempty(fileInfo)
+0812                         timediff = now - fileInfo.datenum;
+0813                         ONE_SEC = 1/24/60/60;
+0814                         <span class="keyword">if</span> timediff &lt; ONE_SEC
+0815                             delete(<span class="string">'export_fig_out.png'</span>);
+0816                         <span class="keyword">end</span>
+0817                     <span class="keyword">end</span>
+0818                 <span class="keyword">catch</span>
+0819                     <span class="comment">% never mind...</span>
+0820                 <span class="keyword">end</span>
+0821             <span class="keyword">end</span>
+0822 
+0823             <span class="comment">% Save the image in the system clipboard</span>
+0824             <span class="comment">% credit: Jiro Doke's IMCLIPBOARD: http://www.mathworks.com/matlabcentral/fileexchange/28708-imclipboard</span>
+0825             <span class="keyword">try</span>
+0826                 error(javachk(<span class="string">'awt'</span>, <span class="string">'export_fig -clipboard output'</span>));
+0827             <span class="keyword">catch</span>
+0828                 warning(<span class="string">'export_fig:clipboardJava'</span>, <span class="string">'export_fig -clipboard output failed: requires Java to work'</span>);
+0829                 <span class="keyword">return</span>;
+0830             <span class="keyword">end</span>
+0831             <span class="keyword">try</span>
+0832                 <span class="comment">% Import necessary Java classes</span>
+0833                 import java.awt.Toolkit
+0834                 import java.awt.image.BufferedImage
+0835                 import java.awt.datatransfer.DataFlavor
+0836 
+0837                 <span class="comment">% Get System Clipboard object (java.awt.Toolkit)</span>
+0838                 cb = Toolkit.getDefaultToolkit.getSystemClipboard();
+0839 
+0840                 <span class="comment">% Add java class (ImageSelection) to the path</span>
+0841                 <span class="keyword">if</span> ~exist(<span class="string">'ImageSelection'</span>, <span class="string">'class'</span>)
+0842                     javaaddpath(fileparts(which(mfilename)), <span class="string">'-end'</span>);
+0843                 <span class="keyword">end</span>
+0844 
+0845                 <span class="comment">% Get image size</span>
+0846                 ht = size(imageData, 1);
+0847                 wd = size(imageData, 2);
+0848 
+0849                 <span class="comment">% Convert to Blue-Green-Red format</span>
+0850                 <span class="keyword">try</span>
+0851                     imageData2 = imageData(:, :, [3 2 1]);
+0852                 <span class="keyword">catch</span>
+0853                     <span class="comment">% Probably gray-scaled image (2D, without the 3rd [RGB] dimension)</span>
+0854                     imageData2 = imageData(:, :, [1 1 1]);
+0855                 <span class="keyword">end</span>
+0856 
+0857                 <span class="comment">% Convert to 3xWxH format</span>
+0858                 imageData2 = permute(imageData2, [3, 2, 1]);
+0859 
+0860                 <span class="comment">% Append Alpha data (unused - transparency is not supported in clipboard copy)</span>
+0861                 alphaData2 = uint8(permute(255*alpha,[3,2,1])); <span class="comment">%=255*ones(1,wd,ht,'uint8')</span>
+0862                 imageData2 = cat(1, imageData2, alphaData2);
+0863 
+0864                 <span class="comment">% Create image buffer</span>
+0865                 imBuffer = BufferedImage(wd, ht, BufferedImage.TYPE_INT_RGB);
+0866                 imBuffer.setRGB(0, 0, wd, ht, typecast(imageData2(:), <span class="string">'int32'</span>), 0, wd);
+0867 
+0868                 <span class="comment">% Create ImageSelection object from the image buffer</span>
+0869                 imSelection = ImageSelection(imBuffer);
+0870 
+0871                 <span class="comment">% Set clipboard content to the image</span>
+0872                 cb.setContents(imSelection, []);
+0873             <span class="keyword">catch</span>
+0874                 warning(<span class="string">'export_fig:clipboardFailed'</span>, <span class="string">'export_fig -clipboard output failed: %s'</span>, lasterr); <span class="comment">%#ok&lt;LERR&gt;</span>
+0875             <span class="keyword">end</span>
+0876         <span class="keyword">end</span>
+0877 
+0878         <span class="comment">% Don't output the data to console unless requested</span>
+0879         <span class="keyword">if</span> ~nargout
+0880             clear imageData alpha
+0881         <span class="keyword">end</span>
+0882     <span class="keyword">catch</span> err
+0883         <span class="comment">% Display possible workarounds before the error message</span>
+0884         <span class="keyword">if</span> displaySuggestedWorkarounds &amp;&amp; ~strcmpi(err.message,<span class="string">'export_fig error'</span>)
+0885             <span class="keyword">if</span> ~hadError,  fprintf(2, <span class="string">'export_fig error. '</span>);  <span class="keyword">end</span>
+0886             fprintf(2, <span class="string">'Please ensure:\n'</span>);
+0887             fprintf(2, <span class="string">'  that you are using the &lt;a href=&quot;https://github.com/altmany/export_fig/archive/master.zip&quot;&gt;latest version&lt;/a&gt; of export_fig\n'</span>);
+0888             <span class="keyword">if</span> ismac
+0889                 fprintf(2, <span class="string">'  and that you have &lt;a href=&quot;http://pages.uoregon.edu/koch&quot;&gt;Ghostscript&lt;/a&gt; installed\n'</span>);
+0890             <span class="keyword">else</span>
+0891                 fprintf(2, <span class="string">'  and that you have &lt;a href=&quot;http://www.ghostscript.com&quot;&gt;Ghostscript&lt;/a&gt; installed\n'</span>);
+0892             <span class="keyword">end</span>
+0893             <span class="keyword">try</span>
+0894                 <span class="keyword">if</span> options.eps
+0895                     fprintf(2, <span class="string">'  and that you have &lt;a href=&quot;http://www.foolabs.com/xpdf&quot;&gt;pdftops&lt;/a&gt; installed\n'</span>);
+0896                 <span class="keyword">end</span>
+0897             <span class="keyword">catch</span>
+0898                 <span class="comment">% ignore - probably an error in parse_args</span>
+0899             <span class="keyword">end</span>
+0900             fprintf(2, <span class="string">'  and that you do not have &lt;a href=&quot;matlab:which export_fig -all&quot;&gt;multiple versions&lt;/a&gt; of export_fig installed by mistake\n'</span>);
+0901             fprintf(2, <span class="string">'  and that you did not made a mistake in the &lt;a href=&quot;matlab:help export_fig&quot;&gt;expected input arguments&lt;/a&gt;\n'</span>);
+0902             <span class="keyword">try</span>
+0903                 <span class="comment">% Alert per issue #149</span>
+0904                 <span class="keyword">if</span> ~strncmpi(get(0,<span class="string">'Units'</span>),<span class="string">'pixel'</span>,5)
+0905                     fprintf(2, <span class="string">'  or try to set groot''s Units property back to its default value of ''pixels'' (&lt;a href=&quot;matlab:web(''https://github.com/altmany/export_fig/issues/149'',''-browser'');&quot;&gt;details&lt;/a&gt;)\n'</span>);
+0906                 <span class="keyword">end</span>
+0907             <span class="keyword">catch</span>
+0908                 <span class="comment">% ignore - maybe an old MAtlab release</span>
+0909             <span class="keyword">end</span>
+0910             fprintf(2, <span class="string">'\nIf the problem persists, then please &lt;a href=&quot;https://github.com/altmany/export_fig/issues&quot;&gt;report a new issue&lt;/a&gt;.\n\n'</span>);
+0911         <span class="keyword">end</span>
+0912         rethrow(err)
+0913     <span class="keyword">end</span>
+0914 <span class="keyword">end</span>
+0915 
+0916 <a name="_sub1" href="#_subfunctions" class="code">function options = default_options()</a>
+0917     <span class="comment">% Default options used by export_fig</span>
+0918     options = struct(<span class="keyword">...</span>
+0919         <span class="string">'name'</span>,         <span class="string">'export_fig_out'</span>, <span class="keyword">...</span>
+0920         <span class="string">'crop'</span>,         true, <span class="keyword">...</span>
+0921         <span class="string">'crop_amounts'</span>, nan(1,4), <span class="keyword">...</span><span class="comment">  % auto-crop all 4 image sides</span>
+0922         <span class="string">'transparent'</span>,  false, <span class="keyword">...</span>
+0923         <span class="string">'renderer'</span>,     0, <span class="keyword">...</span><span class="comment">         % 0: default, 1: OpenGL, 2: ZBuffer, 3: Painters</span>
+0924         <span class="string">'pdf'</span>,          false, <span class="keyword">...</span>
+0925         <span class="string">'eps'</span>,          false, <span class="keyword">...</span>
+0926         <span class="string">'png'</span>,          false, <span class="keyword">...</span>
+0927         <span class="string">'tif'</span>,          false, <span class="keyword">...</span>
+0928         <span class="string">'jpg'</span>,          false, <span class="keyword">...</span>
+0929         <span class="string">'bmp'</span>,          false, <span class="keyword">...</span>
+0930         <span class="string">'clipboard'</span>,    false, <span class="keyword">...</span>
+0931         <span class="string">'colourspace'</span>,  0, <span class="keyword">...</span><span class="comment">         % 0: RGB/gray, 1: CMYK, 2: gray</span>
+0932         <span class="string">'append'</span>,       false, <span class="keyword">...</span>
+0933         <span class="string">'im'</span>,           false, <span class="keyword">...</span>
+0934         <span class="string">'alpha'</span>,        false, <span class="keyword">...</span>
+0935         <span class="string">'aa_factor'</span>,    0, <span class="keyword">...</span>
+0936         <span class="string">'bb_padding'</span>,   0, <span class="keyword">...</span>
+0937         <span class="string">'magnify'</span>,      [], <span class="keyword">...</span>
+0938         <span class="string">'resolution'</span>,   [], <span class="keyword">...</span>
+0939         <span class="string">'bookmark'</span>,     false, <span class="keyword">...</span>
+0940         <span class="string">'closeFig'</span>,     false, <span class="keyword">...</span>
+0941         <span class="string">'quality'</span>,      [], <span class="keyword">...</span>
+0942         <span class="string">'update'</span>,       false, <span class="keyword">...</span>
+0943         <span class="string">'fontswap'</span>,     true, <span class="keyword">...</span>
+0944         <span class="string">'font_space'</span>,   <span class="string">''</span>, <span class="keyword">...</span>
+0945         <span class="string">'linecaps'</span>,     false, <span class="keyword">...</span>
+0946         <span class="string">'invert_hardcopy'</span>, true, <span class="keyword">...</span>
+0947         <span class="string">'gs_options'</span>,   {{}});
+0948 <span class="keyword">end</span>
+0949 
+0950 <a name="_sub2" href="#_subfunctions" class="code">function [fig, options] = parse_args(nout, fig, varargin)</a>
+0951     <span class="comment">% Parse the input arguments</span>
+0952 
+0953     <span class="comment">% Convert strings =&gt; chars</span>
+0954     varargin = cellfun(@<a href="#_sub3" class="code" title="subfunction value = str2char(value)">str2char</a>,varargin,<span class="string">'un'</span>,false);
+0955 
+0956     <span class="comment">% Set the defaults</span>
+0957     native = false; <span class="comment">% Set resolution to native of an image</span>
+0958     options = <a href="#_sub1" class="code" title="subfunction options = default_options()">default_options</a>();
+0959     options.im =    (nout == 1);  <span class="comment">% user requested imageData output</span>
+0960     options.alpha = (nout == 2);  <span class="comment">% user requested alpha output</span>
+0961 
+0962     <span class="comment">% Go through the other arguments</span>
+0963     skipNext = false;
+0964     <span class="keyword">for</span> a = 1:nargin-2
+0965         <span class="keyword">if</span> skipNext
+0966             skipNext = false;
+0967             <span class="keyword">continue</span>;
+0968         <span class="keyword">end</span>
+0969         <span class="keyword">if</span> all(ishandle(varargin{a}))
+0970             fig = varargin{a};
+0971         <span class="keyword">elseif</span> ischar(varargin{a}) &amp;&amp; ~isempty(varargin{a})
+0972             <span class="keyword">if</span> varargin{a}(1) == <span class="string">'-'</span>
+0973                 <span class="keyword">switch</span> lower(varargin{a}(2:end))
+0974                     <span class="keyword">case</span> <span class="string">'nocrop'</span>
+0975                         options.crop = false;
+0976                         options.crop_amounts = [0,0,0,0];
+0977                     <span class="keyword">case</span> {<span class="string">'trans'</span>, <span class="string">'transparent'</span>}
+0978                         options.transparent = true;
+0979                     <span class="keyword">case</span> <span class="string">'opengl'</span>
+0980                         options.renderer = 1;
+0981                     <span class="keyword">case</span> <span class="string">'zbuffer'</span>
+0982                         options.renderer = 2;
+0983                     <span class="keyword">case</span> <span class="string">'painters'</span>
+0984                         options.renderer = 3;
+0985                     <span class="keyword">case</span> <span class="string">'pdf'</span>
+0986                         options.pdf = true;
+0987                     <span class="keyword">case</span> <span class="string">'eps'</span>
+0988                         options.eps = true;
+0989                     <span class="keyword">case</span> <span class="string">'png'</span>
+0990                         options.png = true;
+0991                     <span class="keyword">case</span> {<span class="string">'tif'</span>, <span class="string">'tiff'</span>}
+0992                         options.tif = true;
+0993                     <span class="keyword">case</span> {<span class="string">'jpg'</span>, <span class="string">'jpeg'</span>}
+0994                         options.jpg = true;
+0995                     <span class="keyword">case</span> <span class="string">'bmp'</span>
+0996                         options.bmp = true;
+0997                     <span class="keyword">case</span> <span class="string">'rgb'</span>
+0998                         options.colourspace = 0;
+0999                     <span class="keyword">case</span> <span class="string">'cmyk'</span>
+1000                         options.colourspace = 1;
+1001                     <span class="keyword">case</span> {<span class="string">'gray'</span>, <span class="string">'grey'</span>}
+1002                         options.colourspace = 2;
+1003                     <span class="keyword">case</span> {<span class="string">'a1'</span>, <span class="string">'a2'</span>, <span class="string">'a3'</span>, <span class="string">'a4'</span>}
+1004                         options.aa_factor = str2double(varargin{a}(3));
+1005                     <span class="keyword">case</span> <span class="string">'append'</span>
+1006                         options.append = true;
+1007                     <span class="keyword">case</span> <span class="string">'bookmark'</span>
+1008                         options.bookmark = true;
+1009                     <span class="keyword">case</span> <span class="string">'native'</span>
+1010                         native = true;
+1011                     <span class="keyword">case</span> <span class="string">'clipboard'</span>
+1012                         options.clipboard = true;
+1013                         options.im = true;
+1014                         options.alpha = true;
+1015                     <span class="keyword">case</span> <span class="string">'svg'</span>
+1016                         filename = strrep(options.name,<span class="string">'export_fig_out'</span>,<span class="string">'filename'</span>);
+1017                         msg = [<span class="string">'SVG output is not supported by export_fig. Use one of the following alternatives:\n'</span> <span class="keyword">...</span>
+1018                                <span class="string">'  1. saveas(gcf,'''</span> filename <span class="string">'.svg'')\n'</span> <span class="keyword">...</span>
+1019                                <span class="string">'  2. plot2svg utility: https://github.com/kupiqu/plot2svg\n'</span> <span class="keyword">...</span><span class="comment">  % Note: replaced defunct https://github.com/jschwizer99/plot2svg with up-to-date fork on https://github.com/kupiqu/plot2svg</span>
+1020                                <span class="string">'  3. export_fig to EPS/PDF, then convert to SVG using generic (non-Matlab) tools\n'</span>];
+1021                         error(sprintf(msg)); <span class="comment">%#ok&lt;SPERR&gt;</span>
+1022                     <span class="keyword">case</span> <span class="string">'update'</span>
+1023                         <span class="comment">% Download the latest version of export_fig into the export_fig folder</span>
+1024                         <span class="keyword">try</span>
+1025                             zipFileName = <span class="string">'https://github.com/altmany/export_fig/archive/master.zip'</span>;
+1026                             folderName = fileparts(which(mfilename(<span class="string">'fullpath'</span>)));
+1027                             targetFileName = fullfile(folderName, datestr(now,<span class="string">'yyyy-mm-dd.zip'</span>));
+1028                             urlwrite(zipFileName,targetFileName);
+1029                         <span class="keyword">catch</span>
+1030                             error(<span class="string">'Could not download %s into %s\n'</span>,zipFileName,targetFileName);
+1031                         <span class="keyword">end</span>
+1032 
+1033                         <span class="comment">% Unzip the downloaded zip file in the export_fig folder</span>
+1034                         <span class="keyword">try</span>
+1035                             unzip(targetFileName,folderName);
+1036                         <span class="keyword">catch</span>
+1037                             error(<span class="string">'Could not unzip %s\n'</span>,targetFileName);
+1038                         <span class="keyword">end</span>
+1039                     <span class="keyword">case</span> <span class="string">'nofontswap'</span>
+1040                         options.fontswap = false;
+1041                     <span class="keyword">case</span> <span class="string">'font_space'</span>
+1042                         options.font_space = varargin{a+1};
+1043                         skipNext = true;
+1044                     <span class="keyword">case</span> <span class="string">'linecaps'</span>
+1045                         options.linecaps = true;
+1046                     <span class="keyword">case</span> <span class="string">'noinvert'</span>
+1047                         options.invert_hardcopy = false;
+1048                     <span class="keyword">otherwise</span>
+1049                         <span class="keyword">try</span>
+1050                             wasError = false;
+1051                             <span class="keyword">if</span> strcmpi(varargin{a}(1:2),<span class="string">'-d'</span>)
+1052                                 varargin{a}(2) = <span class="string">'d'</span>;  <span class="comment">% ensure lowercase 'd'</span>
+1053                                 options.gs_options{end+1} = varargin{a};
+1054                             <span class="keyword">elseif</span> strcmpi(varargin{a}(1:2),<span class="string">'-c'</span>)
+1055                                 <span class="keyword">if</span> numel(varargin{a})==2
+1056                                     skipNext = true;
+1057                                     vals = str2num(varargin{a+1}); <span class="comment">%#ok&lt;ST2NM&gt;</span>
+1058                                 <span class="keyword">else</span>
+1059                                     vals = str2num(varargin{a}(3:end)); <span class="comment">%#ok&lt;ST2NM&gt;</span>
+1060                                 <span class="keyword">end</span>
+1061                                 <span class="keyword">if</span> numel(vals)~=4
+1062                                     wasError = true;
+1063                                     error(<span class="string">'option -c cannot be parsed: must be a 4-element numeric vector'</span>);
+1064                                 <span class="keyword">end</span>
+1065                                 options.crop_amounts = vals;
+1066                                 options.crop = true;
+1067                             <span class="keyword">else</span>  <span class="comment">% scalar parameter value</span>
+1068                                 val = str2double(regexp(varargin{a}, <span class="string">'(?&lt;=-(m|M|r|R|q|Q|p|P))-?\d*.?\d+'</span>, <span class="string">'match'</span>));
+1069                                 <span class="keyword">if</span> isempty(val) || isnan(val)
+1070                                     <span class="comment">% Issue #51: improved processing of input args (accept space between param name &amp; value)</span>
+1071                                     val = str2double(varargin{a+1});
+1072                                     <span class="keyword">if</span> isscalar(val) &amp;&amp; ~isnan(val)
+1073                                         skipNext = true;
+1074                                     <span class="keyword">end</span>
+1075                                 <span class="keyword">end</span>
+1076                                 <span class="keyword">if</span> ~isscalar(val) || isnan(val)
+1077                                     wasError = true;
+1078                                     error(<span class="string">'option %s is not recognised or cannot be parsed'</span>, varargin{a});
+1079                                 <span class="keyword">end</span>
+1080                                 <span class="keyword">switch</span> lower(varargin{a}(2))
+1081                                     <span class="keyword">case</span> <span class="string">'m'</span>
+1082                                         <span class="comment">% Magnification may never be negative</span>
+1083                                         <span class="keyword">if</span> val &lt;= 0
+1084                                             wasError = true;
+1085                                             error(<span class="string">'Bad magnification value: %g (must be positive)'</span>, val);
+1086                                         <span class="keyword">end</span>
+1087                                         options.magnify = val;
+1088                                     <span class="keyword">case</span> <span class="string">'r'</span>
+1089                                         options.resolution = val;
+1090                                     <span class="keyword">case</span> <span class="string">'q'</span>
+1091                                         options.quality = max(val, 0);
+1092                                     <span class="keyword">case</span> <span class="string">'p'</span>
+1093                                         options.bb_padding = val;
+1094                                 <span class="keyword">end</span>
+1095                             <span class="keyword">end</span>
+1096                         <span class="keyword">catch</span> err
+1097                             <span class="comment">% We might have reached here by raising an intentional error</span>
+1098                             <span class="keyword">if</span> wasError  <span class="comment">% intentional raise</span>
+1099                                 rethrow(err)
+1100                             <span class="keyword">else</span>  <span class="comment">% unintentional</span>
+1101                                 error([<span class="string">'Unrecognized export_fig input option: '''</span> varargin{a} <span class="string">''''</span>]);
+1102                             <span class="keyword">end</span>
+1103                         <span class="keyword">end</span>
+1104                 <span class="keyword">end</span>
+1105             <span class="keyword">else</span>
+1106                 [p, options.name, ext] = fileparts(varargin{a});
+1107                 <span class="keyword">if</span> ~isempty(p)
+1108                     <span class="comment">% Issue #221: alert if the requested folder does not exist</span>
+1109                     <span class="keyword">if</span> ~exist(p,<span class="string">'dir'</span>),  error([<span class="string">'Folder '</span> p <span class="string">' does not exist!'</span>]);  <span class="keyword">end</span>
+1110                     options.name = [p filesep options.name];
+1111                 <span class="keyword">end</span>
+1112                 <span class="keyword">switch</span> lower(ext)
+1113                     <span class="keyword">case</span> {<span class="string">'.tif'</span>, <span class="string">'.tiff'</span>}
+1114                         options.tif = true;
+1115                     <span class="keyword">case</span> {<span class="string">'.jpg'</span>, <span class="string">'.jpeg'</span>}
+1116                         options.jpg = true;
+1117                     <span class="keyword">case</span> <span class="string">'.png'</span>
+1118                         options.png = true;
+1119                     <span class="keyword">case</span> <span class="string">'.bmp'</span>
+1120                         options.bmp = true;
+1121                     <span class="keyword">case</span> <span class="string">'.eps'</span>
+1122                         options.eps = true;
+1123                     <span class="keyword">case</span> <span class="string">'.pdf'</span>
+1124                         options.pdf = true;
+1125                     <span class="keyword">case</span> <span class="string">'.fig'</span>
+1126                         <span class="comment">% If no open figure, then load the specified .fig file and continue</span>
+1127                         <span class="keyword">if</span> isempty(fig)
+1128                             fig = openfig(varargin{a},<span class="string">'invisible'</span>);
+1129                             varargin{a} = fig;
+1130                             options.closeFig = true;
+1131                         <span class="keyword">else</span>
+1132                             <span class="comment">% save the current figure as the specified .fig file and exit</span>
+1133                             saveas(fig(1),varargin{a});
+1134                             fig = -1;
+1135                             <span class="keyword">return</span>
+1136                         <span class="keyword">end</span>
+1137                     <span class="keyword">case</span> <span class="string">'.svg'</span>
+1138                         filename = strrep(options.name,<span class="string">'export_fig_out'</span>,<span class="string">'filename'</span>);
+1139                         msg = [<span class="string">'SVG output is not supported by export_fig. Use one of the following alternatives:\n'</span> <span class="keyword">...</span>
+1140                                <span class="string">'  1. saveas(gcf,'''</span> filename <span class="string">'.svg'')\n'</span> <span class="keyword">...</span>
+1141                                <span class="string">'  2. plot2svg utility: https://github.com/kupiqu/plot2svg\n'</span> <span class="keyword">...</span><span class="comment">  % Note: replaced defunct https://github.com/jschwizer99/plot2svg with up-to-date fork on https://github.com/kupiqu/plot2svg</span>
+1142                                <span class="string">'  3. export_fig to EPS/PDF, then convert to SVG using generic (non-Matlab) tools\n'</span>];
+1143                         error(sprintf(msg)); <span class="comment">%#ok&lt;SPERR&gt;</span>
+1144                     <span class="keyword">otherwise</span>
+1145                         options.name = varargin{a};
+1146                 <span class="keyword">end</span>
+1147             <span class="keyword">end</span>
+1148         <span class="keyword">end</span>
+1149     <span class="keyword">end</span>
+1150 
+1151     <span class="comment">% Quick bail-out if no figure found</span>
+1152     <span class="keyword">if</span> isempty(fig),  <span class="keyword">return</span>;  <span class="keyword">end</span>
+1153 
+1154     <span class="comment">% Do border padding with repsect to a cropped image</span>
+1155     <span class="keyword">if</span> options.bb_padding
+1156         options.crop = true;
+1157     <span class="keyword">end</span>
+1158 
+1159     <span class="comment">% Set default anti-aliasing now we know the renderer</span>
+1160     <span class="keyword">if</span> options.aa_factor == 0
+1161         <span class="keyword">try</span> isAA = strcmp(get(ancestor(fig, <span class="string">'figure'</span>), <span class="string">'GraphicsSmoothing'</span>), <span class="string">'on'</span>); <span class="keyword">catch</span>, isAA = false; <span class="keyword">end</span>
+1162         options.aa_factor = 1 + 2 * (~(<a href="using_hg2.html" class="code" title="function tf = using_hg2(fig)">using_hg2</a>(fig) &amp;&amp; isAA) | (options.renderer == 3));
+1163     <span class="keyword">end</span>
+1164 
+1165     <span class="comment">% Convert user dir '~' to full path</span>
+1166     <span class="keyword">if</span> numel(options.name) &gt; 2 &amp;&amp; options.name(1) == <span class="string">'~'</span> &amp;&amp; (options.name(2) == <span class="string">'/'</span> || options.name(2) == <span class="string">'\'</span>)
+1167         options.name = fullfile(char(java.lang.System.getProperty(<span class="string">'user.home'</span>)), options.name(2:end));
+1168     <span class="keyword">end</span>
+1169 
+1170     <span class="comment">% Compute the magnification and resolution</span>
+1171     <span class="keyword">if</span> isempty(options.magnify)
+1172         <span class="keyword">if</span> isempty(options.resolution)
+1173             options.magnify = 1;
+1174             options.resolution = 864;
+1175         <span class="keyword">else</span>
+1176             options.magnify = options.resolution ./ get(0, <span class="string">'ScreenPixelsPerInch'</span>);
+1177         <span class="keyword">end</span>
+1178     <span class="keyword">elseif</span> isempty(options.resolution)
+1179         options.resolution = 864;
+1180     <span class="keyword">end</span>
+1181 
+1182     <span class="comment">% Set the default format</span>
+1183     <span class="keyword">if</span> ~<a href="#_sub8" class="code" title="subfunction b = isvector(options)">isvector</a>(options) &amp;&amp; ~<a href="#_sub9" class="code" title="subfunction b = isbitmap(options)">isbitmap</a>(options)
+1184         options.png = true;
+1185     <span class="keyword">end</span>
+1186 
+1187     <span class="comment">% Check whether transparent background is wanted (old way)</span>
+1188     <span class="keyword">if</span> isequal(get(ancestor(fig(1), <span class="string">'figure'</span>), <span class="string">'Color'</span>), <span class="string">'none'</span>)
+1189         options.transparent = true;
+1190     <span class="keyword">end</span>
+1191 
+1192     <span class="comment">% If requested, set the resolution to the native vertical resolution of the</span>
+1193     <span class="comment">% first suitable image found</span>
+1194     <span class="keyword">if</span> native &amp;&amp; <a href="#_sub9" class="code" title="subfunction b = isbitmap(options)">isbitmap</a>(options)
+1195         <span class="comment">% Find a suitable image</span>
+1196         list = findall(fig, <span class="string">'Type'</span>,<span class="string">'image'</span>, <span class="string">'Tag'</span>,<span class="string">'export_fig_native'</span>);
+1197         <span class="keyword">if</span> isempty(list)
+1198             list = findall(fig, <span class="string">'Type'</span>,<span class="string">'image'</span>, <span class="string">'Visible'</span>,<span class="string">'on'</span>);
+1199         <span class="keyword">end</span>
+1200         <span class="keyword">for</span> hIm = list(:)'
+1201             <span class="comment">% Check height is &gt;= 2</span>
+1202             height = size(get(hIm, <span class="string">'CData'</span>), 1);
+1203             <span class="keyword">if</span> height &lt; 2
+1204                 <span class="keyword">continue</span>
+1205             <span class="keyword">end</span>
+1206             <span class="comment">% Account for the image filling only part of the axes, or vice versa</span>
+1207             yl = get(hIm, <span class="string">'YData'</span>);
+1208             <span class="keyword">if</span> isscalar(yl)
+1209                 yl = [yl(1)-0.5 yl(1)+height+0.5];
+1210             <span class="keyword">else</span>
+1211                 yl = [min(yl), max(yl)];  <span class="comment">% fix issue #151 (case of yl containing more than 2 elements)</span>
+1212                 <span class="keyword">if</span> ~diff(yl)
+1213                     <span class="keyword">continue</span>
+1214                 <span class="keyword">end</span>
+1215                 yl = yl + [-0.5 0.5] * (diff(yl) / (height - 1));
+1216             <span class="keyword">end</span>
+1217             hAx = get(hIm, <span class="string">'Parent'</span>);
+1218             yl2 = get(hAx, <span class="string">'YLim'</span>);
+1219             <span class="comment">% Find the pixel height of the axes</span>
+1220             oldUnits = get(hAx, <span class="string">'Units'</span>);
+1221             set(hAx, <span class="string">'Units'</span>, <span class="string">'pixels'</span>);
+1222             pos = get(hAx, <span class="string">'Position'</span>);
+1223             set(hAx, <span class="string">'Units'</span>, oldUnits);
+1224             <span class="keyword">if</span> ~pos(4)
+1225                 <span class="keyword">continue</span>
+1226             <span class="keyword">end</span>
+1227             <span class="comment">% Found a suitable image</span>
+1228             <span class="comment">% Account for stretch-to-fill being disabled</span>
+1229             pbar = get(hAx, <span class="string">'PlotBoxAspectRatio'</span>);
+1230             pos = min(pos(4), pbar(2)*pos(3)/pbar(1));
+1231             <span class="comment">% Set the magnification to give native resolution</span>
+1232             options.magnify = abs((height * diff(yl2)) / (pos * diff(yl)));  <span class="comment">% magnification must never be negative: issue #103</span>
+1233             <span class="keyword">break</span>
+1234         <span class="keyword">end</span>
+1235     <span class="keyword">end</span>
+1236 <span class="keyword">end</span>
+1237 
+1238 <span class="comment">% Convert a possible string =&gt; char (issue #245)</span>
+1239 <a name="_sub3" href="#_subfunctions" class="code">function value = str2char(value)</a>
+1240     <span class="keyword">if</span> isa(value,<span class="string">'string'</span>)
+1241         value = char(value);
+1242     <span class="keyword">end</span>
+1243 <span class="keyword">end</span>
+1244 
+1245 <a name="_sub4" href="#_subfunctions" class="code">function A = downsize(A, factor)</a>
+1246     <span class="comment">% Downsample an image</span>
+1247     <span class="keyword">if</span> factor == 1
+1248         <span class="comment">% Nothing to do</span>
+1249         <span class="keyword">return</span>
+1250     <span class="keyword">end</span>
+1251     <span class="keyword">try</span>
+1252         <span class="comment">% Faster, but requires image processing toolbox</span>
+1253         A = imresize(A, 1/factor, <span class="string">'bilinear'</span>);
+1254     <span class="keyword">catch</span>
+1255         <span class="comment">% No image processing toolbox - resize manually</span>
+1256         <span class="comment">% Lowpass filter - use Gaussian as is separable, so faster</span>
+1257         <span class="comment">% Compute the 1d Gaussian filter</span>
+1258         filt = (-factor-1:factor+1) / (factor * 0.6);
+1259         filt = exp(-filt .* filt);
+1260         <span class="comment">% Normalize the filter</span>
+1261         filt = single(filt / sum(filt));
+1262         <span class="comment">% Filter the image</span>
+1263         padding = floor(numel(filt) / 2);
+1264         <span class="keyword">for</span> a = 1:size(A, 3)
+1265             A(:,:,a) = conv2(filt, filt', single(A([ones(1, padding) 1:end repmat(<span class="keyword">end</span>, 1, padding)],[ones(1, padding) 1:end repmat(<span class="keyword">end</span>, 1, padding)],a)), <span class="string">'valid'</span>);
+1266         <span class="keyword">end</span>
+1267         <span class="comment">% Subsample</span>
+1268         A = A(1+floor(mod(end-1, factor)/2):factor:<span class="keyword">end</span>,1+floor(mod(end-1, factor)/2):factor:<span class="keyword">end</span>,:);
+1269     <span class="keyword">end</span>
+1270 <span class="keyword">end</span>
+1271 
+1272 <a name="_sub5" href="#_subfunctions" class="code">function A = rgb2grey(A)</a>
+1273     A = cast(reshape(reshape(single(A), [], 3) * single([0.299; 0.587; 0.114]), size(A, 1), size(A, 2)), class(A)); <span class="comment">% #ok&lt;ZEROLIKE&gt;</span>
+1274 <span class="keyword">end</span>
+1275 
+1276 <a name="_sub6" href="#_subfunctions" class="code">function A = check_greyscale(A)</a>
+1277     <span class="comment">% Check if the image is greyscale</span>
+1278     <span class="keyword">if</span> size(A, 3) == 3 &amp;&amp; <span class="keyword">...</span>
+1279             all(reshape(A(:,:,1) == A(:,:,2), [], 1)) &amp;&amp; <span class="keyword">...</span>
+1280             all(reshape(A(:,:,2) == A(:,:,3), [], 1))
+1281         A = A(:,:,1); <span class="comment">% Save only one channel for 8-bit output</span>
+1282     <span class="keyword">end</span>
+1283 <span class="keyword">end</span>
+1284 
+1285 <a name="_sub7" href="#_subfunctions" class="code">function eps_remove_background(fname, count)</a>
+1286     <span class="comment">% Remove the background of an eps file</span>
+1287     <span class="comment">% Open the file</span>
+1288     fh = fopen(fname, <span class="string">'r+'</span>);
+1289     <span class="keyword">if</span> fh == -1
+1290         error(<span class="string">'Not able to open file %s.'</span>, fname);
+1291     <span class="keyword">end</span>
+1292     <span class="comment">% Read the file line by line</span>
+1293     <span class="keyword">while</span> count
+1294         <span class="comment">% Get the next line</span>
+1295         l = fgets(fh);
+1296         <span class="keyword">if</span> isequal(l, -1)
+1297             <span class="keyword">break</span>; <span class="comment">% Quit, no rectangle found</span>
+1298         <span class="keyword">end</span>
+1299         <span class="comment">% Check if the line contains the background rectangle</span>
+1300         <span class="keyword">if</span> isequal(regexp(l, <span class="string">' *0 +0 +\d+ +\d+ +r[fe] *[\n\r]+'</span>, <span class="string">'start'</span>), 1)
+1301             <span class="comment">% Set the line to whitespace and quit</span>
+1302             l(1:regexp(l, <span class="string">'[\n\r]'</span>, <span class="string">'start'</span>, <span class="string">'once'</span>)-1) = <span class="string">' '</span>;
+1303             fseek(fh, -numel(l), 0);
+1304             fprintf(fh, l);
+1305             <span class="comment">% Reduce the count</span>
+1306             count = count - 1;
+1307         <span class="keyword">end</span>
+1308     <span class="keyword">end</span>
+1309     <span class="comment">% Close the file</span>
+1310     fclose(fh);
+1311 <span class="keyword">end</span>
+1312 
+1313 <a name="_sub8" href="#_subfunctions" class="code">function b = isvector(options)</a>
+1314     b = options.pdf || options.eps;
+1315 <span class="keyword">end</span>
+1316 
+1317 <a name="_sub9" href="#_subfunctions" class="code">function b = isbitmap(options)</a>
+1318     b = options.png || options.tif || options.jpg || options.bmp || options.im || options.alpha;
+1319 <span class="keyword">end</span>
+1320 
+1321 <span class="comment">% Helper function</span>
+1322 <a name="_sub10" href="#_subfunctions" class="code">function A = make_cell(A)</a>
+1323     <span class="keyword">if</span> ~iscell(A)
+1324         A = {A};
+1325     <span class="keyword">end</span>
+1326 <span class="keyword">end</span>
+1327 
+1328 <a name="_sub11" href="#_subfunctions" class="code">function add_bookmark(fname, bookmark_text)</a>
+1329     <span class="comment">% Adds a bookmark to the temporary EPS file after %%EndPageSetup</span>
+1330     <span class="comment">% Read in the file</span>
+1331     fh = fopen(fname, <span class="string">'r'</span>);
+1332     <span class="keyword">if</span> fh == -1
+1333         error(<span class="string">'File %s not found.'</span>, fname);
+1334     <span class="keyword">end</span>
+1335     <span class="keyword">try</span>
+1336         fstrm = fread(fh, <span class="string">'*char'</span>)';
+1337     <span class="keyword">catch</span> ex
+1338         fclose(fh);
+1339         rethrow(ex);
+1340     <span class="keyword">end</span>
+1341     fclose(fh);
+1342 
+1343     <span class="comment">% Include standard pdfmark prolog to maximize compatibility</span>
+1344     fstrm = strrep(fstrm, <span class="string">'%%BeginProlog'</span>, sprintf(<span class="string">'%%%%BeginProlog\n/pdfmark where {pop} {userdict /pdfmark /cleartomark load put} ifelse'</span>));
+1345     <span class="comment">% Add page bookmark</span>
+1346     fstrm = strrep(fstrm, <span class="string">'%%EndPageSetup'</span>, sprintf(<span class="string">'%%%%EndPageSetup\n[ /Title (%s) /OUT pdfmark'</span>,bookmark_text));
+1347 
+1348     <span class="comment">% Write out the updated file</span>
+1349     fh = fopen(fname, <span class="string">'w'</span>);
+1350     <span class="keyword">if</span> fh == -1
+1351         error(<span class="string">'Unable to open %s for writing.'</span>, fname);
+1352     <span class="keyword">end</span>
+1353     <span class="keyword">try</span>
+1354         fwrite(fh, fstrm, <span class="string">'char*1'</span>);
+1355     <span class="keyword">catch</span> ex
+1356         fclose(fh);
+1357         rethrow(ex);
+1358     <span class="keyword">end</span>
+1359     fclose(fh);
+1360 <span class="keyword">end</span>
+1361 
+1362 <a name="_sub12" href="#_subfunctions" class="code">function set_tick_mode(Hlims, ax)</a>
+1363     <span class="comment">% Set the tick mode of linear axes to manual</span>
+1364     <span class="comment">% Leave log axes alone as these are tricky</span>
+1365     M = get(Hlims, [ax <span class="string">'Scale'</span>]);
+1366     <span class="keyword">if</span> ~iscell(M)
+1367         M = {M};
+1368     <span class="keyword">end</span>
+1369     <span class="comment">%idx = cellfun(@(c) strcmp(c, 'linear'), M);</span>
+1370     idx = find(strcmp(M,<span class="string">'linear'</span>));
+1371     <span class="comment">%set(Hlims(idx), [ax 'TickMode'], 'manual');  % issue #187</span>
+1372     <span class="comment">%set(Hlims(idx), [ax 'TickLabelMode'], 'manual');  % this hides exponent label in HG2!</span>
+1373     <span class="keyword">for</span> idx2 = 1 : numel(idx)
+1374         <span class="keyword">try</span>
+1375             <span class="comment">% Fix for issue #187 - only set manual ticks when no exponent is present</span>
+1376             hAxes = Hlims(idx(idx2));
+1377             props = {[ax <span class="string">'TickMode'</span>],<span class="string">'manual'</span>, [ax <span class="string">'TickLabelMode'</span>],<span class="string">'manual'</span>};
+1378             tickVals = get(hAxes,[ax <span class="string">'Tick'</span>]);
+1379             tickStrs = get(hAxes,[ax <span class="string">'TickLabel'</span>]);
+1380             <span class="keyword">try</span> <span class="comment">% Fix issue #236</span>
+1381                 exponents = [hAxes.([ax <span class="string">'Axis'</span>]).SecondaryLabel];
+1382             <span class="keyword">catch</span>
+1383                 exponents = [hAxes.([ax <span class="string">'Ruler'</span>]).SecondaryLabel];
+1384             <span class="keyword">end</span>
+1385             <span class="keyword">if</span> isempty([exponents.String])
+1386                 <span class="comment">% Fix for issue #205 - only set manual ticks when the Ticks number match the TickLabels number</span>
+1387                 <span class="keyword">if</span> numel(tickVals) == numel(tickStrs)
+1388                     set(hAxes, props{:});  <span class="comment">% no exponent and matching ticks, so update both ticks and tick labels to manual</span>
+1389                 <span class="keyword">end</span>
+1390             <span class="keyword">end</span>
+1391         <span class="keyword">catch</span>  <span class="comment">% probably HG1</span>
+1392             <span class="comment">% Fix for issue #220 - exponent is removed in HG1 when TickMode is 'manual' (internal Matlab bug)</span>
+1393             <span class="keyword">if</span> isequal(tickVals, str2num(tickStrs)') <span class="comment">%#ok&lt;ST2NM&gt;</span>
+1394                 set(hAxes, props{:});  <span class="comment">% revert back to old behavior</span>
+1395             <span class="keyword">end</span>
+1396         <span class="keyword">end</span>
+1397     <span class="keyword">end</span>
+1398 <span class="keyword">end</span>
+1399 
+1400 <a name="_sub13" href="#_subfunctions" class="code">function change_rgb_to_cmyk(fname)  </a><span class="comment">% convert RGB =&gt; CMYK within an EPS file</span>
+1401     <span class="comment">% Do post-processing on the eps file</span>
+1402     <span class="keyword">try</span>
+1403         <span class="comment">% Read the EPS file into memory</span>
+1404         fstrm = <a href="read_write_entire_textfile.html" class="code" title="function fstrm = read_write_entire_textfile(fname, fstrm)">read_write_entire_textfile</a>(fname);
+1405 
+1406         <span class="comment">% Replace all gray-scale colors</span>
+1407         fstrm = regexprep(fstrm, <span class="string">'\n([\d.]+) +GC\n'</span>, <span class="string">'\n0 0 0 ${num2str(1-str2num($1))} CC\n'</span>);
+1408         
+1409         <span class="comment">% Replace all RGB colors</span>
+1410         fstrm = regexprep(fstrm, <span class="string">'\n[0.]+ +[0.]+ +[0.]+ +RC\n'</span>, <span class="string">'\n0 0 0 1 CC\n'</span>);  <span class="comment">% pure black</span>
+1411         fstrm = regexprep(fstrm, <span class="string">'\n([\d.]+) +([\d.]+) +([\d.]+) +RC\n'</span>, <span class="string">'\n${sprintf(''%.4g '',[1-[str2num($1),str2num($2),str2num($3)]/max([str2num($1),str2num($2),str2num($3)]),1-max([str2num($1),str2num($2),str2num($3)])])} CC\n'</span>);
+1412 
+1413         <span class="comment">% Overwrite the file with the modified contents</span>
+1414         <a href="read_write_entire_textfile.html" class="code" title="function fstrm = read_write_entire_textfile(fname, fstrm)">read_write_entire_textfile</a>(fname, fstrm);
+1415     <span class="keyword">catch</span>
+1416         <span class="comment">% never mind - leave as is...</span>
+1417     <span class="keyword">end</span>
+1418 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

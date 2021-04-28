@@ -1,0 +1,9 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  CalibrateModelGeneration -> CalibratePatellaJoint;
+  CalibrateModelGenerationNum -> CalibratePatellaJoint;
+
+  CalibrateModelGeneration [URL="CalibrateModelGeneration.html"];
+  CalibrateModelGenerationNum [URL="CalibrateModelGenerationNum.html"];
+  CalibratePatellaJoint [URL="CalibratePatellaJoint.html"];
+}

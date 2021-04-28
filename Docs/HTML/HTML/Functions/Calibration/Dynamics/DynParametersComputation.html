@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of DynParametersComputation</title>
+  <meta name="keywords" content="DynParametersComputation">
+  <meta name="description" content="Computation of the inertial parameters of a stadium solid from its geometrical parameters">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- ../menu.html Calibration --><!-- menu.html Dynamics -->
+<h1>DynParametersComputation
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Computation of the inertial parameters of a stadium solid from its geometrical parameters</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [Masse,Zc,Ix,Iy,Iz] = DynParametersComputation(D,r0,t0,r1,t1,h) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Computation of the inertial parameters of a stadium solid from its geometrical parameters
+
+   INPUT
+   - D: density of the stadium solid
+   - r0/t0/r1/t1/h: geometrical parameters of the stadium solid
+   OUTPUT
+   - Masse: mass of the solid
+   - Zc: position of the center of mass along the principal axis
+   - Ix: moment of inertia on x-axis
+   - Iy: moment of inertia on y-axis
+   - Iz: moment of inertia on z-axis
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="DynCalibOptimization.html" class="code" title="function [Human_model] = DynCalibOptimization(ModelParameters, AnalysisParameters, BiomechanicalModel)">DynCalibOptimization</a>	Calibration of the inertial parameters</li><li><a href="DynCalibOptimization_costfunction1.html" class="code" title="function [y] = DynCalibOptimization_costfunction1(X,Human_model,frame_opti,q,dq,ddq,p_pelvis,r_pelvis,v0,w,dv0,dw,BW,H,external_forces,g,nbframe)">DynCalibOptimization_costfunction1</a>	Cost function for the inertial calibration</li><li><a href="FindInitDynParam.html" class="code" title="function [Human_model] = FindInitDynParam(Human_model)">FindInitDynParam</a>	Identification of the stadium solid parameters from inertial parameters</li><li><a href="nonlcon_DynCalib1.html" class="code" title="function [c,ceq] = nonlcon_DynCalib1(X,X0,Human_model,CalibOptiParameters,list_symmetry) %#ok<INUSD>">nonlcon_DynCalib1</a>	Non-linear constraints for the inertial calibration</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function val=F1(a,b)</a></li><li><a href="#_sub2" class="code">function val=F2(a,b)</a></li><li><a href="#_sub3" class="code">function val=F3(a,b)</a></li><li><a href="#_sub4" class="code">function val=F4(a,b)</a></li><li><a href="#_sub5" class="code">function val=F5(a,b)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Masse,Zc,Ix,Iy,Iz] = DynParametersComputation(D,r0,t0,r1,t1,h)</a>
+0002 <span class="comment">% Computation of the inertial parameters of a stadium solid from its geometrical parameters</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - D: density of the stadium solid</span>
+0006 <span class="comment">%   - r0/t0/r1/t1/h: geometrical parameters of the stadium solid</span>
+0007 <span class="comment">%   OUTPUT</span>
+0008 <span class="comment">%   - Masse: mass of the solid</span>
+0009 <span class="comment">%   - Zc: position of the center of mass along the principal axis</span>
+0010 <span class="comment">%   - Ix: moment of inertia on x-axis</span>
+0011 <span class="comment">%   - Iy: moment of inertia on y-axis</span>
+0012 <span class="comment">%   - Iz: moment of inertia on z-axis</span>
+0013 <span class="comment">%________________________________________________________</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Licence</span>
+0016 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0017 <span class="comment">%________________________________________________________</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0020 <span class="comment">% Georges Dumont</span>
+0021 <span class="comment">%________________________________________________________</span>
+0022 
+0023 <span class="keyword">if</span> r0 ~= 0
+0024     a = (r1-r0)/r0;
+0025     <span class="keyword">if</span> t0 ~= 0
+0026         b=(t1-t0)/t0;
+0027         <span class="comment">% Masse</span>
+0028         Masse = D*h*r0*(4*t0*<a href="#_sub1" class="code" title="subfunction val=F1(a,b)">F1</a>(a,b) + pi*r0*<a href="#_sub1" class="code" title="subfunction val=F1(a,b)">F1</a>(a,a));
+0029         <span class="comment">% Position du centre de masse</span>
+0030         Zc=D*h^2*(4*r0*t0*<a href="#_sub2" class="code" title="subfunction val=F2(a,b)">F2</a>(a,b)+pi*r0^2*<a href="#_sub2" class="code" title="subfunction val=F2(a,b)">F2</a>(a,a))/Masse;
+0031         <span class="comment">% Inertie</span>
+0032         intz2Adz=4*r0*t0*<a href="#_sub3" class="code" title="subfunction val=F3(a,b)">F3</a>(a,b) + pi*r0^2*<a href="#_sub3" class="code" title="subfunction val=F3(a,b)">F3</a>(a, a) ;
+0033         intJxdz=4*r0*t0^3*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(a,b)/3 + pi*r0^4*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(a, a)/4;
+0034         intJydz=4*r0*t0^3*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(a,b)/3 + pi*r0^2*t0^2*<a href="#_sub5" class="code" title="subfunction val=F5(a,b)">F5</a>(a,b) + 8*r0^3*t0*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(b,a)/3 + pi*r0^4*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(a,a)/4;
+0035         Iz=D*h*(4*r0*t0^3*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(a,b)/3 + pi*r0^2*t0^2*<a href="#_sub5" class="code" title="subfunction val=F5(a,b)">F5</a>(a,b) + 4*r0^3*t0*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(b,a) + pi*r0^4*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(a,a)/2); 
+0036     <span class="keyword">else</span>
+0037         Masse = D*h*r0*(pi*r0*<a href="#_sub1" class="code" title="subfunction val=F1(a,b)">F1</a>(a,a));
+0038         Zc=D*h^2*(pi*r0^2*<a href="#_sub2" class="code" title="subfunction val=F2(a,b)">F2</a>(a,a))/Masse;
+0039         intz2Adz= pi*r0^2*<a href="#_sub3" class="code" title="subfunction val=F3(a,b)">F3</a>(a,a) ;
+0040         intJxdz=pi*r0^4*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(a,a)/4;
+0041         intJydz= pi*r0^4*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(a,a)/4;
+0042         Iz=D*h*(pi*r0^4*<a href="#_sub4" class="code" title="subfunction val=F4(a,b)">F4</a>(a,a)/2); 
+0043     <span class="keyword">end</span>
+0044     <span class="comment">% Inertie</span>
+0045     Ix0=D*h*intJxdz+D*h^3*intz2Adz;
+0046     Ix=Ix0-Masse*Zc^2;
+0047     Iy0=D*h*intJydz+D*h^3*intz2Adz;
+0048     Iy=Iy0-Masse*Zc^2;
+0049 <span class="keyword">else</span>
+0050     Masse = 0;
+0051     Zc = 3*h/4;
+0052     Ix = 0;
+0053     Iy = 0;
+0054     Iz = 0;
+0055 <span class="keyword">end</span>
+0056 
+0057 <span class="keyword">end</span>
+0058 
+0059 <a name="_sub1" href="#_subfunctions" class="code">function val=F1(a,b)</a>
+0060 val=1 + (a+b)/2 + (a*b)/3;
+0061 <span class="keyword">end</span>
+0062 
+0063 <a name="_sub2" href="#_subfunctions" class="code">function val=F2(a,b)</a>
+0064 val=1/2 + (a+b)/3 + (a*b)/4;
+0065 <span class="keyword">end</span>
+0066 
+0067 <a name="_sub3" href="#_subfunctions" class="code">function val=F3(a,b)</a>
+0068 val=1/3 + (a+b)/4 + (a*b)/5;
+0069 <span class="keyword">end</span>
+0070 
+0071 <a name="_sub4" href="#_subfunctions" class="code">function val=F4(a,b)</a>
+0072 val = 1 + (a + 3*b)/2 + (3*a*b + 3*b^2)/3 + (3*a*b^2+ b^3)/4 + (a*b^3)/5;
+0073 <span class="keyword">end</span>
+0074 
+0075 <a name="_sub5" href="#_subfunctions" class="code">function val=F5(a,b)</a>
+0076 val= 1+ (2*a+ 2*b)/2 + (a^2 + 4*a*b + b^2)/3 + 2*a*b*(a + b)/4 + (a^2*b^2)/5; 
+0077 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

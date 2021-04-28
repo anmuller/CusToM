@@ -1,0 +1,216 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of distance_point_wrap</title>
+  <meta name="keywords" content="distance_point_wrap">
+  <meta name="description" content="Computation of the distance between two points">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html AlgoMathsModel -->
+<h1>distance_point_wrap
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Computation of the distance between two points</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [L,Typ,wrapside] = distance_point_wrap(Point1,Bone1,Point2,Bone2,Human_model,q,Wrap,wrapside,EnforcedWrap) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Computation of the distance between two points
+
+   INPUT
+   - Point1: position of the anatomical position of the first studied
+   point on its solid
+   - Bone1: number of the solid containing the first studied point
+   - Point2: position of the anatomical position of the second studied
+   point on its solid
+   - Bone2: number of the solid containing the second studied point
+   - Human_model: osteo-articular model (see the Documentation for the structure)
+   - q: vector of joint coordinates at a given instant
+   OUTPUT
+   - L: distance between the two studied points
+   - Typ: relative orientation of the two points (-1 ou 1)
+   - Wrapside: side of wrapping (1 or 2)
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>	Computation of the Rodrigues equation</li><li><a href="find_solid_path.html" class="code" title="function [solid_1_path,solid_2_path]=find_solid_path(Human_model,i,k)">find_solid_path</a>	Identification of the hierarchical path between two solids</li><li><a href="../../Functions/MuscleForces/Wrapping/CylinderWrapping.html" class="code" title="function [L,Q,T,AnimPt_in_Rw,ind]=CylinderWrapping(P,S,R,ind)">CylinderWrapping</a>	Provide the length wrapping around a cylinder</li><li><a href="../../Functions/MuscleForces/Wrapping/Intersect_line_cylinder.html" class="code" title="function [bool]=Intersect_line_cylinder(P1,P2,R)">Intersect_line_cylinder</a>	Verify if the line intersect the cylinder</li><li><a href="../../Functions/MuscleForces/Wrapping/Intersect_line_sphere.html" class="code" title="function [bool] = Intersect_line_sphere(P1, P2, R)">Intersect_line_sphere</a>	Verify if the line intersect the sphere</li><li><a href="../../Functions/MuscleForces/Wrapping/SphereWrapping.html" class="code" title="function [L, Q, T, AnimPt_in_Rw, ind] = SphereWrapping(P, S, R,ind)">SphereWrapping</a>	Provide the length wrapping around a shere</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Functions/MuscleForces/Muscle_lengthNum.html" class="code" title="function [Lmt,Wrapside] = Muscle_lengthNum(Human_model,Muscles,q)">Muscle_lengthNum</a>	Computation of the muscle/tendon length</li><li><a href="../../Functions/MuscleForces/Wrapping/WrappingLocations.html" class="code" title="function [BiomechanicalModel]=WrappingLocations(BiomechanicalModel)">WrappingLocations</a>	Location of where are wraps</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [L,Typ,wrapside] = distance_point_wrap(Point1,Bone1,Point2,Bone2,Human_model,q,Wrap,wrapside,EnforcedWrap)</a>
+0002 <span class="comment">% Computation of the distance between two points</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - Point1: position of the anatomical position of the first studied</span>
+0006 <span class="comment">%   point on its solid</span>
+0007 <span class="comment">%   - Bone1: number of the solid containing the first studied point</span>
+0008 <span class="comment">%   - Point2: position of the anatomical position of the second studied</span>
+0009 <span class="comment">%   point on its solid</span>
+0010 <span class="comment">%   - Bone2: number of the solid containing the second studied point</span>
+0011 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the structure)</span>
+0012 <span class="comment">%   - q: vector of joint coordinates at a given instant</span>
+0013 <span class="comment">%   OUTPUT</span>
+0014 <span class="comment">%   - L: distance between the two studied points</span>
+0015 <span class="comment">%   - Typ: relative orientation of the two points (-1 ou 1)</span>
+0016 <span class="comment">%   - Wrapside: side of wrapping (1 or 2)</span>
+0017 <span class="comment">%________________________________________________________</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% Licence</span>
+0020 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0021 <span class="comment">%________________________________________________________</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0024 <span class="comment">% Georges Dumont</span>
+0025 <span class="comment">%________________________________________________________</span>
+0026 
+0027 <span class="keyword">if</span> Bone1 == Bone2
+0028     A=Human_model(Bone1).anat_position{Point1,2};
+0029     B=Human_model(Bone2).anat_position{Point2,2};
+0030     L = norm(B-A);
+0031     Typ = sign(B(2)-A(2));
+0032     <span class="keyword">return</span>
+0033 <span class="keyword">end</span>
+0034 
+0035 <span class="comment">% finding the index of common antecedent (ppac:plus proche antecedent commun)</span>
+0036 t = 1;
+0037 t1 = <a href="find_solid_path.html" class="code" title="function [solid_1_path,solid_2_path]=find_solid_path(Human_model,i,k)">find_solid_path</a>(Human_model,Bone1,1);
+0038 t2 = <a href="find_solid_path.html" class="code" title="function [solid_1_path,solid_2_path]=find_solid_path(Human_model,i,k)">find_solid_path</a>(Human_model,Bone2,1);
+0039 t3 = <a href="find_solid_path.html" class="code" title="function [solid_1_path,solid_2_path]=find_solid_path(Human_model,i,k)">find_solid_path</a>(Human_model,Wrap.num_solid,1);
+0040 <span class="keyword">while</span> t&lt;=min([numel(t1),numel(t2),numel(t3)]) &amp;&amp; t1(t)==t2(t) &amp;&amp; t1(t)==t3(t)
+0041     ppac = t1(t);
+0042     ppac_t = t;
+0043     t = t + 1;
+0044 <span class="keyword">end</span>
+0045 
+0046 <span class="comment">% minimal paths</span>
+0047 solid1 = t1(ppac_t:end);
+0048 solid2 = t2(ppac_t:end);
+0049 wrap_path = t3(ppac_t:end);
+0050 
+0051 <span class="comment">% Direct kinematics initialization (Initialisation de la cin�atique directe)</span>
+0052 Human_model(ppac).p = zeros(3,1);
+0053 Human_model(ppac).R = eye(3);
+0054 
+0055 <span class="comment">% Computation of coordinates of point A (calcul des coordonn�s du point A)</span>
+0056 <span class="keyword">if</span> numel(solid1)==1
+0057     A = Human_model(Bone1).c+Human_model(Bone1).anat_position{Point1,2};
+0058 <span class="keyword">else</span>
+0059     <span class="keyword">for</span> n=solid1(2:end)
+0060         m = Human_model(n).mother;
+0061         Human_model(n).p = Human_model(m).R * Human_model(n).b + Human_model(m).p;
+0062         Human_model(n).R = Human_model(m).R * <a href="Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(n).a,q(n)) * <a href="Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(n).u,Human_model(n).theta);
+0063     <span class="keyword">end</span>
+0064     l = solid1(end);
+0065     Human_model(l).c_global = Human_model(l).p + Human_model(l).R * Human_model(l).c;
+0066     A = Human_model(l).c_global + Human_model(l).R * Human_model(Bone1).anat_position{Point1,2};
+0067 <span class="keyword">end</span>
+0068 
+0069 <span class="comment">% Computation of coordinates of point B (calcul des coordonn�s du point B)</span>
+0070 <span class="keyword">if</span> numel(solid2)==1
+0071     B = Human_model(Bone2).c+Human_model(Bone2).anat_position{Point2,2};
+0072 <span class="keyword">else</span>
+0073     <span class="keyword">for</span> n=solid2(2:end)
+0074         m = Human_model(n).mother;
+0075         Human_model(n).p = Human_model(m).R * Human_model(n).b + Human_model(m).p;
+0076         Human_model(n).R = Human_model(m).R * <a href="Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(n).a,q(n)) * <a href="Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(n).u,Human_model(n).theta);
+0077     <span class="keyword">end</span>
+0078     l = solid2(end);
+0079     Human_model(l).c_global = Human_model(l).p + Human_model(l).R * Human_model(l).c;
+0080     B = Human_model(l).c_global + Human_model(l).R * Human_model(Bone2).anat_position{Point2,2};
+0081 <span class="keyword">end</span>
+0082 
+0083 
+0084 <span class="comment">% Computation of coordinates of the Wrap</span>
+0085 <span class="keyword">if</span> numel(wrap_path)==1
+0086     Wc = Human_model(Wrap.num_solid).c+Wrap.location; <span class="comment">% wrap_center</span>
+0087     R_i_w = Wrap.orientation;
+0088     T_Ri_Rw = [R_i_w, Wc;[0 0 0],1];
+0089 <span class="keyword">else</span>
+0090     <span class="keyword">for</span> n=wrap_path(2:end)
+0091         m = Human_model(n).mother;
+0092         Human_model(n).p = Human_model(m).R * Human_model(n).b + Human_model(m).p;
+0093         Human_model(n).R = Human_model(m).R * <a href="Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(n).a,q(n)) * <a href="Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(n).u,Human_model(n).theta);
+0094     <span class="keyword">end</span>
+0095     l = wrap_path(end);
+0096     Human_model(l).c_global = Human_model(l).p + Human_model(l).R * Human_model(l).c;
+0097     Wc = Human_model(l).c_global + Human_model(l).R * Wrap.location; <span class="comment">% wrap_center</span>
+0098     R_i_w = Human_model(l).R*Wrap.orientation;
+0099     T_Ri_Rw = [R_i_w, Wc;[0 0 0],1];
+0100 <span class="keyword">end</span>
+0101 
+0102 <span class="comment">% fastscatter3(A); hold on;</span>
+0103 <span class="comment">% fastscatter3(B)</span>
+0104 <span class="comment">% fastscatter3(Wc)</span>
+0105 
+0106 <span class="comment">% Compute A and B in Wrap frame</span>
+0107 Aw=T_Ri_Rw\[A;1];   Aw(4)=[];
+0108 Bw=T_Ri_Rw\[B;1];   Bw(4)=[];
+0109 
+0110 <span class="comment">% subplot(1,2,2)</span>
+0111 <span class="comment">% fastscatter3(Aw); hold on;</span>
+0112 <span class="comment">% fastscatter3(Bw)</span>
+0113 <span class="comment">% fastscatter3([0 0 0]); axis equal</span>
+0114 <span class="comment">% V�ifier les longueurs les distances entre les points</span>
+0115 
+0116 
+0117 <span class="comment">% fastscatter3(A); hold on;</span>
+0118 <span class="comment">% fastscatter3(B)</span>
+0119 <span class="comment">% fastscatter3(Wc)</span>
+0120 
+0121 
+0122 <span class="comment">% Is there an intersection between the cylinder and the straight line</span>
+0123 <span class="comment">% between Aw and Bw</span>
+0124 <span class="comment">% intersection_droite_cylindre(Aw, Bw, [0 0 0], Wrap.radius, -Wrap.h, +Wrap.h)</span>
+0125 <span class="keyword">if</span> Wrap.type==<span class="string">'C'</span>
+0126     <span class="keyword">if</span> <a href="../../Functions/MuscleForces/Wrapping/Intersect_line_cylinder.html" class="code" title="function [bool]=Intersect_line_cylinder(P1,P2,R)">Intersect_line_cylinder</a>(Aw, Bw, Wrap.R) || EnforcedWrap
+0127         [L,~,~,~,wrapside]=<a href="../../Functions/MuscleForces/Wrapping/CylinderWrapping.html" class="code" title="function [L,Q,T,AnimPt_in_Rw,ind]=CylinderWrapping(P,S,R,ind)">CylinderWrapping</a>(Aw, Bw, Wrap.R, wrapside);
+0128         Typ = sign(Bw(2)-Aw(2));
+0129     <span class="keyword">else</span>
+0130         <span class="comment">%Distance between A and B</span>
+0131         L = norm(B-A);
+0132         Typ = sign(B(2)-A(2));
+0133         wrapside=[];
+0134     <span class="keyword">end</span>
+0135 <span class="keyword">elseif</span> Wrap.type==<span class="string">'S'</span>
+0136     <span class="keyword">if</span> <a href="../../Functions/MuscleForces/Wrapping/Intersect_line_sphere.html" class="code" title="function [bool] = Intersect_line_sphere(P1, P2, R)">Intersect_line_sphere</a>(Aw, Bw, Wrap.R) || EnforcedWrap
+0137         [L,~,~,~,wrapside]=<a href="../../Functions/MuscleForces/Wrapping/SphereWrapping.html" class="code" title="function [L, Q, T, AnimPt_in_Rw, ind] = SphereWrapping(P, S, R,ind)">SphereWrapping</a>(Aw, Bw, Wrap.R, wrapside);
+0138         Typ = sign(Bw(2)-Aw(2));
+0139     <span class="keyword">else</span>
+0140         <span class="comment">%Distance between A and B</span>
+0141         L = norm(B-A);
+0142         Typ = sign(B(2)-A(2));
+0143         wrapside=[];
+0144     <span class="keyword">end</span>
+0145 <span class="keyword">end</span>
+0146 
+0147 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of MuscleCalibrationAnthropo</title>
+  <meta name="keywords" content="MuscleCalibrationAnthropo">
+  <meta name="description" content="% Model of reference">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- ../menu.html Calibration --><!-- menu.html Muscle -->
+<h1>MuscleCalibrationAnthropo
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>% Model of reference</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [BiomechanicalModelscaled]=MuscleCalibrationAnthropo(ModelParameters,AnalysisParameters,BiomechanicalModel) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">% Model of reference</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="GenerateGenericModel.html" class="code" title="function BiomechanicalModel=GenerateGenericModel(ModelParameters)">GenerateGenericModel</a>	</li><li><a href="Maximal_Isometric_Force_Scaling_Steele.html" class="code" title="function [F_scaled] = Maximal_Isometric_Force_Scaling_Steele(Muscles,ModelParameters,H_ref)">Maximal_Isometric_Force_Scaling_Steele</a>	MAXIMAL_ISOMETRIC_FORCE_SCALING_ Summary of this function goes here</li><li><a href="../../../Functions/MuscleForces/MuscleLengthComputationNum.html" class="code" title="function [L] = MuscleLengthComputationNum(BiomechanicalModel,q)">MuscleLengthComputationNum</a>	Computation of the moment arms matrix (numerical version)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Functions/Calibration/CalibrateModelGenerationNum.html" class="code" title="function [] = CalibrateModelGenerationNum(ModelParameters,AnalysisParameters)">CalibrateModelGenerationNum</a>	Generation of the calibrated musculoskeletal model</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [BiomechanicalModelscaled]=MuscleCalibrationAnthropo(ModelParameters,AnalysisParameters,BiomechanicalModel)</a>
+0002 
+0003 <span class="comment">%% Model of reference</span>
+0004 RefBiomechanicalModel = <a href="GenerateGenericModel.html" class="code" title="function BiomechanicalModel=GenerateGenericModel(ModelParameters)">GenerateGenericModel</a>(ModelParameters);
+0005 
+0006 <span class="keyword">if</span> isfield(BiomechanicalModel,<span class="string">'Generalized_Coordinates'</span>)
+0007     q=BiomechanicalModel.Generalized_Coordinates.q_complete;
+0008     Nb_q= size(q,1);
+0009 <span class="keyword">else</span>
+0010     Nb_q = numel(Human_model)-6;
+0011 <span class="keyword">end</span>
+0012 
+0013 Nb_m=length(RefBiomechanicalModel.Muscles);
+0014 
+0015 
+0016 <span class="comment">%% Scaling l0 and ls</span>
+0017 <span class="comment">% tendon slack lengths</span>
+0018 <span class="comment">% optimal musce lengths</span>
+0019 
+0020 <span class="comment">% Measuring Musculotendon lengths of the model in reference position with</span>
+0021 <span class="comment">% all DoF at zero.</span>
+0022 <span class="comment">% for the reference model and the scaled model.</span>
+0023 
+0024 L_MT_ref = <a href="../../../Functions/MuscleForces/MuscleLengthComputationNum.html" class="code" title="function [L] = MuscleLengthComputationNum(BiomechanicalModel,q)">MuscleLengthComputationNum</a>(RefBiomechanicalModel,zeros(Nb_q,1));
+0025 L_MT_scaled = <a href="../../../Functions/MuscleForces/MuscleLengthComputationNum.html" class="code" title="function [L] = MuscleLengthComputationNum(BiomechanicalModel,q)">MuscleLengthComputationNum</a>(BiomechanicalModel,zeros(Nb_q,1));
+0026 
+0027 BiomechanicalModelscaled = BiomechanicalModel;
+0028 
+0029 <span class="comment">% Homothetic factors for anthropometric scaling of muscle paramaters</span>
+0030 <span class="comment">% optimal muscle fiber lengths l0</span>
+0031 <span class="comment">% tendon slack length ls</span>
+0032 
+0033 k_m = L_MT_scaled ./ L_MT_ref;
+0034 
+0035 BiomechanicalModelscaled.AnthropometricMuscleScaling=k_m;
+0036 
+0037 <span class="keyword">for</span> ii=1:Nb_m
+0038     
+0039 BiomechanicalModelscaled.Muscles(ii).l0 = <span class="keyword">...</span>
+0040     k_m(ii)*BiomechanicalModel.Muscles(ii).l0;
+0041 
+0042 BiomechanicalModelscaled.Muscles(ii).ls = <span class="keyword">...</span>
+0043     k_m(ii)*BiomechanicalModel.Muscles(ii).ls;
+0044 
+0045 <span class="keyword">end</span>
+0046 
+0047 <span class="comment">%% Scaling F0</span>
+0048 <span class="comment">% maximal isometric forces</span>
+0049 
+0050 <span class="comment">% functions in the AnalysisParameters struct.</span>
+0051 F0_scaled = <a href="Maximal_Isometric_Force_Scaling_Steele.html" class="code" title="function [F_scaled] = Maximal_Isometric_Force_Scaling_Steele(Muscles,ModelParameters,H_ref)">Maximal_Isometric_Force_Scaling_Steele</a>(BiomechanicalModel.Muscles,ModelParameters);
+0052 
+0053 <span class="keyword">for</span> ii=1:Nb_m
+0054     BiomechanicalModelscaled.Muscles(ii).f0 = <span class="keyword">...</span>
+0055     F0_scaled(ii);
+0056 <span class="keyword">end</span>
+0057 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

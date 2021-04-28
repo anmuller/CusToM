@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ForwardPositions</title>
+  <meta name="keywords" content="ForwardPositions">
+  <meta name="description" content="Computation of spacial position and rotation for each solid starting from">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html Kinematics -->
+<h1>ForwardPositions
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Computation of spacial position and rotation for each solid starting from</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Human_model] = ForwardPositions(Human_model,j) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Computation of spacial position and rotation for each solid starting from
+ j
+
+   INPUT
+   - Human_model: osteo-articular model (see the Documentation for the
+   structure)
+   - j: current solid
+   OUTPUT
+   - Human_model: osteo-articular model with additional computations (see
+   the Documentation for the structure)
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>	Computation of the Rodrigues equation</li><li><a href="ForwardPositions.html" class="code" title="function [Human_model] = ForwardPositions(Human_model,j)">ForwardPositions</a>	Computation of spacial position and rotation for each solid starting from</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="ForwardPositions.html" class="code" title="function [Human_model] = ForwardPositions(Human_model,j)">ForwardPositions</a>	Computation of spacial position and rotation for each solid starting from</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Human_model] = ForwardPositions(Human_model,j)</a>
+0002 <span class="comment">% Computation of spacial position and rotation for each solid starting from</span>
+0003 <span class="comment">% j</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   INPUT</span>
+0006 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the</span>
+0007 <span class="comment">%   structure)</span>
+0008 <span class="comment">%   - j: current solid</span>
+0009 <span class="comment">%   OUTPUT</span>
+0010 <span class="comment">%   - Human_model: osteo-articular model with additional computations (see</span>
+0011 <span class="comment">%   the Documentation for the structure)</span>
+0012 <span class="comment">%________________________________________________________</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Licence</span>
+0015 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0016 <span class="comment">%________________________________________________________</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0019 <span class="comment">% Georges Dumont</span>
+0020 <span class="comment">%________________________________________________________</span>
+0021 
+0022 <span class="keyword">if</span> j==0
+0023     <span class="keyword">return</span>;
+0024 <span class="keyword">end</span>
+0025 
+0026 <span class="comment">%% Position vector and Rotation Matrix computation</span>
+0027 <span class="keyword">if</span> j~=1
+0028     i=Human_model(j).mother;
+0029     
+0030     <span class="comment">% Pin joint</span>
+0031     <span class="keyword">if</span> Human_model(j).joint == 1    
+0032         Human_model(j).p=Human_model(i).R*Human_model(j).b+Human_model(i).p;
+0033         Human_model(j).R=Human_model(i).R*<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).a,Human_model(j).q)*<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).u,Human_model(j).theta);
+0034     <span class="keyword">end</span>
+0035     
+0036     <span class="comment">% Slide joint</span>
+0037     <span class="keyword">if</span> Human_model(j).joint == 2    
+0038         Human_model(j).p=Human_model(i).R*Human_model(j).b+Human_model(i).R*Human_model(j).a*Human_model(j).q+Human_model(i).p;
+0039         Human_model(j).R=Human_model(i).R*<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).u,Human_model(j).theta);
+0040     <span class="keyword">end</span>    
+0041 <span class="keyword">end</span>
+0042 
+0043 Human_model=<a href="ForwardPositions.html" class="code" title="function [Human_model] = ForwardPositions(Human_model,j)">ForwardPositions</a>(Human_model,Human_model(j).sister);
+0044 Human_model=<a href="ForwardPositions.html" class="code" title="function [Human_model] = ForwardPositions(Human_model,j)">ForwardPositions</a>(Human_model,Human_model(j).child);
+0045 
+0046 <span class="keyword">end</span>
+0047</pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

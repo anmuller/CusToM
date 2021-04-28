@@ -1,0 +1,22 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  DynCalibOptimization -> DynCalibOptimization_costfunction1;
+  DynCalibOptimization -> DynParametersComputation;
+  DynCalibOptimization -> FindFrameDynCalibration;
+  DynCalibOptimization -> nonlcon_DynCalib1;
+  DynCalibOptimization_costfunction1 -> DynParametersComputation;
+  DynamicCalibration -> DynCalibOptimization;
+  DynamicCalibration -> FindInitDynParam;
+  FindInitDynParam -> DynParametersComputation;
+  FindInitDynParam -> distance_point_anthropo;
+  nonlcon_DynCalib1 -> DynParametersComputation;
+
+  DynCalibOptimization [URL="DynCalibOptimization.html"];
+  DynCalibOptimization_costfunction1 [URL="DynCalibOptimization_costfunction1.html"];
+  DynParametersComputation [URL="DynParametersComputation.html"];
+  DynamicCalibration [URL="DynamicCalibration.html"];
+  FindFrameDynCalibration [URL="FindFrameDynCalibration.html"];
+  FindInitDynParam [URL="FindInitDynParam.html"];
+  distance_point_anthropo [URL="distance_point_anthropo.html"];
+  nonlcon_DynCalib1 [URL="nonlcon_DynCalib1.html"];
+}

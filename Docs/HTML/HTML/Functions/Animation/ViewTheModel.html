@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ViewTheModel</title>
+  <meta name="keywords" content="ViewTheModel">
+  <meta name="description" content="View the model defined with Model Parameters">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html Animation -->
+<h1>ViewTheModel
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>View the model defined with Model Parameters</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> View the model defined with Model Parameters
+
+   INPUT
+
+   OUTPUT
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="PlotAnimation.html" class="code" title="function [varargout] = PlotAnimation(ModelParameters, AnimateParameters)">PlotAnimation</a>	Generation of an animation</li><li><a href="../../Functions/ExternLibrary/GIBBON/functions/cFigure.html" class="code" title="function [varargout]=cFigure(varargin)">cFigure</a>	function [h]=cFigure(figStruct)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% View the model defined with Model Parameters</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">%   INPUT</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   OUTPUT</span>
+0006 <span class="comment">%________________________________________________________</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% Licence</span>
+0009 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0010 <span class="comment">%________________________________________________________</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0013 <span class="comment">% Georges Dumont</span>
+0014 <span class="comment">%________________________________________________________</span>
+0015 
+0016 clear all
+0017 close all
+0018 load(<span class="string">'ModelParameters.mat'</span>)
+0019 
+0020 X=<a href="../../Functions/ExternLibrary/GIBBON/functions/cFigure.html" class="code" title="function [varargout]=cFigure(varargin)">cFigure</a>; grid off; hold on; axis off;
+0021 XX=axes; set(XX,<span class="string">'visible'</span>,<span class="string">'off'</span>)
+0022 AnimateParameters.Mode = <span class="string">'GenerateParameters'</span>;
+0023 <span class="comment">% AnimateParameters.Mode = 'cFigure';</span>
+0024 AnimateParameters.seg_anim = 0;
+0025 AnimateParameters.bone_anim = 1;
+0026 AnimateParameters.mass_centers_anim = 0;
+0027 AnimateParameters.Global_mass_center_anim = 0;
+0028 AnimateParameters.muscles_anim = 1;
+0029 AnimateParameters.mod_marker_anim = 0;
+0030 AnimateParameters.exp_marker_anim = 0;
+0031 AnimateParameters.external_forces_anim = 0;
+0032 AnimateParameters.external_forces_pred = 0;
+0033 AnimateParameters.PictureFrame = 1;
+0034 AnimateParameters.ax = XX;
+0035 <a href="PlotAnimation.html" class="code" title="function [varargout] = PlotAnimation(ModelParameters, AnimateParameters)">PlotAnimation</a>(ModelParameters, AnimateParameters);
+0036 
+0037 view(2); axis equal; axis tight; axis vis3d; grid on; box on;
+0038 <span class="comment">% camlight left;</span>
+0039 axis off; axis manual;
+0040 lighting gouraud
+0041 ax=gca;
+0042 ax.Clipping = <span class="string">'off'</span>;
+0043 drawnow;</pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

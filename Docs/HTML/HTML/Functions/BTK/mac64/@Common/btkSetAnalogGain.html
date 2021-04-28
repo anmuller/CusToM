@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of btkSetAnalogGain</title>
+  <meta name="keywords" content="btkSetAnalogGain">
+  <meta name="description" content="BTKSETANALOGGAIN Modify analog's gain and return updated analogs.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html Functions --><!-- # BTK --><!-- ../menu.html mac64 --><!-- menu.html @Common -->
+<h1>btkSetAnalogGain
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>BTKSETANALOGGAIN Modify analog's gain and return updated analogs.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function btkSetAnalogGain(h, idx_or_label, new_gain) %#ok </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">BTKSETANALOGGAIN Modify analog's gain and return updated analogs.
+ 
+  BTKSETANALOGGAIN(H, INDEX, NEWGAIN) modifies analog's gain by NEWGAIN for 
+  the analog at the index INDEX.  NEWGAIN must be a value between 0 and 5 to represent:
+    - 0 : unknown gain
+    - 1 : +/- 10 volts
+    - 2 : +/- 5 volts
+    - 3 : +/- 2.5 volts
+    - 4 : +/- 1.25 volts
+    - 5 : +/- 1 volt
+
+  The analog to modify can also be selected by its LABEL.
+  BTKSETANALOGGAIN(H, LABEL, NEWGAIN)
+
+  This function can also returns an updated list of analogs.
+  ANALOGS = BTKSETANALOGGAIN(H, INDEX, NEWGAIN)
+  ANALOGS = BTKSETANALOGGAIN(H, LABEL, NEWGAIN)
+  The format of ANALOGS is the same than using the function &lt;a href=&quot;matlab:help btkGetAnalogs&quot;&gt;btkGetAnalogs&lt;/a&gt;
+
+  This function can also returns an updated list of analogs' informations.
+  [ANALOGS, ANALOGSINFO] = BTKSETANALOGGAIN(H, INDEX, NEWGAIN)
+  [ANALOGS, ANALOGSINFO] = BTKSETANALOGGAIN(H, LABEL, NEWGAIN)
+  The format of ANALOGSINFO is the same than using the function &lt;a href=&quot;matlab:help btkGetAnalogs&quot;&gt;btkGetAnalogs&lt;/a&gt;
+
+  The acquisition is represented by the handle H.  This handle is obtained
+  by the use of a btk* function.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Functions/BTK/linux64/btkAppendForcePlatformType2.html" class="code" title="function btkAppendForcePlatformType2(h, forces, moments, corners, origin, localFrame)">btkAppendForcePlatformType2</a>	BTKAPPENDFORCEPLATFORMTYPE2 Append a virtual force platform of type 2.</li><li><a href="../../../../Functions/BTK/linux64/btkEmulateC3Dserver.html" class="code" title="function itf = btkEmulateC3Dserver()">btkEmulateC3Dserver</a>	BTKEMULATEC3DSERVER Creates an emulated COM object for C3Dserver.</li><li><a href="../../../../Functions/BTK/mac64/btkAppendForcePlatformType2.html" class="code" title="function btkAppendForcePlatformType2(h, forces, moments, corners, origin, localFrame)">btkAppendForcePlatformType2</a>	BTKAPPENDFORCEPLATFORMTYPE2 Append a virtual force platform of type 2.</li><li><a href="../../../../Functions/BTK/mac64/btkEmulateC3Dserver.html" class="code" title="function itf = btkEmulateC3Dserver()">btkEmulateC3Dserver</a>	BTKEMULATEC3DSERVER Creates an emulated COM object for C3Dserver.</li><li><a href="../../../../Functions/BTK/win64/btkAppendForcePlatformType2.html" class="code" title="function btkAppendForcePlatformType2(h, forces, moments, corners, origin, localFrame)">btkAppendForcePlatformType2</a>	BTKAPPENDFORCEPLATFORMTYPE2 Append a virtual force platform of type 2.</li><li><a href="../../../../Functions/BTK/win64/btkEmulateC3Dserver.html" class="code" title="function itf = btkEmulateC3Dserver()">btkEmulateC3Dserver</a>	BTKEMULATEC3DSERVER Creates an emulated COM object for C3Dserver.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function btkSetAnalogGain(h, idx_or_label, new_gain) </a><span class="comment">%#ok</span>
+0002 <span class="comment">%BTKSETANALOGGAIN Modify analog's gain and return updated analogs.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%  BTKSETANALOGGAIN(H, INDEX, NEWGAIN) modifies analog's gain by NEWGAIN for</span>
+0005 <span class="comment">%  the analog at the index INDEX.  NEWGAIN must be a value between 0 and 5 to represent:</span>
+0006 <span class="comment">%    - 0 : unknown gain</span>
+0007 <span class="comment">%    - 1 : +/- 10 volts</span>
+0008 <span class="comment">%    - 2 : +/- 5 volts</span>
+0009 <span class="comment">%    - 3 : +/- 2.5 volts</span>
+0010 <span class="comment">%    - 4 : +/- 1.25 volts</span>
+0011 <span class="comment">%    - 5 : +/- 1 volt</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%  The analog to modify can also be selected by its LABEL.</span>
+0014 <span class="comment">%  BTKSETANALOGGAIN(H, LABEL, NEWGAIN)</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%  This function can also returns an updated list of analogs.</span>
+0017 <span class="comment">%  ANALOGS = BTKSETANALOGGAIN(H, INDEX, NEWGAIN)</span>
+0018 <span class="comment">%  ANALOGS = BTKSETANALOGGAIN(H, LABEL, NEWGAIN)</span>
+0019 <span class="comment">%  The format of ANALOGS is the same than using the function &lt;a href=&quot;matlab:help btkGetAnalogs&quot;&gt;btkGetAnalogs&lt;/a&gt;</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%  This function can also returns an updated list of analogs' informations.</span>
+0022 <span class="comment">%  [ANALOGS, ANALOGSINFO] = BTKSETANALOGGAIN(H, INDEX, NEWGAIN)</span>
+0023 <span class="comment">%  [ANALOGS, ANALOGSINFO] = BTKSETANALOGGAIN(H, LABEL, NEWGAIN)</span>
+0024 <span class="comment">%  The format of ANALOGSINFO is the same than using the function &lt;a href=&quot;matlab:help btkGetAnalogs&quot;&gt;btkGetAnalogs&lt;/a&gt;</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%  The acquisition is represented by the handle H.  This handle is obtained</span>
+0027 <span class="comment">%  by the use of a btk* function.</span>
+0028 
+0029 <span class="comment">%  Author: A. Barré</span>
+0030 <span class="comment">%  Copyright 2009-2013 Biomechanical ToolKit (BTK).</span>
+0031 
+0032 <span class="comment">% The following comment, MATLAB compiler pragma, is necessary to avoid</span>
+0033 <span class="comment">% compiling this M-file instead of linking against the MEX-file.  Don't remove.</span>
+0034 <span class="comment">%# mex</span>
+0035 
+0036 error(generatemsgid(<span class="string">'NotSupported'</span>),<span class="string">'MEX file for BTKSETANALOGGAIN not found'</span>);
+0037 
+0038 <span class="comment">% [EOF] btkSetAnalogGain.m</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

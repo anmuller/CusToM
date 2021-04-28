@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Gen_NonLinCon_ClosedLoop</title>
+  <meta name="keywords" content="Gen_NonLinCon_ClosedLoop">
+  <meta name="description" content="Non-linear constraints generation.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html Kinematics -->
+<h1>Gen_NonLinCon_ClosedLoop
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Non-linear constraints generation.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [c,ceq]=Gen_NonLinCon_ClosedLoop(Human_model,nbClosedLoop) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Non-linear constraints generation.
+ These constraints are used in the inverse kinematics step for closed loop
+
+   INPUT
+   - Human_model: osteo-articular model (see the Documentation for the
+   structure)
+   - nb_ClosedLoop: number of closed loop in the model
+   OUTPUT
+   - c: non-linar inequality constraint
+   - ceq: non-linear equality constraint
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [c,ceq]=Gen_NonLinCon_ClosedLoop(Human_model,nbClosedLoop)</a>
+0002 <span class="comment">% Non-linear constraints generation.</span>
+0003 <span class="comment">% These constraints are used in the inverse kinematics step for closed loop</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   INPUT</span>
+0006 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the</span>
+0007 <span class="comment">%   structure)</span>
+0008 <span class="comment">%   - nb_ClosedLoop: number of closed loop in the model</span>
+0009 <span class="comment">%   OUTPUT</span>
+0010 <span class="comment">%   - c: non-linar inequality constraint</span>
+0011 <span class="comment">%   - ceq: non-linear equality constraint</span>
+0012 <span class="comment">%________________________________________________________</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Licence</span>
+0015 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0016 <span class="comment">%________________________________________________________</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0019 <span class="comment">% Georges Dumont</span>
+0020 <span class="comment">%________________________________________________________</span>
+0021 c=[];
+0022 
+0023 <span class="comment">%% Number of solids considered in the Inverse Kinematics</span>
+0024    
+0025 loop_start=zeros(1 ,nbClosedLoop);
+0026 loop_end=zeros(1, nbClosedLoop);
+0027 loop_end_anat=zeros(1, nbClosedLoop);
+0028 loop_i=1;
+0029 <span class="keyword">for</span> j=1:numel(Human_model)
+0030     <span class="keyword">if</span> size(Human_model(j).ClosedLoop) ~= [0 0] <span class="comment">%#ok&lt;BDSCA&gt;</span>
+0031         <span class="comment">% we find the solid and the position where there was a cut</span>
+0032         loop_start(loop_i)=j;
+0033         name=Human_model(j).ClosedLoop;
+0034         token=0;
+0035         <span class="keyword">for</span> pp=1:numel(Human_model)
+0036             <span class="keyword">for</span> kk=1:size(Human_model(pp).anat_position,1)
+0037                 <span class="keyword">if</span> strcmp(name,Human_model(pp).anat_position(kk,1))
+0038                     loop_end(loop_i)=pp;
+0039                     loop_end_anat(loop_i)=kk;
+0040                     token=1;
+0041                     loop_i=loop_i+1;
+0042                     <span class="keyword">break</span>
+0043                 <span class="keyword">end</span>
+0044             <span class="keyword">end</span>
+0045             <span class="keyword">if</span> token ~= 0
+0046                 <span class="keyword">break</span>
+0047             <span class="keyword">end</span>
+0048         <span class="keyword">end</span>
+0049     <span class="keyword">end</span>
+0050 <span class="keyword">end</span>
+0051 
+0052 <span class="comment">% ceq=sym('ceq',[9*nbClosedLoop 1]);</span>
+0053 ceq=sym(<span class="string">'ceq'</span>,[7*nbClosedLoop 1]);
+0054 
+0055 
+0056 <span class="keyword">for</span> j=1:nbClosedLoop
+0057     Rtemp=Human_model(loop_start(j)).R*Human_model(loop_end(j)).R';
+0058     ptemp=Human_model(loop_start(j)).p - Human_model(loop_end(j)).R*Human_model(loop_end(j)).anat_position{loop_end_anat(j),2} - Human_model(loop_end(j)).p ;
+0059 
+0060 <span class="comment">%     % Rotation matrix must be equal to eye</span>
+0061 <span class="comment">%     Rtemp=Human_model(loop_start(j)).R*Human_model(loop_end(j)).R' -eye(3);</span>
+0062 <span class="comment">%     ceq(1+9*(j-1))=Rtemp(1,1);</span>
+0063 <span class="comment">%     ceq(2+9*(j-1))=Rtemp(2,2);</span>
+0064 <span class="comment">%     ceq(3+9*(j-1))=Rtemp(3,3);</span>
+0065 <span class="comment">%     ceq(4+9*(j-1))=Rtemp(1,2);</span>
+0066 <span class="comment">%     ceq(5+9*(j-1))=Rtemp(1,3);</span>
+0067 <span class="comment">%     ceq(6+9*(j-1))=Rtemp(2,3);</span>
+0068 <span class="comment">%     ceq(7+9*(j-1))=ptemp(1);</span>
+0069 <span class="comment">%     ceq(8+9*(j-1))=ptemp(2);</span>
+0070 <span class="comment">%     ceq(9+9*(j-1))=ptemp(3);</span>
+0071 
+0072     <span class="comment">% Quaternion expression of rotation matrix</span>
+0073     r=1/2*sqrt(1+Rtemp(1,1)+Rtemp(2,2)+Rtemp(3,3));
+0074     ceq(1+7*(pp-1))=r-1;
+0075     ceq(2+7*(pp-1))=Rtemp(3,2)-Rtemp(2,3);
+0076     ceq(3+7*(pp-1))=Rtemp(1,3)-Rtemp(3,1);
+0077     ceq(4+7*(pp-1))=Rtemp(2,1)-Rtemp(1,2);
+0078     ceq(5+7*(pp-1))=ptemp(1); 
+0079     ceq(6+7*(pp-1))=ptemp(2);
+0080     ceq(7+7*(pp-1))=ptemp(3);
+0081     
+0082 <span class="keyword">end</span>
+0083 <span class="keyword">end</span>
+0084 
+0085</pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

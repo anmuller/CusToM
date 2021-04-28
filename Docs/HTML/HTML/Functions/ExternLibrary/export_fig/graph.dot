@@ -1,0 +1,49 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  append_pdfs -> ghostscript;
+  eps2pdf -> ghostscript;
+  eps2pdf -> user_string;
+  export_fig -> copyfig;
+  export_fig -> crop_borders;
+  export_fig -> eps2pdf;
+  export_fig -> isolate_axes;
+  export_fig -> pdf2eps;
+  export_fig -> print2array;
+  export_fig -> print2eps;
+  export_fig -> read_write_entire_textfile;
+  export_fig -> using_hg2;
+  fix_lines -> read_write_entire_textfile;
+  fix_lines -> using_hg2;
+  ghostscript -> user_string;
+  ghostscript -> using_hg2;
+  im2gif -> crop_borders;
+  isolate_axes -> copyfig;
+  pdf2eps -> pdftops;
+  pdftops -> user_string;
+  print2array -> ghostscript;
+  print2array -> print2eps;
+  print2array -> user_string;
+  print2array -> using_hg2;
+  print2eps -> crop_borders;
+  print2eps -> fix_lines;
+  print2eps -> print2array;
+  print2eps -> read_write_entire_textfile;
+  print2eps -> using_hg2;
+
+  append_pdfs [URL="append_pdfs.html"];
+  copyfig [URL="copyfig.html"];
+  crop_borders [URL="crop_borders.html"];
+  eps2pdf [URL="eps2pdf.html"];
+  export_fig [URL="export_fig.html"];
+  fix_lines [URL="fix_lines.html"];
+  ghostscript [URL="ghostscript.html"];
+  im2gif [URL="im2gif.html"];
+  isolate_axes [URL="isolate_axes.html"];
+  pdf2eps [URL="pdf2eps.html"];
+  pdftops [URL="pdftops.html"];
+  print2array [URL="print2array.html"];
+  print2eps [URL="print2eps.html"];
+  read_write_entire_textfile [URL="read_write_entire_textfile.html"];
+  user_string [URL="user_string.html"];
+  using_hg2 [URL="using_hg2.html"];
+}

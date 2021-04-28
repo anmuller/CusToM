@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of DynCalibOptimization_costfunction1</title>
+  <meta name="keywords" content="DynCalibOptimization_costfunction1">
+  <meta name="description" content="Cost function for the inertial calibration">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- ../menu.html Calibration --><!-- menu.html Dynamics -->
+<h1>DynCalibOptimization_costfunction1
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Cost function for the inertial calibration</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [y] = DynCalibOptimization_costfunction1(X,Human_model,frame_opti,q,dq,ddq,p_pelvis,r_pelvis,v0,w,dv0,dw,BW,H,external_forces,g,nbframe) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Cost function for the inertial calibration
+   Cost function corresponds to the normalized sum of dynamic residuals
+   (forces and torques) 
+
+   INPUT
+   - X: optimization variables: geometrical parameters of the stadium solids
+   - Human_model: osteo-articular model (see the Documentation for the structure)
+   - frame_opti: number of frames to be used for the inertial calibration
+   - q: joint coordinates
+   - dq: joint velocities
+   - ddq: joint accelerations
+   - p_pelvis: position of the pelvis
+   - r_pelvis: rotation of the pelvis
+   - v0: linear velocity of the pelvis
+   - w: rotational velocity of the pelvis
+   - dv0: linear acceleration of the pelvis
+   - dw: rotational acceleration of the pelvis
+   - BW: body weight of the subject
+   - H: height of the subject
+   - external_forces: external forces applied on the subject
+   - g: vector of gravity
+   - nbframe: number of frames
+   OUTPUT
+   - y: cost function value
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="DynParametersComputation.html" class="code" title="function [Masse,Zc,Ix,Iy,Iz] = DynParametersComputation(D,r0,t0,r1,t1,h)">DynParametersComputation</a>	Computation of the inertial parameters of a stadium solid from its geometrical parameters</li><li><a href="../../../Functions/Dynamics/ForwardAllKinematics.html" class="code" title="function [Human_model] = ForwardAllKinematics(Human_model,j)">ForwardAllKinematics</a>	Computation of spacial position, velocity and acceleration for each solid</li><li><a href="../../../Functions/Dynamics/InverseDynamicsSolid.html" class="code" title="function [Human_model,f,t]=InverseDynamicsSolid(Human_model,external_forces,g,j)">InverseDynamicsSolid</a>	Computation of the inverse dynamics step on one solid</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="DynCalibOptimization.html" class="code" title="function [Human_model] = DynCalibOptimization(ModelParameters, AnalysisParameters, BiomechanicalModel)">DynCalibOptimization</a>	Calibration of the inertial parameters</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [y] = DynCalibOptimization_costfunction1(X,Human_model,frame_opti,q,dq,ddq,p_pelvis,r_pelvis,v0,w,dv0,dw,BW,H,external_forces,g,nbframe)</a>
+0002 <span class="comment">% Cost function for the inertial calibration</span>
+0003 <span class="comment">%   Cost function corresponds to the normalized sum of dynamic residuals</span>
+0004 <span class="comment">%   (forces and torques)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   INPUT</span>
+0007 <span class="comment">%   - X: optimization variables: geometrical parameters of the stadium solids</span>
+0008 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the structure)</span>
+0009 <span class="comment">%   - frame_opti: number of frames to be used for the inertial calibration</span>
+0010 <span class="comment">%   - q: joint coordinates</span>
+0011 <span class="comment">%   - dq: joint velocities</span>
+0012 <span class="comment">%   - ddq: joint accelerations</span>
+0013 <span class="comment">%   - p_pelvis: position of the pelvis</span>
+0014 <span class="comment">%   - r_pelvis: rotation of the pelvis</span>
+0015 <span class="comment">%   - v0: linear velocity of the pelvis</span>
+0016 <span class="comment">%   - w: rotational velocity of the pelvis</span>
+0017 <span class="comment">%   - dv0: linear acceleration of the pelvis</span>
+0018 <span class="comment">%   - dw: rotational acceleration of the pelvis</span>
+0019 <span class="comment">%   - BW: body weight of the subject</span>
+0020 <span class="comment">%   - H: height of the subject</span>
+0021 <span class="comment">%   - external_forces: external forces applied on the subject</span>
+0022 <span class="comment">%   - g: vector of gravity</span>
+0023 <span class="comment">%   - nbframe: number of frames</span>
+0024 <span class="comment">%   OUTPUT</span>
+0025 <span class="comment">%   - y: cost function value</span>
+0026 <span class="comment">%________________________________________________________</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">% Licence</span>
+0029 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0030 <span class="comment">%________________________________________________________</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0033 <span class="comment">% Georges Dumont</span>
+0034 <span class="comment">%________________________________________________________</span>
+0035 
+0036 <span class="comment">%% Actualisation du mod�e �partir de X</span>
+0037 num_i=0;
+0038 <span class="keyword">for</span> i=1:numel(Human_model)
+0039     <span class="keyword">if</span> numel(Human_model(i).L) ~= 0 <span class="comment">% Pour les solides poss�ant le champ ��L��. For solids with ��L��, indicating that a stadium solid is associated</span>
+0040         num_i=num_i+1;
+0041         [Masse,Zc,Ix,Iy,Iz]=<a href="DynParametersComputation.html" class="code" title="function [Masse,Zc,Ix,Iy,Iz] = DynParametersComputation(D,r0,t0,r1,t1,h)">DynParametersComputation</a>(1000,X(4*(num_i-1)+1),X(4*(num_i-1)+3),X(4*(num_i-1)+2),X(4*(num_i-1)+4),Human_model(i).ParamAnthropo.h);
+0042         <span class="comment">% Masse</span>
+0043         Human_model(i).m=Masse;
+0044         <span class="comment">% Centre de masse</span>
+0045         <span class="keyword">if</span> Human_model(i).ParamAnthropo.Typ == 1
+0046             DeltaZc = (Zc - Human_model(i).ParamAnthropo.Zc);
+0047         <span class="keyword">else</span>
+0048             DeltaZc = -(Zc - Human_model(i).ParamAnthropo.Zc);
+0049         <span class="keyword">end</span>
+0050         Cy=Human_model(i).c(2) + DeltaZc;
+0051         Human_model(i).c(2) = Cy;
+0052         <span class="comment">% Inertie</span>
+0053         Human_model(i).I = [Ix 0 0; 0 Iy 0; 0 0 Iz]; <span class="comment">% - [Masse*Cy*Cy 0 0;0 0 0;0 0 Masse*Cy*Cy]; % on d�lace la matrice d'inertie en G</span>
+0054     <span class="keyword">end</span>
+0055 <span class="keyword">end</span>
+0056 
+0057 <span class="comment">%% Dynamique inverse</span>
+0058 <span class="comment">%% Inverse dynamics</span>
+0059 f6dof=zeros(3,nbframe);
+0060 t6dof0=zeros(3,nbframe);
+0061 t6dof=t6dof0;
+0062 <span class="keyword">for</span> i=frame_opti
+0063     <span class="comment">% attribution �chaque articulation de la position/vitesse/acc��ation</span>
+0064     <span class="comment">% setting position/speed/acceleration to each joint</span>
+0065     Human_model(1).p=p_pelvis(i,:)';
+0066     Human_model(1).R=r_pelvis{i};
+0067     Human_model(1).v0=v0(i,:)';
+0068     Human_model(1).w=w(i,:)';
+0069     Human_model(1).dv0=dv0(i,:)';
+0070     Human_model(1).dw=dw(i,:)';    
+0071     <span class="keyword">for</span> j=2:numel(Human_model)
+0072         Human_model(j).q=q(i,j); <span class="comment">%#ok&lt;*SAGROW&gt;</span>
+0073         Human_model(j).dq=dq(i,j);
+0074         Human_model(j).ddq=ddq(i,j);
+0075     <span class="keyword">end</span>
+0076     Human_model = <a href="../../../Functions/Dynamics/ForwardAllKinematics.html" class="code" title="function [Human_model] = ForwardAllKinematics(Human_model,j)">ForwardAllKinematics</a>(Human_model,1);
+0077     [Human_model,f6dof(:,i),t6dof0(:,i)]=<a href="../../../Functions/Dynamics/InverseDynamicsSolid.html" class="code" title="function [Human_model,f,t]=InverseDynamicsSolid(Human_model,external_forces,g,j)">InverseDynamicsSolid</a>(Human_model,external_forces(i).fext,g,1);
+0078     <span class="comment">% Calcul des efforts au niveau de la liaison 6DoF (transport du moment)</span>
+0079     t6dof(:,i) = t6dof0(:,i) + cross(f6dof(:,i),p_pelvis(i,:)'); 
+0080 <span class="keyword">end</span>
+0081 
+0082 <span class="comment">%% Calcul de la fonction de cout</span>
+0083 <span class="comment">%% Computation of the cost function</span>
+0084 
+0085 y=(sum(sum(abs(f6dof(:,frame_opti)./BW).^2))+sum(sum(abs(t6dof(:,frame_opti)./(BW*H)).^2)))/numel(frame_opti);
+0086 
+0087 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

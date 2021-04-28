@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of WrappingScriptTests</title>
+  <meta name="keywords" content="WrappingScriptTests">
+  <meta name="description" content="Verification of the wrapping for sphere problems">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html Developments -->
+<h1>WrappingScriptTests
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Verification of the wrapping for sphere problems</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">Verification of the wrapping for sphere problems
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Functions/Animation/PlotCylinder.html" class="code" title="function [F,V]=PlotCylinder(r,h)">PlotCylinder</a>	Generation of cylinder mesh for animation</li><li><a href="../../Functions/ExternLibrary/GIBBON/functions/cFigure.html" class="code" title="function [varargout]=cFigure(varargin)">cFigure</a>	function [h]=cFigure(figStruct)</li><li><a href="../../Functions/ExternLibrary/GIBBON/functions/gpatch.html" class="code" title="function [varargout]=gpatch(varargin)">gpatch</a>	function [h]=gpatch(F,V,C,CE,A,L)</li><li><a href="../../Functions/MuscleForces/Wrapping/CylinderWrapping.html" class="code" title="function [L,Q,T,AnimPt_in_Rw,ind]=CylinderWrapping(P,S,R,ind)">CylinderWrapping</a>	Provide the length wrapping around a cylinder</li><li><a href="../../Functions/MuscleForces/Wrapping/Intersect_line_cylinder.html" class="code" title="function [bool]=Intersect_line_cylinder(P1,P2,R)">Intersect_line_cylinder</a>	Verify if the line intersect the cylinder</li><li><a href="../../Functions/MuscleForces/Wrapping/Intersect_line_sphere.html" class="code" title="function [bool] = Intersect_line_sphere(P1, P2, R)">Intersect_line_sphere</a>	Verify if the line intersect the sphere</li><li><a href="../../Functions/MuscleForces/Wrapping/SphereWrapping.html" class="code" title="function [L, Q, T, AnimPt_in_Rw, ind] = SphereWrapping(P, S, R,ind)">SphereWrapping</a>	Provide the length wrapping around a shere</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function h = plot3point(Pt)</a></li><li><a href="#_sub2" class="code">function h=line3(Pt1,Pt2)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%Verification of the wrapping for sphere problems</span>
+0002 <span class="comment">%________________________________________________________</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Licence</span>
+0005 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0006 <span class="comment">%________________________________________________________</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0009 <span class="comment">% Georges Dumont</span>
+0010 <span class="comment">%________________________________________________________</span>
+0011 
+0012 P1=0.8*[0.01,1,1]';
+0013 P2=0.8*[0.01,-.9,-1]';
+0014 R = 0.48;
+0015 
+0016 <span class="comment">% P1=[0 0 0]';</span>
+0017 <span class="comment">% P2=[0.0213100000000000;0.188071363636364;0.0102800000000000]-[0;0.167400000000000;0]</span>
+0018 <span class="comment">% R = 0.025;</span>
+0019 
+0020 b = <a href="../../Functions/MuscleForces/Wrapping/Intersect_line_sphere.html" class="code" title="function [bool] = Intersect_line_sphere(P1, P2, R)">Intersect_line_sphere</a>(P1,P2,R);
+0021 
+0022 <a href="../../Functions/ExternLibrary/GIBBON/functions/cFigure.html" class="code" title="function [varargout]=cFigure(varargin)">cFigure</a>;
+0023 [x,y,z]=sphere();
+0024 s=surf(R*x,R*y,R*z); hold on; axis equal
+0025 s.EdgeColor = <span class="string">'k'</span>;
+0026 s.FaceAlpha = 0.3;
+0027 s.EdgeAlpha = 0.3;
+0028 s.FaceColor = <span class="string">'c'</span>;
+0029 
+0030 h = <a href="#_sub1" class="code" title="subfunction h = plot3point(Pt)">plot3point</a>(P1);
+0031 h = <a href="#_sub1" class="code" title="subfunction h = plot3point(Pt)">plot3point</a>(P2);
+0032 
+0033 <span class="keyword">if</span> b
+0034     [L,Q,T,Pts]=<a href="../../Functions/MuscleForces/Wrapping/SphereWrapping.html" class="code" title="function [L, Q, T, AnimPt_in_Rw, ind] = SphereWrapping(P, S, R,ind)">SphereWrapping</a>(P1,P2,R);
+0035     <a href="#_sub2" class="code" title="subfunction h=line3(Pt1,Pt2)">line3</a>(P1,Q);
+0036     <a href="#_sub2" class="code" title="subfunction h=line3(Pt1,Pt2)">line3</a>(P2,T);
+0037     h =plot3(Pts(:,1),Pts(:,2),Pts(:,3),<span class="string">'k.'</span>);
+0038 <span class="keyword">else</span>
+0039     <a href="#_sub2" class="code" title="subfunction h=line3(Pt1,Pt2)">line3</a>(P1,P2);
+0040 <span class="keyword">end</span>
+0041 
+0042 disp([<span class="string">'Total distance between the 2 points = '</span> num2str(L)])
+0043 view(3)
+0044 axis equal; axis tight; axis vis3d; grid on; box on;
+0045 <span class="comment">% camlight left;</span>
+0046 axis off; axis manual;
+0047 lighting gouraud
+0048 ax=gca;
+0049 ax.Clipping = <span class="string">'off'</span>;
+0050 drawnow;
+0051 
+0052 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0053 
+0054 b = <a href="../../Functions/MuscleForces/Wrapping/Intersect_line_cylinder.html" class="code" title="function [bool]=Intersect_line_cylinder(P1,P2,R)">Intersect_line_cylinder</a>(P1,P2,R);
+0055 
+0056 <a href="../../Functions/ExternLibrary/GIBBON/functions/cFigure.html" class="code" title="function [varargout]=cFigure(varargin)">cFigure</a>;
+0057 [F,V]=<a href="../../Functions/Animation/PlotCylinder.html" class="code" title="function [F,V]=PlotCylinder(r,h)">PlotCylinder</a>(R,1);
+0058 c = <a href="../../Functions/ExternLibrary/GIBBON/functions/gpatch.html" class="code" title="function [varargout]=gpatch(varargin)">gpatch</a>(F,V,<span class="string">'c'</span>,<span class="string">'k'</span>); hold on; axis equal
+0059 c.FaceAlpha = 0.3;
+0060 c.EdgeAlpha = 0.3;
+0061 
+0062 h = <a href="#_sub1" class="code" title="subfunction h = plot3point(Pt)">plot3point</a>(P1);
+0063 h = <a href="#_sub1" class="code" title="subfunction h = plot3point(Pt)">plot3point</a>(P2);
+0064 
+0065 <span class="keyword">if</span> b
+0066     [L,Q,T,Pts]=<a href="../../Functions/MuscleForces/Wrapping/CylinderWrapping.html" class="code" title="function [L,Q,T,AnimPt_in_Rw,ind]=CylinderWrapping(P,S,R,ind)">CylinderWrapping</a>(P1,P2,R);
+0067     <a href="#_sub2" class="code" title="subfunction h=line3(Pt1,Pt2)">line3</a>(P1,Q);
+0068     <a href="#_sub2" class="code" title="subfunction h=line3(Pt1,Pt2)">line3</a>(P2,T);
+0069     h =plot3(Pts(:,1),Pts(:,2),Pts(:,3),<span class="string">'k.'</span>);
+0070 <span class="keyword">else</span>
+0071     <a href="#_sub2" class="code" title="subfunction h=line3(Pt1,Pt2)">line3</a>(P1,P2);
+0072 <span class="keyword">end</span>
+0073 view(3)
+0074 axis equal; axis tight; axis vis3d; grid on; box on;
+0075 <span class="comment">% camlight left;</span>
+0076 axis off; axis manual;
+0077 lighting gouraud
+0078 ax=gca;
+0079 ax.Clipping = <span class="string">'off'</span>;
+0080 drawnow;
+0081 
+0082 <a name="_sub0" href="#_subfunctions" class="code">function h = plot3point(Pt)</a>
+0083 h =plot3(Pt(1),Pt(2),Pt(3),<span class="string">'r*'</span>);
+0084 <span class="keyword">end</span>
+0085 
+0086 <a name="_sub1" href="#_subfunctions" class="code">function h=line3(Pt1,Pt2)</a>
+0087 h=plot3([Pt1(1) Pt2(1)],[Pt1(2) Pt2(2)],[Pt1(3) Pt2(3)],<span class="string">'linewidth'</span>,2,<span class="string">'Color'</span>,<span class="string">'k'</span>);
+0088 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

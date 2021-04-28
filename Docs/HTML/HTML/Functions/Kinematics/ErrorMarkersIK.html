@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ErrorMarkersIK</title>
+  <meta name="keywords" content="ErrorMarkersIK">
+  <meta name="description" content="Computation of reconstruction error for the inverse kinematics step">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html Kinematics -->
+<h1>ErrorMarkersIK
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Computation of reconstruction error for the inverse kinematics step</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [error] = ErrorMarkersIK(q,nb_cut,real_markers,f,list_markers,Rcut,pcut) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Computation of reconstruction error for the inverse kinematics step
+   Computation of the distance between the position of each experimental 
+   marker and the position of the corresponded model marker
+
+   INPUT
+   - q: vector of joint coordinates at a given instant
+   - nb_cut: number of geometrical cut done in the osteo-articular model
+   - real_markers: 3D position of experimental markers
+   - f: current frame
+   - list_markers: list of the marker names
+   - Rcut: pre-initialization of Rcut
+   - pcut: pre-initialization of pcut
+   OUTPUT
+   - error: distance between the position of each experimental marker and
+   the position of the corresponded model marker 
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="InverseKinematicsLM.html" class="code" title="function [ExperimentalData, InverseKinematicResults] = InverseKinematicsLM(filename,AnalysisParameters,BiomechanicalModel)">InverseKinematicsLM</a>	Computation of the inverse kinematics step thanks to a Jacobian matrix</li><li><a href="InverseKinematicsOpti.html" class="code" title="function [ExperimentalData, InverseKinematicResults] = InverseKinematicsOpti(filename,AnalysisParameters,BiomechanicalModel)">InverseKinematicsOpti</a>	Computation of the inverse kinematics step thanks to a sqp optimization method</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [error] = ErrorMarkersIK(q,nb_cut,real_markers,f,list_markers,Rcut,pcut)</a>
+0002 <span class="comment">% Computation of reconstruction error for the inverse kinematics step</span>
+0003 <span class="comment">%   Computation of the distance between the position of each experimental</span>
+0004 <span class="comment">%   marker and the position of the corresponded model marker</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   INPUT</span>
+0007 <span class="comment">%   - q: vector of joint coordinates at a given instant</span>
+0008 <span class="comment">%   - nb_cut: number of geometrical cut done in the osteo-articular model</span>
+0009 <span class="comment">%   - real_markers: 3D position of experimental markers</span>
+0010 <span class="comment">%   - f: current frame</span>
+0011 <span class="comment">%   - list_markers: list of the marker names</span>
+0012 <span class="comment">%   - Rcut: pre-initialization of Rcut</span>
+0013 <span class="comment">%   - pcut: pre-initialization of pcut</span>
+0014 <span class="comment">%   OUTPUT</span>
+0015 <span class="comment">%   - error: distance between the position of each experimental marker and</span>
+0016 <span class="comment">%   the position of the corresponded model marker</span>
+0017 <span class="comment">%________________________________________________________</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% Licence</span>
+0020 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0021 <span class="comment">%________________________________________________________</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0024 <span class="comment">% Georges Dumont</span>
+0025 <span class="comment">%________________________________________________________</span>
+0026 list_function=cell(nb_cut,1);
+0027 <span class="keyword">for</span> c=1:nb_cut
+0028     list_function{c}=str2func(sprintf(<span class="string">'f%dcut'</span>,c));
+0029     <span class="keyword">if</span> c==1          
+0030     [Rcut(:,:,c),pcut(:,:,c)]=list_function{c}(q,[],[]);
+0031     <span class="keyword">else</span>
+0032         [Rcut(:,:,c),pcut(:,:,c)]=list_function{c}(q,pcut,Rcut);
+0033     <span class="keyword">end</span>
+0034 <span class="keyword">end</span>
+0035 
+0036 error=zeros(numel(list_markers),1);
+0037 <span class="keyword">for</span> m=1:numel(list_markers)
+0038     error(m,:) = norm(feval([list_markers{m} <span class="string">'_Position'</span>],q,pcut,Rcut) - real_markers(m).position(f,:)');
+0039 <span class="keyword">end</span>
+0040 
+0041 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

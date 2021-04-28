@@ -1,0 +1,291 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of tocbtkcommon</title>
+  <meta name="keywords" content="tocbtkcommon">
+  <meta name="description" content="BTK Common">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- # BTK --><!-- menu.html mac64 -->
+<h1>tocbtkcommon
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>BTK Common</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function tocbtkcommon </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> BTK Common            
+ ----------
+
+ Acquisition accessor
+   &lt;a href=&quot;matlab:help btkFindMetaData&quot;&gt;btkFindMetaData&lt;/a&gt;                   - Find a metadata
+   &lt;a href=&quot;matlab:help btkGetAnalogFrameNumber&quot;&gt;btkGetAnalogFrameNumber&lt;/a&gt;           - Analog's frame number accessor
+   &lt;a href=&quot;matlab:help btkGetAnalogFrequency&quot;&gt;btkGetAnalogFrequency&lt;/a&gt;             - Analog's frequency accessor
+   &lt;a href=&quot;matlab:help btkGetAnalogNumber&quot;&gt;btkGetAnalogNumber&lt;/a&gt;                - Analog's number accessor
+   &lt;a href=&quot;matlab:help btkGetAnalogSampleNumberPerFrame&quot;&gt;btkGetAnalogSampleNumberPerFrame&lt;/a&gt;  - Number of analog samples per video frame
+   &lt;a href=&quot;matlab:help btkGetAnalysis&quot;&gt;btkGetAnalysis&lt;/a&gt;                    - ANALYSIS group extraction
+   &lt;a href=&quot;matlab:help btkGetFirstFrame&quot;&gt;btkGetFirstFrame&lt;/a&gt;                  - Acquisition's first frame accessor
+   &lt;a href=&quot;matlab:help btkGetLastFrame&quot;&gt;btkGetLastFrame&lt;/a&gt;                   - Acquisition's last frame accessor
+   &lt;a href=&quot;matlab:help btkGetMaxInterpolationGap&quot;&gt;btkGetMaxInterpolationGap&lt;/a&gt;         - Acquisition's interpolation gap accessor
+   &lt;a href=&quot;matlab:help btkGetMetaData&quot;&gt;btkGetMetaData&lt;/a&gt;                    - Acquisition's metadata accessor
+   &lt;a href=&quot;matlab:help btkGetPointFrameNumber&quot;&gt;btkGetPointFrameNumber&lt;/a&gt;            - Point's frame number accessor
+   &lt;a href=&quot;matlab:help btkGetPointFrequency&quot;&gt;btkGetPointFrequency&lt;/a&gt;              - Point's frequency accessor
+   &lt;a href=&quot;matlab:help btkGetPointNumber&quot;&gt;btkGetPointNumber&lt;/a&gt;                 - Point's number accessor
+
+ Acquisition modifier
+   &lt;a href=&quot;matlab:help btkAppendAnalysisParameter&quot;&gt;btkAppendAnalysisParameter&lt;/a&gt;        - Append or set a paremeter into the analysis
+   &lt;a href=&quot;matlab:help btkAppendMetadata&quot;&gt;btkAppendMetadata&lt;/a&gt;                 - Append a metadata in the acquisition
+   &lt;a href=&quot;matlab:help btkClearMetadata&quot;&gt;btkClearMetadata&lt;/a&gt;                  - Clear metadata in the acquisition
+   &lt;a href=&quot;matlab:help btkCloneAcquisition&quot;&gt;btkCloneAcquisition&lt;/a&gt;               - Clone an acquisition
+   &lt;a href=&quot;matlab:help btkClearAnalysis&quot;&gt;btkClearAnalysis&lt;/a&gt;                  - Clear the metadata ANALYSIS
+   &lt;a href=&quot;matlab:help btkCropAcquisition&quot;&gt;btkCropAcquisition&lt;/a&gt;                - Crop the acquistion and adapt the events' frame/time.
+   &lt;a href=&quot;matlab:help btkDeleteAcquisition&quot;&gt;btkDeleteAcquisition&lt;/a&gt;              - Delete acquisition handle and release used memory
+   &lt;a href=&quot;matlab:help btkNewAcquisition&quot;&gt;btkNewAcquisition&lt;/a&gt;                 - Create an empty acquisition
+   &lt;a href=&quot;matlab:help btkRemoveAnalysisParameter&quot;&gt;btkRemoveAnalysisParameter&lt;/a&gt;        - Erase a paremeter from the analysis
+   &lt;a href=&quot;matlab:help btkRemoveMetaData&quot;&gt;btkRemoveMetaData&lt;/a&gt;                 - Remove a metadata from the acquisition
+   &lt;a href=&quot;matlab:help btkSetFirstFrame&quot;&gt;btkSetFirstFrame&lt;/a&gt;                  - Acquisition's first frame modifier
+   &lt;a href=&quot;matlab:help btkSetFrameNumber&quot;&gt;btkSetFrameNumber&lt;/a&gt;                 - Point and analog frame number modifier
+   &lt;a href=&quot;matlab:help btkSetFrequency&quot;&gt;btkSetFrequency&lt;/a&gt;                   - Set the main frequency
+   &lt;a href=&quot;matlab:help btkSetMaxInterpolationGap&quot;&gt;btkSetMaxInterpolationGap&lt;/a&gt;         - Acquisition's interpolation gap modifier
+   &lt;a href=&quot;matlab:help btkSetMetaData&quot;&gt;btkSetMetaData&lt;/a&gt;                    - Metadata modifier
+   &lt;a href=&quot;matlab:help btkSetMetaDataDescription&quot;&gt;btkSetMetaDataDescription&lt;/a&gt;         - Metadata's description modifier
+   &lt;a href=&quot;matlab:help btkSetMetaDataDimensions&quot;&gt;btkSetMetaDataDimensions&lt;/a&gt;          - Metadata's dimensions modifier
+   &lt;a href=&quot;matlab:help btkSetMetaDataFormat&quot;&gt;btkSetMetaDataFormat&lt;/a&gt;              - Metadata's format modifier
+   &lt;a href=&quot;matlab:help btkSetMetaDataLabel&quot;&gt;btkSetMetaDataLabel&lt;/a&gt;               - Metadata's label modifier
+   &lt;a href=&quot;matlab:help btkSetMetaDataUnlock&quot;&gt;btkSetMetaDataUnlock&lt;/a&gt;              - Metadata's unlock state modifier
+   &lt;a href=&quot;matlab:help btkSetMetaDataValue&quot;&gt;btkSetMetaDataValue&lt;/a&gt;               - Modify one metadata's value
+   &lt;a href=&quot;matlab:help btkSetPointNumber&quot;&gt;btkSetPointNumber&lt;/a&gt;                 - Point's number modifier
+
+ Point accessor
+   &lt;a href=&quot;matlab:help btkGetPoint&quot;&gt;btkGetPoint&lt;/a&gt;                       - Point extraction
+   &lt;a href=&quot;matlab:help btkGetPointsValues&quot;&gt;btkGetPointsValues&lt;/a&gt;                - Points' values accessor
+   &lt;a href=&quot;matlab:help btkGetPointsResiduals&quot;&gt;btkGetPointsResiduals&lt;/a&gt;             - Points' residuals accessor
+   &lt;a href=&quot;matlab:help btkGetAngles&quot;&gt;btkGetAngles&lt;/a&gt;                      - Angles extraction
+   &lt;a href=&quot;matlab:help btkGetAnglesValues&quot;&gt;btkGetAnglesValues&lt;/a&gt;                - Extracts angles as a simple matrix 
+   &lt;a href=&quot;matlab:help btkGetForces&quot;&gt;btkGetForces&lt;/a&gt;                      - Forces extraction
+   &lt;a href=&quot;matlab:help btkGetForcesValues&quot;&gt;btkGetForcesValues&lt;/a&gt;                - Extracts forces as a simple matrix 
+   &lt;a href=&quot;matlab:help btkGetMarkers&quot;&gt;btkGetMarkers&lt;/a&gt;                     - Markers extraction
+   &lt;a href=&quot;matlab:help btkGetMarkersValues&quot;&gt;btkGetMarkersValues&lt;/a&gt;               - Extracts markers as a simple matrix 
+   &lt;a href=&quot;matlab:help btkGetMarkersResiduals&quot;&gt;btkGetMarkersResiduals&lt;/a&gt;           - Extracts markers' residuals as a simple matrix 
+   &lt;a href=&quot;matlab:help btkGetMoments&quot;&gt;btkGetMoments&lt;/a&gt;                     - Moments extraction
+   &lt;a href=&quot;matlab:help btkGetMomentsValues&quot;&gt;btkGetMomentsValues&lt;/a&gt;               - Extracts moments as a simple matrix 
+   &lt;a href=&quot;matlab:help btkGetPoints&quot;&gt;btkGetPoints&lt;/a&gt;                      - Points extraction
+   &lt;a href=&quot;matlab:help btkGetPowers&quot;&gt;btkGetPowers&lt;/a&gt;                      - Powers extraction
+   &lt;a href=&quot;matlab:help btkGetPowersValues&quot;&gt;btkGetPowersValues&lt;/a&gt;                - Extracts powers as a simple matrix 
+   &lt;a href=&quot;matlab:help btkGetScalars&quot;&gt;btkGetScalars&lt;/a&gt;                     - Scalars extraction
+   &lt;a href=&quot;matlab:help btkGetScalarsValues&quot;&gt;btkGetScalarsValues&lt;/a&gt;               - Extracts scalars as a simple matrix 
+
+ Point modifier
+   &lt;a href=&quot;matlab:help btkAppendPoint&quot;&gt;btkAppendPoint&lt;/a&gt;                    - Append a point into an acquisition
+   &lt;a href=&quot;matlab:help btkClearPoints&quot;&gt;btkClearPoints&lt;/a&gt;                    - Remove all points from an acquisition
+   &lt;a href=&quot;matlab:help btkRemovePoint&quot;&gt;btkRemovePoint&lt;/a&gt;                    - Delete a point from an acquisition
+   &lt;a href=&quot;matlab:help btkSetPoint&quot;&gt;btkSetPoint&lt;/a&gt;                       - Point's data modifier (values, residuals)
+   &lt;a href=&quot;matlab:help btkSetPointDescription&quot;&gt;btkSetPointDescription&lt;/a&gt;            - Point's description modifier
+   &lt;a href=&quot;matlab:help btkSetPointLabel&quot;&gt;btkSetPointLabel&lt;/a&gt;                  - Point's label modifier
+   &lt;a href=&quot;matlab:help btkSetPointResiduals&quot;&gt;btkSetPointResiduals&lt;/a&gt;              - Point's residuals modifier
+   &lt;a href=&quot;matlab:help btkSetPointType&quot;&gt;btkSetPointType&lt;/a&gt;                   - Point's type modifier
+   &lt;a href=&quot;matlab:help btkSetPointsUnit&quot;&gt;btkSetPointsUnit&lt;/a&gt;                  - Set unit for a type of point
+   &lt;a href=&quot;matlab:help btkSetPointValues&quot;&gt;btkSetPointValues&lt;/a&gt;                 - Point's values modifier
+   &lt;a href=&quot;matlab:help btkSetPointsValues&quot;&gt;btkSetPointsValues&lt;/a&gt;                - Set points's values from a matrix
+   &lt;a href=&quot;matlab:help btkSetPointsResiduals&quot;&gt;btkSetPointsResiduals&lt;/a&gt;             - Set points's residuals from a matrix
+   &lt;a href=&quot;matlab:help btkSetAnglesValues&quot;&gt;btkSetAnglesValues&lt;/a&gt;                - Set scalars's values from a matrix
+   &lt;a href=&quot;matlab:help btkSetForcesValues&quot;&gt;btkSetForcesValues&lt;/a&gt;                - Set forces's values from a matrix
+   &lt;a href=&quot;matlab:help btkSetMomentsValues&quot;&gt;btkSetMomentsValues&lt;/a&gt;               - Set moments's values from a matrix
+   &lt;a href=&quot;matlab:help btkSetPowersValues&quot;&gt;btkSetPowersValues&lt;/a&gt;                - Set power's values from a matrix
+   &lt;a href=&quot;matlab:help btkSetMarkersValues&quot;&gt;btkSetMarkersValues&lt;/a&gt;               - Set markers's values from a matrix
+   &lt;a href=&quot;matlab:help btkSetMarkersResiduals&quot;&gt;btkSetMarkersResiduals&lt;/a&gt;            - Set markers's residuals from a matrix
+   &lt;a href=&quot;matlab:help btkSetScalarsValues&quot;&gt;btkSetScalarsValues&lt;/a&gt;               - Set scalars's values from a matrix
+
+ Analog accessor
+   &lt;a href=&quot;matlab:help btkGetAnalog&quot;&gt;btkGetAnalog&lt;/a&gt;                      - Analog channel extraction
+   &lt;a href=&quot;matlab:help btkGetAnalogs&quot;&gt;btkGetAnalogs&lt;/a&gt;                     - Analog channels extraction
+   &lt;a href=&quot;matlab:help btkGetAnalogsResolution&quot;&gt;btkGetAnalogsResolution&lt;/a&gt;           - Return ADC resolution
+   &lt;a href=&quot;matlab:help btkGetAnalogsValues&quot;&gt;btkGetAnalogsValues&lt;/a&gt;               - Extract analogs channels' values in a simple matrix 
+   &lt;a href=&quot;matlab:help btkGetForcePlatforms&quot;&gt;btkGetForcePlatforms&lt;/a&gt;              - Force platform channels and configuration extraction
+
+ Analog modifier
+   &lt;a href=&quot;matlab:help btkAppendAnalog&quot;&gt;btkAppendAnalog&lt;/a&gt;                   - Append an analog channel into an acquisition
+   &lt;a href=&quot;matlab:help btkClearAnalogs&quot;&gt;btkClearAnalogs&lt;/a&gt;                   - Remove all analog channels from an acquisition
+   &lt;a href=&quot;matlab:help btkRemoveAnalog&quot;&gt;btkRemoveAnalog&lt;/a&gt;                   - Delete an analog channel from an acquisition
+   &lt;a href=&quot;matlab:help btkSetAnalogDescription&quot;&gt;btkSetAnalogDescription&lt;/a&gt;           - Set analog's description
+   &lt;a href=&quot;matlab:help btkSetAnalogGain&quot;&gt;btkSetAnalogGain&lt;/a&gt;                  - Set analog's gain
+   &lt;a href=&quot;matlab:help btkSetAnalogLabel&quot;&gt;btkSetAnalogLabel&lt;/a&gt;                 - Set analog's label
+   &lt;a href=&quot;matlab:help btkSetAnalogOffset&quot;&gt;btkSetAnalogOffset&lt;/a&gt;                - Set analog's offset
+   &lt;a href=&quot;matlab:help btkSetAnalogScale&quot;&gt;btkSetAnalogScale&lt;/a&gt;                 - Set analog's scale factor
+   &lt;a href=&quot;matlab:help btkSetAnalogsResolution&quot;&gt;btkSetAnalogsResolution&lt;/a&gt;           - Set ADC resolution (8, 12, 14 or 16 bits)
+   &lt;a href=&quot;matlab:help btkSetAnalogSampleNumberPerFrame&quot;&gt;btkSetAnalogSampleNumberPerFrame&lt;/a&gt;  - Set analog sample per 3D frame
+   &lt;a href=&quot;matlab:help btkSetAnalogUnit&quot;&gt;btkSetAnalogUnit&lt;/a&gt;                  - Set analog's unit
+   &lt;a href=&quot;matlab:help btkSetAnalogsValues&quot;&gt;btkSetAnalogValues&lt;/a&gt;                - Set analog's values from a vector
+   &lt;a href=&quot;matlab:help btkSetAnalogsValues&quot;&gt;btkSetAnalogsValues&lt;/a&gt;               - Set analogs' values from a matrix 
+
+ Event accessor
+   &lt;a href=&quot;matlab:help btkGetEventNumber&quot;&gt;btkGetEventNumber&lt;/a&gt;                 - Number of events
+   &lt;a href=&quot;matlab:help btkGetEvents&quot;&gt;btkGetEvents&lt;/a&gt;                      - Events extraction
+   &lt;a href=&quot;matlab:help btkGetEventsValues&quot;&gt;btkGetEventsValues&lt;/a&gt;                - Events values (time, label, id, description)
+
+ Event modifier
+   &lt;a href=&quot;matlab:help btkAppendEvent&quot;&gt;btkAppendEvent&lt;/a&gt;                    - Append event into an acquisition
+   &lt;a href=&quot;matlab:help btkClearEvents&quot;&gt;btkClearEvents&lt;/a&gt;                    - Remove all events from an acquisition
+   &lt;a href=&quot;matlab:help btkRemoveEvent&quot;&gt;btkRemoveEvent&lt;/a&gt;                    - Remove event from an acquisition
+   &lt;a href=&quot;matlab:help btkSetEventDescription&quot;&gt;btkSetEventDescription&lt;/a&gt;            - Set event's description
+   &lt;a href=&quot;matlab:help btkSetEventLabel&quot;&gt;btkSetEventLabel&lt;/a&gt;                  - Set event's label
+   &lt;a href=&quot;matlab:help btkSetEventId&quot;&gt;btkSetEventId&lt;/a&gt;                     - Set event's ID
+   &lt;a href=&quot;matlab:help btkSetEventSubject&quot;&gt;btkSetEventSubject&lt;/a&gt;                - Set event's subject
+   &lt;a href=&quot;matlab:help btkSetEventTime&quot;&gt;btkSetEventTime&lt;/a&gt;                   - Set event's time
+
+ &lt;a href=&quot;matlab:help btk&quot;&gt;Biomechanical Toolkit TOC&lt;/a&gt;</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function tocbtkcommon</a>
+0002 <span class="comment">% BTK Common</span>
+0003 <span class="comment">% ----------</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Acquisition accessor</span>
+0006 <span class="comment">%   &lt;a href=&quot;matlab:help btkFindMetaData&quot;&gt;btkFindMetaData&lt;/a&gt;                   - Find a metadata</span>
+0007 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetAnalogFrameNumber&quot;&gt;btkGetAnalogFrameNumber&lt;/a&gt;           - Analog's frame number accessor</span>
+0008 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetAnalogFrequency&quot;&gt;btkGetAnalogFrequency&lt;/a&gt;             - Analog's frequency accessor</span>
+0009 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetAnalogNumber&quot;&gt;btkGetAnalogNumber&lt;/a&gt;                - Analog's number accessor</span>
+0010 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetAnalogSampleNumberPerFrame&quot;&gt;btkGetAnalogSampleNumberPerFrame&lt;/a&gt;  - Number of analog samples per video frame</span>
+0011 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetAnalysis&quot;&gt;btkGetAnalysis&lt;/a&gt;                    - ANALYSIS group extraction</span>
+0012 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetFirstFrame&quot;&gt;btkGetFirstFrame&lt;/a&gt;                  - Acquisition's first frame accessor</span>
+0013 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetLastFrame&quot;&gt;btkGetLastFrame&lt;/a&gt;                   - Acquisition's last frame accessor</span>
+0014 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetMaxInterpolationGap&quot;&gt;btkGetMaxInterpolationGap&lt;/a&gt;         - Acquisition's interpolation gap accessor</span>
+0015 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetMetaData&quot;&gt;btkGetMetaData&lt;/a&gt;                    - Acquisition's metadata accessor</span>
+0016 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetPointFrameNumber&quot;&gt;btkGetPointFrameNumber&lt;/a&gt;            - Point's frame number accessor</span>
+0017 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetPointFrequency&quot;&gt;btkGetPointFrequency&lt;/a&gt;              - Point's frequency accessor</span>
+0018 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetPointNumber&quot;&gt;btkGetPointNumber&lt;/a&gt;                 - Point's number accessor</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% Acquisition modifier</span>
+0021 <span class="comment">%   &lt;a href=&quot;matlab:help btkAppendAnalysisParameter&quot;&gt;btkAppendAnalysisParameter&lt;/a&gt;        - Append or set a paremeter into the analysis</span>
+0022 <span class="comment">%   &lt;a href=&quot;matlab:help btkAppendMetadata&quot;&gt;btkAppendMetadata&lt;/a&gt;                 - Append a metadata in the acquisition</span>
+0023 <span class="comment">%   &lt;a href=&quot;matlab:help btkClearMetadata&quot;&gt;btkClearMetadata&lt;/a&gt;                  - Clear metadata in the acquisition</span>
+0024 <span class="comment">%   &lt;a href=&quot;matlab:help btkCloneAcquisition&quot;&gt;btkCloneAcquisition&lt;/a&gt;               - Clone an acquisition</span>
+0025 <span class="comment">%   &lt;a href=&quot;matlab:help btkClearAnalysis&quot;&gt;btkClearAnalysis&lt;/a&gt;                  - Clear the metadata ANALYSIS</span>
+0026 <span class="comment">%   &lt;a href=&quot;matlab:help btkCropAcquisition&quot;&gt;btkCropAcquisition&lt;/a&gt;                - Crop the acquistion and adapt the events' frame/time.</span>
+0027 <span class="comment">%   &lt;a href=&quot;matlab:help btkDeleteAcquisition&quot;&gt;btkDeleteAcquisition&lt;/a&gt;              - Delete acquisition handle and release used memory</span>
+0028 <span class="comment">%   &lt;a href=&quot;matlab:help btkNewAcquisition&quot;&gt;btkNewAcquisition&lt;/a&gt;                 - Create an empty acquisition</span>
+0029 <span class="comment">%   &lt;a href=&quot;matlab:help btkRemoveAnalysisParameter&quot;&gt;btkRemoveAnalysisParameter&lt;/a&gt;        - Erase a paremeter from the analysis</span>
+0030 <span class="comment">%   &lt;a href=&quot;matlab:help btkRemoveMetaData&quot;&gt;btkRemoveMetaData&lt;/a&gt;                 - Remove a metadata from the acquisition</span>
+0031 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetFirstFrame&quot;&gt;btkSetFirstFrame&lt;/a&gt;                  - Acquisition's first frame modifier</span>
+0032 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetFrameNumber&quot;&gt;btkSetFrameNumber&lt;/a&gt;                 - Point and analog frame number modifier</span>
+0033 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetFrequency&quot;&gt;btkSetFrequency&lt;/a&gt;                   - Set the main frequency</span>
+0034 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetMaxInterpolationGap&quot;&gt;btkSetMaxInterpolationGap&lt;/a&gt;         - Acquisition's interpolation gap modifier</span>
+0035 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetMetaData&quot;&gt;btkSetMetaData&lt;/a&gt;                    - Metadata modifier</span>
+0036 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetMetaDataDescription&quot;&gt;btkSetMetaDataDescription&lt;/a&gt;         - Metadata's description modifier</span>
+0037 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetMetaDataDimensions&quot;&gt;btkSetMetaDataDimensions&lt;/a&gt;          - Metadata's dimensions modifier</span>
+0038 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetMetaDataFormat&quot;&gt;btkSetMetaDataFormat&lt;/a&gt;              - Metadata's format modifier</span>
+0039 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetMetaDataLabel&quot;&gt;btkSetMetaDataLabel&lt;/a&gt;               - Metadata's label modifier</span>
+0040 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetMetaDataUnlock&quot;&gt;btkSetMetaDataUnlock&lt;/a&gt;              - Metadata's unlock state modifier</span>
+0041 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetMetaDataValue&quot;&gt;btkSetMetaDataValue&lt;/a&gt;               - Modify one metadata's value</span>
+0042 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetPointNumber&quot;&gt;btkSetPointNumber&lt;/a&gt;                 - Point's number modifier</span>
+0043 <span class="comment">%</span>
+0044 <span class="comment">% Point accessor</span>
+0045 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetPoint&quot;&gt;btkGetPoint&lt;/a&gt;                       - Point extraction</span>
+0046 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetPointsValues&quot;&gt;btkGetPointsValues&lt;/a&gt;                - Points' values accessor</span>
+0047 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetPointsResiduals&quot;&gt;btkGetPointsResiduals&lt;/a&gt;             - Points' residuals accessor</span>
+0048 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetAngles&quot;&gt;btkGetAngles&lt;/a&gt;                      - Angles extraction</span>
+0049 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetAnglesValues&quot;&gt;btkGetAnglesValues&lt;/a&gt;                - Extracts angles as a simple matrix</span>
+0050 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetForces&quot;&gt;btkGetForces&lt;/a&gt;                      - Forces extraction</span>
+0051 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetForcesValues&quot;&gt;btkGetForcesValues&lt;/a&gt;                - Extracts forces as a simple matrix</span>
+0052 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetMarkers&quot;&gt;btkGetMarkers&lt;/a&gt;                     - Markers extraction</span>
+0053 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetMarkersValues&quot;&gt;btkGetMarkersValues&lt;/a&gt;               - Extracts markers as a simple matrix</span>
+0054 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetMarkersResiduals&quot;&gt;btkGetMarkersResiduals&lt;/a&gt;           - Extracts markers' residuals as a simple matrix</span>
+0055 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetMoments&quot;&gt;btkGetMoments&lt;/a&gt;                     - Moments extraction</span>
+0056 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetMomentsValues&quot;&gt;btkGetMomentsValues&lt;/a&gt;               - Extracts moments as a simple matrix</span>
+0057 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetPoints&quot;&gt;btkGetPoints&lt;/a&gt;                      - Points extraction</span>
+0058 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetPowers&quot;&gt;btkGetPowers&lt;/a&gt;                      - Powers extraction</span>
+0059 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetPowersValues&quot;&gt;btkGetPowersValues&lt;/a&gt;                - Extracts powers as a simple matrix</span>
+0060 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetScalars&quot;&gt;btkGetScalars&lt;/a&gt;                     - Scalars extraction</span>
+0061 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetScalarsValues&quot;&gt;btkGetScalarsValues&lt;/a&gt;               - Extracts scalars as a simple matrix</span>
+0062 <span class="comment">%</span>
+0063 <span class="comment">% Point modifier</span>
+0064 <span class="comment">%   &lt;a href=&quot;matlab:help btkAppendPoint&quot;&gt;btkAppendPoint&lt;/a&gt;                    - Append a point into an acquisition</span>
+0065 <span class="comment">%   &lt;a href=&quot;matlab:help btkClearPoints&quot;&gt;btkClearPoints&lt;/a&gt;                    - Remove all points from an acquisition</span>
+0066 <span class="comment">%   &lt;a href=&quot;matlab:help btkRemovePoint&quot;&gt;btkRemovePoint&lt;/a&gt;                    - Delete a point from an acquisition</span>
+0067 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetPoint&quot;&gt;btkSetPoint&lt;/a&gt;                       - Point's data modifier (values, residuals)</span>
+0068 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetPointDescription&quot;&gt;btkSetPointDescription&lt;/a&gt;            - Point's description modifier</span>
+0069 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetPointLabel&quot;&gt;btkSetPointLabel&lt;/a&gt;                  - Point's label modifier</span>
+0070 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetPointResiduals&quot;&gt;btkSetPointResiduals&lt;/a&gt;              - Point's residuals modifier</span>
+0071 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetPointType&quot;&gt;btkSetPointType&lt;/a&gt;                   - Point's type modifier</span>
+0072 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetPointsUnit&quot;&gt;btkSetPointsUnit&lt;/a&gt;                  - Set unit for a type of point</span>
+0073 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetPointValues&quot;&gt;btkSetPointValues&lt;/a&gt;                 - Point's values modifier</span>
+0074 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetPointsValues&quot;&gt;btkSetPointsValues&lt;/a&gt;                - Set points's values from a matrix</span>
+0075 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetPointsResiduals&quot;&gt;btkSetPointsResiduals&lt;/a&gt;             - Set points's residuals from a matrix</span>
+0076 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetAnglesValues&quot;&gt;btkSetAnglesValues&lt;/a&gt;                - Set scalars's values from a matrix</span>
+0077 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetForcesValues&quot;&gt;btkSetForcesValues&lt;/a&gt;                - Set forces's values from a matrix</span>
+0078 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetMomentsValues&quot;&gt;btkSetMomentsValues&lt;/a&gt;               - Set moments's values from a matrix</span>
+0079 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetPowersValues&quot;&gt;btkSetPowersValues&lt;/a&gt;                - Set power's values from a matrix</span>
+0080 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetMarkersValues&quot;&gt;btkSetMarkersValues&lt;/a&gt;               - Set markers's values from a matrix</span>
+0081 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetMarkersResiduals&quot;&gt;btkSetMarkersResiduals&lt;/a&gt;            - Set markers's residuals from a matrix</span>
+0082 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetScalarsValues&quot;&gt;btkSetScalarsValues&lt;/a&gt;               - Set scalars's values from a matrix</span>
+0083 <span class="comment">%</span>
+0084 <span class="comment">% Analog accessor</span>
+0085 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetAnalog&quot;&gt;btkGetAnalog&lt;/a&gt;                      - Analog channel extraction</span>
+0086 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetAnalogs&quot;&gt;btkGetAnalogs&lt;/a&gt;                     - Analog channels extraction</span>
+0087 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetAnalogsResolution&quot;&gt;btkGetAnalogsResolution&lt;/a&gt;           - Return ADC resolution</span>
+0088 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetAnalogsValues&quot;&gt;btkGetAnalogsValues&lt;/a&gt;               - Extract analogs channels' values in a simple matrix</span>
+0089 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetForcePlatforms&quot;&gt;btkGetForcePlatforms&lt;/a&gt;              - Force platform channels and configuration extraction</span>
+0090 <span class="comment">%</span>
+0091 <span class="comment">% Analog modifier</span>
+0092 <span class="comment">%   &lt;a href=&quot;matlab:help btkAppendAnalog&quot;&gt;btkAppendAnalog&lt;/a&gt;                   - Append an analog channel into an acquisition</span>
+0093 <span class="comment">%   &lt;a href=&quot;matlab:help btkClearAnalogs&quot;&gt;btkClearAnalogs&lt;/a&gt;                   - Remove all analog channels from an acquisition</span>
+0094 <span class="comment">%   &lt;a href=&quot;matlab:help btkRemoveAnalog&quot;&gt;btkRemoveAnalog&lt;/a&gt;                   - Delete an analog channel from an acquisition</span>
+0095 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetAnalogDescription&quot;&gt;btkSetAnalogDescription&lt;/a&gt;           - Set analog's description</span>
+0096 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetAnalogGain&quot;&gt;btkSetAnalogGain&lt;/a&gt;                  - Set analog's gain</span>
+0097 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetAnalogLabel&quot;&gt;btkSetAnalogLabel&lt;/a&gt;                 - Set analog's label</span>
+0098 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetAnalogOffset&quot;&gt;btkSetAnalogOffset&lt;/a&gt;                - Set analog's offset</span>
+0099 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetAnalogScale&quot;&gt;btkSetAnalogScale&lt;/a&gt;                 - Set analog's scale factor</span>
+0100 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetAnalogsResolution&quot;&gt;btkSetAnalogsResolution&lt;/a&gt;           - Set ADC resolution (8, 12, 14 or 16 bits)</span>
+0101 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetAnalogSampleNumberPerFrame&quot;&gt;btkSetAnalogSampleNumberPerFrame&lt;/a&gt;  - Set analog sample per 3D frame</span>
+0102 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetAnalogUnit&quot;&gt;btkSetAnalogUnit&lt;/a&gt;                  - Set analog's unit</span>
+0103 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetAnalogsValues&quot;&gt;btkSetAnalogValues&lt;/a&gt;                - Set analog's values from a vector</span>
+0104 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetAnalogsValues&quot;&gt;btkSetAnalogsValues&lt;/a&gt;               - Set analogs' values from a matrix</span>
+0105 <span class="comment">%</span>
+0106 <span class="comment">% Event accessor</span>
+0107 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetEventNumber&quot;&gt;btkGetEventNumber&lt;/a&gt;                 - Number of events</span>
+0108 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetEvents&quot;&gt;btkGetEvents&lt;/a&gt;                      - Events extraction</span>
+0109 <span class="comment">%   &lt;a href=&quot;matlab:help btkGetEventsValues&quot;&gt;btkGetEventsValues&lt;/a&gt;                - Events values (time, label, id, description)</span>
+0110 <span class="comment">%</span>
+0111 <span class="comment">% Event modifier</span>
+0112 <span class="comment">%   &lt;a href=&quot;matlab:help btkAppendEvent&quot;&gt;btkAppendEvent&lt;/a&gt;                    - Append event into an acquisition</span>
+0113 <span class="comment">%   &lt;a href=&quot;matlab:help btkClearEvents&quot;&gt;btkClearEvents&lt;/a&gt;                    - Remove all events from an acquisition</span>
+0114 <span class="comment">%   &lt;a href=&quot;matlab:help btkRemoveEvent&quot;&gt;btkRemoveEvent&lt;/a&gt;                    - Remove event from an acquisition</span>
+0115 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetEventDescription&quot;&gt;btkSetEventDescription&lt;/a&gt;            - Set event's description</span>
+0116 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetEventLabel&quot;&gt;btkSetEventLabel&lt;/a&gt;                  - Set event's label</span>
+0117 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetEventId&quot;&gt;btkSetEventId&lt;/a&gt;                     - Set event's ID</span>
+0118 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetEventSubject&quot;&gt;btkSetEventSubject&lt;/a&gt;                - Set event's subject</span>
+0119 <span class="comment">%   &lt;a href=&quot;matlab:help btkSetEventTime&quot;&gt;btkSetEventTime&lt;/a&gt;                   - Set event's time</span>
+0120 <span class="comment">%</span>
+0121 <span class="comment">% &lt;a href=&quot;matlab:help btk&quot;&gt;Biomechanical Toolkit TOC&lt;/a&gt;</span>
+0122 
+0123 <span class="comment">% Author(s): A. Barré</span>
+0124 <span class="comment">% Copyright 2009-2013 Biomechanical ToolKit</span>
+0125 
+0126 <span class="comment">% [EOF]</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ForwardKinematics_ClosedLoop</title>
+  <meta name="keywords" content="ForwardKinematics_ClosedLoop">
+  <meta name="description" content="Computation of a symbolic forward kinematics">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html Kinematics -->
+<h1>ForwardKinematics_ClosedLoop
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Computation of a symbolic forward kinematics</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Human_model,p,R] = ForwardKinematics_ClosedLoop(Human_model,n,s,solid_path,p,R,q,k) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Computation of a symbolic forward kinematics
+
+   INPUT
+   - Human_model: osteo-articular model (see the Documentation for the
+   structure)
+   - n: current solid
+   - s: position of current solid in regards to articulation of parent
+   solid of closedloop
+   - solid_path: solid list included in the closed loop
+   - numClosedLoop: number of closed loop in the model
+   - p: position of the closed loops
+   - R: matrix rotatio of the closed loops
+   - q: vector of joint coordinates
+   - k: vector of homothety coefficient
+   OUTPUT
+   - Human_model: osteo-articular model (see the Documentation for the
+   structure)
+   - p: position of the closed loops
+   - R: matrix rotatio of the closed loops
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GLP 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>	Computation of the Rodrigues equation</li><li><a href="ForwardKinematics_ClosedLoop.html" class="code" title="function [Human_model,p,R] = ForwardKinematics_ClosedLoop(Human_model,n,s,solid_path,p,R,q,k)">ForwardKinematics_ClosedLoop</a>	Computation of a symbolic forward kinematics</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="ForwardKinematics_ClosedLoop.html" class="code" title="function [Human_model,p,R] = ForwardKinematics_ClosedLoop(Human_model,n,s,solid_path,p,R,q,k)">ForwardKinematics_ClosedLoop</a>	Computation of a symbolic forward kinematics</li><li><a href="NonLinCon_ClosedLoop_Num.html" class="code" title="function [c,ceq]=NonLinCon_ClosedLoop_Num(Human_model,solid_path1,solid_path2,num_solid,num_markers,q,k)">NonLinCon_ClosedLoop_Num</a>	Non-linear equation used in the inverse kinematics step for closed loops</li><li><a href="NonLinCon_ClosedLoop_Sym.html" class="code" title="function [c,ceq]=NonLinCon_ClosedLoop_Sym(Human_model,solid_path1,solid_path2,num_solid,num_markers,q,k)">NonLinCon_ClosedLoop_Sym</a>	Non-linear equation used in the inverse kinematics step for closed loops</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Human_model,p,R] = ForwardKinematics_ClosedLoop(Human_model,n,s,solid_path,p,R,q,k)</a>
+0002 <span class="comment">% Computation of a symbolic forward kinematics</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the</span>
+0006 <span class="comment">%   structure)</span>
+0007 <span class="comment">%   - n: current solid</span>
+0008 <span class="comment">%   - s: position of current solid in regards to articulation of parent</span>
+0009 <span class="comment">%   solid of closedloop</span>
+0010 <span class="comment">%   - solid_path: solid list included in the closed loop</span>
+0011 <span class="comment">%   - numClosedLoop: number of closed loop in the model</span>
+0012 <span class="comment">%   - p: position of the closed loops</span>
+0013 <span class="comment">%   - R: matrix rotatio of the closed loops</span>
+0014 <span class="comment">%   - q: vector of joint coordinates</span>
+0015 <span class="comment">%   - k: vector of homothety coefficient</span>
+0016 <span class="comment">%   OUTPUT</span>
+0017 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the</span>
+0018 <span class="comment">%   structure)</span>
+0019 <span class="comment">%   - p: position of the closed loops</span>
+0020 <span class="comment">%   - R: matrix rotatio of the closed loops</span>
+0021 <span class="comment">%________________________________________________________</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% Licence</span>
+0024 <span class="comment">% Toolbox distributed under GLP 3.0 Licence</span>
+0025 <span class="comment">%________________________________________________________</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0028 <span class="comment">% Georges Dumont</span>
+0029 <span class="comment">%________________________________________________________</span>
+0030 
+0031 <span class="keyword">if</span> n==(numel(solid_path)+1) <span class="comment">% quand on arrive au bout de la cha�ne</span>
+0032     p=p-k(solid_path(1))*s;   <span class="comment">% le point extr�me est attach� � un point de coordonn�es s sur le solide de base</span>
+0033     <span class="keyword">return</span>;
+0034 <span class="keyword">end</span>
+0035 
+0036 <span class="comment">%% incr�mentation de la position et orientation</span>
+0037 <span class="keyword">if</span> n ~= 1
+0038    <span class="comment">% if n~=(numel(solid_path))</span>
+0039         j=solid_path(n); <span class="comment">% num�ro du solide</span>
+0040         i=Human_model(j).mother; <span class="comment">% num�ro de la m�re</span>
+0041         
+0042         <span class="keyword">if</span> size(Human_model(j).linear_constraint) == [0 0]  <span class="comment">% si coordonn�e articulaire fonction lin�aire d'une autre coordonn�e articulaire</span>
+0043             angle=q(j);
+0044         <span class="keyword">else</span>
+0045             angle=Human_model(j).linear_constraint(2)*q(Human_model(j).linear_constraint(1)); <span class="comment">% qj=alpha*q</span>
+0046         <span class="keyword">end</span>
+0047         
+0048         <span class="keyword">if</span> Human_model(j).joint == 1    <span class="comment">% liaison pivot</span>
+0049             p=R*(k(i)*Human_model(j).b)+p; <span class="comment">% position du rep�re</span>
+0050             R=R*<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).a,angle)*<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).u,Human_model(j).theta); <span class="comment">% orientation du rep�re</span>
+0051         <span class="keyword">end</span>
+0052         <span class="keyword">if</span> Human_model(j).joint == 2    <span class="comment">% liaison glissi�re</span>
+0053             p=R*(k(i)*Human_model(j).b + angle*Human_model(j).a)+p;
+0054             R=R*<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).u,Human_model(j).theta);
+0055         <span class="keyword">end</span>
+0056         
+0057  <span class="comment">%   else</span>
+0058 <span class="comment">%         if n==(numel(solid_path)) &amp;&amp; ~isempty(Human_model(solid_path(n)).ClosedLoop)</span>
+0059 <span class="comment">%             j=solid_path(n); % num�ro du solide</span>
+0060 <span class="comment">%             i=Human_model(j).mother; % num�ro de la m�re</span>
+0061 <span class="comment">%</span>
+0062 <span class="comment">%             if size(Human_model(j).linear_constraint) == [0 0]  % si coordonn�e articulaire fonction lin�aire d'une autre coordonn�e articulaire</span>
+0063 <span class="comment">%                 angle=-q(j);</span>
+0064 <span class="comment">%             else</span>
+0065 <span class="comment">%                 angle=-Human_model(j).linear_constraint(2)*q(Human_model(j).linear_constraint(1)); % qj=alpha*q</span>
+0066 <span class="comment">%             end</span>
+0067 <span class="comment">%</span>
+0068 <span class="comment">%             if Human_model(j).joint == 1    % liaison pivot</span>
+0069 <span class="comment">%                 p=R*(k(i)*Human_model(j).b)+p; % position du rep�re</span>
+0070 <span class="comment">%                 R=R*Rodrigues(Human_model(j).a,angle)*Rodrigues(Human_model(j).u,Human_model(j).theta); % orientation du rep�re</span>
+0071 <span class="comment">%             end</span>
+0072 <span class="comment">%             if Human_model(j).joint == 2    % liaison glissi�re</span>
+0073 <span class="comment">%                 p=R*(k(i)*Human_model(j).b + angle*Human_model(j).a)+p;</span>
+0074 <span class="comment">%                 R=R*Rodrigues(Human_model(j).u,Human_model(j).theta);</span>
+0075 <span class="comment">%             end</span>
+0076             
+0077 <span class="comment">%        end</span>
+0078  <span class="comment">%   end</span>
+0079 <span class="keyword">end</span>
+0080 
+0081 n=n+1;
+0082 
+0083 [Human_model,p,R] = <a href="ForwardKinematics_ClosedLoop.html" class="code" title="function [Human_model,p,R] = ForwardKinematics_ClosedLoop(Human_model,n,s,solid_path,p,R,q,k)">ForwardKinematics_ClosedLoop</a>(Human_model,n,s,solid_path,p,R,q,k);
+0084 
+0085 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

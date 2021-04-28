@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of append_pdfs</title>
+  <meta name="keywords" content="append_pdfs">
+  <meta name="description" content="APPEND_PDFS Appends/concatenates multiple PDF files">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- # ExternLibrary --><!-- menu.html export_fig -->
+<h1>append_pdfs
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>APPEND_PDFS Appends/concatenates multiple PDF files</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function append_pdfs(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">APPEND_PDFS Appends/concatenates multiple PDF files
+
+ Example:
+   append_pdfs(output, input1, input2, ...)
+   append_pdfs(output, input_list{:})
+   append_pdfs test.pdf temp1.pdf temp2.pdf
+
+ This function appends multiple PDF files to an existing PDF file, or
+ concatenates them into a PDF file if the output file doesn't yet exist.
+
+ This function requires that you have ghostscript installed on your
+ system. Ghostscript can be downloaded from: http://www.ghostscript.com
+
+ IN:
+    output - string of output file name (including the extension, .pdf).
+             If it exists it is appended to; if not, it is created.
+    input1 - string of an input file name (including the extension, .pdf).
+             All input files are appended in order.
+    input_list - cell array list of input file name strings. All input
+                 files are appended in order.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="ghostscript.html" class="code" title="function varargout = ghostscript(cmd)">ghostscript</a>	GHOSTSCRIPT  Calls a local GhostScript executable with the input command</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function prepareCmdFile(cmdfile, output, varargin)</a></li><li><a href="#_sub2" class="code">function pathStr = normalizePath(pathStr)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%APPEND_PDFS Appends/concatenates multiple PDF files</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% Example:</span>
+0004 <span class="comment">%   append_pdfs(output, input1, input2, ...)</span>
+0005 <span class="comment">%   append_pdfs(output, input_list{:})</span>
+0006 <span class="comment">%   append_pdfs test.pdf temp1.pdf temp2.pdf</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% This function appends multiple PDF files to an existing PDF file, or</span>
+0009 <span class="comment">% concatenates them into a PDF file if the output file doesn't yet exist.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% This function requires that you have ghostscript installed on your</span>
+0012 <span class="comment">% system. Ghostscript can be downloaded from: http://www.ghostscript.com</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% IN:</span>
+0015 <span class="comment">%    output - string of output file name (including the extension, .pdf).</span>
+0016 <span class="comment">%             If it exists it is appended to; if not, it is created.</span>
+0017 <span class="comment">%    input1 - string of an input file name (including the extension, .pdf).</span>
+0018 <span class="comment">%             All input files are appended in order.</span>
+0019 <span class="comment">%    input_list - cell array list of input file name strings. All input</span>
+0020 <span class="comment">%                 files are appended in order.</span>
+0021 
+0022 <span class="comment">% Copyright: Oliver Woodford, 2011</span>
+0023 
+0024 <span class="comment">% Thanks to Reinhard Knoll for pointing out that appending multiple pdfs in</span>
+0025 <span class="comment">% one go is much faster than appending them one at a time.</span>
+0026 
+0027 <span class="comment">% Thanks to Michael Teo for reporting the issue of a too long command line.</span>
+0028 <span class="comment">% Issue resolved on 5/5/2011, by passing gs a command file.</span>
+0029 
+0030 <span class="comment">% Thanks to Martin Wittmann for pointing out the quality issue when</span>
+0031 <span class="comment">% appending multiple bitmaps.</span>
+0032 <span class="comment">% Issue resolved (to best of my ability) 1/6/2011, using the prepress</span>
+0033 <span class="comment">% setting</span>
+0034 
+0035 <span class="comment">% 26/02/15: If temp dir is not writable, use the output folder for temp</span>
+0036 <span class="comment">%           files when appending (Javier Paredes); sanity check of inputs</span>
+0037 <span class="comment">% 24/01/18: Fixed error in case of existing output file (append mode)</span>
+0038 <span class="comment">% 24/01/18: Fixed issue #213: non-ASCII characters in folder names on Windows</span>
+0039 
+0040 <a name="_sub0" href="#_subfunctions" class="code">function append_pdfs(varargin)</a>
+0041 
+0042     <span class="keyword">if</span> nargin &lt; 2,  <span class="keyword">return</span>;  <span class="keyword">end</span>  <span class="comment">% sanity check</span>
+0043 
+0044     <span class="comment">% Are we appending or creating a new file</span>
+0045     append = exist(varargin{1}, <span class="string">'file'</span>) == 2;
+0046     output = [tempname <span class="string">'.pdf'</span>];
+0047     <span class="keyword">try</span>
+0048         <span class="comment">% Ensure that the temp dir is writable (Javier Paredes 26/2/15)</span>
+0049         fid = fopen(output,<span class="string">'w'</span>);
+0050         fwrite(fid,1);
+0051         fclose(fid);
+0052         delete(output);
+0053         isTempDirOk = true;
+0054     <span class="keyword">catch</span>
+0055         <span class="comment">% Temp dir is not writable, so use the output folder</span>
+0056         [dummy,fname,fext] = fileparts(output); <span class="comment">%#ok&lt;ASGLU&gt;</span>
+0057         fpath = fileparts(varargin{1});
+0058         output = fullfile(fpath,[fname fext]);
+0059         isTempDirOk = false;
+0060     <span class="keyword">end</span>
+0061     <span class="keyword">if</span> ~append
+0062         output = varargin{1};
+0063         varargin = varargin(2:end);
+0064     <span class="keyword">end</span>
+0065 
+0066     <span class="comment">% Create the command file</span>
+0067     <span class="keyword">if</span> isTempDirOk
+0068         cmdfile = [tempname <span class="string">'.txt'</span>];
+0069     <span class="keyword">else</span>
+0070         cmdfile = fullfile(fpath,[fname <span class="string">'.txt'</span>]);
+0071     <span class="keyword">end</span>
+0072     <a href="#_sub1" class="code" title="subfunction prepareCmdFile(cmdfile, output, varargin)">prepareCmdFile</a>(cmdfile, output, varargin{:});
+0073 
+0074     <span class="comment">% Call ghostscript</span>
+0075     [status, errMsg] = <a href="ghostscript.html" class="code" title="function varargout = ghostscript(cmd)">ghostscript</a>([<span class="string">'@&quot;'</span> cmdfile <span class="string">'&quot;'</span>]);
+0076 
+0077     <span class="comment">% Check for ghostscript execution errors</span>
+0078     <span class="keyword">if</span> status &amp;&amp; ~isempty(strfind(errMsg,<span class="string">'undefinedfile'</span>)) &amp;&amp; ispc
+0079         <span class="comment">% Fix issue #213: non-ASCII characters in folder names on Windows</span>
+0080         <span class="keyword">for</span> fileIdx = 2 : numel(varargin)
+0081             [fpath,fname,fext] = fileparts(varargin{fileIdx});
+0082             varargin{fileIdx} = fullfile(<a href="#_sub2" class="code" title="subfunction pathStr = normalizePath(pathStr)">normalizePath</a>(fpath),[fname fext]);
+0083         <span class="keyword">end</span>
+0084         <span class="comment">% Rerun ghostscript with the normalized folder names</span>
+0085         <a href="#_sub1" class="code" title="subfunction prepareCmdFile(cmdfile, output, varargin)">prepareCmdFile</a>(cmdfile, output, varargin{:});
+0086         [status, errMsg] = <a href="ghostscript.html" class="code" title="function varargout = ghostscript(cmd)">ghostscript</a>([<span class="string">'@&quot;'</span> cmdfile <span class="string">'&quot;'</span>]);
+0087     <span class="keyword">end</span>
+0088 
+0089     <span class="comment">% Delete the command file</span>
+0090     delete(cmdfile);
+0091 
+0092     <span class="comment">% Check for ghostscript execution errors</span>
+0093     <span class="keyword">if</span> status
+0094         error(<span class="string">'YMA:export_fig:append_pdf'</span>,errMsg);
+0095     <span class="keyword">end</span>
+0096 
+0097     <span class="comment">% Rename the file if needed</span>
+0098     <span class="keyword">if</span> append
+0099         movefile(output, varargin{1}, <span class="string">'f'</span>);
+0100     <span class="keyword">end</span>
+0101 <span class="keyword">end</span>
+0102 
+0103 <span class="comment">% Prepare a text file with ghostscript directives</span>
+0104 <a name="_sub1" href="#_subfunctions" class="code">function prepareCmdFile(cmdfile, output, varargin)</a>
+0105     fh = fopen(cmdfile, <span class="string">'w'</span>);
+0106     fprintf(fh, <span class="string">'-q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -dPDFSETTINGS=/prepress -sOutputFile=&quot;%s&quot; -f'</span>, output);
+0107     fprintf(fh, <span class="string">' &quot;%s&quot;'</span>, varargin{:});
+0108     fclose(fh);
+0109 <span class="keyword">end</span>
+0110 
+0111 <span class="comment">% Convert long/non-ASCII folder names into their short ASCII equivalents</span>
+0112 <a name="_sub2" href="#_subfunctions" class="code">function pathStr = normalizePath(pathStr)</a>
+0113     [fpath,fname,fext] = fileparts(pathStr);
+0114     <span class="keyword">if</span> isempty(fpath) || strcmpi(fpath,pathStr), <span class="keyword">return</span>, <span class="keyword">end</span>
+0115     dirOutput = evalc([<span class="string">'system(''dir /X /AD &quot;'</span> pathStr <span class="string">'*&quot;'')'</span>]);
+0116     shortName = strtrim(regexprep(dirOutput,{<span class="string">'.*&gt; *'</span>,[fname fext <span class="string">'.*'</span>]},<span class="string">''</span>));
+0117     <span class="keyword">if</span> isempty(shortName)
+0118         shortName = [fname fext];
+0119     <span class="keyword">end</span>
+0120     fpath = <a href="#_sub2" class="code" title="subfunction pathStr = normalizePath(pathStr)">normalizePath</a>(fpath);  <span class="comment">%recursive until entire fpath is processed</span>
+0121     pathStr = fullfile(fpath, shortName);
+0122 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>
