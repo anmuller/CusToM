@@ -1,5 +1,9 @@
 function [Human_model] = FindInitDynParam(Human_model)
 % Identification of the stadium solid parameters from inertial parameters
+%   
+%   Based on:
+%   - Yeadon M. R. The simulation of aerial movement - II. A mathematical inertia
+%   model of the human body. Journal of Biomechanics, 23(1):67–74, 1990.
 %
 %   INPUT
 %   - Human_model: osteo-articular model (see the Documentation for the structure)
@@ -27,20 +31,20 @@ D=1000*ones(nb_solid_opt,1);
 %% On cherche les dimensions géométriques pour coller aux données anthropométriques
 %% Looking for geometrical dimensions for fitting with anthropometric data
 
-num_solid_L = 0; % numéro du solide à optimiser (solid number)
+num_solid_L = 0; % numéro du solide à optimiser (solid index)
 for i=1:numel(Human_model) % Pour chaque solide (loop for each solid)
-    if numel(Human_model(i).L) ~= 0 % Pour les solides possédant le champ "L"
-        num_solid_L = num_solid_L + 1;  % incrémentation
-        % On déclare les variables symboliques
+    if numel(Human_model(i).L) ~= 0 % For solids with « L », indicating that a stadium solid is associated. Pour les solides possédant le champ "L"
+        num_solid_L = num_solid_L + 1;  % incrementation
+        % Symbolic variables declaration
         syms('r0','real')
         syms('r1','real')
-        % Données anthropo
-            % masse
+        % Anthropo data
+            % mass
             MassAnthro = Human_model(i).m;
             % position centre de masse / center of mass position
                 % on cherche la position des points / looking for points position
                 for s=1:numel(Human_model) % pour chaque solide (loop for each solid)
-                    for p=1:size(Human_model(s).anat_position,1) % pour chaque position anatomique de ce solide
+                    for p=1:size(Human_model(s).anat_position,1) % fo each anatomic point of the solid (pour chaque position anatomique de ce solide)
                         if strcmp(Human_model(i).L{1,1},Human_model(s).anat_position{p,1})
                             N_Bone1 = s; % numéro du solide qui contient ce point (solid number to which this point belongs)
                             N_Point1 = p; % positionnement de la position anatomique dans ce solide (number of anatomical position within the anatomical position list)

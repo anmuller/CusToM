@@ -33,15 +33,16 @@ function [y] = DynCalibOptimization_costfunction1(X,Human_model,frame_opti,q,dq,
 % Georges Dumont
 %________________________________________________________
 
+%% Model Actualisation based on X
 %% Actualisation du modèle à partir de X
 num_i=0;
 for i=1:numel(Human_model)
     if numel(Human_model(i).L) ~= 0 % Pour les solides possédant le champ « L ». For solids with « L », indicating that a stadium solid is associated
         num_i=num_i+1;
         [Masse,Zc,Ix,Iy,Iz]=DynParametersComputation(1000,X(4*(num_i-1)+1),X(4*(num_i-1)+3),X(4*(num_i-1)+2),X(4*(num_i-1)+4),Human_model(i).ParamAnthropo.h);
-        % Masse
+        % Mass
         Human_model(i).m=Masse;
-        % Centre de masse
+        % Center of mass
         if Human_model(i).ParamAnthropo.Typ == 1
         	DeltaZc = (Zc - Human_model(i).ParamAnthropo.Zc);
         else
@@ -49,8 +50,8 @@ for i=1:numel(Human_model)
         end
         Cy=Human_model(i).c(2) + DeltaZc;
         Human_model(i).c(2) = Cy;
-        % Inertie
-        Human_model(i).I = [Ix 0 0; 0 Iy 0; 0 0 Iz]; % - [Masse*Cy*Cy 0 0;0 0 0;0 0 Masse*Cy*Cy]; % on déplace la matrice d'inertie en G
+        % Inertia
+        Human_model(i).I = [Ix 0 0; 0 Iy 0; 0 0 Iz]; % - [Mass*Cy*Cy 0 0;0 0 0;0 0 Mass*Cy*Cy]; % We move the inertia matrix in G. (on déplace la matrice d'inertie en G)
     end
 end
 
@@ -69,12 +70,13 @@ for i=frame_opti
     Human_model(1).dv0=dv0(i,:)';
     Human_model(1).dw=dw(i,:)';    
     for j=2:numel(Human_model)
-        Human_model(j).q=q(i,j); %#ok<*SAGROW>
+        Human_model(j).q=q(i,j); 
         Human_model(j).dq=dq(i,j);
         Human_model(j).ddq=ddq(i,j);
     end
     Human_model = ForwardAllKinematics(Human_model,1);
     [Human_model,f6dof(:,i),t6dof0(:,i)]=InverseDynamicsSolid(Human_model,external_forces(i).fext,g,1);
+    % Computation of the effort in the 6DoF joint (moment change)
     % Calcul des efforts au niveau de la liaison 6DoF (transport du moment)
     t6dof(:,i) = t6dof0(:,i) + cross(f6dof(:,i),p_pelvis(i,:)'); 
 end
