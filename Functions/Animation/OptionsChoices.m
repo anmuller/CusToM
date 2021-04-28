@@ -61,11 +61,11 @@ if isfield(AnimateParameters, 'muscles_anim')
 else
     options.muscles_anim = 0;
 end
-% if isfield(AnimateParameters, 'ellipsoid')
-%     ellipsoid_anim = AnimateParameters.ellipsoid;
-% else
-options.ellipsoid_anim = 0;
-% end
+if isfield(AnimateParameters, 'ShoulderEllipsoid')
+    options.ellipsoid_anim = AnimateParameters.ShoulderEllipsoid;
+else
+    options.ellipsoid_anim = 0;
+end
 if isfield(AnimateParameters, 'wrap')
     options.wrap_anim = AnimateParameters.wrap;
 else

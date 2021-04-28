@@ -696,26 +696,33 @@ for f=f_affich
         animStruct.Set{f}={animStruct.Set{f}{:},Vpt_p};
     end
     
-    %% Scapulo-thoracic Ellipsoid
+        %% Scapulo-thoracic Ellipsoid
     if options.ellipsoid_anim
+        %&& sum(cellfun(@isempty,[Muscles.wrap]'))==0
         Fe=[];
         CEe=[];
         Ve=[];
-        num_solid=7;
-        
-        for i_w = 1:2
-            pos_ell=Human_model_bis(7).anat_position{8+i_w, 2};
+        [~,num_Thorax] = intersect({Human_model_bis.name},'Thorax');
+        [~,ind_anat_ellips] = intersect(Human_model_bis(num_Thorax).anat_position(:,1),'Thorax_scjJointRightNode');
+        [~,num_Scapula] = intersect({Human_model_bis.name},'RScapula');
+        [~,ind_radius_ellips] = intersect(Human_model_bis(num_Scapula).anat_position(:,1),'ThoracicEllipsoid_radius');
+        Ellips_radius = Human_model_bis(num_Scapula).anat_position(ind_radius_ellips,2);
+        Ellips_radius = Ellips_radius{1};
+        Ellips_rx = Ellips_radius(1);
+        Ellips_ry = Ellips_radius(2);
+        Ellips_rz = Ellips_radius(3);
+        for i_w = 0:1
+            pos_ell=Human_model_bis(num_Thorax).anat_position{ind_anat_ellips+i_w, 2};
             T_Ri_Rw=[eye(3,3), pos_ell;[0 0 0],1];
-            X = Human_model_bis(num_solid).Tc_R0_Ri*T_Ri_Rw;
-            [xel1,yel1,zel1]=ellipsoid(0,0,0,1.8/1.7*0.07,1.8/1.7*0.15,1.8/1.7*0.07);
+            X=Human_model_bis(num_Thorax).Tc_R0_Ri*T_Ri_Rw;
+            [xel1,yel1,zel1]=ellipsoid(0,0,0,Ellips_rx,Ellips_ry,Ellips_rz);
             [Fel1,Vel1]=surf2patch(xel1,yel1,zel1);
-            Vell_R0= (X*[Vel1';ones(1,length(Vel1))])';
-            
+            Vell_R0=(X*[Vel1';ones(1,length(Vel1))])';
             tot_nb_F=length(Fe);
             cur_nb_F=length(Fel1);
             tot_nb_V=length(Ve);
             Fe((1:cur_nb_F)+tot_nb_F,:)=Fel1+tot_nb_V;
-            Ve=[Ve ;Vell_R0(:,1:3)];
+            Ve=[Ve ;Vell_R0(:,1:3)]; %#ok<AGROW>
         end
         if isfield(AnimateParameters,'Mode')  &&  (isequal(AnimateParameters.Mode, 'Figure') ...
                 || isequal(AnimateParameters.Mode, 'GenerateParameters') ...                
@@ -732,6 +739,7 @@ for f=f_affich
         animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices'};
         animStruct.Set{f} = {animStruct.Set{f}{:},Ve};
     end
+    
     
     %% Muscle wraps
     if options.wrap_anim && isfield(Human_model,'wrap') && numel([Human_model.wrap])>0
