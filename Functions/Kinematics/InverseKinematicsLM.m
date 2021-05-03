@@ -46,6 +46,7 @@ end
 
 %% Position of the real markers from the c3d file
 [real_markers, nb_frame, Firstframe, Lastframe,f_mocap] = Get_real_markers(filename,list_markers,AnalysisParameters); 
+list_markers = [real_markers.name];
 
 %% Root position
 Base_position=cell(nb_frame,1);
@@ -69,10 +70,9 @@ end
 
 %% Inverse kinematics frame per frame
 
-options1 = optimoptions(@fmincon,'Display','off','TolFun',1e-3,'MaxFunEvals',50000,'GradObj','off','GradConstr','off');
-
+options1 = optimoptions(@fmincon,'Algorithm','interior-point','Display','final','TolFun',1e-6,'TolCon',1e-6,'MaxFunEvals',10000000,'MaxIter',10000);
 q=zeros(nb_solid,nb_frame);
-ceq=zeros(9*nbClosedLoop,nb_frame);
+ceq=zeros(6*nbClosedLoop,nb_frame);
 
 addpath('Symbolic_function')
 
@@ -112,72 +112,39 @@ else
     l_sup1=[Human_model.limit_sup]';
 end
 
-% Jacobian matrix loading
-Jfq = BiomechanicalModel.Jacob.Jfq;
-indexesNumericJfq = BiomechanicalModel.Jacob.indexesNumericJfq;
-nonNumericJfq = BiomechanicalModel.Jacob.nonNumericJfq;
-Jfcut = BiomechanicalModel.Jacob.Jfcut;
-indexesNumericJfcut = BiomechanicalModel.Jacob.indexesNumericJfcut;
-nonNumericJfcut = BiomechanicalModel.Jacob.nonNumericJfcut;
-Jcutq = BiomechanicalModel.Jacob.Jcutq;
-indexesNumericJcutq = BiomechanicalModel.Jacob.indexesNumericJcutq;
-nonNumericJcutq = BiomechanicalModel.Jacob.nonNumericJcutq;
-Jcutcut = BiomechanicalModel.Jacob.Jcutcut;
-indexesNumericJcutcut = BiomechanicalModel.Jacob.indexesNumericJcutcut;
-nonNumericJcutcut = BiomechanicalModel.Jacob.nonNumericJcutcut;
-if isfield(BiomechanicalModel.Jacob,'RmvInd_q')
-    RmvInd_q = BiomechanicalModel.Jacob.RmvInd_q;Ind_q=setdiff(1:nb_solid,RmvInd_q);
-else
-    RmvInd_q=[];Ind_q=setdiff(1:nb_solid,RmvInd_q);
-end
-% Inverse kinematics parameters
-if isfield(BiomechanicalModel,'Generalized_Coordinates')
-    pos_root =find(q_map'*([Human_model.mother]==0)'); %  root solid position;
-else
-    pos_root =find([Human_model.mother]==0); %  root solid position
-end
-
-lambda = 5e-2; % LM
-
 h = waitbar(0,['Inverse Kinematics (' filename ')']);
 % 1st frame : classical optimization
-q0=zeros(nb_solid,1);   
-ik_function_objective=@(qvar)CostFunctionSymbolicIK(qvar,nb_cut,real_markers,1,list_function,list_function_markers,Rcut,pcut);
-[q(:,1)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,[],options1);
-waitbar(1/nb_frame)
+
+if ~isfield(BiomechanicalModel,'ClosedLoopData')
+    q0=zeros(nb_solid,1);   
+    ik_function_objective=@(qvar)CostFunctionSymbolicIK(qvar,nb_cut,real_markers,1,list_function,list_function_markers,Rcut,pcut);
+    [q(:,1)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,[],options1);
+    hclosedloophandle =@(x) 0 ;
+else
+    q0=zeros(nb_solid,1);
+    ik_function_objective=@(qvar)CostFunctionSymbolicIK(qvar,nb_cut,real_markers,1,list_function,list_function_markers,Rcut,pcut);
+    nonlcon=@(qvar)ClosedLoop(qvar,nbClosedLoop);
+    [q(:,1)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,nonlcon,options1);
+    hclosedloophandle = BiomechanicalModel.ClosedLoopData.ConstraintEq;
+end
+
+buteehandle = @(q)  Limits(q,l_inf1,l_sup1);
+gamma = 100;
+zeta = 20;
+
+waitbar(1/nb_frame) 
+
+optionsLM = optimset('Algorithm','Levenberg-Marquardt','Display','off','MaxIter',4e6,'MaxFunEval',5e6);
 
 for f = 2:nb_frame
-    % cut evaluation
-    for c=1:nb_cut
-        [Rcut(:,:,c),pcut(:,:,c)]=list_function{c}(q(:,f-1),pcut,Rcut);
-    end
-    % dx
-    for m=1:numel(list_markers)
-        dX((m-1)*3+1:3*m,:) = real_markers(m).position(f,:)'-list_function_markers{m}(q(:,f-1),pcut,Rcut);
-    end
-    % Jfq
-    Jfq(indexesNumericJfq) = nonNumericJfq(q(:,f-1),pcut,Rcut);
-    % Jfcut
-    Jfcut(indexesNumericJfcut) = nonNumericJfcut(q(:,f-1),pcut,Rcut);
-    % Jcutq
-    Jcutq(indexesNumericJcutq) = nonNumericJcutq(q(:,f-1),pcut,Rcut);
-    % Jcutcut
-    Jcutcut(indexesNumericJcutcut) = nonNumericJcutcut(q(:,f-1),pcut,Rcut);
-    % J
-    J = Jfq + Jfcut*dJcutq(Jcutcut,Jcutq); J(:,RmvInd_q)=[];
-    % dq (Levenberg–Marquardt)
-    Jt = transpose(J);
-    JtJ = Jt*J;
-    A=(JtJ+lambda * diag(diag(JtJ)));
-    B=Jt*(dX);
-    dq = A\B;
-    % joint coordinates computation
-    q(Ind_q,f)=q(Ind_q,f-1)+dq;
-%     q(Ind_q,f)=q(Ind_q,f-1)+[dq(1:pos_root-1,:);0;dq(pos_root:end,:)];
+  
+   fun = @(q) CostFunctionLM(q, f, nb_cut,pcut,Rcut,gamma,hclosedloophandle,list_function,real_markers,list_function_markers,zeta,buteehandle);
+   q(:,f)= lsqnonlin(fun,q(:,f-1),[],[],optionsLM);
+
     waitbar(f/nb_frame)
+    
 end
 close(h)
-
 %% Data processing
 if AnalysisParameters.IK.FilterActive
     % data filtering
@@ -192,7 +159,8 @@ if nbClosedLoop == 0
         [KinematicsError(:,f)] = ErrorMarkersIK(q(:,f),nb_cut,real_markers,f,list_markers,Rcut,pcut);
     end
 else
-    nonlcon=@(qvar)NonLinCon_ClosedLoop(qvar,nb_cut,list_function,pcut,Rcut);
+    nonlcon=@(qvar)ClosedLoop(qvar,nbClosedLoop);
+
     for f=1:nb_frame
         [KinematicsError(:,f)] = ErrorMarkersIK(q(:,f),nb_cut,real_markers,f,list_markers,Rcut,pcut);
         [~,ceq(:,f)]=nonlcon(q(:,f));

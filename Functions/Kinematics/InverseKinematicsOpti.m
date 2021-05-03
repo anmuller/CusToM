@@ -48,6 +48,7 @@ end
 
 %% Getting real markers position from the c3d file
 [real_markers, nb_frame, Firstframe, Lastframe,f_mocap] = Get_real_markers(filename,list_markers, AnalysisParameters); %#ok<ASGLU>
+list_markers = [real_markers.name]';
 
 %% Root position
 Base_position=cell(nb_frame,1);
