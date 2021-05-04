@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of btkGetForcePlatformWrenches</title>
+  <meta name="keywords" content="btkGetForcePlatformWrenches">
+  <meta name="description" content="BTKGETFORCEPLATFORMWRENCHES Extract force platform wrenches (FPW) from a biomechanical acquisition in the global frame.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html Functions --><!-- # BTK --><!-- ../menu.html linux64 --><!-- menu.html @BasicFilters -->
+<h1>btkGetForcePlatformWrenches
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>BTKGETFORCEPLATFORMWRENCHES Extract force platform wrenches (FPW) from a biomechanical acquisition in the global frame.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function FPW = btkGetForcePlatformWrenches(h, threshold) %#ok </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">BTKGETFORCEPLATFORMWRENCHES Extract force platform wrenches (FPW) from a biomechanical acquisition in the global frame.
+ 
+  FPW = BTKGETFORCEPLATFORMWRENCHES(H) returns a structure of wrenches 
+  computed from force platform data and expressed in the global frame.
+  The structure FPW is a row structure where each row contains 
+  data for one wrench.  Fieldnames for each row are:
+   - FPW(i).P
+   - FPW(i).F
+   - FPW(i).M
+  The field P is a matrix (n,3) where n is the number of frames and contains the
+  positions of the wrench in the global frame (force platform orgin).  The field F 
+  is a matrix (n,3) which contains wrench's forces in the global frame.  The field M 
+  is a matrix (n,3) which contains wrench's moments in the global frame.
+
+  FPW = BTKGETFORCEPLATFORMWRENCHES(H, INGLOBALFRAME) gives the possibility to compute 
+  the force platform in the local frame when INGLOBALFRAME is equal to 0. Other values
+  for INGLOBALFRAME compute the force platform wrenches in the global frame.
+
+  The biomechanical acquisition handle H is represented as a double and can be 
+  only used with the btk* functions.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Functions/BTK/linux64/btkEmulateC3Dserver.html" class="code" title="function itf = btkEmulateC3Dserver()">btkEmulateC3Dserver</a>	BTKEMULATEC3DSERVER Creates an emulated COM object for C3Dserver.</li><li><a href="../../../../Functions/BTK/linux64/btkTransformTDFToViconC3DFile.html" class="code" title="function btkTransformTDFToViconC3DFile(TDF_INPUT, C3D_OUTPUT)">btkTransformTDFToViconC3DFile</a>	BTKTRANSFORMTDFTOVICONC3DFILE transforms a TDF file (BTS Bioengineering) to a compatible Vicon C3D file.</li><li><a href="../../../../Functions/BTK/mac64/btkEmulateC3Dserver.html" class="code" title="function itf = btkEmulateC3Dserver()">btkEmulateC3Dserver</a>	BTKEMULATEC3DSERVER Creates an emulated COM object for C3Dserver.</li><li><a href="../../../../Functions/BTK/mac64/btkTransformTDFToViconC3DFile.html" class="code" title="function btkTransformTDFToViconC3DFile(TDF_INPUT, C3D_OUTPUT)">btkTransformTDFToViconC3DFile</a>	BTKTRANSFORMTDFTOVICONC3DFILE transforms a TDF file (BTS Bioengineering) to a compatible Vicon C3D file.</li><li><a href="../../../../Functions/BTK/win64/btkEmulateC3Dserver.html" class="code" title="function itf = btkEmulateC3Dserver()">btkEmulateC3Dserver</a>	BTKEMULATEC3DSERVER Creates an emulated COM object for C3Dserver.</li><li><a href="../../../../Functions/BTK/win64/btkTransformTDFToViconC3DFile.html" class="code" title="function btkTransformTDFToViconC3DFile(TDF_INPUT, C3D_OUTPUT)">btkTransformTDFToViconC3DFile</a>	BTKTRANSFORMTDFTOVICONC3DFILE transforms a TDF file (BTS Bioengineering) to a compatible Vicon C3D file.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function FPW = btkGetForcePlatformWrenches(h, threshold) </a><span class="comment">%#ok</span>
+0002 <span class="comment">%BTKGETFORCEPLATFORMWRENCHES Extract force platform wrenches (FPW) from a biomechanical acquisition in the global frame.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%  FPW = BTKGETFORCEPLATFORMWRENCHES(H) returns a structure of wrenches</span>
+0005 <span class="comment">%  computed from force platform data and expressed in the global frame.</span>
+0006 <span class="comment">%  The structure FPW is a row structure where each row contains</span>
+0007 <span class="comment">%  data for one wrench.  Fieldnames for each row are:</span>
+0008 <span class="comment">%   - FPW(i).P</span>
+0009 <span class="comment">%   - FPW(i).F</span>
+0010 <span class="comment">%   - FPW(i).M</span>
+0011 <span class="comment">%  The field P is a matrix (n,3) where n is the number of frames and contains the</span>
+0012 <span class="comment">%  positions of the wrench in the global frame (force platform orgin).  The field F</span>
+0013 <span class="comment">%  is a matrix (n,3) which contains wrench's forces in the global frame.  The field M</span>
+0014 <span class="comment">%  is a matrix (n,3) which contains wrench's moments in the global frame.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%  FPW = BTKGETFORCEPLATFORMWRENCHES(H, INGLOBALFRAME) gives the possibility to compute</span>
+0017 <span class="comment">%  the force platform in the local frame when INGLOBALFRAME is equal to 0. Other values</span>
+0018 <span class="comment">%  for INGLOBALFRAME compute the force platform wrenches in the global frame.</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%  The biomechanical acquisition handle H is represented as a double and can be</span>
+0021 <span class="comment">%  only used with the btk* functions.</span>
+0022 
+0023 <span class="comment">%  Author: A. Barré</span>
+0024 <span class="comment">%  Copyright 2009-2013 Biomechanical ToolKit (BTK).</span>
+0025 
+0026 <span class="comment">% The following comment, MATLAB compiler pragma, is necessary to avoid</span>
+0027 <span class="comment">% compiling this M-file instead of linking against the MEX-file.  Don't remove.</span>
+0028 <span class="comment">%# mex</span>
+0029 
+0030 error(generatemsgid(<span class="string">'NotSupported'</span>),<span class="string">'MEX file for BTKGETFORCEPLATFORMWRENCHES not found'</span>);
+0031 
+0032 <span class="comment">% [EOF] btkGetForcePlatformWrenches.m</span>
+0033</pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

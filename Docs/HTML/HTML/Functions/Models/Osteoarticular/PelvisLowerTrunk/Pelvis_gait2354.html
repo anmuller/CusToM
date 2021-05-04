@@ -1,0 +1,302 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Pelvis_gait2354</title>
+  <meta name="keywords" content="Pelvis_gait2354">
+  <meta name="description" content="CREDIT">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html Functions --><!-- ../../menu.html Models --><!-- ../menu.html Osteoarticular --><!-- menu.html PelvisLowerTrunk -->
+<h1>Pelvis_gait2354
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>CREDIT</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [OsteoArticularModel]= Pelvis_gait2354(OsteoArticularModel,k,Mass,AttachmentPoint) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">    CREDIT
+   Delp S.L., Loan J.P., Hoy M.G., Zajac F.E., Topp E.L., Rosen J.M., Thelen D.G., Anderson F.C., Seth A. 
+   NOTES
+   3D, 23 DOF gait model created by D.G. Thelen, Univ. of Wisconsin-Madison, and Ajay Seth, Frank C. Anderson, and Scott L. Delp, Stanford University. Lower extremity joint defintions based on Delp et al. (1990). Low back joint and anthropometry based on Anderson and Pandy (1999, 2001). Planar knee model of Yamaguchi and Zajac (1989). Seth replaced tibia translation constraints with a CustomJoint for the knee and removed the patella to eliminate all kinematic constraints; insertions of the quadrucepts are handled with moving points in the tibia frame as defined by Delp 1990. 
+   LINK
+   http://simtk-confluence.stanford.edu:8080/display/OpenSim/Gait+2392+and+2354+Models
+   Based on: 
+   - Delp, S.L., Loan, J.P., Hoy, M.G., Zajac, F.E., Topp E.L., Rosen, J.M.: An interactive graphics-based model of the lower extremity to study orthopaedic surgical procedures, IEEE Transactions on Biomedical Engineering, vol. 37, pp. 757-767, 1990. 
+   - Yamaguchi G.T., Zajac F.E.: A planar model of the knee joint to characterize the knee extensor mechanism.&quot; J . Biomech. vol. 22. pp. 1-10. 1989. 
+   - Anderson F.C., Pandy M.G.: A dynamic optimization solution for vertical jumping in three dimensions. Computer Methods in Biomechanics and Biomedical Engineering 2:201-231, 1999. Anderson F.C., Pandy M.G.: Dynamic optimization of human walking. Journal of Biomechanical Engineering 123:381-390, 2001.
+   INPUT
+   - OsteoArticularModel: osteo-articular model of an already existing
+   model (see the Documentation for the structure)
+   - k: homothety coefficient for the geometrical parameters (defined as
+   the subject size in cm divided by 180)
+   - Signe: side of the thigh model ('R' for right side or 'L' for left side)
+   - Mass: mass of the solids
+   - AttachmentPoint: name of the attachment point of the model on the
+   already existing model (character string)
+   OUTPUT
+   - OsteoArticularModel: new osteo-articular model (see the Documentation
+   for the structure) 
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>	Computation of inertia matrix from radius of gyration</li><li><a href="../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>	Addition of a sister to a solid</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [OsteoArticularModel]= Pelvis_gait2354(OsteoArticularModel,k,Mass,AttachmentPoint)</a>
+0002 
+0003 <span class="comment">%    CREDIT</span>
+0004 <span class="comment">%   Delp S.L., Loan J.P., Hoy M.G., Zajac F.E., Topp E.L., Rosen J.M., Thelen D.G., Anderson F.C., Seth A.</span>
+0005 <span class="comment">%   NOTES</span>
+0006 <span class="comment">%   3D, 23 DOF gait model created by D.G. Thelen, Univ. of Wisconsin-Madison, and Ajay Seth, Frank C. Anderson, and Scott L. Delp, Stanford University. Lower extremity joint defintions based on Delp et al. (1990). Low back joint and anthropometry based on Anderson and Pandy (1999, 2001). Planar knee model of Yamaguchi and Zajac (1989). Seth replaced tibia translation constraints with a CustomJoint for the knee and removed the patella to eliminate all kinematic constraints; insertions of the quadrucepts are handled with moving points in the tibia frame as defined by Delp 1990.</span>
+0007 <span class="comment">%   LINK</span>
+0008 <span class="comment">%   http://simtk-confluence.stanford.edu:8080/display/OpenSim/Gait+2392+and+2354+Models</span>
+0009 <span class="comment">%   Based on:</span>
+0010 <span class="comment">%   - Delp, S.L., Loan, J.P., Hoy, M.G., Zajac, F.E., Topp E.L., Rosen, J.M.: An interactive graphics-based model of the lower extremity to study orthopaedic surgical procedures, IEEE Transactions on Biomedical Engineering, vol. 37, pp. 757-767, 1990.</span>
+0011 <span class="comment">%   - Yamaguchi G.T., Zajac F.E.: A planar model of the knee joint to characterize the knee extensor mechanism.&quot; J . Biomech. vol. 22. pp. 1-10. 1989.</span>
+0012 <span class="comment">%   - Anderson F.C., Pandy M.G.: A dynamic optimization solution for vertical jumping in three dimensions. Computer Methods in Biomechanics and Biomedical Engineering 2:201-231, 1999. Anderson F.C., Pandy M.G.: Dynamic optimization of human walking. Journal of Biomechanical Engineering 123:381-390, 2001.</span>
+0013 <span class="comment">%   INPUT</span>
+0014 <span class="comment">%   - OsteoArticularModel: osteo-articular model of an already existing</span>
+0015 <span class="comment">%   model (see the Documentation for the structure)</span>
+0016 <span class="comment">%   - k: homothety coefficient for the geometrical parameters (defined as</span>
+0017 <span class="comment">%   the subject size in cm divided by 180)</span>
+0018 <span class="comment">%   - Signe: side of the thigh model ('R' for right side or 'L' for left side)</span>
+0019 <span class="comment">%   - Mass: mass of the solids</span>
+0020 <span class="comment">%   - AttachmentPoint: name of the attachment point of the model on the</span>
+0021 <span class="comment">%   already existing model (character string)</span>
+0022 <span class="comment">%   OUTPUT</span>
+0023 <span class="comment">%   - OsteoArticularModel: new osteo-articular model (see the Documentation</span>
+0024 <span class="comment">%   for the structure)</span>
+0025 <span class="comment">%________________________________________________________</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% Licence</span>
+0028 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0029 <span class="comment">%________________________________________________________</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0032 <span class="comment">% Georges Dumont</span>
+0033 <span class="comment">%________________________________________________________</span>
+0034 
+0035 <span class="comment">%% Variables de sortie :</span>
+0036 <span class="comment">% &quot;enrichissement de la structure &quot;Human_model&quot;&quot;</span>
+0037 
+0038 list_solid={<span class="string">'pelvis'</span>};
+0039 
+0040 <span class="comment">% %% Incr�entation du num�o des groupes</span>
+0041 <span class="comment">% n_group=0;</span>
+0042 <span class="comment">% for i=1:numel(OsteoArticularModel)</span>
+0043 <span class="comment">%     if size(OsteoArticularModel(i).Group) ~= [0 0] %#ok&lt;BDSCA&gt;</span>
+0044 <span class="comment">%         n_group=max(n_group,OsteoArticularModel(i).Group(1,1));</span>
+0045 <span class="comment">%     end</span>
+0046 <span class="comment">% end</span>
+0047 <span class="comment">% n_group=n_group+1;</span>
+0048 
+0049 <span class="comment">%% Incr�entation de la num�otation des solides</span>
+0050 
+0051 s=size(OsteoArticularModel,2)+1;  <span class="comment">%#ok&lt;NASGU&gt; % num�o du premier solide</span>
+0052 <span class="keyword">for</span> i=1:size(list_solid,2)      <span class="comment">% num�otation de chaque solide : s_&quot;nom du solide&quot;</span>
+0053     <span class="keyword">if</span> i==1
+0054         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s;'</span>))
+0055     <span class="keyword">else</span>
+0056         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s_'</span>,list_solid{i-1},<span class="string">'+1;'</span>))
+0057     <span class="keyword">end</span>
+0058 <span class="keyword">end</span>
+0059 
+0060 <span class="comment">% trouver le num�o de la m�e �partir du nom du point d'attache : 'attachment_pt'</span>
+0061 <span class="keyword">if</span> numel(OsteoArticularModel) == 0
+0062     s_mother=0;
+0063     pos_attachment_pt=[0 0 0]';
+0064 <span class="keyword">else</span>
+0065 <span class="comment">%     AttachmentPoint=varargin{1};</span>
+0066     test=0;
+0067     <span class="keyword">for</span> i=1:numel(OsteoArticularModel)
+0068         <span class="keyword">for</span> j=1:size(OsteoArticularModel(i).anat_position,1)
+0069             <span class="keyword">if</span> strcmp(AttachmentPoint,OsteoArticularModel(i).anat_position{j,1})
+0070                 s_mother=i;
+0071                 pos_attachment_pt=OsteoArticularModel(i).anat_position{j,2}+OsteoArticularModel(s_mother).c;
+0072                 test=1;
+0073                 <span class="keyword">break</span>
+0074             <span class="keyword">end</span>
+0075         <span class="keyword">end</span>
+0076         <span class="keyword">if</span> i==numel(OsteoArticularModel) &amp;&amp; test==0
+0077             error([AttachmentPoint <span class="string">' is no existent'</span>])
+0078         <span class="keyword">end</span>
+0079     <span class="keyword">end</span>
+0080     <span class="keyword">if</span> OsteoArticularModel(s_mother).child == 0      <span class="comment">% si la m�e n'a pas d'enfant</span>
+0081         OsteoArticularModel(s_mother).child = eval([<span class="string">'s_'</span> list_solid{1}]);    <span class="comment">% l'enfant de cette m�e est ce solide</span>
+0082     <span class="keyword">else</span>
+0083         [OsteoArticularModel]=<a href="../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval([<span class="string">'s_'</span> list_solid{1}]));   <span class="comment">% recherche de la derni�e soeur</span>
+0084     <span class="keyword">end</span>
+0085 <span class="keyword">end</span>
+0086 
+0087 <span class="comment">%% ------------------------- Pelvis ----------------------------------------</span>
+0088 
+0089 <span class="comment">% Position du CoM par rapport au rep�e de centr�au milieu RASIS-LASIS</span>
+0090 CoM_Pelvis = k*[-0.0707 0 0]';
+0091 
+0092 <span class="comment">%milieu de RASIS et ASIS dans le rep�e centr��la hanche droite</span>
+0093 Hip_midRASISASIS = k*[0; 0; 0]-CoM_Pelvis;
+0094 
+0095 <span class="comment">% Position des noeuds dans le rep�e centr�au milieu de RASIS et ASIS</span>
+0096 Pelvis_HipJointRightNode = k*[-0.0707 -0.0661 0.0835]'                        - CoM_Pelvis;
+0097 Pelvis_HipJointLeftNode = k*[-0.0707 -0.0661 -0.0835]'                          - CoM_Pelvis;
+0098 Pelvis_HipJointsCenterNode = (Pelvis_HipJointLeftNode+Pelvis_HipJointRightNode)/2-CoM_Pelvis;
+0099 
+0100 <span class="comment">% ------------------------- Sacrum ----------------------------------------</span>
+0101 
+0102 <span class="comment">% Position des noeuds</span>
+0103 <span class="comment">% Sacrum_L5JointNode = k*[-65;30;0]/1000- CoM_Pelvis; % D�ini �la main sur la g�m�rie du Sacrum .STL</span>
+0104 
+0105 Pelvis_L5JointNode = k*[-0.1007 0.0815 0]'-CoM_Pelvis;
+0106 LowerTrunk_UpperTrunkNode = k*[-0.1007 0.0815 0]'-CoM_Pelvis;
+0107 
+0108 <span class="comment">%% D�inition des positions anatomiques</span>
+0109 
+0110 Pelvis_position_set= {<span class="keyword">...</span>
+0111     <span class="string">'RFWT'</span>,k*([0.02;0.03;0.128])-CoM_Pelvis;<span class="keyword">...</span>
+0112     <span class="string">'LFWT'</span>,k*([0.02;0.03;-0.128])-CoM_Pelvis;<span class="keyword">...</span>
+0113     <span class="string">'V.Sacral'</span>,k*([-0.16;0.04;0])-CoM_Pelvis;<span class="keyword">...</span>
+0114     <span class="string">'LBWT'</span>,                     (k*[-0.08;0.0361;-0.055]); <span class="keyword">...</span>
+0115     <span class="string">'RBWT'</span>,                     (k*[-0.08;0.0361;0.055]); <span class="keyword">...</span>
+0116     <span class="keyword">...</span><span class="comment">%'RightPubicTubercle', ((k*[0.0489;    -0.0032;    -0.0853]-Hip_midRASISASIS)   -CoM_Pelvis); ...</span>
+0117     <span class="keyword">...</span><span class="comment">%'LeftPubicTubercle', ([1 0 0;0 1 0;0 0 -1]*(k*[0.0489;    -0.0032;    -0.0853]-Hip_midRASISASIS )  -CoM_Pelvis); ...</span>
+0118     <span class="string">'Pelvis_HipJointRightNode'</span>, Pelvis_HipJointRightNode; <span class="keyword">...</span>
+0119     <span class="string">'Pelvis_HipJointLeftNode'</span>,  Pelvis_HipJointLeftNode; <span class="keyword">...</span>
+0120     <span class="string">'Pelvis_LowerTrunkNode'</span>,    Pelvis_L5JointNode; <span class="keyword">...</span>
+0121         <span class="string">'Pelvis_L5JointNode'</span>, Pelvis_L5JointNode; <span class="keyword">...</span>
+0122     <span class="string">'Pelvis_HipJointsCenterNode'</span>, Pelvis_HipJointsCenterNode; <span class="keyword">...</span>
+0123     <span class="string">'CoMPelvis'</span>,                [0; 0; 0];<span class="keyword">...</span>
+0124     <span class="string">'Hip_midRASISASIS'</span>,Hip_midRASISASIS;<span class="keyword">...</span>
+0125     <span class="string">'LowerTrunk_UpperTrunkNode'</span>,LowerTrunk_UpperTrunkNode;<span class="keyword">...</span>
+0126     };
+0127 
+0128 
+0129 Pelvis_position_set = [Pelvis_position_set;<span class="keyword">...</span>
+0130     {<span class="keyword">...</span>
+0131     [<span class="string">'glut_med1_r-P1'</span>],k*([-0.0408;0.0304;0.1209])-CoM_Pelvis;<span class="keyword">...</span>
+0132     [<span class="string">'glut_med2_r-P1'</span>],k*([-0.0855;0.0445;0.0766])-CoM_Pelvis;<span class="keyword">...</span>
+0133     [<span class="string">'glut_med3_r-P1'</span>],k*([-0.1223;0.0105;0.0648])-CoM_Pelvis;<span class="keyword">...</span>
+0134     [<span class="string">'bifemlh_r-P1'</span>],k*([-0.12596;-0.10257;0.06944])-CoM_Pelvis;<span class="keyword">...</span>
+0135     [<span class="string">'sar_r-P1'</span>],k*([-0.0153;-0.0013;0.1242])-CoM_Pelvis;<span class="keyword">...</span>
+0136     [<span class="string">'add_mag2_r-P1'</span>],k*([-0.0831;-0.1192;0.0308])-CoM_Pelvis;<span class="keyword">...</span>
+0137     [<span class="string">'tfl_r-P1'</span>],k*([-0.0311;0.0214;0.1241])-CoM_Pelvis;<span class="keyword">...</span>
+0138     [<span class="string">'pect_r-P1'</span>],k*([-0.0431;-0.0768;0.0451])-CoM_Pelvis;<span class="keyword">...</span>
+0139     [<span class="string">'grac_r-P1'</span>],k*([-0.07401;-0.1187;0.02794])-CoM_Pelvis;<span class="keyword">...</span>
+0140     [<span class="string">'glut_max1_r-P1'</span>],k*([-0.1195;0.0612;0.07])-CoM_Pelvis;<span class="keyword">...</span>
+0141     [<span class="string">'glut_max1_r-P2'</span>],k*([-0.1291;0.0012;0.0886])-CoM_Pelvis;<span class="keyword">...</span>
+0142     [<span class="string">'glut_max2_r-P1'</span>],k*([-0.1349;0.0176;0.0563])-CoM_Pelvis;<span class="keyword">...</span>
+0143     [<span class="string">'glut_max2_r-P2'</span>],k*([-0.1376;-0.052;0.0914])-CoM_Pelvis;<span class="keyword">...</span>
+0144     [<span class="string">'glut_max3_r-P1'</span>],k*([-0.1556;-0.0314;0.0058])-CoM_Pelvis;<span class="keyword">...</span>
+0145     [<span class="string">'glut_max3_r-P2'</span>],k*([-0.1529;-0.1052;0.0403])-CoM_Pelvis;<span class="keyword">...</span>
+0146     [<span class="string">'iliacus_r-P1'</span>],k*([-0.0674;0.0365;0.0854])-CoM_Pelvis;<span class="keyword">...</span>
+0147     [<span class="string">'iliacus_r-P2'</span>],k*([-0.0258;-0.055;0.0811])-CoM_Pelvis;<span class="keyword">...</span>
+0148     [<span class="string">'psoas_r-P1'</span>],k*([-0.0647;0.0887;0.0289])-CoM_Pelvis;<span class="keyword">...</span>
+0149     [<span class="string">'psoas_r-P2'</span>],k*([-0.0238;-0.057;0.0759])-CoM_Pelvis;<span class="keyword">...</span>
+0150     [<span class="string">'quad_fem_r-P1'</span>],k*([-0.1143;-0.1151;0.052])-CoM_Pelvis;<span class="keyword">...</span>
+0151     [<span class="string">'gem_r-P1'</span>],k*([-0.1133;-0.082;0.0714])-CoM_Pelvis;<span class="keyword">...</span>
+0152     [<span class="string">'peri_r-P1'</span>],k*([-0.1396;0.0003;0.0235])-CoM_Pelvis;<span class="keyword">...</span>
+0153     [<span class="string">'peri_r-P2'</span>],k*([-0.1193;-0.0276;0.0657])-CoM_Pelvis;<span class="keyword">...</span>
+0154     [<span class="string">'rect_fem_r-P1'</span>],k*([-0.0295;-0.0311;0.0968])-CoM_Pelvis;<span class="keyword">...</span>
+0155     [<span class="string">'glut_med1_l-P1'</span>],k*([-0.0408;0.0304;-0.1209])-CoM_Pelvis;<span class="keyword">...</span>
+0156     [<span class="string">'glut_med2_l-P1'</span>],k*([-0.0855;0.0445;-0.0766])-CoM_Pelvis;<span class="keyword">...</span>
+0157     [<span class="string">'glut_med3_l-P1'</span>],k*([-0.1223;0.0105;-0.0648])-CoM_Pelvis;<span class="keyword">...</span>
+0158     [<span class="string">'bifemlh_l-P1'</span>],k*([-0.12596;-0.10257;-0.06944])-CoM_Pelvis;<span class="keyword">...</span>
+0159     [<span class="string">'sar_l-P1'</span>],k*([-0.0153;-0.0013;-0.1242])-CoM_Pelvis;<span class="keyword">...</span>
+0160     [<span class="string">'add_mag2_l-P1'</span>],k*([-0.0831;-0.1192;-0.0308])-CoM_Pelvis;<span class="keyword">...</span>
+0161     [<span class="string">'tfl_l-P1'</span>],k*([-0.0311;0.0214;-0.1241])-CoM_Pelvis;<span class="keyword">...</span>
+0162     [<span class="string">'pect_l-P1'</span>],k*([-0.0431;-0.0768;-0.0451])-CoM_Pelvis;<span class="keyword">...</span>
+0163     [<span class="string">'grac_l-P1'</span>],k*([-0.07401;-0.1187;-0.02794])-CoM_Pelvis;<span class="keyword">...</span>
+0164     [<span class="string">'glut_max1_l-P1'</span>],k*([-0.1195;0.0612;-0.07])-CoM_Pelvis;<span class="keyword">...</span>
+0165     [<span class="string">'glut_max1_l-P2'</span>],k*([-0.1291;0.0012;-0.0886])-CoM_Pelvis;<span class="keyword">...</span>
+0166     [<span class="string">'glut_max2_l-P1'</span>],k*([-0.1349;0.0176;-0.0563])-CoM_Pelvis;<span class="keyword">...</span>
+0167     [<span class="string">'glut_max2_l-P2'</span>],k*([-0.1376;-0.052;-0.0914])-CoM_Pelvis;<span class="keyword">...</span>
+0168     [<span class="string">'glut_max3_l-P1'</span>],k*([-0.1556;-0.0314;-0.0058])-CoM_Pelvis;<span class="keyword">...</span>
+0169     [<span class="string">'glut_max3_l-P2'</span>],k*([-0.1529;-0.1052;-0.0403])-CoM_Pelvis;<span class="keyword">...</span>
+0170     [<span class="string">'iliacus_l-P1'</span>],k*([-0.0674;0.0365;-0.0854])-CoM_Pelvis;<span class="keyword">...</span>
+0171     [<span class="string">'iliacus_l-P2'</span>],k*([-0.0258;-0.055;-0.0811])-CoM_Pelvis;<span class="keyword">...</span>
+0172     [<span class="string">'psoas_l-P1'</span>],k*([-0.0647;0.0887;-0.0289])-CoM_Pelvis;<span class="keyword">...</span>
+0173     [<span class="string">'psoas_l-P2'</span>],k*([-0.0238;-0.057;-0.0759])-CoM_Pelvis;<span class="keyword">...</span>
+0174     [<span class="string">'quad_fem_l-P1'</span>],k*([-0.1143;-0.1151;-0.052])-CoM_Pelvis;<span class="keyword">...</span>
+0175     [<span class="string">'gem_l-P1'</span>],k*([-0.1133;-0.082;-0.0714])-CoM_Pelvis;<span class="keyword">...</span>
+0176     [<span class="string">'peri_l-P1'</span>],k*([-0.1396;0.0003;-0.0235])-CoM_Pelvis;<span class="keyword">...</span>
+0177     [<span class="string">'peri_l-P2'</span>],k*([-0.1193;-0.0276;-0.0657])-CoM_Pelvis;<span class="keyword">...</span>
+0178     [<span class="string">'rect_fem_l-P1'</span>],k*([-0.0295;-0.0311;-0.0968])-CoM_Pelvis;<span class="keyword">...</span>
+0179     [<span class="string">'ercspn_r-P1'</span>],k*([-0.14;0.0439;0.0436])-CoM_Pelvis;<span class="keyword">...</span>
+0180     [<span class="string">'ercspn_l-P1'</span>],k*([-0.14;0.0439;-0.0436])-CoM_Pelvis;<span class="keyword">...</span>
+0181     [<span class="string">'intobl_r-P1'</span>],k*([-0.04;0.07;0.1157])-CoM_Pelvis;<span class="keyword">...</span>
+0182     [<span class="string">'intobl_l-P1'</span>],k*([-0.04;0.07;-0.1157])-CoM_Pelvis;<span class="keyword">...</span>
+0183     [<span class="string">'extobl_r-P1'</span>],k*([-0.03;-0.0636;0.01])-CoM_Pelvis;<span class="keyword">...</span>
+0184     [<span class="string">'extobl_l-P1'</span>],k*([-0.03;-0.0636;-0.01])-CoM_Pelvis;<span class="keyword">...</span>
+0185     }]; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0186 
+0187 <span class="comment">%%                     Mise �l'�helle des inerties</span>
+0188 
+0189     <span class="comment">%% [&quot;Adjustments to McConville et al. and Young et al. body segment inertial parameters&quot;] R. Dumas</span>
+0190     <span class="comment">% ------------------------- Pelvis ----------------------------------------</span>
+0191     Length_Pelvis = norm(Pelvis_HipJointsCenterNode-Pelvis_L5JointNode);
+0192     [I_Pelvis]=<a href="../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>([100 107 95 25*1i 12*1i 8*1i], Mass.Pelvis_Mass, [0 0 0], Length_Pelvis);
+0193 
+0194 <span class="comment">%% Cr�tion de la structure &quot;Human_model&quot;</span>
+0195 
+0196 num_solid=0;
+0197 <span class="comment">%% Pelvis</span>
+0198 <span class="comment">% Pelvis</span>
+0199 num_solid=num_solid+1;        <span class="comment">% solide num�o ...</span>
+0200 name=list_solid{num_solid}; <span class="comment">% nom du solide</span>
+0201 eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% num�o du solide dans le mod�e</span>
+0202 OsteoArticularModel(incr_solid).name=name;               <span class="comment">% nom du solide</span>
+0203 OsteoArticularModel(incr_solid).sister=0;                      <span class="comment">% sister</span>
+0204 OsteoArticularModel(incr_solid).child=0;       <span class="comment">% child</span>
+0205 OsteoArticularModel(incr_solid).mother=s_mother;                      <span class="comment">% mother</span>
+0206 OsteoArticularModel(incr_solid).a=[0 0 0]';                    <span class="comment">% axe de rotation</span>
+0207 OsteoArticularModel(incr_solid).joint=1;                       <span class="comment">% type d'articulation : 1:pivot / 2:glissi�e</span>
+0208 OsteoArticularModel(incr_solid).calib_k_constraint=[];         <span class="comment">% initialisation des contraintes d'optimisation pour la calibration de la longueur des membres</span>
+0209 OsteoArticularModel(incr_solid).u=[];                          <span class="comment">% rotation fixe selon l'axe u d'un angle theta (apr� la rotation q)</span>
+0210 OsteoArticularModel(incr_solid).theta=[];
+0211 OsteoArticularModel(incr_solid).KinematicsCut=[];              <span class="comment">% coupure cin�atique</span>
+0212 OsteoArticularModel(incr_solid).ClosedLoop=[];                 <span class="comment">% si solide de fermeture de boucle : {num�o du solide i sur lequel est attach�ce solide ; point d'attache (rep�e du solide i)}</span>
+0213 OsteoArticularModel(incr_solid).ActiveJoint=1;                 <span class="comment">% 1 si articulation active / 0 si articulation passive</span>
+0214 OsteoArticularModel(incr_solid).Visual=1;                      <span class="comment">% 1 si il y a un visuel associ�/ 0 sinon</span>
+0215 <span class="comment">% OsteoArticularModel(incr_solid).Group=[n_group 1];                   % groupe pour la calibration dynamique</span>
+0216 OsteoArticularModel(incr_solid).b=pos_attachment_pt;                    <span class="comment">% position du point d'attache par rapport au rep�e parent</span>
+0217 OsteoArticularModel(incr_solid).c=[0 0 0]';                    <span class="comment">% position du centre de masse dans le rep�e local</span>
+0218 OsteoArticularModel(incr_solid).m=Mass.Pelvis_Mass;                 <span class="comment">% masse</span>
+0219 OsteoArticularModel(incr_solid).I=[I_Pelvis(1) I_Pelvis(4) I_Pelvis(5); I_Pelvis(4) I_Pelvis(2) I_Pelvis(6); I_Pelvis(5) I_Pelvis(6) I_Pelvis(3)];                  <span class="comment">% matrice d'inertie de r��ence</span>
+0220 OsteoArticularModel(incr_solid).anat_position=Pelvis_position_set;
+0221 OsteoArticularModel(incr_solid).linear_constraint=[];
+0222 OsteoArticularModel(incr_solid).L={<span class="string">'Pelvis_HipJointsCenterNode'</span>;<span class="string">'Pelvis_LowerTrunkNode'</span>};
+0223 OsteoArticularModel(incr_solid).v= [] ;
+0224 OsteoArticularModel(incr_solid).visual_file = [<span class="string">'gait2354/pelvis.mat'</span>];
+0225 
+0226 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

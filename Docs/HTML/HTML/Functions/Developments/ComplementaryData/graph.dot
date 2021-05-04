@@ -1,0 +1,11 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  ForwardKinematics -> ForwardKinematics;
+  JointPositions -> ForwardKinematics;
+  JointPositions -> JointPositions;
+
+  BaseOfSupport [URL="BaseOfSupport.html"];
+  CombinedCoM [URL="CombinedCoM.html"];
+  ForwardKinematics [URL="ForwardKinematics.html"];
+  JointPositions [URL="JointPositions.html"];
+}

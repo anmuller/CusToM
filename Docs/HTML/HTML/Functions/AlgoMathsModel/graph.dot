@@ -1,0 +1,24 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  NbSolidUpstream -> NbSolidUpstream;
+  Rodrigues_from_two_axes -> Rodrigues;
+  distance_point -> Rodrigues;
+  distance_point -> find_solid_path;
+  distance_point_wrap -> Rodrigues;
+  distance_point_wrap -> find_solid_path;
+  rgyration2inertia -> Huygens;
+  sister_actualize -> sister_actualize;
+
+  Huygens [URL="Huygens.html"];
+  NbSolidUpstream [URL="NbSolidUpstream.html"];
+  Rodrigues [URL="Rodrigues.html"];
+  Rodrigues_from_two_axes [URL="Rodrigues_from_two_axes.html"];
+  derivee2 [URL="derivee2.html"];
+  distance_point [URL="distance_point.html"];
+  distance_point_wrap [URL="distance_point_wrap.html"];
+  filt_data [URL="filt_data.html"];
+  find_solid_path [URL="find_solid_path.html"];
+  rgyration2inertia [URL="rgyration2inertia.html"];
+  sister_actualize [URL="sister_actualize.html"];
+  wedge [URL="wedge.html"];
+}

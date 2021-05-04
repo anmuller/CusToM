@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ProcessedOptotrak</title>
+  <meta name="keywords" content="ProcessedOptotrak">
+  <meta name="description" content="Extraction of experimental data coming from Optotrak">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- ../menu.html DataImport --><!-- menu.html InputDataImport -->
+<h1>ProcessedOptotrak
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Extraction of experimental data coming from Optotrak</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [real_markers, nb_frame, Firstframe, Lastframe, f, list_missing_markers_in_c3d]=ProcessedOptotrak(filename, list_markers, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Extraction of experimental data coming from Optotrak
+   
+   INPUT
+   - filename: name of the file to process (character string)
+   - list_markers: list of the marker names
+   OUTPUT
+   - real_markers: 3D position of experimental markers
+   - nb_frame: number of frames
+   - Firstframe: number of the first frame
+   - Lastframe: number of the last frame
+   - f: acquisition frequency
+   - list_missing_markers_in_c3d: list of marker name which are missing in
+   the c3d file</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [real_markers, nb_frame, Firstframe, Lastframe, f, list_missing_markers_in_c3d]=ProcessedOptotrak(filename, list_markers, varargin)</a>
+0002 <span class="comment">% Extraction of experimental data coming from Optotrak</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - filename: name of the file to process (character string)</span>
+0006 <span class="comment">%   - list_markers: list of the marker names</span>
+0007 <span class="comment">%   OUTPUT</span>
+0008 <span class="comment">%   - real_markers: 3D position of experimental markers</span>
+0009 <span class="comment">%   - nb_frame: number of frames</span>
+0010 <span class="comment">%   - Firstframe: number of the first frame</span>
+0011 <span class="comment">%   - Lastframe: number of the last frame</span>
+0012 <span class="comment">%   - f: acquisition frequency</span>
+0013 <span class="comment">%   - list_missing_markers_in_c3d: list of marker name which are missing in</span>
+0014 <span class="comment">%   the c3d file</span>
+0015 
+0016 load([filename <span class="string">'.mat'</span>]); <span class="comment">%#ok&lt;LOAD&gt;</span>
+0017 
+0018 nb_frame = size(aut.ess_Tr_Ps,1);
+0019 Firstframe = 1;
+0020 Lastframe = nb_frame;
+0021 f = 30;
+0022 
+0023 markers_optotrak = {<span class="string">'EIASD'</span>,<span class="string">'EIASG'</span>,<span class="string">'EPISD'</span>,<span class="string">'EPISG'</span>,<span class="string">'L5'</span>,<span class="string">'GIN_D'</span>,<span class="string">'GEX_D'</span>,<span class="string">'GIN_G'</span>,<span class="string">'GEX_G'</span>,<span class="string">'PIIND'</span>,<span class="string">'TALDI'</span>,<span class="string">'TALDA'</span>,<span class="string">'TALDE'</span>,<span class="string">'PIEXD'</span>,<span class="string">'BP__D'</span>,<span class="string">'MA_ID'</span>,<span class="string">'MA_ED'</span>,<span class="string">'PIING'</span>,<span class="keyword">...</span>
+0024     <span class="string">'TALGI'</span>,<span class="string">'TALGA'</span>,<span class="string">'TALGE'</span>,<span class="string">'PIEXG'</span>,<span class="string">'BP__G'</span>,<span class="string">'MA_IG'</span>,<span class="string">'MA_EG'</span>,<span class="string">'T12_D'</span>,<span class="string">'T12_G'</span>,<span class="string">'STRN'</span>,<span class="string">'T12_C'</span>,<span class="string">'C7_D'</span>,<span class="string">'C7_G'</span>,<span class="string">'STRN_C7'</span>,<span class="string">'Manubrium'</span>,<span class="string">'C7_C'</span>,<span class="string">'NEZ'</span>,<span class="string">'NUQUE'</span>,<span class="string">'VERTEX'</span>,<span class="string">'EAV_D'</span>,<span class="keyword">...</span>
+0025     <span class="string">'EAR_D'</span>,<span class="string">'EPI_D'</span>,<span class="string">'EPE_D'</span>,<span class="string">'EAV_G'</span>,<span class="string">'EAR_G'</span>,<span class="string">'EPI_G'</span>,<span class="string">'EPE_G'</span>,<span class="string">'PEX_D'</span>,<span class="string">'PIN_D'</span>,<span class="string">'PEX_G'</span>,<span class="string">'PIN_G'</span>};
+0026 
+0027 real_markers=struct;
+0028 
+0029 <span class="comment">% On cherche dans toutes les combinaisons de nom de marqueurs, lesquels</span>
+0030 <span class="comment">% sont pr�ents</span>
+0031 [list_marker_c3d,Ia,~]=intersect(list_markers,markers_optotrak,<span class="string">'stable'</span>);
+0032 
+0033 <span class="keyword">for</span> ii=1:length(list_marker_c3d)
+0034     real_markers(ii).name=list_markers(Ia(ii));
+0035     [~,~,pos] = intersect(list_markers(Ia(ii)), markers_optotrak);
+0036     real_markers(ii).position_c3d = aut.ess_Tr_Ps(:,3*(pos-1)+1:3*pos);
+0037 <span class="keyword">end</span>
+0038 
+0039 [list_missing_markers_in_c3d]=setdiff(list_markers,[real_markers.name]');
+0040 
+0041 <span class="keyword">if</span> ~isempty(list_missing_markers_in_c3d)
+0042     disp([<span class="string">'Markerset have not been extracted enterely from the .c3d file, missing markers : '</span> ;list_missing_markers_in_c3d])
+0043 <span class="keyword">end</span>
+0044 
+0045 <span class="comment">%Cr�tion du vecteur temps</span>
+0046 <span class="keyword">for</span> i=1:numel(real_markers)
+0047     real_markers(i).time=[0:(1/f):(nb_frame-1)/f]'; <span class="comment">%#ok&lt;NBRAK&gt;</span>
+0048 <span class="keyword">end</span>
+0049 
+0050 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

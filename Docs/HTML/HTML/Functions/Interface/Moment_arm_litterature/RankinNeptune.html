@@ -1,0 +1,392 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of RankinNeptune</title>
+  <meta name="keywords" content="RankinNeptune">
+  <meta name="description" content="All coeffs non explained come from">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- ../menu.html Interface --><!-- menu.html Moment_arm_litterature -->
+<h1>RankinNeptune
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>All coeffs non explained come from</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function MomentsArm=RankinNeptune(mus_name,axis,joints_names,q) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> All coeffs non explained come from
+Rankin, J. W., &amp; Neptune, R. R. (2012).
+Musculotendon lengths and moment arms for a
+three-dimensional upper-extremity model.
+Journal of Biomechanics, 45(9), 1739–1744.
+https://doi.org/10.1016/j.jbiomech.2012.03.010</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN1.html" class="code" title="function y=equationRRN1(a,q)">equationRRN1</a>	</li><li><a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN3.html" class="code" title="function y=equationRRN3(a,q)">equationRRN3</a>	</li><li><a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN4.html" class="code" title="function y=equationRRN4(a,q)">equationRRN4</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function MomentsArm=RankinNeptune(mus_name,axis,joints_names,q)</a>
+0002 
+0003 <span class="comment">% All coeffs non explained come from</span>
+0004 <span class="comment">%Rankin, J. W., &amp; Neptune, R. R. (2012).</span>
+0005 <span class="comment">%Musculotendon lengths and moment arms for a</span>
+0006 <span class="comment">%three-dimensional upper-extremity model.</span>
+0007 <span class="comment">%Journal of Biomechanics, 45(9), 1739–1744.</span>
+0008 <span class="comment">%https://doi.org/10.1016/j.jbiomech.2012.03.010</span>
+0009 
+0010 mus_name = mus_name{:};
+0011 mus_name = mus_name(2:end);
+0012 MomentsArm = [];
+0013 
+0014 <span class="comment">%% TricepsMedial</span>
+0015 <span class="keyword">if</span> strcmp(mus_name,<span class="string">'TricepsMed'</span>)
+0016     <span class="keyword">if</span> strcmp(axis,<span class="string">'Ulna'</span>)
+0017         [~,ind] = intersect(joints_names, <span class="string">'Ulna'</span>);
+0018         <span class="keyword">if</span> length(ind)==1
+0019             Q  = q(ind,:)';
+0020             coeffs=[-2.02999e-2  -2.15606e-2  3.56484e-2  -1.78502e-2  2.6245e-3]';
+0021             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN1.html" class="code" title="function y=equationRRN1(a,q)">equationRRN1</a>(coeffs,Q);
+0022         <span class="keyword">end</span>
+0023     <span class="keyword">end</span>
+0024 <span class="keyword">end</span>
+0025 
+0026 
+0027 <span class="comment">%% TricepsLateral</span>
+0028 <span class="keyword">if</span> strcmp(mus_name,<span class="string">'TricepsLat'</span>)
+0029     <span class="keyword">if</span> strcmp(axis,<span class="string">'Ulna'</span>)
+0030         [~,ind] = intersect(joints_names, <span class="string">'Ulna'</span>);
+0031         <span class="keyword">if</span> length(ind)==1
+0032             Q  = q(ind,:)';
+0033             coeffs=[-2.02999e-2  -2.15606e-2  3.56484e-2  -1.78502e-2  2.6245e-3]';
+0034             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN1.html" class="code" title="function y=equationRRN1(a,q)">equationRRN1</a>(coeffs,Q);
+0035         <span class="keyword">end</span>
+0036     <span class="keyword">end</span>
+0037 <span class="keyword">end</span>
+0038 
+0039 
+0040 <span class="comment">%% Anconeus</span>
+0041 <span class="keyword">if</span> strcmp(mus_name,<span class="string">'Anconeus'</span>)
+0042     <span class="keyword">if</span> strcmp(axis,<span class="string">'Ulna'</span>)
+0043         [~,ind] = intersect(joints_names, <span class="string">'Ulna'</span>);
+0044         <span class="keyword">if</span> length(ind)==1
+0045             Q  = q(ind,:)';
+0046             coeffs=[-8.19456E-03  -1.27179E-02   8.20591E-03   2.90914E-03  -2.29252E-03 ]';
+0047             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN1.html" class="code" title="function y=equationRRN1(a,q)">equationRRN1</a>(coeffs,Q);
+0048         <span class="keyword">end</span>
+0049     <span class="keyword">end</span>
+0050 <span class="keyword">end</span>
+0051 
+0052 
+0053 
+0054 <span class="comment">%% Brachialis</span>
+0055 <span class="keyword">if</span> strcmp(mus_name,<span class="string">'Brachialis'</span>)
+0056     <span class="keyword">if</span> strcmp(axis,<span class="string">'Ulna'</span>)
+0057         [~,ind] = intersect(joints_names, <span class="string">'Ulna'</span>);
+0058         <span class="keyword">if</span> length(ind)==1
+0059             Q  = q(ind,:)';
+0060             coeffs=[9.84873e-3  1.01630e-2  -2.39557e-2  2.90329e-2  -9.24344e-3]';
+0061             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN1.html" class="code" title="function y=equationRRN1(a,q)">equationRRN1</a>(coeffs,Q);
+0062         <span class="keyword">end</span>
+0063     <span class="keyword">end</span>
+0064 <span class="keyword">end</span>
+0065 
+0066 
+0067 <span class="comment">%% Brachioradialis</span>
+0068 <span class="keyword">if</span> strcmp(mus_name,<span class="string">'Brachioradialis'</span>)
+0069     <span class="keyword">if</span> strcmp(axis,<span class="string">'Radius_J1'</span>)
+0070         [~,ind] = intersect(joints_names,{<span class="string">'Radius_J1'</span>,<span class="string">'Radius'</span>},<span class="string">'stable'</span>);
+0071         <span class="keyword">if</span> length(ind)==2
+0072             Q  = q(ind,:)';
+0073             coeffs=[1.18003e-2  2.09993e-2  3.7126e-2  -1.47644e-2  -5.8285e-4  -3.57599e-3  -7.25432e-4  1.40991e-2  -1.25532e-2  -1.47822e-3  3.61034e-3 -2.57318e-4]';
+0074             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN4.html" class="code" title="function y=equationRRN4(a,q)">equationRRN4</a>(coeffs,Q);
+0075         <span class="keyword">end</span>
+0076     <span class="keyword">elseif</span> strcmp(axis,<span class="string">'Radius'</span>)
+0077         [~,ind] = intersect(joints_names,{<span class="string">'Radius_J1'</span>,<span class="string">'Radius'</span>},<span class="string">'stable'</span>);
+0078         <span class="keyword">if</span> length(ind)==2
+0079             Q  = q(ind,:)';
+0080             coeffs=[-7.81478e-4  6.99447e-4  3.60463e-3  -1.06015e-3  -3.9357e-4  1.44296e-3  -8.94732e-4  -4.05248e-3  -1.00184e-2  -2.83974e-3  3.51570e-3  2.85087e-3]';
+0081             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN4.html" class="code" title="function y=equationRRN4(a,q)">equationRRN4</a>(coeffs,Q);
+0082         <span class="keyword">end</span>
+0083     <span class="keyword">end</span>
+0084 <span class="keyword">end</span>
+0085 
+0086 
+0087 <span class="comment">%% PronatorTeres</span>
+0088 <span class="keyword">if</span> strcmp(mus_name,<span class="string">'PronatorTeres'</span>)
+0089     <span class="keyword">if</span> strcmp(axis,<span class="string">'Radius_J1'</span>)
+0090         [~,ind] = intersect(joints_names,{<span class="string">'Radius_J1'</span>,<span class="string">'Radius'</span>},<span class="string">'stable'</span>);
+0091         <span class="keyword">if</span> length(ind)==2
+0092             Q  = q(ind,:)';
+0093             coeffs=[6.55640E-03  1.69232E-02  -3.28333E-02  3.21198E-02   -5.90348E-17   9.60061E-16   3.77736E-16  -1.27742E-02  1.63665E-03   -1.57600E-15  -4.90059E-16      ]';
+0094             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN3.html" class="code" title="function y=equationRRN3(a,q)">equationRRN3</a>(coeffs,Q);
+0095         <span class="keyword">end</span>
+0096     <span class="keyword">elseif</span> strcmp(axis,<span class="string">'Radius'</span>)
+0097         [~,ind] = intersect(joints_names,{<span class="string">'Radius_J1'</span>,<span class="string">'Radius'</span>},<span class="string">'stable'</span>);
+0098         <span class="keyword">if</span> length(ind)==2
+0099             Q  = q(ind,:)';
+0100             coeffs=[9.47956E-03  -9.28023E-15  3.97126E-14  -6.20788E-14   -2.01126E-03  -2.82774E-03  2.85982E-03  4.00418E-14  -9.11077E-15   1.70446E-03  -2.34187E-03 ]';
+0101             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN3.html" class="code" title="function y=equationRRN3(a,q)">equationRRN3</a>(coeffs,Q);
+0102         <span class="keyword">end</span>
+0103     <span class="keyword">end</span>
+0104 <span class="keyword">end</span>
+0105 
+0106 <span class="comment">%% PronatorQuadratus</span>
+0107 <span class="keyword">if</span> strcmp(mus_name,<span class="string">'PronatorQuadratus'</span>)
+0108     <span class="keyword">if</span> strcmp(axis,<span class="string">'Radius'</span>)
+0109         [~,ind] = intersect(joints_names, <span class="string">'Radius'</span>);
+0110         <span class="keyword">if</span> length(ind)==1
+0111             Q  = q(ind,:)';
+0112             coeffs=[7.30854e-3  2.28126e-3  -2.81928e-3  -1.02119e-3  1.74483e-5]';
+0113             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN1.html" class="code" title="function y=equationRRN1(a,q)">equationRRN1</a>(coeffs,Q);
+0114         <span class="keyword">end</span>
+0115     <span class="keyword">end</span>
+0116 <span class="keyword">end</span>
+0117 <span class="comment">%% SupinatorBrevis</span>
+0118 <span class="keyword">if</span> strcmp(mus_name,<span class="string">'SupinatorBrevis'</span>)
+0119     <span class="keyword">if</span> strcmp(axis,<span class="string">'Radius'</span>)
+0120         [~,ind] = intersect(joints_names, <span class="string">'Radius'</span>);
+0121         <span class="keyword">if</span> length(ind)==1
+0122             Q  = q(ind,:)';
+0123             coeffs=[-7.67985E-03  4.08098E-04 1.45346E-03  -1.70151E-04  -5.01312E-04]';
+0124             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN1.html" class="code" title="function y=equationRRN1(a,q)">equationRRN1</a>(coeffs,Q);
+0125         <span class="keyword">end</span>
+0126     <span class="keyword">end</span>
+0127 <span class="keyword">end</span>
+0128 
+0129 <span class="comment">%% ExtensorCarpiRadialisBrevis</span>
+0130 <span class="keyword">if</span> strcmp(mus_name,<span class="string">'ExtensorCarpiRadialisBrevis'</span>)
+0131     <span class="keyword">if</span> strcmp(axis,<span class="string">'Radius_J1'</span>)
+0132         [~,ind] = intersect(joints_names,{<span class="string">'Radius_J1'</span>,<span class="string">'Radius'</span>},<span class="string">'stable'</span>);
+0133         <span class="keyword">if</span> length(ind)==2
+0134             Q  = q(ind,:)';
+0135             coeffs=[5.64642E-03  -1.74387E-03  -3.71495E-03  1.01268E-03  -5.29727E-05  1.84085E-04  1.87014E-05   -3.87485E-04  5.11181E-05  2.50652E-04  4.03295E-05   2.61368E-05]';
+0136             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN4.html" class="code" title="function y=equationRRN4(a,q)">equationRRN4</a>(coeffs,Q);
+0137         <span class="keyword">end</span>
+0138     <span class="keyword">elseif</span> strcmp(axis,<span class="string">'Radius'</span>)
+0139         [~,ind] = intersect(joints_names,{<span class="string">'Radius_J1'</span>,<span class="string">'Radius'</span>},<span class="string">'stable'</span>);
+0140         <span class="keyword">if</span> length(ind)==2
+0141             Q  = q(ind,:)';
+0142             coeffs=[-1.55243E-03  -5.91013E-05  -2.19213E-04  5.07507E-05  -1.90131E-03   7.41471E-04  3.34035E-04  1.84492E-04  6.68436E-04  1.32696E-04  -1.58205E-04  -1.55084E-04 ]';
+0143             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN4.html" class="code" title="function y=equationRRN4(a,q)">equationRRN4</a>(coeffs,Q);
+0144         <span class="keyword">end</span>
+0145     <span class="keyword">elseif</span> strcmp(axis,<span class="string">'Hand'</span>)
+0146         [~,ind] = intersect(joints_names,{<span class="string">'Hand'</span>,<span class="string">'Wrist_J1'</span>},<span class="string">'stable'</span>);
+0147         <span class="keyword">if</span> length(ind)==2
+0148             Q  = q(ind,:)';
+0149             coeffs=[-1.34815E-02   3.02208E-02   5.78169E-03  -1.64320E-02  2.68623E-03  3.41629E-03  -2.45737E-03   8.20428E-04  -3.08372E-02  -8.27743E-03  3.13227E-02   6.21186E-03]';
+0150             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN4.html" class="code" title="function y=equationRRN4(a,q)">equationRRN4</a>(coeffs,Q);
+0151         <span class="keyword">end</span>
+0152     <span class="keyword">elseif</span> strcmp(axis,<span class="string">'Wrist_J1'</span>)
+0153         [~,ind] = intersect(joints_names,{<span class="string">'Hand'</span>,<span class="string">'Wrist_J1'</span>},<span class="string">'stable'</span>);
+0154         <span class="keyword">if</span> length(ind)==2
+0155             Q  = q(ind,:)';
+0156             coeffs=[-2.67570E-02  2.69223E-03   3.35291E-03  -1.18284E-02  9.57323E-03   3.02360E-03  -2.78438E-03  2.09357E-03  -1.37559E-02  -6.54620E-03   2.41453E-02     1.01279E-02 ]';
+0157             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN4.html" class="code" title="function y=equationRRN4(a,q)">equationRRN4</a>(coeffs,Q);
+0158         <span class="keyword">end</span>
+0159     <span class="keyword">end</span>
+0160 <span class="keyword">end</span>
+0161 
+0162 
+0163 
+0164 <span class="comment">%% ExtensorCarpiRadialisLongus</span>
+0165 <span class="keyword">if</span> strcmp(mus_name,<span class="string">'ExtensorCarpiRadialisLongus'</span>)
+0166     <span class="keyword">if</span> strcmp(axis,<span class="string">'Radius_J1'</span>)
+0167         [~,ind] = intersect(joints_names,{<span class="string">'Radius_J1'</span>,<span class="string">'Radius'</span>},<span class="string">'stable'</span>);
+0168         <span class="keyword">if</span> length(ind)==2
+0169             Q  = q(ind,:)';
+0170             coeffs=[6.784195E-03  4.25933E-03   1.08103E-02   -3.02892E-03  5.08279E-03  -3.08828E-04   -9.16923E-04   -4.83760E-03   2.49206E-03  -1.02552E-03   -4.91622E-04  4.50855E-04 ]';
+0171             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN4.html" class="code" title="function y=equationRRN4(a,q)">equationRRN4</a>(coeffs,Q);
+0172         <span class="keyword">end</span>
+0173     <span class="keyword">elseif</span> strcmp(axis,<span class="string">'Radius'</span>)
+0174         [~,ind] = intersect(joints_names,{<span class="string">'Radius_J1'</span>,<span class="string">'Radius'</span>},<span class="string">'stable'</span>);
+0175         <span class="keyword">if</span> length(ind)==2
+0176             Q  = q(ind,:)';
+0177             coeffs=[-2.36211E-03  2.93937E-03  -6.69053E-05  -1.39155E-04  -1.06309E-03  1.00099E-03  -5.83203E-04  -2.37355E-04  -2.73083E-03  -1.15824E-03   6.79267E-04   1.00675E-03 ]';
+0178             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN4.html" class="code" title="function y=equationRRN4(a,q)">equationRRN4</a>(coeffs,Q);
+0179         <span class="keyword">end</span>
+0180     <span class="keyword">elseif</span> strcmp(axis,<span class="string">'Hand'</span>)
+0181         [~,ind] = intersect(joints_names,{<span class="string">'Hand'</span>,<span class="string">'Wrist_J1'</span>},<span class="string">'stable'</span>);
+0182         <span class="keyword">if</span> length(ind)==2
+0183             Q  = q(ind,:)';
+0184             coeffs=[-2.14012E-02  3.26927E-02  -1.13902E-02  -1.82031E-03  1.35811E-02  1.72010E-03  -2.39317E-03  -1.89705E-02  -1.02368E-02   -1.48189E-03  1.29229E-02  8.20184E-03  ]';
+0185             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN4.html" class="code" title="function y=equationRRN4(a,q)">equationRRN4</a>(coeffs,Q);
+0186         <span class="keyword">end</span>
+0187     <span class="keyword">elseif</span> strcmp(axis,<span class="string">'Wrist_J1'</span>)
+0188         [~,ind] = intersect(joints_names,{<span class="string">'Hand'</span>,<span class="string">'Wrist_J1'</span>},<span class="string">'stable'</span>);
+0189         <span class="keyword">if</span> length(ind)==2
+0190             Q  = q(ind,:)';
+0191             coeffs=[-1.98904E-02 1.410779E-02   -5.64345E-03  -4.25499E-03  1.09667E-02   -4.96348E-03  -7.54046E-05  1.60476E-03   -5.13726E-03  -7.44317E-03   4.86065E-03   8.54788E-03 ]';
+0192             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN4.html" class="code" title="function y=equationRRN4(a,q)">equationRRN4</a>(coeffs,Q);
+0193         <span class="keyword">end</span>
+0194     <span class="keyword">end</span>
+0195 <span class="keyword">end</span>
+0196 
+0197 
+0198 <span class="comment">%% ExtensorCarpiUlnaris</span>
+0199 <span class="keyword">if</span> strcmp(mus_name,<span class="string">'ExtensorCarpiUlnaris'</span>)
+0200     <span class="keyword">if</span> strcmp(axis,<span class="string">'Radius_J1'</span>)
+0201         [~,ind] = intersect(joints_names,{<span class="string">'Radius_J1'</span>,<span class="string">'Radius'</span>},<span class="string">'stable'</span>);
+0202         <span class="keyword">if</span> length(ind)==2
+0203             Q  = q(ind,:)';
+0204             coeffs=[-6.48E-03 -2.13E-03  4.01E-03   -7.28E-04    1.56E-05 ]';
+0205             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN4.html" class="code" title="function y=equationRRN4(a,q)">equationRRN4</a>(coeffs,Q);
+0206         <span class="keyword">end</span>
+0207     <span class="keyword">elseif</span> strcmp(axis,<span class="string">'Radius'</span>)
+0208         [~,ind] = intersect(joints_names,{<span class="string">'Radius_J1'</span>,<span class="string">'Radius'</span>},<span class="string">'stable'</span>);
+0209         <span class="keyword">if</span> length(ind)==2
+0210             Q  = q(ind,:)';
+0211             coeffs=[ -6.83927E-04  4.81841E-10  -1.44939E-09  6.78194E-10  -2.61266E-03  3.40180E-04   4.37423E-04  1.38498E-09  -4.84425E-09  1.21106E-09   2.26670E-09  2.79839E-09 ]';
+0212             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN4.html" class="code" title="function y=equationRRN4(a,q)">equationRRN4</a>(coeffs,Q);
+0213         <span class="keyword">end</span>
+0214     <span class="keyword">elseif</span> strcmp(axis,<span class="string">'Hand'</span>)
+0215         [~,ind] = intersect(joints_names,{<span class="string">'Hand'</span>,<span class="string">'Wrist_J1'</span>},<span class="string">'stable'</span>);
+0216         <span class="keyword">if</span> length(ind)==2
+0217             Q  = q(ind,:)';
+0218             coeffs=[2.54110E-02  -1.11073E-02  -2.08457E-02  1.15763E-02  -1.49666E-02  -1.18817E-02  1.27967E-02  -2.35572E-02   2.55822E-02  1.27644E-03  6.66190E-02   -8.41382E-03      ]';
+0219             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN4.html" class="code" title="function y=equationRRN4(a,q)">equationRRN4</a>(coeffs,Q);
+0220         <span class="keyword">end</span>
+0221     <span class="keyword">elseif</span> strcmp(axis,<span class="string">'Wrist_J1'</span>)
+0222         [~,ind] = intersect(joints_names,{<span class="string">'Hand'</span>,<span class="string">'Wrist_J1'</span>},<span class="string">'stable'</span>);
+0223         <span class="keyword">if</span> length(ind)==2
+0224             Q  = q(ind,:)';
+0225             coeffs=[-1.09221E-02   -1.73542E-02   -4.94780E-03  2.78397E-02  -7.07319E-03    1.96901E-02  9.79676E-03  -3.75544E-02   -9.52318E-03   2.45856E-02  -5.24763E-02  6.69292E-02    ]';
+0226             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN4.html" class="code" title="function y=equationRRN4(a,q)">equationRRN4</a>(coeffs,Q);
+0227         <span class="keyword">end</span>
+0228     <span class="keyword">end</span>
+0229 <span class="keyword">end</span>
+0230 
+0231 
+0232 
+0233 <span class="comment">%% FlexorCarpiRadialis</span>
+0234 <span class="keyword">if</span> strcmp(mus_name,<span class="string">'FlexorCarpiRadialis'</span>)
+0235     <span class="keyword">if</span> strcmp(axis,<span class="string">'Radius_J1'</span>)
+0236         [~,ind] = intersect(joints_names,{<span class="string">'Radius_J1'</span>,<span class="string">'Radius'</span>},<span class="string">'stable'</span>);
+0237         <span class="keyword">if</span> length(ind)==2
+0238             Q  = q(ind,:)';
+0239             coeffs=[7.67790E-03  4.48052E-03  2.16460E-03   -1.82752E-03   -2.32672E-03   -2.30373E-04   1.51697E-04   5.65668E-03  -5.31170E-03  4.61653E-05   1.79044E-03  -1.33508E-04  ]';
+0240             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN4.html" class="code" title="function y=equationRRN4(a,q)">equationRRN4</a>(coeffs,Q);
+0241         <span class="keyword">end</span>
+0242     <span class="keyword">elseif</span> strcmp(axis,<span class="string">'Radius'</span>)
+0243         [~,ind] = intersect(joints_names,{<span class="string">'Radius_J1'</span>,<span class="string">'Radius'</span>},<span class="string">'stable'</span>);
+0244         <span class="keyword">if</span> length(ind)==2
+0245             Q  = q(ind,:)';
+0246             coeffs=[2.67438E-03  -1.36880E-03  6.91513E-04  -6.98935E-05    -4.90337E-03   -1.23667E-03   7.01458E-04  1.72866E-04    -7.68966E-04   1.90012E-04   2.54791E-04  1.57488E-04          ]';
+0247             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN4.html" class="code" title="function y=equationRRN4(a,q)">equationRRN4</a>(coeffs,Q);
+0248         <span class="keyword">end</span>
+0249     <span class="keyword">elseif</span> strcmp(axis,<span class="string">'Hand'</span>)
+0250         [~,ind] = intersect(joints_names,{<span class="string">'Hand'</span>,<span class="string">'Wrist_J1'</span>},<span class="string">'stable'</span>);
+0251         <span class="keyword">if</span> length(ind)==2
+0252             Q  = q(ind,:)';
+0253             coeffs=[-8.03093E-03   -1.34897E-03   -3.33381E-03   4.95872E-03   2.86237E-03   7.19412E-03   8.91592E-03   -4.12701E-02  5.23716E-02   -2.44844E-02    -1.58656E-02    -2.30728E-02          ]';
+0254             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN4.html" class="code" title="function y=equationRRN4(a,q)">equationRRN4</a>(coeffs,Q);
+0255         <span class="keyword">end</span>
+0256     <span class="keyword">elseif</span> strcmp(axis,<span class="string">'Wrist_J1'</span>)
+0257         [~,ind] = intersect(joints_names,{<span class="string">'Hand'</span>,<span class="string">'Wrist_J1'</span>},<span class="string">'stable'</span>);
+0258         <span class="keyword">if</span> length(ind)==2
+0259             Q  = q(ind,:)';
+0260             coeffs=[3.05783E-02   4.97620E-03  -3.02582E-02  1.87421E-02   1.05117E-02  -1.52883E-02  -1.37820E-02  7.51537E-03  -3.89462E-02  1.89374E-02  2.99607E-02  2.18283E-02            ]';
+0261             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN4.html" class="code" title="function y=equationRRN4(a,q)">equationRRN4</a>(coeffs,Q);
+0262         <span class="keyword">end</span>
+0263     <span class="keyword">end</span>
+0264 <span class="keyword">end</span>
+0265 
+0266 
+0267 <span class="comment">%% FlexorCarpiUlnaris</span>
+0268 <span class="keyword">if</span> strcmp(mus_name,<span class="string">'FlexorCarpiUlnaris'</span>)
+0269     <span class="keyword">if</span> strcmp(axis,<span class="string">'Radius_J1'</span>)
+0270         [~,ind] = intersect(joints_names,{<span class="string">'Radius_J1'</span>,<span class="string">'Radius'</span>},<span class="string">'stable'</span>);
+0271         <span class="keyword">if</span> length(ind)==2
+0272             Q  = q(ind,:)';
+0273             coeffs=[5.51173E-03  -4.01108E-03  1.40164E-02   -5.18068E-03   -2.01298E-04  2.70126E-04   4.21473E-04  -3.28234E-03  3.92531E-03  -3.40615E-04   -1.13142E-03   -2.69541E-04             ]';
+0274             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN4.html" class="code" title="function y=equationRRN4(a,q)">equationRRN4</a>(coeffs,Q);
+0275         <span class="keyword">end</span>
+0276     <span class="keyword">elseif</span> strcmp(axis,<span class="string">'Radius'</span>)
+0277         [~,ind] = intersect(joints_names,{<span class="string">'Radius_J1'</span>,<span class="string">'Radius'</span>},<span class="string">'stable'</span>);
+0278         Q  = q(ind,:)';
+0279         coeffs=[1.11146E-03   1.97726E-04   -1.27326E-03  5.20819E-04  -3.74902E-03  -9.92194E-04   4.27625E-04   5.64019E-04   -6.85108E-04  2.54066E-04   1.42679E-04   7.91794E-05   ]';
+0280         MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN4.html" class="code" title="function y=equationRRN4(a,q)">equationRRN4</a>(coeffs,Q);
+0281     <span class="keyword">elseif</span> strcmp(axis,<span class="string">'Hand'</span>)
+0282         [~,ind] = intersect(joints_names,{<span class="string">'Hand'</span>,<span class="string">'Wrist_J1'</span>},<span class="string">'stable'</span>);
+0283         <span class="keyword">if</span> length(ind)==2
+0284             
+0285             Q  = q(ind,:)';
+0286             coeffs=[2.17266E-02  -1.74158E-02  -2.51289E-02  1.59383E-02  -4.81507E-03  -9.42592E-04  1.86899E-03   -1.88998E-02    1.01198E-02  -2.38388E-03   -7.70851E-03  1.77299E-03         ]';
+0287             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN4.html" class="code" title="function y=equationRRN4(a,q)">equationRRN4</a>(coeffs,Q);
+0288         <span class="keyword">end</span>
+0289     <span class="keyword">elseif</span> strcmp(axis,<span class="string">'Wrist_J1'</span>)
+0290         [~,ind] = intersect(joints_names,{<span class="string">'Hand'</span>,<span class="string">'Wrist_J1'</span>},<span class="string">'stable'</span>);
+0291         <span class="keyword">if</span> length(ind)==2
+0292             
+0293             Q  = q(ind,:)';
+0294             coeffs=[2.97122E-02   -5.00567E-03    -6.41658E-03  1.50843E-04   1.16523E-02  -2.43971E-03  3.28030E-04  -4.07005E-03   5.00416E-03   4.94657E-03  -8.17776E-03   4.91559E-03       ]';
+0295             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN4.html" class="code" title="function y=equationRRN4(a,q)">equationRRN4</a>(coeffs,Q);
+0296         <span class="keyword">end</span>
+0297     <span class="keyword">end</span>
+0298 <span class="keyword">end</span>
+0299 
+0300 
+0301 
+0302 
+0303 
+0304 <span class="comment">%% PalmarisLongus</span>
+0305 <span class="keyword">if</span> strcmp(mus_name,<span class="string">'PalmarisLongus'</span>)
+0306     <span class="keyword">if</span> strcmp(axis,<span class="string">'Radius_J1'</span>)
+0307         [~,ind] = intersect(joints_names,{<span class="string">'Radius_J1'</span>,<span class="string">'Radius'</span>},<span class="string">'stable'</span>);
+0308         <span class="keyword">if</span> length(ind)==2
+0309             
+0310             Q  = q(ind,:)';
+0311             coeffs=[3.75789E-03  1.11963E-02  1.07860E-04   -1.43591E-03  -2.23585E-03  3.23306E-04  6.49814E-06  1.27466E-03 4.03585E-04   -5.81201E-04  -1.49607E-04  5.43361E-05     ]';
+0312             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN4.html" class="code" title="function y=equationRRN4(a,q)">equationRRN4</a>(coeffs,Q);
+0313         <span class="keyword">end</span>
+0314     <span class="keyword">elseif</span> strcmp(axis,<span class="string">'Radius'</span>)
+0315         [~,ind] = intersect(joints_names,{<span class="string">'Radius_J1'</span>,<span class="string">'Radius'</span>},<span class="string">'stable'</span>);
+0316         <span class="keyword">if</span> length(ind)==2
+0317             
+0318             Q  = q(ind,:)';
+0319             coeffs=[3.66899E-03  -2.53706E-03  1.13466E-03   -1.44441E-04   -5.65003E-03  -1.69339E-03  7.87399E-04   7.18247E-04  -1.89115E-03  5.10777E-04   6.23193E-04   2.34536E-04   ]';
+0320             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN4.html" class="code" title="function y=equationRRN4(a,q)">equationRRN4</a>(coeffs,Q);
+0321         <span class="keyword">end</span>
+0322     <span class="keyword">elseif</span> strcmp(axis,<span class="string">'Hand'</span>)
+0323         [~,ind] = intersect(joints_names,{<span class="string">'Hand'</span>,<span class="string">'Wrist_J1'</span>},<span class="string">'stable'</span>);
+0324         <span class="keyword">if</span> length(ind)==2
+0325             
+0326             Q  = q(ind,:)';
+0327             coeffs=[-2.97675E-03  -2.71776E-02   8.61377E-03   7.16362E-03   -7.62851E-05  -8.28526E-03    -1.34914E-02  -5.24356E-02  6.23784E-02   1.60804E-02  -2.30912E-02    4.53652E-02 ]';
+0328             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN4.html" class="code" title="function y=equationRRN4(a,q)">equationRRN4</a>(coeffs,Q);
+0329         <span class="keyword">end</span>
+0330     <span class="keyword">elseif</span> strcmp(axis,<span class="string">'Wrist_J1'</span>)
+0331         <span class="keyword">if</span> length(ind)==2
+0332             
+0333             [~,ind] = intersect(joints_names,{<span class="string">'Hand'</span>,<span class="string">'Wrist_J1'</span>},<span class="string">'stable'</span>);
+0334             Q  = q(ind,:)';
+0335             coeffs=[4.79301E-02   -6.89603E-03  -9.91209E-03   1.46616E-02  2.24075E-02  -5.30622E-02   -8.62529E-02  -3.72153E-02   2.30734E-02  -4.21861E-04  1.17943E-02   5.25951E-02           ]';
+0336             MomentsArm = <a href="../../../Functions/Interface/Moment_arm_litterature/Equations/equationRRN4.html" class="code" title="function y=equationRRN4(a,q)">equationRRN4</a>(coeffs,Q);
+0337         <span class="keyword">end</span>
+0338     <span class="keyword">end</span>
+0339 <span class="keyword">end</span>
+0340 
+0341 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

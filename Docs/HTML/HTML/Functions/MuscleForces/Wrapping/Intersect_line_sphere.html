@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Intersect_line_sphere</title>
+  <meta name="keywords" content="Intersect_line_sphere">
+  <meta name="description" content="Verify if the line intersect the sphere">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- ../menu.html MuscleForces --><!-- menu.html Wrapping -->
+<h1>Intersect_line_sphere
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Verify if the line intersect the sphere</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [bool] = Intersect_line_sphere(P1, P2, R) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Verify if the line intersect the sphere
+
+   INPUT
+   - P1: array 3x1 position of the first point
+   - P2: array 3x1 position of the second point
+   - R: radius of the sphere
+   OUTPUT
+   - bool: logical 1 or 0
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________%% 1- Compute locations of obstacle via points</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Functions/AlgoMathsModel/distance_point_wrap.html" class="code" title="function [L,Typ,wrapside] = distance_point_wrap(Point1,Bone1,Point2,Bone2,Human_model,q,Wrap,wrapside,EnforcedWrap)">distance_point_wrap</a>	Computation of the distance between two points</li><li><a href="../../../Functions/Developments/WrappingScriptTests.html" class="code" title="">WrappingScriptTests</a>	Verification of the wrapping for sphere problems</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [bool] = Intersect_line_sphere(P1, P2, R)</a>
+0002 <span class="comment">% Verify if the line intersect the sphere</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - P1: array 3x1 position of the first point</span>
+0006 <span class="comment">%   - P2: array 3x1 position of the second point</span>
+0007 <span class="comment">%   - R: radius of the sphere</span>
+0008 <span class="comment">%   OUTPUT</span>
+0009 <span class="comment">%   - bool: logical 1 or 0</span>
+0010 <span class="comment">%________________________________________________________</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Licence</span>
+0013 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0014 <span class="comment">%________________________________________________________</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0017 <span class="comment">% Georges Dumont</span>
+0018 <span class="comment">%________________________________________________________%% 1- Compute locations of obstacle via points</span>
+0019 bool=0;
+0020 
+0021 <span class="comment">% [X1,Y1,Z1] = R*sphere(20);</span>
+0022 <span class="comment">% surf(X1+O(1),Y1+O(2),Z1+O(3))</span>
+0023 <span class="comment">% shading flat</span>
+0024 <span class="comment">% hold on</span>
+0025 
+0026 <span class="comment">% P Bounding-fixed via points Start of path</span>
+0027 P = P1;
+0028 <span class="comment">% S Bounding-fixed via points END of path</span>
+0029 S = P2;
+0030 O = [0;0;0];
+0031 
+0032 OS = (S-O)/norm(S-O) ;
+0033 OP = (P-O)/norm(P-O) ;
+0034 
+0035 <span class="comment">% unit vector normal to the plane (Z-axis)</span>
+0036 N = cross(OP,OS)/norm(cross(OP,OS));
+0037 NN = cross(N,OS);
+0038 
+0039 <span class="comment">% scatter3(P(1),P(2),P(3),'r*')</span>
+0040 <span class="comment">% hold on</span>
+0041 <span class="comment">% axis equal</span>
+0042 <span class="comment">% grid off</span>
+0043 <span class="comment">% scatter3(S(1),S(2),S(3),'r*')</span>
+0044 <span class="comment">% scatter3(O(1),O(2),O(3),'b*')</span>
+0045 
+0046 <span class="comment">% quiver3(O(1),O(2),O(3),OS(1),OS(2),OS(3))</span>
+0047 <span class="comment">% quiver3(O(1),O(2),O(3),OP(1),OP(2),OP(3))</span>
+0048 <span class="comment">% quiver3(O(1),O(2),O(3),N(1),N(2),N(3))</span>
+0049 <span class="comment">% quiver3(O(1),O(2),O(3),NN(1),NN(2),NN(3))</span>
+0050 
+0051 <span class="comment">%Rotation Matrix R_sphere_R_0</span>
+0052 <span class="comment">% P_R_0 = M_R_0_R_sphere * P_R_sphere</span>
+0053 x1 = OS;
+0054 y1 = NN;
+0055 z1 = N; <span class="comment">% Normal to the plan</span>
+0056 
+0057 M_rot = [ x1, y1, z1];
+0058 
+0059 <span class="comment">%Express P and S in the plane reference frame;</span>
+0060 p = M_rot'*P;
+0061 s = M_rot'*S;
+0062 <span class="comment">%% 2-on v�ifie s'il y'a intersection de la droite dans avec le cercle dans le plan XY</span>
+0063 
+0064 <span class="comment">%circle equation : x^2+y^2=R^2</span>
+0065 <span class="comment">%line equation : y = a*x+b avec :</span>
+0066 a = (s(2)-p(2))/(s(1)-p(1)); <span class="comment">%(1)</span>
+0067 b = p(2)-a*p(1); <span class="comment">%(2)</span>
+0068 <span class="comment">% (2) into (1)</span>
+0069 <span class="comment">%x^2 + (a*x+b)^2=R^2</span>
+0070 <span class="comment">%x^2 + a^2*x^2+ 2*a*b*x + b^2=R^2</span>
+0071 <span class="comment">%  (a^2+1)*x^2+ 2*a*b*x + b^2-R^2 =0</span>
+0072 <span class="comment">% Determinant</span>
+0073 DD = (2*a*b)^2-4*(a^2+1)*(b^2-R^2);
+0074 <span class="comment">% if DD&gt;0 =&gt; there is intersection.</span>
+0075 
+0076 bool1 = sign(p(1))~= sign(s(1));
+0077 bool = (DD&gt;0 &amp;&amp; bool1);
+0078 
+0079 
+0080 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

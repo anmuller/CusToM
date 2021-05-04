@@ -24,11 +24,11 @@ if r0 ~= 0
     a = (r1-r0)/r0;
     if t0 ~= 0
         b=(t1-t0)/t0;
-        % Masse
+        % Mass
         Masse = D*h*r0*(4*t0*F1(a,b) + pi*r0*F1(a,a));
-        % Position du centre de masse
+        % Center of mass position (Position du centre de masse)
         Zc=D*h^2*(4*r0*t0*F2(a,b)+pi*r0^2*F2(a,a))/Masse;
-        % Inertie
+        % Inertia
         intz2Adz=4*r0*t0*F3(a,b) + pi*r0^2*F3(a, a) ;
         intJxdz=4*r0*t0^3*F4(a,b)/3 + pi*r0^4*F4(a, a)/4;
         intJydz=4*r0*t0^3*F4(a,b)/3 + pi*r0^2*t0^2*F5(a,b) + 8*r0^3*t0*F4(b,a)/3 + pi*r0^4*F4(a,a)/4;
@@ -41,7 +41,7 @@ if r0 ~= 0
         intJydz= pi*r0^4*F4(a,a)/4;
         Iz=D*h*(pi*r0^4*F4(a,a)/2); 
     end
-    % Inertie
+    % Inertia
     Ix0=D*h*intJxdz+D*h^3*intz2Adz;
     Ix=Ix0-Masse*Zc^2;
     Iy0=D*h*intJydz+D*h^3*intz2Adz;

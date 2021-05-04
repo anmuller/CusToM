@@ -1,0 +1,207 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of talus_gait2354</title>
+  <meta name="keywords" content="talus_gait2354">
+  <meta name="description" content="CREDIT">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../../menu.html Functions --><!-- ../../../menu.html Models --><!-- ../../menu.html Osteoarticular --><!-- ../menu.html Leg --><!-- menu.html ModelParts -->
+<h1>talus_gait2354
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>CREDIT</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function [Human_model]= talus_gait2354(Human_model,k,Signe,Mass,AttachmentPoint) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">    CREDIT
+   Delp S.L., Loan J.P., Hoy M.G., Zajac F.E., Topp E.L., Rosen J.M., Thelen D.G., Anderson F.C., Seth A. 
+   NOTES
+   3D, 23 DOF gait model created by D.G. Thelen, Univ. of Wisconsin-Madison, and Ajay Seth, Frank C. Anderson, and Scott L. Delp, Stanford University. Lower extremity joint defintions based on Delp et al. (1990). Low back joint and anthropometry based on Anderson and Pandy (1999, 2001). Planar knee model of Yamaguchi and Zajac (1989). Seth replaced tibia translation constraints with a CustomJoint for the knee and removed the patella to eliminate all kinematic constraints; insertions of the quadrucepts are handled with moving points in the tibia frame as defined by Delp 1990. 
+   LINK
+   http://simtk-confluence.stanford.edu:8080/display/OpenSim/Gait+2392+and+2354+Models
+   Based on: 
+   - Delp, S.L., Loan, J.P., Hoy, M.G., Zajac, F.E., Topp E.L., Rosen, J.M.: An interactive graphics-based model of the lower extremity to study orthopaedic surgical procedures, IEEE Transactions on Biomedical Engineering, vol. 37, pp. 757-767, 1990. 
+   - Yamaguchi G.T., Zajac F.E.: A planar model of the knee joint to characterize the knee extensor mechanism.&quot; J . Biomech. vol. 22. pp. 1-10. 1989. 
+   - Anderson F.C., Pandy M.G.: A dynamic optimization solution for vertical jumping in three dimensions. Computer Methods in Biomechanics and Biomedical Engineering 2:201-231, 1999. Anderson F.C., Pandy M.G.: Dynamic optimization of human walking. Journal of Biomechanical Engineering 123:381-390, 2001.
+   INPUT
+   - OsteoArticularModel: osteo-articular model of an already existing
+   model (see the Documentation for the structure)
+   - k: homothety coefficient for the geometrical parameters (defined as
+   the subject size in cm divided by 180)
+   - Signe: side of the thigh model ('R' for right side or 'L' for left side)
+   - Mass: mass of the solids
+   - AttachmentPoint: name of the attachment point of the model on the
+   already existing model (character string)
+   OUTPUT
+   - OsteoArticularModel: new osteo-articular model (see the Documentation
+   for the structure) 
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="../../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>	Addition of a sister to a solid</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="../../../../../Functions/Models/Osteoarticular/Leg/Leg_gait2354.html" class="code" title="function [OsteoArticularModel]= Leg_gait2354(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)">Leg_gait2354</a>	Addition of a leg model</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Human_model]= talus_gait2354(Human_model,k,Signe,Mass,AttachmentPoint)</a>
+0002 
+0003 <span class="comment">%    CREDIT</span>
+0004 <span class="comment">%   Delp S.L., Loan J.P., Hoy M.G., Zajac F.E., Topp E.L., Rosen J.M., Thelen D.G., Anderson F.C., Seth A.</span>
+0005 <span class="comment">%   NOTES</span>
+0006 <span class="comment">%   3D, 23 DOF gait model created by D.G. Thelen, Univ. of Wisconsin-Madison, and Ajay Seth, Frank C. Anderson, and Scott L. Delp, Stanford University. Lower extremity joint defintions based on Delp et al. (1990). Low back joint and anthropometry based on Anderson and Pandy (1999, 2001). Planar knee model of Yamaguchi and Zajac (1989). Seth replaced tibia translation constraints with a CustomJoint for the knee and removed the patella to eliminate all kinematic constraints; insertions of the quadrucepts are handled with moving points in the tibia frame as defined by Delp 1990.</span>
+0007 <span class="comment">%   LINK</span>
+0008 <span class="comment">%   http://simtk-confluence.stanford.edu:8080/display/OpenSim/Gait+2392+and+2354+Models</span>
+0009 <span class="comment">%   Based on:</span>
+0010 <span class="comment">%   - Delp, S.L., Loan, J.P., Hoy, M.G., Zajac, F.E., Topp E.L., Rosen, J.M.: An interactive graphics-based model of the lower extremity to study orthopaedic surgical procedures, IEEE Transactions on Biomedical Engineering, vol. 37, pp. 757-767, 1990.</span>
+0011 <span class="comment">%   - Yamaguchi G.T., Zajac F.E.: A planar model of the knee joint to characterize the knee extensor mechanism.&quot; J . Biomech. vol. 22. pp. 1-10. 1989.</span>
+0012 <span class="comment">%   - Anderson F.C., Pandy M.G.: A dynamic optimization solution for vertical jumping in three dimensions. Computer Methods in Biomechanics and Biomedical Engineering 2:201-231, 1999. Anderson F.C., Pandy M.G.: Dynamic optimization of human walking. Journal of Biomechanical Engineering 123:381-390, 2001.</span>
+0013 <span class="comment">%   INPUT</span>
+0014 <span class="comment">%   - OsteoArticularModel: osteo-articular model of an already existing</span>
+0015 <span class="comment">%   model (see the Documentation for the structure)</span>
+0016 <span class="comment">%   - k: homothety coefficient for the geometrical parameters (defined as</span>
+0017 <span class="comment">%   the subject size in cm divided by 180)</span>
+0018 <span class="comment">%   - Signe: side of the thigh model ('R' for right side or 'L' for left side)</span>
+0019 <span class="comment">%   - Mass: mass of the solids</span>
+0020 <span class="comment">%   - AttachmentPoint: name of the attachment point of the model on the</span>
+0021 <span class="comment">%   already existing model (character string)</span>
+0022 <span class="comment">%   OUTPUT</span>
+0023 <span class="comment">%   - OsteoArticularModel: new osteo-articular model (see the Documentation</span>
+0024 <span class="comment">%   for the structure)</span>
+0025 <span class="comment">%________________________________________________________</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% Licence</span>
+0028 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0029 <span class="comment">%________________________________________________________</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0032 <span class="comment">% Georges Dumont</span>
+0033 <span class="comment">%________________________________________________________</span>
+0034 
+0035 <span class="comment">%% Variables de sortie :</span>
+0036 <span class="comment">% &quot;enrichissement de la structure &quot;Human_model&quot;&quot;</span>
+0037 
+0038 <span class="comment">%% Liste des solides</span>
+0039 list_solid={<span class="string">'talus'</span>};
+0040 
+0041 <span class="comment">%% Choix jambe droite ou gauche</span>
+0042 <span class="keyword">if</span> Signe == <span class="string">'R'</span>
+0043     Mirror=[1 0 0; 0 1 0; 0 0 1];
+0044 <span class="keyword">else</span>
+0045     <span class="keyword">if</span> Signe == <span class="string">'L'</span>
+0046         Mirror=[1 0 0; 0 1 0; 0 0 -1];
+0047     <span class="keyword">end</span>
+0048 <span class="keyword">end</span>
+0049 
+0050 <span class="comment">%% Incr�entation de la num�otation des solides</span>
+0051 
+0052 s=size(Human_model,2)+1;  <span class="comment">%#ok&lt;NASGU&gt; % num�o du premier solide</span>
+0053 <span class="keyword">for</span> i=1:size(list_solid,2)      <span class="comment">% num�otation de chaque solide : s_&quot;nom du solide&quot;</span>
+0054     <span class="keyword">if</span> i==1
+0055         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s;'</span>))
+0056     <span class="keyword">else</span>
+0057         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s_'</span>,list_solid{i-1},<span class="string">'+1;'</span>))
+0058     <span class="keyword">end</span>
+0059 <span class="keyword">end</span>
+0060 
+0061 <span class="comment">% trouver le num�o de la m�e �partir du nom du point d'attache : 'attachment_pt'</span>
+0062 <span class="keyword">if</span> numel(Human_model) == 0
+0063     s_mother=0;
+0064     pos_attachment_pt=[0 0 0]';
+0065 <span class="keyword">else</span>
+0066     test=0;
+0067     <span class="keyword">for</span> i=1:numel(Human_model)
+0068         <span class="keyword">for</span> j=1:size(Human_model(i).anat_position,1)
+0069             <span class="keyword">if</span> strcmp(AttachmentPoint,Human_model(i).anat_position{j,1})
+0070                 s_mother=i;
+0071                 pos_attachment_pt=Human_model(i).anat_position{j,2}+Human_model(s_mother).c;
+0072                 test=1;
+0073                 <span class="keyword">break</span>
+0074             <span class="keyword">end</span>
+0075         <span class="keyword">end</span>
+0076         <span class="keyword">if</span> i==numel(Human_model) &amp;&amp; test==0
+0077             error([AttachmentPoint <span class="string">' is no existent'</span>])
+0078         <span class="keyword">end</span>
+0079     <span class="keyword">end</span>
+0080     <span class="keyword">if</span> Human_model(s_mother).child == 0      <span class="comment">% si la m�e n'a pas d'enfant</span>
+0081         Human_model(s_mother).child = eval([<span class="string">'s_'</span> list_solid{1}]);    <span class="comment">% l'enfant de cette m�e est ce solide</span>
+0082     <span class="keyword">else</span>
+0083         [Human_model]=<a href="../../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>(Human_model,Human_model(s_mother).child,eval([<span class="string">'s_'</span> list_solid{1}]));   <span class="comment">% recherche de la derni�e soeur</span>
+0084     <span class="keyword">end</span>
+0085 <span class="keyword">end</span>
+0086 
+0087 <span class="comment">% ---------------------------- Thigh --------------------------------------</span>
+0088 
+0089 <span class="comment">%Centre de masse</span>
+0090 CoM_talus=k*Mirror*[0; 0; 0];
+0091 talus_tibiaJointNode = (k*Mirror*[0 ; 0 ;    0])             -CoM_talus;
+0092 talus_calcJointNode = (k*Mirror*[-0.04877; -0.04195; 0.00792]) -CoM_talus;
+0093 
+0094 <span class="comment">%% D�inition des positions anatomiques</span>
+0095 
+0096 talus_position_set = {<span class="keyword">...</span>
+0097     [Signe <span class="string">'talus_tibiaJointNode'</span>],talus_tibiaJointNode;<span class="keyword">...</span>
+0098     [Signe <span class="string">'talus_calcJointNode'</span>],talus_calcJointNode;<span class="keyword">...</span>
+0099         };
+0100 
+0101 
+0102 <span class="comment">%%                     Mise �l'�helle des inerties</span>
+0103 
+0104 I_Talus = eye(3)*10^-3;
+0105 
+0106 <span class="comment">%% Cr�tion de la structure &quot;Human_model&quot;</span>
+0107 
+0108 num_solid=0;
+0109 <span class="comment">%% Talus</span>
+0110 num_solid=num_solid+1;        <span class="comment">% solide num�o ...</span>
+0111 name=list_solid{num_solid}; <span class="comment">% nom du solide</span>
+0112 eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% num�o du solide dans le mod�e</span>
+0113 Human_model(incr_solid).name=[name <span class="string">'_'</span> lower(Signe)];
+0114 Human_model(incr_solid).sister=0;
+0115 Human_model(incr_solid).child=0;
+0116 Human_model(incr_solid).mother=s_mother;
+0117 Human_model(incr_solid).a=[Mirror(3,3)*-0.10501355 Mirror(3,3)*-0.17402245 0.97912632]';
+0118 Human_model(incr_solid).joint=1;
+0119 Human_model(incr_solid).limit_inf=-pi/2;
+0120 Human_model(incr_solid).limit_sup=pi/2;
+0121 Human_model(incr_solid).ActiveJoint=1;
+0122 Human_model(incr_solid).Visual=1;
+0123 Human_model(incr_solid).visual_file = [<span class="string">'gait2354/talus_'</span>  lower(Signe) <span class="string">'.mat'</span>];
+0124 Human_model(incr_solid).m=k*0.1;
+0125 Human_model(incr_solid).b=pos_attachment_pt;
+0126 Human_model(incr_solid).I=I_Talus;
+0127 Human_model(incr_solid).c=CoM_talus;
+0128 Human_model(incr_solid).anat_position=talus_position_set;
+0129 Human_model(incr_solid).L={[Signe <span class="string">'talus_tibiaJointNode'</span>];[Signe <span class="string">'talus_calcJointNode'</span>]};
+0130 Human_model(incr_solid).comment=<span class="string">'Ankle Flexion(+)/Extension(-)'</span>;
+0131 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

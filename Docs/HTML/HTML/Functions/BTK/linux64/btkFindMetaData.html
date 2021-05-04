@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of btkFindMetaData</title>
+  <meta name="keywords" content="btkFindMetaData">
+  <meta name="description" content="BTKFINDMETADATA Return the searched metadata or 0 if not found.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- # BTK --><!-- menu.html linux64 -->
+<h1>btkFindMetaData
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>BTKFINDMETADATA Return the searched metadata or 0 if not found.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function md = btkFindMetaData(h,label,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">BTKFINDMETADATA Return the searched metadata or 0 if not found.
+
+  MD = BTKFINDMETADATA(H, LABEL) finds the metadata based on the given LABEL from 
+  the root of the acquistion's metadata.  The format of MD is the same than using 
+  the function &lt;a href=&quot;matlab:help btkGetMetaData&quot;&gt;btkGetMetaData&lt;/a&gt;.  
+  The handle H represents an acquistion and is obtained by the use of a btk* function.
+
+  MD = BTKFINDMETADATA(H, LABEL, SUBLABEL) returns the metadata associated with the 
+  label SUBLABEL, child of the metadata with the label LABEL.
+
+  MD = BTKFINDMETADATA(H, LABEL, SUBLABEL, ...) finds the n-th sub-metadata.  There 
+  is not limit of depth.
+
+  By default, BTK, use two stages of metadata representing group and parameters.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Functions/BTK/linux64/@Common/btkGetMetaData.html" class="code" title="function btkGetMetaData(h) %#ok">btkGetMetaData</a>	btkGetMetaData Extract acquisition's metadata</li><li><a href="../../../Functions/BTK/mac64/@Common/btkGetMetaData.html" class="code" title="function btkGetMetaData(h) %#ok">btkGetMetaData</a>	btkGetMetaData Extract acquisition's metadata</li><li><a href="../../../Functions/BTK/win64/@Common/btkGetMetaData.html" class="code" title="function btkGetMetaData(h) %#ok">btkGetMetaData</a>	btkGetMetaData Extract acquisition's metadata</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="btkAppendForcePlatformType2.html" class="code" title="function btkAppendForcePlatformType2(h, forces, moments, corners, origin, localFrame)">btkAppendForcePlatformType2</a>	BTKAPPENDFORCEPLATFORMTYPE2 Append a virtual force platform of type 2.</li><li><a href="btkEmulateC3Dserver.html" class="code" title="function itf = btkEmulateC3Dserver()">btkEmulateC3Dserver</a>	BTKEMULATEC3DSERVER Creates an emulated COM object for C3Dserver.</li><li><a href="btkSetMetaData.html" class="code" title="function md = btkSetMetaData(h, varargin) %#ok">btkSetMetaData</a>	BTKSETMETADATA  Set an existing metada and return an updated list of the metadata in the acquisition.</li><li><a href="../../../Functions/BTK/mac64/btkAppendForcePlatformType2.html" class="code" title="function btkAppendForcePlatformType2(h, forces, moments, corners, origin, localFrame)">btkAppendForcePlatformType2</a>	BTKAPPENDFORCEPLATFORMTYPE2 Append a virtual force platform of type 2.</li><li><a href="../../../Functions/BTK/mac64/btkEmulateC3Dserver.html" class="code" title="function itf = btkEmulateC3Dserver()">btkEmulateC3Dserver</a>	BTKEMULATEC3DSERVER Creates an emulated COM object for C3Dserver.</li><li><a href="../../../Functions/BTK/mac64/btkSetMetaData.html" class="code" title="function md = btkSetMetaData(h, varargin) %#ok">btkSetMetaData</a>	BTKSETMETADATA  Set an existing metada and return an updated list of the metadata in the acquisition.</li><li><a href="../../../Functions/BTK/win64/btkAppendForcePlatformType2.html" class="code" title="function btkAppendForcePlatformType2(h, forces, moments, corners, origin, localFrame)">btkAppendForcePlatformType2</a>	BTKAPPENDFORCEPLATFORMTYPE2 Append a virtual force platform of type 2.</li><li><a href="../../../Functions/BTK/win64/btkEmulateC3Dserver.html" class="code" title="function itf = btkEmulateC3Dserver()">btkEmulateC3Dserver</a>	BTKEMULATEC3DSERVER Creates an emulated COM object for C3Dserver.</li><li><a href="../../../Functions/BTK/win64/btkSetMetaData.html" class="code" title="function md = btkSetMetaData(h, varargin) %#ok">btkSetMetaData</a>	BTKSETMETADATA  Set an existing metada and return an updated list of the metadata in the acquisition.</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function md = extractMetaData_p(parent, label)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function md = btkFindMetaData(h,label,varargin)</a>
+0002 <span class="comment">%BTKFINDMETADATA Return the searched metadata or 0 if not found.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%  MD = BTKFINDMETADATA(H, LABEL) finds the metadata based on the given LABEL from</span>
+0005 <span class="comment">%  the root of the acquistion's metadata.  The format of MD is the same than using</span>
+0006 <span class="comment">%  the function &lt;a href=&quot;matlab:help btkGetMetaData&quot;&gt;btkGetMetaData&lt;/a&gt;.</span>
+0007 <span class="comment">%  The handle H represents an acquistion and is obtained by the use of a btk* function.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%  MD = BTKFINDMETADATA(H, LABEL, SUBLABEL) returns the metadata associated with the</span>
+0010 <span class="comment">%  label SUBLABEL, child of the metadata with the label LABEL.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%  MD = BTKFINDMETADATA(H, LABEL, SUBLABEL, ...) finds the n-th sub-metadata.  There</span>
+0013 <span class="comment">%  is not limit of depth.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%  By default, BTK, use two stages of metadata representing group and parameters.</span>
+0016 
+0017 <span class="comment">%  Author: A. Barré</span>
+0018 <span class="comment">%  Copyright 2009-2013 Biomechanical ToolKit (BTK).</span>
+0019 
+0020 <span class="keyword">if</span> (nargin &lt; 2)
+0021   error(<span class="string">'At least two inputs are required.'</span>);
+0022 <span class="keyword">end</span>
+0023 <span class="keyword">if</span> (nargout &gt; 1)
+0024   error(<span class="string">'Too many output arguments.'</span>);
+0025 <span class="keyword">end</span>
+0026 
+0027 root = <a href="../../../Functions/BTK/linux64/@Common/btkGetMetaData.html" class="code" title="function btkGetMetaData(h) %#ok">btkGetMetaData</a>(h);
+0028 <span class="keyword">if</span> (isstruct(root.children))
+0029     md = <a href="#_sub1" class="code" title="subfunction md = extractMetaData_p(parent, label)">extractMetaData_p</a>(root.children, label);
+0030     <span class="keyword">if</span> (isstruct(md))
+0031         <span class="keyword">for</span> i=1:length(varargin)
+0032             md = <a href="#_sub1" class="code" title="subfunction md = extractMetaData_p(parent, label)">extractMetaData_p</a>(md.children, varargin{i});
+0033             <span class="keyword">if</span> (~isstruct(md))
+0034                 <span class="keyword">break</span>;
+0035             <span class="keyword">end</span>
+0036         <span class="keyword">end</span>
+0037     <span class="keyword">end</span>
+0038 <span class="keyword">else</span>
+0039     md = 0;
+0040 <span class="keyword">end</span>
+0041 
+0042 <a name="_sub1" href="#_subfunctions" class="code">function md = extractMetaData_p(parent, label)</a>
+0043 md = 0;
+0044 labels = fieldnames(parent);
+0045 <span class="keyword">for</span> i = 1:length(labels)
+0046     <span class="keyword">if</span> strcmp(label, labels{i})
+0047         md = parent.(labels{i});
+0048         <span class="keyword">break</span>;
+0049     <span class="keyword">end</span>
+0050 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

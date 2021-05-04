@@ -64,3 +64,9 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % GenerateAnimate;
+
+% if ~exist(fullfile(pwd,'AnimateParameters.mat'),'file')
+%     load('AnimateParameters.mat');
+%     PlotAnimation(ModelParameters, AnimateParameters);
+% end
+

@@ -1,0 +1,324 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Thorax_Shoulder</title>
+  <meta name="keywords" content="Thorax_Shoulder">
+  <meta name="description" content="Addition of a thorax model">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../../menu.html Functions --><!-- ../../../menu.html Models --><!-- ../../menu.html Osteoarticular --><!-- ../menu.html UpperTrunk --><!-- menu.html ModelParts -->
+<h1>Thorax_Shoulder
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>Addition of a thorax model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function [Human_model]= Thorax_Shoulder(Human_model,k,Mass,AttachmentPoint) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Addition of a thorax model
+   INPUT
+   - Human_model: osteo-articular model of an already existing
+   model (see the Documentation for the structure)
+   - k: homothety coefficient for the geometrical parameters (defined as
+   the subject size in cm divided by 180)
+   - Mass: mass of the solids
+   - AttachmentPoint: name of the attachment point of the model on the
+   already existing model (character string)
+   OUTPUT
+   - Human_model: new osteo-articular model (see the Documentation
+   for the structure) 
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________
+% Solid list</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="../../../../../Functions/AlgoMathsModel/distance_point.html" class="code" title="function [L,Typ] = distance_point(Point1,Bone1,Point2,Bone2,Human_model,q)">distance_point</a>	Computation of the distance between two points</li><li><a href="../../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>	Computation of inertia matrix from radius of gyration</li><li><a href="../../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>	Addition of a sister to a solid</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="../../../../../Functions/Models/Osteoarticular/UpperTrunk/UpperTrunkShoulder.html" class="code" title="function [OsteoArticularModel]= UpperTrunkShoulder(OsteoArticularModel,k,Mass,AttachmentPoint)">UpperTrunkShoulder</a>	Addition of an upper trunk model</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Human_model]= Thorax_Shoulder(Human_model,k,Mass,AttachmentPoint)</a>
+0002 <span class="comment">% Addition of a thorax model</span>
+0003 <span class="comment">%   INPUT</span>
+0004 <span class="comment">%   - Human_model: osteo-articular model of an already existing</span>
+0005 <span class="comment">%   model (see the Documentation for the structure)</span>
+0006 <span class="comment">%   - k: homothety coefficient for the geometrical parameters (defined as</span>
+0007 <span class="comment">%   the subject size in cm divided by 180)</span>
+0008 <span class="comment">%   - Mass: mass of the solids</span>
+0009 <span class="comment">%   - AttachmentPoint: name of the attachment point of the model on the</span>
+0010 <span class="comment">%   already existing model (character string)</span>
+0011 <span class="comment">%   OUTPUT</span>
+0012 <span class="comment">%   - Human_model: new osteo-articular model (see the Documentation</span>
+0013 <span class="comment">%   for the structure)</span>
+0014 <span class="comment">%________________________________________________________</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% Licence</span>
+0017 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0018 <span class="comment">%________________________________________________________</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0021 <span class="comment">% Georges Dumont</span>
+0022 <span class="comment">%________________________________________________________</span>
+0023 <span class="comment">%% Solid list</span>
+0024 
+0025 list_solid={<span class="string">'UpperTrunk_J1'</span> <span class="string">'UpperTrunk_J2'</span> <span class="string">'Thorax'</span>};
+0026 
+0027 <span class="comment">%% Solid numbering incremation</span>
+0028 
+0029 s=size(Human_model,2)+1;  <span class="comment">%#ok&lt;NASGU&gt; % num�o du premier solide</span>
+0030 <span class="keyword">for</span> i=1:size(list_solid,2)      <span class="comment">% num�otation de chaque solide : s_&quot;nom du solide&quot;</span>
+0031     <span class="keyword">if</span> i==1
+0032         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s;'</span>))
+0033     <span class="keyword">else</span>
+0034         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s_'</span>,list_solid{i-1},<span class="string">'+1;'</span>))
+0035     <span class="keyword">end</span>
+0036 <span class="keyword">end</span>
+0037 
+0038 <span class="comment">% find the number of the mother from the attachment point: 'attachment_pt'</span>
+0039 <span class="keyword">if</span> numel(Human_model) == 0
+0040     s_mother=0;
+0041     pos_attachment_pt=[0 0 0]';
+0042 <span class="keyword">else</span>
+0043     test=0;
+0044     <span class="keyword">for</span> i=1:numel(Human_model)
+0045         <span class="keyword">for</span> j=1:size(Human_model(i).anat_position,1)
+0046             <span class="keyword">if</span> strcmp(AttachmentPoint,Human_model(i).anat_position{j,1})
+0047                 s_mother=i;
+0048                 pos_attachment_pt=Human_model(i).anat_position{j,2}+Human_model(s_mother).c;
+0049                 test=1;
+0050                 <span class="keyword">break</span>
+0051             <span class="keyword">end</span>
+0052         <span class="keyword">end</span>
+0053         <span class="keyword">if</span> i==numel(Human_model) &amp;&amp; test==0
+0054             error([AttachmentPoint <span class="string">' is no existent'</span>])
+0055         <span class="keyword">end</span>
+0056     <span class="keyword">end</span>
+0057     <span class="keyword">if</span> Human_model(s_mother).child == 0      <span class="comment">% si la m�e n'a pas d'enfant</span>
+0058         Human_model(s_mother).child = eval([<span class="string">'s_'</span> list_solid{1}]);    <span class="comment">% l'enfant de cette m�e est ce solide</span>
+0059     <span class="keyword">else</span>
+0060         [Human_model]=<a href="../../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>(Human_model,Human_model(s_mother).child,eval([<span class="string">'s_'</span> list_solid{1}]));   <span class="comment">% recherche de la derni�e soeur</span>
+0061     <span class="keyword">end</span>
+0062 <span class="keyword">end</span>
+0063 
+0064 
+0065 <span class="comment">%%                     Definition of anatomical landmarks</span>
+0066 
+0067 <span class="comment">% ------------------------- Thorax ----------------------------------------</span>
+0068 
+0069 <span class="comment">% Center of mass location with respect to the reference frame</span>
+0070 CoM_Thorax = k*[0.060 0.303 0];
+0071 
+0072 <span class="comment">% Node locations</span>
+0073 Thorax_T12L1JointNode = k*[0.022 0.154 0] - CoM_Thorax;
+0074 Thorax_C1HatNode = k*[0.026 0.6 0] - CoM_Thorax;
+0075 Thorax_T1C5 = k*[0.013 0.462 0] - CoM_Thorax;
+0076 Thorax_ShoulderRightNode=k*[-0.0408 0.1099 0.1929]-Thorax_T12L1JointNode;
+0077 NeckNode=Thorax_C1HatNode;
+0078 
+0079 <span class="comment">% Joints imported and adjusted from (Puchaud et al. 2019)</span>
+0080 Thorax_osim2antoine         = [k k Thorax_ShoulderRightNode(3)/0.17]; <span class="comment">% scaling coef based on shoulder width</span>
+0081 CoM_Thorax_osim             = Thorax_osim2antoine.*[-0.0591 -0.1486 0];
+0082 Thorax_scjJointRightNode    = Thorax_osim2antoine.*[0.006325 0.00693 0.025465] - CoM_Thorax_osim;
+0083 Thorax_scjJointLeftNode     = Thorax_osim2antoine.*[0.006325 0.00693 -0.025465] - CoM_Thorax_osim;
+0084 Thorax_EllipsoidRightNode   = Thorax_osim2antoine.*[-0.02 -0.0173 0.0609] - CoM_Thorax_osim;
+0085 Thorax_EllipsoidLeftNode    = Thorax_osim2antoine.*[-0.02 -0.0173 -0.0609] - CoM_Thorax_osim;
+0086 
+0087 <span class="comment">%% Definition of anatomical landmarks (with respect to the center of mass of the solid)</span>
+0088 
+0089 Thorax_position_set= {<span class="keyword">...</span>
+0090     <span class="comment">% Markers</span>
+0091     <span class="string">'STRN'</span>, k*[0.095 -0.055 0]'; <span class="keyword">...</span>
+0092     <span class="string">'CLAV'</span>, k*[0.01 0.13 0]'; <span class="keyword">...</span>
+0093     <span class="string">'T10'</span>, k*[-0.12 -0.115 0]'; <span class="keyword">...</span>
+0094     <span class="string">'T8'</span>, k*[-0.13 -0.05 0]'; <span class="keyword">...</span>
+0095     <span class="string">'T12'</span>, k*[-0.10 -0.175 0]'; <span class="keyword">...</span>
+0096     <span class="string">'C7'</span>, k*[-0.105 0.165 0]'; <span class="keyword">...</span>
+0097     <span class="comment">% Joint Nodes</span>
+0098     <span class="string">'NeckNode'</span>, NeckNode'; <span class="keyword">...</span>
+0099     <span class="string">'Thorax_T1C5'</span>, Thorax_T1C5'; <span class="keyword">...</span>
+0100     <span class="string">'Thorax_scjJointRightNode'</span>, Thorax_scjJointRightNode'; <span class="keyword">...</span>
+0101     <span class="string">'Thorax_scjJointLeftNode'</span>, Thorax_scjJointLeftNode'; <span class="keyword">...</span>
+0102     <span class="string">'Thorax_T12L1JointNode'</span>, Thorax_T12L1JointNode'; <span class="keyword">...</span>
+0103     <span class="string">'R_Thorax_EllipsoidNode'</span>, Thorax_EllipsoidRightNode'; <span class="keyword">...</span><span class="comment"> </span>
+0104     <span class="string">'L_Thorax_EllipsoidNode'</span>, Thorax_EllipsoidLeftNode'; <span class="keyword">...</span><span class="comment"> </span>
+0105     <span class="comment">% Muscle paths</span>
+0106     [<span class="string">'R_Thorax_PECM1-P3'</span>],Thorax_osim2antoine'.*[0.0063633;-0.0073233;0.11927]- CoM_Thorax_osim';<span class="keyword">...</span>
+0107     [<span class="string">'R_Thorax_PECM2-P3'</span>],Thorax_osim2antoine'.*([0.020397;-0.03445;0.12312])- CoM_Thorax_osim';<span class="keyword">...</span>
+0108     [<span class="string">'R_Thorax_PECM2-P4'</span>],Thorax_osim2antoine'.*([0.03091;-0.03922;0.09705])- CoM_Thorax_osim';<span class="keyword">...</span>
+0109     [<span class="string">'R_Thorax_PECM2-P5'</span>],Thorax_osim2antoine'.*([0.02769;-0.04498;0.02271])- CoM_Thorax_osim';<span class="keyword">...</span>
+0110     [<span class="string">'R_Thorax_PECM3-P3'</span>],Thorax_osim2antoine'.*([0.02984;-0.069739;0.1151])- CoM_Thorax_osim';<span class="keyword">...</span>
+0111     [<span class="string">'R_Thorax_PECM3-P4'</span>],Thorax_osim2antoine'.*([0.0525;-0.08417;0.08935])- CoM_Thorax_osim';<span class="keyword">...</span>
+0112     [<span class="string">'R_Thorax_PECM3-P5'</span>],Thorax_osim2antoine'.*([0.05724;-0.11654;0.03787])- CoM_Thorax_osim';<span class="keyword">...</span>
+0113     [<span class="string">'R_Thorax_LAT1-P4'</span>],Thorax_osim2antoine'.*([-0.11828;-0.10118;0.03316])- CoM_Thorax_osim';<span class="keyword">...</span>
+0114     [<span class="string">'R_Thorax_LAT1-P5'</span>],Thorax_osim2antoine'.*([-0.09578;-0.11724;0.00882])- CoM_Thorax_osim';<span class="keyword">...</span>
+0115     [<span class="string">'R_Thorax_LAT2-P4'</span>],Thorax_osim2antoine'.*([-0.10992;-0.16908;0.02878])- CoM_Thorax_osim';<span class="keyword">...</span>
+0116     [<span class="string">'R_Thorax_LAT2-P5'</span>],Thorax_osim2antoine'.*([-0.07186;-0.18818;0.00815])- CoM_Thorax_osim';<span class="keyword">...</span>
+0117     [<span class="string">'R_Thorax_LAT3-P4'</span>],Thorax_osim2antoine'.*([-0.11157;-0.19387;0.05532])- CoM_Thorax_osim';<span class="keyword">...</span>
+0118     [<span class="string">'R_Thorax_LAT3-P5'</span>],Thorax_osim2antoine'.*([-0.07117;-0.24858;0.00907])- CoM_Thorax_osim';<span class="keyword">...</span>
+0119     [<span class="string">'L_Thorax_PECM1-P3'</span>],Thorax_osim2antoine'.*([0.0063633;-0.0073233;-0.11927])- CoM_Thorax_osim';<span class="keyword">...</span>
+0120     [<span class="string">'L_Thorax_PECM2-P3'</span>],Thorax_osim2antoine'.*([0.020397;-0.03445;-0.12312])- CoM_Thorax_osim';<span class="keyword">...</span>
+0121     [<span class="string">'L_Thorax_PECM2-P4'</span>],Thorax_osim2antoine'.*([0.03091;-0.03922;-0.09705])- CoM_Thorax_osim';<span class="keyword">...</span>
+0122     [<span class="string">'L_Thorax_PECM2-P5'</span>],Thorax_osim2antoine'.*([0.02769;-0.04498;-0.02271])- CoM_Thorax_osim';<span class="keyword">...</span>
+0123     [<span class="string">'L_Thorax_PECM3-P3'</span>],Thorax_osim2antoine'.*([0.02984;-0.069739;-0.1151])- CoM_Thorax_osim';<span class="keyword">...</span>
+0124     [<span class="string">'L_Thorax_PECM3-P4'</span>],Thorax_osim2antoine'.*([0.0525;-0.08417;-0.08935])- CoM_Thorax_osim';<span class="keyword">...</span>
+0125     [<span class="string">'L_Thorax_PECM3-P5'</span>],Thorax_osim2antoine'.*([0.05724;-0.11654;-0.03787])- CoM_Thorax_osim';<span class="keyword">...</span>
+0126     [<span class="string">'L_Thorax_LAT1-P4'</span>],Thorax_osim2antoine'.*([-0.11828;-0.10118;-0.03316])- CoM_Thorax_osim';<span class="keyword">...</span>
+0127     [<span class="string">'L_Thorax_LAT1-P5'</span>],Thorax_osim2antoine'.*([-0.09578;-0.11724;-0.00882])- CoM_Thorax_osim';<span class="keyword">...</span>
+0128     [<span class="string">'L_Thorax_LAT2-P4'</span>],Thorax_osim2antoine'.*([-0.10992;-0.16908;-0.02878])- CoM_Thorax_osim';<span class="keyword">...</span>
+0129     [<span class="string">'L_Thorax_LAT2-P5'</span>],Thorax_osim2antoine'.*([-0.07186;-0.18818;-0.00815])- CoM_Thorax_osim';<span class="keyword">...</span>
+0130     [<span class="string">'L_Thorax_LAT3-P4'</span>],Thorax_osim2antoine'.*([-0.11157;-0.19387;-0.05532])- CoM_Thorax_osim';<span class="keyword">...</span>
+0131     [<span class="string">'L_Thorax_LAT3-P5'</span>],Thorax_osim2antoine'.*([-0.07117;-0.24858;-0.00907])- CoM_Thorax_osim';<span class="keyword">...</span>
+0132     [<span class="string">'R_Thorax_stern_mast-P1'</span>],Thorax_osim2antoine'.*([-0.002;-0.0005;0.0087])- CoM_Thorax_osim';<span class="keyword">...</span>
+0133     [<span class="string">'L_Thorax_stern_mast-P1'</span>],Thorax_osim2antoine'.*([-0.002;-0.0005;-0.0087])- CoM_Thorax_osim';<span class="keyword">...</span>
+0134     [<span class="string">'R_Thorax_rhomboid_min-P1'</span>],Thorax_osim2antoine'.*([-0.078;0.03;0])- CoM_Thorax_osim';<span class="keyword">...</span>
+0135     [<span class="string">'R_Thorax_rhomboid_maj-P1'</span>],Thorax_osim2antoine'.*([-0.1;-0.038;0])- CoM_Thorax_osim';<span class="keyword">...</span>
+0136     [<span class="string">'L_Thorax_rhomboid_min-P1'</span>],Thorax_osim2antoine'.*([-0.078;0.03;0])- CoM_Thorax_osim';<span class="keyword">...</span>
+0137     [<span class="string">'L_Thorax_rhomboid_maj-P1'</span>],Thorax_osim2antoine'.*([-0.1;-0.038;0])- CoM_Thorax_osim';<span class="keyword">...</span>
+0138     [<span class="string">'R_Thorax_serr_ant_1-P2'</span>],Thorax_osim2antoine'.*([-0.0353;-0.2;0.125])- CoM_Thorax_osim';<span class="keyword">...</span>
+0139     [<span class="string">'R_Thorax_serr_ant_2-P2'</span>],Thorax_osim2antoine'.*([-0.0149;-0.175;0.1327])- CoM_Thorax_osim';<span class="keyword">...</span>
+0140     [<span class="string">'R_Thorax_serr_ant_3-P2'</span>],Thorax_osim2antoine'.*([-0.0024;-0.15;0.135])- CoM_Thorax_osim';<span class="keyword">...</span>
+0141     [<span class="string">'R_Thorax_serr_ant_4-P2'</span>],Thorax_osim2antoine'.*([0.0031;-0.129;0.135])- CoM_Thorax_osim';<span class="keyword">...</span>
+0142     [<span class="string">'R_Thorax_serr_ant_5-P2'</span>],Thorax_osim2antoine'.*([-0.0041;-0.09;0.14])- CoM_Thorax_osim';<span class="keyword">...</span>
+0143     [<span class="string">'R_Thorax_serr_ant_6-P2'</span>],Thorax_osim2antoine'.*([-0.019;-0.07;0.126])- CoM_Thorax_osim';<span class="keyword">...</span>
+0144     [<span class="string">'R_Thorax_serr_ant_7-P2'</span>],Thorax_osim2antoine'.*([-0.033;-0.04;0.12])- CoM_Thorax_osim';<span class="keyword">...</span>
+0145     [<span class="string">'R_Thorax_serr_ant_8-P2'</span>],Thorax_osim2antoine'.*([-0.0552;-0.02;0.101])- CoM_Thorax_osim';<span class="keyword">...</span>
+0146     [<span class="string">'R_Thorax_serr_ant_9-P2'</span>],Thorax_osim2antoine'.*([-0.0546;0.0062;0.098])- CoM_Thorax_osim';<span class="keyword">...</span>
+0147     [<span class="string">'R_Thorax_serr_ant_10-P2'</span>],Thorax_osim2antoine'.*([-0.0595;0.0109;0.0944])- CoM_Thorax_osim';<span class="keyword">...</span>
+0148     [<span class="string">'R_Thorax_serr_ant_11-P2'</span>],Thorax_osim2antoine'.*([-0.0546;0.0062;0.098])- CoM_Thorax_osim';<span class="keyword">...</span>
+0149     [<span class="string">'R_Thorax_serr_ant_12-P2'</span>],Thorax_osim2antoine'.*([-0.047;0.0009;0.1005])- CoM_Thorax_osim';<span class="keyword">...</span>
+0150     [<span class="string">'L_Thorax_serr_ant_1-P2'</span>],Thorax_osim2antoine'.*([-0.0353;-0.2;-0.125])- CoM_Thorax_osim';<span class="keyword">...</span>
+0151     [<span class="string">'L_Thorax_serr_ant_2-P2'</span>],Thorax_osim2antoine'.*([-0.0149;-0.175;-0.1327])- CoM_Thorax_osim';<span class="keyword">...</span>
+0152     [<span class="string">'L_Thorax_serr_ant_3-P2'</span>],Thorax_osim2antoine'.*([-0.0024;-0.15;-0.135])- CoM_Thorax_osim';<span class="keyword">...</span>
+0153     [<span class="string">'L_Thorax_serr_ant_4-P2'</span>],Thorax_osim2antoine'.*([0.0031;-0.129;-0.135])- CoM_Thorax_osim';<span class="keyword">...</span>
+0154     [<span class="string">'L_Thorax_serr_ant_5-P2'</span>],Thorax_osim2antoine'.*([-0.0041;-0.09;-0.14])- CoM_Thorax_osim';<span class="keyword">...</span>
+0155     [<span class="string">'L_Thorax_serr_ant_6-P2'</span>],Thorax_osim2antoine'.*([-0.019;-0.07;-0.126])- CoM_Thorax_osim';<span class="keyword">...</span>
+0156     [<span class="string">'L_Thorax_serr_ant_7-P2'</span>],Thorax_osim2antoine'.*([-0.033;-0.04;-0.12])- CoM_Thorax_osim';<span class="keyword">...</span>
+0157     [<span class="string">'L_Thorax_serr_ant_8-P2'</span>],Thorax_osim2antoine'.*([-0.0552;-0.02;-0.101])- CoM_Thorax_osim';<span class="keyword">...</span>
+0158     [<span class="string">'L_Thorax_serr_ant_9-P2'</span>],Thorax_osim2antoine'.*([-0.0546;0.0062;-0.098])- CoM_Thorax_osim';<span class="keyword">...</span>
+0159     [<span class="string">'L_Thorax_serr_ant_10-P2'</span>],Thorax_osim2antoine'.*([-0.0595;0.0109;-0.0944])- CoM_Thorax_osim';<span class="keyword">...</span>
+0160     [<span class="string">'L_Thorax_serr_ant_11-P2'</span>],Thorax_osim2antoine'.*([-0.0546;0.0062;-0.098])- CoM_Thorax_osim';<span class="keyword">...</span>
+0161     [<span class="string">'L_Thorax_serr_ant_12-P2'</span>],Thorax_osim2antoine'.*([-0.047;0.0009;-0.1005])- CoM_Thorax_osim';<span class="keyword">...</span><span class="comment">   </span>
+0162     };
+0163 
+0164 <span class="comment">%% Scaling inertial parameters</span>
+0165 
+0166 <span class="comment">% longueur entre 'Pelvis_L5JointNode' et 'Thorax_T1C5'</span>
+0167 Lpts={<span class="string">'Pelvis_LowerTrunkNode'</span>;<span class="string">'LowerTrunk_UpperTrunkNode'</span>};
+0168 <span class="keyword">for</span> pp=1:2
+0169     test=0;
+0170     <span class="keyword">for</span> i=1:numel(Human_model)
+0171         <span class="keyword">for</span> j=1:size(Human_model(i).anat_position,1)
+0172             <span class="keyword">if</span> strcmp(Lpts{pp},Human_model(i).anat_position{j,1})
+0173                Lpts{pp,2}=i; <span class="comment">% solid number</span>
+0174                Lpts{pp,3}=j; <span class="comment">% number of the anatomical landmarks</span>
+0175                test=1;
+0176                <span class="keyword">break</span>
+0177             <span class="keyword">end</span>
+0178         <span class="keyword">end</span>
+0179         <span class="keyword">if</span> i==numel(Human_model) &amp;&amp; test==0
+0180             error([Lpts{pp} <span class="string">' is no existent'</span>])        
+0181         <span class="keyword">end</span>       
+0182     <span class="keyword">end</span>
+0183 <span class="keyword">end</span>
+0184 Length_Thorax = <a href="../../../../../Functions/AlgoMathsModel/distance_point.html" class="code" title="function [L,Typ] = distance_point(Point1,Bone1,Point2,Bone2,Human_model,q)">distance_point</a>(Lpts{1,3},Lpts{1,2},Lpts{2,3},Lpts{2,2},Human_model,zeros(numel(Human_model),1)) <span class="keyword">...</span>
+0185     +norm(Thorax_T12L1JointNode-Thorax_T1C5);
+0186 
+0187 <span class="comment">%% [&quot;Adjustments to McConville et al. and Young et al. body segment inertial parameters&quot;] R. Dumas</span>
+0188 
+0189 [I_Thorax]=<a href="../../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>([27 25 28 18 2 4*1i], Mass.Thorax_Mass, [0 0 0], Length_Thorax);
+0190 
+0191 <span class="comment">%% &quot;Human_model&quot; structure generation</span>
+0192  
+0193 num_solid=0;
+0194 <span class="comment">% UpperTrunk_J1</span>
+0195 num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0196 name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0197 eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0198 Human_model(incr_solid).name=name;               <span class="comment">% solid name</span>
+0199 Human_model(incr_solid).sister=0;                
+0200 Human_model(incr_solid).child=s_UpperTrunk_J2;                   
+0201 Human_model(incr_solid).mother=s_mother;           
+0202 Human_model(incr_solid).a=[0 0 1]'; 
+0203 Human_model(incr_solid).joint=1;  
+0204 Human_model(incr_solid).limit_inf=-0.2;
+0205 Human_model(incr_solid).limit_sup=0.2;
+0206 Human_model(incr_solid).linear_constraint=[];
+0207 Human_model(incr_solid).Visual=0;
+0208 Human_model(incr_solid).b=pos_attachment_pt;
+0209 Human_model(incr_solid).c=[0 0 0]';
+0210 Human_model(incr_solid).m=0;                 
+0211 Human_model(incr_solid).I=zeros(3,3);
+0212 Human_model(incr_solid).comment=<span class="string">'Trunk Flexion(-)/Extension(+)'</span>;
+0213 
+0214 <span class="comment">% UpperTrunk_J2</span>
+0215 num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0216 name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0217 eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0218 Human_model(incr_solid).name=name;               <span class="comment">% solid name</span>
+0219 Human_model(incr_solid).sister=0;                
+0220 Human_model(incr_solid).child=s_Thorax;                   
+0221 Human_model(incr_solid).mother=s_UpperTrunk_J1;           
+0222 Human_model(incr_solid).a=[1 0 0]';
+0223 Human_model(incr_solid).joint=1;
+0224 Human_model(incr_solid).limit_inf=-0.2;
+0225 Human_model(incr_solid).limit_sup=0.2;
+0226 Human_model(incr_solid).linear_constraint=[];
+0227 Human_model(incr_solid).Visual=0;
+0228 Human_model(incr_solid).b=[0 0 0]';  
+0229 Human_model(incr_solid).c=[0 0 0]';
+0230 Human_model(incr_solid).m=0;                 
+0231 Human_model(incr_solid).I=zeros(3,3);
+0232 Human_model(incr_solid).comment=<span class="string">'Trunk Axial Rotation Right(+)/Left(-)'</span>;
+0233 
+0234 <span class="comment">% Thorax</span>
+0235 num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0236 name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0237 eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0238 Human_model(incr_solid).name=name;               <span class="comment">% solid name</span>
+0239 Human_model(incr_solid).sister=0;                
+0240 Human_model(incr_solid).child=0;                   
+0241 Human_model(incr_solid).mother=s_UpperTrunk_J2;           
+0242 Human_model(incr_solid).a=[0 1 0]';    
+0243 Human_model(incr_solid).joint=1;
+0244 Human_model(incr_solid).limit_inf=-0.2;
+0245 Human_model(incr_solid).limit_sup=0.2;
+0246 Human_model(incr_solid).Visual=1;
+0247 Human_model(incr_solid).Visual_file=<span class="string">'Holzbaur/torso.mat'</span>;
+0248 Human_model(incr_solid).calib_k_constraint=[];
+0249 Human_model(incr_solid).b=[0 0 0]';  
+0250 Human_model(incr_solid).c=-Thorax_T12L1JointNode';
+0251 Human_model(incr_solid).m=Mass.Thorax_Mass;                 
+0252 Human_model(incr_solid).I=[I_Thorax(1) I_Thorax(4) I_Thorax(5); I_Thorax(4) I_Thorax(2) I_Thorax(6); I_Thorax(5) I_Thorax(6) I_Thorax(3)];
+0253 Human_model(incr_solid).anat_position=Thorax_position_set;
+0254 Human_model(incr_solid).L={<span class="string">'Pelvis_LowerTrunkNode'</span>;<span class="string">'Thorax_T1C5'</span>};
+0255 Human_model(incr_solid).comment=<span class="string">'Trunk Lateral Bending Right(+)/Left(-)'</span>;
+0256 
+0257 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

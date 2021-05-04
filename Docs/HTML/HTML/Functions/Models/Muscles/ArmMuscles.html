@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ArmMuscles</title>
+  <meta name="keywords" content="ArmMuscles">
+  <meta name="description" content="Definition of an arm muscle model">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- ../menu.html Models --><!-- menu.html Muscles -->
+<h1>ArmMuscles
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Definition of an arm muscle model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [Muscles]=ArmMuscles(Muscles,Signe) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Definition of an arm muscle model
+   This model contains 9 muscles, actuating the elbow joint
+
+    Based on:
+    - Holzbaur, K. R., Murray, W. M., &amp; Delp, S. L., 2005.
+    A model of the upper extremity for simulating musculoskeletal surgery and analyzing neuromuscular control. Annals of biomedical engineering, 33(6), 829-840
+
+   INPUT
+   - Muscles: set of muscles (see the Documentation for the structure)
+   - Signe: side of the arm model ('R' for right side or 'L' for left side)
+   OUTPUT
+   - Muscles: new set of muscles (see the Documentation for the structure)
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Muscles]=ArmMuscles(Muscles,Signe)</a>
+0002 <span class="comment">% Definition of an arm muscle model</span>
+0003 <span class="comment">%   This model contains 9 muscles, actuating the elbow joint</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    Based on:</span>
+0006 <span class="comment">%    - Holzbaur, K. R., Murray, W. M., &amp; Delp, S. L., 2005.</span>
+0007 <span class="comment">%    A model of the upper extremity for simulating musculoskeletal surgery and analyzing neuromuscular control. Annals of biomedical engineering, 33(6), 829-840</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%   INPUT</span>
+0010 <span class="comment">%   - Muscles: set of muscles (see the Documentation for the structure)</span>
+0011 <span class="comment">%   - Signe: side of the arm model ('R' for right side or 'L' for left side)</span>
+0012 <span class="comment">%   OUTPUT</span>
+0013 <span class="comment">%   - Muscles: new set of muscles (see the Documentation for the structure)</span>
+0014 <span class="comment">%________________________________________________________</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% Licence</span>
+0017 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0018 <span class="comment">%________________________________________________________</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0021 <span class="comment">% Georges Dumont</span>
+0022 <span class="comment">%________________________________________________________</span>
+0023 <span class="keyword">if</span> strcmp(Signe,<span class="string">'Right'</span>)
+0024     Signe = <span class="string">'R'</span>;
+0025 <span class="keyword">else</span>
+0026     Signe = <span class="string">'L'</span>;
+0027 <span class="keyword">end</span>
+0028 
+0029 s=cell(0);
+0030 
+0031 <span class="comment">% Elbow</span>
+0032 s=[s;{
+0033     [Signe <span class="string">'Brachioradialis'</span>],261.3,[],[],[],[],{[Signe <span class="string">'Humerus_Brachioradialis_o'</span>];[Signe <span class="string">'Forearm_Brachioradialis_i'</span>]},{};<span class="keyword">...</span>
+0034     [Signe <span class="string">'BicepsL'</span>],624.3,0.1157,4,0.2723,0,{[Signe <span class="string">'Thorax_BicepsL_o'</span>];[Signe <span class="string">'Thorax_BicepsL_via1'</span>];[Signe <span class="string">'Humerus_BicepsL_via2'</span>];[Signe <span class="string">'Humerus_BicepsL_via3'</span>];[Signe <span class="string">'Humerus_BicepsL_via4'</span>];[Signe <span class="string">'Humerus_BicepsL_via5'</span>];[Signe <span class="string">'Humerus_BicepsL_via6'</span>];[Signe <span class="string">'Humerus_Biceps_via7'</span>];[Signe <span class="string">'Forearm_Biceps_i'</span>]},{};<span class="keyword">...</span><span class="comment"> arm26.osim       </span>
+0035     [Signe <span class="string">'BicepsS'</span>],435.56,0.1321,4,0.1923,0,{[Signe <span class="string">'Thorax_BicepsS_o'</span>];[Signe <span class="string">'Thorax_BicepsS_via1'</span>];[Signe <span class="string">'Humerus_BicepsS_via2'</span>];[Signe <span class="string">'Humerus_BicepsS_via3'</span>];[Signe <span class="string">'Humerus_Biceps_via7'</span>];[Signe <span class="string">'Forearm_Biceps_i'</span>]},{};<span class="keyword">...</span><span class="comment"> arm26.osim    </span>
+0036     [Signe <span class="string">'Brachialis'</span>],987.3,0.0858,4,0.0535,0,{[Signe <span class="string">'Humerus_Brachialis_o'</span>];[Signe <span class="string">'Forearm_Brachialis'</span>]},{};<span class="keyword">...</span>
+0037     [Signe <span class="string">'ECRL'</span>],304.9,[],[],[],[],{[Signe <span class="string">'Humerus_ECRL_o'</span>];[Signe <span class="string">'Forearm_ECRL_i'</span>]},{};<span class="keyword">...</span>
+0038     [Signe <span class="string">'PronatorTeres'</span>],566.2,[],[],[],[],{[Signe <span class="string">'Humerus_PronatorTeres_o'</span>];[Signe <span class="string">'Forearm_PronatorTeres_i'</span>]},{};<span class="keyword">...</span>
+0039     [Signe <span class="string">'TricepsLg'</span>],798.5,0.134,4,0.143,0.209,{[Signe <span class="string">'Thorax_Triceps_o'</span>];[Signe <span class="string">'Humerus_TricepsLg_via1'</span>];[Signe <span class="string">'Humerus_Triceps_via2'</span>];[Signe <span class="string">'Humerus_Triceps_via3'</span>];[Signe <span class="string">'Humerus_Triceps_via4'</span>];[Signe <span class="string">'Forearm_Triceps_via5'</span>];[Signe <span class="string">'Forearm_Triceps_i'</span>]},{};<span class="keyword">...</span><span class="comment">       arm26.osim    </span>
+0040     [Signe <span class="string">'TricepsLat'</span>],624.3,0.114,4,0.098,0.157,{[Signe <span class="string">'Humerus_TricepsLat_o'</span>];[Signe <span class="string">'Humerus_TricepsLat_via1'</span>];[Signe <span class="string">'Humerus_Triceps_via2'</span>];[Signe <span class="string">'Humerus_Triceps_via3'</span>];[Signe <span class="string">'Humerus_Triceps_via4'</span>];[Signe <span class="string">'Forearm_Triceps_via5'</span>];[Signe <span class="string">'Forearm_Triceps_i'</span>]},{};<span class="keyword">...</span><span class="comment"> arm26.osim   </span>
+0041     [Signe <span class="string">'TricepsMed'</span>],624.3,0.114,4,0.098,0.157,{[Signe <span class="string">'Humerus_TricepsMed_o'</span>];[Signe <span class="string">'Humerus_TricepsMed_via1'</span>];[Signe <span class="string">'Humerus_Triceps_via2'</span>];[Signe <span class="string">'Humerus_Triceps_via3'</span>];[Signe <span class="string">'Humerus_Triceps_via4'</span>];[Signe <span class="string">'Forearm_Triceps_via5'</span>];[Signe <span class="string">'Forearm_Triceps_i'</span>]},{};<span class="keyword">...</span><span class="comment"> arm26.osim     </span>
+0042     }];
+0043 
+0044 <span class="comment">% Structure generation</span>
+0045 Muscles=[Muscles;struct(<span class="string">'name'</span>,{s{:,1}}',<span class="string">'f0'</span>,{s{:,2}}',<span class="string">'l0'</span>,{s{:,3}}',<span class="keyword">...</span>
+0046     <span class="string">'Kt'</span>,{s{:,4}}',<span class="string">'ls'</span>,{s{:,5}}',<span class="string">'alpha0'</span>,{s{:,6}}',<span class="string">'path'</span>,{s{:,7}}',<span class="string">'wrap'</span>,{s{:,8}}')]; <span class="comment">%#ok&lt;CCAT1&gt;</span>
+0047 
+0048 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Maj_Human_model</title>
+  <meta name="keywords" content="Maj_Human_model">
+  <meta name="description" content="Update the numbers of child,sister,mother of the human model after delete">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html Models -->
+<h1>Maj_Human_model
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Update the numbers of child,sister,mother of the human model after delete</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Human_model,Human_model_save]=Maj_Human_model(Human_model,Human_model_save,j) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Update the numbers of child,sister,mother of the human model after delete
+ one line 
+(Warning, you have to suppress a complete branch)
+ Recursive function
+   INPUT
+   - Human_model (the new one with deleted lines)
+   - Human_model_save (the old one with all saved lines)
+   OUTPUT
+   - Human_model (with refreshed numbers)
+   - Human_model_save (the old one with all saved lines)
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Pierre Puchaud, Antoine Muller, Charles Pontonnier, and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="Maj_Human_model.html" class="code" title="function [Human_model,Human_model_save]=Maj_Human_model(Human_model,Human_model_save,j)">Maj_Human_model</a>	Update the numbers of child,sister,mother of the human model after delete</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="Maj_Human_model.html" class="code" title="function [Human_model,Human_model_save]=Maj_Human_model(Human_model,Human_model_save,j)">Maj_Human_model</a>	Update the numbers of child,sister,mother of the human model after delete</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [Human_model,Human_model_save]=</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Human_model,Human_model_save]=Maj_Human_model(Human_model,Human_model_save,j)</a>
+0002 <span class="comment">% Update the numbers of child,sister,mother of the human model after delete</span>
+0003 <span class="comment">% one line</span>
+0004 <span class="comment">%(Warning, you have to suppress a complete branch)</span>
+0005 <span class="comment">% Recursive function</span>
+0006 <span class="comment">%   INPUT</span>
+0007 <span class="comment">%   - Human_model (the new one with deleted lines)</span>
+0008 <span class="comment">%   - Human_model_save (the old one with all saved lines)</span>
+0009 <span class="comment">%   OUTPUT</span>
+0010 <span class="comment">%   - Human_model (with refreshed numbers)</span>
+0011 <span class="comment">%   - Human_model_save (the old one with all saved lines)</span>
+0012 <span class="comment">%________________________________________________________</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Licence</span>
+0015 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0016 <span class="comment">%________________________________________________________</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% Authors : Pierre Puchaud, Antoine Muller, Charles Pontonnier, and</span>
+0019 <span class="comment">% Georges Dumont</span>
+0020 <span class="comment">%________________________________________________________</span>
+0021 
+0022 ind_mother_old = find([Human_model_save.mother]==j);
+0023 
+0024 <span class="keyword">for</span> ii=1:length(ind_mother_old)
+0025     
+0026     ind_mother_new=find(contains({Human_model.name}',<span class="keyword">...</span>
+0027     Human_model_save(ind_mother_old(ii)).name),1);
+0028 
+0029     <span class="keyword">if</span> ~isempty(ind_mother_new)
+0030         
+0031         ind_child_old  = Human_model_save(ind_mother_old(ii)).child;
+0032         ind_sister_old = Human_model_save(ind_mother_old(ii)).sister;
+0033         
+0034         [Human_model,Human_model_save]=  <span class="keyword">...</span>
+0035             Maj_child_or_sister(Human_model,Human_model_save,ind_mother_old(ii),ind_mother_new,ind_child_old,0);
+0036         
+0037         [Human_model,Human_model_save]=  <span class="keyword">...</span>
+0038             Maj_child_or_sister(Human_model,Human_model_save,ind_mother_old(ii),ind_mother_new,ind_sister_old,j);
+0039     <span class="keyword">end</span>
+0040     
+0041 <span class="keyword">end</span>
+0042 <span class="keyword">end</span>
+0043 
+0044 <a name="_sub1" href="#_subfunctions" class="code">function [Human_model,Human_model_save]=</a><span class="keyword">...</span>
+0045     Maj_child_or_sister(Human_model,Human_model_save,ind_mother_old,ind_mother_new,ind_child_or_sister_old,nb)
+0046 
+0047 <span class="keyword">if</span> ind_child_or_sister_old~=0
+0048     
+0049     cur_name = Human_model_save(ind_child_or_sister_old).name;
+0050     <span class="comment">% check if the solid is in the new</span>
+0051     ind_child_or_sister_new = find(contains({Human_model.name}',cur_name),1);
+0052     
+0053     <span class="keyword">if</span> ~isempty(ind_child_or_sister_new)
+0054         
+0055         <span class="keyword">if</span> nb==0
+0056             Human_model(ind_mother_new).child=ind_child_or_sister_new;
+0057                     Human_model(ind_child_or_sister_new).mother=ind_mother_new;
+0058         <span class="keyword">elseif</span> nb~=0
+0059             Human_model(ind_mother_new).sister=ind_child_or_sister_new;
+0060                     Human_model(ind_child_or_sister_new).mother=nb;
+0061         <span class="keyword">end</span>
+0062         
+0063 
+0064         
+0065         [Human_model,Human_model_save]= <a href="Maj_Human_model.html" class="code" title="function [Human_model,Human_model_save]=Maj_Human_model(Human_model,Human_model_save,j)">Maj_Human_model</a>(Human_model,Human_model_save,ind_mother_old);
+0066         
+0067     <span class="keyword">elseif</span> Human_model_save(ind_child_or_sister_old).sister~=0
+0068         
+0069         ind_old_sister=Human_model_save(ind_child_or_sister_old).sister;
+0070         cur_name = Human_model_save(ind_old_sister).name;
+0071         ind_child_or_sister_new = find(contains({Human_model.name}',cur_name),1);
+0072         
+0073         Human_model(ind_mother_new).child=ind_child_or_sister_new;
+0074         Human_model(ind_child_or_sister_new).mother=ind_mother_new;
+0075         
+0076         [Human_model,Human_model_save]= <a href="Maj_Human_model.html" class="code" title="function [Human_model,Human_model_save]=Maj_Human_model(Human_model,Human_model_save,j)">Maj_Human_model</a>(Human_model,Human_model_save,ind_mother_old);
+0077     <span class="keyword">end</span>
+0078 <span class="keyword">end</span>
+0079 
+0080 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

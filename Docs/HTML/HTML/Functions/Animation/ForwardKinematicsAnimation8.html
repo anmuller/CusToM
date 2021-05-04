@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ForwardKinematicsAnimation8</title>
+  <meta name="keywords" content="ForwardKinematicsAnimation8">
+  <meta name="description" content="Computation of a forward kinematics step for the animation8">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html Animation -->
+<h1>ForwardKinematicsAnimation8
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Computation of a forward kinematics step for the animation8</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation8(Human_model,Markers_set,Muscles,q,j,seg_anim,muscles_anim,mod_marker_anim) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Computation of a forward kinematics step for the animation8
+
+   INPUT
+   - Human_model: osteo-articular model (see the Documentation for the
+   structure) 
+   - Markers_set: set of markers (see the Documentation for the structure)
+   - Muscles: set of muscles (see the Documentation for the structure)
+   - q: vector of joint coordinates
+   - j: current solid
+   - muscles_anim: representation of the muscles (0 or 1)
+   - mod_marker_anim: representation of the model markers (0 or 1)
+   OUTPUT
+   - Human_model: osteo-articular model (see the Documentation for the
+   structure) 
+   - Muscles: set of muscles (see the Documentation for the structure)
+   - Markers_set: set of markers (see the Documentation for the structure)
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>	Computation of the Rodrigues equation</li><li><a href="ForwardKinematicsAnimation8.html" class="code" title="function [Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation8(Human_model,Markers_set,Muscles,q,j,seg_anim,muscles_anim,mod_marker_anim)">ForwardKinematicsAnimation8</a>	Computation of a forward kinematics step for the animation8</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="AnimationFramebyFrame.html" class="code" title="function [animStruct]=AnimationFramebyFrame(ax,fig,filename,AnalysisParameters,ModelParameters,AnimateParameters,DataXSens,q,q6dof,PelvisPosition,PelvisOrientation,Markers_set,f_affich,Muscles,animStruct,real_markers,BiomechanicalModel,Human_model)">AnimationFramebyFrame</a>	Computation of animation structure for animation</li><li><a href="ForwardKinematicsAnimation8.html" class="code" title="function [Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation8(Human_model,Markers_set,Muscles,q,j,seg_anim,muscles_anim,mod_marker_anim)">ForwardKinematicsAnimation8</a>	Computation of a forward kinematics step for the animation8</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation8(</a><span class="keyword">...</span>
+0002     Human_model,Markers_set,Muscles,q,j,<span class="keyword">...</span>
+0003     seg_anim,muscles_anim,mod_marker_anim)
+0004 <span class="comment">% Computation of a forward kinematics step for the animation8</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   INPUT</span>
+0007 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the</span>
+0008 <span class="comment">%   structure)</span>
+0009 <span class="comment">%   - Markers_set: set of markers (see the Documentation for the structure)</span>
+0010 <span class="comment">%   - Muscles: set of muscles (see the Documentation for the structure)</span>
+0011 <span class="comment">%   - q: vector of joint coordinates</span>
+0012 <span class="comment">%   - j: current solid</span>
+0013 <span class="comment">%   - muscles_anim: representation of the muscles (0 or 1)</span>
+0014 <span class="comment">%   - mod_marker_anim: representation of the model markers (0 or 1)</span>
+0015 <span class="comment">%   OUTPUT</span>
+0016 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the</span>
+0017 <span class="comment">%   structure)</span>
+0018 <span class="comment">%   - Muscles: set of muscles (see the Documentation for the structure)</span>
+0019 <span class="comment">%   - Markers_set: set of markers (see the Documentation for the structure)</span>
+0020 <span class="comment">%________________________________________________________</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% Licence</span>
+0023 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0024 <span class="comment">%________________________________________________________</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0027 <span class="comment">% Georges Dumont</span>
+0028 <span class="comment">%________________________________________________________</span>
+0029 
+0030 <span class="keyword">if</span> j == 0 
+0031     <span class="keyword">return</span>;
+0032 <span class="keyword">end</span>
+0033 
+0034 i=Human_model(j).mother; <span class="comment">% number (ident) of mother</span>
+0035 <span class="keyword">if</span> i == 0
+0036     Human_model(j).p = zeros(3,1);
+0037     Human_model(j).R = eye(3,3);
+0038     Human_model(j).pos_pts_anim=[]; <span class="comment">% initialization of a new domain</span>
+0039 <span class="keyword">else</span>
+0040     <span class="keyword">if</span> Human_model(j).joint == 1     <span class="comment">% hinge</span>
+0041         Human_model(j).p = Human_model(i).R * Human_model(j).b + Human_model(i).p;
+0042         Human_model(j).R = Human_model(i).R * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).a,q(j)) * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).u,Human_model(j).theta);
+0043     <span class="keyword">end</span>
+0044     <span class="keyword">if</span> Human_model(j).joint == 2    <span class="comment">% slider</span>
+0045         Human_model(j).p = Human_model(i).R * (Human_model(j).b + q(j)*Human_model(j).a) + Human_model(i).p;
+0046         Human_model(j).R = Human_model(i).R * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).u,Human_model(j).theta);
+0047     <span class="keyword">end</span>
+0048 <span class="keyword">end</span>
+0049 Human_model(j).pc = Human_model(j).p + Human_model(j).R*Human_model(j).c;
+0050 Human_model(j).Tc_R0_Ri=[Human_model(j).R, Human_model(j).pc ; [0 0 0 1]];
+0051 
+0052 <span class="comment">% Computation of the location for each point</span>
+0053 <span class="keyword">if</span> seg_anim
+0054     <span class="keyword">if</span> Human_model(j).Visual == 1
+0055         X = [Human_model(j).p ,Human_model(j).pos_pts_anim (Human_model(j).R * Human_model(j).c + Human_model(j).p) ];
+0056         Human_model(j).pos_pts_anim = [Human_model(j).pos_pts_anim unique(X',<span class="string">'rows'</span>,<span class="string">'sorted'</span>)']; <span class="comment">% rep�e origine du solide</span>
+0057         
+0058         <span class="keyword">for</span> n = 1:size(Human_model(j).pos_solid_visual,2)
+0059             Human_model(j).pos_pts_anim = [Human_model(j).pos_pts_anim (Human_model(j).R * Human_model(j).pos_solid_visual(:,n) + Human_model(j).p)]; <span class="comment">% autre pts</span>
+0060         <span class="keyword">end</span>
+0061         <span class="comment">% markers (if there is a solid at chain�s extremity with center of mass</span>
+0062     <span class="comment">% at the same location as origin)</span>
+0063         <span class="keyword">if</span> (Human_model(j).child == 0 &amp;&amp; min(Human_model(j).c == [0 0 0]') ~= 0)
+0064             <span class="keyword">for</span> m=1:numel(Markers_set)
+0065                 <span class="keyword">if</span> Markers_set(m).exist &amp;&amp; Markers_set(m).num_solid == j
+0066                     Human_model(j).pos_pts_anim = [Human_model(j).pos_pts_anim (Human_model(j).R * (Human_model(j).c + Human_model(j).anat_position{Markers_set(m).num_markers,2}) + Human_model(j).p)];
+0067                 <span class="keyword">end</span>
+0068             <span class="keyword">end</span>
+0069         <span class="keyword">end</span>
+0070     <span class="keyword">end</span>
+0071 <span class="keyword">end</span>
+0072 <span class="comment">% mod_marker</span>
+0073 <span class="keyword">if</span> mod_marker_anim
+0074     <span class="keyword">for</span> m=1:numel(Markers_set)
+0075         <span class="keyword">if</span> Markers_set(m).exist &amp;&amp; Markers_set(m).num_solid == j
+0076             Markers_set(m).pos_anim = (Human_model(j).R * (Human_model(j).c + Human_model(j).anat_position{Markers_set(m).num_markers,2}) + Human_model(j).p);
+0077         <span class="keyword">end</span>        
+0078     <span class="keyword">end</span>
+0079 <span class="keyword">end</span>
+0080 <span class="comment">% position of muscle points</span>
+0081 <span class="keyword">if</span> muscles_anim &amp;&amp; numel(Muscles)
+0082     ind_mu=find([Muscles.exist]==1);
+0083     <span class="keyword">for</span> i_mu = 1:numel(ind_mu) <span class="comment">% for each muscle</span>
+0084         m=ind_mu(i_mu);
+0085         <span class="keyword">for</span> num_pts = 1:numel(Muscles(m).num_solid) <span class="comment">% for each point associated to the muscle m</span>
+0086             <span class="keyword">if</span> Muscles(m).num_solid(num_pts,1) == j
+0087                 Muscles(m).pos_pts(:,num_pts) = (Human_model(j).R * (Human_model(j).c + Human_model(j).anat_position{Muscles(m).num_markers(num_pts,1),2}) + Human_model(j).p);
+0088             <span class="keyword">end</span>
+0089         <span class="keyword">end</span>
+0090         
+0091     <span class="keyword">end</span>
+0092 <span class="keyword">end</span>
+0093 
+0094 [Human_model, Muscles, Markers_set]=<a href="ForwardKinematicsAnimation8.html" class="code" title="function [Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation8(Human_model,Markers_set,Muscles,q,j,seg_anim,muscles_anim,mod_marker_anim)">ForwardKinematicsAnimation8</a>(Human_model,Markers_set,Muscles,q,Human_model(j).sister,seg_anim,muscles_anim,mod_marker_anim);
+0095 [Human_model, Muscles, Markers_set]=<a href="ForwardKinematicsAnimation8.html" class="code" title="function [Human_model, Muscles, Markers_set]=ForwardKinematicsAnimation8(Human_model,Markers_set,Muscles,q,j,seg_anim,muscles_anim,mod_marker_anim)">ForwardKinematicsAnimation8</a>(Human_model,Markers_set,Muscles,q,Human_model(j).child,seg_anim,muscles_anim,mod_marker_anim);
+0096 
+0097 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

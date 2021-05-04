@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Marker_set4</title>
+  <meta name="keywords" content="Marker_set4">
+  <meta name="description" content="Definition of the markers set used with the Kinect">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- ../menu.html Models --><!-- menu.html Markers -->
+<h1>Marker_set4
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Definition of the markers set used with the Kinect</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [Markers]=Marker_set4(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Definition of the markers set used with the Kinect
+
+   OUTPUT
+   - Markers: set of markers (see the Documentation for the structure) 
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Markers]=Marker_set4(varargin)</a>
+0002 <span class="comment">% Definition of the markers set used with the Kinect</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   OUTPUT</span>
+0005 <span class="comment">%   - Markers: set of markers (see the Documentation for the structure)</span>
+0006 <span class="comment">%________________________________________________________</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% Licence</span>
+0009 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0010 <span class="comment">%________________________________________________________</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0013 <span class="comment">% Georges Dumont</span>
+0014 <span class="comment">%________________________________________________________</span>
+0015 s=cell(0);
+0016 
+0017 s=[s;{<span class="string">'HIP_CENTER'</span> <span class="string">'CoMPelvis'</span> {<span class="string">'Off'</span>;<span class="string">'On'</span>;<span class="string">'Off'</span>};<span class="string">'SPINE'</span> <span class="string">'Thorax_T12L1JointNode'</span> {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};<span class="string">'SHOULDER_CENTER'</span> <span class="string">'Thorax_T1C5'</span> {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};<span class="keyword">...</span>
+0018     <span class="string">'HEAD'</span> <span class="string">'Skull_NeckNode'</span> {<span class="string">'Off'</span>;<span class="string">'On'</span>;<span class="string">'Off'</span>};<span class="string">'SHOULDER_LEFT'</span> <span class="string">'Thorax_ShoulderLeftNode'</span> {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};<span class="string">'ELBOW_LEFT'</span> <span class="string">'LHumerus_ElbowJointNode'</span> {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};<span class="string">'WRIST_LEFT'</span> <span class="string">'LHand_WristJointNode'</span> {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};<span class="keyword">...</span>
+0019     <span class="string">'HAND_LEFT'</span> <span class="string">'LHand_EndNode'</span> {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};<span class="string">'SHOULDER_RIGHT'</span> <span class="string">'Thorax_ShoulderRightNode'</span> {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};<span class="string">'ELBOW_RIGHT'</span> <span class="string">'RHumerus_ElbowJointNode'</span> {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};<span class="keyword">...</span>
+0020     <span class="string">'WRIST_RIGHT'</span> <span class="string">'RHand_WristJointNode'</span> {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};<span class="string">'HAND_RIGHT'</span> <span class="string">'RHand_EndNode'</span> {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};<span class="string">'HIP_LEFT'</span> <span class="string">'LThigh_HipJointNode'</span> {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};<span class="string">'KNEE_LEFT'</span> <span class="string">'LShank_KneeJointNode'</span> {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};<span class="keyword">...</span>
+0021     <span class="string">'ANKLE_LEFT'</span> <span class="string">'LFoot_AnkleJointNode'</span> {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};<span class="string">'FOOT_LEFT'</span> <span class="string">'LFoot_ToetipNode'</span> {<span class="string">'Off'</span>;<span class="string">'On'</span>;<span class="string">'Off'</span>};<span class="string">'HIP_RIGHT'</span> <span class="string">'RThigh_HipJointNode'</span> {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};<span class="keyword">...</span>
+0022     <span class="string">'KNEE_RIGHT'</span> <span class="string">'RShank_KneeJointNode'</span> {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};<span class="string">'ANKLE_RIGHT'</span> <span class="string">'RFoot_AnkleJointNode'</span> {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};<span class="string">'FOOT_RIGHT'</span> <span class="string">'RFoot_ToetipNode'</span> {<span class="string">'Off'</span>;<span class="string">'On'</span>;<span class="string">'Off'</span>}}];
+0023 
+0024 Markers=struct(<span class="string">'name'</span>,{s{:,1}}',<span class="string">'anat_position'</span>,{s{:,2}}',<span class="string">'calib_dir'</span>,{s{:,3}}'); <span class="comment">%#ok&lt;CCAT1&gt;</span>
+0025 
+0026 <span class="keyword">end</span>
+0027</pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ForwardAllKinematicsPrediction</title>
+  <meta name="keywords" content="ForwardAllKinematicsPrediction">
+  <meta name="description" content="Computation of spacial position, velocity and acceleration for each solid used for the prediction of ground reaction forces">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- ../menu.html ExternalForces --><!-- menu.html Prediction -->
+<h1>ForwardAllKinematicsPrediction
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Computation of spacial position, velocity and acceleration for each solid used for the prediction of ground reaction forces</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [Human_model,Prediction] = ForwardAllKinematicsPrediction(Human_model,Prediction,j) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Computation of spacial position, velocity and acceleration for each solid used for the prediction of ground reaction forces
+
+   INPUT
+   - Human_model: osteo-articular model (see the Documentation for the
+   structure) 
+   - Prediction: contact points for the ground reaction forces
+   - j: current solid
+   OUTPUT
+   - Human_model: osteo-articular model with additional computations (see
+   the Documentation for the structure)  
+   - Prediction: contact points for the ground reaction forces with
+   additional computations
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>	Computation of the Rodrigues equation</li><li><a href="ForwardAllKinematicsPrediction.html" class="code" title="function [Human_model,Prediction] = ForwardAllKinematicsPrediction(Human_model,Prediction,j)">ForwardAllKinematicsPrediction</a>	Computation of spacial position, velocity and acceleration for each solid used for the prediction of ground reaction forces</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Functions/Developments/ComplementaryData/BaseOfSupport.html" class="code" title="function [] = BaseOfSupport(AnalysisParameters)">BaseOfSupport</a>	Computation of the base of support</li><li><a href="../../../Functions/ExternalForces/ExternalForcesPrediction.html" class="code" title="function [ExternalForcesComputationResults] = ExternalForcesPrediction(filename, AnalysisParameters, BiomechanicalModel, ModelParameters)">ExternalForcesPrediction</a>	Prediction of ground reaction forces</li><li><a href="ForwardAllKinematicsPrediction.html" class="code" title="function [Human_model,Prediction] = ForwardAllKinematicsPrediction(Human_model,Prediction,j)">ForwardAllKinematicsPrediction</a>	Computation of spacial position, velocity and acceleration for each solid used for the prediction of ground reaction forces</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Human_model,Prediction] = ForwardAllKinematicsPrediction(Human_model,Prediction,j)</a>
+0002 <span class="comment">% Computation of spacial position, velocity and acceleration for each solid used for the prediction of ground reaction forces</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the</span>
+0006 <span class="comment">%   structure)</span>
+0007 <span class="comment">%   - Prediction: contact points for the ground reaction forces</span>
+0008 <span class="comment">%   - j: current solid</span>
+0009 <span class="comment">%   OUTPUT</span>
+0010 <span class="comment">%   - Human_model: osteo-articular model with additional computations (see</span>
+0011 <span class="comment">%   the Documentation for the structure)</span>
+0012 <span class="comment">%   - Prediction: contact points for the ground reaction forces with</span>
+0013 <span class="comment">%   additional computations</span>
+0014 <span class="comment">%________________________________________________________</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% Licence</span>
+0017 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0018 <span class="comment">%________________________________________________________</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0021 <span class="comment">% Georges Dumont</span>
+0022 <span class="comment">%________________________________________________________</span>
+0023 
+0024 <span class="keyword">if</span> j==0
+0025     <span class="keyword">return</span>;
+0026 <span class="keyword">end</span>
+0027 
+0028 <span class="comment">%%</span>
+0029 <span class="keyword">if</span> j~=1
+0030     i=Human_model(j).mother;
+0031     <span class="comment">%% Position et Orientation</span>
+0032     Human_model(j).p=Human_model(i).R*Human_model(j).b+Human_model(i).p;
+0033     Human_model(j).R=Human_model(i).R*<a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).a,Human_model(j).q)*<a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).u,Human_model(j).theta);
+0034     <span class="comment">%% Vitesse spatiale</span>
+0035     sw=Human_model(i).R*Human_model(j).a;
+0036     sv=cross(Human_model(j).p,sw);
+0037     Human_model(j).w=Human_model(i).w+sw*Human_model(j).dq;
+0038     Human_model(j).v0=Human_model(i).v0+sv*Human_model(j).dq;
+0039     <span class="comment">%% Acc��ation spatiale</span>
+0040     dsv=cross(Human_model(i).w,sv)+cross(Human_model(i).v0,sw);
+0041     dsw=cross(Human_model(i).w,sw);
+0042     Human_model(j).dw=Human_model(i).dw+dsw*Human_model(j).dq+sw*Human_model(j).ddq;
+0043     Human_model(j).dv0=Human_model(i).dv0+dsv*Human_model(j).dq+sv*Human_model(j).ddq;
+0044     Human_model(j).sw=sw;
+0045     Human_model(j).sv=sv;
+0046 <span class="keyword">end</span>
+0047     <span class="comment">%% Position et vitesse des points de contact avec l'ext�ieur</span>
+0048     <span class="keyword">for</span> m=1:numel(Prediction)
+0049         <span class="keyword">if</span> Prediction(m).exist &amp;&amp; Prediction(m).num_solid == j
+0050             Prediction(m).pos_anim = (Human_model(j).R * (Human_model(j).c + Human_model(j).anat_position{Prediction(m).num_markers,2}) + Human_model(j).p);
+0051             Prediction(m).vitesse = Human_model(j).v0 + cross(Human_model(j).w,Prediction(m).pos_anim); <span class="comment">% calcul de la vitesse</span>
+0052         <span class="keyword">end</span>
+0053     <span class="keyword">end</span>
+0054 <span class="comment">% end</span>
+0055 
+0056 [Human_model,Prediction]=<a href="ForwardAllKinematicsPrediction.html" class="code" title="function [Human_model,Prediction] = ForwardAllKinematicsPrediction(Human_model,Prediction,j)">ForwardAllKinematicsPrediction</a>(Human_model,Prediction,Human_model(j).sister);
+0057 [Human_model,Prediction]=<a href="ForwardAllKinematicsPrediction.html" class="code" title="function [Human_model,Prediction] = ForwardAllKinematicsPrediction(Human_model,Prediction,j)">ForwardAllKinematicsPrediction</a>(Human_model,Prediction,Human_model(j).child);
+0058 
+0059 <span class="keyword">end</span>
+0060</pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

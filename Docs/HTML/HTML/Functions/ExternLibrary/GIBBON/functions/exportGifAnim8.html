@@ -1,0 +1,234 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of exportGifAnim8</title>
+  <meta name="keywords" content="exportGifAnim8">
+  <meta name="description" content="%">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html Functions --><!-- # ExternLibrary --><!-- # GIBBON --><!-- menu.html functions -->
+<h1>exportGifAnim8
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>%</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function exportGifAnim8(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">%</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="exportGif.html" class="code" title="function exportGif(optStruct)">exportGif</a>	% Parse input</li><li><a href="structComplete.html" class="code" title="function [C]=structComplete(A,B,emptyFixOpt)">structComplete</a>	function [C]=structComplete(A,B,emptyFixOpt)</li><li><a href="../../../../Functions/ExternLibrary/export_fig/export_fig.html" class="code" title="function [imageData, alpha] = export_fig(varargin) %#ok<*STRCL1>">export_fig</a>	EXPORT_FIG  Exports figures in a publication-quality format</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="anim8.html" class="code" title="function hf=anim8(varargin)">anim8</a>	function hf=anim8(hf,animStruct)</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function exportGifAnim8(varargin)</a>
+0002 
+0003 
+0004 <span class="comment">%%</span>
+0005 
+0006 <span class="keyword">switch</span> nargin
+0007     <span class="keyword">case</span> 0
+0008         hf=gcf;
+0009         inputStruct=[];
+0010         dlgOpt=0;
+0011     <span class="keyword">case</span> 1
+0012         hf=varargin{1};
+0013         inputStruct=[];
+0014         dlgOpt=0;
+0015     <span class="keyword">case</span> 2
+0016         hf=varargin{1};
+0017         inputStruct=varargin{2};
+0018         dlgOpt=0;
+0019     <span class="keyword">case</span> 3
+0020         hf=varargin{1};
+0021         inputStruct=varargin{2};
+0022         dlgOpt=varargin{3};
+0023 <span class="keyword">end</span>
+0024 
+0025 <span class="comment">%%</span>
+0026         
+0027 defStruct=hf.UserData.efw;
+0028 
+0029 [inputStruct]=<a href="structComplete.html" class="code" title="function [C]=structComplete(A,B,emptyFixOpt)">structComplete</a>(inputStruct,defStruct,1); <span class="comment">%Complement provided with default if missing or empty</span>
+0030 
+0031 <span class="keyword">if</span> dlgOpt==1
+0032     prompt = {<span class="string">'Save path (leave empty to browse to desired folder instead):'</span>,<span class="keyword">...</span>
+0033         <span class="string">'Image name:'</span>,<span class="string">'Image extension (i.e. png, jpg, bmp, or tif):'</span>,<span class="keyword">...</span>
+0034         <span class="string">'Image resolution (e.g. 120):'</span>,<span class="keyword">...</span>
+0035         <span class="string">'Extra export_fig options (comma seperated, no spaces e.g. -nocrop,-transparent,-painters):'</span>,<span class="keyword">...</span>
+0036         <span class="string">'Export gif option:'</span>};
+0037     dlg_title = <span class="string">'Export Gif Widget (see: help efw and help export_fig)'</span>;
+0038     defaultOptions = {inputStruct.defaultPath,<span class="keyword">...</span>
+0039         inputStruct.imName,<span class="keyword">...</span>
+0040         inputStruct.imExt,<span class="keyword">...</span>
+0041         inputStruct.imRes,<span class="keyword">...</span>
+0042         inputStruct.exportFigOpt,<span class="keyword">...</span>
+0043         hf.UserData.efw.exportGifOpt,<span class="keyword">...</span>
+0044         };
+0045     
+0046     s=25+max([cellfun(@numel,prompt) cellfun(@numel,defaultOptions)]);
+0047     
+0048     Q = inputdlg(prompt,dlg_title,[1 s],defaultOptions);
+0049 <span class="keyword">else</span>
+0050     Q = {inputStruct.defaultPath,<span class="keyword">...</span>
+0051         inputStruct.imName,<span class="keyword">...</span>
+0052         inputStruct.imExt,<span class="keyword">...</span>
+0053         inputStruct.imRes,<span class="keyword">...</span>
+0054         inputStruct.exportFigOpt,<span class="keyword">...</span>
+0055         <span class="string">'1'</span>};
+0056 <span class="keyword">end</span>
+0057 
+0058 <span class="keyword">if</span> ~isempty(Q)
+0059     <span class="keyword">if</span> isempty(Q{1})
+0060         Q{1}=uigetdir(inputStruct.defaultPath,<span class="string">'Select save path'</span>);
+0061         <span class="keyword">if</span> Q{1}==0
+0062             <span class="keyword">return</span>;
+0063         <span class="keyword">end</span>
+0064     <span class="keyword">end</span>
+0065     
+0066     <span class="keyword">if</span> isempty(Q{2})
+0067         error(<span class="string">'Empty input. Please enter a file name'</span>);
+0068     <span class="keyword">end</span>
+0069     
+0070     <span class="keyword">if</span> ~exist(Q{1},<span class="string">'dir'</span>) <span class="comment">%create output folder if it does not exist already</span>
+0071         mkdir(Q{1});
+0072     <span class="keyword">end</span>
+0073     
+0074     <span class="keyword">if</span> isempty(Q{3})
+0075         warning(<span class="string">'Empty input. No image format specified, using jpg files.'</span>);
+0076         Q{3}=<span class="string">'jpg'</span>;
+0077     <span class="keyword">end</span>
+0078     
+0079     fileName=fullfile(Q{1},Q{2});
+0080     exportGifCell{1,1}=fileName;
+0081     
+0082     stringSet=Q{3}; <span class="comment">%The image extension</span>
+0083     stringNoSpaces=regexprep(stringSet,<span class="string">'[^\w'']'</span>,<span class="string">''</span>); <span class="comment">%Remove potential extra spaces</span>
+0084     
+0085     <span class="keyword">if</span> ~strcmp(stringNoSpaces(1),<span class="string">'-'</span>) <span class="comment">%If first character is not '-'</span>
+0086         stringNoSpaces=[<span class="string">'-'</span>,stringNoSpaces]; <span class="comment">%Add '-' to start, e.g. 'jpg' becomes '-jpg'</span>
+0087     <span class="keyword">end</span>
+0088     
+0089     <span class="comment">%Check format validaty and keep if valid</span>
+0090     <span class="keyword">if</span> any(strcmp(stringNoSpaces,{<span class="string">'-png'</span>,<span class="string">'-jpg'</span>,<span class="string">'-tiff'</span>,<span class="string">'-bmp'</span>}))
+0091         exportGifCell{1,end+1}=stringNoSpaces; <span class="comment">%Add to input list</span>
+0092     <span class="keyword">else</span>
+0093         error(<span class="string">'Wrong image format requested'</span>);
+0094     <span class="keyword">end</span>
+0095     
+0096     figRes=[<span class="string">'-r'</span>,Q{4}];
+0097     exportGifCell{1,end+1}=figRes;
+0098     
+0099     <span class="keyword">if</span> ~isempty(Q{5})
+0100         stringSet=Q{5}; <span class="comment">%The set of potentially multiple options</span>
+0101         stringSetSep = strsplit(stringSet,<span class="string">','</span>);
+0102         <span class="keyword">for</span> q=1:1:numel(stringSetSep)
+0103             stringNoSpaces=regexprep(stringSetSep{q},<span class="string">'[^\w'']'</span>,<span class="string">''</span>); <span class="comment">%Remove potential extra spaces</span>
+0104             <span class="keyword">if</span> ~strcmp(stringNoSpaces(1),<span class="string">'-'</span>) <span class="comment">%If first character is not '-'</span>
+0105                 stringNoSpaces=[<span class="string">'-'</span>,stringNoSpaces]; <span class="comment">%Add '-' to start, e.g. 'jpg' becomes '-jpg'</span>
+0106             <span class="keyword">end</span>
+0107             exportGifCell{1,end+1}=stringNoSpaces; <span class="comment">%Add to input list</span>
+0108         <span class="keyword">end</span>
+0109     <span class="keyword">end</span>
+0110     
+0111     <span class="keyword">if</span> ~isempty(Q{6})
+0112         exportGifOpt=Q{6};
+0113     <span class="keyword">end</span>
+0114     
+0115     fileNameGif=exportGifCell{1,1};
+0116     exportGifCellSub=exportGifCell;
+0117     
+0118     c=1;
+0119     stepRange=1:hf.UserData.anim8.shiftMag:numel(hf.UserData.anim8.animStruct.Time);    
+0120     <span class="keyword">for</span> q=stepRange
+0121         set(hf.UserData.anim8.sliderHandles{1},<span class="string">'Value'</span>,q);
+0122         fileNameNow=[fileNameGif,<span class="string">'_'</span>,num2str(q)];
+0123         exportGifCellSub{1,1}=fileNameNow;
+0124         figure(hf);
+0125         <a href="../../../../Functions/ExternLibrary/export_fig/export_fig.html" class="code" title="function [imageData, alpha] = export_fig(varargin) %#ok<*STRCL1>">export_fig</a>(exportGifCellSub{:});
+0126         gifStruct.FileNames{c}=[fileNameNow,<span class="string">'.'</span>,exportGifCell{1,2}(2:end)];
+0127         c=c+1;
+0128     <span class="keyword">end</span>
+0129     
+0130     <span class="keyword">if</span> strcmp(exportGifOpt,<span class="string">'1'</span>)
+0131         <span class="comment">%Add reverse path</span>
+0132         <span class="keyword">if</span> strcmp(get(hf.UserData.anim8.ButtonHandles.hCycle,<span class="string">'State'</span>),<span class="string">'on'</span>)
+0133             numFiles=numel(gifStruct.FileNames);
+0134             <span class="keyword">if</span> numFiles&gt;2
+0135                 <span class="keyword">for</span> q=(numFiles-1):-1:2
+0136                     gifStruct.FileNames{end+1}=gifStruct.FileNames{q};
+0137                 <span class="keyword">end</span>
+0138             <span class="keyword">end</span>
+0139         <span class="keyword">end</span>
+0140         
+0141         gifStruct.DelayTime=hf.UserData.anim8.pauseTime;
+0142         gifStruct.FileNameGif=fileNameGif;
+0143         
+0144         <a href="exportGif.html" class="code" title="function exportGif(optStruct)">exportGif</a>(gifStruct);
+0145         
+0146         <span class="comment">%Cleanup image files</span>
+0147         <span class="keyword">for</span> q=1:1:numel(gifStruct.FileNames)
+0148             <span class="keyword">if</span> exist(gifStruct.FileNames{q},<span class="string">'file'</span>)==2
+0149                 delete(gifStruct.FileNames{q});
+0150             <span class="keyword">end</span>
+0151         <span class="keyword">end</span>
+0152     <span class="keyword">end</span>
+0153     
+0154     <span class="comment">%Override defaults</span>
+0155     defStruct.defaultPath=Q{1};
+0156     defStruct.imName=Q{2};
+0157     defStruct.imExt=Q{3};
+0158     defStruct.imRes=Q{4};
+0159     defStruct.exportFigOpt=Q{5};
+0160     defStruct.efw.exportGifOpt=Q{6};
+0161     
+0162     hf.UserData.efw=defStruct;
+0163     
+0164 <span class="keyword">end</span>
+0165     
+0166 <span class="comment">%%</span>
+0167 <span class="comment">% _*GIBBON footer text*_</span>
+0168 <span class="comment">%</span>
+0169 <span class="comment">% License: &lt;https://github.com/gibbonCode/GIBBON/blob/master/LICENSE&gt;</span>
+0170 <span class="comment">%</span>
+0171 <span class="comment">% GIBBON: The Geometry and Image-based Bioengineering add-On. A toolbox for</span>
+0172 <span class="comment">% image segmentation, image-based modeling, meshing, and finite element</span>
+0173 <span class="comment">% analysis.</span>
+0174 <span class="comment">%</span>
+0175 <span class="comment">% Copyright (C) 2019  Kevin Mattheus Moerman</span>
+0176 <span class="comment">%</span>
+0177 <span class="comment">% This program is free software: you can redistribute it and/or modify</span>
+0178 <span class="comment">% it under the terms of the GNU General Public License as published by</span>
+0179 <span class="comment">% the Free Software Foundation, either version 3 of the License, or</span>
+0180 <span class="comment">% (at your option) any later version.</span>
+0181 <span class="comment">%</span>
+0182 <span class="comment">% This program is distributed in the hope that it will be useful,</span>
+0183 <span class="comment">% but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+0184 <span class="comment">% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+0185 <span class="comment">% GNU General Public License for more details.</span>
+0186 <span class="comment">%</span>
+0187 <span class="comment">% You should have received a copy of the GNU General Public License</span>
+0188 <span class="comment">% along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

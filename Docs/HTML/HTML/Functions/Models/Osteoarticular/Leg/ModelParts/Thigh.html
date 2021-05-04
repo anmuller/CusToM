@@ -1,0 +1,273 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Thigh</title>
+  <meta name="keywords" content="Thigh">
+  <meta name="description" content="Addition of a thigh model">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../../menu.html Functions --><!-- ../../../menu.html Models --><!-- ../../menu.html Osteoarticular --><!-- ../menu.html Leg --><!-- menu.html ModelParts -->
+<h1>Thigh
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>Addition of a thigh model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function [OsteoArticularModel]= Thigh(OsteoArticularModel,k,Signe,Mass,AttachmentPoint) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Addition of a thigh model
+   This thigh model contains one solid (thigh), exhibits 3 dof for the hip
+
+   INPUT
+   - OsteoArticularModel: osteo-articular model of an already existing
+   model (see the Documentation for the structure)
+   - k: homothety coefficient for the geometrical parameters (defined as
+   the subject size in cm divided by 180)
+   - Signe: side of the thigh model ('R' for right side or 'L' for left side)
+   - Mass: mass of the solids
+   - AttachmentPoint: name of the attachment point of the model on the
+   already existing model (character string)
+   OUTPUT
+   - OsteoArticularModel: new osteo-articular model (see the Documentation
+   for the structure) 
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="../../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>	Computation of inertia matrix from radius of gyration</li><li><a href="../../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>	Addition of a sister to a solid</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="../../../../../Functions/Models/Osteoarticular/Leg/Leg.html" class="code" title="function [OsteoArticularModel]= Leg(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)">Leg</a>	Addition of a leg model</li><li><a href="../../../../../Functions/Models/Osteoarticular/Leg/LegBallJoint.html" class="code" title="function [OsteoArticularModel]= LegBallJoint(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)">LegBallJoint</a>	Addition of a leg model</li><li><a href="../../../../../Functions/Models/Osteoarticular/Leg/LegWithoutAnkle.html" class="code" title="function [OsteoArticularModel]= LegWithoutAnkle(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)">LegWithoutAnkle</a>	Addition of a leg model</li><li><a href="../../../../../Functions/Models/Osteoarticular/Leg/LegWithoutAnklePronation.html" class="code" title="function [OsteoArticularModel]= LegWithoutAnklePronation(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)">LegWithoutAnklePronation</a>	Addition of a leg model</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [OsteoArticularModel]= Thigh(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)</a>
+0002 <span class="comment">% Addition of a thigh model</span>
+0003 <span class="comment">%   This thigh model contains one solid (thigh), exhibits 3 dof for the hip</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   INPUT</span>
+0006 <span class="comment">%   - OsteoArticularModel: osteo-articular model of an already existing</span>
+0007 <span class="comment">%   model (see the Documentation for the structure)</span>
+0008 <span class="comment">%   - k: homothety coefficient for the geometrical parameters (defined as</span>
+0009 <span class="comment">%   the subject size in cm divided by 180)</span>
+0010 <span class="comment">%   - Signe: side of the thigh model ('R' for right side or 'L' for left side)</span>
+0011 <span class="comment">%   - Mass: mass of the solids</span>
+0012 <span class="comment">%   - AttachmentPoint: name of the attachment point of the model on the</span>
+0013 <span class="comment">%   already existing model (character string)</span>
+0014 <span class="comment">%   OUTPUT</span>
+0015 <span class="comment">%   - OsteoArticularModel: new osteo-articular model (see the Documentation</span>
+0016 <span class="comment">%   for the structure)</span>
+0017 <span class="comment">%________________________________________________________</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% Licence</span>
+0020 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0021 <span class="comment">%________________________________________________________</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0024 <span class="comment">% Georges Dumont</span>
+0025 <span class="comment">%________________________________________________________</span>
+0026 list_solid={<span class="string">'Hip_J1'</span> <span class="string">'Hip_J2'</span> <span class="string">'Thigh'</span>};
+0027 
+0028 <span class="comment">%% Choose jambe right or left</span>
+0029 <span class="keyword">if</span> Signe == <span class="string">'R'</span>
+0030 Mirror=[1 0 0; 0 1 0; 0 0 1];
+0031 <span class="keyword">else</span>
+0032     <span class="keyword">if</span> Signe == <span class="string">'L'</span>
+0033     Mirror=[1 0 0; 0 1 0; 0 0 -1];
+0034     <span class="keyword">end</span>
+0035 <span class="keyword">end</span>
+0036 
+0037 <span class="comment">%% solid numbering incremation</span>
+0038 
+0039 s=size(OsteoArticularModel,2)+1;  <span class="comment">%#ok&lt;NASGU&gt; % number of the first solid</span>
+0040 <span class="keyword">for</span> i=1:size(list_solid,2)      <span class="comment">% each solid numbering: s_&quot;nom du solide&quot;</span>
+0041     <span class="keyword">if</span> i==1
+0042         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s;'</span>))
+0043     <span class="keyword">else</span>
+0044         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s_'</span>,list_solid{i-1},<span class="string">'+1;'</span>))
+0045     <span class="keyword">end</span>
+0046 <span class="keyword">end</span>
+0047 
+0048 <span class="comment">% find the number of the mother from the attachment point: 'attachment_pt'</span>
+0049 <span class="keyword">if</span> ~numel(AttachmentPoint)
+0050     s_mother=0;
+0051     pos_attachment_pt=[0 0 0]';
+0052 <span class="keyword">else</span>
+0053     test=0;
+0054     <span class="keyword">for</span> i=1:numel(OsteoArticularModel)
+0055         <span class="keyword">for</span> j=1:size(OsteoArticularModel(i).anat_position,1)
+0056             <span class="keyword">if</span> strcmp(AttachmentPoint,OsteoArticularModel(i).anat_position{j,1})
+0057                s_mother=i;
+0058                pos_attachment_pt=OsteoArticularModel(i).anat_position{j,2}+OsteoArticularModel(s_mother).c;
+0059                test=1;
+0060                <span class="keyword">break</span>
+0061             <span class="keyword">end</span>
+0062         <span class="keyword">end</span>
+0063         <span class="keyword">if</span> i==numel(OsteoArticularModel) &amp;&amp; test==0
+0064             error([AttachmentPoint <span class="string">' is no existent'</span>])        
+0065         <span class="keyword">end</span>       
+0066     <span class="keyword">end</span>
+0067     <span class="keyword">if</span> OsteoArticularModel(s_mother).child == 0      <span class="comment">% if the mother don't have any child</span>
+0068         OsteoArticularModel(s_mother).child = eval([<span class="string">'s_'</span> list_solid{1}]);    <span class="comment">% the child of this mother is this solid</span>
+0069     <span class="keyword">else</span>
+0070         [OsteoArticularModel]=<a href="../../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval([<span class="string">'s_'</span> list_solid{1}]));   <span class="comment">% recherche de la derni�e soeur</span>
+0071     <span class="keyword">end</span>
+0072 <span class="keyword">end</span>
+0073 
+0074 <span class="comment">%%                      Definition of anatomical landmarks (joint)</span>
+0075 
+0076 <span class="comment">% ---------------------------- Thigh --------------------------------------</span>
+0077 
+0078 <span class="comment">% Node locations</span>
+0079 Thigh_KneeJointNode = (k*[-0.025 -0.2580 -0.028])*Mirror;
+0080 Thigh_HipJointNode = (k*[0 0.197 -0.038])*Mirror;
+0081 
+0082 <span class="comment">%% Definition of anatomical landmarks</span>
+0083 
+0084 Thigh_position_set = {<span class="keyword">...</span>
+0085     [Signe <span class="string">'KNE'</span>], k*Mirror*[-0.020623 -0.27 0.035]'; <span class="keyword">...</span>
+0086     [Signe <span class="string">'Thigh_KneeJointNode'</span>], Thigh_KneeJointNode'; <span class="keyword">...</span>
+0087     [Signe <span class="string">'Thigh_HipJointNode'</span>], Thigh_HipJointNode'; <span class="keyword">...</span>
+0088     [<span class="string">'CondylusMedialis'</span> Signe <span class="string">'Thigh'</span>],k*Mirror*[-0.025;-0.29;-0.028];<span class="keyword">...</span>
+0089     [<span class="string">'GluteusMinimus'</span> Signe <span class="string">'Thigh'</span>],k*Mirror*[0.003;0.173;0.037];<span class="keyword">...</span>
+0090     [<span class="string">'GluteusMedius'</span> Signe <span class="string">'Thigh'</span>],k*Mirror*[-0.010;0.177;0.032];<span class="keyword">...</span>
+0091     [<span class="string">'GluteusMaximus3'</span> Signe <span class="string">'Thigh'</span>],k*Mirror*[-0.016;0.075;0.009];<span class="keyword">...</span>
+0092     [<span class="string">'GluteusMaximus3Via2'</span> Signe <span class="string">'Thigh'</span>],k*Mirror*[-0.045;0.16;-0.01];<span class="keyword">...</span>
+0093     [<span class="string">'AdductorLongus'</span> Signe <span class="string">'Thigh'</span>],k*Mirror*[-0.010;0.0;-0.006];<span class="keyword">...</span>
+0094     [<span class="string">'AdductorMagnus1'</span> Signe <span class="string">'Thigh'</span>],k*Mirror*[-0.021;0.078;0.009];<span class="keyword">...</span>
+0095     [<span class="string">'AdductorMagnus2'</span> Signe <span class="string">'Thigh'</span>],k*Mirror*[-0.015;-0.029;0.001];<span class="keyword">...</span>
+0096     [<span class="string">'AdductorMagnus3'</span> Signe <span class="string">'Thigh'</span>],k*Mirror*[-0.025;-0.226;-0.044];<span class="keyword">...</span>
+0097     [<span class="string">'Iliopsoas'</span> Signe <span class="string">'Thigh'</span>],k*Mirror*[0.001;0.120;-0.008];<span class="keyword">...</span>
+0098     [<span class="string">'VastusLateralis'</span> Signe <span class="string">'Thigh'</span>],k*Mirror*[0.0;0.0;0.013];<span class="keyword">...</span>
+0099     [<span class="string">'VastusMedialis'</span> Signe <span class="string">'Thigh'</span>],k*Mirror*[0.0;0.041;-0.014];<span class="keyword">...</span>
+0100     [<span class="string">'VastusIntermedius'</span> Signe <span class="string">'Thigh'</span>],k*Mirror*[0.014;0.0;0.0];<span class="keyword">...</span>
+0101     [<span class="string">'BicepsFemorisCaputBreve'</span> Signe <span class="string">'Thigh'</span>],k*Mirror*[-0.014;-0.054;0.0];<span class="keyword">...</span>
+0102     [<span class="string">'Gastrocnemius'</span> Signe <span class="string">'Thigh'</span>],k*Mirror*[-0.028;-0.237;-0.023];<span class="keyword">...</span>
+0103     [<span class="string">'QuadratusFemoris'</span> Signe <span class="string">'Thigh'</span>],k*Mirror*[-0.025;0.15;0.02];<span class="keyword">...</span>
+0104     [<span class="string">'AbductorBrevis'</span> Signe <span class="string">'Thigh'</span>],k*Mirror*[-0.0;0.04;-0.014];<span class="keyword">...</span>
+0105     [<span class="string">'ObturatoriusExternus'</span> Signe <span class="string">'Thigh'</span>],k*Mirror*[-0.017;0.17;0.013];<span class="keyword">...</span>
+0106     [<span class="string">'ObturatoriusInternus'</span> Signe <span class="string">'Thigh'</span>],k*Mirror*[0.01;0.182;0.019];<span class="keyword">...</span>
+0107     [<span class="string">'Pectineus'</span> Signe <span class="string">'Thigh'</span>],k*Mirror*[-0.025;0.10;-0.004];<span class="keyword">...</span>
+0108     [<span class="string">'GemellusSuperior'</span> Signe <span class="string">'Thigh'</span>],k*Mirror*[0.013;0.182;0.019];<span class="keyword">...</span>
+0109     [<span class="string">'GemellusInferior'</span> Signe <span class="string">'Thigh'</span>],k*Mirror*[0.007;0.182;0.019];<span class="keyword">...</span>
+0110     [<span class="string">'Piriformis'</span> Signe <span class="string">'Thigh'</span>],k*Mirror*[0.013;0.183;0.028];<span class="keyword">...</span>
+0111     [<span class="string">'SartoriusVia1'</span> Signe <span class="string">'Thigh'</span>],k*Mirror*[0.045;0;-0.03];<span class="keyword">...</span>
+0112     [<span class="string">'TensorFasciaeLataeVia2'</span> Signe <span class="string">'Thigh'</span>],k*Mirror*[-0.010;0.13;0.042];<span class="keyword">...</span>
+0113     [<span class="string">'GluteusMaximus2Via3'</span> Signe <span class="string">'Thigh'</span>],k*Mirror*[-0.045;0.16;-0.01];<span class="keyword">...</span>
+0114     [<span class="string">'QuadricepsVia1'</span> Signe <span class="string">'Thigh'</span>],k*Mirror*[0.021;-0.264;-0.018];<span class="keyword">...</span>
+0115     [<span class="string">'QuadricepsVia2'</span> Signe <span class="string">'Thigh'</span>],k*Mirror*[0.007;-0.30;-0.018];<span class="keyword">...</span>
+0116     [<span class="string">'GluteusMaximus1Via2'</span> Signe <span class="string">'Thigh'</span>],k*Mirror*[-0.020;0.16;0.045]<span class="keyword">...</span>
+0117     };
+0118 
+0119 
+0120 <span class="comment">%%                     Scaling inertial parameters</span>
+0121 
+0122 
+0123 <span class="comment">%% [&quot;Adjustments to McConville et al. and Young et al. body segment inertial parameters&quot;] R. Dumas</span>
+0124 <span class="comment">% ---------------------------- Thigh --------------------------------------</span>
+0125 Length_Thigh=norm(Thigh_KneeJointNode-Thigh_HipJointNode);
+0126 [I_Thigh]=<a href="../../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>([29 15 30 7 2*1i 7*1i], Mass.Thigh_Mass, [0 0 0], Length_Thigh, Signe);
+0127 
+0128             <span class="comment">%% Cr�tion de la structure &quot;Human_model&quot;</span>
+0129     
+0130 num_solid=0;
+0131 <span class="comment">%% Thigh</span>
+0132     <span class="comment">% Hip_J1</span>
+0133     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0134     name=list_solid{num_solid}; <span class="comment">% nom du solide</span>
+0135     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0136     OsteoArticularModel(incr_solid).name=[Signe name];   <span class="comment">% name of the solid ('R' or 'L' in prefix)</span>
+0137     OsteoArticularModel(incr_solid).sister=0;                 <span class="comment">% sister : defined as an input of the function</span>
+0138     OsteoArticularModel(incr_solid).child=s_Hip_J2;                <span class="comment">% child : Shank</span>
+0139     OsteoArticularModel(incr_solid).mother=s_mother;                 <span class="comment">% mother : defined as an input of the function</span>
+0140     OsteoArticularModel(incr_solid).a=[0 0 1]';                    <span class="comment">% rotation /z</span>
+0141     OsteoArticularModel(incr_solid).joint=1;                        <span class="comment">% pin joint</span>
+0142     OsteoArticularModel(incr_solid).limit_inf=-pi/4;               <span class="comment">% inferior joint biomechanical stop</span>
+0143     OsteoArticularModel(incr_solid).limit_sup=2*pi/3;                <span class="comment">% superior joint biomechanical stop</span>
+0144     OsteoArticularModel(incr_solid).Visual=0;
+0145     OsteoArticularModel(incr_solid).m=0;                           <span class="comment">% reference mass</span>
+0146     OsteoArticularModel(incr_solid).b=pos_attachment_pt;              <span class="comment">% attachment point with respect to the parent's frame</span>
+0147     OsteoArticularModel(incr_solid).I=zeros(3,3);                  <span class="comment">% reference inertia matrix</span>
+0148     OsteoArticularModel(incr_solid).c=[0 0 0]';                    <span class="comment">% center of mass location in the local frame</span>
+0149     OsteoArticularModel(incr_solid).calib_k_constraint=[];   
+0150     OsteoArticularModel(incr_solid).u=[];                          <span class="comment">% fixed rotation with respect to u axis of theta angle</span>
+0151     OsteoArticularModel(incr_solid).theta=[];
+0152     OsteoArticularModel(incr_solid).KinematicsCut=[];              <span class="comment">% kinematic cut</span>
+0153     OsteoArticularModel(incr_solid).ClosedLoop=[];                 <span class="comment">% if this solid close a closed-loop chain : {number of solid i on which is attached this solid ; attachement point (local frame of solid i}</span>
+0154     OsteoArticularModel(incr_solid).linear_constraint=[];
+0155     OsteoArticularModel(incr_solid).comment=<span class="string">'Hip Flexion(+)/Extension(-) - Z-Rotation'</span>;
+0156     
+0157     <span class="comment">% Hip_J2</span>
+0158     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0159     name=list_solid{num_solid}; <span class="comment">% nom du solide</span>
+0160     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0161     OsteoArticularModel(incr_solid).name=[Signe name];
+0162     OsteoArticularModel(incr_solid).sister=0;                
+0163     OsteoArticularModel(incr_solid).child=s_Thigh;                   
+0164     OsteoArticularModel(incr_solid).mother=s_Hip_J1;           
+0165     OsteoArticularModel(incr_solid).a=[1 0 0]'; 
+0166     OsteoArticularModel(incr_solid).joint=1;
+0167     OsteoArticularModel(incr_solid).limit_inf=-pi/4;
+0168     OsteoArticularModel(incr_solid).limit_sup=pi/4;
+0169     OsteoArticularModel(incr_solid).Visual=0;
+0170     OsteoArticularModel(incr_solid).m=0;                 
+0171     OsteoArticularModel(incr_solid).b=[0 0 0]';  
+0172     OsteoArticularModel(incr_solid).I=zeros(3,3);
+0173     OsteoArticularModel(incr_solid).c=[0 0 0]';
+0174     <span class="keyword">if</span> Signe==<span class="string">'R'</span>
+0175         OsteoArticularModel(incr_solid).comment=<span class="string">'Hip Abduction(-)/Adduction(+) - X-Rotation'</span>;
+0176     <span class="keyword">else</span>
+0177         OsteoArticularModel(incr_solid).comment=<span class="string">'Hip Abduction(+)/Adduction(-) - X-Rotation'</span>;
+0178     <span class="keyword">end</span>
+0179     <span class="comment">% Thigh</span>
+0180     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0181     name=list_solid{num_solid}; <span class="comment">% nom du solide</span>
+0182     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0183     OsteoArticularModel(incr_solid).name=[Signe name];
+0184     OsteoArticularModel(incr_solid).sister=0;    
+0185     OsteoArticularModel(incr_solid).child=0;
+0186     OsteoArticularModel(incr_solid).mother=s_Hip_J2;
+0187     OsteoArticularModel(incr_solid).a=[0 1 0]';
+0188     OsteoArticularModel(incr_solid).joint=1;
+0189     OsteoArticularModel(incr_solid).limit_inf=-pi/2;
+0190     OsteoArticularModel(incr_solid).limit_sup=pi/2;
+0191     OsteoArticularModel(incr_solid).Visual=1;
+0192     OsteoArticularModel(incr_solid).m=Mass.Thigh_Mass;
+0193     OsteoArticularModel(incr_solid).b=[0 0 0]';
+0194     OsteoArticularModel(incr_solid).I=[I_Thigh(1) I_Thigh(4) I_Thigh(5); I_Thigh(4) I_Thigh(2) I_Thigh(6); I_Thigh(5) I_Thigh(6) I_Thigh(3)];
+0195     OsteoArticularModel(incr_solid).c=-Thigh_HipJointNode';
+0196     OsteoArticularModel(incr_solid).anat_position=Thigh_position_set;
+0197     OsteoArticularModel(incr_solid).L={[Signe <span class="string">'Thigh_HipJointNode'</span>];[Signe <span class="string">'Thigh_KneeJointNode'</span>]};
+0198     <span class="keyword">if</span> Signe==<span class="string">'R'</span>
+0199         OsteoArticularModel(incr_solid).comment=<span class="string">'Hip Internal(+)/External(-) Rotation'</span>;
+0200     <span class="keyword">else</span>
+0201         OsteoArticularModel(incr_solid).comment=<span class="string">'Hip Internal(-)/External(+) Rotation'</span>;
+0202     <span class="keyword">end</span>
+0203 
+0204 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

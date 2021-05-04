@@ -1,0 +1,411 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Forearm_Pennestri_model_definition</title>
+  <meta name="keywords" content="Forearm_Pennestri_model_definition">
+  <meta name="description" content="Addition of an forearm model">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../../menu.html Functions --><!-- ../../../menu.html Models --><!-- ../../menu.html Osteoarticular --><!-- ../menu.html Arm --><!-- menu.html ModelParts -->
+<h1>Forearm_Pennestri_model_definition
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>Addition of an forearm model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function [Human_model]= Forearm_Pennestri_model_definition(Human_model,k,Signe,Mass,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Addition of an forearm model
+
+    Based on:
+    -Pennestrì, E., Stefanelli, R., Valentini, P. P., &amp; Vita, L. (2007).
+Virtual musculo-skeletal model for the biomechanical analysis of the upper limb.
+ Journal of Biomechanics, 40(6), 1350–1361. https://doi.org/10.1016/j.jbiomech.2006.05.013
+
+   INPUT
+   - Human_model: osteo-articular model of an already existing
+   model (see the Documentation for the structure)
+   - k: homothety coefficient for the geometrical parameters (defined as
+   the subject size in cm divided by 180)
+   - Signe: side of the arm model ('R' for right side or 'L' for left side)
+   - Mass: mass of the solids
+   - AttachmentPoint: name of the attachment point of the model on the
+   already existing model (character string)
+   OUTPUT
+   - Human_model: new osteo-articular model (see the Documentation
+   for the structure) 
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="../../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>	Addition of a sister to a solid</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="../../../../../Functions/Models/Osteoarticular/Arm/Arm_model_Pennestri.html" class="code" title="function [Human_model] = Arm_model_Pennestri(Human_model,k,Signe,Mass,varargin)">Arm_model_Pennestri</a>	Addition of an arm model</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Human_model]= Forearm_Pennestri_model_definition(Human_model,k,Signe,Mass,varargin)</a>
+0002 <span class="comment">% Addition of an forearm model</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%    Based on:</span>
+0005 <span class="comment">%    -Pennestrì, E., Stefanelli, R., Valentini, P. P., &amp; Vita, L. (2007).</span>
+0006 <span class="comment">%Virtual musculo-skeletal model for the biomechanical analysis of the upper limb.</span>
+0007 <span class="comment">% Journal of Biomechanics, 40(6), 1350–1361. https://doi.org/10.1016/j.jbiomech.2006.05.013</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%   INPUT</span>
+0010 <span class="comment">%   - Human_model: osteo-articular model of an already existing</span>
+0011 <span class="comment">%   model (see the Documentation for the structure)</span>
+0012 <span class="comment">%   - k: homothety coefficient for the geometrical parameters (defined as</span>
+0013 <span class="comment">%   the subject size in cm divided by 180)</span>
+0014 <span class="comment">%   - Signe: side of the arm model ('R' for right side or 'L' for left side)</span>
+0015 <span class="comment">%   - Mass: mass of the solids</span>
+0016 <span class="comment">%   - AttachmentPoint: name of the attachment point of the model on the</span>
+0017 <span class="comment">%   already existing model (character string)</span>
+0018 <span class="comment">%   OUTPUT</span>
+0019 <span class="comment">%   - Human_model: new osteo-articular model (see the Documentation</span>
+0020 <span class="comment">%   for the structure)</span>
+0021 <span class="comment">%________________________________________________________</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% Licence</span>
+0024 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0025 <span class="comment">%________________________________________________________</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0028 <span class="comment">% Georges Dumont</span>
+0029 <span class="comment">%________________________________________________________</span>
+0030 
+0031 
+0032 <span class="comment">%% Liste des solides</span>
+0033 list_solid={<span class="string">'Radius_J1'</span> <span class="string">'Radius_J2'</span> <span class="string">'Radius'</span> <span class="string">'Ulna'</span> <span class="string">'UlnaRadius_J1'</span> <span class="string">'UlnaRadius_J2'</span> <span class="string">'UlnaRadius_J3'</span> <span class="string">'UlnaRadius'</span>};
+0034 
+0035 <span class="comment">%% Choix bras droite ou gauche</span>
+0036 <span class="keyword">if</span> Signe == <span class="string">'R'</span>
+0037     Mirror=[1 0 0; 0 1 0; 0 0 1];
+0038 <span class="keyword">else</span>
+0039     <span class="keyword">if</span> Signe == <span class="string">'L'</span>
+0040         Mirror=[1 0 0; 0 1 0; 0 0 -1];
+0041     <span class="keyword">end</span>
+0042 <span class="keyword">end</span>
+0043 
+0044 
+0045 <span class="comment">%% Incr�mentation de la num�rotation des solides</span>
+0046 
+0047 s=size(Human_model,2)+1;  <span class="comment">%#ok&lt;NASGU&gt; % num�ro du premier solide</span>
+0048 <span class="keyword">for</span> i=1:size(list_solid,2)      <span class="comment">% num�rotation de chaque solide : s_&quot;nom du solide&quot;</span>
+0049     <span class="keyword">if</span> i==1
+0050         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s;'</span>))
+0051     <span class="keyword">else</span>
+0052         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s_'</span>,list_solid{i-1},<span class="string">'+1;'</span>))
+0053     <span class="keyword">end</span>
+0054 <span class="keyword">end</span>
+0055 
+0056 <span class="comment">% trouver le num�ro de la m�re � partir du nom du point d'attache : 'attachment_pt'</span>
+0057 <span class="keyword">if</span> numel(Human_model) == 0
+0058     s_mother=0;
+0059     pos_attachment_pt=[0 0 0]';
+0060 <span class="keyword">else</span>
+0061     attachment_pt=varargin{1};
+0062     test=0;
+0063     <span class="keyword">for</span> i=1:numel(Human_model)
+0064         <span class="keyword">for</span> j=1:size(Human_model(i).anat_position,1)
+0065             <span class="keyword">if</span> strcmp(attachment_pt,Human_model(i).anat_position{j,1})
+0066                 s_mother=i;
+0067                 pos_attachment_pt=Human_model(i).anat_position{j,2}+Human_model(s_mother).c;
+0068                 test=1;
+0069                 <span class="keyword">break</span>
+0070             <span class="keyword">end</span>
+0071         <span class="keyword">end</span>
+0072         <span class="keyword">if</span> i==numel(Human_model) &amp;&amp; test==0
+0073             error([attachment_pt <span class="string">' is no existent'</span>])
+0074         <span class="keyword">end</span>
+0075     <span class="keyword">end</span>
+0076     <span class="keyword">if</span> Human_model(s_mother).child == 0      <span class="comment">% si la m�re n'a pas d'enfant</span>
+0077         Human_model(s_mother).child = eval([<span class="string">'s_'</span> list_solid{1}]);    <span class="comment">% l'enfant de cette m�re est ce solide</span>
+0078     <span class="keyword">else</span>
+0079         [Human_model]=<a href="../../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>(Human_model,Human_model(s_mother).child,eval([<span class="string">'s_'</span> list_solid{1}]));   <span class="comment">% recherche de la derni�re soeur</span>
+0080     <span class="keyword">end</span>
+0081 <span class="keyword">end</span>
+0082 
+0083 <span class="comment">%%                      D�finition des noeuds</span>
+0084 
+0085 <span class="comment">% ------------------------- Radius ----------------------------------------</span>
+0086 
+0087 <span class="comment">% Position des noeuds</span>
+0088 Radius_ElbowJointNode = (k*[0 0.1741 0])*Mirror;
+0089 Radius_WristJointNode = (k*[0 -0.0887 0])*Mirror;
+0090 Radius_UlnaJointNode = (k*[0 -0.0777 -0.0382])*Mirror;
+0091 
+0092 <span class="comment">% ------------------------- Ulna ------------------------------------------</span>
+0093 
+0094 <span class="comment">% Position des noeuds</span>
+0095 Ulna_HumerusJointNode = (k*[0 0.1088 0])*Mirror;
+0096 Ulna_RadiusJointNode = (k*[0 -0.1430 0])*Mirror;
+0097 
+0098 
+0099 <span class="comment">% Adaptation of (Pennestri et al., 2007) node positions</span>
+0100 dr = 0.159;
+0101 er = 0.081;
+0102 cr = 0.071;
+0103 du = 0.078;
+0104 L_forearm = 0.2628;
+0105 k_Pennestri2custom = L_forearm/(cr+dr)*k*Mirror; <span class="comment">% Forearm length homothety</span>
+0106 Pennestri2custom = k_Pennestri2custom*[0 0 1;-1 0 0;0 -1 0];
+0107 bh = 2*0.0191/(L_forearm/(cr+dr));
+0108 
+0109 
+0110 <span class="comment">% % ------------------------- Radius ----------------------------------------</span>
+0111 <span class="comment">% Radius_ElbowJointNode = Pennestri2custom* [-dr 0 0]';</span>
+0112 <span class="comment">% Radius_WristJointNode = Pennestri2custom* [er 0 0]';</span>
+0113 <span class="comment">% Radius_UlnaJointNode = Pennestri2custom* [cr bh 0]';</span>
+0114 <span class="comment">%</span>
+0115 <span class="comment">% % ------------------------- Ulna ------------------------------------------</span>
+0116 <span class="comment">% Ulna_HumerusJointNode = Pennestri2custom* [-du 0 0]';</span>
+0117 <span class="comment">% Ulna_RadiusJointNode = Pennestri2custom* [cr+dr-du 0 0]';</span>
+0118 
+0119 
+0120 <span class="comment">%%              D�finition des positions anatomiques</span>
+0121 
+0122 Radius_position_set = {<span class="keyword">...</span>
+0123     [Signe <span class="string">'RAD'</span>], k*Mirror*[0 0.15 0.023]'; <span class="keyword">...</span>
+0124     [Signe <span class="string">'WRA'</span>], k*Mirror*[0 -0.09 0.03]'; <span class="keyword">...</span>
+0125     [Signe <span class="string">'Forearm_WristJointNode'</span>], Radius_WristJointNode'; <span class="keyword">...</span>
+0126     [Signe <span class="string">'Radius_UlnaJointNode'</span>], Radius_UlnaJointNode';
+0127     [Signe <span class="string">'Radius_SupinatorBrevis_i'</span>], Radius_ElbowJointNode'+Pennestri2custom*[0.028 0.01 -0.01]';<span class="keyword">...</span>
+0128     [Signe <span class="string">'Radius_Brachialis_i'</span>],Radius_ElbowJointNode'+Pennestri2custom*[0.033 0.005 0.001]';<span class="keyword">...</span>
+0129     [Signe <span class="string">'Radius_Brachioradialis_i'</span>], Radius_ElbowJointNode'+Pennestri2custom*[0.238 -0.012 0]';<span class="keyword">...</span>
+0130     [Signe <span class="string">'Radius_PronatorTeres_i'</span>], Radius_ElbowJointNode'+Pennestri2custom*[0.055 -0.011 0.024]';<span class="keyword">...</span>
+0131     [Signe <span class="string">'Radius_PronatorQuadrus_i'</span>], Radius_ElbowJointNode'+Pennestri2custom*[0.236 -0.005 0.012]';<span class="keyword">...</span>
+0132 <span class="comment">%     [Signe 'Radius_TricepsBrachii2_o'], Radius_ElbowJointNode'+Pennestri2custom*[-0.025 0.02 -0.02]';...</span>
+0133     [Signe <span class="string">'Thorax_TricepsBrachii2_i'</span>],Radius_ElbowJointNode'+Pennestri2custom*[0.038 0.027 -0.02]';<span class="keyword">...</span>
+0134     };
+0135 
+0136 Ulna_position_set = {<span class="keyword">...</span>
+0137     [Signe <span class="string">'WRB'</span>], Pennestri2custom*[0 -0.1570 0]'; <span class="keyword">...</span>
+0138     [Signe <span class="string">'Ulna_SupinatorBrevis_o'</span>], Ulna_HumerusJointNode'+Pennestri2custom*[-0.013 -0.027 -0.012]';<span class="keyword">...</span>
+0139     [Signe <span class="string">'Ulna_AbductorDigitiV_o'</span>], Ulna_HumerusJointNode'+Pennestri2custom*[0.115 -0.015 -0.005]';<span class="keyword">...</span>
+0140     [Signe <span class="string">'Ulna_PronatorQuadrus_o'</span>], Ulna_HumerusJointNode'+Pennestri2custom*[0.2 0.012 0.009]';<span class="keyword">...</span>
+0141     [Signe <span class="string">'Ulna_TricepsBrachii1_i'</span>], Ulna_HumerusJointNode'+Pennestri2custom*[0.038 -0.027 -0.015]';<span class="keyword">...</span>
+0142     [Signe <span class="string">'Ulna_Anconeus_i'</span>], Ulna_HumerusJointNode'+Pennestri2custom*[0.042 0.012 0.029]';<span class="keyword">...</span>
+0143 <span class="comment">%     [Signe 'Ulna_BicepsBrachii1_o'], Ulna_HumerusJointNode'-Pennestri2custom*[0 -0.015 0.01]';...</span>
+0144     [Signe <span class="string">'Thorax_BicepsBrachii1_i'</span>],Ulna_HumerusJointNode'+Pennestri2custom*[0.038 0 0.01]';<span class="keyword">...</span>
+0145     };
+0146 
+0147 
+0148 
+0149 <span class="comment">%%                     Mise � l'�chelle des inerties</span>
+0150 
+0151 
+0152 <span class="comment">%% [&quot;Adjustments to McConville et al. and Young et al. body segment inertial parameters&quot;] R. Dumas</span>
+0153 <span class="comment">% Forearm</span>
+0154 Forearm_Mass=Mass.Forearm_Mass;
+0155 Radius_Mass=Forearm_Mass*(0.498)/(0.498+0.752);
+0156 Ulna_Mass=Forearm_Mass*(0.752)/(0.498+0.752);
+0157 <span class="comment">% ------------------------- Radius ----------------------------------------</span>
+0158 Radius_radius_sagittal = k*0.033;
+0159 Radius_radius_transverse = k*0.079;
+0160 Radius_radius_longitudinal = k*0.079;
+0161 I_Radius=[Radius_radius_sagittal*Radius_radius_sagittal*Radius_Mass, Radius_radius_longitudinal*Radius_radius_longitudinal*Radius_Mass, Radius_radius_transverse*Radius_radius_transverse*Radius_Mass, 0, 0, 0];
+0162 <span class="comment">% ------------------------- Ulna ------------------------------------------</span>
+0163 Radius_ulna_sagittal = k*0.02;
+0164 Radius_ulna_transverse = k*0.0745;
+0165 Radius_ulna_longitudinal = k*0.0745;
+0166 I_Ulna=[Radius_ulna_sagittal*Radius_ulna_sagittal*Ulna_Mass, Radius_ulna_longitudinal*Radius_ulna_longitudinal*Ulna_Mass, Radius_ulna_transverse*Radius_ulna_transverse*Ulna_Mass, 0, 0, 0];
+0167 
+0168 
+0169 
+0170 <span class="comment">%% Cr�ation de la structure &quot;Human_model&quot;</span>
+0171 
+0172 num_solid=0;
+0173 <span class="comment">%% Radius</span>
+0174 <span class="comment">% Radius_J1</span>
+0175 num_solid=num_solid+1;        <span class="comment">% solide num�ro ...</span>
+0176 name=list_solid{num_solid}; <span class="comment">% nom du solide</span>
+0177 eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% num�ro du solide dans le mod�le</span>
+0178 Human_model(incr_solid).name=[Signe name];
+0179 Human_model(incr_solid).sister=s_Ulna;
+0180 Human_model(incr_solid).child=s_Radius_J2;
+0181 Human_model(incr_solid).mother=s_mother;
+0182 Human_model(incr_solid).a=[0 0 1]';
+0183 Human_model(incr_solid).joint=1;
+0184 Human_model(incr_solid).limit_inf=0;
+0185 Human_model(incr_solid).limit_sup=pi;
+0186 Human_model(incr_solid).ActiveJoint=1;
+0187 Human_model(incr_solid).m=0;
+0188 Human_model(incr_solid).b=pos_attachment_pt;
+0189 Human_model(incr_solid).I=zeros(3,3);
+0190 Human_model(incr_solid).c=[0 0 0]';
+0191 Human_model(incr_solid).Visual=0;
+0192 
+0193 <span class="comment">% Radius_J2</span>
+0194 num_solid=num_solid+1;        <span class="comment">% solide num�ro ...</span>
+0195 name=list_solid{num_solid}; <span class="comment">% nom du solide</span>
+0196 eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% num�ro du solide dans le mod�le</span>
+0197 Human_model(incr_solid).name=[Signe name];
+0198 Human_model(incr_solid).sister=0;
+0199 Human_model(incr_solid).child=s_Radius;
+0200 Human_model(incr_solid).mother=s_Radius_J1;
+0201 Human_model(incr_solid).a=[1 0 0]';
+0202 Human_model(incr_solid).joint=1;
+0203 Human_model(incr_solid).limit_inf=-pi/4;
+0204 Human_model(incr_solid).limit_sup=pi/4;
+0205 Human_model(incr_solid).ActiveJoint=0;
+0206 Human_model(incr_solid).m=0;
+0207 Human_model(incr_solid).b=[0 0 0]';
+0208 Human_model(incr_solid).I=zeros(3,3);
+0209 Human_model(incr_solid).c=[0 0 0]';
+0210 Human_model(incr_solid).Visual=0;
+0211 
+0212 <span class="comment">% Radius</span>
+0213 num_solid=num_solid+1;        <span class="comment">% solide num�ro ...</span>
+0214 name=list_solid{num_solid}; <span class="comment">% nom du solide</span>
+0215 eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% num�ro du solide dans le mod�le</span>
+0216 Human_model(incr_solid).name=[Signe name];
+0217 Human_model(incr_solid).sister=0;
+0218 Human_model(incr_solid).child=0;
+0219 Human_model(incr_solid).mother=s_Radius_J2;
+0220 Human_model(incr_solid).a=[0 1 0]';
+0221 Human_model(incr_solid).joint=1;
+0222 <span class="keyword">if</span> Signe == <span class="string">'R'</span>
+0223     Human_model(incr_solid).limit_inf=0;
+0224     Human_model(incr_solid).limit_sup=pi;
+0225 <span class="keyword">else</span>
+0226     Human_model(incr_solid).limit_inf=-pi;
+0227     Human_model(incr_solid).limit_sup=0;
+0228 <span class="keyword">end</span>
+0229 Human_model(incr_solid).ActiveJoint=1;
+0230 Human_model(incr_solid).m=Radius_Mass;
+0231 <span class="comment">% Human_model(incr_solid).Group=[n_group 2];</span>
+0232 Human_model(incr_solid).b=[0 0 0]';
+0233 Human_model(incr_solid).I=[I_Radius(1) I_Radius(4) I_Radius(5); I_Radius(4) I_Radius(2) I_Radius(6); I_Radius(5) I_Radius(6) I_Radius(3)];
+0234 Human_model(incr_solid).c=-Radius_ElbowJointNode';
+0235 Human_model(incr_solid).anat_position=Radius_position_set;
+0236 Human_model(incr_solid).Visual=1;
+0237 
+0238 <span class="comment">%% Ulna</span>
+0239 
+0240 <span class="comment">% Ulna</span>
+0241 num_solid=num_solid+1;        <span class="comment">% solide num�ro ...</span>
+0242 name=list_solid{num_solid}; <span class="comment">% nom du solide</span>
+0243 eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% num�ro du solide dans le mod�le</span>
+0244 Human_model(incr_solid).name=[Signe name];
+0245 Human_model(incr_solid).sister=0;
+0246 Human_model(incr_solid).child=s_UlnaRadius_J1;
+0247 Human_model(incr_solid).mother=s_mother;
+0248 Human_model(incr_solid).a=[0 0 1]';
+0249 Human_model(incr_solid).joint=1;
+0250 Human_model(incr_solid).limit_inf=0;
+0251 Human_model(incr_solid).limit_sup=pi;
+0252 Human_model(incr_solid).m=Ulna_Mass;
+0253 Human_model(incr_solid).I=[I_Ulna(1) I_Ulna(4) I_Ulna(5); I_Ulna(4) I_Ulna(2) I_Ulna(6); I_Ulna(5) I_Ulna(6) I_Ulna(3)];
+0254 Human_model(incr_solid).c=-Ulna_HumerusJointNode';
+0255 Human_model(incr_solid).ActiveJoint=0;
+0256 Human_model(incr_solid).b=pos_attachment_pt+(k*[0 0 -0.0382]*Mirror)';
+0257 Human_model(incr_solid).calib_k_constraint=s_Radius;
+0258 Human_model(incr_solid).anat_position=Ulna_position_set;
+0259 Human_model(incr_solid).Visual=0;
+0260 
+0261 <span class="comment">% UlnaRadius_J1</span>
+0262 num_solid=num_solid+1;        <span class="comment">% solide num�ro ...</span>
+0263 name=list_solid{num_solid}; <span class="comment">% nom du solide</span>
+0264 eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% num�ro du solide dans le mod�le</span>
+0265 Human_model(incr_solid).name=[Signe name];
+0266 Human_model(incr_solid).sister=0;
+0267 Human_model(incr_solid).child=s_UlnaRadius_J2;
+0268 Human_model(incr_solid).mother=s_Ulna;
+0269 Human_model(incr_solid).a=[0 1 0]';
+0270 Human_model(incr_solid).joint=2;
+0271 Human_model(incr_solid).limit_inf=-0.1;
+0272 Human_model(incr_solid).limit_sup=0.1;
+0273 Human_model(incr_solid).ActiveJoint=0;
+0274 Human_model(incr_solid).m=0;
+0275 Human_model(incr_solid).b=(Ulna_RadiusJointNode-Ulna_HumerusJointNode)';
+0276 Human_model(incr_solid).I=zeros(3,3);
+0277 Human_model(incr_solid).c=[0 0 0]';
+0278 Human_model(incr_solid).Visual=0;
+0279 
+0280 <span class="comment">% UlnaRadius_J2</span>
+0281 num_solid=num_solid+1;        <span class="comment">% solide num�ro ...</span>
+0282 name=list_solid{num_solid}; <span class="comment">% nom du solide</span>
+0283 eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% num�ro du solide dans le mod�le</span>
+0284 Human_model(incr_solid).name=[Signe name];
+0285 Human_model(incr_solid).sister=0;
+0286 Human_model(incr_solid).child=s_UlnaRadius_J3;
+0287 Human_model(incr_solid).mother=s_UlnaRadius_J1;
+0288 Human_model(incr_solid).a=[0 0 1]';
+0289 Human_model(incr_solid).joint=1;
+0290 Human_model(incr_solid).limit_inf=-pi;
+0291 Human_model(incr_solid).limit_sup=pi;
+0292 Human_model(incr_solid).ActiveJoint=0;
+0293 Human_model(incr_solid).m=0;
+0294 Human_model(incr_solid).b=[0 0 0]';
+0295 Human_model(incr_solid).I=zeros(3,3);
+0296 Human_model(incr_solid).c=[0 0 0]';
+0297 Human_model(incr_solid).Visual=0;
+0298 
+0299 <span class="comment">% UlnaRadius_J3</span>
+0300 num_solid=num_solid+1;        <span class="comment">% solide num�ro ...</span>
+0301 name=list_solid{num_solid}; <span class="comment">% nom du solide</span>
+0302 eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% num�ro du solide dans le mod�le</span>
+0303 Human_model(incr_solid).name=[Signe name];
+0304 Human_model(incr_solid).sister=0;
+0305 Human_model(incr_solid).child=s_UlnaRadius;
+0306 Human_model(incr_solid).mother=s_UlnaRadius_J2;
+0307 Human_model(incr_solid).a=[0 1 0]';
+0308 Human_model(incr_solid).joint=1;
+0309 Human_model(incr_solid).limit_inf=-pi;
+0310 Human_model(incr_solid).limit_sup=pi;
+0311 Human_model(incr_solid).ActiveJoint=0;
+0312 Human_model(incr_solid).m=0;
+0313 Human_model(incr_solid).b=[0 0 0]';
+0314 Human_model(incr_solid).I=zeros(3,3);
+0315 Human_model(incr_solid).c=[0 0 0]';
+0316 Human_model(incr_solid).Visual=0;
+0317 
+0318 <span class="comment">% UlnaRadius</span>
+0319 num_solid=num_solid+1;        <span class="comment">% solide num�ro ...</span>
+0320 name=list_solid{num_solid}; <span class="comment">% nom du solide</span>
+0321 eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% num�ro du solide dans le mod�le</span>
+0322 Human_model(incr_solid).name=[Signe name];
+0323 Human_model(incr_solid).sister=0;
+0324 Human_model(incr_solid).child=0;
+0325 Human_model(incr_solid).mother=s_UlnaRadius_J3;
+0326 Human_model(incr_solid).a=[1 0 0]';
+0327 Human_model(incr_solid).m=0;
+0328 Human_model(incr_solid).b=[0 0 0]';
+0329 Human_model(incr_solid).I=zeros(3,3);
+0330 Human_model(incr_solid).c=[0 0 0]';
+0331 Human_model(incr_solid).joint=1;
+0332 Human_model(incr_solid).limit_inf=-pi;
+0333 Human_model(incr_solid).limit_sup=pi;
+0334 Human_model(incr_solid).ActiveJoint=0;
+0335 Human_model(incr_solid).Visual=1;
+0336 Human_model(incr_solid).ClosedLoop = [Signe <span class="string">'Radius_UlnaJointNode'</span>];
+0337 
+0338 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

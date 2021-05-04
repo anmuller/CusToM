@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ArmMusclesPennestri</title>
+  <meta name="keywords" content="ArmMusclesPennestri">
+  <meta name="description" content="Definition of an arm muscle model">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- ../menu.html Models --><!-- menu.html Muscles -->
+<h1>ArmMusclesPennestri
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Definition of an arm muscle model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [Muscles]=ArmMusclesPennestri(Muscles,Signe) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Definition of an arm muscle model
+   This model contains 21 muscles
+
+    Based on:
+    - Pennestrì, E. , Stefanelli, R. , Valentini, P. P. , Vita, L.
+    Virtual musculo-skeletal model for the biomechanical
+ analysis of the upper limb, Pennestrì2007</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Muscles]=ArmMusclesPennestri(Muscles,Signe)</a>
+0002 <span class="comment">% Definition of an arm muscle model</span>
+0003 <span class="comment">%   This model contains 21 muscles</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    Based on:</span>
+0006 <span class="comment">%    - Pennestrì, E. , Stefanelli, R. , Valentini, P. P. , Vita, L.</span>
+0007 <span class="comment">%    Virtual musculo-skeletal model for the biomechanical</span>
+0008 <span class="comment">% analysis of the upper limb, Pennestrì2007</span>
+0009 
+0010 <span class="comment">%   INPUT</span>
+0011 <span class="comment">%   - Muscles: set of muscles (see the Documentation for the structure)</span>
+0012 <span class="comment">%   - Signe: Signe of the arm model ('R' for right Signe or 'L' for left Signe)</span>
+0013 <span class="comment">%   OUTPUT</span>
+0014 <span class="comment">%   - Muscles: new set of muscles (see the Documentation for the structure)</span>
+0015 <span class="comment">%________________________________________________________</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% Licence</span>
+0018 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0019 <span class="comment">%________________________________________________________</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0022 <span class="comment">% Georges Dumont</span>
+0023 <span class="comment">%________________________________________________________</span>
+0024 
+0025 
+0026 <span class="keyword">if</span> strcmp(Signe,<span class="string">'Right'</span>)
+0027     Signe = <span class="string">'R'</span>;
+0028 <span class="keyword">else</span>
+0029     Signe = <span class="string">'L'</span>;
+0030 <span class="keyword">end</span>
+0031 
+0032 s=cell(0);
+0033 
+0034 s=[s;{
+0035     [Signe <span class="string">'Coracobrachialis'</span>],242.5,0.200,[],[],[],{[Signe <span class="string">'Humerus_Coracobrachialis_o'</span>];[Signe <span class="string">'Thorax_Coracobrachialis_i'</span>]},{};<span class="keyword">...</span>
+0036     [Signe <span class="string">'Deltoid_pos'</span>],259.9,0.170,[],[],[],{[Signe <span class="string">'Humerus_Deltoid_o'</span>];[Signe <span class="string">'Thorax_Deltoid_i'</span>]},{};<span class="keyword">...</span>
+0037     [Signe <span class="string">'LatissimusDorsi'</span>],1059,0.135,[],[],[],{[Signe <span class="string">'Humerus_LatissimusDorsi_o'</span>];[Signe <span class="string">'Thorax_LatissimusDorsi_i'</span>]},{};<span class="keyword">...</span>
+0038     [Signe <span class="string">'PectoralisMajor'</span>],1270,0.190,[],[],[],{[Signe <span class="string">'Humerus_PectoralisMajor_o'</span>];[Signe <span class="string">'Thorax_PectoralisMajor_i'</span>]},{};<span class="keyword">...</span>
+0039     [Signe <span class="string">'Supraspinatus'</span>],487.8,0.090,[],[],[],{[Signe <span class="string">'Humerus_Supraspinatus_o'</span>];[Signe <span class="string">'Thorax_Supraspinatus_i'</span>]},{};<span class="keyword">...</span>
+0040     [Signe <span class="string">'Infraspinatus'</span>],1210,0.105,[],[],[],{[Signe <span class="string">'Humerus_Infraspinatus_o'</span>];[Signe <span class="string">'Thorax_Infraspinatus_i'</span>]},{};<span class="keyword">...</span>
+0041     [Signe <span class="string">'Trapezius'</span>],240,0.1,[],[],[],{[Signe <span class="string">'Humerus_Trapezius_o'</span>];[Signe <span class="string">'Thorax_Trapezius_i'</span>]},{};<span class="keyword">...</span><span class="comment">        [Signe 'BicepsBrachii2'],47,0.23,[],[],[],{[Signe 'Humerus_BicepsBrachii2_o'];[Signe 'Thorax_BicepsBrachii2_i']},{};...</span>
+0042     [Signe <span class="string">'BicepsBrachii2'</span>],435.6,0.23,[],[],[],{[Signe <span class="string">'Humerus_BicepsBrachii2_o'</span>];[Signe <span class="string">'Thorax_BicepsBrachii2_i'</span>]},{};<span class="keyword">...</span><span class="comment">  </span>
+0043     [Signe <span class="string">'TricepsBrachii2'</span>],1120,0.285,[],[],[],{[Signe <span class="string">'Radius_TricepsBrachii2_o'</span>];[Signe <span class="string">'Thorax_TricepsBrachii2_i'</span>]},{};<span class="keyword">...</span>
+0044     [Signe <span class="string">'BicepsBrachii1'</span>],624.3,0.27,[],[],[],{[Signe <span class="string">'Ulna_BicepsBrachii1_o'</span>];[Signe <span class="string">'Thorax_BicepsBrachii1_i'</span>]},{};<span class="keyword">...</span>
+0045     [Signe <span class="string">'Anconeus'</span>],350,0.075,[],[],[],{[Signe <span class="string">'Humerus_Anconeus_o'</span>];[Signe <span class="string">'Ulna_Anconeus_i'</span>]},{};<span class="keyword">...</span>
+0046     [Signe <span class="string">'TricepsBrachii1'</span>],936.3,0.21,[],[],[],{[Signe <span class="string">'Humerus_TricepsBrachii1_o'</span>];[Signe <span class="string">'Ulna_TricepsBrachii1_i'</span>]},{};<span class="keyword">...</span>
+0047     [Signe <span class="string">'CubitalisAnterior'</span>],35,0.255,[],[],[],{[Signe <span class="string">'Humerus_CubitalisAnterior_o'</span>];[Signe <span class="string">'Hand_CubitalisAnterior_i'</span>]},{};<span class="keyword">...</span>
+0048     [Signe <span class="string">'FlexorCarpiUlnaris'</span>],74,0.255,[],[],[],{[Signe <span class="string">'Humerus_FlexorCarpiUlnaris_o'</span>];[Signe <span class="string">'Hand_FlexorCarpiUlnaris_i'</span>]},{};<span class="keyword">...</span>
+0049     [Signe <span class="string">'ExtensorCarpiUlnaris'</span>],93.2,0.210,[],[],[],{[Signe <span class="string">'Humerus_ExtensorCarpiUlnaris_o'</span>];[Signe <span class="string">'Hand_ExtensorCarpiUlnaris_i'</span>]},{};<span class="keyword">...</span>
+0050     [Signe <span class="string">'ExtensorDigitorum'</span>],46,0.225,[],[],[],{[Signe <span class="string">'Humerus_ExtensorDigitorum_o'</span>];[Signe <span class="string">'Hand_ExtensorDigitorum_i'</span>]},{};<span class="keyword">...</span>
+0051     [Signe <span class="string">'FlexorDigitorumSuperior'</span>],45,0.220,[],[],[],{[Signe <span class="string">'Humerus_FlexorDigitorumSuperior_o'</span>];[Signe <span class="string">'Hand_FlexorDigitorumSuperior_i'</span>]},{};<span class="keyword">...</span>
+0052     [Signe <span class="string">'FlexorCarpiRadialis'</span>],74,0.235,[],[],[],{[Signe <span class="string">'Humerus_FlexorCarpiRadialis_o'</span>];[Signe <span class="string">'Hand_FlexorCapriRadialis_i'</span>]},{};<span class="keyword">...</span>
+0053     [Signe <span class="string">'PronatorQuadrus'</span>],78,0.045,[],[],[],{[Signe <span class="string">'Ulna_PronatorQuadrus_o'</span>];[Signe <span class="string">'Radius_PronatorQuadrus_i'</span>]},{};<span class="keyword">...</span>
+0054     [Signe <span class="string">'SupinatorBrevis'</span>],30,0.050,[],[],[],{[Signe <span class="string">'Ulna_SupinatorBrevis_o'</span>];[Signe <span class="string">'Radius_SupinatorBrevis_i'</span>]},{};<span class="keyword">...</span>
+0055     [Signe <span class="string">'AbductorDigitiV'</span>],36,0.140,[],[],[],{[Signe <span class="string">'Ulna_AbductorDigitiV_o'</span>];[Signe <span class="string">'Hand_AbductorDigitiV_i'</span>]},{};<span class="keyword">...</span><span class="comment">    </span>
+0056     [Signe <span class="string">'Brachialis'</span>],987.3,0.105,4,0.0535,0,{[Signe <span class="string">'Humerus_Brachialis_o'</span>];[Signe <span class="string">'Radius_Brachialis_i'</span>]},{};<span class="keyword">...</span>
+0057     [Signe <span class="string">'Brachioradialis'</span>],261.3,0.22,[],[],[],{[Signe <span class="string">'Humerus_Brachioradialis_o'</span>];[Signe <span class="string">'Radius_Brachioradialis_i'</span>]},{};<span class="keyword">...</span>
+0058     [Signe <span class="string">'PronatorTeres'</span>],566.2,0.07,[],[],[],{[Signe <span class="string">'Humerus_PronatorTeres_o'</span>];[Signe <span class="string">'Radius_PronatorTeres_i'</span>]},{};<span class="keyword">...</span>
+0059     
+0060     <span class="comment">% Fake muscles from (Seth et al., 2016)</span>
+0061     [Signe <span class="string">'_Deltoid_ant'</span>],1218.9,0.0976,[],0.093,0.38397,{[Signe <span class="string">'_humerus_r_DELT1_r-P1'</span>];[Signe <span class="string">'_humerus_r_DELT1_r-P1'</span>];[Signe <span class="string">'_Scapula_DELT1-P3'</span>];[Signe <span class="string">'_clavicle_r_DELT1_r-P4'</span>]},{[<span class="string">'Wrap'</span> Signe <span class="string">'HumerusDelt'</span>]};<span class="keyword">...</span><span class="comment"> </span>
+0062     [Signe <span class="string">'_Deltoid_mid'</span>],1103.5,0.1078,[],0.1095,0.2618,{[Signe <span class="string">'_humerus_r_DELT2_r-P1'</span>];[Signe <span class="string">'_Scapula_DELT2-P3'</span>];[Signe <span class="string">'_Scapula_DELT2-P4'</span>]},{[<span class="string">'Wrap'</span> Signe <span class="string">'ThoraxGH'</span>]};<span class="keyword">...</span><span class="comment">   </span>
+0063     <span class="comment">%     % Conservation du modèle de Holzbaur</span>
+0064 <span class="comment">% % on conserve les biceps du modèle de Holzbaur sauf qu'on part de la</span>
+0065 <span class="comment">%     % scapula pour le biceps short et glénoïde pour le biceps long</span>
+0066 <span class="comment">%     [Signe 'BicepsL'],624.3,0.1157,4,0.2723,0,{[Signe 'Scapula_BicepsL_o'];[Signe 'Scapula_BicepsL_via1'];[Signe 'Humerus_BicepsL_via2'];[Signe 'Humerus_BicepsL_via3'];[Signe 'Humerus_BicepsL_via4'];[Signe 'Humerus_BicepsL_via5'];[Signe 'Humerus_BicepsL_via6'];[Signe 'Humerus_Biceps_via7'];[Signe 'Ulna_Biceps_i']},{};... arm26.osim</span>
+0067 <span class="comment">%     [Signe 'BicepsS'],435.56,0.1321,4,0.1923,0,{[Signe 'Scapula_BicepsS_o'];[Signe 'Scapula_BicepsS_via1'];[Signe 'Humerus_BicepsS_via2'];[Signe 'Humerus_BicepsS_via3'];[Signe 'Humerus_Biceps_via7'];[Signe 'Ulna_Biceps_i']},{};... arm26.osim</span>
+0068 <span class="comment">%     % on conserve les biceps du modèle de Holzbaur sauf qu'on part de la</span>
+0069 <span class="comment">%     % scapula pour le triceps long</span>
+0070 <span class="comment">%        [Signe 'TricepsLg'],798.5,0.134,4,0.143,0.209,{[Signe 'Scapula_Triceps_o'];[Signe 'Humerus_TricepsLg_via1'];[Signe 'Humerus_Triceps_via2'];[Signe 'Humerus_Triceps_via3'];[Signe 'Humerus_Triceps_via4'];[Signe 'Ulna_Triceps_via5'];[Signe 'Ulna_Triceps_i']},{};...       arm26.osim</span>
+0071 <span class="comment">%     [Signe 'TricepsLat'],624.3,0.114,4,0.098,0.157,{[Signe 'Humerus_TricepsLat_o'];[Signe 'Humerus_TricepsLat_via1'];[Signe 'Humerus_Triceps_via2'];[Signe 'Humerus_Triceps_via3'];[Signe 'Humerus_Triceps_via4'];[Signe 'Ulna_Triceps_via5'];[Signe 'Ulna_Triceps_i']},{};... arm26.osim</span>
+0072 <span class="comment">%     [Signe 'TricepsMed'],624.3,0.114,4,0.098,0.157,{[Signe 'Humerus_TricepsMed_o'];[Signe 'Humerus_TricepsMed_via1'];[Signe 'Humerus_Triceps_via2'];[Signe 'Humerus_Triceps_via3'];[Signe 'Humerus_Triceps_via4'];[Signe 'Ulna_Triceps_via5'];[Signe 'Ulna_Triceps_i']},{};... arm26.osim</span>
+0073         }];
+0074 
+0075 
+0076 <span class="comment">% Structure generation</span>
+0077 Muscles=[Muscles;struct(<span class="string">'name'</span>,{s{:,1}}',<span class="string">'f0'</span>,{s{:,2}}',<span class="string">'l0'</span>,{s{:,3}}',<span class="keyword">...</span>
+0078     <span class="string">'Kt'</span>,{s{:,4}}',<span class="string">'ls'</span>,{s{:,5}}',<span class="string">'alpha0'</span>,{s{:,6}}',<span class="string">'path'</span>,{s{:,7}}',<span class="string">'wrap'</span>,{s{:,8}}')]; <span class="comment">%#ok&lt;CCAT1&gt;</span>
+0079 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

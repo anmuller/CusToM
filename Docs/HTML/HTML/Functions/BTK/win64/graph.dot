@@ -1,0 +1,35 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  btkAppendForcePlatformType2 -> btkFindMetaData;
+  btkAppendForcePlatformType2 -> btkMetaDataInfo;
+  btkCropAcquisition -> btkGetLastFrame;
+  btkEmulateC3Dserver -> btkFindMetaData;
+  btkEmulateC3Dserver -> btkGetEventNumber;
+  btkEmulateC3Dserver -> btkGetLastFrame;
+  btkEmulateC3Dserver -> btkGetVersion;
+  btkEmulateC3Dserver -> btkMetaDataInfo;
+  btkSetMetaData -> btkFindMetaData;
+  btkSetMetaDataValues -> btkSetMetaData;
+  btkTransformTDFToViconC3DFile -> btkAppendForcePlatformType2;
+  btkTransformTDFToViconC3DFile -> btkGetVersion;
+  btkTransformTDFToViconC3DFile -> btkMetaDataInfo;
+
+  Contents [URL="Contents.html"];
+  btkAppendForcePlatformType2 [URL="btkAppendForcePlatformType2.html"];
+  btkCloseAcquisition [URL="btkCloseAcquisition.html"];
+  btkCropAcquisition [URL="btkCropAcquisition.html"];
+  btkEmulateC3Dserver [URL="btkEmulateC3Dserver.html"];
+  btkFindMetaData [URL="btkFindMetaData.html"];
+  btkGetAnalogsResolution [URL="btkGetAnalogsResolution.html"];
+  btkGetEventNumber [URL="btkGetEventNumber.html"];
+  btkGetLastFrame [URL="btkGetLastFrame.html"];
+  btkGetVersion [URL="btkGetVersion.html"];
+  btkMetaDataInfo [URL="btkMetaDataInfo.html"];
+  btkSetAnalogsResolution [URL="btkSetAnalogsResolution.html"];
+  btkSetMetaData [URL="btkSetMetaData.html"];
+  btkSetMetaDataValues [URL="btkSetMetaDataValues.html"];
+  btkTransformTDFToViconC3DFile [URL="btkTransformTDFToViconC3DFile.html"];
+  tocbtkbasicfilters [URL="tocbtkbasicfilters.html"];
+  tocbtkcommon [URL="tocbtkcommon.html"];
+  tocbtkio [URL="tocbtkio.html"];
+}

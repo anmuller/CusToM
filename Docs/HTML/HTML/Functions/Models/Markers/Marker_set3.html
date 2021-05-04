@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Marker_set3</title>
+  <meta name="keywords" content="Marker_set3">
+  <meta name="description" content="Definition of the markers set used in the M2S with VR glasses">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- ../menu.html Models --><!-- menu.html Markers -->
+<h1>Marker_set3
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Definition of the markers set used in the M2S with VR glasses</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [Markers]=Marker_set3(nb_markers_hand) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Definition of the markers set used in the M2S with VR glasses
+
+   INPUT
+   - nb_markers_hand: number of markers used on each hand
+   OUTPUT
+   - Markers: set of markers (see the Documentation for the structure) 
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [s]=Hand_markers_1(s,Signe)</a></li><li><a href="#_sub2" class="code">function [s]=Hand_markers_2(s,Signe)</a></li><li><a href="#_sub3" class="code">function [s]=Hand_markers_3(s,Signe)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Markers]=Marker_set3(nb_markers_hand)</a>
+0002 <span class="comment">% Definition of the markers set used in the M2S with VR glasses</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - nb_markers_hand: number of markers used on each hand</span>
+0006 <span class="comment">%   OUTPUT</span>
+0007 <span class="comment">%   - Markers: set of markers (see the Documentation for the structure)</span>
+0008 <span class="comment">%________________________________________________________</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Licence</span>
+0011 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0012 <span class="comment">%________________________________________________________</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0015 <span class="comment">% Georges Dumont</span>
+0016 <span class="comment">%________________________________________________________</span>
+0017 s=cell(0);
+0018 s=cell(0);
+0019 
+0020 <span class="comment">% Trunk</span>
+0021 s=[s;{<span class="string">'STRN'</span> <span class="string">'STRN'</span> {<span class="string">'Off'</span>;<span class="string">'On'</span>;<span class="string">'Off'</span>};<span class="string">'CLAV'</span> <span class="string">'CLAV'</span> {<span class="string">'On'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};<span class="string">'T10'</span> <span class="string">'T10'</span> {<span class="string">'Off'</span>;<span class="string">'On'</span>;<span class="string">'Off'</span>};<span class="keyword">...</span>
+0022     <span class="string">'C7'</span> <span class="string">'C7'</span> {<span class="string">'On'</span>;<span class="string">'On'</span>;<span class="string">'Off'</span>};<span class="string">'RSHO'</span> <span class="string">'RSHO'</span> {<span class="string">'On'</span>;<span class="string">'Off'</span>;<span class="string">'On'</span>};<span class="string">'LSHO'</span> <span class="string">'LSHO'</span> {<span class="string">'On'</span>;<span class="string">'Off'</span>;<span class="string">'On'</span>};<span class="string">'RFWT'</span> <span class="string">'RFWT'</span> {<span class="string">'On'</span>;<span class="string">'Off'</span>;<span class="string">'On'</span>};<span class="keyword">...</span>
+0023     <span class="string">'LFWT'</span> <span class="string">'LFWT'</span> {<span class="string">'On'</span>;<span class="string">'Off'</span>;<span class="string">'On'</span>};<span class="string">'RBWT'</span> <span class="string">'RBWT'</span> {<span class="string">'On'</span>;<span class="string">'Off'</span>;<span class="string">'On'</span>};<span class="string">'LBWT'</span> <span class="string">'LBWT'</span> {<span class="string">'On'</span>;<span class="string">'Off'</span>;<span class="string">'On'</span>};<span class="keyword">...</span>
+0024 <span class="comment">%     'RFHD' 'RFHD' {'Off';'Off';'On'};'LFHD' 'LFHD' {'Off';'Off';'On'};'RBHD' 'RBHD' {'Off';'On';'On'};'LBHD' 'LBHD' {'Off';'On';'On'};...</span>
+0025     <span class="string">'GLASS1'</span> <span class="string">'GLASS1'</span> {<span class="string">'On'</span>;<span class="string">'Off'</span>;<span class="string">'On'</span>};<span class="string">'GLASS2'</span> <span class="string">'GLASS2'</span> {<span class="string">'On'</span>;<span class="string">'Off'</span>;<span class="string">'On'</span>};<span class="string">'GLASS3'</span> <span class="string">'GLASS3'</span> {<span class="string">'On'</span>;<span class="string">'Off'</span>;<span class="string">'On'</span>};<span class="string">'GLASS4'</span> <span class="string">'GLASS4'</span> {<span class="string">'On'</span>;<span class="string">'Off'</span>;<span class="string">'On'</span>}}<span class="keyword">...</span>
+0026     ];
+0027 
+0028 
+0029 
+0030     Signe=<span class="string">'R'</span>;
+0031     s=[s;{[Signe <span class="string">'HUM'</span>] [Signe <span class="string">'HUM'</span>] {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};[Signe <span class="string">'RAD'</span>] [Signe <span class="string">'RAD'</span>] {<span class="string">'On'</span>;<span class="string">'On'</span>;<span class="string">'Off'</span>};<span class="keyword">...</span>
+0032         [Signe <span class="string">'WRA'</span>] [Signe <span class="string">'WRA'</span>] {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};[Signe <span class="string">'WRB'</span>] [Signe <span class="string">'WRB'</span>] {<span class="string">'Off'</span>;<span class="string">'On'</span>;<span class="string">'Off'</span>};<span class="keyword">...</span><span class="comment"> %#ok&lt;AGROW&gt;])</span>
+0033         [Signe <span class="string">'CAR'</span>] [Signe <span class="string">'CAR1'</span>] {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};[Signe <span class="string">'500G1'</span>] [Signe <span class="string">'500G1'</span>] {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};[Signe <span class="string">'500G2'</span>] [Signe <span class="string">'500G2'</span>] {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};[Signe <span class="string">'500G3'</span>] [Signe <span class="string">'500G3'</span>] {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};[Signe <span class="string">'500G4'</span>] [Signe <span class="string">'500G4'</span>] {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};[Signe <span class="string">'1000G1'</span>] [Signe <span class="string">'1000G1'</span>] {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};[Signe <span class="string">'1000G2'</span>] [Signe <span class="string">'1000G2'</span>] {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};[Signe <span class="string">'1000G3'</span>] [Signe <span class="string">'1000G3'</span>] {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>};[Signe <span class="string">'1000G4'</span>] [Signe <span class="string">'1000G4'</span>] {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>}}];  
+0034 
+0035 Markers=struct(<span class="string">'name'</span>,{s{:,1}}',<span class="string">'anat_position'</span>,{s{:,2}}',<span class="string">'calib_dir'</span>,{s{:,3}}'); <span class="comment">%#ok&lt;CCAT1&gt;</span>
+0036 
+0037 <span class="keyword">end</span>
+0038 
+0039      
+0040 
+0041 
+0042 
+0043 <a name="_sub1" href="#_subfunctions" class="code">function [s]=Hand_markers_1(s,Signe)   </a><span class="comment">%#ok&lt;DEFNU&gt;</span>
+0044 <span class="comment">% 1 marqueur sur la main</span>
+0045     s=[s;{[Signe <span class="string">'CAR'</span>] [Signe <span class="string">'CAR1'</span>] {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>}}];   
+0046 <span class="keyword">end</span>
+0047 <a name="_sub2" href="#_subfunctions" class="code">function [s]=Hand_markers_2(s,Signe)   </a><span class="comment">%#ok&lt;DEFNU&gt;</span>
+0048 <span class="comment">% 2 marqueurs sur la main</span>
+0049     s=[s;{[Signe <span class="string">'500G2'</span>] [Signe <span class="string">'500G2'</span>] {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>}}];    
+0050 <span class="keyword">end</span>    
+0051 <a name="_sub3" href="#_subfunctions" class="code">function [s]=Hand_markers_3(s,Signe)   </a><span class="comment">%#ok&lt;DEFNU&gt;</span>
+0052 <span class="comment">% 3 marqueurs sur la main</span>
+0053 s=[s;{[Signe <span class="string">'1000G1'</span>] [Signe <span class="string">'1000G1'</span>] {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>}}];    
+0054 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

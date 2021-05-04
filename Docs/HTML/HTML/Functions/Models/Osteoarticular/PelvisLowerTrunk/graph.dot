@@ -1,0 +1,13 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  Pelvis -> PelvisNoTrunk;
+  PelvisLowerTrunk -> PelvisNoTrunk;
+  Pelvis_TLEM -> Pelvis_TLEMNoTrunk;
+
+  Pelvis [URL="Pelvis.html"];
+  PelvisLowerTrunk [URL="PelvisLowerTrunk.html"];
+  PelvisNoTrunk [URL="PelvisNoTrunk.html"];
+  Pelvis_TLEM [URL="Pelvis_TLEM.html"];
+  Pelvis_TLEMNoTrunk [URL="Pelvis_TLEMNoTrunk.html"];
+  Pelvis_gait2354 [URL="Pelvis_gait2354.html"];
+}

@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of CostFunctionSymbolicIK</title>
+  <meta name="keywords" content="CostFunctionSymbolicIK">
+  <meta name="description" content="Cost function used for the inverse kinematics step using an optimization method">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html Kinematics -->
+<h1>CostFunctionSymbolicIK
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Cost function used for the inverse kinematics step using an optimization method</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [error] = CostFunctionSymbolicIK(q,nb_cut,real_markers,f,list_function,list_function_markers,Rcut,pcut) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Cost function used for the inverse kinematics step using an optimization method
+   
+   INPUT
+   - q: vector of joint coordinates at a given instant
+   - nb_cut: number of geometrical cut done in the osteo-articular model
+   - real_markers: 3D position of experimental markers
+   - f: current frame
+   - list_function: list of functions used for the evaluation of the
+   geometrical cuts position 
+   - list_function_markers: list of functions used for the evaluation of the
+   markers position 
+   - Rcut: pre-initialization of Rcut
+   - pcut: pre-initialization of pcut
+   OUTPUT
+   - error: cost function value
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="InverseKinematicsLM.html" class="code" title="function [ExperimentalData, InverseKinematicResults] = InverseKinematicsLM(filename,AnalysisParameters,BiomechanicalModel)">InverseKinematicsLM</a>	Computation of the inverse kinematics step thanks to a Jacobian matrix</li><li><a href="InverseKinematicsOpti.html" class="code" title="function [ExperimentalData, InverseKinematicResults] = InverseKinematicsOpti(filename,AnalysisParameters,BiomechanicalModel)">InverseKinematicsOpti</a>	Computation of the inverse kinematics step thanks to a sqp optimization method</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [error] = CostFunctionSymbolicIK(q,nb_cut,real_markers,f,list_function,list_function_markers,Rcut,pcut)</a>
+0002 <span class="comment">% Cost function used for the inverse kinematics step using an optimization method</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - q: vector of joint coordinates at a given instant</span>
+0006 <span class="comment">%   - nb_cut: number of geometrical cut done in the osteo-articular model</span>
+0007 <span class="comment">%   - real_markers: 3D position of experimental markers</span>
+0008 <span class="comment">%   - f: current frame</span>
+0009 <span class="comment">%   - list_function: list of functions used for the evaluation of the</span>
+0010 <span class="comment">%   geometrical cuts position</span>
+0011 <span class="comment">%   - list_function_markers: list of functions used for the evaluation of the</span>
+0012 <span class="comment">%   markers position</span>
+0013 <span class="comment">%   - Rcut: pre-initialization of Rcut</span>
+0014 <span class="comment">%   - pcut: pre-initialization of pcut</span>
+0015 <span class="comment">%   OUTPUT</span>
+0016 <span class="comment">%   - error: cost function value</span>
+0017 <span class="comment">%________________________________________________________</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% Licence</span>
+0020 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0021 <span class="comment">%________________________________________________________</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0024 <span class="comment">% Georges Dumont</span>
+0025 <span class="comment">%________________________________________________________</span>
+0026 <span class="keyword">for</span> c=1:nb_cut
+0027     [Rcut(:,:,c),pcut(:,:,c)]=list_function{c}(q,pcut,Rcut);
+0028 <span class="keyword">end</span>
+0029 
+0030 error=0;
+0031 <span class="keyword">for</span> m=1:numel(list_function_markers)
+0032     a= norm(list_function_markers{m}(q,pcut,Rcut) - real_markers(m).position(f,:)')^2;
+0033     <span class="keyword">if</span> ~isnan(a)
+0034         error = error + a;
+0035     <span class="keyword">end</span>
+0036 <span class="keyword">end</span>
+0037 
+0038 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

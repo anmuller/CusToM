@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of sister_actualize</title>
+  <meta name="keywords" content="sister_actualize">
+  <meta name="description" content="Addition of a sister to a solid">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html AlgoMathsModel -->
+<h1>sister_actualize
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Addition of a sister to a solid</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Human_model]=sister_actualize(Human_model,j,i) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Addition of a sister to a solid
+
+   INPUT
+   - Human_model: osteo-articular model (see the Documentation for the
+   structure) 
+   - j: number of one sister
+   - i: number of the new sister
+   OUTPUT
+   - Human_model: actualize osteo-articular model (see the Documentation
+   for the structure)
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>	Addition of a sister to a solid</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>	Addition of a sister to a solid</li><li><a href="../../Functions/Models/Osteoarticular/Arm/ModelParts/Forearm.html" class="code" title="function [OsteoArticularJoint]= Forearm(OsteoArticularJoint,k,Signe,Mass,AttachmentPoint)">Forearm</a>	Addition of a forearm model</li><li><a href="../../Functions/Models/Osteoarticular/Arm/ModelParts/ForearmWithoutPronation.html" class="code" title="function [OsteoArticularModel]= ForearmWithoutPronation(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)">ForearmWithoutPronation</a>	Addition of a forearm model</li><li><a href="../../Functions/Models/Osteoarticular/Arm/ModelParts/Forearm_Pennestri_model_definition.html" class="code" title="function [Human_model]= Forearm_Pennestri_model_definition(Human_model,k,Signe,Mass,varargin)">Forearm_Pennestri_model_definition</a>	Addition of an forearm model</li><li><a href="../../Functions/Models/Osteoarticular/Arm/ModelParts/Hand.html" class="code" title="function [OsteoArticularModel]= Hand(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)">Hand</a>	Addition of a hand model</li><li><a href="../../Functions/Models/Osteoarticular/Arm/ModelParts/Upperarm.html" class="code" title="function [OsteoArticularModel]= Upperarm(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)">Upperarm</a>	Addition of an upper arm model</li><li><a href="../../Functions/Models/Osteoarticular/Head/Skull.html" class="code" title="function [OsteoArticularModel]= Skull(OsteoArticularModel,k,Mass,AttachmentPoint)">Skull</a>	Addition of a skull model</li><li><a href="../../Functions/Models/Osteoarticular/Leg/ModelParts/Femur_gait2354.html" class="code" title="function [Human_model]= Femur_gait2354(Human_model,k,Signe,Mass,AttachmentPoint)">Femur_gait2354</a>	CREDIT</li><li><a href="../../Functions/Models/Osteoarticular/Leg/ModelParts/Foot.html" class="code" title="function [OsteoArticularModel]= Foot(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)">Foot</a>	Addition of a foot model</li><li><a href="../../Functions/Models/Osteoarticular/Leg/ModelParts/FootBallJoint.html" class="code" title="function [OsteoArticularModel]= FootBallJoint(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)">FootBallJoint</a>	Addition of a foot model</li><li><a href="../../Functions/Models/Osteoarticular/Leg/ModelParts/FootWithoutPronation.html" class="code" title="function [OsteoArticularModel]= FootWithoutPronation(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)">FootWithoutPronation</a>	Addition of a foot model</li><li><a href="../../Functions/Models/Osteoarticular/Leg/ModelParts/Foot_TLEM.html" class="code" title="function [Human_model]= Foot_TLEM(Human_model,k,Signe,Mass,AttachmentPoint)">Foot_TLEM</a>	% Fichier de description du mod�e de jambe</li><li><a href="../../Functions/Models/Osteoarticular/Leg/ModelParts/Patella_TLEM.html" class="code" title="function [Human_model]= Patella_TLEM(Human_model,k,Signe,Mass,AttachmentPoint)">Patella_TLEM</a>	Based on:</li><li><a href="../../Functions/Models/Osteoarticular/Leg/ModelParts/Shank.html" class="code" title="function [OsteoArticularModel]= Shank(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)">Shank</a>	Addition of a shank model</li><li><a href="../../Functions/Models/Osteoarticular/Leg/ModelParts/ShankBallJoint.html" class="code" title="function [OsteoArticularJoint]= ShankBallJoint(OsteoArticularJoint,k,Signe,Mass,AttachmentPoint)">ShankBallJoint</a>	Addition of a shank model</li><li><a href="../../Functions/Models/Osteoarticular/Leg/ModelParts/ShankFoot.html" class="code" title="function [OsteoArticularModel]= ShankFoot(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)">ShankFoot</a>	Addition of a shank/foot model</li><li><a href="../../Functions/Models/Osteoarticular/Leg/ModelParts/Shank_TLEM.html" class="code" title="function [Human_model]= Shank_TLEM(Human_model,k,Signe,Mass,AttachmentPoint)">Shank_TLEM</a>	Based on:</li><li><a href="../../Functions/Models/Osteoarticular/Leg/ModelParts/Talus_TLEM.html" class="code" title="function [Human_model]= Talus_TLEM(Human_model,k,Signe,Mass,AttachmentPoint)">Talus_TLEM</a>	Based on:</li><li><a href="../../Functions/Models/Osteoarticular/Leg/ModelParts/Thigh.html" class="code" title="function [OsteoArticularModel]= Thigh(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)">Thigh</a>	Addition of a thigh model</li><li><a href="../../Functions/Models/Osteoarticular/Leg/ModelParts/Thigh_TLEM.html" class="code" title="function [Human_model]= Thigh_TLEM(Human_model,k,Signe,Mass,AttachmentPoint)">Thigh_TLEM</a>	Addition of a thigh model</li><li><a href="../../Functions/Models/Osteoarticular/Leg/ModelParts/Tibia_gait2354.html" class="code" title="function [Human_model]= Tibia_gait2354(Human_model,k,Signe,Mass,AttachmentPoint)">Tibia_gait2354</a>	CREDIT</li><li><a href="../../Functions/Models/Osteoarticular/Leg/ModelParts/calcn_gait2354.html" class="code" title="function [Human_model]= calcn_gait2354(Human_model,k,Signe,Mass,AttachmentPoint)">calcn_gait2354</a>	CREDIT</li><li><a href="../../Functions/Models/Osteoarticular/Leg/ModelParts/talus_gait2354.html" class="code" title="function [Human_model]= talus_gait2354(Human_model,k,Signe,Mass,AttachmentPoint)">talus_gait2354</a>	CREDIT</li><li><a href="../../Functions/Models/Osteoarticular/Leg/ModelParts/toes_gait2354.html" class="code" title="function [Human_model]= toes_gait2354(Human_model,k,Signe,Mass,AttachmentPoint)">toes_gait2354</a>	CREDIT</li><li><a href="../../Functions/Models/Osteoarticular/PelvisLowerTrunk/Pelvis.html" class="code" title="function [OsteoArticularModel]= Pelvis(OsteoArticularModel,k,Mass,AttachmentPoint)">Pelvis</a>	Addition of a pelvis/lower trunk model</li><li><a href="../../Functions/Models/Osteoarticular/PelvisLowerTrunk/PelvisLowerTrunk.html" class="code" title="function [OsteoArticularModel]= PelvisLowerTrunk(OsteoArticularModel,k,Mass,AttachmentPoint)">PelvisLowerTrunk</a>	Addition of a pelvis/lower trunk model</li><li><a href="../../Functions/Models/Osteoarticular/PelvisLowerTrunk/PelvisNoTrunk.html" class="code" title="function [OsteoArticularModel]= PelvisNoTrunk(OsteoArticularModel,k,Mass,AttachmentPoint)">PelvisNoTrunk</a>	Addition of a pelvis model</li><li><a href="../../Functions/Models/Osteoarticular/PelvisLowerTrunk/Pelvis_TLEM.html" class="code" title="function [OsteoArticularModel]= Pelvis_TLEM(OsteoArticularModel,k,Mass,AttachmentPoint)">Pelvis_TLEM</a>	Addition of a pelvis/lower trunk model</li><li><a href="../../Functions/Models/Osteoarticular/PelvisLowerTrunk/Pelvis_TLEMNoTrunk.html" class="code" title="function [OsteoArticularModel]= Pelvis_TLEMNoTrunk(OsteoArticularModel,k,Mass,AttachmentPoint)">Pelvis_TLEMNoTrunk</a>	Based on:</li><li><a href="../../Functions/Models/Osteoarticular/PelvisLowerTrunk/Pelvis_gait2354.html" class="code" title="function [OsteoArticularModel]= Pelvis_gait2354(OsteoArticularModel,k,Mass,AttachmentPoint)">Pelvis_gait2354</a>	CREDIT</li><li><a href="../../Functions/Models/Osteoarticular/UpperTrunk/ModelParts/Clavicle_Shoulder.html" class="code" title="function [Human_model]= Clavicle_Shoulder(Human_model,k,Mass,Side,AttachmentPoint)">Clavicle_Shoulder</a>	Addition of a thorax model</li><li><a href="../../Functions/Models/Osteoarticular/UpperTrunk/ModelParts/Scapula_Shoulder.html" class="code" title="function [Human_model]= Scapula_Shoulder(Human_model,k,Mass,Side,AttachmentPoint)">Scapula_Shoulder</a>	Addition of a thorax model</li><li><a href="../../Functions/Models/Osteoarticular/UpperTrunk/ModelParts/Thorax_Shoulder.html" class="code" title="function [Human_model]= Thorax_Shoulder(Human_model,k,Mass,AttachmentPoint)">Thorax_Shoulder</a>	Addition of a thorax model</li><li><a href="../../Functions/Models/Osteoarticular/UpperTrunk/UpperTrunk.html" class="code" title="function [OsteoArticularModel]= UpperTrunk(OsteoArticularModel,k,Mass,AttachmentPoint)">UpperTrunk</a>	Addition of an upper trunk model</li><li><a href="../../Functions/Models/Osteoarticular/UpperTrunk/UpperTrunkClavicle.html" class="code" title="function [OsteoArticularModel]= UpperTrunkClavicle(OsteoArticularModel,k,Mass,AttachmentPoint)">UpperTrunkClavicle</a>	Addition of an upper trunk model</li><li><a href="../../Functions/Models/Osteoarticular/UpperTrunk/UpperTrunkHead.html" class="code" title="function [OsteoArticularModel]=UpperTrunkHead(OsteoArticularModel,k,Mass,AttachmentPoint)">UpperTrunkHead</a>	Addition of an upper trunk / head model</li><li><a href="../../Functions/Models/Osteoarticular/UpperTrunk/torso_gait2354.html" class="code" title="function [OsteoArticularModel]= torso_gait2354(OsteoArticularModel,k,Mass,AttachmentPoint)">torso_gait2354</a>	CREDIT</li><li><a href="../../Functions/XSens/XSens_Foot.html" class="code" title="function [OsteoArticularJoint]= XSens_Foot(OsteoArticularJoint,tree,Signe,Mass,AttachmentPoint,pose)">XSens_Foot</a>	Addition of a foot model</li><li><a href="../../Functions/XSens/XSens_ForeArm.html" class="code" title="function [OsteoArticularJoint]= XSens_ForeArm(OsteoArticularJoint,tree,Signe,Mass,AttachmentPoint,pose)">XSens_ForeArm</a>	Addition of a forearm model</li><li><a href="../../Functions/XSens/XSens_Hand.html" class="code" title="function [OsteoArticularJoint]= XSens_Hand(OsteoArticularJoint,tree,Signe,Mass,AttachmentPoint,pose)">XSens_Hand</a>	Addition of a hand model</li><li><a href="../../Functions/XSens/XSens_Head.html" class="code" title="function [OsteoArticularJoint]= XSens_Head(OsteoArticularJoint,tree,Mass,AttachmentPoint,pose)">XSens_Head</a>	Addition of a head model</li><li><a href="../../Functions/XSens/XSens_L3.html" class="code" title="function [OsteoArticularJoint]= XSens_L3(OsteoArticularJoint,tree,Mass,AttachmentPoint,pose)">XSens_L3</a>	Addition of a L3 model</li><li><a href="../../Functions/XSens/XSens_L5.html" class="code" title="function [OsteoArticularJoint]= XSens_L5(OsteoArticularJoint,tree,Mass,AttachmentPoint,pose)">XSens_L5</a>	Addition of a L5 model</li><li><a href="../../Functions/XSens/XSens_LowerLeg.html" class="code" title="function [OsteoArticularJoint]= XSens_LowerLeg(OsteoArticularJoint,tree,Signe,Mass,AttachmentPoint,pose)">XSens_LowerLeg</a>	Addition of a lowerleg model</li><li><a href="../../Functions/XSens/XSens_Neck.html" class="code" title="function [OsteoArticularJoint]= XSens_Neck(OsteoArticularJoint,tree,Mass,AttachmentPoint,pose)">XSens_Neck</a>	Addition of a neck model</li><li><a href="../../Functions/XSens/XSens_Pelvis.html" class="code" title="function [OsteoArticularJoint]= XSens_Pelvis(OsteoArticularJoint,tree,Mass,AttachmentPoint,pose)">XSens_Pelvis</a>	Addition of a pelvis model</li><li><a href="../../Functions/XSens/XSens_Shoulder.html" class="code" title="function [OsteoArticularJoint]= XSens_Shoulder(OsteoArticularJoint,tree,Signe,Mass,AttachmentPoint,pose)">XSens_Shoulder</a>	Addition of a shoulder model</li><li><a href="../../Functions/XSens/XSens_T12.html" class="code" title="function [OsteoArticularJoint]= XSens_T12(OsteoArticularJoint,tree,Mass,AttachmentPoint,pose)">XSens_T12</a>	Addition of a T12 model</li><li><a href="../../Functions/XSens/XSens_T8.html" class="code" title="function [OsteoArticularJoint]= XSens_T8(OsteoArticularJoint,tree,Mass,AttachmentPoint,pose)">XSens_T8</a>	Addition of a T8 model</li><li><a href="../../Functions/XSens/XSens_Toe.html" class="code" title="function [OsteoArticularJoint]= XSens_Toe(OsteoArticularJoint,tree,Signe,Mass,AttachmentPoint,pose)">XSens_Toe</a>	Addition of a toe model</li><li><a href="../../Functions/XSens/XSens_UpperArm.html" class="code" title="function [OsteoArticularJoint]= XSens_UpperArm(OsteoArticularJoint,tree,Signe,Mass,AttachmentPoint,pose)">XSens_UpperArm</a>	Addition of an upperarm model</li><li><a href="../../Functions/XSens/XSens_UpperLeg.html" class="code" title="function [OsteoArticularJoint]= XSens_UpperLeg(OsteoArticularJoint,tree,Signe,Mass,AttachmentPoint,pose)">XSens_UpperLeg</a>	Addition of an upperleg model</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Human_model]=sister_actualize(Human_model,j,i)</a>
+0002 <span class="comment">% Addition of a sister to a solid</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the</span>
+0006 <span class="comment">%   structure)</span>
+0007 <span class="comment">%   - j: number of one sister</span>
+0008 <span class="comment">%   - i: number of the new sister</span>
+0009 <span class="comment">%   OUTPUT</span>
+0010 <span class="comment">%   - Human_model: actualize osteo-articular model (see the Documentation</span>
+0011 <span class="comment">%   for the structure)</span>
+0012 <span class="comment">%________________________________________________________</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Licence</span>
+0015 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0016 <span class="comment">%________________________________________________________</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0019 <span class="comment">% Georges Dumont</span>
+0020 <span class="comment">%________________________________________________________</span>
+0021 
+0022 <span class="keyword">if</span> Human_model(j).sister == 0
+0023     Human_model(j).sister = i;
+0024     <span class="keyword">return</span>;
+0025 <span class="keyword">end</span>
+0026 
+0027 [Human_model]=<a href="sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>(Human_model,Human_model(j).sister,i);
+0028 
+0029 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

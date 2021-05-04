@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of CalcMC</title>
+  <meta name="keywords" content="CalcMC">
+  <meta name="description" content="Additional function that computes the global mass of the jth segments.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html Dynamics -->
+<h1>CalcMC
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Additional function that computes the global mass of the jth segments.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function mc=CalcMC(Human_model,j) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Additional function that computes the global mass of the jth segments.
+
+   INPUT
+   - Human_model: osteo-articular model (see the Documentation for the
+   - j: current solid
+   OUTPUT
+   - mc: total mass of the solids
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="CalcMC.html" class="code" title="function mc=CalcMC(Human_model,j)">CalcMC</a>	Additional function that computes the global mass of the jth segments.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="CalcCoM.html" class="code" title="function com=CalcCoM(Human_model)">CalcCoM</a>	Function that computes the global center of mass position.</li><li><a href="CalcMC.html" class="code" title="function mc=CalcMC(Human_model,j)">CalcMC</a>	Additional function that computes the global mass of the jth segments.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function mc=CalcMC(Human_model,j)</a>
+0002 <span class="comment">% Additional function that computes the global mass of the jth segments.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the</span>
+0006 <span class="comment">%   - j: current solid</span>
+0007 <span class="comment">%   OUTPUT</span>
+0008 <span class="comment">%   - mc: total mass of the solids</span>
+0009 <span class="comment">%________________________________________________________</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% Licence</span>
+0012 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0013 <span class="comment">%________________________________________________________</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0016 <span class="comment">% Georges Dumont</span>
+0017 <span class="comment">%________________________________________________________</span>
+0018 <span class="keyword">if</span> j==0
+0019     mc=0;
+0020 <span class="keyword">else</span>
+0021     mc=Human_model(j).m*(Human_model(j).p+Human_model(j).R*Human_model(j).c);
+0022     mc=mc+<a href="CalcMC.html" class="code" title="function mc=CalcMC(Human_model,j)">CalcMC</a>(Human_model,Human_model(j).sister)+<a href="CalcMC.html" class="code" title="function mc=CalcMC(Human_model,j)">CalcMC</a>(Human_model,Human_model(j).child);
+0023 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

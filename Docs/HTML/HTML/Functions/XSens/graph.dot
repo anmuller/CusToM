@@ -1,0 +1,38 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  MVNXModelGeneration -> XSens_Foot;
+  MVNXModelGeneration -> XSens_ForeArm;
+  MVNXModelGeneration -> XSens_Hand;
+  MVNXModelGeneration -> XSens_Head;
+  MVNXModelGeneration -> XSens_L3;
+  MVNXModelGeneration -> XSens_L5;
+  MVNXModelGeneration -> XSens_LowerLeg;
+  MVNXModelGeneration -> XSens_Neck;
+  MVNXModelGeneration -> XSens_Pelvis;
+  MVNXModelGeneration -> XSens_Shoulder;
+  MVNXModelGeneration -> XSens_T12;
+  MVNXModelGeneration -> XSens_T8;
+  MVNXModelGeneration -> XSens_Toe;
+  MVNXModelGeneration -> XSens_UpperArm;
+  MVNXModelGeneration -> XSens_UpperLeg;
+  MVNXModelGeneration -> XSens_Visual;
+
+  MVNXInverseKinematics [URL="MVNXInverseKinematics.html"];
+  MVNXModelGeneration [URL="MVNXModelGeneration.html"];
+  XSens_Foot [URL="XSens_Foot.html"];
+  XSens_ForeArm [URL="XSens_ForeArm.html"];
+  XSens_Hand [URL="XSens_Hand.html"];
+  XSens_Head [URL="XSens_Head.html"];
+  XSens_L3 [URL="XSens_L3.html"];
+  XSens_L5 [URL="XSens_L5.html"];
+  XSens_LowerLeg [URL="XSens_LowerLeg.html"];
+  XSens_Neck [URL="XSens_Neck.html"];
+  XSens_Pelvis [URL="XSens_Pelvis.html"];
+  XSens_Shoulder [URL="XSens_Shoulder.html"];
+  XSens_T12 [URL="XSens_T12.html"];
+  XSens_T8 [URL="XSens_T8.html"];
+  XSens_Toe [URL="XSens_Toe.html"];
+  XSens_UpperArm [URL="XSens_UpperArm.html"];
+  XSens_UpperLeg [URL="XSens_UpperLeg.html"];
+  XSens_Visual [URL="XSens_Visual.html"];
+}

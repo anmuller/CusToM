@@ -26,14 +26,6 @@ function [Colors]=ColorsAnimation(filename,Muscles,AnimateParameters,Human_model
 %________________________________________________________
 
 
-
-
-
-
-
-
-
-
 Colors.fmk=[];
 Colors.C_mk=[];
 Colors.C_ms=[];
@@ -56,7 +48,7 @@ Colors.NbPointsPrediction=[];
 if options.mod_marker_anim || options.exp_marker_anim || options.mass_centers_anim
     if options.mod_marker_anim || options.exp_marker_anim
         nb_set= options.mod_marker_anim + options.exp_marker_anim;
-        % Creating a mesh with all the marker to do only one gpatch
+        % Creating a mesh with all the markers to do only one gpatch
         nbmk=numel(Markers_set);
         Colors.fmk=1:1:nbmk*nb_set;
         Colors.C_mk = zeros(nbmk*nb_set,3); % RGB;
@@ -77,8 +69,6 @@ if options.mod_marker_anim || options.exp_marker_anim || options.mass_centers_an
 end
 
 
-
-
 if options.Force_Prediction_points
     %% Creation of a structure to add contact points
     for i=1:numel(AnalysisParameters.Prediction.ContactPoint)
@@ -95,7 +85,7 @@ if options.muscles_anim
     if isfield(AnimateParameters,'Mode') && isequal(AnimateParameters.Mode, 'GenerateParameters')
         Colors.Aopt = ones(numel(Muscles),1);
     else
-        load([filename '/MuscleForcesComputationResults.mat']); %#ok<LOAD>
+        load([filename '/MuscleForcesComputationResults.mat']); 
         Colors.Aopt = MuscleForcesComputationResults.MuscleActivations;
     end
 end
@@ -124,7 +114,7 @@ end
 
 
 if options.external_forces_anim || options.external_forces_p  %vector normalization
-    Colors.lmax_vector_visual = 1; % longueur max du vecteur (en m)
+    Colors.lmax_vector_visual = 1; % maximal vector length in meters (longueur max du vecteur) (en m)
     Colors.coef_f_visual=(ModelParameters.Mass*9.81)/Colors.lmax_vector_visual;
 end
 
@@ -134,7 +124,7 @@ if options.forceplate
         h = btkReadAcquisition([filename '.c3d']);
         Colors.ForceplatesData = btkGetForcePlatforms(h);
     elseif isequal(AnalysisParameters.ExternalForces.Method, @PF_IRSST)
-        load([filename '.mat']); %#ok<LOAD>
+        load([filename '.mat']); 
     end
 end
 

@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of copyfig</title>
+  <meta name="keywords" content="copyfig">
+  <meta name="description" content="COPYFIG Create a copy of a figure, without changing the figure">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- # ExternLibrary --><!-- menu.html export_fig -->
+<h1>copyfig
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>COPYFIG Create a copy of a figure, without changing the figure</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function fh = copyfig(fh) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">COPYFIG Create a copy of a figure, without changing the figure
+
+ Examples:
+   fh_new = copyfig(fh_old)
+
+ This function will create a copy of a figure, but not change the figure,
+ as copyobj sometimes does, e.g. by changing legends.
+
+ IN:
+    fh_old - The handle of the figure to be copied. Default: gcf.
+
+ OUT:
+    fh_new - The handle of the created figure.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="export_fig.html" class="code" title="function [imageData, alpha] = export_fig(varargin) %#ok<*STRCL1>">export_fig</a>	EXPORT_FIG  Exports figures in a publication-quality format</li><li><a href="isolate_axes.html" class="code" title="function fh = isolate_axes(ah, vis)">isolate_axes</a>	ISOLATE_AXES Isolate the specified axes in a figure on their own</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function fh = copyfig(fh)</a>
+0002 <span class="comment">%COPYFIG Create a copy of a figure, without changing the figure</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Examples:</span>
+0005 <span class="comment">%   fh_new = copyfig(fh_old)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% This function will create a copy of a figure, but not change the figure,</span>
+0008 <span class="comment">% as copyobj sometimes does, e.g. by changing legends.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% IN:</span>
+0011 <span class="comment">%    fh_old - The handle of the figure to be copied. Default: gcf.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% OUT:</span>
+0014 <span class="comment">%    fh_new - The handle of the created figure.</span>
+0015 
+0016 <span class="comment">% Copyright (C) Oliver Woodford 2012</span>
+0017 
+0018 <span class="comment">% 26/02/15: If temp dir is not writable, use the dest folder for temp</span>
+0019 <span class="comment">%           destination files (Javier Paredes)</span>
+0020 <span class="comment">% 15/04/15: Suppress warnings during copyobj (Dun Kirk comment on FEX page 2013-10-02)</span>
+0021 
+0022     <span class="comment">% Set the default</span>
+0023     <span class="keyword">if</span> nargin == 0
+0024         fh = gcf;
+0025     <span class="keyword">end</span>
+0026     <span class="comment">% Is there a legend?</span>
+0027     <span class="keyword">if</span> isempty(findall(fh, <span class="string">'Type'</span>, <span class="string">'axes'</span>, <span class="string">'Tag'</span>, <span class="string">'legend'</span>))
+0028         <span class="comment">% Safe to copy using copyobj</span>
+0029         oldWarn = warning(<span class="string">'off'</span>); <span class="comment">%#ok&lt;WNOFF&gt;  %Suppress warnings during copyobj (Dun Kirk comment on FEX page 2013-10-02)</span>
+0030         fh = copyobj(fh, 0);
+0031         warning(oldWarn);
+0032     <span class="keyword">else</span>
+0033         <span class="comment">% copyobj will change the figure, so save and then load it instead</span>
+0034         tmp_nam = [tempname <span class="string">'.fig'</span>];
+0035         <span class="keyword">try</span>
+0036             <span class="comment">% Ensure that the temp dir is writable (Javier Paredes 26/2/15)</span>
+0037             fid = fopen(tmp_nam,<span class="string">'w'</span>);
+0038             fwrite(fid,1);
+0039             fclose(fid);
+0040             delete(tmp_nam);  <span class="comment">% cleanup</span>
+0041         <span class="keyword">catch</span>
+0042             <span class="comment">% Temp dir is not writable, so use the current folder</span>
+0043             [dummy,fname,fext] = fileparts(tmp_nam); <span class="comment">%#ok&lt;ASGLU&gt;</span>
+0044             fpath = pwd;
+0045             tmp_nam = fullfile(fpath,[fname fext]);
+0046         <span class="keyword">end</span>
+0047         hgsave(fh, tmp_nam);
+0048         fh = hgload(tmp_nam);
+0049         delete(tmp_nam);
+0050     <span class="keyword">end</span>
+0051 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

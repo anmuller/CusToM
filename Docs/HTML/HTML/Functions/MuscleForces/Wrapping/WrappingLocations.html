@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of WrappingLocations</title>
+  <meta name="keywords" content="WrappingLocations">
+  <meta name="description" content="Location of where are wraps">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- ../menu.html MuscleForces --><!-- menu.html Wrapping -->
+<h1>WrappingLocations
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Location of where are wraps</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [BiomechanicalModel]=WrappingLocations(BiomechanicalModel) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Location of where are wraps
+   INPUT
+   - BiomechanicalModel
+   OUTPUT
+   - BiomechanicalModel
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Functions/AlgoMathsModel/distance_point_wrap.html" class="code" title="function [L,Typ,wrapside] = distance_point_wrap(Point1,Bone1,Point2,Bone2,Human_model,q,Wrap,wrapside,EnforcedWrap)">distance_point_wrap</a>	Computation of the distance between two points</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Functions/Calibration/CalibrateModelGenerationNum.html" class="code" title="function [] = CalibrateModelGenerationNum(ModelParameters,AnalysisParameters)">CalibrateModelGenerationNum</a>	Generation of the calibrated musculoskeletal model</li><li><a href="../../../Functions/Calibration/Muscle/GenerateGenericModel.html" class="code" title="function BiomechanicalModel=GenerateGenericModel(ModelParameters)">GenerateGenericModel</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [BiomechanicalModel]=WrappingLocations(BiomechanicalModel)</a>
+0002 <span class="comment">% Location of where are wraps</span>
+0003 <span class="comment">%   INPUT</span>
+0004 <span class="comment">%   - BiomechanicalModel</span>
+0005 <span class="comment">%   OUTPUT</span>
+0006 <span class="comment">%   - BiomechanicalModel</span>
+0007 <span class="comment">%________________________________________________________</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Licence</span>
+0010 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0011 <span class="comment">%________________________________________________________</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0014 <span class="comment">% Georges Dumont</span>
+0015 <span class="comment">%________________________________________________________</span>
+0016 OsteoArticularModel=BiomechanicalModel.OsteoArticularModel;
+0017 
+0018 <span class="keyword">for</span> ii=1:length(OsteoArticularModel)
+0019     <span class="keyword">if</span> ~isempty(OsteoArticularModel(ii).wrap)
+0020         <span class="keyword">for</span> jj=1:length(OsteoArticularModel(ii).wrap)
+0021             <span class="comment">% Num solid</span>
+0022             OsteoArticularModel(ii).wrap(jj).num_solid=ii;
+0023             <span class="comment">% find the number of the anat position</span>
+0024             [~,ind]=intersect(OsteoArticularModel(ii).anat_position(:,1),<span class="keyword">...</span>
+0025                 OsteoArticularModel(ii).wrap(jj).anat_position);
+0026             <span class="comment">% save the anat position</span>
+0027             OsteoArticularModel(ii).wrap(jj).location = <span class="keyword">...</span>
+0028                 OsteoArticularModel(ii).anat_position{ind,2};
+0029         <span class="keyword">end</span>
+0030     <span class="keyword">end</span>
+0031 <span class="keyword">end</span>
+0032 BiomechanicalModel.OsteoArticularModel=OsteoArticularModel;
+0033 
+0034 
+0035 <span class="comment">%% Wrapping sides</span>
+0036 <span class="comment">% Considering in anatomical position we are wrapping on the proper side.</span>
+0037 q= zeros(numel(OsteoArticularModel),1);
+0038 Muscles = BiomechanicalModel.Muscles;
+0039 <span class="keyword">for</span> ii=1:numel(Muscles)
+0040     <span class="keyword">if</span> Muscles(ii).exist &amp;&amp; ~isempty(Muscles(ii).wrap) &amp;&amp; ~isempty(Muscles(ii).wrap{1})
+0041         <span class="comment">%find the wrap</span>
+0042         Wrap = [OsteoArticularModel.wrap]; names = {Wrap.name}'; [~,ind]=intersect(names,Muscles(ii).wrap{1});
+0043         cur_Wrap=Wrap(ind);
+0044         <span class="keyword">for</span> p=1:(numel(Muscles(ii).path)-1)
+0045             <span class="comment">% distance between p and p+1 point</span>
+0046             M_Bone = Muscles(ii).num_solid(p); <span class="comment">% number of the solid which contains this position</span>
+0047             M_pos = Muscles(ii).num_markers(p); <span class="comment">% number of the anatomical landmark in this solid</span>
+0048             N_Bone = Muscles(ii).num_solid(p+1);
+0049             N_pos = Muscles(ii).num_markers(p+1);
+0050             EnforcedWrap= 1;
+0051             [~,~,wrapside]=<a href="../../../Functions/AlgoMathsModel/distance_point_wrap.html" class="code" title="function [L,Typ,wrapside] = distance_point_wrap(Point1,Bone1,Point2,Bone2,Human_model,q,Wrap,wrapside,EnforcedWrap)">distance_point_wrap</a>(M_pos,M_Bone,N_pos,N_Bone,OsteoArticularModel,q,cur_Wrap,[],EnforcedWrap);
+0052             BiomechanicalModel.Muscles(ii).wrapside=wrapside;
+0053         <span class="keyword">end</span>
+0054     <span class="keyword">else</span>
+0055         BiomechanicalModel.Muscles(ii).wrapside=[];
+0056     <span class="keyword">end</span>
+0057 <span class="keyword">end</span>
+0058</pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of btkWriteAcquisition</title>
+  <meta name="keywords" content="btkWriteAcquisition">
+  <meta name="description" content="BTKWRITEACQUISITION Write acquisition's data into file (C3D, TRC, ...)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html Functions --><!-- # BTK --><!-- ../menu.html linux64 --><!-- menu.html @IO -->
+<h1>btkWriteAcquisition
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>BTKWRITEACQUISITION Write acquisition's data into file (C3D, TRC, ...)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function h = btkWriteAcquisition(filename) %#ok </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">BTKWRITEACQUISITION Write acquisition's data into file (C3D, TRC, ...)
+ 
+  BTKWRITEACQUISITION(H, FILENAME, ...) exports acquisition's data represented 
+  as the handle H into the file FILENAME.  The choice of the file format is
+  based on the file extension in FILENAME (for example, '.trc' or '.c3d').
+  This handle H must be obtained by the use of a btk* function.  
+  
+  Some formats (for example C3D) have options to store an acquisition. In a 
+  binary format, it is possible to specify the byte order (see BYTEORDER 
+  option) and the storage format (see STORAGEFORMAT option). The options are 
+  given in BTKWRITEACQUISITION after the filename by first the name of the
+  option and its value. 
+
+  The BYTEORDER option can receive 3 values:
+   - IEEE_LittleEndian: write integer and float in x86 format (PC).
+   - IEEE_BigEndian: write integer and float in PPC/MIPS format (SGI).
+   - VAX_LittleEndian: write integer and float in VAX format (DEC).
+  The STORAGEFORMAT option can receive 2 values:
+   - Integer: Acquisition data are scaled and stored as 16 bits integer.
+   - Float: Acquisition data are stored as floating values.
+  The REGENERATEINTERNALS is an advanced option which can receive 2 values.
+   - DataBased: Internal file format configuration (if any) is regenerated based on
+     the acquisition data (i.e. points and analog channels plus events). This
+     option is the default one.
+   - MetadataBased: Internal file format configuration (if any) is regenerated based
+     on the metadata. WARNING: Use this value carefully as it could be easy to
+     corrupt file format internals with it.
+
+  Without any option, a C3D File is written using the machine byte order
+  and the float as storage format. Using these options on ASCII formats 
+  (for example TRC) have no effect on the file data.
+  The writing of an empty acquisition (no point and no analog channel) in
+  a C3D file will create a template C3D file. Only the metadata will be saved.
+
+  EXAMPLES:
+   - BTKWRITEACQUISITION(acq, 'filename.c3d', 'StorageFormat', 'Float'); 
+   - BTKWRITEACQUISITION(acq, 'filename.c3d', 'ByteOrder', 'VAX_LittleEndian'); 
+   - BTKWRITEACQUISITION(acq, 'filename.c3d', 'StorageFormat', 'Integer', 'ByteOrder', 'IEEE_LittleEndian');</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Functions/BTK/linux64/btkEmulateC3Dserver.html" class="code" title="function itf = btkEmulateC3Dserver()">btkEmulateC3Dserver</a>	BTKEMULATEC3DSERVER Creates an emulated COM object for C3Dserver.</li><li><a href="../../../../Functions/BTK/linux64/btkTransformTDFToViconC3DFile.html" class="code" title="function btkTransformTDFToViconC3DFile(TDF_INPUT, C3D_OUTPUT)">btkTransformTDFToViconC3DFile</a>	BTKTRANSFORMTDFTOVICONC3DFILE transforms a TDF file (BTS Bioengineering) to a compatible Vicon C3D file.</li><li><a href="../../../../Functions/BTK/mac64/btkEmulateC3Dserver.html" class="code" title="function itf = btkEmulateC3Dserver()">btkEmulateC3Dserver</a>	BTKEMULATEC3DSERVER Creates an emulated COM object for C3Dserver.</li><li><a href="../../../../Functions/BTK/mac64/btkTransformTDFToViconC3DFile.html" class="code" title="function btkTransformTDFToViconC3DFile(TDF_INPUT, C3D_OUTPUT)">btkTransformTDFToViconC3DFile</a>	BTKTRANSFORMTDFTOVICONC3DFILE transforms a TDF file (BTS Bioengineering) to a compatible Vicon C3D file.</li><li><a href="../../../../Functions/BTK/win64/btkEmulateC3Dserver.html" class="code" title="function itf = btkEmulateC3Dserver()">btkEmulateC3Dserver</a>	BTKEMULATEC3DSERVER Creates an emulated COM object for C3Dserver.</li><li><a href="../../../../Functions/BTK/win64/btkTransformTDFToViconC3DFile.html" class="code" title="function btkTransformTDFToViconC3DFile(TDF_INPUT, C3D_OUTPUT)">btkTransformTDFToViconC3DFile</a>	BTKTRANSFORMTDFTOVICONC3DFILE transforms a TDF file (BTS Bioengineering) to a compatible Vicon C3D file.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function h = btkWriteAcquisition(filename) </a><span class="comment">%#ok</span>
+0002 <span class="comment">%BTKWRITEACQUISITION Write acquisition's data into file (C3D, TRC, ...)</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%  BTKWRITEACQUISITION(H, FILENAME, ...) exports acquisition's data represented</span>
+0005 <span class="comment">%  as the handle H into the file FILENAME.  The choice of the file format is</span>
+0006 <span class="comment">%  based on the file extension in FILENAME (for example, '.trc' or '.c3d').</span>
+0007 <span class="comment">%  This handle H must be obtained by the use of a btk* function.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%  Some formats (for example C3D) have options to store an acquisition. In a</span>
+0010 <span class="comment">%  binary format, it is possible to specify the byte order (see BYTEORDER</span>
+0011 <span class="comment">%  option) and the storage format (see STORAGEFORMAT option). The options are</span>
+0012 <span class="comment">%  given in BTKWRITEACQUISITION after the filename by first the name of the</span>
+0013 <span class="comment">%  option and its value.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%  The BYTEORDER option can receive 3 values:</span>
+0016 <span class="comment">%   - IEEE_LittleEndian: write integer and float in x86 format (PC).</span>
+0017 <span class="comment">%   - IEEE_BigEndian: write integer and float in PPC/MIPS format (SGI).</span>
+0018 <span class="comment">%   - VAX_LittleEndian: write integer and float in VAX format (DEC).</span>
+0019 <span class="comment">%  The STORAGEFORMAT option can receive 2 values:</span>
+0020 <span class="comment">%   - Integer: Acquisition data are scaled and stored as 16 bits integer.</span>
+0021 <span class="comment">%   - Float: Acquisition data are stored as floating values.</span>
+0022 <span class="comment">%  The REGENERATEINTERNALS is an advanced option which can receive 2 values.</span>
+0023 <span class="comment">%   - DataBased: Internal file format configuration (if any) is regenerated based on</span>
+0024 <span class="comment">%     the acquisition data (i.e. points and analog channels plus events). This</span>
+0025 <span class="comment">%     option is the default one.</span>
+0026 <span class="comment">%   - MetadataBased: Internal file format configuration (if any) is regenerated based</span>
+0027 <span class="comment">%     on the metadata. WARNING: Use this value carefully as it could be easy to</span>
+0028 <span class="comment">%     corrupt file format internals with it.</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">%  Without any option, a C3D File is written using the machine byte order</span>
+0031 <span class="comment">%  and the float as storage format. Using these options on ASCII formats</span>
+0032 <span class="comment">%  (for example TRC) have no effect on the file data.</span>
+0033 <span class="comment">%  The writing of an empty acquisition (no point and no analog channel) in</span>
+0034 <span class="comment">%  a C3D file will create a template C3D file. Only the metadata will be saved.</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">%  EXAMPLES:</span>
+0037 <span class="comment">%   - BTKWRITEACQUISITION(acq, 'filename.c3d', 'StorageFormat', 'Float');</span>
+0038 <span class="comment">%   - BTKWRITEACQUISITION(acq, 'filename.c3d', 'ByteOrder', 'VAX_LittleEndian');</span>
+0039 <span class="comment">%   - BTKWRITEACQUISITION(acq, 'filename.c3d', 'StorageFormat', 'Integer', 'ByteOrder', 'IEEE_LittleEndian');</span>
+0040 
+0041 <span class="comment">%  Author: A. Barré</span>
+0042 <span class="comment">%  Copyright 2009-2013 Biomechanical ToolKit (BTK).</span>
+0043 
+0044 <span class="comment">% The following comment, MATLAB compiler pragma, is necessary to avoid</span>
+0045 <span class="comment">% compiling this M-file instead of linking against the MEX-file.  Don't remove.</span>
+0046 <span class="comment">%# mex</span>
+0047 
+0048 error(generatemsgid(<span class="string">'NotSupported'</span>),<span class="string">'MEX file for BTKWRITEACQUISITION not found'</span>);
+0049 
+0050 <span class="comment">% [EOF] btkWriteAcquisition.m</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

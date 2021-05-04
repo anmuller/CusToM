@@ -16,5 +16,6 @@ end
 suite = testsuite('Tests/Cycling/SolverTestCycling.m');
 runner = TestRunner.withTextOutput;
 runner.addPlugin(CodeCoveragePlugin.forFolder(nameFolds))
+
 testCase  = SolverTestCycling;
 res = runner.run(suite);

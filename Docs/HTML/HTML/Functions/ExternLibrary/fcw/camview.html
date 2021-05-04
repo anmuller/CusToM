@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of camview</title>
+  <meta name="keywords" content="camview">
+  <meta name="description" content="function Vo = camview([hAx], [Vi])">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- # ExternLibrary --><!-- menu.html fcw -->
+<h1>camview
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function Vo = camview([hAx], [Vi])</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function Vo = camview(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> function Vo = camview([hAx], [Vi])
+ ------------------------------------------------------------------------
+ CAMVIEW  Records or sets the viewpoint of the current axes
+
+   Vo = camview([hAx], [Vi])
+
+ Records or sets the viewpoint of the current axes, including projection
+ type. This is useful for giving multiple axes (with the same coordinate
+ frame) the same viewpoint, or resetting the viewpoint to a known point.
+ A data aspect ratio of [1 1 1] is assumed.
+
+ The view is recorded and set using a 4x4 matrix. The upper 3x4 quadrant
+ of this matrix is a projection matrix from the axes coordinate frame to
+ the camera coordinate frame (the view frustrum coordinates range from -1
+ to 1 in x and y directions). Padding the last row with [0 0 0 1] makes it
+ possible to use projection matrices computed externally.
+
+ IN:
+    hAx - Handle to the axes in question. Default: gca.
+    Vi - 4x4 matrix defining the viewpoint to set the current axes to. The
+         matrix should defined by calling camview on previous axes.
+
+ OUT:
+    Vo - 4x4 matrix specifying the viewpoint of the current axes just
+         prior to the function being called.
+
+ This code was written by Oliver Woodford and obtained from:
+ http://www.mathworks.com/matlabcentral/fileexchange/34883-camview
+
+ (C) Copyright Oliver Woodford 2006-2015
+
+ Kevin Mattheus Moerman
+ gibbon.toolbox@gmail.com
+
+ 2015/04/15 %Added to external library for GIBBON toolbox
+ ------------------------------------------------------------------------</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Functions/ExternLibrary/GIBBON/functions/vcw.html" class="code" title="function [varargout]=vcw(varargin)">vcw</a>	function vcw(hf,buttonOpt)</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function Vo = camview(varargin)</a>
+0002 
+0003 <span class="comment">% function Vo = camview([hAx], [Vi])</span>
+0004 <span class="comment">% ------------------------------------------------------------------------</span>
+0005 <span class="comment">% CAMVIEW  Records or sets the viewpoint of the current axes</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   Vo = camview([hAx], [Vi])</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Records or sets the viewpoint of the current axes, including projection</span>
+0010 <span class="comment">% type. This is useful for giving multiple axes (with the same coordinate</span>
+0011 <span class="comment">% frame) the same viewpoint, or resetting the viewpoint to a known point.</span>
+0012 <span class="comment">% A data aspect ratio of [1 1 1] is assumed.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% The view is recorded and set using a 4x4 matrix. The upper 3x4 quadrant</span>
+0015 <span class="comment">% of this matrix is a projection matrix from the axes coordinate frame to</span>
+0016 <span class="comment">% the camera coordinate frame (the view frustrum coordinates range from -1</span>
+0017 <span class="comment">% to 1 in x and y directions). Padding the last row with [0 0 0 1] makes it</span>
+0018 <span class="comment">% possible to use projection matrices computed externally.</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% IN:</span>
+0021 <span class="comment">%    hAx - Handle to the axes in question. Default: gca.</span>
+0022 <span class="comment">%    Vi - 4x4 matrix defining the viewpoint to set the current axes to. The</span>
+0023 <span class="comment">%         matrix should defined by calling camview on previous axes.</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">% OUT:</span>
+0026 <span class="comment">%    Vo - 4x4 matrix specifying the viewpoint of the current axes just</span>
+0027 <span class="comment">%         prior to the function being called.</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">% This code was written by Oliver Woodford and obtained from:</span>
+0030 <span class="comment">% http://www.mathworks.com/matlabcentral/fileexchange/34883-camview</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">% (C) Copyright Oliver Woodford 2006-2015</span>
+0033 <span class="comment">%</span>
+0034 <span class="comment">% Kevin Mattheus Moerman</span>
+0035 <span class="comment">% gibbon.toolbox@gmail.com</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">% 2015/04/15 %Added to external library for GIBBON toolbox</span>
+0038 <span class="comment">% ------------------------------------------------------------------------</span>
+0039 
+0040 <span class="comment">%%</span>
+0041 <span class="comment">% Set default inputs</span>
+0042 hAx = gca;
+0043 Vi = [];
+0044 <span class="comment">% Parse the inputs</span>
+0045 <span class="keyword">for</span> a = 1:nargin
+0046     <span class="keyword">if</span> ishandle(varargin{a})
+0047         hAx = varargin{a};
+0048     <span class="keyword">else</span>
+0049         Vi = varargin{a};
+0050     <span class="keyword">end</span>
+0051 <span class="keyword">end</span>
+0052 
+0053 <span class="keyword">if</span> nargout &gt; 0
+0054     <span class="comment">% Get the current viewpoint</span>
+0055     t = get(hAx, <span class="string">'CameraPosition'</span>);
+0056     d = get(hAx, <span class="string">'CameraTarget'</span>) - t;
+0057     K = eye(3);
+0058     K([1 5]) = 1 / tan(get(hAx, <span class="string">'CameraViewAngle'</span>) * pi / 360);
+0059     R(:,3) = d / norm(d);
+0060     R(:,2) = get(hAx, <span class="string">'CameraUpVector'</span>);
+0061     R(:,1) = cross(R(:,3), R(:,2));
+0062     Vo = K * R' * [eye(3) -t'];
+0063     Vo(4,:) = [norm(d) 0 0 strcmp(get(hAx, <span class="string">'Projection'</span>), <span class="string">'perspective'</span>)];
+0064 <span class="keyword">end</span>
+0065 
+0066 <span class="keyword">if</span> ~isempty(Vi)
+0067     <span class="comment">% Decompose the projection matrix</span>
+0068     st = @(M) M(end:-1:1,end:-1:1)';
+0069     [R, K] = qr(st(Vi(1:3,1:3)));
+0070     K = st(K);
+0071     I = diag(K) &lt; 0;
+0072     K(:,I) = -K(:,I);
+0073     R = st(R);
+0074     R(I,:) = -R(I,:);
+0075     t = (K * R) \ -Vi(1:3,4);
+0076     K = K / K(3,3);
+0077         
+0078     <span class="comment">% Set the current viewpoint</span>
+0079     projection = {<span class="string">'perspective'</span>, <span class="string">'orthographic'</span>};
+0080     set(hAx, <span class="string">'CameraTarget'</span>, t'+R(3,:)*(Vi(4)+(Vi(4)==0)), <span class="keyword">...</span>
+0081              <span class="string">'CameraPosition'</span>, t, <span class="keyword">...</span>
+0082              <span class="string">'CameraUpVector'</span>, R(2,:), <span class="keyword">...</span>
+0083              <span class="string">'CameraViewAngle'</span>, atan(1/K(5))*360/pi, <span class="keyword">...</span>
+0084              <span class="string">'Projection'</span>, projection{(Vi(16)==0)+1});
+0085 <span class="keyword">end</span>
+0086 
+0087 <span class="keyword">return</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -27,7 +27,7 @@ for k=1:nu:size(KinematicsError,2)
     while d<round(0.5*nu) && MeanError(k+d)~=min(MeanError([max(k-round(0.5*nu),1):min(k+round(0.5*nu),size(KinematicsError,2))]))
         d=d+1;
     end
-    T=[T k+d]; %#ok<AGROW>
+    T=[T k+d]; 
 end
 
 end

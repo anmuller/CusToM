@@ -1,0 +1,283 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of eps2pdf</title>
+  <meta name="keywords" content="eps2pdf">
+  <meta name="description" content="EPS2PDF  Convert an eps file to pdf format using ghostscript">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- # ExternLibrary --><!-- menu.html export_fig -->
+<h1>eps2pdf
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>EPS2PDF  Convert an eps file to pdf format using ghostscript</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function eps2pdf(source, dest, crop, append, gray, quality, gs_options) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">EPS2PDF  Convert an eps file to pdf format using ghostscript
+
+ Examples:
+   eps2pdf source dest
+   eps2pdf(source, dest, crop)
+   eps2pdf(source, dest, crop, append)
+   eps2pdf(source, dest, crop, append, gray)
+   eps2pdf(source, dest, crop, append, gray, quality)
+   eps2pdf(source, dest, crop, append, gray, quality, gs_options)
+
+ This function converts an eps file to pdf format. The output can be
+ optionally cropped and also converted to grayscale. If the output pdf
+ file already exists then the eps file can optionally be appended as a new
+ page on the end of the eps file. The level of bitmap compression can also
+ optionally be set.
+
+ This function requires that you have ghostscript installed on your
+ system. Ghostscript can be downloaded from: http://www.ghostscript.com
+
+ Inputs:
+   source  - filename of the source eps file to convert. The filename is
+             assumed to already have the extension &quot;.eps&quot;.
+   dest    - filename of the destination pdf file. The filename is assumed
+             to already have the extension &quot;.pdf&quot;.
+   crop    - boolean indicating whether to crop the borders off the pdf.
+             Default: true.
+   append  - boolean indicating whether the eps should be appended to the
+             end of the pdf as a new page (if the pdf exists already).
+             Default: false.
+   gray    - boolean indicating whether the output pdf should be grayscale
+             or not. Default: false.
+   quality - scalar indicating the level of image bitmap quality to
+             output. A larger value gives a higher quality. quality &gt; 100
+             gives lossless output. Default: ghostscript prepress default.
+   gs_options - optional ghostscript options (e.g.: '-dNoOutputFonts'). If
+                multiple options are needed, enclose in call array: {'-a','-b'}</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="ghostscript.html" class="code" title="function varargout = ghostscript(cmd)">ghostscript</a>	GHOSTSCRIPT  Calls a local GhostScript executable with the input command</li><li><a href="user_string.html" class="code" title="function string = user_string(string_name, string)">user_string</a>	USER_STRING  Get/set a user specific string</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="export_fig.html" class="code" title="function [imageData, alpha] = export_fig(varargin) %#ok<*STRCL1>">export_fig</a>	EXPORT_FIG  Exports figures in a publication-quality format</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function fp = font_path()</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function eps2pdf(source, dest, crop, append, gray, quality, gs_options)</a>
+0002 <span class="comment">%EPS2PDF  Convert an eps file to pdf format using ghostscript</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Examples:</span>
+0005 <span class="comment">%   eps2pdf source dest</span>
+0006 <span class="comment">%   eps2pdf(source, dest, crop)</span>
+0007 <span class="comment">%   eps2pdf(source, dest, crop, append)</span>
+0008 <span class="comment">%   eps2pdf(source, dest, crop, append, gray)</span>
+0009 <span class="comment">%   eps2pdf(source, dest, crop, append, gray, quality)</span>
+0010 <span class="comment">%   eps2pdf(source, dest, crop, append, gray, quality, gs_options)</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% This function converts an eps file to pdf format. The output can be</span>
+0013 <span class="comment">% optionally cropped and also converted to grayscale. If the output pdf</span>
+0014 <span class="comment">% file already exists then the eps file can optionally be appended as a new</span>
+0015 <span class="comment">% page on the end of the eps file. The level of bitmap compression can also</span>
+0016 <span class="comment">% optionally be set.</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% This function requires that you have ghostscript installed on your</span>
+0019 <span class="comment">% system. Ghostscript can be downloaded from: http://www.ghostscript.com</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% Inputs:</span>
+0022 <span class="comment">%   source  - filename of the source eps file to convert. The filename is</span>
+0023 <span class="comment">%             assumed to already have the extension &quot;.eps&quot;.</span>
+0024 <span class="comment">%   dest    - filename of the destination pdf file. The filename is assumed</span>
+0025 <span class="comment">%             to already have the extension &quot;.pdf&quot;.</span>
+0026 <span class="comment">%   crop    - boolean indicating whether to crop the borders off the pdf.</span>
+0027 <span class="comment">%             Default: true.</span>
+0028 <span class="comment">%   append  - boolean indicating whether the eps should be appended to the</span>
+0029 <span class="comment">%             end of the pdf as a new page (if the pdf exists already).</span>
+0030 <span class="comment">%             Default: false.</span>
+0031 <span class="comment">%   gray    - boolean indicating whether the output pdf should be grayscale</span>
+0032 <span class="comment">%             or not. Default: false.</span>
+0033 <span class="comment">%   quality - scalar indicating the level of image bitmap quality to</span>
+0034 <span class="comment">%             output. A larger value gives a higher quality. quality &gt; 100</span>
+0035 <span class="comment">%             gives lossless output. Default: ghostscript prepress default.</span>
+0036 <span class="comment">%   gs_options - optional ghostscript options (e.g.: '-dNoOutputFonts'). If</span>
+0037 <span class="comment">%                multiple options are needed, enclose in call array: {'-a','-b'}</span>
+0038 
+0039 <span class="comment">% Copyright (C) Oliver Woodford 2009-2014, Yair Altman 2015-</span>
+0040 
+0041 <span class="comment">% Suggestion of appending pdf files provided by Matt C at:</span>
+0042 <span class="comment">% http://www.mathworks.com/matlabcentral/fileexchange/23629</span>
+0043 
+0044 <span class="comment">% Thank you to Fabio Viola for pointing out compression artifacts, leading</span>
+0045 <span class="comment">% to the quality setting.</span>
+0046 <span class="comment">% Thank you to Scott for pointing out the subsampling of very small images,</span>
+0047 <span class="comment">% which was fixed for lossless compression settings.</span>
+0048 
+0049 <span class="comment">% 09/12/11: Pass font path to ghostscript</span>
+0050 <span class="comment">% 26/02/15: If temp dir is not writable, use the dest folder for temp</span>
+0051 <span class="comment">%           destination files (Javier Paredes)</span>
+0052 <span class="comment">% 28/02/15: Enable users to specify optional ghostscript options (issue #36)</span>
+0053 <span class="comment">% 01/03/15: Upon GS error, retry without the -sFONTPATH= option (this might solve</span>
+0054 <span class="comment">%           some /findfont errors according to James Rankin, FEX Comment 23/01/15)</span>
+0055 <span class="comment">% 23/06/15: Added extra debug info in case of ghostscript error; code indentation</span>
+0056 <span class="comment">% 04/10/15: Suggest a workaround for issue #41 (missing font path; thanks Mariia Fedotenkova)</span>
+0057 <span class="comment">% 22/02/16: Bug fix from latest release of this file (workaround for issue #41)</span>
+0058 <span class="comment">% 20/03/17: Added informational message in case of GS croak (issue #186)</span>
+0059 <span class="comment">% 16/01/18: Improved appending of multiple EPS files into single PDF (issue #233; thanks @shartjen)</span>
+0060 
+0061     <span class="comment">% Intialise the options string for ghostscript</span>
+0062     options = [<span class="string">'-q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -dPDFSETTINGS=/prepress -sOutputFile=&quot;'</span> dest <span class="string">'&quot;'</span>];
+0063     <span class="comment">% Set crop option</span>
+0064     <span class="keyword">if</span> nargin &lt; 3 || crop
+0065         options = [options <span class="string">' -dEPSCrop'</span>];
+0066     <span class="keyword">end</span>
+0067     <span class="comment">% Set the font path</span>
+0068     fp = <a href="#_sub1" class="code" title="subfunction fp = font_path()">font_path</a>();
+0069     <span class="keyword">if</span> ~isempty(fp)
+0070         options = [options <span class="string">' -sFONTPATH=&quot;'</span> fp <span class="string">'&quot;'</span>];
+0071     <span class="keyword">end</span>
+0072     <span class="comment">% Set the grayscale option</span>
+0073     <span class="keyword">if</span> nargin &gt; 4 &amp;&amp; gray
+0074         options = [options <span class="string">' -sColorConversionStrategy=Gray -dProcessColorModel=/DeviceGray'</span>];
+0075     <span class="keyword">end</span>
+0076     <span class="comment">% Set the bitmap quality</span>
+0077     <span class="keyword">if</span> nargin &gt; 5 &amp;&amp; ~isempty(quality)
+0078         options = [options <span class="string">' -dAutoFilterColorImages=false -dAutoFilterGrayImages=false'</span>];
+0079         <span class="keyword">if</span> quality &gt; 100
+0080             options = [options <span class="string">' -dColorImageFilter=/FlateEncode -dGrayImageFilter=/FlateEncode -c &quot;.setpdfwrite &lt;&lt; /ColorImageDownsampleThreshold 10 /GrayImageDownsampleThreshold 10 &gt;&gt; setdistillerparams&quot;'</span>];
+0081         <span class="keyword">else</span>
+0082             options = [options <span class="string">' -dColorImageFilter=/DCTEncode -dGrayImageFilter=/DCTEncode'</span>];
+0083             v = 1 + (quality &lt; 80);
+0084             quality = 1 - quality / 100;
+0085             s = sprintf(<span class="string">'&lt;&lt; /QFactor %.2f /Blend 1 /HSample [%d 1 1 %d] /VSample [%d 1 1 %d] &gt;&gt;'</span>, quality, v, v, v, v);
+0086             options = sprintf(<span class="string">'%s -c &quot;.setpdfwrite &lt;&lt; /ColorImageDict %s /GrayImageDict %s &gt;&gt; setdistillerparams&quot;'</span>, options, s, s);
+0087         <span class="keyword">end</span>
+0088     <span class="keyword">end</span>
+0089     <span class="comment">% Enable users to specify optional ghostscript options (issue #36)</span>
+0090     <span class="keyword">if</span> nargin &gt; 6 &amp;&amp; ~isempty(gs_options)
+0091         <span class="keyword">if</span> iscell(gs_options)
+0092             gs_options = sprintf(<span class="string">' %s'</span>,gs_options{:});
+0093         <span class="keyword">elseif</span> ~ischar(gs_options)
+0094             error(<span class="string">'gs_options input argument must be a string or cell-array of strings'</span>);
+0095         <span class="keyword">else</span>
+0096             gs_options = [<span class="string">' '</span> gs_options];
+0097         <span class="keyword">end</span>
+0098         options = [options gs_options];
+0099     <span class="keyword">end</span>
+0100     <span class="comment">% Check if the output file exists</span>
+0101     <span class="keyword">if</span> nargin &gt; 3 &amp;&amp; append &amp;&amp; exist(dest, <span class="string">'file'</span>) == 2
+0102         <span class="comment">% File exists - append current figure to the end</span>
+0103         tmp_nam = [tempname <span class="string">'.pdf'</span>];
+0104         [fpath,fname,fext] = fileparts(tmp_nam);
+0105         <span class="keyword">try</span>
+0106             <span class="comment">% Ensure that the temp dir is writable (Javier Paredes 26/2/15)</span>
+0107             fid = fopen(tmp_nam,<span class="string">'w'</span>);
+0108             fwrite(fid,1);
+0109             fclose(fid);
+0110             delete(tmp_nam);
+0111         <span class="keyword">catch</span>
+0112             <span class="comment">% Temp dir is not writable, so use the dest folder</span>
+0113             fpath = fileparts(dest);
+0114             tmp_nam = fullfile(fpath,[fname fext]);
+0115         <span class="keyword">end</span>
+0116         <span class="comment">% Copy the existing (dest) pdf file to temporary folder</span>
+0117         copyfile(dest, tmp_nam);
+0118         <span class="comment">% Produce an interim pdf of the source eps, rather than adding the eps directly (issue #233)</span>
+0119         <a href="ghostscript.html" class="code" title="function varargout = ghostscript(cmd)">ghostscript</a>([options <span class="string">' -f &quot;'</span> source <span class="string">'&quot;'</span>]);
+0120         [~,fname] = fileparts(tempname);
+0121         tmp_nam2 = fullfile(fpath,[fname fext]); <span class="comment">% ensure using a writable folder (not necessarily tempdir)</span>
+0122         copyfile(dest, tmp_nam2);
+0123         <span class="comment">% Add the existing pdf and interim pdf as inputs to ghostscript</span>
+0124         <span class="comment">%options = [options ' -f &quot;' tmp_nam '&quot; &quot;' source '&quot;'];  % append the source eps to dest pdf</span>
+0125         options = [options <span class="string">' -f &quot;'</span> tmp_nam <span class="string">'&quot; &quot;'</span> tmp_nam2 <span class="string">'&quot;'</span>]; <span class="comment">% append the interim pdf to dest pdf</span>
+0126         <span class="keyword">try</span>
+0127             <span class="comment">% Convert to pdf using ghostscript</span>
+0128             [status, message] = <a href="ghostscript.html" class="code" title="function varargout = ghostscript(cmd)">ghostscript</a>(options);
+0129         <span class="keyword">catch</span> me
+0130             <span class="comment">% Delete the intermediate files and rethrow the error</span>
+0131             delete(tmp_nam);
+0132             delete(tmp_nam2);
+0133             rethrow(me);
+0134         <span class="keyword">end</span>
+0135         <span class="comment">% Delete the intermediate (temporary) files</span>
+0136         delete(tmp_nam);
+0137         delete(tmp_nam2);
+0138     <span class="keyword">else</span>
+0139         <span class="comment">% File doesn't exist or should be over-written</span>
+0140         <span class="comment">% Add the source eps file as input to ghostscript</span>
+0141         options = [options <span class="string">' -f &quot;'</span> source <span class="string">'&quot;'</span>];
+0142         <span class="comment">% Convert to pdf using ghostscript</span>
+0143         [status, message] = <a href="ghostscript.html" class="code" title="function varargout = ghostscript(cmd)">ghostscript</a>(options);
+0144     <span class="keyword">end</span>
+0145     <span class="comment">% Check for error</span>
+0146     <span class="keyword">if</span> status
+0147         <span class="comment">% Retry without the -sFONTPATH= option (this might solve some GS</span>
+0148         <span class="comment">% /findfont errors according to James Rankin, FEX Comment 23/01/15)</span>
+0149         orig_options = options;
+0150         <span class="keyword">if</span> ~isempty(fp)
+0151             options = regexprep(options, <span class="string">' -sFONTPATH=[^ ]+ '</span>,<span class="string">' '</span>);
+0152             status = <a href="ghostscript.html" class="code" title="function varargout = ghostscript(cmd)">ghostscript</a>(options);
+0153             <span class="keyword">if</span> ~status, <span class="keyword">return</span>; <span class="keyword">end</span>  <span class="comment">% hurray! (no error)</span>
+0154         <span class="keyword">end</span>
+0155         <span class="comment">% Report error</span>
+0156         <span class="keyword">if</span> isempty(message)
+0157             error(<span class="string">'Unable to generate pdf. Check destination directory is writable.'</span>);
+0158         <span class="keyword">elseif</span> ~isempty(strfind(message,<span class="string">'/typecheck in /findfont'</span>))
+0159             <span class="comment">% Suggest a workaround for issue #41 (missing font path)</span>
+0160             font_name = strtrim(regexprep(message,<span class="string">'.*Operand stack:\s*(.*)\s*Execution.*'</span>,<span class="string">'$1'</span>));
+0161             fprintf(2, <span class="string">'Ghostscript error: could not find the following font(s): %s\n'</span>, font_name);
+0162             fpath = fileparts(mfilename(<span class="string">'fullpath'</span>));
+0163             gs_fonts_file = fullfile(fpath, <span class="string">'.ignore'</span>, <span class="string">'gs_font_path.txt'</span>);
+0164             fprintf(2, <span class="string">'  try to add the font''s folder to your %s file\n\n'</span>, gs_fonts_file);
+0165             error(<span class="string">'export_fig error'</span>);
+0166         <span class="keyword">else</span>
+0167             fprintf(2, <span class="string">'\nGhostscript error: perhaps %s is open by another application\n'</span>, dest);
+0168             <span class="keyword">if</span> ~isempty(gs_options)
+0169                 fprintf(2, <span class="string">'  or maybe the%s option(s) are not accepted by your GS version\n'</span>, gs_options);
+0170             <span class="keyword">end</span>
+0171             fprintf(2, <span class="string">'  or maybe you have another gs executable in your system''s path\n'</span>);
+0172             fprintf(2, <span class="string">'Ghostscript options: %s\n\n'</span>, orig_options);
+0173             error(message);
+0174         <span class="keyword">end</span>
+0175     <span class="keyword">end</span>
+0176 <span class="keyword">end</span>
+0177 
+0178 <span class="comment">% Function to return (and create, where necessary) the font path</span>
+0179 <a name="_sub1" href="#_subfunctions" class="code">function fp = font_path()</a>
+0180     fp = <a href="user_string.html" class="code" title="function string = user_string(string_name, string)">user_string</a>(<span class="string">'gs_font_path'</span>);
+0181     <span class="keyword">if</span> ~isempty(fp)
+0182         <span class="keyword">return</span>
+0183     <span class="keyword">end</span>
+0184     <span class="comment">% Create the path</span>
+0185     <span class="comment">% Start with the default path</span>
+0186     fp = getenv(<span class="string">'GS_FONTPATH'</span>);
+0187     <span class="comment">% Add on the typical directories for a given OS</span>
+0188     <span class="keyword">if</span> ispc
+0189         <span class="keyword">if</span> ~isempty(fp)
+0190             fp = [fp <span class="string">';'</span>];
+0191         <span class="keyword">end</span>
+0192         fp = [fp getenv(<span class="string">'WINDIR'</span>) filesep <span class="string">'Fonts'</span>];
+0193     <span class="keyword">else</span>
+0194         <span class="keyword">if</span> ~isempty(fp)
+0195             fp = [fp <span class="string">':'</span>];
+0196         <span class="keyword">end</span>
+0197         fp = [fp <span class="string">'/usr/share/fonts:/usr/local/share/fonts:/usr/share/fonts/X11:/usr/local/share/fonts/X11:/usr/share/fonts/truetype:/usr/local/share/fonts/truetype'</span>];
+0198     <span class="keyword">end</span>
+0199     <a href="user_string.html" class="code" title="function string = user_string(string_name, string)">user_string</a>(<span class="string">'gs_font_path'</span>, fp);
+0200 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

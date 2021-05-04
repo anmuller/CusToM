@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of nonlcon_DynCalib1</title>
+  <meta name="keywords" content="nonlcon_DynCalib1">
+  <meta name="description" content="Non-linear constraints for the inertial calibration">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- ../menu.html Calibration --><!-- menu.html Dynamics -->
+<h1>nonlcon_DynCalib1
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Non-linear constraints for the inertial calibration</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [c,ceq] = nonlcon_DynCalib1(X,X0,Human_model,CalibOptiParameters,list_symmetry) %#ok<INUSD> </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Non-linear constraints for the inertial calibration
+   It corresponds to the limitation of the variation of the global mass
+
+   INPUT
+   - X: optimization variables (geometrical parameters of the stadium
+   solids)
+   - X0: initial solution
+   - Human_model: osteo-articular model (see the Documentation for the
+   structure) 
+   - CalibOptiParameters: calibration parameters (coefficient of
+   variation)
+   - list_symmetry: list of symmetric solids
+   OUTPUT
+   - c: non-linear inequality constraints
+   - ceq: non-linear equality constraints
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="DynParametersComputation.html" class="code" title="function [Masse,Zc,Ix,Iy,Iz] = DynParametersComputation(D,r0,t0,r1,t1,h)">DynParametersComputation</a>	Computation of the inertial parameters of a stadium solid from its geometrical parameters</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="DynCalibOptimization.html" class="code" title="function [Human_model] = DynCalibOptimization(ModelParameters, AnalysisParameters, BiomechanicalModel)">DynCalibOptimization</a>	Calibration of the inertial parameters</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [c,ceq] = nonlcon_DynCalib1(X,X0,Human_model,CalibOptiParameters,list_symmetry) </a><span class="comment">%#ok&lt;INUSD&gt;</span>
+0002 <span class="comment">% Non-linear constraints for the inertial calibration</span>
+0003 <span class="comment">%   It corresponds to the limitation of the variation of the global mass</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   INPUT</span>
+0006 <span class="comment">%   - X: optimization variables (geometrical parameters of the stadium</span>
+0007 <span class="comment">%   solids)</span>
+0008 <span class="comment">%   - X0: initial solution</span>
+0009 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the</span>
+0010 <span class="comment">%   structure)</span>
+0011 <span class="comment">%   - CalibOptiParameters: calibration parameters (coefficient of</span>
+0012 <span class="comment">%   variation)</span>
+0013 <span class="comment">%   - list_symmetry: list of symmetric solids</span>
+0014 <span class="comment">%   OUTPUT</span>
+0015 <span class="comment">%   - c: non-linear inequality constraints</span>
+0016 <span class="comment">%   - ceq: non-linear equality constraints</span>
+0017 <span class="comment">%________________________________________________________</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% Licence</span>
+0020 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0021 <span class="comment">%________________________________________________________</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0024 <span class="comment">% Georges Dumont</span>
+0025 <span class="comment">%________________________________________________________</span>
+0026 
+0027 ceq = [];
+0028 c = [];
+0029 
+0030 Masstot = 0;
+0031 Masstot0 = 0;
+0032 
+0033 num_i=0;
+0034 <span class="keyword">for</span> i = 1 : numel(Human_model)
+0035     <span class="keyword">if</span> numel(Human_model(i).L) ~= 0
+0036         num_i = num_i+1;
+0037         [Masse,Zc]=<a href="DynParametersComputation.html" class="code" title="function [Masse,Zc,Ix,Iy,Iz] = DynParametersComputation(D,r0,t0,r1,t1,h)">DynParametersComputation</a>(1000,X(4*(num_i-1)+1),X(4*(num_i-1)+3),X(4*(num_i-1)+2),X(4*(num_i-1)+4),Human_model(i).ParamAnthropo.h);
+0038         [Masse0,Zc0]=<a href="DynParametersComputation.html" class="code" title="function [Masse,Zc,Ix,Iy,Iz] = DynParametersComputation(D,r0,t0,r1,t1,h)">DynParametersComputation</a>(1000,X0(4*(num_i-1)+1),X0(4*(num_i-1)+3),X0(4*(num_i-1)+2),X0(4*(num_i-1)+4),Human_model(i).ParamAnthropo.h);
+0039         Masstot = Masstot + Masse;
+0040         Masstot0 = Masstot0 + Masse0;
+0041      <span class="keyword">end</span>
+0042 <span class="keyword">end</span>
+0043 
+0044 <span class="keyword">if</span> CalibOptiParameters.DeltaM ~= Inf
+0045     c = [c; abs(Masstot-Masstot0)-CalibOptiParameters.DeltaM*Masstot0]; <span class="comment">% abs(m-m0)&lt;0.05*m0</span>
+0046 <span class="keyword">end</span>
+0047 
+0048 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

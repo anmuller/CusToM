@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of derivee2</title>
+  <meta name="keywords" content="derivee2">
+  <meta name="description" content="2-order numerical derivative">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html AlgoMathsModel -->
+<h1>derivee2
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>2-order numerical derivative</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function yp=derivee2(h,y) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> 2-order numerical derivative
+
+   INPUT
+   - h: time step
+   - y: input data
+   OUTPUT
+   - yp: output filtered data
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Functions/Calibration/Dynamics/DynCalibOptimization.html" class="code" title="function [Human_model] = DynCalibOptimization(ModelParameters, AnalysisParameters, BiomechanicalModel)">DynCalibOptimization</a>	Calibration of the inertial parameters</li><li><a href="../../Functions/Developments/ComplementaryData/BaseOfSupport.html" class="code" title="function [] = BaseOfSupport(AnalysisParameters)">BaseOfSupport</a>	Computation of the base of support</li><li><a href="../../Functions/Dynamics/InverseDynamics.html" class="code" title="function []=InverseDynamics(AnalysisParameters)">InverseDynamics</a>	Computation of the inverse dynamics step</li><li><a href="../../Functions/Dynamics/Kinetics.html" class="code" title="function []=Kinetics(AnalysisParameters,KinType)">Kinetics</a>	Computation of the kinetic energy</li><li><a href="../../Functions/ExternalForces/ExternalForcesPrediction.html" class="code" title="function [ExternalForcesComputationResults] = ExternalForcesPrediction(filename, AnalysisParameters, BiomechanicalModel, ModelParameters)">ExternalForcesPrediction</a>	Prediction of ground reaction forces</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function yp=derivee2(h,y)</a>
+0002 <span class="comment">% 2-order numerical derivative</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - h: time step</span>
+0006 <span class="comment">%   - y: input data</span>
+0007 <span class="comment">%   OUTPUT</span>
+0008 <span class="comment">%   - yp: output filtered data</span>
+0009 <span class="comment">%________________________________________________________</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% Licence</span>
+0012 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0013 <span class="comment">%________________________________________________________</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0016 <span class="comment">% Georges Dumont</span>
+0017 <span class="comment">%________________________________________________________</span>
+0018 
+0019 k=size(y);<span class="comment">%Size of vector y (or of matrix i y is a matrix)</span>
+0020 n=k(1);<span class="comment">% Numbre of samples</span>
+0021 <span class="keyword">for</span> i=1:k(2)
+0022     yp(1,i)=(-y(3,i)+4*y(2,i)-3*y(1,i))/(2*h); <span class="comment">% for the first term a forward 2nd order difference is used</span>
+0023     yp(n,i)=(3*y(n,i)-4*y(n-1,i)+y(n-2,i))/(2*h); <span class="comment">% for the last terme, a backward 2nd order differenece is used</span>
+0024     yp(2:n-1,i) = (y(3:n,i)-y(1:n-2,i))/(2*h);<span class="comment">% for other terms, a 2nd order difference is used</span>
+0025 <span class="keyword">end</span>
+0026 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of C3dProcessedData</title>
+  <meta name="keywords" content="C3dProcessedData">
+  <meta name="description" content="Extraction of experimental data in a processed c3d">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- ../menu.html DataImport --><!-- menu.html InputDataImport -->
+<h1>C3dProcessedData
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Extraction of experimental data in a processed c3d</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [real_markers, nb_frame, Firstframe, Lastframe, f, list_missing_markers_in_c3d]=C3dProcessedData(filename, list_markers, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Extraction of experimental data in a processed c3d
+   
+   INPUT
+   - filename: name of the file to process (character string)
+   - list_markers: list of the marker names
+   OUTPUT
+   - real_markers: 3D position of experimental markers
+   - nb_frame: number of frames
+   - Firstframe: number of the first frame
+   - Lastframe: number of the last frame
+   - f: acquisition frequency
+   - list_missing_markers_in_c3d: list of marker name which are missing in
+   the c3d file
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Functions/BTK/linux64/@Common/btkGetFirstFrame.html" class="code" title="function ff = btkGetFirstFrame(h) %#ok">btkGetFirstFrame</a>	BTKGETFIRSTFRAME Returns acquisition's first frame index.</li><li><a href="../../../Functions/BTK/linux64/@Common/btkGetMarkers.html" class="code" title="function [markers markersInfo] = btkGetMarkers(h) %#ok">btkGetMarkers</a>	BTKGETMARKERS Extract markers from a biomechanical acquisition</li><li><a href="../../../Functions/BTK/linux64/@Common/btkGetMarkersValues.html" class="code" title="function v = btkGetMarkersValues(h) %#ok">btkGetMarkersValues</a>	BTKGETMARKERSVALUES Extract markers' coordinates and store them in a matrix</li><li><a href="../../../Functions/BTK/linux64/@Common/btkGetMetaData.html" class="code" title="function btkGetMetaData(h) %#ok">btkGetMetaData</a>	btkGetMetaData Extract acquisition's metadata</li><li><a href="../../../Functions/BTK/linux64/@IO/btkReadAcquisition.html" class="code" title="function h = btkReadAcquisition(filename) %#ok">btkReadAcquisition</a>	BTKREADACQUISITION Read an acquisition's file (C3D, TRC, ...)</li><li><a href="../../../Functions/BTK/linux64/btkGetLastFrame.html" class="code" title="function lf = btkGetLastFrame(h) %#ok">btkGetLastFrame</a>	BTKGETLASTFRAME Returns acquisition's last frame index.</li><li><a href="../../../Functions/BTK/mac64/@Common/btkGetFirstFrame.html" class="code" title="function ff = btkGetFirstFrame(h) %#ok">btkGetFirstFrame</a>	BTKGETFIRSTFRAME Returns acquisition's first frame index.</li><li><a href="../../../Functions/BTK/mac64/@Common/btkGetMarkers.html" class="code" title="function [markers markersInfo] = btkGetMarkers(h) %#ok">btkGetMarkers</a>	BTKGETMARKERS Extract markers from a biomechanical acquisition</li><li><a href="../../../Functions/BTK/mac64/@Common/btkGetMarkersValues.html" class="code" title="function v = btkGetMarkersValues(h) %#ok">btkGetMarkersValues</a>	BTKGETMARKERSVALUES Extract markers' coordinates and store them in a matrix</li><li><a href="../../../Functions/BTK/mac64/@Common/btkGetMetaData.html" class="code" title="function btkGetMetaData(h) %#ok">btkGetMetaData</a>	btkGetMetaData Extract acquisition's metadata</li><li><a href="../../../Functions/BTK/mac64/@IO/btkReadAcquisition.html" class="code" title="function h = btkReadAcquisition(filename) %#ok">btkReadAcquisition</a>	BTKREADACQUISITION Read an acquisition's file (C3D, TRC, ...)</li><li><a href="../../../Functions/BTK/mac64/btkGetLastFrame.html" class="code" title="function lf = btkGetLastFrame(h) %#ok">btkGetLastFrame</a>	BTKGETLASTFRAME Returns acquisition's last frame index.</li><li><a href="../../../Functions/BTK/win64/@Common/btkGetFirstFrame.html" class="code" title="function ff = btkGetFirstFrame(h) %#ok">btkGetFirstFrame</a>	BTKGETFIRSTFRAME Returns acquisition's first frame index.</li><li><a href="../../../Functions/BTK/win64/@Common/btkGetMarkers.html" class="code" title="function [markers markersInfo] = btkGetMarkers(h) %#ok">btkGetMarkers</a>	BTKGETMARKERS Extract markers from a biomechanical acquisition</li><li><a href="../../../Functions/BTK/win64/@Common/btkGetMarkersValues.html" class="code" title="function v = btkGetMarkersValues(h) %#ok">btkGetMarkersValues</a>	BTKGETMARKERSVALUES Extract markers' coordinates and store them in a matrix</li><li><a href="../../../Functions/BTK/win64/@Common/btkGetMetaData.html" class="code" title="function btkGetMetaData(h) %#ok">btkGetMetaData</a>	btkGetMetaData Extract acquisition's metadata</li><li><a href="../../../Functions/BTK/win64/@IO/btkReadAcquisition.html" class="code" title="function h = btkReadAcquisition(filename) %#ok">btkReadAcquisition</a>	BTKREADACQUISITION Read an acquisition's file (C3D, TRC, ...)</li><li><a href="../../../Functions/BTK/win64/btkGetLastFrame.html" class="code" title="function lf = btkGetLastFrame(h) %#ok">btkGetLastFrame</a>	BTKGETLASTFRAME Returns acquisition's last frame index.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [real_markers, nb_frame, Firstframe, Lastframe, f, list_missing_markers_in_c3d]=C3dProcessedData(filename, list_markers, varargin)</a>
+0002 <span class="comment">% Extraction of experimental data in a processed c3d</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - filename: name of the file to process (character string)</span>
+0006 <span class="comment">%   - list_markers: list of the marker names</span>
+0007 <span class="comment">%   OUTPUT</span>
+0008 <span class="comment">%   - real_markers: 3D position of experimental markers</span>
+0009 <span class="comment">%   - nb_frame: number of frames</span>
+0010 <span class="comment">%   - Firstframe: number of the first frame</span>
+0011 <span class="comment">%   - Lastframe: number of the last frame</span>
+0012 <span class="comment">%   - f: acquisition frequency</span>
+0013 <span class="comment">%   - list_missing_markers_in_c3d: list of marker name which are missing in</span>
+0014 <span class="comment">%   the c3d file</span>
+0015 <span class="comment">%________________________________________________________</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% Licence</span>
+0018 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0019 <span class="comment">%________________________________________________________</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0022 <span class="comment">% Georges Dumont</span>
+0023 <span class="comment">%________________________________________________________</span>
+0024 
+0025 warning(<span class="string">'off'</span>, <span class="string">'btk:ReadAcquisition'</span>);
+0026 h = <a href="../../../Functions/BTK/linux64/@IO/btkReadAcquisition.html" class="code" title="function h = btkReadAcquisition(filename) %#ok">btkReadAcquisition</a>([char(filename) <span class="string">'.c3d'</span>]);
+0027 [markers,markersInfo]=<a href="../../../Functions/BTK/linux64/@Common/btkGetMarkers.html" class="code" title="function [markers markersInfo] = btkGetMarkers(h) %#ok">btkGetMarkers</a>(h);
+0028 v=<a href="../../../Functions/BTK/linux64/@Common/btkGetMarkersValues.html" class="code" title="function v = btkGetMarkersValues(h) %#ok">btkGetMarkersValues</a>(h);
+0029 
+0030 f=markersInfo.frequency;  <span class="comment">% frequency</span>
+0031 
+0032 Firstframe=<a href="../../../Functions/BTK/linux64/@Common/btkGetFirstFrame.html" class="code" title="function ff = btkGetFirstFrame(h) %#ok">btkGetFirstFrame</a>(h); <span class="comment">% first frame</span>
+0033 Lastframe=<a href="../../../Functions/BTK/linux64/btkGetLastFrame.html" class="code" title="function lf = btkGetLastFrame(h) %#ok">btkGetLastFrame</a>(h); <span class="comment">% last frame</span>
+0034 nb_frame=Lastframe-Firstframe+1;  <span class="comment">% frames count</span>
+0035 
+0036 prefixInfo = <a href="../../../Functions/BTK/linux64/@Common/btkGetMetaData.html" class="code" title="function btkGetMetaData(h) %#ok">btkGetMetaData</a>(h);
+0037 <span class="comment">% prefix = [prefixInfo.children.SUBJECTS.children.NAMES.info.values{1} '_'];</span>
+0038 
+0039 ListMarkersName = fieldnames(markers);
+0040 
+0041 real_markers=struct;
+0042 list_m_bis=cell(1,1);
+0043 list_m_table=cell(1,1);
+0044 
+0045 <span class="comment">%prefixInfo.children.SUBJECTS_2.children.NAMES.info.values</span>
+0046 <span class="comment">% Creation of a table with all combinations of marker names</span>
+0047 <span class="comment">% with all the prefixes available in the c3d.</span>
+0048 <span class="comment">%testing all &quot;subjects&quot; fields</span>
+0049 
+0050 <span class="comment">%% old way for versioning</span>
+0051 <span class="comment">% s1='SUBJECTS';</span>
+0052 <span class="comment">% nb_pref=0;</span>
+0053 <span class="comment">% i=2;</span>
+0054 <span class="comment">% if isfield(prefixInfo.children, s1)</span>
+0055 <span class="comment">%     %int�rer test &quot;SUBJECTS_XXX&quot;</span>
+0056 <span class="comment">%</span>
+0057 <span class="comment">% nb_pref=length(prefixInfo.children.SUBJECTS.children.NAMES.info.values)+1;</span>
+0058 <span class="comment">% else</span>
+0059 <span class="comment">% nb_pref=1;</span>
+0060 <span class="comment">% end</span>
+0061     
+0062 <span class="comment">%% new way</span>
+0063 
+0064 prefix{1} = [];<span class="comment">%markers without prefix</span>
+0065 
+0066 <span class="comment">%finding all the subjects in which prefixes are hidden</span>
+0067 j=1;
+0068 k=1;
+0069 s1=<span class="string">'SUBJECTS'</span>;
+0070 cal=<span class="string">'prefixInfo.children.%s.children.NAMES.info.values'</span>;
+0071 <span class="keyword">if</span> isfield(prefixInfo.children, s1)
+0072     i=1;
+0073 <span class="keyword">while</span> i&lt;=length(prefixInfo.children.SUBJECTS.children.NAMES.info.values)
+0074     prefix{j+1} = [prefixInfo.children.SUBJECTS.children.NAMES.info.values{i} <span class="string">'_'</span>];
+0075     i=i+1;
+0076     j=j+1;
+0077 <span class="keyword">end</span>
+0078 <span class="keyword">end</span>
+0079 
+0080 <span class="comment">%% additional subjects fields</span>
+0081 s=strcat(s1,<span class="string">'_'</span>,num2str(k+1));
+0082 <span class="keyword">while</span> isfield(prefixInfo.children, s)
+0083     i=1;
+0084         cal2=sprintf(cal,s);
+0085         w=eval(cal2);
+0086 <span class="keyword">for</span> i=1:length(w)
+0087     <span class="keyword">if</span> ~any(strcmp(prefix,[w{i} <span class="string">'_'</span>]))
+0088     prefix{j+1} = [w{i} <span class="string">'_'</span>];
+0089     j=j+1;
+0090     <span class="keyword">end</span>
+0091 <span class="keyword">end</span>
+0092 k=k+1;
+0093 s=strcat(s1,<span class="string">'_'</span>,num2str(k+1));
+0094 <span class="keyword">end</span>
+0095 
+0096 <span class="comment">%% constituting marker names with prefixes</span>
+0097 
+0098 nb_pref=length(prefix);
+0099 
+0100 <span class="keyword">for</span> i_pref=1:nb_pref
+0101 
+0102     <span class="keyword">for</span> j=1:length(list_markers)
+0103         list_m_table{i_pref,j} = list_markers{j};
+0104         list_m_bis{i_pref,j} = strcat(prefix{i_pref},list_markers{j}); <span class="comment">% toutes les combinaisons de noms de marqueurs possibles (all combinations of possible markers names)</span>
+0105     <span class="keyword">end</span>
+0106 <span class="keyword">end</span>
+0107 
+0108 <span class="comment">%% Which markers are present within all the combination ?</span>
+0109 [list_marker_c3d,Ia,~]=intersect(list_m_bis,ListMarkersName,<span class="string">'stable'</span>);
+0110 
+0111 <span class="keyword">for</span> ii=1:length(list_marker_c3d)
+0112     real_markers(ii).name=list_m_table(Ia(ii));
+0113     real_markers(ii).position_c3d=markers.(list_marker_c3d{ii})/1000;
+0114     real_markers(ii).Occluded=find(real_markers(ii).position_c3d(:,1)==0);
+0115     real_markers(ii).IsOccluded=~isempty(real_markers(ii).Occluded);
+0116 <span class="keyword">end</span>
+0117 
+0118 <span class="keyword">if</span> ~isempty(cat(1,real_markers.Occluded))
+0119     warning([<span class="string">'A least one marker is occluded in '</span> filename <span class="string">', occluded markers :'</span>])
+0120     disp([real_markers(cat(1,real_markers.IsOccluded)).name]')
+0121 <span class="keyword">end</span>
+0122 
+0123 [list_missing_markers_in_c3d]=setdiff(list_markers,[real_markers.name]');
+0124 
+0125 <span class="keyword">if</span> ~isempty(list_missing_markers_in_c3d)
+0126 disp([<span class="string">'Markerset have not been extracted enterely from the .c3d file, missing markers : '</span> ;list_missing_markers_in_c3d])
+0127 <span class="keyword">end</span>
+0128 
+0129 <span class="comment">%% creating time</span>
+0130 <span class="keyword">for</span> i=1:numel(real_markers)
+0131     real_markers(i).time=[0:(1/f):(nb_frame-1)/f]'; <span class="comment">%#ok&lt;NBRAK&gt;</span>
+0132 <span class="keyword">end</span>
+0133 
+0134 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -18,7 +18,7 @@ function [L] = MuscleLengthComputationNum(BiomechanicalModel,q)
 Human_model=BiomechanicalModel.OsteoArticularModel;
 Muscles=BiomechanicalModel.Muscles;
 Muscles_list = [Muscles.exist];
-nmr=size(Muscles_list,2);
+nmr=sum(Muscles_list);
 %% Compute muscle lengths at current frame
 % The current muscle lengths are important for the muscle force computation
 L = ones(nmr,1);

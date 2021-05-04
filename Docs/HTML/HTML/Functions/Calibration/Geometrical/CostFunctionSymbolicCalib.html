@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of CostFunctionSymbolicCalib</title>
+  <meta name="keywords" content="CostFunctionSymbolicCalib">
+  <meta name="description" content="Cost function used for the geometrical calibration step">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- ../menu.html Calibration --><!-- menu.html Geometrical -->
+<h1>CostFunctionSymbolicCalib
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Cost function used for the geometrical calibration step</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [error] = CostFunctionSymbolicCalib(q,k,Human_model,real_markers,f,list_function,list_function_markers,Pelvis_position,Pelvis_rotation,Rcut,pcut) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Cost function used for the geometrical calibration step
+   
+   INPUT
+   - q: vector of joint coordinates at a given instant
+   - k: vector of homothety coefficient
+   - Human_model: osteo-articular model (see the Documentation for the
+   structure) 
+   - real_markers: 3D position of experimental markers
+   - f: current frame
+   - list_function: list of functions used for the evaluation of the
+   geometrical cuts position 
+   - list_function_markers: list of functions used for the evaluation of the
+   markers position 
+   - Pelvis_position: position of the pelvis at the considered instant
+   - Pelvis_rotation: rotation of the pelvis at the considered instant
+   - Rcut: pre-initialization of Rcut
+   - pcut: pre-initialization of pcut
+   OUTPUT
+   - error: cost function value
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="GeometricalCalibration.html" class="code" title="function [Human_model_calib, calib_parameters, Markers_set] = GeometricalCalibration(OsteoArticularModel, Markers_set, AnalysisParameters)">GeometricalCalibration</a>	Calibration of the geometrical parameters</li><li><a href="OptCalibrationSymbolic.html" class="code" title="function [error] = OptCalibrationSymbolic(q,k,Human_model,real_markers,nb_frame,list_function,list_function_markers,Pelvis_position,Pelvis_rotation,Rcut,pcut)">OptCalibrationSymbolic</a>	Cost function used for the calibration of the geometrical parameters</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [error] = CostFunctionSymbolicCalib(q,k,Human_model,real_markers,f,list_function,list_function_markers,Pelvis_position,Pelvis_rotation,Rcut,pcut)</a>
+0002 <span class="comment">% Cost function used for the geometrical calibration step</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - q: vector of joint coordinates at a given instant</span>
+0006 <span class="comment">%   - k: vector of homothety coefficient</span>
+0007 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the</span>
+0008 <span class="comment">%   structure)</span>
+0009 <span class="comment">%   - real_markers: 3D position of experimental markers</span>
+0010 <span class="comment">%   - f: current frame</span>
+0011 <span class="comment">%   - list_function: list of functions used for the evaluation of the</span>
+0012 <span class="comment">%   geometrical cuts position</span>
+0013 <span class="comment">%   - list_function_markers: list of functions used for the evaluation of the</span>
+0014 <span class="comment">%   markers position</span>
+0015 <span class="comment">%   - Pelvis_position: position of the pelvis at the considered instant</span>
+0016 <span class="comment">%   - Pelvis_rotation: rotation of the pelvis at the considered instant</span>
+0017 <span class="comment">%   - Rcut: pre-initialization of Rcut</span>
+0018 <span class="comment">%   - pcut: pre-initialization of pcut</span>
+0019 <span class="comment">%   OUTPUT</span>
+0020 <span class="comment">%   - error: cost function value</span>
+0021 <span class="comment">%________________________________________________________</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% Licence</span>
+0024 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0025 <span class="comment">%________________________________________________________</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0028 <span class="comment">% Georges Dumont</span>
+0029 <span class="comment">%________________________________________________________</span>
+0030 
+0031 <span class="keyword">for</span> c=1:max([Human_model.KinematicsCut])
+0032     [Rcut(:,:,c),pcut(:,:,c)]=<span class="keyword">...</span>
+0033         list_function{c}(Pelvis_position,Pelvis_rotation,q,k,pcut,Rcut);
+0034 <span class="keyword">end</span>
+0035 
+0036 nb_mk=numel(list_function_markers);
+0037 
+0038 e=zeros(nb_mk,1);
+0039 <span class="keyword">for</span> m=1:nb_mk
+0040     e(m,1)= norm(list_function_markers{m}<span class="keyword">...</span>
+0041         (Pelvis_position,Pelvis_rotation,q,k,<span class="keyword">...</span>
+0042         pcut,Rcut) - real_markers(m).position(f,:)') ;    
+0043 <span class="keyword">end</span>
+0044 
+0045 W=eye(nb_mk); <span class="comment">%Weighted markers each markers are weighted by one</span>
+0046 error=e'*W*e;
+0047 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

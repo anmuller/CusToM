@@ -1,0 +1,9 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+
+  UpperTrunk [URL="UpperTrunk.html"];
+  UpperTrunkClavicle [URL="UpperTrunkClavicle.html"];
+  UpperTrunkHead [URL="UpperTrunkHead.html"];
+  UpperTrunkShoulder [URL="UpperTrunkShoulder.html"];
+  torso_gait2354 [URL="torso_gait2354.html"];
+}
