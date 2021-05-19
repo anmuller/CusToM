@@ -1,0 +1,324 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of cFigure</title>
+  <meta name="keywords" content="cFigure">
+  <meta name="description" content="function [h]=cFigure(figStruct)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html Functions --><!-- # ExternLibrary --><!-- # GIBBON --><!-- menu.html functions -->
+<h1>cFigure
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [h]=cFigure(figStruct)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [varargout]=cFigure(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> function [h]=cFigure(figStruct)
+ ------------------------------------------------------------------------
+ Creates a custom figure using the input structure figStruct. The cFigure
+ function provides easy control of background color, the color
+ definitions, the figure window size (e.g. near maximal), and enables
+ figure property cloning. It also allows users to create hidden figures
+ which can be made visible for instance using the mfv command.
+
+ The content of figStruct may follow all properties of a normal figure
+ i.e. such that figStruct=figure. Which could lead to (amonst other
+ properties):
+
+ figStruct=figure
+
+   Figure (1) with properties:
+
+       Number: 10
+         Name: ''
+        Color: [0.9400 0.9400 0.9400]
+     Position: [680 558 560 420]
+        Units: 'pixels'
+
+ figStruct used to be a handle in which case its use in this function
+ involves the set command e.g.: set(h,'outerPosition',[a b c d]);
+ For newer MATLAB versions however the cFigure function uses a different
+ but equivalent syntax i.e.:
+ h.outerPosition=[a b c d];
+
+ Some additional fields can be added that are not normally part of the
+ figure property set: ColorDef and ScreenOffset.
+ ColorDef sets the color definition which is either 'white' or 'black'.
+ This allows the user to select a dark background and appropriately set
+ the colorscheme for it e.g. for a black background:
+         figStruct.ColorDef='black';
+         figStruct.Color='k';
+ Where the Color property sets the figure background color while the
+ ColorDef property sets the colorscheme used (of axes etc.).
+ By default cFigure creates figures that are the full screensize but
+ reduced 10% away from the edges. The spacing between the figure window
+ and the screen edges is set by the figStruct.ScreenOffset property. The
+ units are pixels.
+
+ See also: figure, set, get, colordef, mfv, scf
+
+ Kevin Mattheus Moerman
+ gibbon.toolbox@gmail.com
+
+ Change log:
+ 2014/11/25 Created
+ 2015/04/15 Added <a href="vcw.html" class="code" title="function [varargout]=vcw(varargin)">vcw</a> functionality
+ 2018/02/02 Fixed bug in relation to groot units (e.g. figure size is
+ wrong if units are not pixels).
+ 2018/12/05 Updated figure size handling which now accepts either a
+ screen offset or a scaling factor.
+ 2018/12/19 Fixed bug to handle when both offset and scaling are specified
+
+ To do:
+ Check handling of multiple screens for figure size setting
+------------------------------------------------------------------------</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="efw.html" class="code" title="function efw(varargin)">efw</a>	function efw(hf)</li><li><a href="structComplete.html" class="code" title="function [C]=structComplete(A,B,emptyFixOpt)">structComplete</a>	function [C]=structComplete(A,B,emptyFixOpt)</li><li><a href="vcw.html" class="code" title="function [varargout]=vcw(varargin)">vcw</a>	function vcw(hf,buttonOpt)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Functions/Animation/PlotAnimation.html" class="code" title="function [varargout] = PlotAnimation(ModelParameters, AnimateParameters)">PlotAnimation</a>	Generation of an animation</li><li><a href="../../../../Functions/Animation/ViewTheModel.html" class="code" title="">ViewTheModel</a>	View the model defined with Model Parameters</li><li><a href="../../../../Functions/Developments/WrappingScriptTests.html" class="code" title="">WrappingScriptTests</a>	Verification of the wrapping for sphere problems</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [varargout]=cFigure(varargin)</a>
+0002 
+0003 <span class="comment">% function [h]=cFigure(figStruct)</span>
+0004 <span class="comment">% ------------------------------------------------------------------------</span>
+0005 <span class="comment">% Creates a custom figure using the input structure figStruct. The cFigure</span>
+0006 <span class="comment">% function provides easy control of background color, the color</span>
+0007 <span class="comment">% definitions, the figure window size (e.g. near maximal), and enables</span>
+0008 <span class="comment">% figure property cloning. It also allows users to create hidden figures</span>
+0009 <span class="comment">% which can be made visible for instance using the mfv command.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% The content of figStruct may follow all properties of a normal figure</span>
+0012 <span class="comment">% i.e. such that figStruct=figure. Which could lead to (amonst other</span>
+0013 <span class="comment">% properties):</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% figStruct=figure</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%   Figure (1) with properties:</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%       Number: 10</span>
+0020 <span class="comment">%         Name: ''</span>
+0021 <span class="comment">%        Color: [0.9400 0.9400 0.9400]</span>
+0022 <span class="comment">%     Position: [680 558 560 420]</span>
+0023 <span class="comment">%        Units: 'pixels'</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">% figStruct used to be a handle in which case its use in this function</span>
+0026 <span class="comment">% involves the set command e.g.: set(h,'outerPosition',[a b c d]);</span>
+0027 <span class="comment">% For newer MATLAB versions however the cFigure function uses a different</span>
+0028 <span class="comment">% but equivalent syntax i.e.:</span>
+0029 <span class="comment">% h.outerPosition=[a b c d];</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">% Some additional fields can be added that are not normally part of the</span>
+0032 <span class="comment">% figure property set: ColorDef and ScreenOffset.</span>
+0033 <span class="comment">% ColorDef sets the color definition which is either 'white' or 'black'.</span>
+0034 <span class="comment">% This allows the user to select a dark background and appropriately set</span>
+0035 <span class="comment">% the colorscheme for it e.g. for a black background:</span>
+0036 <span class="comment">%         figStruct.ColorDef='black';</span>
+0037 <span class="comment">%         figStruct.Color='k';</span>
+0038 <span class="comment">% Where the Color property sets the figure background color while the</span>
+0039 <span class="comment">% ColorDef property sets the colorscheme used (of axes etc.).</span>
+0040 <span class="comment">% By default cFigure creates figures that are the full screensize but</span>
+0041 <span class="comment">% reduced 10% away from the edges. The spacing between the figure window</span>
+0042 <span class="comment">% and the screen edges is set by the figStruct.ScreenOffset property. The</span>
+0043 <span class="comment">% units are pixels.</span>
+0044 <span class="comment">%</span>
+0045 <span class="comment">% See also: figure, set, get, colordef, mfv, scf</span>
+0046 <span class="comment">%</span>
+0047 <span class="comment">% Kevin Mattheus Moerman</span>
+0048 <span class="comment">% gibbon.toolbox@gmail.com</span>
+0049 <span class="comment">%</span>
+0050 <span class="comment">% Change log:</span>
+0051 <span class="comment">% 2014/11/25 Created</span>
+0052 <span class="comment">% 2015/04/15 Added vcw functionality</span>
+0053 <span class="comment">% 2018/02/02 Fixed bug in relation to groot units (e.g. figure size is</span>
+0054 <span class="comment">% wrong if units are not pixels).</span>
+0055 <span class="comment">% 2018/12/05 Updated figure size handling which now accepts either a</span>
+0056 <span class="comment">% screen offset or a scaling factor.</span>
+0057 <span class="comment">% 2018/12/19 Fixed bug to handle when both offset and scaling are specified</span>
+0058 <span class="comment">%</span>
+0059 <span class="comment">% To do:</span>
+0060 <span class="comment">% Check handling of multiple screens for figure size setting</span>
+0061 <span class="comment">%------------------------------------------------------------------------</span>
+0062 
+0063 <span class="comment">%% Parse input and set defaults</span>
+0064 
+0065 <span class="comment">%Force groot units to be pixels</span>
+0066 graphicalRoot=groot;
+0067 grootUnits=graphicalRoot.Units;
+0068 <span class="keyword">if</span> ~strcmp(grootUnits,<span class="string">'pixels'</span>)
+0069     graphicalRoot.Units=<span class="string">'pixels'</span>;
+0070 <span class="keyword">end</span>
+0071 screenSizeGroot = graphicalRoot.ScreenSize(3:4); <span class="comment">%Get screen widht and height</span>
+0072 
+0073 <span class="comment">%Default settings</span>
+0074 defaultFigStruct.Visible=<span class="string">'on'</span>;
+0075 defaultFigStruct.ColorDef=<span class="string">'white'</span>;
+0076 defaultFigStruct.Color=<span class="string">'w'</span>;
+0077 defaultFigStruct.ScreenScale=0.85; <span class="comment">%Figure size is based on scaled screensize</span>
+0078 <span class="comment">% defaultFigStruct.ScreenOffset=round(max(screenSizeGroot)*0.1); %i.e. figures are spaced around 10% of the sreensize from the edges</span>
+0079 defaultFigStruct.Clipping=<span class="string">'off'</span>;
+0080 defaultFigStruct.efw=1;
+0081 defaultFigStruct.vcw={<span class="string">'pan'</span>,<span class="string">'rot'</span>,<span class="string">'zoomz'</span>,<span class="string">'zoomz'</span>};
+0082 
+0083 <span class="keyword">switch</span> nargin
+0084     <span class="keyword">case</span> 0
+0085        figStruct=[]; <span class="comment">%Use default</span>
+0086     <span class="keyword">case</span> 1        
+0087         figStruct=varargin{1}; <span class="comment">%Use custom</span>
+0088 <span class="keyword">end</span>
+0089 
+0090 <span class="comment">%Fix option structure, complete and remove empty values</span>
+0091 [figStruct]=<a href="structComplete.html" class="code" title="function [C]=structComplete(A,B,emptyFixOpt)">structComplete</a>(figStruct,defaultFigStruct,1);
+0092 
+0093 <span class="comment">%Get export figure option and remove field</span>
+0094 efwOpt=figStruct.efw;
+0095 figStruct=rmfield(figStruct,<span class="string">'efw'</span>); <span class="comment">%Remove field from structure array</span>
+0096 
+0097 <span class="comment">%Get view control widget options and remove field</span>
+0098 vcwOpt=figStruct.vcw;
+0099 figStruct=rmfield(figStruct,<span class="string">'vcw'</span>); <span class="comment">%Remove field from structure array</span>
+0100             
+0101 <span class="comment">%%</span>
+0102 
+0103 isOld=verLessThan(<span class="string">'matlab'</span>, <span class="string">'8.4.0.150421 (R2014b)'</span>);
+0104 
+0105 <span class="comment">%% Create a hidden figure</span>
+0106 hf = figure(<span class="string">'Visible'</span>, <span class="string">'off'</span>); <span class="comment">%create an invisible figure</span>
+0107 
+0108 <span class="comment">%% Setcolor definition and associated defaults</span>
+0109 hf=colordef(hf,figStruct.ColorDef); <span class="comment">%Update figure handle</span>
+0110 figStruct=rmfield(figStruct,<span class="string">'ColorDef'</span>); <span class="comment">%Remove field from structure array</span>
+0111 
+0112 <span class="comment">%% Set figure size</span>
+0113 
+0114 <span class="comment">%Set figure units</span>
+0115 <span class="keyword">if</span> isOld
+0116     set(hf,<span class="string">'units'</span>,<span class="string">'pixels'</span>);    
+0117 <span class="keyword">else</span>
+0118     hf.Units=<span class="string">'pixels'</span>;    
+0119 <span class="keyword">end</span>
+0120 
+0121 <span class="comment">%Set figure size</span>
+0122 <span class="keyword">if</span> isfield(figStruct,<span class="string">'ScreenOffset'</span>)        
+0123     <span class="comment">%Compute figure offset from border</span>
+0124     figSizeEdgeOffset=figStruct.ScreenOffset/2; 
+0125 <span class="keyword">elseif</span> isfield(figStruct,<span class="string">'ScreenScale'</span>)
+0126     <span class="comment">%Compute screen offset</span>
+0127     figSizeEdgeOffset=(screenSizeGroot-(screenSizeGroot*figStruct.ScreenScale))/2;        
+0128 <span class="keyword">end</span>
+0129 
+0130 <span class="comment">%Remove custom fields from structure</span>
+0131 <span class="keyword">if</span> isfield(figStruct,<span class="string">'ScreenOffset'</span>)        
+0132     figStruct=rmfield(figStruct,<span class="string">'ScreenOffset'</span>); <span class="comment">%Remove field from structure array</span>
+0133 <span class="keyword">end</span>
+0134 
+0135 <span class="keyword">if</span> isfield(figStruct,<span class="string">'ScreenScale'</span>)
+0136     figStruct=rmfield(figStruct,<span class="string">'ScreenScale'</span>); <span class="comment">%Remove field from structure array</span>
+0137 <span class="keyword">end</span>
+0138 
+0139 <span class="comment">%Get/set units</span>
+0140 figUnits=hf.Units; <span class="comment">%Get current figure units (users may change defaults)</span>
+0141 hf.Units=graphicalRoot.Units; <span class="comment">%Force units the same</span>
+0142 
+0143 <span class="comment">%Compute figure size in terms of width and height</span>
+0144 figSize=screenSizeGroot-figSizeEdgeOffset*2; <span class="comment">% width, height offsets</span>
+0145 
+0146 <span class="comment">%Position and resize figure</span>
+0147 <span class="keyword">if</span> isOld
+0148     set(hf,<span class="string">'outerPosition'</span>,[(screenSizeGroot(1)-figSize(1))/2 (screenSizeGroot(2)-figSize(2))/2 figSize(1) figSize(2)]); <span class="comment">% left bottom width height</span>
+0149 <span class="keyword">else</span>
+0150 <span class="comment">%     hf.Position=[figSizeEdgeOffset(1) figSizeEdgeOffset(2) figSize(1) figSize(2)]; % left bottom width height</span>
+0151     hf.Position=[(screenSizeGroot(1)-figSize(1))/2 (screenSizeGroot(2)-figSize(2))/2 figSize(1) figSize(2)]; <span class="comment">% left bottom width height</span>
+0152 <span class="keyword">end</span>
+0153 
+0154 <span class="comment">%Set figure units back</span>
+0155 hf.Units=figUnits;
+0156 
+0157 <span class="comment">%% Parse remaining figure properties</span>
+0158 
+0159 <span class="comment">% Note: This is where figure becomes visible if figStruct.Visible='on'</span>
+0160 
+0161 fieldSet = fieldnames(figStruct); <span class="comment">% Cell containing all structure field names</span>
+0162 <span class="keyword">for</span> q=1:1:numel(fieldSet)
+0163     fieldNameCurrent=fieldSet{q};
+0164     <span class="keyword">try</span>
+0165         <span class="keyword">if</span> isOld
+0166             set(hf,fieldNameCurrent,figStruct.(fieldNameCurrent));
+0167         <span class="keyword">else</span>
+0168             hf.(fieldNameCurrent)=figStruct.(fieldNameCurrent);
+0169         <span class="keyword">end</span>
+0170     <span class="keyword">catch</span> errorMsg
+0171         rethrow(errorMsg); <span class="comment">%likely false option</span>
+0172     <span class="keyword">end</span>
+0173 <span class="keyword">end</span>
+0174 
+0175 <span class="comment">%% Check for activation of vcw</span>
+0176 
+0177 <span class="keyword">if</span> isa(vcwOpt,<span class="string">'cell'</span>) <span class="comment">%Allow enabling of vcw mode</span>
+0178     hp=<a href="vcw.html" class="code" title="function [varargout]=vcw(varargin)">vcw</a>(hf,vcwOpt);
+0179     hf.UserData.cFigure.Handles.vcw=hp;
+0180 <span class="keyword">end</span>
+0181 
+0182 <span class="comment">%% Check for activation of efw</span>
+0183 <span class="keyword">if</span> efwOpt
+0184     <a href="efw.html" class="code" title="function efw(varargin)">efw</a>; 
+0185 <span class="keyword">end</span>
+0186 
+0187 <span class="comment">%%</span>
+0188 <span class="keyword">if</span> nargout&gt;0
+0189     varargout{1}=hf;
+0190 <span class="keyword">end</span>
+0191 
+0192 <span class="comment">%%</span>
+0193 <span class="comment">% Reset groot units if a change was needed</span>
+0194 <span class="keyword">if</span> ~strcmp(grootUnits,<span class="string">'pixels'</span>)
+0195     graphicalRoot.Units=grootUnits;
+0196 <span class="keyword">end</span>
+0197 
+0198 <span class="comment">%%</span>
+0199 <span class="comment">% _*GIBBON footer text*_</span>
+0200 <span class="comment">%</span>
+0201 <span class="comment">% License: &lt;https://github.com/gibbonCode/GIBBON/blob/master/LICENSE&gt;</span>
+0202 <span class="comment">%</span>
+0203 <span class="comment">% GIBBON: The Geometry and Image-based Bioengineering add-On. A toolbox for</span>
+0204 <span class="comment">% image segmentation, image-based modeling, meshing, and finite element</span>
+0205 <span class="comment">% analysis.</span>
+0206 <span class="comment">%</span>
+0207 <span class="comment">% Copyright (C) 2019  Kevin Mattheus Moerman</span>
+0208 <span class="comment">%</span>
+0209 <span class="comment">% This program is free software: you can redistribute it and/or modify</span>
+0210 <span class="comment">% it under the terms of the GNU General Public License as published by</span>
+0211 <span class="comment">% the Free Software Foundation, either version 3 of the License, or</span>
+0212 <span class="comment">% (at your option) any later version.</span>
+0213 <span class="comment">%</span>
+0214 <span class="comment">% This program is distributed in the hope that it will be useful,</span>
+0215 <span class="comment">% but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+0216 <span class="comment">% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+0217 <span class="comment">% GNU General Public License for more details.</span>
+0218 <span class="comment">%</span>
+0219 <span class="comment">% You should have received a copy of the GNU General Public License</span>
+0220 <span class="comment">% along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of anat_position_solid_repere</title>
+  <meta name="keywords" content="anat_position_solid_repere">
+  <meta name="description" content="Identification of anatomical positions where other solids are fixed">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html Animation -->
+<h1>anat_position_solid_repere
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Identification of anatomical positions where other solids are fixed</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Human_model] = anat_position_solid_repere(Human_model,i) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Identification of anatomical positions where other solids are fixed
+  
+   INPUT
+   - Human_model: osteo-articular model (see the Documentation for the
+   structure) 
+   - i: current solid
+   OUTPUT
+   - Human_model: osteo-articular model with additional computations (see
+   the Documentation for the structure)
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="anat_position_solid_repere.html" class="code" title="function [Human_model] = anat_position_solid_repere(Human_model,i)">anat_position_solid_repere</a>	Identification of anatomical positions where other solids are fixed</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="PlotAnimation.html" class="code" title="function [varargout] = PlotAnimation(ModelParameters, AnimateParameters)">PlotAnimation</a>	Generation of an animation</li><li><a href="anat_position_solid_repere.html" class="code" title="function [Human_model] = anat_position_solid_repere(Human_model,i)">anat_position_solid_repere</a>	Identification of anatomical positions where other solids are fixed</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Human_model] = anat_position_solid_repere(Human_model,i)</a>
+0002 <span class="comment">% Identification of anatomical positions where other solids are fixed</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the</span>
+0006 <span class="comment">%   structure)</span>
+0007 <span class="comment">%   - i: current solid</span>
+0008 <span class="comment">%   OUTPUT</span>
+0009 <span class="comment">%   - Human_model: osteo-articular model with additional computations (see</span>
+0010 <span class="comment">%   the Documentation for the structure)</span>
+0011 <span class="comment">%________________________________________________________</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% Licence</span>
+0014 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0015 <span class="comment">%________________________________________________________</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0018 <span class="comment">% Georges Dumont</span>
+0019 <span class="comment">%________________________________________________________</span>
+0020 
+0021 <span class="keyword">if</span> i == 0 <span class="comment">% bout de chaine</span>
+0022     <span class="keyword">return</span>;
+0023 <span class="keyword">end</span>
+0024 
+0025 j=Human_model(i).mother; <span class="comment">% number of the mother</span>
+0026 <span class="keyword">if</span> j == 0 <span class="comment">% initialization : first time this function is called</span>
+0027     Human_model(i).pos_solid_visual=[]; <span class="comment">% init of a new domain</span>
+0028 <span class="keyword">end</span>
+0029 <span class="keyword">if</span> (j ~= 0) &amp;&amp; (Human_model(j).Visual ~= 0) 
+0030     Human_model(j).pos_solid_visual = [Human_model(j).pos_solid_visual Human_model(i).b];
+0031 <span class="keyword">end</span>
+0032 
+0033 [Human_model] = <a href="anat_position_solid_repere.html" class="code" title="function [Human_model] = anat_position_solid_repere(Human_model,i)">anat_position_solid_repere</a>(Human_model,Human_model(i).child);
+0034 [Human_model] = <a href="anat_position_solid_repere.html" class="code" title="function [Human_model] = anat_position_solid_repere(Human_model,i)">anat_position_solid_repere</a>(Human_model,Human_model(i).sister);
+0035 
+0036 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

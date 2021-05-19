@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ForwardKinematicsPoint</title>
+  <meta name="keywords" content="ForwardKinematicsPoint">
+  <meta name="description" content="Computation of the position of a point according to a reference solid">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html MuscleForces -->
+<h1>ForwardKinematicsPoint
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Computation of the position of a point according to a reference solid</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [p] = ForwardKinematicsPoint(Human_model,num_solid_repere,num_solid,num_point,q) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Computation of the position of a point according to a reference solid
+   
+   INPUT
+   - Human_model: osteo-articular model (see the Documentation for the
+   structure) 
+   - num_solid_repere: number of the reference solid
+   - num_solid: number of the solid containing the point
+   - num_point: number of the anatomical position of the point on its
+   corresponded solid 
+   - q: vector of joint coordinates
+   OUTPUT
+   - p: position of the point
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________
+ Initialisation</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>	Computation of the Rodrigues equation</li><li><a href="../../Functions/AlgoMathsModel/find_solid_path.html" class="code" title="function [solid_1_path,solid_2_path]=find_solid_path(Human_model,i,k)">find_solid_path</a>	Identification of the hierarchical path between two solids</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Functions/Calibration/CalibratePatellaJoint.html" class="code" title="function [BiomechanicalModel]=CalibratePatellaJoint(BiomechanicalModel)">CalibratePatellaJoint</a>	Generation of the function between Knee Angle and Patella Angle with the</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [p] = ForwardKinematicsPoint(Human_model,num_solid_repere,num_solid,num_point,q)</a>
+0002 <span class="comment">% Computation of the position of a point according to a reference solid</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the</span>
+0006 <span class="comment">%   structure)</span>
+0007 <span class="comment">%   - num_solid_repere: number of the reference solid</span>
+0008 <span class="comment">%   - num_solid: number of the solid containing the point</span>
+0009 <span class="comment">%   - num_point: number of the anatomical position of the point on its</span>
+0010 <span class="comment">%   corresponded solid</span>
+0011 <span class="comment">%   - q: vector of joint coordinates</span>
+0012 <span class="comment">%   OUTPUT</span>
+0013 <span class="comment">%   - p: position of the point</span>
+0014 <span class="comment">%________________________________________________________</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% Licence</span>
+0017 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0018 <span class="comment">%________________________________________________________</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0021 <span class="comment">% Georges Dumont</span>
+0022 <span class="comment">%________________________________________________________</span>
+0023 <span class="comment">% Initialisation</span>
+0024 Human_model(num_solid_repere).p = zeros(3,1);
+0025 Human_model(num_solid_repere).R = eye(3);
+0026 
+0027 <span class="comment">% Computation of the point coordinates</span>
+0028 <span class="keyword">if</span> num_solid == num_solid_repere
+0029     p = Human_model(num_solid).c+Human_model(num_solid).anat_position{num_point,2};
+0030 <span class="keyword">else</span>
+0031     path_solid = <a href="../../Functions/AlgoMathsModel/find_solid_path.html" class="code" title="function [solid_1_path,solid_2_path]=find_solid_path(Human_model,i,k)">find_solid_path</a>(Human_model,num_solid,num_solid_repere);
+0032 
+0033     <span class="keyword">for</span> n=path_solid(2:end)
+0034         m = Human_model(n).mother;
+0035         Human_model(n).p = Human_model(m).R * Human_model(n).b + Human_model(m).p;
+0036         Human_model(n).R = Human_model(m).R * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(n).a,q(n)) * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(n).u,Human_model(n).theta);
+0037     <span class="keyword">end</span>
+0038     l = path_solid(end);
+0039     Human_model(l).c_global = Human_model(l).p + Human_model(l).R * Human_model(l).c;
+0040     p = Human_model(l).c_global + Human_model(l).R * Human_model(num_solid).anat_position{num_point,2};
+0041 <span class="keyword">end</span>
+0042 
+0043 <span class="keyword">end</span>
+0044 
+0045</pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

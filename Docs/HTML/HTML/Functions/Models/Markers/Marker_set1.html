@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Marker_set1</title>
+  <meta name="keywords" content="Marker_set1">
+  <meta name="description" content="Definition of the markers set used in ENSAM">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- ../menu.html Models --><!-- menu.html Markers -->
+<h1>Marker_set1
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Definition of the markers set used in ENSAM</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [Markers]=Marker_set1(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Definition of the markers set used in ENSAM
+
+   OUTPUT
+   - Markers: set of markers (see the Documentation for the structure) 
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Markers]=Marker_set1(varargin)</a>
+0002 <span class="comment">% Definition of the markers set used in ENSAM</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   OUTPUT</span>
+0005 <span class="comment">%   - Markers: set of markers (see the Documentation for the structure)</span>
+0006 <span class="comment">%________________________________________________________</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% Licence</span>
+0009 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0010 <span class="comment">%________________________________________________________</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0013 <span class="comment">% Georges Dumont</span>
+0014 <span class="comment">%________________________________________________________</span>
+0015 s=cell(0);
+0016 
+0017 <span class="comment">% Trunk</span>
+0018 s=[s;{<span class="string">'TMPD'</span> <span class="string">'RFHD'</span> {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'On'</span>}; <span class="string">'TMPG'</span> <span class="string">'LFHD'</span> {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'On'</span>}; <span class="string">'OCCD'</span> <span class="string">'RBHD'</span> {<span class="string">'Off'</span>;<span class="string">'On'</span>;<span class="string">'On'</span>}; <span class="string">'OCCG'</span> <span class="string">'LBHD'</span> {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'On'</span>}; <span class="keyword">...</span>
+0019     <span class="string">'C7'</span> <span class="string">'C7'</span> {<span class="string">'On'</span>;<span class="string">'On'</span>;<span class="string">'Off'</span>}; <span class="string">'MAN'</span> <span class="string">'CLAV'</span> {<span class="string">'On'</span>;<span class="string">'On'</span>;<span class="string">'Off'</span>}; <span class="keyword">...</span>
+0020     <span class="string">'ACD'</span> <span class="string">'RSHO'</span> {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'On'</span>}; <span class="string">'ACG'</span> <span class="string">'LSHO'</span> {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'On'</span>}; <span class="keyword">...</span>
+0021     <span class="string">'EASD'</span> <span class="string">'RFWT'</span> {<span class="string">'On'</span>;<span class="string">'Off'</span>;<span class="string">'On'</span>}; <span class="string">'EASG'</span> <span class="string">'LFWT'</span> {<span class="string">'On'</span>;<span class="string">'Off'</span>;<span class="string">'On'</span>}; <span class="string">'EPSD'</span> <span class="string">'RBWT'</span> {<span class="string">'On'</span>;<span class="string">'Off'</span>;<span class="string">'On'</span>}; <span class="string">'EPSG'</span> <span class="string">'LBWT'</span> {<span class="string">'On'</span>;<span class="string">'Off'</span>;<span class="string">'On'</span>}; <span class="keyword">...</span>
+0022     <span class="string">'T8'</span> <span class="string">'T8'</span> {<span class="string">'Off'</span>;<span class="string">'On'</span>;<span class="string">'Off'</span>}; <span class="string">'T12'</span> <span class="string">'T12'</span> {<span class="string">'Off'</span>;<span class="string">'On'</span>;<span class="string">'Off'</span>}; <span class="keyword">...</span>
+0023     <span class="string">'CLAVD'</span> <span class="string">'CLAVD'</span> {<span class="string">'On'</span>;<span class="string">'On'</span>;<span class="string">'On'</span>}; <span class="string">'CLAVG'</span> <span class="string">'CLAVG'</span> {<span class="string">'On'</span>;<span class="string">'On'</span>;<span class="string">'On'</span>}; <span class="keyword">...</span>
+0024     }];
+0025 
+0026 Side1={<span class="string">'D'</span>;<span class="string">'G'</span>};
+0027 Side2={<span class="string">'R'</span>;<span class="string">'L'</span>};
+0028 <span class="comment">% Arm</span>
+0029 <span class="keyword">for</span> i=1:2
+0030     s=[s;{[<span class="string">'EL'</span> Side1{i}] [Side2{i} <span class="string">'RAD'</span>] {<span class="string">'On'</span>;<span class="string">'On'</span>;<span class="string">'Off'</span>}; [<span class="string">'EM'</span> Side1{i}] [Side2{i} <span class="string">'HUM'</span>] {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>}; <span class="keyword">...</span>
+0031         [<span class="string">'PSR'</span> Side1{i}] [Side2{i} <span class="string">'WRA'</span>] {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>}; [<span class="string">'PSU'</span> Side1{i}] [Side2{i} <span class="string">'WRB'</span>] {<span class="string">'Off'</span>;<span class="string">'On'</span>;<span class="string">'Off'</span>}; <span class="keyword">...</span>
+0032         [<span class="string">'MC2'</span> Side1{i}] [Side2{i} <span class="string">'CAR2'</span>] {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>}; [<span class="string">'MC5'</span> Side1{i}] [Side2{i} <span class="string">'OHAND'</span>] {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>}; <span class="keyword">...</span>
+0033         }];
+0034 <span class="keyword">end</span>
+0035 
+0036 <span class="comment">% Leg</span>
+0037 <span class="keyword">for</span> i=1:2
+0038     s=[s;{[<span class="string">'CL'</span> Side1{i}] [Side2{i} <span class="string">'KNE'</span>] {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'On'</span>}; [<span class="string">'CM'</span> Side1{i}] [Side2{i} <span class="string">'KNI'</span>] {<span class="string">'Off'</span>;<span class="string">'On'</span>;<span class="string">'On'</span>}; <span class="keyword">...</span>
+0039         [<span class="string">'ML'</span> Side1{i}] [Side2{i} <span class="string">'ANE'</span>] {<span class="string">'Off'</span>;<span class="string">'On'</span>;<span class="string">'Off'</span>}; [<span class="string">'MM'</span> Side1{i}] [Side2{i} <span class="string">'ANI'</span>] {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>}; <span class="keyword">...</span>
+0040         [<span class="string">'CAL'</span> Side1{i}] [Side2{i} <span class="string">'HEE'</span>] {<span class="string">'Off'</span>;<span class="string">'On'</span>;<span class="string">'Off'</span>}; <span class="keyword">...</span>
+0041         [<span class="string">'MT1'</span> Side1{i}] [Side2{i} <span class="string">'TARI'</span>] {<span class="string">'Off'</span>;<span class="string">'On'</span>;<span class="string">'On'</span>}; [<span class="string">'MT5'</span> Side1{i}] [Side2{i} <span class="string">'TAR'</span>] {<span class="string">'Off'</span>;<span class="string">'Off'</span>;<span class="string">'Off'</span>}; <span class="keyword">...</span>
+0042         }];
+0043 <span class="keyword">end</span>
+0044 
+0045 Markers=struct(<span class="string">'name'</span>,{s{:,1}}',<span class="string">'anat_position'</span>,{s{:,2}}',<span class="string">'calib_dir'</span>,{s{:,3}}'); <span class="comment">%#ok&lt;CCAT1&gt;</span>
+0046 
+0047 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

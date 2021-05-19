@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of btkReadAcquisition</title>
+  <meta name="keywords" content="btkReadAcquisition">
+  <meta name="description" content="BTKREADACQUISITION Read an acquisition's file (C3D, TRC, ...)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html Functions --><!-- # BTK --><!-- ../menu.html linux64 --><!-- menu.html @IO -->
+<h1>btkReadAcquisition
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>BTKREADACQUISITION Read an acquisition's file (C3D, TRC, ...)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function h = btkReadAcquisition(filename) %#ok </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">BTKREADACQUISITION Read an acquisition's file (C3D, TRC, ...)
+ 
+  H = BTKREADACQUISITION(FILENAME) returns the handle H of a biomechanical 
+  acquisition stored in file FILENAME.  This handle is returned 
+  as a double and can be only used with the btk* function.
+
+  The release of the memory associated with the handle H can be done automatically
+  by Matlab when you use the command 'clear all', or you can use the function
+  BTKDELETEACQUISITION.  The use of the function BTKDELETEACQUISITION is greatly
+  advised when you are doing batch processing as Matlab does not manage the C++
+  memory and an &quot;Out of memory&quot; error could be thrown.
+
+  [H, BYTEORDER] = BTKREADACQUISITION(FILENAME) returns the byte order of the
+  file as a string. The known values are:
+   - OrderNotApplicable (In the case the file is an ASCII file).
+   - IEEE_LittleEndian
+   - VAX_LittleEndian
+   - IEEE_BigEndian
+
+  [H, BYTEORDER, STORAGEFORMAT] = BTKREADACQUISITION(FILENAME) returns the storage
+  format of the file as a string. The known values are:
+   - StorageNotApplicable (In the case the file is an ASCII file).
+   - Float
+   - Integer</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Functions/Animation/ColorsAnimation.html" class="code" title="function [Colors]=ColorsAnimation(filename,Muscles,AnimateParameters,Human_model,ModelParameters,AnalysisParameters,options,Markers_set)">ColorsAnimation</a>	Preparing the colors for animation</li><li><a href="../../../../Functions/BTK/linux64/btkEmulateC3Dserver.html" class="code" title="function itf = btkEmulateC3Dserver()">btkEmulateC3Dserver</a>	BTKEMULATEC3DSERVER Creates an emulated COM object for C3Dserver.</li><li><a href="../../../../Functions/BTK/linux64/btkTransformTDFToViconC3DFile.html" class="code" title="function btkTransformTDFToViconC3DFile(TDF_INPUT, C3D_OUTPUT)">btkTransformTDFToViconC3DFile</a>	BTKTRANSFORMTDFTOVICONC3DFILE transforms a TDF file (BTS Bioengineering) to a compatible Vicon C3D file.</li><li><a href="../../../../Functions/BTK/mac64/btkEmulateC3Dserver.html" class="code" title="function itf = btkEmulateC3Dserver()">btkEmulateC3Dserver</a>	BTKEMULATEC3DSERVER Creates an emulated COM object for C3Dserver.</li><li><a href="../../../../Functions/BTK/mac64/btkTransformTDFToViconC3DFile.html" class="code" title="function btkTransformTDFToViconC3DFile(TDF_INPUT, C3D_OUTPUT)">btkTransformTDFToViconC3DFile</a>	BTKTRANSFORMTDFTOVICONC3DFILE transforms a TDF file (BTS Bioengineering) to a compatible Vicon C3D file.</li><li><a href="../../../../Functions/BTK/win64/btkEmulateC3Dserver.html" class="code" title="function itf = btkEmulateC3Dserver()">btkEmulateC3Dserver</a>	BTKEMULATEC3DSERVER Creates an emulated COM object for C3Dserver.</li><li><a href="../../../../Functions/BTK/win64/btkTransformTDFToViconC3DFile.html" class="code" title="function btkTransformTDFToViconC3DFile(TDF_INPUT, C3D_OUTPUT)">btkTransformTDFToViconC3DFile</a>	BTKTRANSFORMTDFTOVICONC3DFILE transforms a TDF file (BTS Bioengineering) to a compatible Vicon C3D file.</li><li><a href="../../../../Functions/DataImport/InputDataImport/C3dProcessedData.html" class="code" title="function [real_markers, nb_frame, Firstframe, Lastframe, f, list_missing_markers_in_c3d]=C3dProcessedData(filename, list_markers, varargin)">C3dProcessedData</a>	Extraction of experimental data in a processed c3d</li><li><a href="../../../../Functions/ExternalForces/FromExperiments/DataInC3D.html" class="code" title="function [ExternalForcesComputationResults] = DataInC3D(filename, BiomechanicalModel, AnalysisParameters)">DataInC3D</a>	Computation of the external forces</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function h = btkReadAcquisition(filename) </a><span class="comment">%#ok</span>
+0002 <span class="comment">%BTKREADACQUISITION Read an acquisition's file (C3D, TRC, ...)</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%  H = BTKREADACQUISITION(FILENAME) returns the handle H of a biomechanical</span>
+0005 <span class="comment">%  acquisition stored in file FILENAME.  This handle is returned</span>
+0006 <span class="comment">%  as a double and can be only used with the btk* function.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%  The release of the memory associated with the handle H can be done automatically</span>
+0009 <span class="comment">%  by Matlab when you use the command 'clear all', or you can use the function</span>
+0010 <span class="comment">%  BTKDELETEACQUISITION.  The use of the function BTKDELETEACQUISITION is greatly</span>
+0011 <span class="comment">%  advised when you are doing batch processing as Matlab does not manage the C++</span>
+0012 <span class="comment">%  memory and an &quot;Out of memory&quot; error could be thrown.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%  [H, BYTEORDER] = BTKREADACQUISITION(FILENAME) returns the byte order of the</span>
+0015 <span class="comment">%  file as a string. The known values are:</span>
+0016 <span class="comment">%   - OrderNotApplicable (In the case the file is an ASCII file).</span>
+0017 <span class="comment">%   - IEEE_LittleEndian</span>
+0018 <span class="comment">%   - VAX_LittleEndian</span>
+0019 <span class="comment">%   - IEEE_BigEndian</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%  [H, BYTEORDER, STORAGEFORMAT] = BTKREADACQUISITION(FILENAME) returns the storage</span>
+0022 <span class="comment">%  format of the file as a string. The known values are:</span>
+0023 <span class="comment">%   - StorageNotApplicable (In the case the file is an ASCII file).</span>
+0024 <span class="comment">%   - Float</span>
+0025 <span class="comment">%   - Integer</span>
+0026 
+0027 <span class="comment">%  Author: A. Barré</span>
+0028 <span class="comment">%  Copyright 2009-2013 Biomechanical ToolKit (BTK).</span>
+0029 
+0030 <span class="comment">% The following comment, MATLAB compiler pragma, is necessary to avoid</span>
+0031 <span class="comment">% compiling this M-file instead of linking against the MEX-file.  Don't remove.</span>
+0032 <span class="comment">%# mex</span>
+0033 
+0034 error(generatemsgid(<span class="string">'NotSupported'</span>),<span class="string">'MEX file for BTKREADACQUISITION not found'</span>);
+0035 
+0036 <span class="comment">% [EOF] btkReadAcquisition.m</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

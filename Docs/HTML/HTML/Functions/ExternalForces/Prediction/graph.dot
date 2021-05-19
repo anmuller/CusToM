@@ -1,0 +1,11 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  ForwardAllKinematicsPrediction -> ForwardAllKinematicsPrediction;
+  InverseDynamicsSolid_lin -> InverseDynamicsSolid_lin;
+
+  Force_max_TOR [URL="Force_max_TOR.html"];
+  ForwardAllKinematicsPrediction [URL="ForwardAllKinematicsPrediction.html"];
+  InverseDynamicsSolid_lin [URL="InverseDynamicsSolid_lin.html"];
+  addForces_Prediction_frame_par_frame [URL="addForces_Prediction_frame_par_frame.html"];
+  verif_Prediction_Humanmodel [URL="verif_Prediction_Humanmodel.html"];
+}

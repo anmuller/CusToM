@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of distance_point_anthropo</title>
+  <meta name="keywords" content="distance_point_anthropo">
+  <meta name="description" content="Computation of the distance between a point and the center of mass of a solid">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- ../menu.html Calibration --><!-- menu.html Dynamics -->
+<h1>distance_point_anthropo
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Computation of the distance between a point and the center of mass of a solid</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [L] = distance_point_anthropo(Point1,Bone1,Human_model,q,s) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Computation of the distance between a point and the center of mass of a solid
+   
+   INPUT
+   - Point1: position of the anatomical position of the studied point on
+   its solid 
+   - Bone1: number of the solid containing the studied point
+   - Human_model: osteo-articular model (see the Documentation for the structure)
+   - q: vector of joint coordinates at a given instant
+   - s: number of the studied solid
+   OUTPUT
+   - L: distance between the studied point and the center of mass of the
+   studied solid 
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>	Computation of the Rodrigues equation</li><li><a href="../../../Functions/AlgoMathsModel/find_solid_path.html" class="code" title="function [solid_1_path,solid_2_path]=find_solid_path(Human_model,i,k)">find_solid_path</a>	Identification of the hierarchical path between two solids</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="FindInitDynParam.html" class="code" title="function [Human_model] = FindInitDynParam(Human_model)">FindInitDynParam</a>	Identification of the stadium solid parameters from inertial parameters</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [L] = distance_point_anthropo(Point1,Bone1,Human_model,q,s)</a>
+0002 <span class="comment">% Computation of the distance between a point and the center of mass of a solid</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - Point1: position of the anatomical position of the studied point on</span>
+0006 <span class="comment">%   its solid</span>
+0007 <span class="comment">%   - Bone1: number of the solid containing the studied point</span>
+0008 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the structure)</span>
+0009 <span class="comment">%   - q: vector of joint coordinates at a given instant</span>
+0010 <span class="comment">%   - s: number of the studied solid</span>
+0011 <span class="comment">%   OUTPUT</span>
+0012 <span class="comment">%   - L: distance between the studied point and the center of mass of the</span>
+0013 <span class="comment">%   studied solid</span>
+0014 <span class="comment">%________________________________________________________</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% Licence</span>
+0017 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0018 <span class="comment">%________________________________________________________</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0021 <span class="comment">% Georges Dumont</span>
+0022 <span class="comment">%________________________________________________________</span>
+0023 
+0024 <span class="comment">% si les points appartiennent au m�e solide</span>
+0025 <span class="comment">% if all points belong to the same solid</span>
+0026 <span class="keyword">if</span> Bone1 == s
+0027     A=Human_model(Bone1).anat_position{Point1,2};
+0028 <span class="comment">%     B=Human_model(s).c;</span>
+0029     B=[0 0 0]';
+0030     L = abs(B(2)-A(2));
+0031     <span class="keyword">return</span>
+0032 <span class="keyword">end</span>
+0033 
+0034 <span class="comment">% finding the index of common antecedent (ppac:plus proche antecedent commun)</span>
+0035 <span class="comment">% recherche du ppac (plus proche antecedent commun)</span>
+0036 t = 1;
+0037 t1 = <a href="../../../Functions/AlgoMathsModel/find_solid_path.html" class="code" title="function [solid_1_path,solid_2_path]=find_solid_path(Human_model,i,k)">find_solid_path</a>(Human_model,Bone1,1);
+0038 t2 = <a href="../../../Functions/AlgoMathsModel/find_solid_path.html" class="code" title="function [solid_1_path,solid_2_path]=find_solid_path(Human_model,i,k)">find_solid_path</a>(Human_model,s,1);
+0039 <span class="keyword">while</span> t&lt;=min(numel(t1),numel(t2)) &amp;&amp; t1(t)==t2(t)
+0040     ppac = t1(t);
+0041     ppac_t = t;
+0042     t = t + 1;
+0043 <span class="keyword">end</span>
+0044 
+0045 <span class="comment">% chemin minimaux</span>
+0046 <span class="comment">% minimal path</span>
+0047 solid1 = t1(ppac_t:end);
+0048 solid2 = t2(ppac_t:end);
+0049 
+0050 <span class="comment">% Direct kinematics initialization (Initialisation de la cin�atique directe)</span>
+0051 Human_model(ppac).p = zeros(3,1);
+0052 Human_model(ppac).R = eye(3);
+0053 
+0054 <span class="comment">% Computation of coordinates of point A (calcul des coordonn�s du point A)</span>
+0055 <span class="keyword">if</span> numel(solid1)==1
+0056     A = Human_model(Bone1).c+Human_model(Bone1).anat_position{Point1,2};
+0057 <span class="keyword">else</span>
+0058     <span class="keyword">for</span> n=solid1(2:end)
+0059         m = Human_model(n).mother;
+0060         Human_model(n).p = Human_model(m).R * Human_model(n).b + Human_model(m).p;
+0061         Human_model(n).R = Human_model(m).R * <a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(n).a,q(n)) * <a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(n).u,Human_model(n).theta);
+0062     <span class="keyword">end</span>
+0063     l = solid1(end);
+0064     Human_model(l).c_global = Human_model(l).p + Human_model(l).R * Human_model(l).c;
+0065     A = Human_model(l).c_global + Human_model(l).R * Human_model(Bone1).anat_position{Point1,2};
+0066 <span class="keyword">end</span>
+0067 
+0068 <span class="comment">% Computation of coordinates of point B (calcul des coordonn�s du point B)</span>
+0069 <span class="keyword">if</span> numel(solid2)==1
+0070 <span class="comment">%     B = Human_model(s).c;</span>
+0071     B=[0 0 0]';
+0072 <span class="keyword">else</span>
+0073     <span class="keyword">for</span> n=solid2(2:end)
+0074         m = Human_model(n).mother;
+0075         Human_model(n).p = Human_model(m).R * Human_model(n).b + Human_model(m).p;
+0076         Human_model(n).R = Human_model(m).R * <a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(n).a,q(n)) * <a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(n).u,Human_model(n).theta);
+0077     <span class="keyword">end</span>
+0078     l = solid2(end);
+0079     Human_model(l).c_global = Human_model(l).p + Human_model(l).R * Human_model(l).c;
+0080 <span class="comment">%     Human_model(l).c_global = Human_model(l).p;</span>
+0081     B = Human_model(l).c_global;
+0082 <span class="keyword">end</span>
+0083 
+0084 <span class="comment">%calcul de la distance entre A et B</span>
+0085 <span class="comment">%Distance between A and B</span>
+0086 L = abs(B(2)-A(2));
+0087 
+0088 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

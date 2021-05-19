@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of btkSetMetaDataValue</title>
+  <meta name="keywords" content="btkSetMetaDataValue">
+  <meta name="description" content="BTKSETMETADATAVALUE Set one metada's value.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html Functions --><!-- # BTK --><!-- ../menu.html win64 --><!-- menu.html @Common -->
+<h1>btkSetMetaDataValue
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>BTKSETMETADATAVALUE Set one metada's value.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function btkSetMetaDataValue(h, label_idx, sublabel_idx, ..., index, value) %#ok </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">BTKSETMETADATAVALUE Set one metada's value.
+  
+  BTKSETMETADATAVALUE(H, LABEL, INDEX, VALUE) set the VALUE for the INDEX in
+  the metadata which has the label LABEL and contained in the root. The INDEX's value
+ start from 1, as all index in Matlab.
+  Based on the format of the metadata, the value set is automaticaly converted to fit the
+  format.  This design gives you the possibiliy to pass a Matlab native number format
+  (double) or a char or a cell containing a char and then its content is converted.
+
+  BTKSETMETADATAVALUE(H, LABEL, SUBLABEL, ..., INDEX, VALUE) set the VALUE
+  for the  metatada with the label SUBLABEL contained in its metadata's parent with
+  the label LABEL.  The number of sub-level is infinite.  However, the main common 
+  use of the metadata is to use LABEL as a group and SUBLABEL as a parameter. So the 
+  metadata has 2 levels.  This use was introduced in the C3D format.
+
+  BTKSETMETADATAVALUE(H, IDX, INDEX, VALUE) set the VALUE at the 
+  given INDEX contained in the  metadata's root.
+
+  BTKSETMETADATAVALUE(H, IDX, SUBIDX ..., INDEX, VALUE) set the metadata's
+  format contained at the index SUBINDEX which is contained in the metadata with 
+  the index INDEX.
+
+  You can mix label and index to select the metadata.
+
+  This function can also returns an updated list of metadata.
+  MD = BTKSETMETADATAVALUE(H, LABEL, INDEX, VALUE)
+  MD = BTKSETMETADATAVALUE(H, LABEL, SUBLABEL, ..., INDEX, VALUE)
+  The format of MD is the same than using the function &lt;a href=&quot;matlab:help btkGetMetaData&quot;&gt;btkGetMetaData&lt;/a&gt;.
+
+  The acquisition is represented by the handle H.  This handle is obtained
+  by the use of a btk* function.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Functions/BTK/linux64/btkEmulateC3Dserver.html" class="code" title="function itf = btkEmulateC3Dserver()">btkEmulateC3Dserver</a>	BTKEMULATEC3DSERVER Creates an emulated COM object for C3Dserver.</li><li><a href="../../../../Functions/BTK/mac64/btkEmulateC3Dserver.html" class="code" title="function itf = btkEmulateC3Dserver()">btkEmulateC3Dserver</a>	BTKEMULATEC3DSERVER Creates an emulated COM object for C3Dserver.</li><li><a href="../../../../Functions/BTK/win64/btkEmulateC3Dserver.html" class="code" title="function itf = btkEmulateC3Dserver()">btkEmulateC3Dserver</a>	BTKEMULATEC3DSERVER Creates an emulated COM object for C3Dserver.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function btkSetMetaDataValue(h, label_idx, sublabel_idx, </a><span class="keyword">...</span><span class="comment">, index, value) %#ok</span>
+0002 <span class="comment">%BTKSETMETADATAVALUE Set one metada's value.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%  BTKSETMETADATAVALUE(H, LABEL, INDEX, VALUE) set the VALUE for the INDEX in</span>
+0005 <span class="comment">%  the metadata which has the label LABEL and contained in the root. The INDEX's value</span>
+0006 <span class="comment">% start from 1, as all index in Matlab.</span>
+0007 <span class="comment">%  Based on the format of the metadata, the value set is automaticaly converted to fit the</span>
+0008 <span class="comment">%  format.  This design gives you the possibiliy to pass a Matlab native number format</span>
+0009 <span class="comment">%  (double) or a char or a cell containing a char and then its content is converted.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%  BTKSETMETADATAVALUE(H, LABEL, SUBLABEL, ..., INDEX, VALUE) set the VALUE</span>
+0012 <span class="comment">%  for the  metatada with the label SUBLABEL contained in its metadata's parent with</span>
+0013 <span class="comment">%  the label LABEL.  The number of sub-level is infinite.  However, the main common</span>
+0014 <span class="comment">%  use of the metadata is to use LABEL as a group and SUBLABEL as a parameter. So the</span>
+0015 <span class="comment">%  metadata has 2 levels.  This use was introduced in the C3D format.</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%  BTKSETMETADATAVALUE(H, IDX, INDEX, VALUE) set the VALUE at the</span>
+0018 <span class="comment">%  given INDEX contained in the  metadata's root.</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%  BTKSETMETADATAVALUE(H, IDX, SUBIDX ..., INDEX, VALUE) set the metadata's</span>
+0021 <span class="comment">%  format contained at the index SUBINDEX which is contained in the metadata with</span>
+0022 <span class="comment">%  the index INDEX.</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%  You can mix label and index to select the metadata.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%  This function can also returns an updated list of metadata.</span>
+0027 <span class="comment">%  MD = BTKSETMETADATAVALUE(H, LABEL, INDEX, VALUE)</span>
+0028 <span class="comment">%  MD = BTKSETMETADATAVALUE(H, LABEL, SUBLABEL, ..., INDEX, VALUE)</span>
+0029 <span class="comment">%  The format of MD is the same than using the function &lt;a href=&quot;matlab:help btkGetMetaData&quot;&gt;btkGetMetaData&lt;/a&gt;.</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%  The acquisition is represented by the handle H.  This handle is obtained</span>
+0032 <span class="comment">%  by the use of a btk* function.</span>
+0033 
+0034 <span class="comment">%  Author: A. Barré</span>
+0035 <span class="comment">%  Copyright 2009-2013 Biomechanical ToolKit (BTK).</span>
+0036 
+0037 <span class="comment">% The following comment, MATLAB compiler pragma, is necessary to avoid</span>
+0038 <span class="comment">% compiling this M-file instead of linking against the MEX-file.  Don't remove.</span>
+0039 <span class="comment">%# mex</span>
+0040 
+0041 error(generatemsgid(<span class="string">'NotSupported'</span>),<span class="string">'MEX file for BTKSETMETADATAVALUE not found'</span>);
+0042 
+0043 <span class="comment">% [EOF] btkSetMetaDataValue.m</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

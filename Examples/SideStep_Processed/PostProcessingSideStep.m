@@ -57,6 +57,7 @@ end
 
 %% Plot the result
 Directions={'X','Y','Z'};
+figure();
 for ii=1:3
     subplot(2,3,ii)
     % LFoot

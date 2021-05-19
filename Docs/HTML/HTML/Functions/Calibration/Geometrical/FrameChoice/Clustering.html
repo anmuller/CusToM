@@ -1,0 +1,204 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Clustering</title>
+  <meta name="keywords" content="Clustering">
+  <meta name="description" content="Frames choice for the geometrical calibration">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html Functions --><!-- ../../menu.html Calibration --><!-- ../menu.html Geometrical --><!-- menu.html FrameChoice -->
+<h1>Clustering
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>Frames choice for the geometrical calibration</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [frame_calib] = Clustering(nb_frame_calib, real_markers, list_markers) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Frames choice for the geometrical calibration
+   Frames are selected thanks to a clustering method from the position of
+   experimental markers
+   
+   INPUT
+   - nb_frame_calib: number of frames to select
+   - real_markers: 3D position of experimental markers
+   - list_markers: list of the marker names
+   OUTPUT
+   - frame_calib: number of frames to be used for the geometrical
+   calibration
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [frame_calib] = Clustering(nb_frame_calib, real_markers, list_markers)</a>
+0002 <span class="comment">% Frames choice for the geometrical calibration</span>
+0003 <span class="comment">%   Frames are selected thanks to a clustering method from the position of</span>
+0004 <span class="comment">%   experimental markers</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   INPUT</span>
+0007 <span class="comment">%   - nb_frame_calib: number of frames to select</span>
+0008 <span class="comment">%   - real_markers: 3D position of experimental markers</span>
+0009 <span class="comment">%   - list_markers: list of the marker names</span>
+0010 <span class="comment">%   OUTPUT</span>
+0011 <span class="comment">%   - frame_calib: number of frames to be used for the geometrical</span>
+0012 <span class="comment">%   calibration</span>
+0013 <span class="comment">%________________________________________________________</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Licence</span>
+0016 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0017 <span class="comment">%________________________________________________________</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0020 <span class="comment">% Georges Dumont</span>
+0021 <span class="comment">%________________________________________________________</span>
+0022 
+0023 nb_frame = size(real_markers(1).position,1);
+0024 
+0025 <span class="comment">% s�ection �partir de la position des marqueurs (selection from markers position)</span>
+0026 vect_clust=zeros(nb_frame,3*numel(list_markers));
+0027 <span class="keyword">for</span> i=1:numel(list_markers)
+0028     vect_clust(:,(3*(i-1)+1):(3*(i-1)+3))=real_markers(i).position;
+0029 <span class="keyword">end</span>
+0030 
+0031 <span class="comment">% classification : k-means</span>
+0032 nb_essai=10;
+0033 idx_inter=zeros(size(vect_clust,1),nb_essai);
+0034 sumd=zeros(nb_frame_calib,nb_essai);
+0035 normsum=zeros(1,nb_essai);
+0036 <span class="keyword">for</span> i=1:nb_essai
+0037     [idx_inter(:,i),~,sumd(:,i)] = kmeans(vect_clust,nb_frame_calib);
+0038     normsum(:,i)=norm(sumd(:,i));
+0039 <span class="keyword">end</span>
+0040 aa=find(normsum==min(normsum));
+0041 idx=idx_inter(:,aa(1));
+0042 
+0043 
+0044 <span class="comment">% classification : regroupement hi�archique (classification: hierarchical grouping)</span>
+0045 <span class="comment">% Z = linkage(vect_clust,'ward');</span>
+0046 <span class="comment">% dendrogram(Z,5000)</span>
+0047 <span class="comment">% idx=cluster(Z,'cutoff',40,'criterion','distance');</span>
+0048 <span class="comment">% nb_frame_calib=max(idx);</span>
+0049 
+0050 <span class="comment">% choix des frames dans les classes (m�iane) (choice of frames within classes)</span>
+0051 position_classes=cell(nb_frame_calib,1);
+0052 position_mediane=cell(nb_frame_calib,1);
+0053 <span class="keyword">for</span> i=1:nb_frame_calib
+0054     position_classes{i}=find(idx==i)';
+0055     position_mediane{i}=median(vect_clust(position_classes{i},:));
+0056 <span class="keyword">end</span>
+0057 dist=zeros(size(vect_clust,1),1);
+0058 <span class="keyword">for</span> f=1:nb_frame
+0059     dist(f,:)=norm(vect_clust(f,:)-position_mediane{idx(f,1)},2);
+0060 <span class="keyword">end</span>
+0061 frame_calib=zeros(1,nb_frame_calib);
+0062 
+0063 <span class="keyword">for</span> i=1:nb_frame_calib
+0064     test=0;
+0065     <span class="keyword">for</span> f=1:nb_frame
+0066         <span class="keyword">if</span> test == 0 &amp;&amp; idx(f)==i
+0067             frame_calib(i)=f;
+0068             test=1;
+0069             normref=dist(f,1);
+0070         <span class="keyword">else</span>
+0071             <span class="keyword">if</span> idx(f)==i
+0072                 <span class="keyword">if</span> dist(f,1)&lt;normref
+0073                     frame_calib(i)=f;
+0074                     normref=dist(f,1);
+0075                 <span class="keyword">end</span>
+0076             <span class="keyword">end</span>
+0077         <span class="keyword">end</span>
+0078     <span class="keyword">end</span>
+0079 <span class="keyword">end</span>
+0080 <span class="keyword">end</span>
+0081 
+0082 
+0083 <span class="comment">% % choix des frames dans les classes (point le plus �oign�des barycentres des autres classes) (choice of frames within classes)</span>
+0084 <span class="comment">%     position_classes=cell(nb_frame_calib,1);</span>
+0085 <span class="comment">%     position_mediane=cell(nb_frame_calib,1);</span>
+0086 <span class="comment">%     for i=1:nb_frame_calib</span>
+0087 <span class="comment">%         position_classes{i}=find(idx==i)';</span>
+0088 <span class="comment">%         position_mediane{i}=median(vect_clust(position_classes{i},:));</span>
+0089 <span class="comment">%     end</span>
+0090 <span class="comment">%</span>
+0091 <span class="comment">%     dist=zeros(size(vect_clust,1),1);</span>
+0092 <span class="comment">%     for f=1:nb_frame % calcul de la position du point par rapport � la m�iane (computation of point�s position wrt median)</span>
+0093 <span class="comment">%         dist(f,:)=norm(vect_clust(f,:)-position_mediane{idx(f,1)},2);</span>
+0094 <span class="comment">%     end</span>
+0095 <span class="comment">%     bary=zeros(1,nb_frame_calib);</span>
+0096 <span class="comment">%     for i=1:nb_frame_calib</span>
+0097 <span class="comment">%         test=0;</span>
+0098 <span class="comment">%         for f=1:nb_frame</span>
+0099 <span class="comment">%             if test == 0 &amp;&amp; idx(f)==i</span>
+0100 <span class="comment">%                 bary(i)=f;</span>
+0101 <span class="comment">%                 test=1;</span>
+0102 <span class="comment">%                 normref=dist(f,1);</span>
+0103 <span class="comment">%             else</span>
+0104 <span class="comment">%                 if idx(f)==i</span>
+0105 <span class="comment">%                     if dist(f,1)&lt;normref</span>
+0106 <span class="comment">%                         bary(i)=f;</span>
+0107 <span class="comment">%                         normref=dist(f,1);</span>
+0108 <span class="comment">%                     end</span>
+0109 <span class="comment">%                 end</span>
+0110 <span class="comment">%             end</span>
+0111 <span class="comment">%         end</span>
+0112 <span class="comment">%     end</span>
+0113 <span class="comment">%</span>
+0114 <span class="comment">%     distbis=zeros(size(vect_clust,1),1);</span>
+0115 <span class="comment">%     for f=1:nb_frame  % calcul de la somme des distances par rapport �chaque barycentre des autres classes (computation of distances wrt barycenters of other classes)</span>
+0116 <span class="comment">%         for p=1:nb_frame_calib</span>
+0117 <span class="comment">%             if idx(f) ~= p</span>
+0118 <span class="comment">%                 distbis(f,:)= distbis(f,:)+norm(vect_clust(f,:)-vect_clust(bary(p),:),2);</span>
+0119 <span class="comment">%             end</span>
+0120 <span class="comment">%         end</span>
+0121 <span class="comment">%     end</span>
+0122 <span class="comment">%     frame_calib=zeros(1,nb_frame_calib);</span>
+0123 <span class="comment">%     for i=1:nb_frame_calib</span>
+0124 <span class="comment">%         test=0;</span>
+0125 <span class="comment">%         for f=1:nb_frame</span>
+0126 <span class="comment">%             if test == 0 &amp;&amp; idx(f)==i</span>
+0127 <span class="comment">%                 frame_calib(i)=f;</span>
+0128 <span class="comment">%                 test=1;</span>
+0129 <span class="comment">%                 normref=distbis(f,1);</span>
+0130 <span class="comment">%             else</span>
+0131 <span class="comment">%                 if idx(f)==i</span>
+0132 <span class="comment">%                     if distbis(f,1)&gt;normref</span>
+0133 <span class="comment">%                         frame_calib(i)=f;</span>
+0134 <span class="comment">%                         normref=distbis(f,1);</span>
+0135 <span class="comment">%                     end</span>
+0136 <span class="comment">%                 end</span>
+0137 <span class="comment">%             end</span>
+0138 <span class="comment">%         end</span>
+0139 <span class="comment">%     end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

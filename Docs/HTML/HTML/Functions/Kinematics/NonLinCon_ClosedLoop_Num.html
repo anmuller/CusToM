@@ -1,0 +1,218 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of NonLinCon_ClosedLoop_Num</title>
+  <meta name="keywords" content="NonLinCon_ClosedLoop_Num">
+  <meta name="description" content="Non-linear equation used in the inverse kinematics step for closed loops">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html Kinematics -->
+<h1>NonLinCon_ClosedLoop_Num
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Non-linear equation used in the inverse kinematics step for closed loops</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [c,ceq]=NonLinCon_ClosedLoop_Num(Human_model,solid_path1,solid_path2,num_solid,num_markers,q,k) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Non-linear equation used in the inverse kinematics step for closed loops
+
+   INPUT
+  - Human_model: osteo-articular model (see the Documentation for the
+   structure)
+   - solid_path1 : vector of one of the two paths to close the loop
+   - solid_path2 : vector of the other of the two paths to close the loop
+   - num_solid : vector of the number of solid where the anatomical point must join the
+   origin of another joint to close the loo
+   - num_markers : vector of the position in the list &quot;anat_position&quot; that
+   corresponds to the point to close the loop
+   - q: vector of joint coordinates at a given instant
+   - k: vector of homothety coefficient
+
+   OUTPUT
+   - c: non-linar inequality
+   - ceq: non-linear equality
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="ForwardKinematics_ClosedLoop.html" class="code" title="function [Human_model,p,R] = ForwardKinematics_ClosedLoop(Human_model,n,s,solid_path,p,R,q,k)">ForwardKinematics_ClosedLoop</a>	Computation of a symbolic forward kinematics</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="ConstraintsJacobian.html" class="code" title="function K=ConstraintsJacobian(Human_model,q,solid_path1,solid_path2,num_solid,num_markers,k,dq,dependancies)">ConstraintsJacobian</a>	Return the constraint matrix K, which is the jacobian of the constraints</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [c,ceq]=NonLinCon_ClosedLoop_Num(Human_model,solid_path1,solid_path2,num_solid,num_markers,q,k)</a>
+0002 <span class="comment">% Non-linear equation used in the inverse kinematics step for closed loops</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%  - Human_model: osteo-articular model (see the Documentation for the</span>
+0006 <span class="comment">%   structure)</span>
+0007 <span class="comment">%   - solid_path1 : vector of one of the two paths to close the loop</span>
+0008 <span class="comment">%   - solid_path2 : vector of the other of the two paths to close the loop</span>
+0009 <span class="comment">%   - num_solid : vector of the number of solid where the anatomical point must join the</span>
+0010 <span class="comment">%   origin of another joint to close the loo</span>
+0011 <span class="comment">%   - num_markers : vector of the position in the list &quot;anat_position&quot; that</span>
+0012 <span class="comment">%   corresponds to the point to close the loop</span>
+0013 <span class="comment">%   - q: vector of joint coordinates at a given instant</span>
+0014 <span class="comment">%   - k: vector of homothety coefficient</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   OUTPUT</span>
+0017 <span class="comment">%   - c: non-linar inequality</span>
+0018 <span class="comment">%   - ceq: non-linear equality</span>
+0019 <span class="comment">%________________________________________________________</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% Licence</span>
+0022 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0023 <span class="comment">%________________________________________________________</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0026 <span class="comment">% Georges Dumont</span>
+0027 <span class="comment">%________________________________________________________</span>
+0028 
+0029 <span class="comment">% Contraints initialization</span>
+0030 c=[];
+0031 <span class="comment">%ceq=zeros(9*length(num_solid),1);</span>
+0032 ceq=zeros(7*length(num_solid),1);
+0033 
+0034 
+0035 <span class="keyword">for</span> pp=1:numel(num_solid)
+0036     
+0037     <span class="keyword">if</span> isempty(solid_path2{pp}) <span class="comment">% if the beginning coincides with the end of the loop</span>
+0038         
+0039         <span class="comment">% Computation on path</span>
+0040         s = Human_model(num_solid(pp)).c + Human_model(num_solid(pp)).anat_position{num_markers(pp),2}; <span class="comment">% position with respects to the position of the mother solid joint of the closed loop</span>
+0041         [Human_model,p_ClosedLoop,R_ClosedLoop] = <a href="ForwardKinematics_ClosedLoop.html" class="code" title="function [Human_model,p,R] = ForwardKinematics_ClosedLoop(Human_model,n,s,solid_path,p,R,q,k)">ForwardKinematics_ClosedLoop</a>(Human_model,1,s,solid_path1{pp},[0 0 0]',eye(3),q,k);
+0042         
+0043         <span class="comment">% Rotation matrix and Position vector</span>
+0044         Rtemp=R_ClosedLoop;
+0045         ptemp=p_ClosedLoop;
+0046        
+0047 <span class="comment">%         % Rotation matrix must be equal to eye</span>
+0048 <span class="comment">%         Rtemp=R_ClosedLoop -eye(3);</span>
+0049 <span class="comment">%         ceq(1+9*(pp-1))=Rtemp(1,1);</span>
+0050 <span class="comment">%         ceq(2+9*(pp-1))=Rtemp(2,2);</span>
+0051 <span class="comment">%         ceq(3+9*(pp-1))=Rtemp(3,3);</span>
+0052 <span class="comment">%         ceq(4+9*(pp-1))=Rtemp(1,2);</span>
+0053 <span class="comment">%         ceq(5+9*(pp-1))=Rtemp(1,3);</span>
+0054 <span class="comment">%         ceq(6+9*(pp-1))=Rtemp(2,3);</span>
+0055 <span class="comment">%         ceq(7+9*(pp-1))=ptemp(1);</span>
+0056 <span class="comment">%         ceq(8+9*(pp-1))=ptemp(2);</span>
+0057 <span class="comment">%         ceq(9+9*(pp-1))=ptemp(3);</span>
+0058         
+0059         <span class="comment">% Quaternion expression of rotation matrix</span>
+0060         r=1/2*sqrt(1+Rtemp(1,1)+Rtemp(2,2)+Rtemp(3,3));
+0061         ceq(1+7*(pp-1))=r-1;
+0062         ceq(2+7*(pp-1))=Rtemp(2,3);
+0063         ceq(3+7*(pp-1))=Rtemp(1,3);
+0064         ceq(4+7*(pp-1))=Rtemp(1,2);
+0065         ceq(5+7*(pp-1))=ptemp(1); 
+0066         ceq(6+7*(pp-1))=ptemp(2);
+0067         ceq(7+7*(pp-1))=ptemp(3);
+0068 
+0069         
+0070     <span class="keyword">else</span>
+0071         <span class="keyword">if</span> isempty(solid_path1{pp}) <span class="comment">% if the beginning coincides with the end of the loop</span>
+0072             
+0073             <span class="comment">% Computation on path</span>
+0074             s = Human_model(num_solid(pp)).c + Human_model(num_solid(pp)).anat_position{num_markers(pp),2}; <span class="comment">% position with respects to the position of the mother solid joint of the closed loop</span>
+0075             [Human_model,p_ClosedLoop,R_ClosedLoop] = <a href="ForwardKinematics_ClosedLoop.html" class="code" title="function [Human_model,p,R] = ForwardKinematics_ClosedLoop(Human_model,n,s,solid_path,p,R,q,k)">ForwardKinematics_ClosedLoop</a>(Human_model,1,s,solid_path2{pp},[0 0 0]',eye(3),q,k);
+0076             
+0077             <span class="comment">% Rotation matrix and Position vector</span>
+0078             Rtemp=R_ClosedLoop;
+0079             ptemp=p_ClosedLoop;
+0080             
+0081 <span class="comment">%             % Rotation matrix must be equal to eye</span>
+0082 <span class="comment">%             Rtemp=R_ClosedLoop -eye(3);</span>
+0083 <span class="comment">%             ceq(1+9*(pp-1))=Rtemp(1,1);</span>
+0084 <span class="comment">%             ceq(2+9*(pp-1))=Rtemp(2,2);</span>
+0085 <span class="comment">%             ceq(3+9*(pp-1))=Rtemp(3,3);</span>
+0086 <span class="comment">%             ceq(4+9*(pp-1))=Rtemp(1,2);</span>
+0087 <span class="comment">%             ceq(5+9*(pp-1))=Rtemp(1,3);</span>
+0088 <span class="comment">%             ceq(6+9*(pp-1))=Rtemp(2,3);</span>
+0089 <span class="comment">%             ceq(7+9*(pp-1))=ptemp(1);</span>
+0090 <span class="comment">%             ceq(8+9*(pp-1))=ptemp(2);</span>
+0091 <span class="comment">%             ceq(9+9*(pp-1))=ptemp(3);</span>
+0092        
+0093             <span class="comment">% Quaternion expression of rotation matrix</span>
+0094             r=1/2*sqrt(1+Rtemp(1,1)+Rtemp(2,2)+Rtemp(3,3));
+0095             ceq(1+7*(pp-1))=r-1;
+0096             ceq(2+7*(pp-1))=Rtemp(2,3);
+0097             ceq(3+7*(pp-1))=Rtemp(1,3);
+0098             ceq(4+7*(pp-1))=Rtemp(1,2);
+0099             ceq(5+7*(pp-1))=ptemp(1); 
+0100             ceq(6+7*(pp-1))=ptemp(2);
+0101             ceq(7+7*(pp-1))=ptemp(3);
+0102 
+0103 
+0104         <span class="keyword">else</span><span class="comment">% if the loop is cut elsewhere in the loop</span>
+0105             
+0106             <span class="comment">% Computation on path</span>
+0107             [Human_model,p_ClosedLoop1,R_ClosedLoop1] = <a href="ForwardKinematics_ClosedLoop.html" class="code" title="function [Human_model,p,R] = ForwardKinematics_ClosedLoop(Human_model,n,s,solid_path,p,R,q,k)">ForwardKinematics_ClosedLoop</a>(Human_model,1,[0 0 0],solid_path1{pp},[0 0 0]',eye(3),q,k);
+0108             [Human_model,p_ClosedLoop2,R_ClosedLoop2] = <a href="ForwardKinematics_ClosedLoop.html" class="code" title="function [Human_model,p,R] = ForwardKinematics_ClosedLoop(Human_model,n,s,solid_path,p,R,q,k)">ForwardKinematics_ClosedLoop</a>(Human_model,1,[0 0 0],solid_path2{pp},[0 0 0]',eye(3),q,k);
+0109             <span class="keyword">if</span> ~isempty(intersect(solid_path1{pp},num_solid(pp))) <span class="comment">% Finding the solid with the anatomical position to be respected</span>
+0110                 p_ClosedLoop1 = p_ClosedLoop1 + R_ClosedLoop1*(Human_model(num_solid(pp)).c+Human_model(num_solid(pp)).anat_position{num_markers(pp),2});
+0111             <span class="keyword">else</span>
+0112                 p_ClosedLoop2= p_ClosedLoop2 + R_ClosedLoop2*(Human_model(num_solid(pp)).c+Human_model(num_solid(pp)).anat_position{num_markers(pp),2});
+0113             <span class="keyword">end</span>
+0114             
+0115             <span class="comment">% Rotation matrix and Position vector</span>
+0116             ptemp=p_ClosedLoop2-p_ClosedLoop1;
+0117             Rtemp=R_ClosedLoop1*R_ClosedLoop2';
+0118   
+0119 <span class="comment">%             % Rotation matrix must be eye</span>
+0120 <span class="comment">%             Rtemp=R_ClosedLoop1*R_ClosedLoop2' -eye(3);</span>
+0121 <span class="comment">%             ceq(1+9*(pp-1))=Rtemp(1,1);</span>
+0122 <span class="comment">%             ceq(2+9*(pp-1))=Rtemp(2,2);</span>
+0123 <span class="comment">%             ceq(3+9*(pp-1))=Rtemp(3,3);</span>
+0124 <span class="comment">%             ceq(4+9*(pp-1))=Rtemp(1,2);</span>
+0125 <span class="comment">%             ceq(5+9*(pp-1))=Rtemp(1,3);</span>
+0126 <span class="comment">%             ceq(6+9*(pp-1))=Rtemp(2,3);</span>
+0127 <span class="comment">%             ceq(7+9*(pp-1))=ptemp(1);</span>
+0128 <span class="comment">%             ceq(8+9*(pp-1))=ptemp(2);</span>
+0129 <span class="comment">%             ceq(9+9*(pp-1))=ptemp(3);</span>
+0130 
+0131             <span class="comment">% Quaternion expression of rotation matrix</span>
+0132             r=1/2*sqrt(1+Rtemp(1,1)+Rtemp(2,2)+Rtemp(3,3));
+0133             ceq(1+7*(pp-1))=r-1;
+0134             ceq(2+7*(pp-1))=Rtemp(2,3);
+0135             ceq(3+7*(pp-1))=Rtemp(1,3);
+0136             ceq(4+7*(pp-1))=Rtemp(1,2);
+0137             ceq(5+7*(pp-1))=ptemp(1); 
+0138             ceq(6+7*(pp-1))=ptemp(2);
+0139             ceq(7+7*(pp-1))=ptemp(3);
+0140         
+0141             
+0142         <span class="keyword">end</span>
+0143     <span class="keyword">end</span>
+0144 <span class="keyword">end</span>
+0145 
+0146 
+0147 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

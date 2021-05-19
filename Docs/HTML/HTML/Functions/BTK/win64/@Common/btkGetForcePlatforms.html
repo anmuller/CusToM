@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of btkGetForcePlatforms</title>
+  <meta name="keywords" content="btkGetForcePlatforms">
+  <meta name="description" content="BTKGETFORCEPLATFORMS Extract force platforms' informations from a biomechanical acquisition">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html Functions --><!-- # BTK --><!-- ../menu.html win64 --><!-- menu.html @Common -->
+<h1>btkGetForcePlatforms
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>BTKGETFORCEPLATFORMS Extract force platforms' informations from a biomechanical acquisition</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [forceplates forceplatesInfo] = btkGetForcePlatforms(h) %#ok </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">BTKGETFORCEPLATFORMS Extract force platforms' informations from a biomechanical acquisition
+ 
+  FORCEPLATES = BTKGETFORCEPLATFORMS(H) returns a structure of force platforms. 
+  The structure FORCEPLATFORMS is a row structure where each row contains 
+  data for one force platform. Fieldnames for each row are:
+   - FORCEPLATES(i).CHANNELS
+   - FORCEPLATES(i).CORNERS
+   - FORCEPLATES(i).ORIGIN
+   - FORCEPLATES(i).TYPE
+  The field CHANNELS is also a structure with field corresponding to analog 
+  channel.  Their fieldname's label is the label of the analog channel.
+  Field CORNERS is a matrix (3,4) of double with the 3D coordinates 
+  of the four corners of the force platform (expressed in the global frame).
+  Field ORIGIN is a matrix (3,1) of double with the 3D coordinates 
+  of the origin the force platform (expressed in the global frame).
+  Field TYPE is an integer which indicate the force platform type.  For
+  much information on this type, see the C3D documentation (www.c3d.org).
+  The biomechanical acquisition handle H is represented as a double and can
+  be only used with the btk* functions.
+
+  [FORCEPLATES FORCEPLATESINFO] = BTKGETFORCEPLATFORMS(H) returns 
+  force platform's channel' informations in FORCEPLATESINFO.  The structure 
+  FORCEPLATESINFO has the following fields:
+    - FORCEPLATESINFO(i).FREQUENCY
+    - FORCEPLATESINFO(i).UNITS
+    - FORCEPLATESINFO(i).CAL_MATRIX
+  Field FREQUENCY contains the force platform's channel' frequency.  
+  Field UNITS contains the unit of each analog channel.  Each fieldname in
+  UNITS corresponds to analog channel's label.  Field CAL_MATRIX contains a
+  matrix which is used to correct the cross talk between channel.  This 
+  matrix is only used with supported force platform type.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Functions/Animation/ColorsAnimation.html" class="code" title="function [Colors]=ColorsAnimation(filename,Muscles,AnimateParameters,Human_model,ModelParameters,AnalysisParameters,options,Markers_set)">ColorsAnimation</a>	Preparing the colors for animation</li><li><a href="../../../../Functions/BTK/linux64/btkTransformTDFToViconC3DFile.html" class="code" title="function btkTransformTDFToViconC3DFile(TDF_INPUT, C3D_OUTPUT)">btkTransformTDFToViconC3DFile</a>	BTKTRANSFORMTDFTOVICONC3DFILE transforms a TDF file (BTS Bioengineering) to a compatible Vicon C3D file.</li><li><a href="../../../../Functions/BTK/mac64/btkTransformTDFToViconC3DFile.html" class="code" title="function btkTransformTDFToViconC3DFile(TDF_INPUT, C3D_OUTPUT)">btkTransformTDFToViconC3DFile</a>	BTKTRANSFORMTDFTOVICONC3DFILE transforms a TDF file (BTS Bioengineering) to a compatible Vicon C3D file.</li><li><a href="../../../../Functions/BTK/win64/btkTransformTDFToViconC3DFile.html" class="code" title="function btkTransformTDFToViconC3DFile(TDF_INPUT, C3D_OUTPUT)">btkTransformTDFToViconC3DFile</a>	BTKTRANSFORMTDFTOVICONC3DFILE transforms a TDF file (BTS Bioengineering) to a compatible Vicon C3D file.</li><li><a href="../../../../Functions/ExternalForces/FromExperiments/DataInC3D.html" class="code" title="function [ExternalForcesComputationResults] = DataInC3D(filename, BiomechanicalModel, AnalysisParameters)">DataInC3D</a>	Computation of the external forces</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [forceplates forceplatesInfo] = btkGetForcePlatforms(h) </a><span class="comment">%#ok</span>
+0002 <span class="comment">%BTKGETFORCEPLATFORMS Extract force platforms' informations from a biomechanical acquisition</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%  FORCEPLATES = BTKGETFORCEPLATFORMS(H) returns a structure of force platforms.</span>
+0005 <span class="comment">%  The structure FORCEPLATFORMS is a row structure where each row contains</span>
+0006 <span class="comment">%  data for one force platform. Fieldnames for each row are:</span>
+0007 <span class="comment">%   - FORCEPLATES(i).CHANNELS</span>
+0008 <span class="comment">%   - FORCEPLATES(i).CORNERS</span>
+0009 <span class="comment">%   - FORCEPLATES(i).ORIGIN</span>
+0010 <span class="comment">%   - FORCEPLATES(i).TYPE</span>
+0011 <span class="comment">%  The field CHANNELS is also a structure with field corresponding to analog</span>
+0012 <span class="comment">%  channel.  Their fieldname's label is the label of the analog channel.</span>
+0013 <span class="comment">%  Field CORNERS is a matrix (3,4) of double with the 3D coordinates</span>
+0014 <span class="comment">%  of the four corners of the force platform (expressed in the global frame).</span>
+0015 <span class="comment">%  Field ORIGIN is a matrix (3,1) of double with the 3D coordinates</span>
+0016 <span class="comment">%  of the origin the force platform (expressed in the global frame).</span>
+0017 <span class="comment">%  Field TYPE is an integer which indicate the force platform type.  For</span>
+0018 <span class="comment">%  much information on this type, see the C3D documentation (www.c3d.org).</span>
+0019 <span class="comment">%  The biomechanical acquisition handle H is represented as a double and can</span>
+0020 <span class="comment">%  be only used with the btk* functions.</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%  [FORCEPLATES FORCEPLATESINFO] = BTKGETFORCEPLATFORMS(H) returns</span>
+0023 <span class="comment">%  force platform's channel' informations in FORCEPLATESINFO.  The structure</span>
+0024 <span class="comment">%  FORCEPLATESINFO has the following fields:</span>
+0025 <span class="comment">%    - FORCEPLATESINFO(i).FREQUENCY</span>
+0026 <span class="comment">%    - FORCEPLATESINFO(i).UNITS</span>
+0027 <span class="comment">%    - FORCEPLATESINFO(i).CAL_MATRIX</span>
+0028 <span class="comment">%  Field FREQUENCY contains the force platform's channel' frequency.</span>
+0029 <span class="comment">%  Field UNITS contains the unit of each analog channel.  Each fieldname in</span>
+0030 <span class="comment">%  UNITS corresponds to analog channel's label.  Field CAL_MATRIX contains a</span>
+0031 <span class="comment">%  matrix which is used to correct the cross talk between channel.  This</span>
+0032 <span class="comment">%  matrix is only used with supported force platform type.</span>
+0033 
+0034 <span class="comment">%  Author: A. Barré</span>
+0035 <span class="comment">%  Copyright 2009-2013 Biomechanical ToolKit (BTK).</span>
+0036 
+0037 <span class="comment">% The following comment, MATLAB compiler pragma, is necessary to avoid</span>
+0038 <span class="comment">% compiling this M-file instead of linking against the MEX-file.  Don't remove.</span>
+0039 <span class="comment">%# mex</span>
+0040 
+0041 error(generatemsgid(<span class="string">'NotSupported'</span>),<span class="string">'MEX file for BTKGETFORCEPLATFORMS not found'</span>);
+0042 
+0043 <span class="comment">% [EOF] btkGetForcePlatforms.m</span>
+0044</pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

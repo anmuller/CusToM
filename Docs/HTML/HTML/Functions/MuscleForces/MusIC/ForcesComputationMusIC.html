@@ -1,0 +1,279 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ForcesComputationMusIC</title>
+  <meta name="keywords" content="ForcesComputationMusIC">
+  <meta name="description" content="Computation of the muscle forces estimation step by using the MusIC method">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- ../menu.html MuscleForces --><!-- menu.html MusIC -->
+<h1>ForcesComputationMusIC
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Computation of the muscle forces estimation step by using the MusIC method</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [MuscleForcesComputationResults] = ForcesComputationMusIC(filename, BiomechanicalModel, AnalysisParameters) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Computation of the muscle forces estimation step by using the MusIC method
+
+    Associated publications :
+    - Muller, A., Pontonnier, C., &amp; Dumont, G., 2018.
+     The MusIC method: a fast and quasi-optimal solution to the muscle forces estimation problem. Computer methods in biomechanics and biomedical engineering, 21(2), 149-160.
+    - Muller, A., Demore, F., Pontonnier, C., &amp; Dumont, G., 2017. 
+    MusIC makes the muscles work together. In XVI International Symposium on Computer Simulation in Biomechanics (p. 2).
+
+   INPUT
+   - filename: name of the file to process (character string)
+   - BiomechanicalModel: musculoskeletal model
+   OUTPUT
+   - MuscleForcesComputationResults: results of the muscle forces
+   estimation step (see the Documentation for the structure) 
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="InterpnVector.html" class="code" title="function [Vq] = InterpnVector(X,V,Xq)">InterpnVector</a>	Linear interpolation of m-dimensions vector in n-dimensions database</li><li><a href="KKT_projection.html" class="code" title="function [F,mu] = KKT_projection(F0,Fmax,R,C,pos_active_set,pos_passive_set,epsilon)">KKT_projection</a>	Resolution of the Karush�Kuhn�Tucker conditions</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Functions/MuscleForces/MuscleForcesComputation.html" class="code" title="function [] = MuscleForcesComputation(AnalysisParameters)">MuscleForcesComputation</a>	Computation of the muscle forces estimation step</li><li><a href="../../../Functions/MuscleForces/MuscleForcesComputationNum.html" class="code" title="function [] = MuscleForcesComputationNum(AnalysisParameters)">MuscleForcesComputationNum</a>	Computation of the muscle forces estimation step</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [MuscleForcesComputationResults] = ForcesComputationMusIC(filename, BiomechanicalModel, AnalysisParameters)</a>
+0002 <span class="comment">% Computation of the muscle forces estimation step by using the MusIC method</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%    Associated publications :</span>
+0005 <span class="comment">%    - Muller, A., Pontonnier, C., &amp; Dumont, G., 2018.</span>
+0006 <span class="comment">%     The MusIC method: a fast and quasi-optimal solution to the muscle forces estimation problem. Computer methods in biomechanics and biomedical engineering, 21(2), 149-160.</span>
+0007 <span class="comment">%    - Muller, A., Demore, F., Pontonnier, C., &amp; Dumont, G., 2017.</span>
+0008 <span class="comment">%    MusIC makes the muscles work together. In XVI International Symposium on Computer Simulation in Biomechanics (p. 2).</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   INPUT</span>
+0011 <span class="comment">%   - filename: name of the file to process (character string)</span>
+0012 <span class="comment">%   - BiomechanicalModel: musculoskeletal model</span>
+0013 <span class="comment">%   OUTPUT</span>
+0014 <span class="comment">%   - MuscleForcesComputationResults: results of the muscle forces</span>
+0015 <span class="comment">%   estimation step (see the Documentation for the structure)</span>
+0016 <span class="comment">%________________________________________________________</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% Licence</span>
+0019 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0020 <span class="comment">%________________________________________________________</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0023 <span class="comment">% Georges Dumont</span>
+0024 <span class="comment">%________________________________________________________</span>
+0025 
+0026 <span class="keyword">if</span> ~isfield(BiomechanicalModel,[<span class="string">'MusICDatabase_'</span> char(AnalysisParameters.Muscles.Costfunction) num2str(AnalysisParameters.Muscles.CostfunctionOptions) <span class="string">'_'</span> num2str(AnalysisParameters.Muscles.DatabaseDensity(1)) <span class="string">'_'</span> num2str(AnalysisParameters.Muscles.DatabaseDensity(2))])
+0027     disp(<span class="string">'MusIC Database Generation ...'</span>)
+0028     eval([<span class="string">'[BiomechanicalModel.MusICDatabase_'</span> char(AnalysisParameters.Muscles.Costfunction) num2str(AnalysisParameters.Muscles.CostfunctionOptions) <span class="string">'_'</span> num2str(AnalysisParameters.Muscles.DatabaseDensity(1)) <span class="string">'_'</span> num2str(AnalysisParameters.Muscles.DatabaseDensity(2)) <span class="string">'] = MusICDatabaseGeneration(BiomechanicalModel, AnalysisParameters);'</span>]) 
+0029     disp(<span class="string">'... MusIC Database Generation done'</span>)
+0030     save(<span class="string">'BiomechanicalModel'</span>,<span class="string">'BiomechanicalModel'</span>);
+0031 <span class="keyword">end</span>
+0032 
+0033 disp([<span class="string">'Forces Computation ('</span> filename <span class="string">') ...'</span>])
+0034 
+0035 <span class="comment">%% Loading variables</span>
+0036 Moment_Arms = BiomechanicalModel.MomentArms;
+0037 Muscles = BiomechanicalModel.Muscles;
+0038 C = BiomechanicalModel.MuscularCoupling;
+0039 Database = eval([<span class="string">'BiomechanicalModel.MusICDatabase_'</span> char(AnalysisParameters.Muscles.Costfunction) num2str(AnalysisParameters.Muscles.CostfunctionOptions) <span class="string">'_'</span> num2str(AnalysisParameters.Muscles.DatabaseDensity(1)) <span class="string">'_'</span> num2str(AnalysisParameters.Muscles.DatabaseDensity(2))]);
+0040 load([filename <span class="string">'/InverseKinematicsResults'</span>]) <span class="comment">%#ok&lt;LOAD&gt;</span>
+0041 load([filename <span class="string">'/InverseDynamicsResults'</span>]) <span class="comment">%#ok&lt;LOAD&gt;</span>
+0042 
+0043 <span class="keyword">if</span> isfield(BiomechanicalModel,<span class="string">'Generalized_Coordinates'</span>)
+0044 q_map_unsix = BiomechanicalModel.Generalized_Coordinates.q_map_unsix;
+0045 q = q_map_unsix'*[InverseKinematicsResults.FreeJointCoordinates(<span class="keyword">end</span>,:);<span class="keyword">...</span>
+0046     InverseKinematicsResults.JointCoordinates(2:<span class="keyword">end</span>,:);
+0047     InverseKinematicsResults.JointCoordinates(1,:);
+0048     InverseKinematicsResults.FreeJointCoordinates(1:end-1,:)];
+0049 
+0050 torques = q_map_unsix'*[InverseDynamicsResults.DynamicResiduals.t6dof(<span class="keyword">end</span>,:);<span class="keyword">...</span>
+0051     InverseDynamicsResults.JointTorques(2:<span class="keyword">end</span>,:);
+0052     InverseDynamicsResults.JointTorques(1,:);
+0053     InverseDynamicsResults.DynamicResiduals.f6dof;
+0054     InverseDynamicsResults.DynamicResiduals.t6dof(1:end-1,:)];
+0055 <span class="keyword">else</span>
+0056   q=InverseKinematicsResults.JointCoordinates;  
+0057   torques=InverseDynamicsResults.JointTorques;
+0058 <span class="keyword">end</span>
+0059 
+0060 <span class="comment">%%  Detection of joint concerned by the muscle</span>
+0061 n=0;
+0062 <span class="keyword">for</span> i=1:size(Moment_Arms,1)
+0063     <span class="keyword">for</span> j=1:size(Moment_Arms,2)
+0064         <span class="keyword">if</span> ~isnumeric(Moment_Arms{i,j})
+0065            n=n+1;
+0066            art_muscles(n)=i; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0067            <span class="keyword">break</span>
+0068         <span class="keyword">end</span>
+0069     <span class="keyword">end</span>
+0070 <span class="keyword">end</span>
+0071 
+0072 <span class="comment">%% Preliminary computation</span>
+0073 
+0074 <span class="comment">% list to interpolate</span>
+0075 <span class="keyword">for</span> i=1:numel(art_muscles)
+0076     k=0;
+0077     <span class="keyword">for</span> j=1:numel(art_muscles)
+0078         <span class="keyword">if</span> C(art_muscles(i),art_muscles(j))
+0079             k=k+1;
+0080             listX(i).X{k,1} = Database(i).Q{art_muscles(j),1}; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0081         <span class="keyword">end</span>
+0082     <span class="keyword">end</span>
+0083 <span class="keyword">end</span>
+0084 
+0085 <span class="comment">% Muscle_art</span>
+0086 Muscle_art=cell(size(Moment_Arms,2),1);
+0087 <span class="keyword">for</span> i=1:size(Moment_Arms,1)
+0088     <span class="keyword">for</span> j=1:size(Moment_Arms,2)
+0089         <span class="keyword">if</span> ~isnumeric(Moment_Arms{i,j})
+0090             Muscle_art{j,1}=[Muscle_art{j,1} find(art_muscles==i)];
+0091         <span class="keyword">end</span>
+0092     <span class="keyword">end</span>
+0093 <span class="keyword">end</span>
+0094 
+0095 <span class="comment">% FMusIC</span>
+0096 NbMuscles = numel(Muscles);
+0097 nb_frame=size(q,2);
+0098 FMusIC=zeros(NbMuscles,nb_frame);
+0099 AMusIC=zeros(size(FMusIC));
+0100 
+0101 <span class="comment">%% Computation of muscle forces</span>
+0102 
+0103 h = waitbar(0,[<span class="string">'Forces Computation ('</span> filename <span class="string">')'</span>]);
+0104 
+0105 <span class="comment">% initial coefficient to weight the bi-objective optimization</span>
+0106 epsilon_init = 1e-3; epsilon = epsilon_init;
+0107 epsilon_factor = 10; <span class="comment">% multiplication factor for epsilon variation</span>
+0108 
+0109 tic
+0110 <span class="keyword">for</span> i=1:nb_frame
+0111 <span class="comment">%     i</span>
+0112     <span class="comment">%% Computation of muscle moment arms</span>
+0113     M = zeros(numel(art_muscles),numel(Muscles));
+0114     c=0;
+0115     <span class="keyword">for</span> m=art_muscles
+0116         c=c+1;
+0117         <span class="keyword">for</span> j=1:numel(Muscles)
+0118             <span class="keyword">if</span> isnumeric(Moment_Arms{m,j})
+0119                 M(c,j)=0;
+0120             <span class="keyword">else</span>
+0121                 M(c,j) = Moment_Arms{m,j}(q(:,i));
+0122             <span class="keyword">end</span>
+0123         <span class="keyword">end</span>
+0124     <span class="keyword">end</span>
+0125     <span class="comment">%% Fmax</span>
+0126     Fmax=[Muscles.f0]';
+0127     <span class="comment">%% Interpolation</span>
+0128     <span class="comment">% Finding in the database the closest available values</span>
+0129     AlphaDatabase = zeros(numel(Muscles),numel(art_muscles));
+0130     TorquesDatabase = zeros(numel(art_muscles),1);
+0131     <span class="keyword">for</span> j = 1:numel(art_muscles) <span class="comment">% for each joint</span>
+0132         <span class="keyword">if</span> torques(art_muscles(j),i) &gt; 0 <span class="comment">% positive torque</span>
+0133             InterResults = <a href="InterpnVector.html" class="code" title="function [Vq] = InterpnVector(X,V,Xq)">InterpnVector</a>(listX(j).X,Database(j).RatioPos,q(Database(j).list_coupling,i));
+0134         <span class="keyword">else</span>
+0135             InterResults = <a href="InterpnVector.html" class="code" title="function [Vq] = InterpnVector(X,V,Xq)">InterpnVector</a>(listX(j).X,Database(j).RatioNeg,q(Database(j).list_coupling,i));
+0136         <span class="keyword">end</span>
+0137         AlphaDatabase(Database(j).art_mus,j) = InterResults(1:(end-1));
+0138         TorquesDatabase(j,:) = InterResults(end);
+0139     <span class="keyword">end</span>
+0140     <span class="comment">% Weight of each joint in the barycentric interpolation</span>
+0141     Beta = torques(art_muscles,i)./TorquesDatabase;
+0142     <span class="comment">% Associated forces for each joint are computated</span>
+0143     Finter = zeros(size(AlphaDatabase));
+0144     <span class="keyword">for</span> j=1:numel(art_muscles)
+0145         asum=(Beta(j)*TorquesDatabase(j,:))/(sum(M(j,:)'.*Fmax.*AlphaDatabase(:,j)));
+0146         Finter(:,j) = AlphaDatabase(:,j).*Fmax.*asum;
+0147     <span class="keyword">end</span>
+0148     Finter = max(min(Fmax,Finter),0);
+0149    
+0150     <span class="comment">%% Correction</span>
+0151     <span class="comment">% Barycentric interpolation</span>
+0152     <span class="comment">% Unique vector array of muscle forces computation</span>
+0153     Fsingle = zeros(size(Finter,1),1);
+0154     <span class="keyword">for</span> j=1:numel(Fsingle)
+0155         Fsingle(j,1) = sum(Finter(j,Muscle_art{j,1})'.*abs(torques(art_muscles(Muscle_art{j,1}),i)))/sum(abs(torques(art_muscles(Muscle_art{j,1}),i)));
+0156     <span class="keyword">end</span>
+0157     Fsingle = max(min(Fmax,Fsingle),0);
+0158     
+0159     <span class="comment">%% Minimization</span>
+0160     test_stop = 0; <span class="comment">% indicator to stop loops</span>
+0161     pos_active_set = [];
+0162     pos_passive_set = [1:numel(Fsingle)]'; <span class="comment">%#ok&lt;NBRAK&gt;</span>
+0163     iter=0;
+0164     epsilon = max(epsilon_init,epsilon/epsilon_factor);
+0165     <span class="keyword">while</span> ~test_stop
+0166         iter=iter+1;
+0167         <span class="keyword">if</span> iter &gt; NbMuscles
+0168             epsilon = epsilon*epsilon_factor; iter = 0;
+0169         <span class="keyword">end</span>
+0170         <span class="comment">% minimization</span>
+0171         [Fkp1,mu] = <a href="KKT_projection.html" class="code" title="function [F,mu] = KKT_projection(F0,Fmax,R,C,pos_active_set,pos_passive_set,epsilon)">KKT_projection</a>(Fsingle,Fmax,M,torques(art_muscles,i),pos_active_set,pos_passive_set,epsilon);
+0172         test_max = max(max(-Fkp1,Fkp1-Fmax(pos_passive_set))); <span class="comment">% on regarde la diff�ence avec les limites</span>
+0173         <span class="keyword">if</span> test_max &gt; 0 <span class="comment">% Conditions are not satisfied</span>
+0174             <span class="keyword">if</span> test_max == max(-Fkp1) <span class="comment">% maximum limit with 0</span>
+0175                 pos_act = find(max(-Fkp1)==-Fkp1,1); <span class="comment">% contraints number to enable in the pos_passive_set list</span>
+0176                 pos_active_set = [pos_active_set;pos_passive_set(pos_act) 0];  <span class="comment">%#ok&lt;AGROW&gt; % this ligne is added to active constraints</span>
+0177             <span class="keyword">else</span> <span class="comment">% max limit with Fmax</span>
+0178                 pos_act = find(max(Fkp1-Fmax(pos_passive_set))==Fkp1-Fmax(pos_passive_set),1);
+0179                 pos_active_set = [pos_active_set;pos_passive_set(pos_act) 1];  <span class="comment">%#ok&lt;AGROW&gt; % this ligne is added to active constraints</span>
+0180             <span class="keyword">end</span>
+0181             pos_passive_set=[pos_passive_set(1:pos_act-1);pos_passive_set(pos_act+1:end)]; <span class="comment">% this ligne is added to passive constraints</span>
+0182         <span class="keyword">elseif</span> numel(mu) &amp;&amp; any(mu&lt;0) <span class="comment">%we can free an active contraint</span>
+0183                 pos_pas = find(max(-mu)==-mu,1);
+0184                 pos_passive_set = [pos_passive_set;pos_active_set(pos_pas,1)]; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0185                 pos_active_set = [pos_active_set(1:pos_pas-1,:);pos_active_set(pos_pas+1:<span class="keyword">end</span>,:)]; <span class="comment">% this ligne is removed from active constraints</span>
+0186         <span class="keyword">else</span>
+0187                 test_stop = 1; <span class="comment">% STOP</span>
+0188         <span class="keyword">end</span>
+0189 <span class="comment">%         pos_active_set</span>
+0190     <span class="keyword">end</span>
+0191     FMusIC(pos_passive_set,i) = Fkp1;
+0192     <span class="keyword">if</span> numel(pos_active_set)
+0193         FMusIC(pos_active_set(:,1),i) = Fmax(pos_active_set(:,1)).*pos_active_set(:,2);
+0194     <span class="keyword">end</span>
+0195     
+0196     <span class="comment">%% Computation of muscle activation</span>
+0197     AMusIC(:,i) = FMusIC(:,i)./Fmax;
+0198     
+0199     waitbar(i/nb_frame)
+0200 <span class="keyword">end</span>
+0201 close(h)
+0202 <span class="comment">% w=toc;</span>
+0203 
+0204 MuscleForcesComputationResults.MuscleActivations = AMusIC;
+0205 MuscleForcesComputationResults.MuscleForces = FMusIC;
+0206 
+0207 disp([<span class="string">'... Forces Computation ('</span> filename <span class="string">') done'</span>])
+0208 
+0209 <span class="keyword">end</span>
+0210 
+0211</pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

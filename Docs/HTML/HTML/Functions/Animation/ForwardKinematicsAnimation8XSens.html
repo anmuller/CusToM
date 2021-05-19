@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ForwardKinematicsAnimation8XSens</title>
+  <meta name="keywords" content="ForwardKinematicsAnimation8XSens">
+  <meta name="description" content="Computation of a forward kinematics step for the animation8 (adapted for">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html Animation -->
+<h1>ForwardKinematicsAnimation8XSens
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Computation of a forward kinematics step for the animation8 (adapted for</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Human_model]=ForwardKinematicsAnimation8XSens(Human_model,q,j) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Computation of a forward kinematics step for the animation8 (adapted for
+ XSens data)
+
+   INPUT
+   - Human_model: osteo-articular model (see the Documentation for the
+   structure) 
+   - q: vector of joint coordinates
+   - j: current solid
+   OUTPUT
+   - Human_model: osteo-articular model (see the Documentation for the
+   structure) 
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>	Computation of the Rodrigues equation</li><li><a href="ForwardKinematicsAnimation8XSens.html" class="code" title="function [Human_model]=ForwardKinematicsAnimation8XSens(Human_model,q,j)">ForwardKinematicsAnimation8XSens</a>	Computation of a forward kinematics step for the animation8 (adapted for</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="AnimationFramebyFrame.html" class="code" title="function [animStruct]=AnimationFramebyFrame(ax,fig,filename,AnalysisParameters,ModelParameters,AnimateParameters,DataXSens,q,q6dof,PelvisPosition,PelvisOrientation,Markers_set,f_affich,Muscles,animStruct,real_markers,BiomechanicalModel,Human_model)">AnimationFramebyFrame</a>	Computation of animation structure for animation</li><li><a href="ForwardKinematicsAnimation8XSens.html" class="code" title="function [Human_model]=ForwardKinematicsAnimation8XSens(Human_model,q,j)">ForwardKinematicsAnimation8XSens</a>	Computation of a forward kinematics step for the animation8 (adapted for</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Human_model]=ForwardKinematicsAnimation8XSens(Human_model,q,j)</a>
+0002 <span class="comment">% Computation of a forward kinematics step for the animation8 (adapted for</span>
+0003 <span class="comment">% XSens data)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   INPUT</span>
+0006 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the</span>
+0007 <span class="comment">%   structure)</span>
+0008 <span class="comment">%   - q: vector of joint coordinates</span>
+0009 <span class="comment">%   - j: current solid</span>
+0010 <span class="comment">%   OUTPUT</span>
+0011 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the</span>
+0012 <span class="comment">%   structure)</span>
+0013 <span class="comment">%________________________________________________________</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Licence</span>
+0016 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0017 <span class="comment">%________________________________________________________</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0020 <span class="comment">% Georges Dumont</span>
+0021 <span class="comment">%________________________________________________________</span>
+0022 
+0023 <span class="keyword">if</span> j == 0 
+0024     <span class="keyword">return</span>;
+0025 <span class="keyword">end</span>
+0026 
+0027 i=Human_model(j).mother; <span class="comment">% num�o de la m�e</span>
+0028 <span class="keyword">if</span> i == 0
+0029     Human_model(j).pos_pts_anim=[]; <span class="comment">% on initialise un nouveau domaine</span>
+0030 <span class="keyword">else</span>
+0031     <span class="keyword">if</span> Human_model(j).joint == 1    <span class="comment">% liaison pivot</span>
+0032         Human_model(j).p = Human_model(i).R * Human_model(j).b + Human_model(i).p;
+0033         Human_model(j).R = Human_model(i).R * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).a,q(j)) * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).u,Human_model(j).theta);
+0034     <span class="keyword">end</span>
+0035     <span class="keyword">if</span> Human_model(j).joint == 2    <span class="comment">% liaison glissi�e</span>
+0036         Human_model(j).p = Human_model(i).R * (Human_model(j).b + q(j)*Human_model(j).a) + Human_model(i).p;
+0037         Human_model(j).R = Human_model(i).R * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).u,Human_model(j).theta);
+0038     <span class="keyword">end</span>
+0039 <span class="keyword">end</span>
+0040 Human_model(j).pc = Human_model(j).p + Human_model(j).R*Human_model(j).c;
+0041 Human_model(j).Tc_R0_Ri=[Human_model(j).R, Human_model(j).pc ; [0 0 0 1]];
+0042 
+0043 <span class="comment">% Calcul de la position de chaque points</span>
+0044 <span class="keyword">if</span> Human_model(j).Visual == 1
+0045     <span class="keyword">for</span> m = 1:size(Human_model(j).anat_position,1)
+0046         Human_model(j).pos_pts_anim = [Human_model(j).pos_pts_anim <span class="keyword">...</span><span class="comment"> </span>
+0047             (Human_model(j).R * (Human_model(j).c + Human_model(j).anat_position{m,2}) + Human_model(j).p)]; <span class="comment">% calcul de la position de chaque point</span>
+0048     <span class="keyword">end</span>
+0049 <span class="keyword">end</span>
+0050 
+0051 [Human_model]=<a href="ForwardKinematicsAnimation8XSens.html" class="code" title="function [Human_model]=ForwardKinematicsAnimation8XSens(Human_model,q,j)">ForwardKinematicsAnimation8XSens</a>(Human_model,q,Human_model(j).sister);
+0052 [Human_model]=<a href="ForwardKinematicsAnimation8XSens.html" class="code" title="function [Human_model]=ForwardKinematicsAnimation8XSens(Human_model,q,j)">ForwardKinematicsAnimation8XSens</a>(Human_model,q,Human_model(j).child);
+0053 
+0054 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

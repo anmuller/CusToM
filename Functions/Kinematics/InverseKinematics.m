@@ -42,7 +42,7 @@ for i = 1:numel(AnalysisParameters.filename)
             [ExperimentalData, InverseKinematicsResults] = InverseKinematicsOpti(filename,AnalysisParameters,BiomechanicalModel); % Optimization method
         elseif AnalysisParameters.IK.Method == 2
             [ExperimentalData, InverseKinematicsResults] = InverseKinematicsLM(filename,AnalysisParameters,BiomechanicalModel); % Levenberg-Marquardt algorithm
-        end
+    end
 
         % Save data
         save([filename '/ExperimentalData'],'ExperimentalData');

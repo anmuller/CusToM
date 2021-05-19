@@ -1,0 +1,21 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  CalcCoM -> CalcMC;
+  CalcKE -> CalcKE;
+  CalcMC -> CalcMC;
+  ForwardAllKinematics -> ForwardAllKinematics;
+  InverseDynamics -> ForwardAllKinematics;
+  InverseDynamics -> InverseDynamicsSolid;
+  InverseDynamicsSolid -> InverseDynamicsSolid;
+  Kinetics -> CalcCoM;
+  Kinetics -> CalcKE;
+  Kinetics -> ForwardAllKinematics;
+
+  CalcCoM [URL="CalcCoM.html"];
+  CalcKE [URL="CalcKE.html"];
+  CalcMC [URL="CalcMC.html"];
+  ForwardAllKinematics [URL="ForwardAllKinematics.html"];
+  InverseDynamics [URL="InverseDynamics.html"];
+  InverseDynamicsSolid [URL="InverseDynamicsSolid.html"];
+  Kinetics [URL="Kinetics.html"];
+}

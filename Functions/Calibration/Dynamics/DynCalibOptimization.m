@@ -36,17 +36,17 @@ external_forces = ExternalForcesComputationResults.ExternalForcesExperiments;
 nb_frame_opti = AnalysisParameters.CalibID.Frames.NbFrames;
 KinematicsError = InverseKinematicsResults.ReconstructionError;
 
-%% Paramètres d'opti
-CalibOptiParameters.DeltaR0 = 0.3; % % de variation des rayons (Radius variation)
+%% Optimisation parameters
+CalibOptiParameters.DeltaR0 = 0.3; % Radius variation (de variation des rayons)
 CalibOptiParameters.DeltaR1 = 0.3;
 CalibOptiParameters.DeltaM = 0.2;
 alpha = 0.1; % contrainte de symétrie / symmetry constraint
 
-%% Initialisation des paramètres pour la dynamique inverse
+%% Parameters initialisation for inverse dynamic
 
 q6dof=q6dof';
 q=q';
-% Gravité
+% Gravity
 g=[0 0 -9.81]';
 % on enlève la liaison 6 ddl ajoutée par la cinématique inverse
 % Get rid of the 6DOF joint: between human body and global reference frame
@@ -55,8 +55,8 @@ Human_model_dyn=Human_model(1:(numel(Human_model)-6));
 % Définition des vitesses / accélérations articulaires
 % Speed and acceleration for every joint
 dt=1/freq;
-dq=derivee2(dt,q);  % vitesses
-ddq=derivee2(dt,dq);  % accélérations
+dq=derivee2(dt,q);  % velocity (vitesses)
+ddq=derivee2(dt,dq);  % acceleration (accélérations)
 nbframe=size(q,1);
 
 % Définition des données cinématiques du pelvis
@@ -103,7 +103,7 @@ list_symmetry = AnalysisParameters.CalibID.Symmetry;
 
 X0 = [];
 for i=1:numel(Human_model_dyn)
-    if numel(Human_model_dyn(i).L) ~= 0 % Pour les solides possédant le champ "L"
+    if numel(Human_model_dyn(i).L) ~= 0 % For solids with « L », indicating that a stadium solid is associated. Pour les solides possédant le champ "L"
         X0=[X0;Human_model_dyn(i).ParamAnthropo.r0;Human_model_dyn(i).ParamAnthropo.r1;Human_model_dyn(i).ParamAnthropo.t0;Human_model_dyn(i).ParamAnthropo.t1]; %#ok<AGROW>
     end
 end
@@ -287,7 +287,7 @@ for i=1:numel(Human_model)
         end
         Cy=Human_model(i).c(2) + DeltaZc;
         Human_model(i).c(2) = Cy;
-        % Inertie
+        % Inertia
         Human_model(i).I = [Ix 0 0; 0 Iy 0; 0 0 Iz]; 
         % anat_position (défini par rapport au centre de masse / wrt center of mass)
         for m=1:size(Human_model(i).anat_position)

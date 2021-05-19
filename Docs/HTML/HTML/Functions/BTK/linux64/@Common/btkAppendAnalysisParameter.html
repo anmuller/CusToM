@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of btkAppendAnalysisParameter</title>
+  <meta name="keywords" content="btkAppendAnalysisParameter">
+  <meta name="description" content="BTKAPPENDANALYSISPARAMETER Insert or set a parameter in the analysis.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html Functions --><!-- # BTK --><!-- ../menu.html linux64 --><!-- menu.html @Common -->
+<h1>btkAppendAnalysisParameter
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>BTKAPPENDANALYSISPARAMETER Insert or set a parameter in the analysis.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function btkAppendAnalysisParameter(h, name, context, unit, value, subject, description) %#ok </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">BTKAPPENDANALYSISPARAMETER Insert or set a parameter in the analysis. 
+ 
+  BTKAPPENDANALYSISPARAMETER(H, NAME, CONTEXT, UNIT, VALUE) insert or set a 
+  parameter designed by its NAME and CONTEXT.  The NAME, CONTEXT and UNIT are string,
+  and VALUE is a real scalar value.  The SUBJECT and DESCRIPTION are empty
+
+  BTKAPPENDANALYSISPARAMETER(H, NAME, CONTEXT, UNIT, VALUE, SUBJECT) insert or 
+  set a parameter with a non empty SUBJECT.
+
+  BTKAPPENDANALYSISPARAMETER(H, NAME, CONTEXT, UNIT, VALUE, SUBJECT, DESCRIPTION)
+  add a description to the inserted parameter.
+
+  This function can also returns an updated list of parameter.
+  ANALYSIS = BTKAPPENDANALYSISPARAMETER(H, NAME, CONTEXT, UNIT, VALUE)
+  ANALYSIS = BTKAPPENDANALYSISPARAMETER(H, NAME, CONTEXT, UNIT, VALUE, SUBJECT)
+  ANALYSIS = BTKAPPENDANALYSISPARAMETER(H, NAME, CONTEXT, UNIT, VALUE, SUBJECT, DESCRIPTION)
+  The format of ANALYSIS is the same than using the function &lt;a href=&quot;matlab:help btkGetAnalysis&quot;&gt;btkGetAnalysis&lt;/a&gt;
+
+  This function can also returns an updated list of analysis parameters' informations.
+  [ANALYSIS, ANALYSISINFO] = BTKAPPENDANALYSISPARAMETER(H, NAME, CONTEXT, UNIT, VALUE)
+  [ANALYSIS, ANALYSISINFO] = BTKAPPENDANALYSISPARAMETER(H, NAME, CONTEXT, UNIT, VALUE, SUBJECT)
+  [ANALYSIS, ANALYSISINFO] = BTKAPPENDANALYSISPARAMETER(H, NAME, CONTEXT, UNIT, VALUE, SUBJECT, DESCRIPTION)
+  The format of ANALYSISINFO is the same than using the function &lt;a href=&quot;matlab:help btkGetAnalysis&quot;&gt;btkGetAnalysis&lt;/a&gt;
+
+  The acquisition is represented by the handle H.  This handle is obtained
+  by the use of a btk* function.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function btkAppendAnalysisParameter(h, name, context, unit, value, subject, description) </a><span class="comment">%#ok</span>
+0002 <span class="comment">%BTKAPPENDANALYSISPARAMETER Insert or set a parameter in the analysis.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%  BTKAPPENDANALYSISPARAMETER(H, NAME, CONTEXT, UNIT, VALUE) insert or set a</span>
+0005 <span class="comment">%  parameter designed by its NAME and CONTEXT.  The NAME, CONTEXT and UNIT are string,</span>
+0006 <span class="comment">%  and VALUE is a real scalar value.  The SUBJECT and DESCRIPTION are empty</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%  BTKAPPENDANALYSISPARAMETER(H, NAME, CONTEXT, UNIT, VALUE, SUBJECT) insert or</span>
+0009 <span class="comment">%  set a parameter with a non empty SUBJECT.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%  BTKAPPENDANALYSISPARAMETER(H, NAME, CONTEXT, UNIT, VALUE, SUBJECT, DESCRIPTION)</span>
+0012 <span class="comment">%  add a description to the inserted parameter.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%  This function can also returns an updated list of parameter.</span>
+0015 <span class="comment">%  ANALYSIS = BTKAPPENDANALYSISPARAMETER(H, NAME, CONTEXT, UNIT, VALUE)</span>
+0016 <span class="comment">%  ANALYSIS = BTKAPPENDANALYSISPARAMETER(H, NAME, CONTEXT, UNIT, VALUE, SUBJECT)</span>
+0017 <span class="comment">%  ANALYSIS = BTKAPPENDANALYSISPARAMETER(H, NAME, CONTEXT, UNIT, VALUE, SUBJECT, DESCRIPTION)</span>
+0018 <span class="comment">%  The format of ANALYSIS is the same than using the function &lt;a href=&quot;matlab:help btkGetAnalysis&quot;&gt;btkGetAnalysis&lt;/a&gt;</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%  This function can also returns an updated list of analysis parameters' informations.</span>
+0021 <span class="comment">%  [ANALYSIS, ANALYSISINFO] = BTKAPPENDANALYSISPARAMETER(H, NAME, CONTEXT, UNIT, VALUE)</span>
+0022 <span class="comment">%  [ANALYSIS, ANALYSISINFO] = BTKAPPENDANALYSISPARAMETER(H, NAME, CONTEXT, UNIT, VALUE, SUBJECT)</span>
+0023 <span class="comment">%  [ANALYSIS, ANALYSISINFO] = BTKAPPENDANALYSISPARAMETER(H, NAME, CONTEXT, UNIT, VALUE, SUBJECT, DESCRIPTION)</span>
+0024 <span class="comment">%  The format of ANALYSISINFO is the same than using the function &lt;a href=&quot;matlab:help btkGetAnalysis&quot;&gt;btkGetAnalysis&lt;/a&gt;</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%  The acquisition is represented by the handle H.  This handle is obtained</span>
+0027 <span class="comment">%  by the use of a btk* function.</span>
+0028 
+0029 <span class="comment">%  Author: A. Barré</span>
+0030 <span class="comment">%  Copyright 2009-2013 Biomechanical ToolKit (BTK).</span>
+0031 
+0032 <span class="comment">% The following comment, MATLAB compiler pragma, is necessary to avoid</span>
+0033 <span class="comment">% compiling this M-file instead of linking against the MEX-file.  Don't remove.</span>
+0034 <span class="comment">%# mex</span>
+0035 
+0036 error(generatemsgid(<span class="string">'NotSupported'</span>),<span class="string">'MEX file for BTKAPPENDANALYSISPARAMETER not found'</span>);
+0037 
+0038 <span class="comment">% [EOF] btkAppendAnalysisParameter.m</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

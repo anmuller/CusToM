@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ReadAllData</title>
+  <meta name="keywords" content="ReadAllData">
+  <meta name="description" content="Extraction of experimental data coming from Optotrak">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- ../menu.html DataImport --><!-- menu.html InputDataImport -->
+<h1>ReadAllData
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Extraction of experimental data coming from Optotrak</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [real_markers, nb_frame, Firstframe, Lastframe, f, list_missing_markers_in_c3d]=ReadAllData(~, list_markers, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Extraction of experimental data coming from Optotrak
+   
+   INPUT
+   - filename: name of the file to process (character string)
+   - list_markers: list of the marker names
+   OUTPUT
+   - real_markers: 3D position of experimental markers
+   - nb_frame: number of frames
+   - Firstframe: number of the first frame
+   - Lastframe: number of the last frame
+   - f: acquisition frequency
+   - list_missing_markers_in_c3d: list of marker name which are missing in
+   the c3d file</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [real_markers, nb_frame, Firstframe, Lastframe, f, list_missing_markers_in_c3d]=ReadAllData(~, list_markers, varargin)</a>
+0002 <span class="comment">% Extraction of experimental data coming from Optotrak</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - filename: name of the file to process (character string)</span>
+0006 <span class="comment">%   - list_markers: list of the marker names</span>
+0007 <span class="comment">%   OUTPUT</span>
+0008 <span class="comment">%   - real_markers: 3D position of experimental markers</span>
+0009 <span class="comment">%   - nb_frame: number of frames</span>
+0010 <span class="comment">%   - Firstframe: number of the first frame</span>
+0011 <span class="comment">%   - Lastframe: number of the last frame</span>
+0012 <span class="comment">%   - f: acquisition frequency</span>
+0013 <span class="comment">%   - list_missing_markers_in_c3d: list of marker name which are missing in</span>
+0014 <span class="comment">%   the c3d file</span>
+0015 
+0016 num_essai = 3;
+0017 
+0018 load(<span class="string">'AllData.mat'</span>); <span class="comment">%#ok&lt;LOAD&gt;</span>
+0019 
+0020 nb_frame = size(Segment(1).PA2G{1,num_essai},1); <span class="comment">%#ok&lt;NODEF&gt;</span>
+0021 f = 30;
+0022 
+0023 markers = {<span class="keyword">...</span>
+0024     <span class="string">'MC2G'</span>;<span class="keyword">...</span>
+0025     <span class="string">'MC5G'</span>;<span class="keyword">...</span>
+0026     <span class="string">'PIN_G'</span>;<span class="keyword">...</span>
+0027     <span class="string">'PEX_G'</span>;<span class="keyword">...</span>
+0028     <span class="string">'EPI_G'</span>;<span class="keyword">...</span>
+0029     <span class="string">'EPE_G'</span>;<span class="keyword">...</span>
+0030     <span class="string">'VERTEX'</span>;<span class="keyword">...</span>
+0031     <span class="string">'NEZ'</span>;<span class="keyword">...</span>
+0032     <span class="string">'EAR_G'</span>;<span class="keyword">...</span>
+0033     <span class="string">'MC2D'</span>;<span class="keyword">...</span>
+0034     <span class="string">'MC5D'</span>;<span class="keyword">...</span>
+0035     <span class="string">'PIN_D'</span>;<span class="keyword">...</span>
+0036     <span class="string">'PEX_D'</span>;<span class="keyword">...</span>
+0037     <span class="string">'EPI_D'</span>;<span class="keyword">...</span>
+0038     <span class="string">'EPE_D'</span>;<span class="keyword">...</span>
+0039     <span class="string">'Manubrium'</span>;<span class="keyword">...</span>
+0040     <span class="string">'STRN'</span>;<span class="keyword">...</span>
+0041     <span class="string">'C7'</span>;<span class="keyword">...</span>
+0042     <span class="string">'T8'</span>;<span class="keyword">...</span>
+0043     <span class="string">'EAR_D'</span>;<span class="keyword">...</span>
+0044     <span class="string">'EIASD'</span>;<span class="keyword">...</span>
+0045     <span class="string">'EIASG'</span>;<span class="keyword">...</span>
+0046     <span class="string">'EIPSD'</span>;<span class="keyword">...</span>
+0047     <span class="string">'EIPSG'</span>;<span class="keyword">...</span>
+0048     <span class="string">'L5'</span>;<span class="keyword">...</span>
+0049     <span class="string">'BP__D'</span>;<span class="keyword">...</span>
+0050     <span class="string">'RANI'</span>;<span class="keyword">...</span>
+0051     <span class="string">'RANE'</span>;<span class="keyword">...</span>
+0052     <span class="string">'RKNI'</span>;<span class="keyword">...</span>
+0053     <span class="string">'RKNE'</span>;<span class="keyword">...</span>
+0054     <span class="string">'BP__G'</span>;<span class="keyword">...</span>
+0055     <span class="string">'LANI'</span>;<span class="keyword">...</span>
+0056     <span class="string">'LANE'</span>;<span class="keyword">...</span>
+0057     <span class="string">'LKNI'</span>;<span class="keyword">...</span>
+0058     <span class="string">'LKNE'</span>;<span class="keyword">...</span>
+0059     };
+0060 
+0061 Segment(5).PA2G{1,num_essai} = Segment(5).PA2G{1,num_essai}(:,4:6); <span class="comment">% only 1 marker for shoulder</span>
+0062 Segment(10).PA2G{1,num_essai} = Segment(10).PA2G{1,num_essai}(:,4:6); <span class="comment">% only 1 marker for shoulder</span>
+0063 cpt = 0;
+0064 
+0065 Firstframe = 1;
+0066 Lastframe = nb_frame;
+0067 <span class="keyword">for</span> i=1:numel(Segment)
+0068     <span class="keyword">for</span> j=1:(size(Segment(i).PA2G{1,num_essai},2)/3)
+0069         cpt = cpt + 1;
+0070         markers_pos{cpt} = Segment(i).PA2G{1,num_essai}(:,(j-1)*3+1:j*3)/1000; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0071         <span class="keyword">for</span> k = 1:3
+0072             Firstframe = max(Firstframe, find(~isnan(markers_pos{cpt}(:,k)),1,<span class="string">'first'</span>));
+0073             Lastframe = min(Lastframe, find(~isnan(markers_pos{cpt}(:,k)),1,<span class="string">'last'</span>));
+0074         <span class="keyword">end</span>
+0075     <span class="keyword">end</span>
+0076 <span class="keyword">end</span>
+0077 
+0078 Firstframe = 26027;
+0079 Lastframe = 27434;
+0080 
+0081 <span class="keyword">for</span> i=1:numel(markers_pos)
+0082     <span class="keyword">for</span> j=1:3
+0083 <span class="comment">%         markers_pos_withoutNaN{i}(:,j) = inpaint_nans(markers_pos{i}(Firstframe:Lastframe,j)); %#ok&lt;AGROW&gt;</span>
+0084         markers_pos_withoutNaN{i}(:,j) = markers_pos{i}(Firstframe:Lastframe,j); <span class="comment">%#ok&lt;AGROW&gt;</span>
+0085     <span class="keyword">end</span>
+0086 <span class="keyword">end</span>
+0087 nb_frame = size(markers_pos_withoutNaN{1},1);
+0088 
+0089 [~,b,c] = intersect(list_markers, markers);
+0090 [~,ord] = sort(b);
+0091 c = c(ord);
+0092 real_markers=struct;
+0093 
+0094 <span class="keyword">for</span> i=1:numel(list_markers)
+0095     real_markers(i).name = markers{c(i)};
+0096     real_markers(i).position_c3d = markers_pos_withoutNaN{c(i)};
+0097 <span class="keyword">end</span>
+0098 
+0099 <span class="comment">%Cr�tion du vecteur temps</span>
+0100 <span class="keyword">for</span> i=1:numel(real_markers)
+0101     real_markers(i).time=[0:(1/f):(nb_frame-1)/f]'; <span class="comment">%#ok&lt;NBRAK&gt;</span>
+0102 <span class="keyword">end</span>
+0103 
+0104 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

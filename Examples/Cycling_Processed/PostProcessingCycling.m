@@ -44,6 +44,7 @@ L_Activations=Activations(num_Lm,:);
 Nb_frames = size(Activations,2);
 
 %% Plot the result
+figure()
 for ii=1:6
     subplot(2,3,ii)
     plot(R_Activations(ii,:)*100,'r-','LineWidth',2)

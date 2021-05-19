@@ -1,0 +1,332 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Foot_TLEM</title>
+  <meta name="keywords" content="Foot_TLEM">
+  <meta name="description" content="% Fichier de description du mod�e de jambe">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../../menu.html Functions --><!-- ../../../menu.html Models --><!-- ../../menu.html Osteoarticular --><!-- ../menu.html Leg --><!-- menu.html ModelParts -->
+<h1>Foot_TLEM
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>% Fichier de description du mod�e de jambe</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function [Human_model]= Foot_TLEM(Human_model,k,Signe,Mass,AttachmentPoint) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">% Fichier de description du mod�e de jambe
+ Human_model : partie du mod�e d��construite (si il existe)
+ attachment_pt : nom du points d'attache (si il existe)
+ k : coefficient multiplicateur pour le scaling lin�ire
+ Signe : 'R' ou 'L' (Right ou Left)
+ Mass : masse du mod�e complet
+ scaling_choice  : choix de la m�hode de mise �l'�helle des donn�s inertielles
+ Density : densit�du corps</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="../../../../../Functions/AlgoMathsModel/Rodrigues_from_two_axes.html" class="code" title="function [R]=Rodrigues_from_two_axes(a1,a2)">Rodrigues_from_two_axes</a>	Computation of the Rodrigues equation</li><li><a href="../../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>	Computation of inertia matrix from radius of gyration</li><li><a href="../../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>	Addition of a sister to a solid</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="../../../../../Functions/Models/Osteoarticular/Leg/LegTLEM.html" class="code" title="function [OsteoArticularModel]= LegTLEM(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)">LegTLEM</a>	Addition of a leg model</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Human_model]= Foot_TLEM(Human_model,k,Signe,Mass,AttachmentPoint)</a>
+0002 <span class="comment">%% Fichier de description du mod�e de jambe</span>
+0003 <span class="comment">% Human_model : partie du mod�e d��construite (si il existe)</span>
+0004 <span class="comment">% attachment_pt : nom du points d'attache (si il existe)</span>
+0005 <span class="comment">% k : coefficient multiplicateur pour le scaling lin�ire</span>
+0006 <span class="comment">% Signe : 'R' ou 'L' (Right ou Left)</span>
+0007 <span class="comment">% Mass : masse du mod�e complet</span>
+0008 <span class="comment">% scaling_choice  : choix de la m�hode de mise �l'�helle des donn�s inertielles</span>
+0009 <span class="comment">% Density : densit�du corps</span>
+0010 
+0011 <span class="comment">%% Variables de sortie :</span>
+0012 <span class="comment">% &quot;enrichissement de la structure &quot;Human_model&quot;&quot;</span>
+0013 
+0014 <span class="comment">%% Liste des solides</span>
+0015 list_solid={<span class="string">'Foot'</span>};
+0016 
+0017 <span class="comment">%% Choix jambe droite ou gauche</span>
+0018 <span class="keyword">if</span> Signe == <span class="string">'R'</span>
+0019     Mirror=[1 0 0; 0 1 0; 0 0 1];
+0020 <span class="keyword">else</span>
+0021     <span class="keyword">if</span> Signe == <span class="string">'L'</span>
+0022         Mirror=[1 0 0; 0 1 0; 0 0 -1];
+0023     <span class="keyword">end</span>
+0024 <span class="keyword">end</span>
+0025 
+0026 <span class="comment">%% Incr�entation du num�o des groupes</span>
+0027 <span class="comment">% n_group=0;</span>
+0028 <span class="comment">% for i=1:numel(Human_model)</span>
+0029 <span class="comment">%     if size(Human_model(i).Group) ~= [0 0] %#ok&lt;BDSCA&gt;</span>
+0030 <span class="comment">%         n_group=max(n_group,Human_model(i).Group(1,1));</span>
+0031 <span class="comment">%     end</span>
+0032 <span class="comment">% end</span>
+0033 <span class="comment">% n_group=n_group+1;</span>
+0034 
+0035 <span class="comment">%% Incr�entation de la num�otation des solides</span>
+0036 
+0037 s=size(Human_model,2)+1;  <span class="comment">%#ok&lt;NASGU&gt; % num�o du premier solide</span>
+0038 <span class="keyword">for</span> i=1:size(list_solid,2)      <span class="comment">% num�otation de chaque solide : s_&quot;nom du solide&quot;</span>
+0039     <span class="keyword">if</span> i==1
+0040         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s;'</span>))
+0041     <span class="keyword">else</span>
+0042         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s_'</span>,list_solid{i-1},<span class="string">'+1;'</span>))
+0043     <span class="keyword">end</span>
+0044 <span class="keyword">end</span>
+0045 
+0046 <span class="comment">% trouver le num�o de la m�e �partir du nom du point d'attache : 'attachment_pt'</span>
+0047 <span class="keyword">if</span> numel(Human_model) == 0
+0048     s_mother=0;
+0049     pos_attachment_pt=[0 0 0]';
+0050 <span class="keyword">else</span>
+0051     test=0;
+0052     <span class="keyword">for</span> i=1:numel(Human_model)
+0053         <span class="keyword">for</span> j=1:size(Human_model(i).anat_position,1)
+0054             <span class="keyword">if</span> strcmp(AttachmentPoint,Human_model(i).anat_position{j,1})
+0055                 s_mother=i;
+0056                 pos_attachment_pt=Human_model(i).anat_position{j,2}+Human_model(s_mother).c;
+0057                 test=1;
+0058                 <span class="keyword">break</span>
+0059             <span class="keyword">end</span>
+0060         <span class="keyword">end</span>
+0061         <span class="keyword">if</span> i==numel(Human_model) &amp;&amp; test==0
+0062             error([AttachmentPoint <span class="string">' is no existent'</span>])
+0063         <span class="keyword">end</span>
+0064     <span class="keyword">end</span>
+0065     <span class="keyword">if</span> Human_model(s_mother).child == 0      <span class="comment">% si la m�e n'a pas d'enfant</span>
+0066         Human_model(s_mother).child = eval([<span class="string">'s_'</span> list_solid{1}]);    <span class="comment">% l'enfant de cette m�e est ce solide</span>
+0067     <span class="keyword">else</span>
+0068         [Human_model]=<a href="../../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>(Human_model,Human_model(s_mother).child,eval([<span class="string">'s_'</span> list_solid{1}]));   <span class="comment">% recherche de la derni�e soeur</span>
+0069     <span class="keyword">end</span>
+0070 <span class="keyword">end</span>
+0071 
+0072 <span class="comment">%%                      D�inition des noeuds (articulaires)</span>
+0073 <span class="comment">% TLEM 2.0 � A COMPREHENSIVE MUSCULOSKELETAL GEOMETRY DATASET FOR SUBJECT-SPECIFIC MODELING OF LOWER EXTREMITY</span>
+0074 <span class="comment">%</span>
+0075 <span class="comment">%  V. Carbonea*, R. Fluita*, P. Pellikaana, M.M. van der Krogta,b, D. Janssenc, M. Damsgaardd, L. Vignerone, T. Feilkasf, H.F.J.M. Koopmana, N. Verdonschota,c</span>
+0076 <span class="comment">%</span>
+0077 <span class="comment">%  aLaboratory of Biomechanical Engineering, MIRA Institute, University of Twente, Enschede, The Netherlands</span>
+0078 <span class="comment">%  bDepartment of Rehabilitation Medicine, Research Institute MOVE, VU University Medical Center, Amsterdam, The Netherlands</span>
+0079 <span class="comment">%  cOrthopaedic Research Laboratory, Radboud University Medical Centre, Nijmegen, The Netherlands</span>
+0080 <span class="comment">%  dAnyBody Technology A/S, Aalborg, Denmark</span>
+0081 <span class="comment">%  eMaterialise N.V., Leuven, Belgium</span>
+0082 <span class="comment">%  fBrainlab AG, Munich, Germany</span>
+0083 <span class="comment">% *The authors Carbone and Fluit contributed equally.</span>
+0084 <span class="comment">% Journal of Biomechanics, Available online 8 January 2015, http://dx.doi.org/10.1016/j.jbiomech.2014.12.034</span>
+0085 <span class="comment">%% Adjustement of k</span>
+0086 k=k*1.2063; <span class="comment">%to fit 50th percentile person of 1.80m height</span>
+0087 <span class="comment">% --------------------------- Foot ----------------------------------------</span>
+0088 
+0089 <span class="comment">% Position du CoM par rapport au rep�e de r��ence</span>
+0090 CoM_Foot=k*Mirror*([0.0509    ;-0.0161    ;0.0139]);
+0091 
+0092 <span class="comment">% Position des noeuds</span>
+0093 Foot_SubtalarJointNode = (k*Mirror *[0.0000;    0.0000;    0.0000])        - CoM_Foot;
+0094 FirstMetatarsalContact=    (k*Mirror *[0.12190;-0.049100;-0.019600])       - CoM_Foot;
+0095 SecondMetatarsalContact=    (k*Mirror *[0.11390;-0.049100;-0.0021000])  - CoM_Foot;
+0096 FifthMetatarsalContact=    (k*Mirror *[0.097900;-0.049100;0.033000])       - CoM_Foot;
+0097 HeelContact=    (k*Mirror *[-0.026100;-0.049100;-0.0021000])            - CoM_Foot;
+0098 BigToe=    (k*Mirror *[0.17410;-0.040800;-0.0060000])                      - CoM_Foot;
+0099 Cal = k*Mirror*[-0.045 ;  -0.0156  ;  0.0046]                           - CoM_Foot; <span class="comment">%measured from stl</span>
+0100 TAR = k*Mirror*[105 ;-38.69 ;43]/1000                                   - CoM_Foot; <span class="comment">%measured from stl</span>
+0101 <span class="comment">%% D�inition des positions anatomiques</span>
+0102 
+0103 Foot_position_set= {<span class="keyword">...</span>
+0104     [Signe <span class="string">'HEE'</span>], Cal ;<span class="keyword">...</span><span class="comment"> </span>
+0105     [Signe <span class="string">'TAR'</span>], TAR; <span class="keyword">...</span><span class="comment"> </span>
+0106     [Signe <span class="string">'TOE'</span>], k*Mirror*[0.1741;-0.035;-0.0080]- CoM_Foot; <span class="keyword">...</span><span class="comment"> %measured from stl</span>
+0107     [Signe <span class="string">'TARI'</span>], k*Mirror*[131.7;-29.37;-37]/1000- CoM_Foot; <span class="keyword">...</span><span class="comment"> % measured from stl</span>
+0108     [Signe <span class="string">'Foot_SubtalarJointNode'</span>], Foot_SubtalarJointNode; <span class="keyword">...</span>
+0109     [Signe <span class="string">'Foot_ToetipNode'</span>], BigToe; <span class="keyword">...</span>
+0110     [Signe <span class="string">'FirstMetatarsalContact'</span>], FirstMetatarsalContact; <span class="keyword">...</span>
+0111     [Signe <span class="string">'SecondMetatarsalContact'</span>], SecondMetatarsalContact; <span class="keyword">...</span>
+0112     [Signe <span class="string">'FifthMetatarsalContact'</span>], FifthMetatarsalContact; <span class="keyword">...</span>
+0113     [Signe <span class="string">'HeelContact'</span>], HeelContact; <span class="keyword">...</span>
+0114     [<span class="string">'ExtensorDigitorumLongus1Via1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.04651;0.01235;-0.0018])-CoM_Foot;<span class="keyword">...</span>
+0115     [<span class="string">'ExtensorDigitorumLongus1Via2'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.12646;-0.02591;0.00071])-CoM_Foot;<span class="keyword">...</span>
+0116     [<span class="string">'ExtensorDigitorumLongus1Insertion3'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.17395;-0.04189;0.01317])-CoM_Foot;<span class="keyword">...</span>
+0117     [<span class="string">'ExtensorDigitorumLongus2Via1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.04651;0.01235;-0.0018])-CoM_Foot;<span class="keyword">...</span>
+0118     [<span class="string">'ExtensorDigitorumLongus2Via2'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.12431;-0.02753;0.01194])-CoM_Foot;<span class="keyword">...</span>
+0119     [<span class="string">'ExtensorDigitorumLongus2Insertion3'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.16922;-0.04202;0.02498])-CoM_Foot;<span class="keyword">...</span>
+0120     [<span class="string">'ExtensorDigitorumLongus3Via1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.04651;0.01235;-0.0018])-CoM_Foot;<span class="keyword">...</span>
+0121     [<span class="string">'ExtensorDigitorumLongus3Via2'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.11786;-0.03093;0.02267])-CoM_Foot;<span class="keyword">...</span>
+0122     [<span class="string">'ExtensorDigitorumLongus3Insertion3'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.16016;-0.04209;0.03502])-CoM_Foot;<span class="keyword">...</span>
+0123     [<span class="string">'ExtensorDigitorumLongus4Via1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.04651;0.01235;-0.0018])-CoM_Foot;<span class="keyword">...</span>
+0124     [<span class="string">'ExtensorDigitorumLongus4Via2'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.10859;-0.03239;0.0343])-CoM_Foot;<span class="keyword">...</span>
+0125     [<span class="string">'ExtensorDigitorumLongus4Insertion3'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.14504;-0.04263;0.0414])-CoM_Foot;<span class="keyword">...</span>
+0126     [<span class="string">'ExtensorHallucisLongus1Via1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.05156;0.01481;-0.01398])-CoM_Foot;<span class="keyword">...</span>
+0127     [<span class="string">'ExtensorHallucisLongus1Insertion2'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.17139;-0.03638;-0.01176])-CoM_Foot;<span class="keyword">...</span>
+0128     [<span class="string">'ExtensorHallucisLongus2Via1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.05156;0.01481;-0.01398])-CoM_Foot;<span class="keyword">...</span>
+0129     [<span class="string">'ExtensorHallucisLongus2Insertion2'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.17139;-0.03638;-0.01176])-CoM_Foot;<span class="keyword">...</span>
+0130     [<span class="string">'ExtensorHallucisLongus3Via1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.05156;0.01481;-0.01398])-CoM_Foot;<span class="keyword">...</span>
+0131     [<span class="string">'ExtensorHallucisLongus3Insertion2'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.17139;-0.03638;-0.01176])-CoM_Foot;<span class="keyword">...</span>
+0132     [<span class="string">'FlexorDigitorumLongus1Via1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.01189;-0.00657;-0.02966])-CoM_Foot;<span class="keyword">...</span>
+0133     [<span class="string">'FlexorDigitorumLongus1Via2'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.01725;-0.00771;-0.02803])-CoM_Foot;<span class="keyword">...</span>
+0134     [<span class="string">'FlexorDigitorumLongus1Insertion3'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.17072;-0.04781;0.01191])-CoM_Foot;<span class="keyword">...</span>
+0135     [<span class="string">'FlexorDigitorumLongus2Via1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.01189;-0.00657;-0.02966])-CoM_Foot;<span class="keyword">...</span>
+0136     [<span class="string">'FlexorDigitorumLongus2Via2'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.01725;-0.00771;-0.02803])-CoM_Foot;<span class="keyword">...</span>
+0137     [<span class="string">'FlexorDigitorumLongus2Insertion3'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.16725;-0.04775;0.02419])-CoM_Foot;<span class="keyword">...</span>
+0138     [<span class="string">'FlexorDigitorumLongus3Via1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.01189;-0.00657;-0.02966])-CoM_Foot;<span class="keyword">...</span>
+0139     [<span class="string">'FlexorDigitorumLongus3Via2'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.01725;-0.00771;-0.02803])-CoM_Foot;<span class="keyword">...</span>
+0140     [<span class="string">'FlexorDigitorumLongus3Insertion3'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.15795;-0.04771;0.03348])-CoM_Foot;<span class="keyword">...</span>
+0141     [<span class="string">'FlexorDigitorumLongus4Via1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.01189;-0.00657;-0.02966])-CoM_Foot;<span class="keyword">...</span>
+0142     [<span class="string">'FlexorDigitorumLongus4Via2'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.01725;-0.00771;-0.02803])-CoM_Foot;<span class="keyword">...</span>
+0143     [<span class="string">'FlexorDigitorumLongus4Insertion3'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.14244;-0.04648;0.04012])-CoM_Foot;<span class="keyword">...</span>
+0144     [<span class="string">'FlexorHallucisLongus1Via1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([-0.00459;0.00114;-0.02048])-CoM_Foot;<span class="keyword">...</span>
+0145     [<span class="string">'FlexorHallucisLongus1Insertion2'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.16693;-0.04508;-0.01198])-CoM_Foot;<span class="keyword">...</span>
+0146     [<span class="string">'FlexorHallucisLongus2Via1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([-0.00459;0.00114;-0.02048])-CoM_Foot;<span class="keyword">...</span>
+0147     [<span class="string">'FlexorHallucisLongus2Insertion2'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.16693;-0.04508;-0.01198])-CoM_Foot;<span class="keyword">...</span>
+0148     [<span class="string">'FlexorHallucisLongus3Via1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([-0.00459;0.00114;-0.02048])-CoM_Foot;<span class="keyword">...</span>
+0149     [<span class="string">'FlexorHallucisLongus3Insertion2'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.16693;-0.04508;-0.01198])-CoM_Foot;<span class="keyword">...</span>
+0150     [<span class="string">'GastrocnemiusLateralis1Insertion1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([-0.03679;-0.01718;-0.00014])-CoM_Foot;<span class="keyword">...</span>
+0151     [<span class="string">'GastrocnemiusMedialis1Insertion1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([-0.03679;-0.01718;-0.01014])-CoM_Foot;<span class="keyword">...</span>
+0152     [<span class="string">'PeroneusBrevis1Via1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([-0.00411;0.00868;0.01552])-CoM_Foot;<span class="keyword">...</span>
+0153     [<span class="string">'PeroneusBrevis1Via2'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.03351;-0.01785;0.02532])-CoM_Foot;<span class="keyword">...</span>
+0154     [<span class="string">'PeroneusBrevis1Insertion3'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.10508;-0.04435;0.03364])-CoM_Foot;<span class="keyword">...</span>
+0155     [<span class="string">'PeroneusBrevis2Via1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([-0.00411;0.00868;0.01552])-CoM_Foot;<span class="keyword">...</span>
+0156     [<span class="string">'PeroneusBrevis2Via2'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.03351;-0.01785;0.02532])-CoM_Foot;<span class="keyword">...</span>
+0157     [<span class="string">'PeroneusBrevis2Insertion3'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.10508;-0.04435;0.03364])-CoM_Foot;<span class="keyword">...</span>
+0158     [<span class="string">'PeroneusBrevis3Via1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([-0.00411;0.00868;0.01552])-CoM_Foot;<span class="keyword">...</span>
+0159     [<span class="string">'PeroneusBrevis3Via2'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.03351;-0.01785;0.02532])-CoM_Foot;<span class="keyword">...</span>
+0160     [<span class="string">'PeroneusBrevis3Insertion3'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.04494;-0.02783;0.03219])-CoM_Foot;<span class="keyword">...</span>
+0161     [<span class="string">'PeroneusLongus1Via1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([-0.00342;0.00126;0.01741])-CoM_Foot;<span class="keyword">...</span>
+0162     [<span class="string">'PeroneusLongus1Via2'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.00962;-0.01494;0.02008])-CoM_Foot;<span class="keyword">...</span>
+0163     [<span class="string">'PeroneusLongus1Via3'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.04096;-0.02919;0.01887])-CoM_Foot;<span class="keyword">...</span>
+0164     [<span class="string">'PeroneusLongus1Insertion4'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.08292;-0.01936;-0.00997])-CoM_Foot;<span class="keyword">...</span>
+0165     [<span class="string">'PeroneusLongus2Via1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([-0.00342;0.00126;0.01741])-CoM_Foot;<span class="keyword">...</span>
+0166     [<span class="string">'PeroneusLongus2Via2'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.00962;-0.01494;0.02008])-CoM_Foot;<span class="keyword">...</span>
+0167     [<span class="string">'PeroneusLongus2Via3'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.04096;-0.02919;0.01887])-CoM_Foot;<span class="keyword">...</span>
+0168     [<span class="string">'PeroneusLongus2Insertion4'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.08292;-0.01936;-0.00997])-CoM_Foot;<span class="keyword">...</span>
+0169     [<span class="string">'PeroneusLongus3Via1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([-0.00342;0.00126;0.01741])-CoM_Foot;<span class="keyword">...</span>
+0170     [<span class="string">'PeroneusLongus3Via2'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.00962;-0.01494;0.02008])-CoM_Foot;<span class="keyword">...</span>
+0171     [<span class="string">'PeroneusLongus3Via3'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.04096;-0.02919;0.01887])-CoM_Foot;<span class="keyword">...</span>
+0172     [<span class="string">'PeroneusLongus3Insertion4'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.08292;-0.01936;-0.00997])-CoM_Foot;<span class="keyword">...</span>
+0173     [<span class="string">'Plantaris1Insertion1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([-0.03679;-0.01718;-0.00514])-CoM_Foot;<span class="keyword">...</span>
+0174     [<span class="string">'SoleusLateralis1Insertion1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([-0.03679;-0.01718;-0.00014])-CoM_Foot;<span class="keyword">...</span>
+0175     [<span class="string">'SoleusLateralis2Insertion1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([-0.03679;-0.01718;-0.00014])-CoM_Foot;<span class="keyword">...</span>
+0176     [<span class="string">'SoleusLateralis3Insertion1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([-0.03679;-0.01718;-0.00014])-CoM_Foot;<span class="keyword">...</span>
+0177     [<span class="string">'SoleusMedialis1Insertion1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([-0.03679;-0.01718;-0.01014])-CoM_Foot;<span class="keyword">...</span>
+0178     [<span class="string">'SoleusMedialis2Insertion1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([-0.03679;-0.01718;-0.01014])-CoM_Foot;<span class="keyword">...</span>
+0179     [<span class="string">'SoleusMedialis3Insertion1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([-0.03679;-0.01718;-0.01014])-CoM_Foot;<span class="keyword">...</span>
+0180     [<span class="string">'TibialisAnterior1Via1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.03967;0.01383;-0.02391])-CoM_Foot;<span class="keyword">...</span>
+0181     [<span class="string">'TibialisAnterior1Insertion2'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.07628;-0.02512;-0.01172])-CoM_Foot;<span class="keyword">...</span>
+0182     [<span class="string">'TibialisAnterior2Via1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.03967;0.01383;-0.02391])-CoM_Foot;<span class="keyword">...</span>
+0183     [<span class="string">'TibialisAnterior2Insertion2'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.07628;-0.02512;-0.01172])-CoM_Foot;<span class="keyword">...</span>
+0184     [<span class="string">'TibialisAnterior3Via1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.03967;0.01383;-0.02391])-CoM_Foot;<span class="keyword">...</span>
+0185     [<span class="string">'TibialisAnterior3Insertion2'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.06649;-0.02515;-0.02191])-CoM_Foot;<span class="keyword">...</span>
+0186     [<span class="string">'TibialisPosteriorLateralis1Via1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.00929;0.01141;-0.03534])-CoM_Foot;<span class="keyword">...</span>
+0187     [<span class="string">'TibialisPosteriorLateralis1Via2'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.01331;0.00573;-0.03424])-CoM_Foot;<span class="keyword">...</span>
+0188     [<span class="string">'TibialisPosteriorLateralis1Via3'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.01795;-0.0011;-0.03315])-CoM_Foot;<span class="keyword">...</span>
+0189     [<span class="string">'TibialisPosteriorLateralis1Insertion4'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.04489;-0.01477;-0.02404])-CoM_Foot;<span class="keyword">...</span>
+0190     [<span class="string">'TibialisPosteriorLateralis2Via1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.00929;0.01141;-0.03534])-CoM_Foot;<span class="keyword">...</span>
+0191     [<span class="string">'TibialisPosteriorLateralis2Via2'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.01331;0.00573;-0.03424])-CoM_Foot;<span class="keyword">...</span>
+0192     [<span class="string">'TibialisPosteriorLateralis2Via3'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.01795;-0.0011;-0.03315])-CoM_Foot;<span class="keyword">...</span>
+0193     [<span class="string">'TibialisPosteriorLateralis2Insertion4'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.04489;-0.01477;-0.02404])-CoM_Foot;<span class="keyword">...</span>
+0194     [<span class="string">'TibialisPosteriorLateralis3Via1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.00929;0.01141;-0.03534])-CoM_Foot;<span class="keyword">...</span>
+0195     [<span class="string">'TibialisPosteriorLateralis3Via2'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.01331;0.00573;-0.03424])-CoM_Foot;<span class="keyword">...</span>
+0196     [<span class="string">'TibialisPosteriorLateralis3Via3'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.01795;-0.0011;-0.03315])-CoM_Foot;<span class="keyword">...</span>
+0197     [<span class="string">'TibialisPosteriorLateralis3Insertion4'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.04489;-0.01477;-0.02404])-CoM_Foot;<span class="keyword">...</span>
+0198     [<span class="string">'TibialisPosteriorMedialis1Via1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.00929;0.01141;-0.03534])-CoM_Foot;<span class="keyword">...</span>
+0199     [<span class="string">'TibialisPosteriorMedialis1Via2'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.01331;0.00573;-0.03424])-CoM_Foot;<span class="keyword">...</span>
+0200     [<span class="string">'TibialisPosteriorMedialis1Via3'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.01795;-0.0011;-0.03315])-CoM_Foot;<span class="keyword">...</span>
+0201     [<span class="string">'TibialisPosteriorMedialis1Insertion4'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.04489;-0.01477;-0.02404])-CoM_Foot;<span class="keyword">...</span>
+0202     [<span class="string">'TibialisPosteriorMedialis2Via1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.00929;0.01141;-0.03534])-CoM_Foot;<span class="keyword">...</span>
+0203     [<span class="string">'TibialisPosteriorMedialis2Via2'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.01331;0.00573;-0.03424])-CoM_Foot;<span class="keyword">...</span>
+0204     [<span class="string">'TibialisPosteriorMedialis2Via3'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.01795;-0.0011;-0.03315])-CoM_Foot;<span class="keyword">...</span>
+0205     [<span class="string">'TibialisPosteriorMedialis2Insertion4'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.04489;-0.01477;-0.02404])-CoM_Foot;<span class="keyword">...</span>
+0206     [<span class="string">'TibialisPosteriorMedialis3Via1'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.00929;0.01141;-0.03534])-CoM_Foot;<span class="keyword">...</span>
+0207     [<span class="string">'TibialisPosteriorMedialis3Via2'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.01331;0.00573;-0.03424])-CoM_Foot;<span class="keyword">...</span>
+0208     [<span class="string">'TibialisPosteriorMedialis3Via3'</span> Signe <span class="string">'Foot'</span>],k*Mirror*([0.01795;-0.0011;-0.03315])-CoM_Foot;<span class="keyword">...</span>
+0209     [Signe <span class="string">'FootPrediction1'</span>], k*Mirror*[-0.04;0.1185;-0.03]*0.9359;<span class="keyword">...</span><span class="comment"> % A replacer</span>
+0210     [Signe <span class="string">'FootPrediction2'</span>], k*Mirror*[-0.04;0.1185;-0.007]*0.9359;<span class="keyword">...</span><span class="comment">% A replacer</span>
+0211     [Signe <span class="string">'FootPrediction3'</span>], k*Mirror*[-0.03;0.035;0.015]*0.9359;<span class="keyword">...</span><span class="comment">% A replacer</span>
+0212     [Signe <span class="string">'FootPrediction4'</span>], k*Mirror*[-0.025;0.01;-0.04]*0.9359;<span class="keyword">...</span><span class="comment">% A replacer</span>
+0213     [Signe <span class="string">'FootPrediction5'</span>], k*Mirror*[-0.04;-0.0525;-0.035]*0.9359;<span class="keyword">...</span><span class="comment">% A replacer</span>
+0214     [Signe <span class="string">'FootPrediction6'</span>], k*Mirror*[-0.035;-0.0525;-0.0125]*0.9359;<span class="keyword">...</span><span class="comment">% A replacer</span>
+0215     [Signe <span class="string">'FootPrediction7'</span>], k*Mirror*[-0.03;-0.045;0.0015]*0.9359;<span class="keyword">...</span><span class="comment">% A replacer</span>
+0216     [Signe <span class="string">'FootPrediction8'</span>], k*Mirror*[-0.04;-0.035;0.015]*0.9359;<span class="keyword">...</span><span class="comment">% A replacer</span>
+0217     [Signe <span class="string">'FootPrediction9'</span>], k*Mirror*[-0.04;-0.02;0.025]*0.9359;<span class="keyword">...</span><span class="comment">% A replacer</span>
+0218     [Signe <span class="string">'FootPrediction10'</span>], k*Mirror*[-0.04;-0.075;0.04]*0.9359;<span class="keyword">...</span><span class="comment">% A replacer</span>
+0219     [Signe <span class="string">'FootPrediction11'</span>], k*Mirror*[-0.045;-0.117;0.002]*0.9359;<span class="keyword">...</span><span class="comment">% A replacer</span>
+0220     [Signe <span class="string">'FootPrediction12'</span>], k*Mirror*[-0.04;-0.095;-0.025]*0.9359;<span class="keyword">...</span><span class="comment">% A replacer</span>
+0221     [Signe <span class="string">'FootPrediction13'</span>], k*Mirror*[-0.045;-0.1;0.015]*0.9359;<span class="keyword">...</span><span class="comment">% A replacer</span>
+0222     [Signe <span class="string">'FootPrediction14'</span>], k*Mirror*[-0.045;-0.09;0.03]*0.9359;<span class="keyword">...</span><span class="comment">% A replacer</span>
+0223     [Signe <span class="string">'HEEManutention'</span>], k*Mirror*[0.035 0.12946 -0.02]'; <span class="keyword">...</span><span class="comment">% A replacer</span>
+0224     [Signe <span class="string">'TARManutention'</span>], k*Mirror*[-0.01 -0.04 0.04]'; <span class="keyword">...</span><span class="comment">% A replacer</span>
+0225     [Signe <span class="string">'TARIManutention'</span>], k*Mirror*[-0.01 -0.055 -0.05]'; <span class="keyword">...</span><span class="comment">% A replacer</span>
+0226     [Signe <span class="string">'ANEManutention'</span>], k*Mirror*[0.01 0.05 0.015]'; <span class="keyword">...</span><span class="comment">% A replacer</span>
+0227     };
+0228 
+0229 <span class="comment">%%                     Mise �l'�helle des inerties</span>
+0230     <span class="comment">%% [&quot;Adjustments to McConville et al. and Young et al. body segment inertial parameters&quot;] R. Dumas</span>
+0231     <span class="comment">% --------------------------- Foot ----------------------------------------</span>
+0232     Length_Foot = norm(HeelContact-SecondMetatarsalContact);
+0233     [I_Foot]=<a href="../../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>([37 17 36 13 0 8*1i], Mass.Foot_Mass, [0 0 0], Length_Foot, Signe);
+0234 
+0235 <span class="comment">%% Cr�tion de la structure &quot;Human_model&quot;</span>
+0236 
+0237 num_solid=0;
+0238 <span class="comment">%% Foot</span>
+0239 <span class="comment">% s_Foot</span>
+0240 num_solid=num_solid+1;        <span class="comment">% solide num�o ...</span>
+0241 name=list_solid{num_solid}; <span class="comment">% nom du solide</span>
+0242 eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% num�o du solide dans le mod�e</span>
+0243 Human_model(incr_solid).name=[Signe name];
+0244 Human_model(incr_solid).sister=0;
+0245 Human_model(incr_solid).child=0;
+0246 Human_model(incr_solid).mother=s_mother;
+0247 Human_model(incr_solid).a=[0.8784    0.4638    0.1152]';
+0248 Human_model(incr_solid).joint=1;
+0249 Human_model(incr_solid).calib_k_constraint=s_mother;
+0250 Human_model(incr_solid).limit_inf=-pi/4;
+0251 Human_model(incr_solid).limit_sup=pi/2;
+0252 Human_model(incr_solid).ActiveJoint=1;
+0253 Human_model(incr_solid).Visual=1;
+0254 <span class="comment">% Human_model(incr_solid).Group=[n_group 3];</span>
+0255 Human_model(incr_solid).m=Mass.Foot_Mass;
+0256 Human_model(incr_solid).b=pos_attachment_pt;
+0257 Human_model(incr_solid).I=[I_Foot(1) I_Foot(4) I_Foot(5); I_Foot(4) I_Foot(2) I_Foot(6); I_Foot(5) I_Foot(6) I_Foot(3)];
+0258 Human_model(incr_solid).c=-Foot_SubtalarJointNode;
+0259 Human_model(incr_solid).anat_position=Foot_position_set;
+0260 Human_model(incr_solid).L={[Signe <span class="string">'Foot_SubtalarJointNode'</span>];[Signe <span class="string">'BigToe'</span>]};
+0261 Human_model(incr_solid).calib_a=1;
+0262 <span class="comment">%Calibration de l'axe de rotation</span>
+0263 a1=Human_model(incr_solid).a;
+0264 [~,Ind]=max(abs(a1));
+0265 a2=zeros(3,1);
+0266 a2(Ind)=1;
+0267 R=<a href="../../../../../Functions/AlgoMathsModel/Rodrigues_from_two_axes.html" class="code" title="function [R]=Rodrigues_from_two_axes(a1,a2)">Rodrigues_from_two_axes</a>(a2,a1); <span class="comment">% recherche des deux axes orthogonaux �l'axe de rotation</span>
+0268 Human_model(incr_solid).limit_alpha= [ 20 , -20;<span class="keyword">...</span><span class="comment"> %[limit_sup premier axe, limit_inf premier axe;...</span>
+0269                                         30, -30]; <span class="comment">%limit_sup 2nd axe, limit_inf 2nd axe;...</span>
+0270 Human_model(incr_solid).v= [ R(:,2) , R(:,3) ];
+0271 Human_model(incr_solid).visual_file = [<span class="string">'TLEM/'</span> Signe <span class="string">'Foot.mat'</span>];
+0272 <span class="keyword">if</span> Signe == <span class="string">'R'</span>
+0273     Human_model(incr_solid).comment=<span class="string">'Subtalar Inversion(-)/Eversion(+)'</span>;
+0274 <span class="keyword">else</span>
+0275     Human_model(incr_solid).comment=<span class="string">'Subtalar Inversion(+)/Eversion(-)'</span>;
+0276 <span class="keyword">end</span>
+0277 
+0278 
+0279 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

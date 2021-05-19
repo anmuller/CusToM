@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of addPlatformForces_WithoutCoP</title>
+  <meta name="keywords" content="addPlatformForces_WithoutCoP">
+  <meta name="description" content="Addition of an external force corresponding to a platform forces">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html ExternalForces -->
+<h1>addPlatformForces_WithoutCoP
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Addition of an external force corresponding to a platform forces</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [external_forces] = addPlatformForces_WithoutCoP(external_forces, Solid, p, R, F) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Addition of an external force corresponding to a platform forces
+   The computation of the CoP position is done in this function
+
+   INPUT
+   - external_forces: external forces applied on the subject
+   - Solid: number of the solid which is in contact with the platform
+   - p: position of the platform origin in the motion capture frame
+   - R: rotation matrix of the plateform frame in the motion capture frame
+   - F: forces and moments on the platform [Fx Fy Fz Mx My Mz]
+   OUTPUT
+   - external_forces: actualized external forces applied on the subject 
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Functions/ExternalForces/FromExperiments/DataInC3D.html" class="code" title="function [ExternalForcesComputationResults] = DataInC3D(filename, BiomechanicalModel, AnalysisParameters)">DataInC3D</a>	Computation of the external forces</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [external_forces] = addPlatformForces_WithoutCoP(external_forces, Solid, p, R, F)</a>
+0002 <span class="comment">% Addition of an external force corresponding to a platform forces</span>
+0003 <span class="comment">%   The computation of the CoP position is done in this function</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   INPUT</span>
+0006 <span class="comment">%   - external_forces: external forces applied on the subject</span>
+0007 <span class="comment">%   - Solid: number of the solid which is in contact with the platform</span>
+0008 <span class="comment">%   - p: position of the platform origin in the motion capture frame</span>
+0009 <span class="comment">%   - R: rotation matrix of the plateform frame in the motion capture frame</span>
+0010 <span class="comment">%   - F: forces and moments on the platform [Fx Fy Fz Mx My Mz]</span>
+0011 <span class="comment">%   OUTPUT</span>
+0012 <span class="comment">%   - external_forces: actualized external forces applied on the subject</span>
+0013 <span class="comment">%________________________________________________________</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Licence</span>
+0016 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0017 <span class="comment">%________________________________________________________</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0020 <span class="comment">% Georges Dumont</span>
+0021 <span class="comment">%________________________________________________________</span>
+0022 
+0023 nb_frame=numel(external_forces);
+0024 
+0025 <span class="comment">%% Calcul de l'effort r�ultant (computation of resulting forces)</span>
+0026 
+0027 FR0=zeros(nb_frame,3);
+0028 <span class="keyword">if</span> iscell(p) == 1 <span class="comment">% plateforme mobile (mobile plateform)</span>
+0029     <span class="keyword">for</span> i=1:nb_frame
+0030        FR0(i,:)=(R{i}*F(i,1:3)')';    
+0031     <span class="keyword">end</span>
+0032 <span class="keyword">else</span>  <span class="comment">% plateforme fixe</span>
+0033     <span class="keyword">for</span> i=1:nb_frame
+0034        FR0(i,:)=(R*F(i,1:3)')';    
+0035     <span class="keyword">end</span>
+0036 <span class="keyword">end</span>
+0037 
+0038 <span class="comment">%% Calcul du moment au point 0</span>
+0039 
+0040 <span class="comment">% Utilisation du moment �l'origine de la plateforme (Moment expressed at origin of the platform frame)</span>
+0041     <span class="comment">% Moment obtenu avec la plate-forme : M(O)=M(I)+OI^F   (Mp0 = Mp + CoP0 ^ F)</span>
+0042     Mp=zeros(nb_frame,3);
+0043     Mp0=zeros(nb_frame,3);
+0044     <span class="keyword">if</span> iscell(p) == 1 <span class="comment">% plateforme mobile (mobile platform)</span>
+0045         <span class="keyword">for</span> i=1:nb_frame
+0046             Mp(i,:)=(R{i}*F(i,4:6)')';
+0047             Mp0(i,:)=Mp(i,:) + cross(p{i}',FR0(i,:));
+0048         <span class="keyword">end</span>
+0049     <span class="keyword">else</span>
+0050         <span class="keyword">for</span> i=1:nb_frame
+0051             Mp(i,:)=(R*F(i,4:6)')';
+0052             Mp0(i,:)=Mp(i,:) + cross(p',FR0(i,:));
+0053         <span class="keyword">end</span>
+0054     <span class="keyword">end</span>        
+0055     
+0056 <span class="comment">%% Modification de &quot;external_forces&quot;</span>
+0057 
+0058 <span class="keyword">for</span> i=1:nb_frame    
+0059    external_forces(i).fext(Solid).fext=external_forces(i).fext(Solid).fext + [FR0(i,:)' Mp0(i,:)'];    
+0060 <span class="keyword">end</span>
+0061 
+0062 <span class="comment">%% Ajout d'un domaine pour le visuel (adding a visual domain)</span>
+0063 
+0064 <span class="comment">% on initialise le domaine Visual si il n'existe pas encore</span>
+0065 <span class="keyword">if</span> ~any(strcmp(<span class="string">'Visual'</span>,fieldnames(external_forces)))
+0066     external_forces(1).Visual=[];
+0067 <span class="keyword">end</span>
+0068 
+0069 <span class="comment">% on ajoute un vecteur 6x1 dans le domaine Visual : point d'origine et point d'arriv�du vecteur force</span>
+0070 <span class="comment">% adding a 6x1 vector in the visual domain:  origin and end points of force vector</span>
+0071 <span class="comment">% for i=1:numel(external_forces) % pour chaque frame</span>
+0072 <span class="comment">%     if iscell(p) == 1 % plateforme mobile</span>
+0073 <span class="comment">%         pt_origin=p{i}+R{i}*CoP(i,:)';</span>
+0074 <span class="comment">%     else</span>
+0075 <span class="comment">%         pt_origin=p+R*CoP(i,:)';</span>
+0076 <span class="comment">%     end</span>
+0077 <span class="comment">%     pt_end=FR0(i,:)';</span>
+0078 <span class="comment">%     external_forces(i).Visual = [external_forces(i).Visual [pt_origin;pt_end]];</span>
+0079 <span class="comment">% end</span>
+0080 <span class="keyword">for</span> i=1:numel(external_forces) <span class="comment">% pour chaque frame</span>
+0081     <span class="keyword">if</span> iscell(p) == 1 <span class="comment">% plateforme mobile</span>
+0082         pt_origin = p{i};
+0083     <span class="keyword">else</span>
+0084         CoP = cross(F(i,1:3)',F(i,4:6)')/(norm(F(i,1:3))^2);
+0085         CoP = CoP - (CoP(3)/F(i,3))*F(i,1:3)'; <span class="comment">% point sur l'axe avec z=0;</span>
+0086         pt_origin=p+R*CoP;
+0087     <span class="keyword">end</span>
+0088     pt_end=FR0(i,:)';
+0089     external_forces(i).Visual = [external_forces(i).Visual [pt_origin;pt_end]];
+0090 <span class="keyword">end</span>
+0091 
+0092 
+0093 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,352 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of btkAppendForcePlatformType2</title>
+  <meta name="keywords" content="btkAppendForcePlatformType2">
+  <meta name="description" content="BTKAPPENDFORCEPLATFORMTYPE2 Append a virtual force platform of type 2.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- # BTK --><!-- menu.html win64 -->
+<h1>btkAppendForcePlatformType2
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>BTKAPPENDFORCEPLATFORMTYPE2 Append a virtual force platform of type 2.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function btkAppendForcePlatformType2(h, forces, moments, corners, origin, localFrame) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">BTKAPPENDFORCEPLATFORMTYPE2 Append a virtual force platform of type 2.
+
+  BTKAPPENDFORCEPLATFORMTYPE2(H, FORCES, MOMENTS, CORNERS) creates a
+  virtual force platform based only on the reaction FORCES and MOMENTS
+  expressed in the global frame. This function updates all the metadata in
+  the group FORCE_PLATFORM and append 6 analog channels.
+  NOTE: The moment must be expressed at the (surface) origin of the plate.
+  The CORNERS is a matrix (4,3) which contains the coordinates of the corners
+  expressed in the global frame.  They are are numbered from 1 to 4 and refer
+  to the quadrant numbers in the X-Y plane of the force platform coordinate 
+  system (not the 3D point reference coordinate system).  These are +x+y, 
+  -x+y, -x-y, and +x-y, with respect to the force plate coordinate system.
+  The ORIGIN of the platform is set by default to [0,0,0] meaning that it has
+  no thickness.  If your forces and moments come from raw data recorded by a 
+  force platform (and then recorded to the location of the sensor), it is
+  strongly advised to use the sensor distances given in the data sheet.
+  You can retrieve easily the data of the new force platform by using one
+  of the following functions: 
+  - BTKGETFORCEPLATFORMS
+  - BTKGETFORCEPLATFORMWRENCHES
+  - BTKGETGROUNDREACTIONWRENCHES
+
+  BTKAPPENDFORCEPLATFORMTYPE2(H, FORCES, MOMENTS, CORNERS, ORIGIN) sets
+  also the ORIGIN of the force platform compare to its surface' center. 
+  The ORIGIN must be expressed in the frame of the force plate.  Thus the 
+  verical component should be negative as the surface is higher than the 
+  origin.  Setting the ORIGIN to an empty matrix has the same effect than 
+  giving an origin equals to [0,0,0].
+
+  BTKAPPENDFORCEPLATFORMTYPE2(H, FORCES, MOMENTS, CORNERS, ORIGIN, LOCALFRAME)
+  creates a virtual force platform using FORCES and MOMENTS expressed in the 
+  local frame if LOCALFRAME is not set to 0. The content of CORNERS and ORIGIN
+  still must be expressed in the global frame. The use of LOCALFRAME can be useful
+  if you use data recorded directly from the force platform.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Functions/BTK/linux64/@Common/btkAppendAnalog.html" class="code" title="function btkAppendAnalog(h, label, valuesdesc) %#ok">btkAppendAnalog</a>	BTKAPPENDANALOG Append a new analog channel and return an updated list of analog channels.</li><li><a href="../../../Functions/BTK/linux64/@Common/btkAppendMetaData.html" class="code" title="function btkAppendMetaData(h, label, sublabel, ..., info) %#ok">btkAppendMetaData</a>	BTKAPPENDMETADATA Append a new metada and return an updated list of the metadata in the acquisition.</li><li><a href="../../../Functions/BTK/linux64/@Common/btkGetAnalogFrameNumber.html" class="code" title="function afn = btkGetAnalogFrameNumber(h) %#ok">btkGetAnalogFrameNumber</a>	BTKGETANALOGFRAMENUMBER Returns the number of frames for the analog channels.</li><li><a href="../../../Functions/BTK/linux64/@Common/btkGetAnalogNumber.html" class="code" title="function an = btkGetAnalogNumber(h) %#ok">btkGetAnalogNumber</a>	BTKGETANALOGNUMBER Returns the number of analog channels.</li><li><a href="../../../Functions/BTK/linux64/@Common/btkGetAnalogResolution.html" class="code" title="function ar = btkGetAnalogResolution(h) %#ok">btkGetAnalogResolution</a>	BTKGETANALOGRESOLUTION Returns the ADC resolution.</li><li><a href="../../../Functions/BTK/linux64/@Common/btkGetAnalogSampleNumberPerFrame.html" class="code" title="function ratio = btkGetAnalogSampleNumberPerFrame(h) %#ok">btkGetAnalogSampleNumberPerFrame</a>	BTKGETANALOGSAMPLENUMBERPERFRAME Return the number of analog samples per video frame.</li><li><a href="../../../Functions/BTK/linux64/@Common/btkGetPointFrameNumber.html" class="code" title="function pfn = btkGetPointFrameNumber(h) %#ok">btkGetPointFrameNumber</a>	BTKGETPOINTFRAMENUMBER Returns the number of frames for the points.</li><li><a href="../../../Functions/BTK/linux64/@Common/btkGetPointsUnit.html" class="code" title="function unit = btkGetPointsUnit(h, type) %#ok">btkGetPointsUnit</a>	BTKGETPOINTUNIT Returns requested points' unit.</li><li><a href="../../../Functions/BTK/linux64/@Common/btkSetAnalogGain.html" class="code" title="function btkSetAnalogGain(h, idx_or_label, new_gain) %#ok">btkSetAnalogGain</a>	BTKSETANALOGGAIN Modify analog's gain and return updated analogs.</li><li><a href="../../../Functions/BTK/linux64/@Common/btkSetAnalogOffset.html" class="code" title="function btkSetAnalogOffset(h, idx_or_label, new_offset) %#ok">btkSetAnalogOffset</a>	BTKSETANALOGOFFSET Modify analog's offset and return updated analogs.</li><li><a href="../../../Functions/BTK/linux64/@Common/btkSetAnalogScale.html" class="code" title="function btkSetAnalogScale(h, idx_or_label, newscale) %#ok">btkSetAnalogScale</a>	BTKSETANALOGSCALE Modify analog's scale and return updated analogs.</li><li><a href="../../../Functions/BTK/linux64/@Common/btkSetAnalogUnit.html" class="code" title="function btkSetAnalogUnit(h, idx_or_label, new_unit) %#ok">btkSetAnalogUnit</a>	BTKSETANALOGUNIT Modify the analog's unit and return a list of the updated analog channels.</li><li><a href="../../../Functions/BTK/linux64/btkFindMetaData.html" class="code" title="function md = btkFindMetaData(h,label,varargin)">btkFindMetaData</a>	BTKFINDMETADATA Return the searched metadata or 0 if not found.</li><li><a href="../../../Functions/BTK/linux64/btkMetaDataInfo.html" class="code" title="function info = btkMetaDataInfo(format, values, numdims)">btkMetaDataInfo</a>	BTKMETADATAINFO Create a structure containing the required fields for the informations of a metadata.</li><li><a href="../../../Functions/BTK/mac64/@Common/btkAppendAnalog.html" class="code" title="function btkAppendAnalog(h, label, valuesdesc) %#ok">btkAppendAnalog</a>	BTKAPPENDANALOG Append a new analog channel and return an updated list of analog channels.</li><li><a href="../../../Functions/BTK/mac64/@Common/btkAppendMetaData.html" class="code" title="function btkAppendMetaData(h, label, sublabel, ..., info) %#ok">btkAppendMetaData</a>	BTKAPPENDMETADATA Append a new metada and return an updated list of the metadata in the acquisition.</li><li><a href="../../../Functions/BTK/mac64/@Common/btkGetAnalogFrameNumber.html" class="code" title="function afn = btkGetAnalogFrameNumber(h) %#ok">btkGetAnalogFrameNumber</a>	BTKGETANALOGFRAMENUMBER Returns the number of frames for the analog channels.</li><li><a href="../../../Functions/BTK/mac64/@Common/btkGetAnalogNumber.html" class="code" title="function an = btkGetAnalogNumber(h) %#ok">btkGetAnalogNumber</a>	BTKGETANALOGNUMBER Returns the number of analog channels.</li><li><a href="../../../Functions/BTK/mac64/@Common/btkGetAnalogResolution.html" class="code" title="function ar = btkGetAnalogResolution(h) %#ok">btkGetAnalogResolution</a>	BTKGETANALOGRESOLUTION Returns the ADC resolution.</li><li><a href="../../../Functions/BTK/mac64/@Common/btkGetAnalogSampleNumberPerFrame.html" class="code" title="function ratio = btkGetAnalogSampleNumberPerFrame(h) %#ok">btkGetAnalogSampleNumberPerFrame</a>	BTKGETANALOGSAMPLENUMBERPERFRAME Return the number of analog samples per video frame.</li><li><a href="../../../Functions/BTK/mac64/@Common/btkGetPointFrameNumber.html" class="code" title="function pfn = btkGetPointFrameNumber(h) %#ok">btkGetPointFrameNumber</a>	BTKGETPOINTFRAMENUMBER Returns the number of frames for the points.</li><li><a href="../../../Functions/BTK/mac64/@Common/btkGetPointsUnit.html" class="code" title="function unit = btkGetPointsUnit(h, type) %#ok">btkGetPointsUnit</a>	BTKGETPOINTUNIT Returns requested points' unit.</li><li><a href="../../../Functions/BTK/mac64/@Common/btkSetAnalogGain.html" class="code" title="function btkSetAnalogGain(h, idx_or_label, new_gain) %#ok">btkSetAnalogGain</a>	BTKSETANALOGGAIN Modify analog's gain and return updated analogs.</li><li><a href="../../../Functions/BTK/mac64/@Common/btkSetAnalogOffset.html" class="code" title="function btkSetAnalogOffset(h, idx_or_label, new_offset) %#ok">btkSetAnalogOffset</a>	BTKSETANALOGOFFSET Modify analog's offset and return updated analogs.</li><li><a href="../../../Functions/BTK/mac64/@Common/btkSetAnalogScale.html" class="code" title="function btkSetAnalogScale(h, idx_or_label, newscale) %#ok">btkSetAnalogScale</a>	BTKSETANALOGSCALE Modify analog's scale and return updated analogs.</li><li><a href="../../../Functions/BTK/mac64/@Common/btkSetAnalogUnit.html" class="code" title="function btkSetAnalogUnit(h, idx_or_label, new_unit) %#ok">btkSetAnalogUnit</a>	BTKSETANALOGUNIT Modify the analog's unit and return a list of the updated analog channels.</li><li><a href="../../../Functions/BTK/mac64/btkFindMetaData.html" class="code" title="function md = btkFindMetaData(h,label,varargin)">btkFindMetaData</a>	BTKFINDMETADATA Return the searched metadata or 0 if not found.</li><li><a href="../../../Functions/BTK/mac64/btkMetaDataInfo.html" class="code" title="function info = btkMetaDataInfo(format, values, numdims)">btkMetaDataInfo</a>	BTKMETADATAINFO Create a structure containing the required fields for the informations of a metadata.</li><li><a href="../../../Functions/BTK/win64/@Common/btkAppendAnalog.html" class="code" title="function btkAppendAnalog(h, label, valuesdesc) %#ok">btkAppendAnalog</a>	BTKAPPENDANALOG Append a new analog channel and return an updated list of analog channels.</li><li><a href="../../../Functions/BTK/win64/@Common/btkAppendMetaData.html" class="code" title="function btkAppendMetaData(h, label, sublabel, ..., info) %#ok">btkAppendMetaData</a>	BTKAPPENDMETADATA Append a new metada and return an updated list of the metadata in the acquisition.</li><li><a href="../../../Functions/BTK/win64/@Common/btkGetAnalogFrameNumber.html" class="code" title="function afn = btkGetAnalogFrameNumber(h) %#ok">btkGetAnalogFrameNumber</a>	BTKGETANALOGFRAMENUMBER Returns the number of frames for the analog channels.</li><li><a href="../../../Functions/BTK/win64/@Common/btkGetAnalogNumber.html" class="code" title="function an = btkGetAnalogNumber(h) %#ok">btkGetAnalogNumber</a>	BTKGETANALOGNUMBER Returns the number of analog channels.</li><li><a href="../../../Functions/BTK/win64/@Common/btkGetAnalogResolution.html" class="code" title="function ar = btkGetAnalogResolution(h) %#ok">btkGetAnalogResolution</a>	BTKGETANALOGRESOLUTION Returns the ADC resolution.</li><li><a href="../../../Functions/BTK/win64/@Common/btkGetAnalogSampleNumberPerFrame.html" class="code" title="function ratio = btkGetAnalogSampleNumberPerFrame(h) %#ok">btkGetAnalogSampleNumberPerFrame</a>	BTKGETANALOGSAMPLENUMBERPERFRAME Return the number of analog samples per video frame.</li><li><a href="../../../Functions/BTK/win64/@Common/btkGetPointFrameNumber.html" class="code" title="function pfn = btkGetPointFrameNumber(h) %#ok">btkGetPointFrameNumber</a>	BTKGETPOINTFRAMENUMBER Returns the number of frames for the points.</li><li><a href="../../../Functions/BTK/win64/@Common/btkGetPointsUnit.html" class="code" title="function unit = btkGetPointsUnit(h, type) %#ok">btkGetPointsUnit</a>	BTKGETPOINTUNIT Returns requested points' unit.</li><li><a href="../../../Functions/BTK/win64/@Common/btkSetAnalogGain.html" class="code" title="function btkSetAnalogGain(h, idx_or_label, new_gain) %#ok">btkSetAnalogGain</a>	BTKSETANALOGGAIN Modify analog's gain and return updated analogs.</li><li><a href="../../../Functions/BTK/win64/@Common/btkSetAnalogOffset.html" class="code" title="function btkSetAnalogOffset(h, idx_or_label, new_offset) %#ok">btkSetAnalogOffset</a>	BTKSETANALOGOFFSET Modify analog's offset and return updated analogs.</li><li><a href="../../../Functions/BTK/win64/@Common/btkSetAnalogScale.html" class="code" title="function btkSetAnalogScale(h, idx_or_label, newscale) %#ok">btkSetAnalogScale</a>	BTKSETANALOGSCALE Modify analog's scale and return updated analogs.</li><li><a href="../../../Functions/BTK/win64/@Common/btkSetAnalogUnit.html" class="code" title="function btkSetAnalogUnit(h, idx_or_label, new_unit) %#ok">btkSetAnalogUnit</a>	BTKSETANALOGUNIT Modify the analog's unit and return a list of the updated analog channels.</li><li><a href="btkFindMetaData.html" class="code" title="function md = btkFindMetaData(h,label,varargin)">btkFindMetaData</a>	BTKFINDMETADATA Return the searched metadata or 0 if not found.</li><li><a href="btkMetaDataInfo.html" class="code" title="function info = btkMetaDataInfo(format, values, numdims)">btkMetaDataInfo</a>	BTKMETADATAINFO Create a structure containing the required fields for the informations of a metadata.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Functions/BTK/linux64/btkTransformTDFToViconC3DFile.html" class="code" title="function btkTransformTDFToViconC3DFile(TDF_INPUT, C3D_OUTPUT)">btkTransformTDFToViconC3DFile</a>	BTKTRANSFORMTDFTOVICONC3DFILE transforms a TDF file (BTS Bioengineering) to a compatible Vicon C3D file.</li><li><a href="../../../Functions/BTK/mac64/btkTransformTDFToViconC3DFile.html" class="code" title="function btkTransformTDFToViconC3DFile(TDF_INPUT, C3D_OUTPUT)">btkTransformTDFToViconC3DFile</a>	BTKTRANSFORMTDFTOVICONC3DFILE transforms a TDF file (BTS Bioengineering) to a compatible Vicon C3D file.</li><li><a href="btkTransformTDFToViconC3DFile.html" class="code" title="function btkTransformTDFToViconC3DFile(TDF_INPUT, C3D_OUTPUT)">btkTransformTDFToViconC3DFile</a>	BTKTRANSFORMTDFTOVICONC3DFILE transforms a TDF file (BTS Bioengineering) to a compatible Vicon C3D file.</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function s = btkComputeScaleFactor_p(v, res)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function btkAppendForcePlatformType2(h, forces, moments, corners, origin, localFrame)</a>
+0002 <span class="comment">%BTKAPPENDFORCEPLATFORMTYPE2 Append a virtual force platform of type 2.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%  BTKAPPENDFORCEPLATFORMTYPE2(H, FORCES, MOMENTS, CORNERS) creates a</span>
+0005 <span class="comment">%  virtual force platform based only on the reaction FORCES and MOMENTS</span>
+0006 <span class="comment">%  expressed in the global frame. This function updates all the metadata in</span>
+0007 <span class="comment">%  the group FORCE_PLATFORM and append 6 analog channels.</span>
+0008 <span class="comment">%  NOTE: The moment must be expressed at the (surface) origin of the plate.</span>
+0009 <span class="comment">%  The CORNERS is a matrix (4,3) which contains the coordinates of the corners</span>
+0010 <span class="comment">%  expressed in the global frame.  They are are numbered from 1 to 4 and refer</span>
+0011 <span class="comment">%  to the quadrant numbers in the X-Y plane of the force platform coordinate</span>
+0012 <span class="comment">%  system (not the 3D point reference coordinate system).  These are +x+y,</span>
+0013 <span class="comment">%  -x+y, -x-y, and +x-y, with respect to the force plate coordinate system.</span>
+0014 <span class="comment">%  The ORIGIN of the platform is set by default to [0,0,0] meaning that it has</span>
+0015 <span class="comment">%  no thickness.  If your forces and moments come from raw data recorded by a</span>
+0016 <span class="comment">%  force platform (and then recorded to the location of the sensor), it is</span>
+0017 <span class="comment">%  strongly advised to use the sensor distances given in the data sheet.</span>
+0018 <span class="comment">%  You can retrieve easily the data of the new force platform by using one</span>
+0019 <span class="comment">%  of the following functions:</span>
+0020 <span class="comment">%  - BTKGETFORCEPLATFORMS</span>
+0021 <span class="comment">%  - BTKGETFORCEPLATFORMWRENCHES</span>
+0022 <span class="comment">%  - BTKGETGROUNDREACTIONWRENCHES</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%  BTKAPPENDFORCEPLATFORMTYPE2(H, FORCES, MOMENTS, CORNERS, ORIGIN) sets</span>
+0025 <span class="comment">%  also the ORIGIN of the force platform compare to its surface' center.</span>
+0026 <span class="comment">%  The ORIGIN must be expressed in the frame of the force plate.  Thus the</span>
+0027 <span class="comment">%  verical component should be negative as the surface is higher than the</span>
+0028 <span class="comment">%  origin.  Setting the ORIGIN to an empty matrix has the same effect than</span>
+0029 <span class="comment">%  giving an origin equals to [0,0,0].</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%  BTKAPPENDFORCEPLATFORMTYPE2(H, FORCES, MOMENTS, CORNERS, ORIGIN, LOCALFRAME)</span>
+0032 <span class="comment">%  creates a virtual force platform using FORCES and MOMENTS expressed in the</span>
+0033 <span class="comment">%  local frame if LOCALFRAME is not set to 0. The content of CORNERS and ORIGIN</span>
+0034 <span class="comment">%  still must be expressed in the global frame. The use of LOCALFRAME can be useful</span>
+0035 <span class="comment">%  if you use data recorded directly from the force platform.</span>
+0036 
+0037 <span class="comment">%  History</span>
+0038 <span class="comment">%  -------</span>
+0039 <span class="comment">%   - 2011/11/21: Initial version</span>
+0040 <span class="comment">%   - 2011/11/22: Forces and moments must be given in the global frame</span>
+0041 <span class="comment">%   - 2012/03/06: New option 'local' to give the forces and moment in the</span>
+0042 <span class="comment">%                 force platform (local) frame</span>
+0043 <span class="comment">%   - 2012/04/19: Automatic check if the force and moment correspond to the</span>
+0044 <span class="comment">%                 number of the frame for the points or the analog channels</span>
+0045 <span class="comment">%   - 2012/08/14: Option 'quiet' removed an replaced by Matlab warning() function</span>
+0046 <span class="comment">%                 combined with the btk:AppendForcePlatformType2 identifier</span>
+0047 <span class="comment">%   - 2013/02/03: Analog's unit added based on acquisition's configuration (btkGetPointUnit).</span>
+0048 <span class="comment">%   - 2013/03/22: Computation of adapted scale factor and offset to reduce the problem of</span>
+0049 <span class="comment">%                 alisasing in some case. Fake Gain added (+/-10V).</span>
+0050  
+0051 
+0052 <span class="comment">%  Author: A. Barré</span>
+0053 <span class="comment">%  Copyright 2009-2013 Biomechanical ToolKit (BTK).</span>
+0054 
+0055 <span class="keyword">if</span> (nargin &lt; 4)
+0056     error(<span class="string">'Missing input arguments'</span>);
+0057 <span class="keyword">end</span>
+0058 <span class="keyword">if</span> ((nargin &lt; 5) || (isempty(origin)))
+0059     origin = [0;0;0];
+0060 <span class="keyword">end</span>
+0061 <span class="keyword">if</span> ((nargin &lt; 6))
+0062     localFrame = 0;
+0063 <span class="keyword">end</span>
+0064 
+0065 numPointFrames = <a href="../../../Functions/BTK/linux64/@Common/btkGetPointFrameNumber.html" class="code" title="function pfn = btkGetPointFrameNumber(h) %#ok">btkGetPointFrameNumber</a>(h);
+0066 numAnalogFrames = <a href="../../../Functions/BTK/linux64/@Common/btkGetAnalogFrameNumber.html" class="code" title="function afn = btkGetAnalogFrameNumber(h) %#ok">btkGetAnalogFrameNumber</a>(h);
+0067 numAnalogs = <a href="../../../Functions/BTK/linux64/@Common/btkGetAnalogNumber.html" class="code" title="function an = btkGetAnalogNumber(h) %#ok">btkGetAnalogNumber</a>(h);
+0068 
+0069 <span class="comment">% Check the size of the forces</span>
+0070 <span class="keyword">if</span> ((size(forces,1) ~= numPointFrames) &amp;&amp; (size(forces,1) ~= numAnalogFrames))
+0071     error(<span class="string">'The number of frames for the forces doesn''t correspond to the number of frames in the acquisition.'</span>);
+0072 <span class="keyword">end</span>
+0073 <span class="keyword">if</span> (size(forces,2) ~= 3)
+0074     error(<span class="string">'The number of components for the forces must be equal to 3.'</span>);
+0075 <span class="keyword">end</span>
+0076 <span class="comment">% Check the size of the moments</span>
+0077 <span class="keyword">if</span> (size(moments,1) ~= size(forces,1))
+0078     error(<span class="string">'The number of frames for the moments doesn''t correspond to the number of frames for the given forces.'</span>);
+0079 <span class="keyword">end</span>
+0080 <span class="keyword">if</span> (size(moments,2) ~= 3)
+0081     error(<span class="string">'The number of components for the moments must be equal to 3.'</span>);
+0082 <span class="keyword">end</span>
+0083 <span class="comment">% Check the size of the corners</span>
+0084 <span class="keyword">if</span> (size(corners,1) ~= 4)
+0085     error(<span class="string">'The number of corners must be equal to 4.'</span>);
+0086 <span class="keyword">end</span>
+0087 <span class="keyword">if</span> (size(corners,2) ~= 3)
+0088     error(<span class="string">'The number of components for the corners must be equal to 3.'</span>);
+0089 <span class="keyword">end</span>
+0090 <span class="comment">% Check the size of the orgin</span>
+0091 <span class="keyword">if</span> (length(origin) ~= 3)
+0092     error(<span class="string">'The number of components for the origin must be equal to 3.'</span>);
+0093 <span class="keyword">end</span>
+0094 
+0095 <span class="comment">% Check if the vertical component of the origin is negative and adapt the</span>
+0096 <span class="comment">% origin in consequence if it is not the case</span>
+0097 <span class="keyword">if</span> (origin(3) &gt; 0)
+0098     warning(<span class="string">'btk:AppendForcePlatformType2'</span>, <span class="string">'The origin must be expressed from the physical origin to the surface one. The opposite of the origin is used.'</span>);
+0099     origin = origin * -1;
+0100 <span class="keyword">end</span>
+0101 
+0102 <span class="keyword">if</span> (localFrame == 0)
+0103     <span class="comment">% Compute the moment around the physical origin of the platform</span>
+0104     moments(:,1) = moments(:,1) - (forces(:,2) * origin(3) - origin(2) * forces(:,3));
+0105     moments(:,2) = moments(:,2) - (forces(:,3) * origin(1) - origin(3) * forces(:,1));
+0106     moments(:,3) = moments(:,3) - (forces(:,1) * origin(2) - origin(1) * forces(:,2));
+0107     <span class="comment">% Transform the forces and moments to the hardware origin of the platform</span>
+0108     <span class="comment">% and expressed them in its frame.</span>
+0109     R = zeros(3);
+0110     R(:,1) = corners(1,:) - corners(2,:); R(:,1) = R(:,1) / norm(R(:,1));
+0111     R(:,3) = cross(R(:,1)', corners(1,:) - corners(4,:)); R(:,3) = R(:,3) / norm(R(:,3)); 
+0112     R(:,2) = cross(R(:,3), R(:,1));
+0113     forces = forces * R;
+0114     moments = moments * R;
+0115 <span class="keyword">end</span>
+0116 
+0117 <span class="comment">% Check for the analog sample frequency</span>
+0118 ratio = <a href="../../../Functions/BTK/linux64/@Common/btkGetAnalogSampleNumberPerFrame.html" class="code" title="function ratio = btkGetAnalogSampleNumberPerFrame(h) %#ok">btkGetAnalogSampleNumberPerFrame</a>(h);
+0119 <span class="keyword">if</span> ((ratio ~= 1) &amp;&amp; (size(forces,1) == numPointFrames))
+0120     warning(<span class="string">'btk:AppendForcePlatformType2'</span>, <span class="string">'As the sample frequency of the analog channels is not the same than the cameras, the force and moments are interpolated by a linear method.'</span>);
+0121     forces = interp1(1:numPointFrames, forces, 1:1/ratio:numPointFrames, <span class="string">'linear'</span>);
+0122     moments = interp1(1:numPointFrames, moments, 1:1/ratio:numPointFrames, <span class="string">'linear'</span>);
+0123     <span class="comment">% The frames after the last video frame are filled with the value 0</span>
+0124     forces = [forces ; zeros(ratio-1,3)];
+0125     moments = [moments ; zeros(ratio-1,3)];
+0126 <span class="keyword">end</span>
+0127 
+0128 <span class="comment">% Check if the required metadata are in the given acquisition</span>
+0129 used = 1;
+0130 type = 2;
+0131 zero = [0,0]; <span class="comment">% No baseline by default</span>
+0132 md = <a href="btkFindMetaData.html" class="code" title="function md = btkFindMetaData(h,label,varargin)">btkFindMetaData</a>(h, <span class="string">'FORCE_PLATFORM'</span>);
+0133 channel = numAnalogs + [1 2 3 4 5 6];
+0134 numChannelsPerPF = 6;
+0135 corners = corners'; <span class="comment">% Coordinates sorted by column order instead of row order.</span>
+0136 <span class="keyword">if</span> (isstruct(md))
+0137     <span class="keyword">if</span> (isfield(md.children, <span class="string">'USED'</span>))
+0138         used = md.children.USED.info.values(1) + 1;
+0139         type = zeros(used,1);
+0140         corners_ = zeros(3,4,used);
+0141         origin_ = zeros(3,used);
+0142     <span class="keyword">end</span>
+0143     <span class="keyword">if</span> (isfield(md.children,<span class="string">'TYPE'</span>))
+0144         temp = md.children.TYPE.info.values;
+0145         type(1:numel(temp)) = temp;
+0146         type(used) = 2;
+0147         <span class="keyword">for</span> i=1:used-1
+0148             <span class="keyword">switch</span> (type(i))
+0149                 <span class="keyword">case</span> {1, 2, 4, 21}
+0150                     <span class="keyword">if</span> (numChannelsPerPF &lt; 6)
+0151                         numChannelsPerPF = 6;
+0152                     <span class="keyword">end</span>
+0153                 <span class="keyword">case</span> {3, 5, 7, 11, 12}
+0154                     <span class="keyword">if</span> (numChannelsPerPF &lt; 8)
+0155                         numChannelsPerPF = 8;
+0156                     <span class="keyword">end</span>
+0157                 <span class="keyword">case</span> 6,
+0158                     <span class="keyword">if</span> (numChannelsPerPF &lt; 12)
+0159                         numChannelsPerPF = 12;
+0160                     <span class="keyword">end</span>
+0161             <span class="keyword">end</span>
+0162         <span class="keyword">end</span>
+0163         channel = zeros(numChannelsPerPF, used);
+0164     <span class="keyword">end</span>
+0165     <span class="keyword">if</span> (isfield(md.children,<span class="string">'ZERO'</span>))
+0166         zero = md.children.ZERO.info.values;
+0167     <span class="keyword">end</span>
+0168     <span class="keyword">if</span> (isfield(md.children,<span class="string">'CORNERS'</span>))
+0169         temp = md.children.CORNERS.info.values;
+0170         corners_(1:numel(temp)) = temp;
+0171         corners_((used-1)*4*3+1:end) = corners(:);
+0172         corners = corners_;
+0173     <span class="keyword">end</span>
+0174     <span class="keyword">if</span> (isfield(md.children,<span class="string">'ORIGIN'</span>))
+0175         temp = md.children.ORIGIN.info.values;
+0176         origin_(1:numel(temp)) = temp;
+0177         origin_((used-1)*3+1:end) = origin;
+0178         origin = origin_;
+0179     <span class="keyword">end</span>
+0180     <span class="keyword">if</span> (isfield(md.children,<span class="string">'CHANNEL'</span>))
+0181         temp = md.children.CHANNEL.info.values;
+0182         channel(1:numel(temp)) = temp(:);
+0183         channel(numChannelsPerPF * (used-1)+1 : numChannelsPerPF * (used-1)+6) = numAnalogs + [1 2 3 4 5 6];
+0184     <span class="keyword">end</span>
+0185     <span class="comment">% No need to update the CAL_MATRIX metadata</span>
+0186 <span class="keyword">end</span>
+0187 
+0188 offset = 0;
+0189 <span class="comment">% Set the offset for the virtual analog channels</span>
+0190 md = <a href="btkFindMetaData.html" class="code" title="function md = btkFindMetaData(h,label,varargin)">btkFindMetaData</a>(h, <span class="string">'ANALOG'</span>, <span class="string">'FORMAT'</span>);
+0191 res = <a href="../../../Functions/BTK/linux64/@Common/btkGetAnalogResolution.html" class="code" title="function ar = btkGetAnalogResolution(h) %#ok">btkGetAnalogResolution</a>(h);
+0192 <span class="keyword">if</span> (isstruct(md))
+0193     <span class="keyword">if</span> (strcmpi(md.info.values{1},<span class="string">'SIGNED'</span>))
+0194         offset = 0;
+0195     <span class="keyword">elseif</span> (strcmpi(md.info.values{1},<span class="string">'UNSIGNED'</span>))
+0196         offset = 2^(res-1);
+0197     <span class="keyword">else</span>
+0198         error(<span class="string">'btk:AppendForcePlatformType2'</span>, [<span class="string">'Unknown ADC format: '</span>, md.info.values{1}]);
+0199     <span class="keyword">end</span>
+0200 <span class="keyword">else</span>
+0201   <span class="comment">% Assume this is a ADC signed 12-bit card</span>
+0202   offset = 0;
+0203 <span class="keyword">end</span>
+0204 <span class="comment">% Compute fake scale factors;</span>
+0205 scales = zeros(6,1);
+0206 <span class="keyword">for</span> i=1:3
+0207     scales(i) = <a href="#_sub1" class="code" title="subfunction s = btkComputeScaleFactor_p(v, res)">btkComputeScaleFactor_p</a>(forces(:,i), res);
+0208 <span class="keyword">end</span>
+0209 <span class="keyword">for</span> i=1:3
+0210     scales(i+3) = <a href="#_sub1" class="code" title="subfunction s = btkComputeScaleFactor_p(v, res)">btkComputeScaleFactor_p</a>(moments(:,i), res);
+0211 <span class="keyword">end</span>
+0212 <span class="comment">% The gain is also set to ID 1; +/- 10 volts</span>
+0213 <span class="comment">% Append the (fake) analog channels</span>
+0214 str = num2str(used);
+0215 <span class="comment">% - Forces</span>
+0216 unit = <a href="../../../Functions/BTK/linux64/@Common/btkGetPointsUnit.html" class="code" title="function unit = btkGetPointsUnit(h, type) %#ok">btkGetPointsUnit</a>(h, <span class="string">'Force'</span>);
+0217 <a href="../../../Functions/BTK/linux64/@Common/btkAppendAnalog.html" class="code" title="function btkAppendAnalog(h, label, valuesdesc) %#ok">btkAppendAnalog</a>(h, [<span class="string">'Fx'</span>,str], forces(:,1), <span class="string">'Fake analog channel for virtual force platform component Fx'</span>);
+0218 <a href="../../../Functions/BTK/linux64/@Common/btkSetAnalogUnit.html" class="code" title="function btkSetAnalogUnit(h, idx_or_label, new_unit) %#ok">btkSetAnalogUnit</a>(h, numAnalogs+1, unit);
+0219 <a href="../../../Functions/BTK/linux64/@Common/btkSetAnalogOffset.html" class="code" title="function btkSetAnalogOffset(h, idx_or_label, new_offset) %#ok">btkSetAnalogOffset</a>(h, numAnalogs+1, offset);
+0220 <a href="../../../Functions/BTK/linux64/@Common/btkSetAnalogGain.html" class="code" title="function btkSetAnalogGain(h, idx_or_label, new_gain) %#ok">btkSetAnalogGain</a>(h, numAnalogs+1, 1);
+0221 <a href="../../../Functions/BTK/linux64/@Common/btkSetAnalogScale.html" class="code" title="function btkSetAnalogScale(h, idx_or_label, newscale) %#ok">btkSetAnalogScale</a>(h, numAnalogs+1, scales(1));
+0222 <a href="../../../Functions/BTK/linux64/@Common/btkAppendAnalog.html" class="code" title="function btkAppendAnalog(h, label, valuesdesc) %#ok">btkAppendAnalog</a>(h, [<span class="string">'Fy'</span>,str], forces(:,2), <span class="string">'Fake analog channel for virtual force platform component Fy'</span>);
+0223 <a href="../../../Functions/BTK/linux64/@Common/btkSetAnalogUnit.html" class="code" title="function btkSetAnalogUnit(h, idx_or_label, new_unit) %#ok">btkSetAnalogUnit</a>(h, numAnalogs+2, unit);
+0224 <a href="../../../Functions/BTK/linux64/@Common/btkSetAnalogOffset.html" class="code" title="function btkSetAnalogOffset(h, idx_or_label, new_offset) %#ok">btkSetAnalogOffset</a>(h, numAnalogs+2, offset);
+0225 <a href="../../../Functions/BTK/linux64/@Common/btkSetAnalogGain.html" class="code" title="function btkSetAnalogGain(h, idx_or_label, new_gain) %#ok">btkSetAnalogGain</a>(h, numAnalogs+2, 1);
+0226 <a href="../../../Functions/BTK/linux64/@Common/btkSetAnalogScale.html" class="code" title="function btkSetAnalogScale(h, idx_or_label, newscale) %#ok">btkSetAnalogScale</a>(h, numAnalogs+2, scales(2));
+0227 <a href="../../../Functions/BTK/linux64/@Common/btkAppendAnalog.html" class="code" title="function btkAppendAnalog(h, label, valuesdesc) %#ok">btkAppendAnalog</a>(h, [<span class="string">'Fz'</span>,str], forces(:,3), <span class="string">'Fake analog channel for virtual force platform component Fz'</span>);
+0228 <a href="../../../Functions/BTK/linux64/@Common/btkSetAnalogUnit.html" class="code" title="function btkSetAnalogUnit(h, idx_or_label, new_unit) %#ok">btkSetAnalogUnit</a>(h, numAnalogs+3, unit);
+0229 <a href="../../../Functions/BTK/linux64/@Common/btkSetAnalogOffset.html" class="code" title="function btkSetAnalogOffset(h, idx_or_label, new_offset) %#ok">btkSetAnalogOffset</a>(h, numAnalogs+3, offset);
+0230 <a href="../../../Functions/BTK/linux64/@Common/btkSetAnalogGain.html" class="code" title="function btkSetAnalogGain(h, idx_or_label, new_gain) %#ok">btkSetAnalogGain</a>(h, numAnalogs+3, 1);
+0231 <a href="../../../Functions/BTK/linux64/@Common/btkSetAnalogScale.html" class="code" title="function btkSetAnalogScale(h, idx_or_label, newscale) %#ok">btkSetAnalogScale</a>(h, numAnalogs+3, scales(3));
+0232 <span class="comment">% - Moments</span>
+0233 unit = <a href="../../../Functions/BTK/linux64/@Common/btkGetPointsUnit.html" class="code" title="function unit = btkGetPointsUnit(h, type) %#ok">btkGetPointsUnit</a>(h, <span class="string">'Moment'</span>);
+0234 <a href="../../../Functions/BTK/linux64/@Common/btkAppendAnalog.html" class="code" title="function btkAppendAnalog(h, label, valuesdesc) %#ok">btkAppendAnalog</a>(h, [<span class="string">'Mx'</span>,str], moments(:,1), <span class="string">'Fake analog channel for virtual force platform component Mx'</span>);
+0235 <a href="../../../Functions/BTK/linux64/@Common/btkSetAnalogUnit.html" class="code" title="function btkSetAnalogUnit(h, idx_or_label, new_unit) %#ok">btkSetAnalogUnit</a>(h, numAnalogs+4, unit);
+0236 <a href="../../../Functions/BTK/linux64/@Common/btkSetAnalogOffset.html" class="code" title="function btkSetAnalogOffset(h, idx_or_label, new_offset) %#ok">btkSetAnalogOffset</a>(h, numAnalogs+4, offset);
+0237 <a href="../../../Functions/BTK/linux64/@Common/btkSetAnalogGain.html" class="code" title="function btkSetAnalogGain(h, idx_or_label, new_gain) %#ok">btkSetAnalogGain</a>(h, numAnalogs+4, 1);
+0238 <a href="../../../Functions/BTK/linux64/@Common/btkSetAnalogScale.html" class="code" title="function btkSetAnalogScale(h, idx_or_label, newscale) %#ok">btkSetAnalogScale</a>(h, numAnalogs+4, scales(4));
+0239 <a href="../../../Functions/BTK/linux64/@Common/btkAppendAnalog.html" class="code" title="function btkAppendAnalog(h, label, valuesdesc) %#ok">btkAppendAnalog</a>(h, [<span class="string">'My'</span>,str], moments(:,2), <span class="string">'Fake analog channel for virtual force platform component My'</span>);
+0240 <a href="../../../Functions/BTK/linux64/@Common/btkSetAnalogUnit.html" class="code" title="function btkSetAnalogUnit(h, idx_or_label, new_unit) %#ok">btkSetAnalogUnit</a>(h, numAnalogs+5, unit);
+0241 <a href="../../../Functions/BTK/linux64/@Common/btkSetAnalogOffset.html" class="code" title="function btkSetAnalogOffset(h, idx_or_label, new_offset) %#ok">btkSetAnalogOffset</a>(h, numAnalogs+5, offset);
+0242 <a href="../../../Functions/BTK/linux64/@Common/btkSetAnalogGain.html" class="code" title="function btkSetAnalogGain(h, idx_or_label, new_gain) %#ok">btkSetAnalogGain</a>(h, numAnalogs+5, 1);
+0243 <a href="../../../Functions/BTK/linux64/@Common/btkSetAnalogScale.html" class="code" title="function btkSetAnalogScale(h, idx_or_label, newscale) %#ok">btkSetAnalogScale</a>(h, numAnalogs+5, scales(5));
+0244 <a href="../../../Functions/BTK/linux64/@Common/btkAppendAnalog.html" class="code" title="function btkAppendAnalog(h, label, valuesdesc) %#ok">btkAppendAnalog</a>(h, [<span class="string">'Mz'</span>,str], moments(:,3), <span class="string">'Fake analog channel for virtual force platform component Mz'</span>);
+0245 <a href="../../../Functions/BTK/linux64/@Common/btkSetAnalogUnit.html" class="code" title="function btkSetAnalogUnit(h, idx_or_label, new_unit) %#ok">btkSetAnalogUnit</a>(h, numAnalogs+6, unit);
+0246 <a href="../../../Functions/BTK/linux64/@Common/btkSetAnalogOffset.html" class="code" title="function btkSetAnalogOffset(h, idx_or_label, new_offset) %#ok">btkSetAnalogOffset</a>(h, numAnalogs+6, offset);
+0247 <a href="../../../Functions/BTK/linux64/@Common/btkSetAnalogGain.html" class="code" title="function btkSetAnalogGain(h, idx_or_label, new_gain) %#ok">btkSetAnalogGain</a>(h, numAnalogs+6, 1);
+0248 <a href="../../../Functions/BTK/linux64/@Common/btkSetAnalogScale.html" class="code" title="function btkSetAnalogScale(h, idx_or_label, newscale) %#ok">btkSetAnalogScale</a>(h, numAnalogs+6, scales(6));
+0249 <span class="comment">% Update the metadata</span>
+0250 <a href="../../../Functions/BTK/linux64/@Common/btkAppendMetaData.html" class="code" title="function btkAppendMetaData(h, label, sublabel, ..., info) %#ok">btkAppendMetaData</a>(h, <span class="string">'FORCE_PLATFORM'</span>, <span class="string">'USED'</span>, <a href="btkMetaDataInfo.html" class="code" title="function info = btkMetaDataInfo(format, values, numdims)">btkMetaDataInfo</a>(<span class="string">'Integer'</span>, used));
+0251 <a href="../../../Functions/BTK/linux64/@Common/btkAppendMetaData.html" class="code" title="function btkAppendMetaData(h, label, sublabel, ..., info) %#ok">btkAppendMetaData</a>(h, <span class="string">'FORCE_PLATFORM'</span>, <span class="string">'TYPE'</span>, <a href="btkMetaDataInfo.html" class="code" title="function info = btkMetaDataInfo(format, values, numdims)">btkMetaDataInfo</a>(<span class="string">'Integer'</span>, type));
+0252 <a href="../../../Functions/BTK/linux64/@Common/btkAppendMetaData.html" class="code" title="function btkAppendMetaData(h, label, sublabel, ..., info) %#ok">btkAppendMetaData</a>(h, <span class="string">'FORCE_PLATFORM'</span>, <span class="string">'ZERO'</span>, <a href="btkMetaDataInfo.html" class="code" title="function info = btkMetaDataInfo(format, values, numdims)">btkMetaDataInfo</a>(<span class="string">'Integer'</span>, zero));
+0253 <a href="../../../Functions/BTK/linux64/@Common/btkAppendMetaData.html" class="code" title="function btkAppendMetaData(h, label, sublabel, ..., info) %#ok">btkAppendMetaData</a>(h, <span class="string">'FORCE_PLATFORM'</span>, <span class="string">'CORNERS'</span>, <a href="btkMetaDataInfo.html" class="code" title="function info = btkMetaDataInfo(format, values, numdims)">btkMetaDataInfo</a>(<span class="string">'Real'</span>, corners));
+0254 <a href="../../../Functions/BTK/linux64/@Common/btkAppendMetaData.html" class="code" title="function btkAppendMetaData(h, label, sublabel, ..., info) %#ok">btkAppendMetaData</a>(h, <span class="string">'FORCE_PLATFORM'</span>, <span class="string">'ORIGIN'</span>, <a href="btkMetaDataInfo.html" class="code" title="function info = btkMetaDataInfo(format, values, numdims)">btkMetaDataInfo</a>(<span class="string">'Real'</span>, origin));
+0255 <a href="../../../Functions/BTK/linux64/@Common/btkAppendMetaData.html" class="code" title="function btkAppendMetaData(h, label, sublabel, ..., info) %#ok">btkAppendMetaData</a>(h, <span class="string">'FORCE_PLATFORM'</span>, <span class="string">'CHANNEL'</span>, <a href="btkMetaDataInfo.html" class="code" title="function info = btkMetaDataInfo(format, values, numdims)">btkMetaDataInfo</a>(<span class="string">'Integer'</span>, channel));
+0256 
+0257 <a name="_sub1" href="#_subfunctions" class="code">function s = btkComputeScaleFactor_p(v, res)</a>
+0258   s = max(abs(v));
+0259   nd = ceil(log10(s));
+0260   <span class="keyword">if</span> (nd == 0)
+0261       nd = 1;
+0262   <span class="keyword">end</span>
+0263   <span class="keyword">if</span> (s ~= 0)
+0264       s = 1.25 * ceil(s / 10^(nd-1)) * 10^(nd-1) / (2^(res-1));
+0265       <span class="comment">% s = 10^nd / (2^(res-1));</span>
+0266       <span class="keyword">if</span> (any(v &lt; 0))
+0267           s = -1 * s;
+0268       <span class="keyword">end</span>
+0269   <span class="keyword">else</span>
+0270       s = 1;
+0271   <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

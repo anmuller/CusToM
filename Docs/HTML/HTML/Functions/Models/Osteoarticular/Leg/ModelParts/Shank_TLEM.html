@@ -1,0 +1,432 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Shank_TLEM</title>
+  <meta name="keywords" content="Shank_TLEM">
+  <meta name="description" content="Based on:">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../../menu.html Functions --><!-- ../../../menu.html Models --><!-- ../../menu.html Osteoarticular --><!-- ../menu.html Leg --><!-- menu.html ModelParts -->
+<h1>Shank_TLEM
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>Based on:</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function [Human_model]= Shank_TLEM(Human_model,k,Signe,Mass,AttachmentPoint) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">   Based on:
+    V. Carbone et al., �TLEM 2.0 - A comprehensive musculoskeletal geometry dataset for subject-specific modeling of lower extremity,� J. Biomech., vol. 48, no. 5, pp. 734�741, 2015.
+   INPUT
+   - OsteoArticularModel: osteo-articular model of an already existing
+   model (see the Documentation for the structure)
+   - k: homothety coefficient for the geometrical parameters (defined as
+   the subject size in cm divided by 180)
+   - Signe: side of the thigh model ('R' for right side or 'L' for left side)
+   - Mass: mass of the solids
+   - AttachmentPoint: name of the attachment point of the model on the
+   already existing model (character string)
+   OUTPUT
+   - OsteoArticularModel: new osteo-articular model (see the Documentation
+   for the structure) 
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="../../../../../Functions/AlgoMathsModel/Rodrigues_from_two_axes.html" class="code" title="function [R]=Rodrigues_from_two_axes(a1,a2)">Rodrigues_from_two_axes</a>	Computation of the Rodrigues equation</li><li><a href="../../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>	Computation of inertia matrix from radius of gyration</li><li><a href="../../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>	Addition of a sister to a solid</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="../../../../../Functions/Models/Osteoarticular/Leg/LegTLEM.html" class="code" title="function [OsteoArticularModel]= LegTLEM(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)">LegTLEM</a>	Addition of a leg model</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Human_model]= Shank_TLEM(Human_model,k,Signe,Mass,AttachmentPoint)</a>
+0002 <span class="comment">%   Based on:</span>
+0003 <span class="comment">%    V. Carbone et al., �TLEM 2.0 - A comprehensive musculoskeletal geometry dataset for subject-specific modeling of lower extremity,� J. Biomech., vol. 48, no. 5, pp. 734�741, 2015.</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - OsteoArticularModel: osteo-articular model of an already existing</span>
+0006 <span class="comment">%   model (see the Documentation for the structure)</span>
+0007 <span class="comment">%   - k: homothety coefficient for the geometrical parameters (defined as</span>
+0008 <span class="comment">%   the subject size in cm divided by 180)</span>
+0009 <span class="comment">%   - Signe: side of the thigh model ('R' for right side or 'L' for left side)</span>
+0010 <span class="comment">%   - Mass: mass of the solids</span>
+0011 <span class="comment">%   - AttachmentPoint: name of the attachment point of the model on the</span>
+0012 <span class="comment">%   already existing model (character string)</span>
+0013 <span class="comment">%   OUTPUT</span>
+0014 <span class="comment">%   - OsteoArticularModel: new osteo-articular model (see the Documentation</span>
+0015 <span class="comment">%   for the structure)</span>
+0016 <span class="comment">%________________________________________________________</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% Licence</span>
+0019 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0020 <span class="comment">%________________________________________________________</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0023 <span class="comment">% Georges Dumont</span>
+0024 <span class="comment">%________________________________________________________</span>
+0025 
+0026 
+0027 <span class="comment">%% Variables de sortie :</span>
+0028 <span class="comment">% &quot;enrichissement de la structure &quot;Human_model&quot;&quot;</span>
+0029 
+0030 <span class="comment">%% Liste des solides</span>
+0031 list_solid={<span class="string">'Shank'</span>};
+0032 
+0033 <span class="comment">%% Choix jambe droite ou gauche</span>
+0034 <span class="keyword">if</span> Signe == <span class="string">'R'</span>
+0035     Mirror=[1 0 0; 0 1 0; 0 0 1];
+0036 <span class="keyword">else</span>
+0037     <span class="keyword">if</span> Signe == <span class="string">'L'</span>
+0038         Mirror=[1 0 0; 0 1 0; 0 0 -1];
+0039     <span class="keyword">end</span>
+0040 <span class="keyword">end</span>
+0041 
+0042 <span class="comment">% %% Incr�entation du num�o des groupes</span>
+0043 <span class="comment">% n_group=0;</span>
+0044 <span class="comment">% for i=1:numel(Human_model)</span>
+0045 <span class="comment">%     if size(Human_model(i).Group) ~= [0 0] %#ok&lt;BDSCA&gt;</span>
+0046 <span class="comment">%         n_group=max(n_group,Human_model(i).Group(1,1));</span>
+0047 <span class="comment">%     end</span>
+0048 <span class="comment">% end</span>
+0049 <span class="comment">% n_group=n_group+1;</span>
+0050 
+0051 <span class="comment">%% Incr�entation de la num�otation des solides</span>
+0052 
+0053 s=size(Human_model,2)+1;  <span class="comment">%#ok&lt;NASGU&gt; % num�o du premier solide</span>
+0054 <span class="keyword">for</span> i=1:size(list_solid,2)      <span class="comment">% num�otation de chaque solide : s_&quot;nom du solide&quot;</span>
+0055     <span class="keyword">if</span> i==1
+0056         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s;'</span>))
+0057     <span class="keyword">else</span>
+0058         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s_'</span>,list_solid{i-1},<span class="string">'+1;'</span>))
+0059     <span class="keyword">end</span>
+0060 <span class="keyword">end</span>
+0061 
+0062 <span class="comment">% trouver le num�o de la m�e �partir du nom du point d'attache : 'attachment_pt'</span>
+0063 <span class="keyword">if</span> numel(Human_model) == 0
+0064     s_mother=0;
+0065     pos_attachment_pt=[0 0 0]';
+0066 <span class="keyword">else</span>
+0067     test=0;
+0068     <span class="keyword">for</span> i=1:numel(Human_model)
+0069         <span class="keyword">for</span> j=1:size(Human_model(i).anat_position,1)
+0070             <span class="keyword">if</span> strcmp(AttachmentPoint,Human_model(i).anat_position{j,1})
+0071                 s_mother=i;
+0072                 pos_attachment_pt=Human_model(i).anat_position{j,2}+Human_model(s_mother).c;
+0073                 test=1;
+0074                 <span class="keyword">break</span>
+0075             <span class="keyword">end</span>
+0076         <span class="keyword">end</span>
+0077         <span class="keyword">if</span> i==numel(Human_model) &amp;&amp; test==0
+0078             error([AttachmentPoint <span class="string">' is no existent'</span>])
+0079         <span class="keyword">end</span>
+0080     <span class="keyword">end</span>
+0081     <span class="keyword">if</span> Human_model(s_mother).child == 0      <span class="comment">% si la m�e n'a pas d'enfant</span>
+0082         Human_model(s_mother).child = eval([<span class="string">'s_'</span> list_solid{1}]);    <span class="comment">% l'enfant de cette m�e est ce solide</span>
+0083     <span class="keyword">else</span>
+0084         [Human_model]=<a href="../../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>(Human_model,Human_model(s_mother).child,eval([<span class="string">'s_'</span> list_solid{1}]));   <span class="comment">% recherche de la derni�e soeur</span>
+0085     <span class="keyword">end</span>
+0086 <span class="keyword">end</span>
+0087 
+0088 <span class="comment">%%                      D�inition des noeuds (articulaires)</span>
+0089 <span class="comment">% TLEM 2.0 � A COMPREHENSIVE MUSCULOSKELETAL GEOMETRY DATASET FOR SUBJECT-SPECIFIC MODELING OF LOWER EXTREMITY</span>
+0090 <span class="comment">%</span>
+0091 <span class="comment">%  V. Carbonea*, R. Fluita*, P. Pellikaana, M.M. van der Krogta,b, D. Janssenc, M. Damsgaardd, L. Vignerone, T. Feilkasf, H.F.J.M. Koopmana, N. Verdonschota,c</span>
+0092 <span class="comment">%</span>
+0093 <span class="comment">%  aLaboratory of Biomechanical Engineering, MIRA Institute, University of Twente, Enschede, The Netherlands</span>
+0094 <span class="comment">%  bDepartment of Rehabilitation Medicine, Research Institute MOVE, VU University Medical Center, Amsterdam, The Netherlands</span>
+0095 <span class="comment">%  cOrthopaedic Research Laboratory, Radboud University Medical Centre, Nijmegen, The Netherlands</span>
+0096 <span class="comment">%  dAnyBody Technology A/S, Aalborg, Denmark</span>
+0097 <span class="comment">%  eMaterialise N.V., Leuven, Belgium</span>
+0098 <span class="comment">%  fBrainlab AG, Munich, Germany</span>
+0099 <span class="comment">% *The authors Carbone and Fluit contributed equally.</span>
+0100 <span class="comment">% Journal of Biomechanics, Available online 8 January 2015, http://dx.doi.org/10.1016/j.jbiomech.2014.12.034</span>
+0101 <span class="comment">%% Adjustement of k</span>
+0102 k=k*1.2063; <span class="comment">%to fit 50th percentile person of 1.80m height</span>
+0103 <span class="comment">% --------------------------- Shank ---------------------------------------</span>
+0104 
+0105 <span class="comment">% centre de masse dans le rep�e de r��ence du segment</span>
+0106 CoM_Shank=k*Mirror*[-0.0095;    0.2076;    0.0052];
+0107 
+0108 <span class="comment">% Position des noeuds</span>
+0109 Shank_KneeJointNode = (k*Mirror*[-0.0102 ;    0.3670    ;-0.0016])  -CoM_Shank;
+0110 Shank_TalocruralJointNode = (k*Mirror*[0.0052    ;-0.0147    ;0])-CoM_Shank;
+0111 MedialCondyle =    k*Mirror*[0 ; 0.32146 ;-0.038646 ]              -CoM_Shank;
+0112 LateralCondyle=    k*Mirror*[0 ; 0.3194  ; 0.038646 ]              -CoM_Shank;
+0113 TibialTuberosity=    k*Mirror*[0.032171 ; 0.27476  ; 0.0097883 ] -CoM_Shank;
+0114 FibularHead=    k*Mirror*[-0.028328 ;0.31974 ;0.031814 ]        -CoM_Shank;
+0115 MedialMalleolus=    k*Mirror*[0.017065 ;0.0049672 ;-0.027608 ]  -CoM_Shank;
+0116 LateralMalleolus=    k*Mirror*[-0.017065 ;-0.0049672 ; 0.027608 ]-CoM_Shank;
+0117 
+0118 ANI=    k*Mirror*[0.017065 ;0.0049672 ;-0.04 ]      -CoM_Shank;
+0119 ANE=    k*Mirror*[-0.017065 ;-0.0049672 ; 0.04 ]    -CoM_Shank;
+0120 KNI =    k*Mirror*[0 ; 0.32146 ;-0.05 ]              -CoM_Shank;
+0121 
+0122 PatellarLigament2=k*Mirror*[0.0321    0.2932    0.0114]'-CoM_Shank;
+0123 <span class="comment">%% D�inition des positions anatomiques</span>
+0124 
+0125 Shank_position_set= {<span class="keyword">...</span>
+0126     [Signe <span class="string">'ANE'</span>], ANE; <span class="keyword">...</span>
+0127     [Signe <span class="string">'ANI'</span>], ANI; <span class="keyword">...</span>
+0128     [Signe <span class="string">'KNI'</span>], KNI; <span class="keyword">...</span>
+0129     [Signe <span class="string">'Shank_KneeJointNode'</span>], Shank_KneeJointNode; <span class="keyword">...</span>
+0130     [Signe <span class="string">'Shank_TalocruralJointNode'</span>], Shank_TalocruralJointNode; <span class="keyword">...</span>
+0131     [Signe <span class="string">'LateralCondyle'</span>], LateralCondyle; <span class="keyword">...</span>
+0132     [Signe <span class="string">'TibialTuberosity'</span>], TibialTuberosity; <span class="keyword">...</span>
+0133     [Signe <span class="string">'FibularHead'</span>], FibularHead; <span class="keyword">...</span>
+0134     [Signe <span class="string">'LateralMalleolus'</span>], LateralMalleolus; <span class="keyword">...</span>
+0135     [Signe <span class="string">'MedialMalleolus'</span>], MedialMalleolus; <span class="keyword">...</span>
+0136     [Signe <span class="string">'MedialCondyle'</span>], MedialCondyle; <span class="keyword">...</span>
+0137     [Signe <span class="string">'PatellarLigament2'</span>],PatellarLigament2;<span class="keyword">...</span>
+0138     [<span class="string">'BicepsFemorisCaputBreve1Insertion1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.02252;0.31306;0.03954])-CoM_Shank;<span class="keyword">...</span>
+0139     [<span class="string">'BicepsFemorisCaputBreve2Insertion1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.02252;0.31306;0.03954])-CoM_Shank;<span class="keyword">...</span>
+0140     [<span class="string">'BicepsFemorisCaputBreve3Insertion1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.02252;0.31306;0.03954])-CoM_Shank;<span class="keyword">...</span>
+0141     [<span class="string">'BicepsFemorisCaputLongum1Insertion1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.02252;0.31306;0.03954])-CoM_Shank;<span class="keyword">...</span>
+0142     [<span class="string">'ExtensorDigitorumLongus1Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.00565;0.30732;0.02794])-CoM_Shank;<span class="keyword">...</span>
+0143     [<span class="string">'ExtensorDigitorumLongus1Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.01858;0.00757;0.01443])-CoM_Shank;<span class="keyword">...</span>
+0144     [<span class="string">'ExtensorDigitorumLongus1Via3'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.02043;0.00455;0.01356])-CoM_Shank;<span class="keyword">...</span>
+0145     [<span class="string">'ExtensorDigitorumLongus1Via4'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.02315;0.00072;0.01456])-CoM_Shank;<span class="keyword">...</span>
+0146     [<span class="string">'ExtensorDigitorumLongus1Via5'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.02675;-0.0039;0.01741])-CoM_Shank;<span class="keyword">...</span>
+0147     [<span class="string">'ExtensorDigitorumLongus2Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.01721;0.21765;0.02381])-CoM_Shank;<span class="keyword">...</span>
+0148     [<span class="string">'ExtensorDigitorumLongus2Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.01858;0.00757;0.01443])-CoM_Shank;<span class="keyword">...</span>
+0149     [<span class="string">'ExtensorDigitorumLongus2Via3'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.02043;0.00455;0.01356])-CoM_Shank;<span class="keyword">...</span>
+0150     [<span class="string">'ExtensorDigitorumLongus2Via4'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.02315;0.00072;0.01456])-CoM_Shank;<span class="keyword">...</span>
+0151     [<span class="string">'ExtensorDigitorumLongus2Via5'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.02675;-0.0039;0.01741])-CoM_Shank;<span class="keyword">...</span>
+0152     [<span class="string">'ExtensorDigitorumLongus3Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.01402;0.097;0.02065])-CoM_Shank;<span class="keyword">...</span>
+0153     [<span class="string">'ExtensorDigitorumLongus3Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.01858;0.00757;0.01443])-CoM_Shank;<span class="keyword">...</span>
+0154     [<span class="string">'ExtensorDigitorumLongus3Via3'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.02043;0.00455;0.01356])-CoM_Shank;<span class="keyword">...</span>
+0155     [<span class="string">'ExtensorDigitorumLongus3Via4'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.02315;0.00072;0.01456])-CoM_Shank;<span class="keyword">...</span>
+0156     [<span class="string">'ExtensorDigitorumLongus3Via5'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.02675;-0.0039;0.01741])-CoM_Shank;<span class="keyword">...</span>
+0157     [<span class="string">'ExtensorDigitorumLongus4Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.01402;0.097;0.02065])-CoM_Shank;<span class="keyword">...</span>
+0158     [<span class="string">'ExtensorDigitorumLongus4Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.01858;0.00757;0.01443])-CoM_Shank;<span class="keyword">...</span>
+0159     [<span class="string">'ExtensorDigitorumLongus4Via3'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.02043;0.00455;0.01356])-CoM_Shank;<span class="keyword">...</span>
+0160     [<span class="string">'ExtensorDigitorumLongus4Via4'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.02315;0.00072;0.01456])-CoM_Shank;<span class="keyword">...</span>
+0161     [<span class="string">'ExtensorDigitorumLongus4Via5'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.02675;-0.0039;0.01741])-CoM_Shank;<span class="keyword">...</span>
+0162     [<span class="string">'ExtensorHallucisLongus1Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.0191;0.21283;0.01896])-CoM_Shank;<span class="keyword">...</span>
+0163     [<span class="string">'ExtensorHallucisLongus1Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.0238;0.01079;0.00865])-CoM_Shank;<span class="keyword">...</span>
+0164     [<span class="string">'ExtensorHallucisLongus1Via3'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.02804;0.00333;0.00544])-CoM_Shank;<span class="keyword">...</span>
+0165     [<span class="string">'ExtensorHallucisLongus1Via4'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.03222;-0.00101;0.00544])-CoM_Shank;<span class="keyword">...</span>
+0166     [<span class="string">'ExtensorHallucisLongus2Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.01373;0.13964;0.01345])-CoM_Shank;<span class="keyword">...</span>
+0167     [<span class="string">'ExtensorHallucisLongus2Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.0238;0.01079;0.00865])-CoM_Shank;<span class="keyword">...</span>
+0168     [<span class="string">'ExtensorHallucisLongus2Via3'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.02804;0.00333;0.00544])-CoM_Shank;<span class="keyword">...</span>
+0169     [<span class="string">'ExtensorHallucisLongus2Via4'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.03222;-0.00101;0.00544])-CoM_Shank;<span class="keyword">...</span>
+0170     [<span class="string">'ExtensorHallucisLongus3Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00963;0.08052;0.01333])-CoM_Shank;<span class="keyword">...</span>
+0171     [<span class="string">'ExtensorHallucisLongus3Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.0238;0.01079;0.00865])-CoM_Shank;<span class="keyword">...</span>
+0172     [<span class="string">'ExtensorHallucisLongus3Via3'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.02804;0.00333;0.00544])-CoM_Shank;<span class="keyword">...</span>
+0173     [<span class="string">'ExtensorHallucisLongus3Via4'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.03222;-0.00101;0.00544])-CoM_Shank;<span class="keyword">...</span>
+0174     [<span class="string">'FlexorDigitorumLongus1Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00208;0.23212;0.00137])-CoM_Shank;<span class="keyword">...</span>
+0175     [<span class="string">'FlexorDigitorumLongus1Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00071;0.00933;-0.02222])-CoM_Shank;<span class="keyword">...</span>
+0176     [<span class="string">'FlexorDigitorumLongus1Via3'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00031;0.00766;-0.02322])-CoM_Shank;<span class="keyword">...</span>
+0177     [<span class="string">'FlexorDigitorumLongus1Via4'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.00163;0.00368;-0.02351])-CoM_Shank;<span class="keyword">...</span>
+0178     [<span class="string">'FlexorDigitorumLongus1Via5'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.00461;-0.00144;-0.02314])-CoM_Shank;<span class="keyword">...</span>
+0179     [<span class="string">'FlexorDigitorumLongus1Via6'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.00815;-0.00655;-0.02214])-CoM_Shank;<span class="keyword">...</span>
+0180     [<span class="string">'FlexorDigitorumLongus1Via7'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.01173;-0.01049;-0.02055])-CoM_Shank;<span class="keyword">...</span>
+0181     [<span class="string">'FlexorDigitorumLongus2Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-9e-05;0.18162;-0.00427])-CoM_Shank;<span class="keyword">...</span>
+0182     [<span class="string">'FlexorDigitorumLongus2Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00071;0.00933;-0.02222])-CoM_Shank;<span class="keyword">...</span>
+0183     [<span class="string">'FlexorDigitorumLongus2Via3'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00031;0.00766;-0.02322])-CoM_Shank;<span class="keyword">...</span>
+0184     [<span class="string">'FlexorDigitorumLongus2Via4'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.00163;0.00368;-0.02351])-CoM_Shank;<span class="keyword">...</span>
+0185     [<span class="string">'FlexorDigitorumLongus2Via5'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.00461;-0.00144;-0.02314])-CoM_Shank;<span class="keyword">...</span>
+0186     [<span class="string">'FlexorDigitorumLongus2Via6'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.00815;-0.00655;-0.02214])-CoM_Shank;<span class="keyword">...</span>
+0187     [<span class="string">'FlexorDigitorumLongus2Via7'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.01173;-0.01049;-0.02055])-CoM_Shank;<span class="keyword">...</span>
+0188     [<span class="string">'FlexorDigitorumLongus3Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.0005;0.12931;-0.00108])-CoM_Shank;<span class="keyword">...</span>
+0189     [<span class="string">'FlexorDigitorumLongus3Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00071;0.00933;-0.02222])-CoM_Shank;<span class="keyword">...</span>
+0190     [<span class="string">'FlexorDigitorumLongus3Via3'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00031;0.00766;-0.02322])-CoM_Shank;<span class="keyword">...</span>
+0191     [<span class="string">'FlexorDigitorumLongus3Via4'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.00163;0.00368;-0.02351])-CoM_Shank;<span class="keyword">...</span>
+0192     [<span class="string">'FlexorDigitorumLongus3Via5'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.00461;-0.00144;-0.02314])-CoM_Shank;<span class="keyword">...</span>
+0193     [<span class="string">'FlexorDigitorumLongus3Via6'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.00815;-0.00655;-0.02214])-CoM_Shank;<span class="keyword">...</span>
+0194     [<span class="string">'FlexorDigitorumLongus3Via7'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.01173;-0.01049;-0.02055])-CoM_Shank;<span class="keyword">...</span>
+0195     [<span class="string">'FlexorDigitorumLongus4Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.0005;0.12931;-0.00108])-CoM_Shank;<span class="keyword">...</span>
+0196     [<span class="string">'FlexorDigitorumLongus4Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00071;0.00933;-0.02222])-CoM_Shank;<span class="keyword">...</span>
+0197     [<span class="string">'FlexorDigitorumLongus4Via3'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00031;0.00766;-0.02322])-CoM_Shank;<span class="keyword">...</span>
+0198     [<span class="string">'FlexorDigitorumLongus4Via4'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.00163;0.00368;-0.02351])-CoM_Shank;<span class="keyword">...</span>
+0199     [<span class="string">'FlexorDigitorumLongus4Via5'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.00461;-0.00144;-0.02314])-CoM_Shank;<span class="keyword">...</span>
+0200     [<span class="string">'FlexorDigitorumLongus4Via6'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.00815;-0.00655;-0.02214])-CoM_Shank;<span class="keyword">...</span>
+0201     [<span class="string">'FlexorDigitorumLongus4Via7'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.01173;-0.01049;-0.02055])-CoM_Shank;<span class="keyword">...</span>
+0202     [<span class="string">'FlexorHallucisLongus1Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.02731;0.20329;0.01594])-CoM_Shank;<span class="keyword">...</span>
+0203     [<span class="string">'FlexorHallucisLongus1Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00514;0.00265;-0.01064])-CoM_Shank;<span class="keyword">...</span>
+0204     [<span class="string">'FlexorHallucisLongus1Via3'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00495;-0.00224;-0.01029])-CoM_Shank;<span class="keyword">...</span>
+0205     [<span class="string">'FlexorHallucisLongus1Via4'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00463;-0.0067;-0.01027])-CoM_Shank;<span class="keyword">...</span>
+0206     [<span class="string">'FlexorHallucisLongus1Via5'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00417;-0.01073;-0.01057])-CoM_Shank;<span class="keyword">...</span>
+0207     [<span class="string">'FlexorHallucisLongus1Via6'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00357;-0.01432;-0.0112])-CoM_Shank;<span class="keyword">...</span>
+0208     [<span class="string">'FlexorHallucisLongus1Via7'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00284;-0.01747;-0.01215])-CoM_Shank;<span class="keyword">...</span>
+0209     [<span class="string">'FlexorHallucisLongus2Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.02034;0.12716;0.01041])-CoM_Shank;<span class="keyword">...</span>
+0210     [<span class="string">'FlexorHallucisLongus2Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00514;0.00265;-0.01064])-CoM_Shank;<span class="keyword">...</span>
+0211     [<span class="string">'FlexorHallucisLongus2Via3'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00495;-0.00224;-0.01029])-CoM_Shank;<span class="keyword">...</span>
+0212     [<span class="string">'FlexorHallucisLongus2Via4'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00463;-0.0067;-0.01027])-CoM_Shank;<span class="keyword">...</span>
+0213     [<span class="string">'FlexorHallucisLongus2Via5'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00417;-0.01073;-0.01057])-CoM_Shank;<span class="keyword">...</span>
+0214     [<span class="string">'FlexorHallucisLongus2Via6'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00357;-0.01432;-0.0112])-CoM_Shank;<span class="keyword">...</span>
+0215     [<span class="string">'FlexorHallucisLongus2Via7'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00284;-0.01747;-0.01215])-CoM_Shank;<span class="keyword">...</span>
+0216     [<span class="string">'FlexorHallucisLongus3Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.01039;0.05536;0.01121])-CoM_Shank;<span class="keyword">...</span>
+0217     [<span class="string">'FlexorHallucisLongus3Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00514;0.00265;-0.01064])-CoM_Shank;<span class="keyword">...</span>
+0218     [<span class="string">'FlexorHallucisLongus3Via3'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00495;-0.00224;-0.01029])-CoM_Shank;<span class="keyword">...</span>
+0219     [<span class="string">'FlexorHallucisLongus3Via4'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00463;-0.0067;-0.01027])-CoM_Shank;<span class="keyword">...</span>
+0220     [<span class="string">'FlexorHallucisLongus3Via5'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00417;-0.01073;-0.01057])-CoM_Shank;<span class="keyword">...</span>
+0221     [<span class="string">'FlexorHallucisLongus3Via6'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00357;-0.01432;-0.0112])-CoM_Shank;<span class="keyword">...</span>
+0222     [<span class="string">'FlexorHallucisLongus3Via7'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00284;-0.01747;-0.01215])-CoM_Shank;<span class="keyword">...</span>
+0223     [<span class="string">'GastrocnemiusLateralis1Via1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.04748;0.15711;0.00138])-CoM_Shank;<span class="keyword">...</span>
+0224     [<span class="string">'GastrocnemiusMedialis1Via1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.0331;0.30075;-0.01802])-CoM_Shank;<span class="keyword">...</span>
+0225     [<span class="string">'GastrocnemiusMedialis1Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.03395;0.26145;-0.02239])-CoM_Shank;<span class="keyword">...</span>
+0226     [<span class="string">'GastrocnemiusMedialis1Via3'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.03433;0.22333;-0.02427])-CoM_Shank;<span class="keyword">...</span>
+0227     [<span class="string">'GastrocnemiusMedialis1Via4'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.03426;0.1864;-0.02367])-CoM_Shank;<span class="keyword">...</span>
+0228     [<span class="string">'GastrocnemiusMedialis1Via5'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.03372;0.15066;-0.02059])-CoM_Shank;<span class="keyword">...</span>
+0229     [<span class="string">'GastrocnemiusMedialis1Via6'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.03271;0.1161;-0.01503])-CoM_Shank;<span class="keyword">...</span>
+0230     [<span class="string">'Gracilis1Via1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.01316;0.31812;-0.03736])-CoM_Shank;<span class="keyword">...</span>
+0231     [<span class="string">'Gracilis1Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.01079;0.31117;-0.03469])-CoM_Shank;<span class="keyword">...</span>
+0232     [<span class="string">'Gracilis1Via3'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00621;0.30449;-0.03171])-CoM_Shank;<span class="keyword">...</span>
+0233     [<span class="string">'Gracilis1Insertion4'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.02047;0.28263;-0.00681])-CoM_Shank;<span class="keyword">...</span>
+0234     [<span class="string">'Gracilis2Via1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.01316;0.31812;-0.03736])-CoM_Shank;<span class="keyword">...</span>
+0235     [<span class="string">'Gracilis2Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.01079;0.31117;-0.03469])-CoM_Shank;<span class="keyword">...</span>
+0236     [<span class="string">'Gracilis2Via3'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00621;0.30449;-0.03171])-CoM_Shank;<span class="keyword">...</span>
+0237     [<span class="string">'Gracilis2Insertion4'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.02047;0.28263;-0.00681])-CoM_Shank;<span class="keyword">...</span>
+0238     [<span class="string">'PeroneusBrevis1Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.0195;0.19345;0.02392])-CoM_Shank;<span class="keyword">...</span>
+0239     [<span class="string">'PeroneusBrevis1Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.019;-0.00216;0.02239])-CoM_Shank;<span class="keyword">...</span>
+0240     [<span class="string">'PeroneusBrevis1Via3'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.01912;-0.00904;0.02248])-CoM_Shank;<span class="keyword">...</span>
+0241     [<span class="string">'PeroneusBrevis1Via4'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.01481;-0.014;0.02261])-CoM_Shank;<span class="keyword">...</span>
+0242     [<span class="string">'PeroneusBrevis2Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.02008;0.12226;0.01984])-CoM_Shank;<span class="keyword">...</span>
+0243     [<span class="string">'PeroneusBrevis2Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.019;-0.00216;0.02239])-CoM_Shank;<span class="keyword">...</span>
+0244     [<span class="string">'PeroneusBrevis2Via3'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.01912;-0.00904;0.02248])-CoM_Shank;<span class="keyword">...</span>
+0245     [<span class="string">'PeroneusBrevis2Via4'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.01481;-0.014;0.02261])-CoM_Shank;<span class="keyword">...</span>
+0246     [<span class="string">'PeroneusBrevis3Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.01592;0.03615;0.01474])-CoM_Shank;<span class="keyword">...</span>
+0247     [<span class="string">'PeroneusBrevis3Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.019;-0.00216;0.02239])-CoM_Shank;<span class="keyword">...</span>
+0248     [<span class="string">'PeroneusBrevis3Via3'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.01912;-0.00904;0.02248])-CoM_Shank;<span class="keyword">...</span>
+0249     [<span class="string">'PeroneusBrevis3Via4'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.01481;-0.014;0.02261])-CoM_Shank;<span class="keyword">...</span>
+0250     [<span class="string">'PeroneusLongus1Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.01688;0.29115;0.03256])-CoM_Shank;<span class="keyword">...</span>
+0251     [<span class="string">'PeroneusLongus1Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.01599;-0.01128;0.0201])-CoM_Shank;<span class="keyword">...</span>
+0252     [<span class="string">'PeroneusLongus1Via3'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.01408;-0.01409;0.02033])-CoM_Shank;<span class="keyword">...</span>
+0253     [<span class="string">'PeroneusLongus1Via4'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.0135;-0.01624;0.02054])-CoM_Shank;<span class="keyword">...</span>
+0254     [<span class="string">'PeroneusLongus1Via5'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.01425;-0.01773;0.0207])-CoM_Shank;<span class="keyword">...</span>
+0255     [<span class="string">'PeroneusLongus2Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.02396;0.23465;0.02721])-CoM_Shank;<span class="keyword">...</span>
+0256     [<span class="string">'PeroneusLongus2Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.01599;-0.01128;0.0201])-CoM_Shank;<span class="keyword">...</span>
+0257     [<span class="string">'PeroneusLongus2Via3'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.01408;-0.01409;0.02033])-CoM_Shank;<span class="keyword">...</span>
+0258     [<span class="string">'PeroneusLongus2Via4'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.0135;-0.01624;0.02054])-CoM_Shank;<span class="keyword">...</span>
+0259     [<span class="string">'PeroneusLongus2Via5'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.01425;-0.01773;0.0207])-CoM_Shank;<span class="keyword">...</span>
+0260     [<span class="string">'PeroneusLongus3Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.02588;0.16304;0.02012])-CoM_Shank;<span class="keyword">...</span>
+0261     [<span class="string">'PeroneusLongus3Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.01599;-0.01128;0.0201])-CoM_Shank;<span class="keyword">...</span>
+0262     [<span class="string">'PeroneusLongus3Via3'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.01408;-0.01409;0.02033])-CoM_Shank;<span class="keyword">...</span>
+0263     [<span class="string">'PeroneusLongus3Via4'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.0135;-0.01624;0.02054])-CoM_Shank;<span class="keyword">...</span>
+0264     [<span class="string">'PeroneusLongus3Via5'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.01425;-0.01773;0.0207])-CoM_Shank;<span class="keyword">...</span>
+0265     [<span class="string">'Popliteus1Via1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.02066;0.32277;0.01451])-CoM_Shank;<span class="keyword">...</span>
+0266     [<span class="string">'Popliteus1Insertion2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00475;0.28125;-0.00658])-CoM_Shank;<span class="keyword">...</span>
+0267     [<span class="string">'Popliteus2Via1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.02066;0.32277;0.01451])-CoM_Shank;<span class="keyword">...</span>
+0268     [<span class="string">'Popliteus2Insertion2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00218;0.26089;-0.00955])-CoM_Shank;<span class="keyword">...</span>
+0269     [<span class="string">'Popliteus3Via1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.02066;0.32277;0.01451])-CoM_Shank;<span class="keyword">...</span>
+0270     [<span class="string">'Popliteus3Insertion2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.00092;0.22854;-0.01291])-CoM_Shank;<span class="keyword">...</span>
+0271     [<span class="string">'Sartorius1Via1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.0066685;0.31866;-0.037093])-CoM_Shank;<span class="keyword">...</span>
+0272     [<span class="string">'Sartorius1Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.0036549;0.3097;-0.034996])-CoM_Shank;<span class="keyword">...</span>
+0273     [<span class="string">'Sartorius1Via3'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00042061;0.3033;-0.032114])-CoM_Shank;<span class="keyword">...</span>
+0274     [<span class="string">'Sartorius1Insertion4'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.01796;0.2902;-0.01085])-CoM_Shank;<span class="keyword">...</span>
+0275     [<span class="string">'Semimembranosus1Insertion1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.02054;0.31458;-0.01617])-CoM_Shank;<span class="keyword">...</span>
+0276     [<span class="string">'Semimembranosus2Insertion1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.01521;0.31218;-0.0277])-CoM_Shank;<span class="keyword">...</span>
+0277     [<span class="string">'Semimembranosus3Insertion1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00644;0.3134;-0.03297])-CoM_Shank;<span class="keyword">...</span>
+0278     [<span class="string">'Semitendinosus1Via1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.0154;0.31325;-0.03226])-CoM_Shank;<span class="keyword">...</span>
+0279     [<span class="string">'Semitendinosus1Insertion2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.01942;0.27145;-0.00743])-CoM_Shank;<span class="keyword">...</span>
+0280     [<span class="string">'SoleusLateralis1Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.028;0.29987;0.02729])-CoM_Shank;<span class="keyword">...</span>
+0281     [<span class="string">'SoleusLateralis2Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.02813;0.25003;0.02253])-CoM_Shank;<span class="keyword">...</span>
+0282     [<span class="string">'SoleusLateralis3Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.02698;0.18321;0.01689])-CoM_Shank;<span class="keyword">...</span>
+0283     [<span class="string">'SoleusMedialis1Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.0036;0.2454;-0.00375])-CoM_Shank;<span class="keyword">...</span>
+0284     [<span class="string">'SoleusMedialis2Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.00113;0.2205;-0.01218])-CoM_Shank;<span class="keyword">...</span>
+0285     [<span class="string">'SoleusMedialis3Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.00378;0.19825;-0.0131])-CoM_Shank;<span class="keyword">...</span>
+0286     [<span class="string">'TensorFasciaeLatae1Insertion1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.01568;0.32738;0.03194])-CoM_Shank;<span class="keyword">...</span>
+0287     [<span class="string">'TensorFasciaeLatae2Insertion1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.01568;0.32738;0.03194])-CoM_Shank;<span class="keyword">...</span>
+0288     [<span class="string">'TibialisAnterior1Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.01253;0.27569;0.01594])-CoM_Shank;<span class="keyword">...</span>
+0289     [<span class="string">'TibialisAnterior1Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.03221;0.00648;-0.0005])-CoM_Shank;<span class="keyword">...</span>
+0290     [<span class="string">'TibialisAnterior2Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.0115;0.21214;0.00949])-CoM_Shank;<span class="keyword">...</span>
+0291     [<span class="string">'TibialisAnterior2Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.03221;0.00648;-0.0005])-CoM_Shank;<span class="keyword">...</span>
+0292     [<span class="string">'TibialisAnterior3Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.00786;0.13667;0.00912])-CoM_Shank;<span class="keyword">...</span>
+0293     [<span class="string">'TibialisAnterior3Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.03221;0.00648;-0.0005])-CoM_Shank;<span class="keyword">...</span>
+0294     [<span class="string">'TibialisPosteriorLateralis1Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.02198;0.26428;0.02075])-CoM_Shank;<span class="keyword">...</span>
+0295     [<span class="string">'TibialisPosteriorLateralis1Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.00248;0.00941;-0.02552])-CoM_Shank;<span class="keyword">...</span>
+0296     [<span class="string">'TibialisPosteriorLateralis1Via3'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.00704;0.00146;-0.02628])-CoM_Shank;<span class="keyword">...</span>
+0297     [<span class="string">'TibialisPosteriorLateralis1Via4'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.01252;-0.00636;-0.02496])-CoM_Shank;<span class="keyword">...</span>
+0298     [<span class="string">'TibialisPosteriorLateralis2Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.0228;0.19286;0.01283])-CoM_Shank;<span class="keyword">...</span>
+0299     [<span class="string">'TibialisPosteriorLateralis2Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.00248;0.00941;-0.02552])-CoM_Shank;<span class="keyword">...</span>
+0300     [<span class="string">'TibialisPosteriorLateralis2Via3'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.00704;0.00146;-0.02628])-CoM_Shank;<span class="keyword">...</span>
+0301     [<span class="string">'TibialisPosteriorLateralis2Via4'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.01252;-0.00636;-0.02496])-CoM_Shank;<span class="keyword">...</span>
+0302     [<span class="string">'TibialisPosteriorLateralis3Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.01587;0.10849;0.00943])-CoM_Shank;<span class="keyword">...</span>
+0303     [<span class="string">'TibialisPosteriorLateralis3Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.00248;0.00941;-0.02552])-CoM_Shank;<span class="keyword">...</span>
+0304     [<span class="string">'TibialisPosteriorLateralis3Via3'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.00704;0.00146;-0.02628])-CoM_Shank;<span class="keyword">...</span>
+0305     [<span class="string">'TibialisPosteriorLateralis3Via4'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.01252;-0.00636;-0.02496])-CoM_Shank;<span class="keyword">...</span>
+0306     [<span class="string">'TibialisPosteriorMedialis1Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([-0.00128;0.27674;0.01142])-CoM_Shank;<span class="keyword">...</span>
+0307     [<span class="string">'TibialisPosteriorMedialis1Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.00248;0.00941;-0.02552])-CoM_Shank;<span class="keyword">...</span>
+0308     [<span class="string">'TibialisPosteriorMedialis1Via3'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.00704;0.00146;-0.02628])-CoM_Shank;<span class="keyword">...</span>
+0309     [<span class="string">'TibialisPosteriorMedialis1Via4'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.01252;-0.00636;-0.02496])-CoM_Shank;<span class="keyword">...</span>
+0310     [<span class="string">'TibialisPosteriorMedialis2Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.00258;0.20455;0.00749])-CoM_Shank;<span class="keyword">...</span>
+0311     [<span class="string">'TibialisPosteriorMedialis2Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.00248;0.00941;-0.02552])-CoM_Shank;<span class="keyword">...</span>
+0312     [<span class="string">'TibialisPosteriorMedialis2Via3'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.00704;0.00146;-0.02628])-CoM_Shank;<span class="keyword">...</span>
+0313     [<span class="string">'TibialisPosteriorMedialis2Via4'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.01252;-0.00636;-0.02496])-CoM_Shank;<span class="keyword">...</span>
+0314     [<span class="string">'TibialisPosteriorMedialis3Origin1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.00237;0.11025;0.00752])-CoM_Shank;<span class="keyword">...</span>
+0315     [<span class="string">'TibialisPosteriorMedialis3Via2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.00248;0.00941;-0.02552])-CoM_Shank;<span class="keyword">...</span>
+0316     [<span class="string">'TibialisPosteriorMedialis3Via3'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.00704;0.00146;-0.02628])-CoM_Shank;<span class="keyword">...</span>
+0317     [<span class="string">'TibialisPosteriorMedialis3Via4'</span> Signe <span class="string">'Shank'</span>],k*Mirror*([0.01252;-0.00636;-0.02496])-CoM_Shank;<span class="keyword">...</span>
+0318     
+0319     };
+0320 
+0321 <span class="comment">%%                     Mise �l'�helle des inerties</span>
+0322 <span class="comment">%% [&quot;Adjustments to McConville et al. and Young et al. body segment inertial parameters&quot;] R. Dumas</span>
+0323 <span class="comment">% --------------------------- Shank ---------------------------------------</span>
+0324 Length_Shank=norm(Shank_TalocruralJointNode    -Shank_KneeJointNode);
+0325 [I_Shank]=<a href="../../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>([28 10 28 4*1i 2*1i 5], Mass.Shank_Mass, [0 0 0], Length_Shank, Signe);
+0326 
+0327 <span class="comment">%% Cr�tion de la structure &quot;Human_model&quot;</span>
+0328 
+0329 num_solid=0;
+0330 <span class="comment">%% Shank</span>
+0331 num_solid=num_solid+1;        <span class="comment">% solide num�o ...</span>
+0332 name=list_solid{num_solid}; <span class="comment">% nom du solide</span>
+0333 eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% num�o du solide dans le mod�e</span>
+0334 Human_model(incr_solid).name=[Signe name];
+0335 Human_model(incr_solid).sister=0;
+0336 Human_model(incr_solid).child=0;
+0337 Human_model(incr_solid).mother=s_mother;
+0338 Human_model(incr_solid).a=-[-Mirror(3,3)*0.0488    -Mirror(3,3)*0.0463    -0.9977]';
+0339 Human_model(incr_solid).joint=1;
+0340 Human_model(incr_solid).limit_inf=-pi;
+0341 Human_model(incr_solid).limit_sup=pi;
+0342 Human_model(incr_solid).ActiveJoint=1;
+0343 Human_model(incr_solid).Visual=1;
+0344 <span class="comment">% Human_model(incr_solid).Group=[n_group 2];</span>
+0345 Human_model(incr_solid).m=Mass.Shank_Mass;
+0346 Human_model(incr_solid).b=pos_attachment_pt;
+0347 Human_model(incr_solid).I=[I_Shank(1) I_Shank(4) I_Shank(5); I_Shank(4) I_Shank(2) I_Shank(6); I_Shank(5) I_Shank(6) I_Shank(3)];
+0348 Human_model(incr_solid).c=-Shank_KneeJointNode; <span class="comment">% dans le rep�e du joint pr��ent</span>
+0349 Human_model(incr_solid).anat_position=Shank_position_set;
+0350 Human_model(incr_solid).L={[Signe <span class="string">'Shank_KneeJointNode'</span>];[Signe <span class="string">'Shank_TalocruralJointNode'</span>]};
+0351 <span class="comment">%Calibration de l'axe de rotation</span>
+0352 a1=Human_model(incr_solid).a;
+0353 [~,Ind]=max(abs(a1));
+0354 a2=zeros(3,1);
+0355 a2(Ind)=1;
+0356 R=<a href="../../../../../Functions/AlgoMathsModel/Rodrigues_from_two_axes.html" class="code" title="function [R]=Rodrigues_from_two_axes(a1,a2)">Rodrigues_from_two_axes</a>(a2,a1);<span class="comment">% recherche des deux axes orthogonaux �l'axe de rotation</span>
+0357 Human_model(incr_solid).limit_alpha= [10 , -10;<span class="keyword">...</span>
+0358                                         10, -10];
+0359 Human_model(incr_solid).v= [ R(:,1) , R(:,2) ];
+0360 Human_model(incr_solid).calib_a=1;
+0361 Human_model(incr_solid).visual_file = [<span class="string">'TLEM/'</span> Signe <span class="string">'Shank.mat'</span>];
+0362 Human_model(incr_solid).comment=<span class="string">'Knee Flexion(-)/Extension(-)'</span>;
+0363 
+0364 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

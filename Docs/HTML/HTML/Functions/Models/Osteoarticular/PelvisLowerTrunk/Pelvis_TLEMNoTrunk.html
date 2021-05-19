@@ -1,0 +1,400 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Pelvis_TLEMNoTrunk</title>
+  <meta name="keywords" content="Pelvis_TLEMNoTrunk">
+  <meta name="description" content="Based on:">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html Functions --><!-- ../../menu.html Models --><!-- ../menu.html Osteoarticular --><!-- menu.html PelvisLowerTrunk -->
+<h1>Pelvis_TLEMNoTrunk
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>Based on:</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [OsteoArticularModel]= Pelvis_TLEMNoTrunk(OsteoArticularModel,k,Mass,AttachmentPoint) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">   Based on:
+    V. Carbone et al., �TLEM 2.0 - A comprehensive musculoskeletal geometry dataset for subject-specific modeling of lower extremity,� J. Biomech., vol. 48, no. 5, pp. 734�741, 2015.
+   INPUT
+   - OsteoArticularModel: osteo-articular model of an already existing
+   model (see the Documentation for the structure)
+   - k: homothety coefficient for the geometrical parameters (defined as
+   the subject size in cm divided by 180)
+   - Signe: side of the thigh model ('R' for right side or 'L' for left side)
+   - Mass: mass of the solids
+   - AttachmentPoint: name of the attachment point of the model on the
+   already existing model (character string)
+   OUTPUT
+   - OsteoArticularModel: new osteo-articular model (see the Documentation
+   for the structure) 
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>	Computation of inertia matrix from radius of gyration</li><li><a href="../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>	Addition of a sister to a solid</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="Pelvis_TLEM.html" class="code" title="function [OsteoArticularModel]= Pelvis_TLEM(OsteoArticularModel,k,Mass,AttachmentPoint)">Pelvis_TLEM</a>	Addition of a pelvis/lower trunk model</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [OsteoArticularModel]= Pelvis_TLEMNoTrunk(OsteoArticularModel,k,Mass,AttachmentPoint)</a>
+0002 <span class="comment">%   Based on:</span>
+0003 <span class="comment">%    V. Carbone et al., �TLEM 2.0 - A comprehensive musculoskeletal geometry dataset for subject-specific modeling of lower extremity,� J. Biomech., vol. 48, no. 5, pp. 734�741, 2015.</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - OsteoArticularModel: osteo-articular model of an already existing</span>
+0006 <span class="comment">%   model (see the Documentation for the structure)</span>
+0007 <span class="comment">%   - k: homothety coefficient for the geometrical parameters (defined as</span>
+0008 <span class="comment">%   the subject size in cm divided by 180)</span>
+0009 <span class="comment">%   - Signe: side of the thigh model ('R' for right side or 'L' for left side)</span>
+0010 <span class="comment">%   - Mass: mass of the solids</span>
+0011 <span class="comment">%   - AttachmentPoint: name of the attachment point of the model on the</span>
+0012 <span class="comment">%   already existing model (character string)</span>
+0013 <span class="comment">%   OUTPUT</span>
+0014 <span class="comment">%   - OsteoArticularModel: new osteo-articular model (see the Documentation</span>
+0015 <span class="comment">%   for the structure)</span>
+0016 <span class="comment">%________________________________________________________</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% Licence</span>
+0019 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0020 <span class="comment">%________________________________________________________</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0023 <span class="comment">% Georges Dumont</span>
+0024 <span class="comment">%________________________________________________________</span>
+0025 
+0026 <span class="comment">%% Variables de sortie :</span>
+0027 <span class="comment">% &quot;enrichissement de la structure &quot;Human_model&quot;&quot;</span>
+0028 
+0029 list_solid={<span class="string">'PelvisSacrum'</span>};
+0030 
+0031 <span class="comment">% %% Incr�entation du num�o des groupes</span>
+0032 <span class="comment">% n_group=0;</span>
+0033 <span class="comment">% for i=1:numel(OsteoArticularModel)</span>
+0034 <span class="comment">%     if size(OsteoArticularModel(i).Group) ~= [0 0] %#ok&lt;BDSCA&gt;</span>
+0035 <span class="comment">%         n_group=max(n_group,OsteoArticularModel(i).Group(1,1));</span>
+0036 <span class="comment">%     end</span>
+0037 <span class="comment">% end</span>
+0038 <span class="comment">% n_group=n_group+1;</span>
+0039 
+0040 <span class="comment">%% Incr�entation de la num�otation des solides</span>
+0041 
+0042 s=size(OsteoArticularModel,2)+1;  <span class="comment">%#ok&lt;NASGU&gt; % num�o du premier solide</span>
+0043 <span class="keyword">for</span> i=1:size(list_solid,2)      <span class="comment">% num�otation de chaque solide : s_&quot;nom du solide&quot;</span>
+0044     <span class="keyword">if</span> i==1
+0045         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s;'</span>))
+0046     <span class="keyword">else</span>
+0047         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s_'</span>,list_solid{i-1},<span class="string">'+1;'</span>))
+0048     <span class="keyword">end</span>
+0049 <span class="keyword">end</span>
+0050 
+0051 <span class="comment">% trouver le num�o de la m�e �partir du nom du point d'attache : 'attachment_pt'</span>
+0052 <span class="keyword">if</span> numel(OsteoArticularModel) == 0
+0053     s_mother=0;
+0054     pos_attachment_pt=[0 0 0]';
+0055 <span class="keyword">else</span>
+0056 <span class="comment">%     AttachmentPoint=varargin{1};</span>
+0057     test=0;
+0058     <span class="keyword">for</span> i=1:numel(OsteoArticularModel)
+0059         <span class="keyword">for</span> j=1:size(OsteoArticularModel(i).anat_position,1)
+0060             <span class="keyword">if</span> strcmp(AttachmentPoint,OsteoArticularModel(i).anat_position{j,1})
+0061                 s_mother=i;
+0062                 pos_attachment_pt=OsteoArticularModel(i).anat_position{j,2}+OsteoArticularModel(s_mother).c;
+0063                 test=1;
+0064                 <span class="keyword">break</span>
+0065             <span class="keyword">end</span>
+0066         <span class="keyword">end</span>
+0067         <span class="keyword">if</span> i==numel(OsteoArticularModel) &amp;&amp; test==0
+0068             error([AttachmentPoint <span class="string">' is no existent'</span>])
+0069         <span class="keyword">end</span>
+0070     <span class="keyword">end</span>
+0071     <span class="keyword">if</span> OsteoArticularModel(s_mother).child == 0      <span class="comment">% si la m�e n'a pas d'enfant</span>
+0072         OsteoArticularModel(s_mother).child = eval([<span class="string">'s_'</span> list_solid{1}]);    <span class="comment">% l'enfant de cette m�e est ce solide</span>
+0073     <span class="keyword">else</span>
+0074         [OsteoArticularModel]=<a href="../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval([<span class="string">'s_'</span> list_solid{1}]));   <span class="comment">% recherche de la derni�e soeur</span>
+0075     <span class="keyword">end</span>
+0076 <span class="keyword">end</span>
+0077 
+0078 
+0079 <span class="comment">%%                     D�inition des noeuds</span>
+0080 <span class="comment">%</span>
+0081 <span class="comment">% TLEM 2.0 � A COMPREHENSIVE MUSCULOSKELETAL GEOMETRY DATASET FOR SUBJECT-SPECIFIC MODELING OF LOWER EXTREMITY</span>
+0082 <span class="comment">%</span>
+0083 <span class="comment">%  V. Carbonea*, R. Fluita*, P. Pellikaana, M.M. van der Krogta,b, D. Janssenc, M. Damsgaardd, L. Vignerone, T. Feilkasf, H.F.J.M. Koopmana, N. Verdonschota,c</span>
+0084 <span class="comment">%</span>
+0085 <span class="comment">%  aLaboratory of Biomechanical Engineering, MIRA Institute, University of Twente, Enschede, The Netherlands</span>
+0086 <span class="comment">%  bDepartment of Rehabilitation Medicine, Research Institute MOVE, VU University Medical Center, Amsterdam, The Netherlands</span>
+0087 <span class="comment">%  cOrthopaedic Research Laboratory, Radboud University Medical Centre, Nijmegen, The Netherlands</span>
+0088 <span class="comment">%  dAnyBody Technology A/S, Aalborg, Denmark</span>
+0089 <span class="comment">%  eMaterialise N.V., Leuven, Belgium</span>
+0090 <span class="comment">%  fBrainlab AG, Munich, Germany</span>
+0091 <span class="comment">% *The authors Carbone and Fluit contributed equally.</span>
+0092 <span class="comment">% Journal of Biomechanics, Available online 8 January 2015, http://dx.doi.org/10.1016/j.jbiomech.2014.12.034</span>
+0093 <span class="comment">%% Adjustement of k</span>
+0094 k=k*1.2063; <span class="comment">%to fit 50th percentile person of 1.80m height</span>
+0095 <span class="comment">%% ------------------------- Pelvis ----------------------------------------</span>
+0096 
+0097 <span class="comment">% Position du CoM par rapport au rep�e de centr�au milieu RASIS-LASIS</span>
+0098 CoM_Pelvis = k*[-0.0484;    -0.0355;    0.0];
+0099 
+0100 <span class="comment">%milieu de RASIS et ASIS dans le rep�e centr��la hanche droite</span>
+0101 Hip_midRASISASIS = k*[0.0338;0.0807;-0.0843];
+0102 
+0103 <span class="comment">% Position des noeuds dans le rep�e centr�au milieu de RASIS et ASIS</span>
+0104 Pelvis_HipJointRightNode = k*[-0.0338;-0.0807;0.0843]                           - CoM_Pelvis;
+0105 Pelvis_HipJointLeftNode = k*[-0.0338;-0.0807;-0.0843]                           - CoM_Pelvis;
+0106 Pelvis_HipJointsCenterNode = (Pelvis_HipJointLeftNode+Pelvis_HipJointRightNode)/2-CoM_Pelvis;
+0107 
+0108 <span class="comment">% ------------------------- Sacrum ----------------------------------------</span>
+0109 
+0110 <span class="comment">% Position des noeuds</span>
+0111 <span class="comment">% Sacrum_L5JointNode = k*[-65;30;0]/1000- CoM_Pelvis; % D�ini �la main sur la g�m�rie du Sacrum .STL</span>
+0112 
+0113 Pelvis_L5JointNode = k*[-0.0664;  0.0224; 0]-CoM_Pelvis; <span class="comment">%from TLEM to OldPelvis Morphing</span>
+0114 
+0115 
+0116 <span class="comment">%% D�inition des positions anatomiques</span>
+0117 
+0118 Pelvis_position_set= {<span class="keyword">...</span>
+0119     <span class="string">'RFWT'</span>,                     (k*[0;0;0.11770]                 -CoM_Pelvis); <span class="keyword">...</span>
+0120     <span class="string">'LFWT'</span>,                     (k*[0;0;-0.11770]                -CoM_Pelvis); <span class="keyword">...</span>
+0121     <span class="string">'RBWT'</span>,                     (k*[-0.1232;-0.000299;0.0373]    -CoM_Pelvis); <span class="keyword">...</span>
+0122     <span class="string">'LBWT'</span>,                     (k*[-0.1232;-0.000299;-0.0332]   -CoM_Pelvis); <span class="keyword">...</span>
+0123     <span class="string">'RightPubicTubercle'</span>, ((k*[0.0489;    -0.0032;    -0.0853]-Hip_midRASISASIS)   -CoM_Pelvis); <span class="keyword">...</span>
+0124     <span class="string">'LeftPubicTubercle'</span>, ([1 0 0;0 1 0;0 0 -1]*(k*[0.0489;    -0.0032;    -0.0853]-Hip_midRASISASIS )  -CoM_Pelvis); <span class="keyword">...</span>
+0125     <span class="string">'Pelvis_HipJointRightNode'</span>, Pelvis_HipJointRightNode; <span class="keyword">...</span>
+0126     <span class="string">'Pelvis_HipJointLeftNode'</span>,  Pelvis_HipJointLeftNode; <span class="keyword">...</span>
+0127     <span class="string">'Pelvis_LowerTrunkNode'</span>,    Pelvis_L5JointNode; <span class="keyword">...</span>
+0128         <span class="string">'Pelvis_L5JointNode'</span>, Pelvis_L5JointNode; <span class="keyword">...</span>
+0129     <span class="string">'Pelvis_HipJointsCenterNode'</span>, Pelvis_HipJointsCenterNode; <span class="keyword">...</span>
+0130     <span class="string">'CoMPelvis'</span>,                [0; 0; 0]<span class="keyword">...</span>
+0131     };
+0132 
+0133 Side={{<span class="string">'R'</span>;[1 0 0;0 1 0;0 0 1]},{<span class="string">'L'</span>;[1 0 0;0 1 0;0 0 -1]}};
+0134 
+0135 <span class="keyword">for</span> i=1:2 <span class="comment">% positions anatomiques des 2 c��</span>
+0136     Signe=Side{i}{1}; Mirror=Side{i}{2};
+0137     Pelvis_position_set = [Pelvis_position_set;<span class="keyword">...</span>
+0138         {<span class="keyword">...</span>
+0139         [<span class="string">'AdductorBrevisDistal1Origin1'</span> Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.023190;-0.030860;-0.074680]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0140         [<span class="string">'AdductorBrevisDistal2Origin1'</span> Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.022120;-0.032640;-0.073820]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0141         [<span class="string">'AdductorBrevisMid1Origin1'</span> Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.028290;-0.02370;-0.074560]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0142         [<span class="string">'AdductorBrevisMid2Origin1'</span> Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.025280;-0.027880;-0.074880]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0143         [<span class="string">'AdductorBrevisProximal1Origin1'</span> Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.036760;-0.011140;-0.072780]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0144         [<span class="string">'AdductorBrevisProximal2Origin1'</span> Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.03220;-0.018210;-0.073770]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0145         [<span class="string">'AdductorLongus1Origin1'</span> Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.043680;-0.006170;-0.07330]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0146         [<span class="string">'AdductorLongus2Origin1'</span> Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.043130;-0.007080;-0.074220]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0147         [<span class="string">'AdductorLongus3Origin1'</span> Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.042660;-0.008010;-0.075160]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0148         [<span class="string">'AdductorLongus4Origin1'</span> Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.042160;-0.009040;-0.0760]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0149         [<span class="string">'AdductorLongus5Origin1'</span> Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.041710;-0.010260;-0.076950]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0150         [<span class="string">'AdductorLongus6Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.04150;-0.011540;-0.077750]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0151         [<span class="string">'AdductorMagnusDistal1Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.030790;-0.063870;-0.041590]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0152         [<span class="string">'AdductorMagnusDistal2Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.024270;-0.064480;-0.04670]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0153         [<span class="string">'AdductorMagnusDistal3Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.011840;-0.062170;-0.055260]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0154         [<span class="string">'AdductorMagnusMid1Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.004990;-0.055780;-0.057610]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0155         [<span class="string">'AdductorMagnusMid2Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.002910;-0.060260;-0.054620]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0156         [<span class="string">'AdductorMagnusMid3Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.010420;-0.061650;-0.050720]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0157         [<span class="string">'AdductorMagnusMid4Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.016430;-0.062980;-0.046230]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0158         [<span class="string">'AdductorMagnusMid5Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.020990;-0.064490;-0.041020]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0159         [<span class="string">'AdductorMagnusMid6Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.025140;-0.063490;-0.035260]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0160         [<span class="string">'AdductorMagnusProximal1Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.025230;-0.030140;-0.077450]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0161         [<span class="string">'AdductorMagnusProximal2Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.022240;-0.035850;-0.073240]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0162         [<span class="string">'AdductorMagnusProximal3Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.019860;-0.041510;-0.069440]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0163         [<span class="string">'AdductorMagnusProximal4Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.016990;-0.04660;-0.065560]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0164         [<span class="string">'BicepsFemorisCaputLongum1Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.047380;-0.042470;-0.026110]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0165         [<span class="string">'GemellusInferior1Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.035620;-0.016460;-0.015670]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0166         [<span class="string">'GemellusSuperior1Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.048280;-0.006420;-0.035040]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0167         [<span class="string">'GluteusMaximusInferior1Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.088050;0.039450;-0.0590]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0168         [<span class="string">'GluteusMaximusInferior2Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.084670;0.035580;-0.048970]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0169         [<span class="string">'GluteusMaximusInferior3Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.089480;0.023790;-0.070410]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0170         [<span class="string">'GluteusMaximusInferior4Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.084920;0.018960;-0.057620]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0171         [<span class="string">'GluteusMaximusInferior5Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.082670;0.009140;-0.076550]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0172         [<span class="string">'GluteusMaximusInferior6Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.079870;0.008920;-0.072690]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0173         [<span class="string">'GluteusMaximusSuperior1Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.078110;0.12125000;-0.018150]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0174         [<span class="string">'GluteusMaximusSuperior2Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.070180;0.11931000;-0.016550]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0175         [<span class="string">'GluteusMaximusSuperior3Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.087230;0.10144000;-0.029560]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0176         [<span class="string">'GluteusMaximusSuperior4Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.076690;0.095120;-0.023390]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0177         [<span class="string">'GluteusMaximusSuperior5Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.087660;0.079890;-0.037270]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0178         [<span class="string">'GluteusMaximusSuperior6Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.079930;0.076670;-0.030440]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0179         [<span class="string">'GluteusMediusAnterior1Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.024350;0.10368000;0.029590]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0180         [<span class="string">'GluteusMediusAnterior2Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.02270;0.11128000;0.039770]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0181         [<span class="string">'GluteusMediusAnterior3Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.010680;0.094340;0.035870]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0182         [<span class="string">'GluteusMediusAnterior4Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.008560;0.10307000;0.045590]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0183         [<span class="string">'GluteusMediusAnterior5Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.010040;0.090050;0.037420]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0184         [<span class="string">'GluteusMediusAnterior6Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.011130;0.09560;0.044590]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0185         [<span class="string">'GluteusMediusPosterior1Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.050110;0.12595000;0.003490]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0186         [<span class="string">'GluteusMediusPosterior2Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.037220;0.11308000;0.014770]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0187         [<span class="string">'GluteusMediusPosterior3Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.060540;0.11029000;-0.01550]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0188         [<span class="string">'GluteusMediusPosterior4Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.041050;0.096640;-0.002280]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0189         [<span class="string">'GluteusMediusPosterior5Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.064820;0.083090;-0.019270]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0190         [<span class="string">'GluteusMediusPosterior6Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.04990;0.074540;-0.012470]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0191         [<span class="string">'GluteusMinimusAnterior1Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.008240;0.084330;0.029170]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0192         [<span class="string">'GluteusMinimusAnterior2Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.009410;0.068940;0.025320]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0193         [<span class="string">'GluteusMinimusMid1Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.027010;0.074570;0.004480]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0194         [<span class="string">'GluteusMinimusMid2Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.010050;0.051860;0.012770]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0195         [<span class="string">'GluteusMinimusPosterior1Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.037740;0.052150;-0.00660]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0196         [<span class="string">'GluteusMinimusPosterior2Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.026390;0.033740;0.003450]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0197         [<span class="string">'Gracilis1Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.01360;-0.049190;-0.064660]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0198         [<span class="string">'Gracilis2Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.024570;-0.030540;-0.076140]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0199         [<span class="string">'IliacusLateralis1Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.009310;0.093860;0.030650]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0200         [<span class="string">'IliacusLateralis1Via2'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.018490;0.030890;-0.001550]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0201         [<span class="string">'IliacusLateralis2Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.001220;0.066240;0.009930]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0202         [<span class="string">'IliacusLateralis2Via2'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.018490;0.030890;-0.001550]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0203         [<span class="string">'IliacusMedialis1Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.041380;0.12323000;0.006770]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0204         [<span class="string">'IliacusMedialis1Via2'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.018490;0.030890;-0.001550]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0205         [<span class="string">'IliacusMedialis2Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.044170;0.10243000;-0.016290]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0206         [<span class="string">'IliacusMedialis2Via2'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.018490;0.030890;-0.001550]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0207         [<span class="string">'IliacusMid1Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.020440;0.10574000;0.026840]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0208         [<span class="string">'IliacusMid1Via2'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.018490;0.030890;-0.001550]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0209         [<span class="string">'IliacusMid2Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.024490;0.076580;-0.002230]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0210         [<span class="string">'IliacusMid2Via2'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.018490;0.030890;-0.001550]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0211         [<span class="string">'ObturatorExternusInferior1Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.01270;-0.040040;-0.045990]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0212         [<span class="string">'ObturatorExternusInferior2Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.001430;-0.041210;-0.0550]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0213         [<span class="string">'ObturatorExternusSuperior1Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.023380;-0.00470;-0.052410]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0214         [<span class="string">'ObturatorExternusSuperior2Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.026410;-0.012390;-0.063550]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0215         [<span class="string">'ObturatorExternusSuperior3Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.029950;-0.020760;-0.073770]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0216         [<span class="string">'ObturatorInternus1Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.00230;0.026970;-0.027560]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0217         [<span class="string">'ObturatorInternus1Via2'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.045480;-0.01870;-0.031210]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0218         [<span class="string">'ObturatorInternus2Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.025680;0.023610;-0.023740]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0219         [<span class="string">'ObturatorInternus2Via2'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.045480;-0.01870;-0.031210]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0220         [<span class="string">'ObturatorInternus3Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.016640;0.003530;-0.04450]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0221         [<span class="string">'ObturatorInternus3Via2'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.045480;-0.01870;-0.031210]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0222         [<span class="string">'ObturatorInternus4Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.026930;-0.00750;-0.034640]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0223         [<span class="string">'ObturatorInternus4Via2'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.045480;-0.01870;-0.031210]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0224         [<span class="string">'ObturatorInternus5Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.00540;-0.034140;-0.061070]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0225         [<span class="string">'ObturatorInternus5Via2'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.045480;-0.01870;-0.031210]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0226         [<span class="string">'ObturatorInternus6Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.024980;-0.034050;-0.040850]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0227         [<span class="string">'ObturatorInternus6Via2'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.045480;-0.01870;-0.031210]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0228         [<span class="string">'Pectineus1Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.0160;0.024040;-0.029070]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0229         [<span class="string">'Pectineus2Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.022060;0.015450;-0.035480]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0230         [<span class="string">'Pectineus3Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.028320;0.00760;-0.042720]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0231         [<span class="string">'Pectineus4Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.035890;0.000550;-0.049820]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0232         [<span class="string">'Piriformis1Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.071570;0.05790;-0.056680]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0233         [<span class="string">'PsoasMajorT12I_TMVia5'</span> Signe  <span class="string">'Pelvis'</span>],Mirror*k*[-0.0313    0.0050    0.0653]';<span class="keyword">...</span><span class="comment"> %from Krigeage</span>
+0234         [<span class="string">'PsoasMajorL1I_TMVia4'</span> Signe  <span class="string">'Pelvis'</span>],Mirror*k*[-0.0313    0.0050    0.0643]';<span class="keyword">...</span><span class="comment"> %from Krigeage</span>
+0235         [<span class="string">'PsoasMajorL2I_TMVia3'</span> Signe  <span class="string">'Pelvis'</span>],Mirror*k*[-0.0311    0.0049    0.0620]';<span class="keyword">...</span><span class="comment"> %from Krigeage</span>
+0236         [<span class="string">'PsoasMajorL3I_TMVia2'</span> Signe  <span class="string">'Pelvis'</span>],Mirror*k*[   -0.0309    0.0048    0.0584]';<span class="keyword">...</span><span class="comment"> %from Krigeage</span>
+0237         [<span class="string">'PsoasMajorL4I_TMVia1'</span> Signe  <span class="string">'Pelvis'</span>],Mirror*k*[-0.0305    0.0048    0.0517]';<span class="keyword">...</span><span class="comment"> %from Krigeage</span>
+0238         [<span class="string">'PsoasMajorL5_TMVia1'</span> Signe  <span class="string">'Pelvis'</span>],Mirror*k*[ -0.0303    0.0049    0.0480]';<span class="keyword">...</span><span class="comment"> %from Krigeage</span>
+0239         [<span class="string">'PsoasMajor1T_TMVia5'</span> Signe  <span class="string">'Pelvis'</span>],Mirror*k*[-0.0436   -0.0001    0.0673]';<span class="keyword">...</span><span class="comment"> %from Krigeage</span>
+0240         [<span class="string">'PsoasMajor2T_TMVia4'</span> Signe  <span class="string">'Pelvis'</span>],Mirror*k*[-0.0434   -0.0001    0.0653]';<span class="keyword">...</span><span class="comment"> %from Krigeage</span>
+0241         [<span class="string">'PsoasMajor3T_TMVia3'</span> Signe  <span class="string">'Pelvis'</span>],Mirror*k*[-0.0433   -0.0001    0.0640]';<span class="keyword">...</span><span class="comment"> %from Krigeage</span>
+0242         [<span class="string">'PsoasMajor4T_TMVia2'</span> Signe  <span class="string">'Pelvis'</span>],Mirror*k*[-0.0427   -0.0001    0.0555]';<span class="keyword">...</span><span class="comment"> %from Krigeage</span>
+0243         [<span class="string">'PsoasMajor5T_TMVia1'</span> Signe  <span class="string">'Pelvis'</span>],Mirror*k*[-0.0431   -0.0001    0.0607]';<span class="keyword">...</span><span class="comment"> %from Krigeage</span>
+0244         [<span class="string">'PsoasMajor1Via1'</span> Signe  <span class="string">'Pelvis'</span>],Mirror*(k*[0.013490;0.032890;-0.001550]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0245         [<span class="string">'PsoasMajor2Via1'</span> Signe  <span class="string">'Pelvis'</span>],Mirror*(k*[0.013490;0.032890;-0.001550]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0246         [<span class="string">'PsoasMajor3Via1'</span> Signe  <span class="string">'Pelvis'</span>],Mirror*(k*[0.013490;0.032890;-0.001550]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0247         [<span class="string">'PsoasMajor4Via1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.013490;0.032890;-0.001550]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0248         [<span class="string">'PsoasMajor5Via1'</span> Signe  <span class="string">'Pelvis'</span>],Mirror*(k*[0.013490;0.032890;-0.001550]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0249         [<span class="string">'QuadratusFemoris1Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.024850;-0.036230;-0.017030]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0250         [<span class="string">'QuadratusFemoris2Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.02230;-0.044280;-0.021040]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0251         [<span class="string">'QuadratusFemoris3Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.021540;-0.052630;-0.026940]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0252         [<span class="string">'QuadratusFemoris4Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.021710;-0.060720;-0.032230]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0253         [<span class="string">'RectusFemoris1Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.007840;0.034330;0.011270]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0254         [<span class="string">'RectusFemoris2Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.020730;0.04280;0.016130]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0255         [<span class="string">'Sartorius1Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.031950;0.078610;0.032610]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0256         [<span class="string">'Semimembranosus1Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.038320;-0.027610;-0.015480]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0257         [<span class="string">'Semimembranosus2Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.034010;-0.042980;-0.01490]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0258         [<span class="string">'Semimembranosus3Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.02710;-0.056770;-0.024390]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0259         [<span class="string">'Semitendinosus1Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[-0.043160;-0.057260;-0.034470]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0260         [<span class="string">'TensorFasciaeLatae1Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.022490;0.091550;0.046770]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0261         [<span class="string">'TensorFasciaeLatae2Origin1'</span>    Signe <span class="string">'Pelvis'</span>],Mirror*(k*[0.029420;0.086140;0.042660]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0262         [<span class="string">'Wrap'</span> Signe <span class="string">'Pelvis'</span> <span class="string">'GluteusMaximus'</span>],Mirror*(k*[-0.0201;    0.1060;    0.0435]-Hip_midRASISASIS)-CoM_Pelvis;<span class="keyword">...</span>
+0263 
+0264         }]; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0265 <span class="keyword">end</span>
+0266 
+0267 <span class="comment">%%                     Mise �l'�helle des inerties</span>
+0268 
+0269     <span class="comment">%% [&quot;Adjustments to McConville et al. and Young et al. body segment inertial parameters&quot;] R. Dumas</span>
+0270     <span class="comment">% ------------------------- Pelvis ----------------------------------------</span>
+0271     Length_Pelvis = norm(Pelvis_HipJointsCenterNode-Pelvis_L5JointNode);
+0272     [I_Pelvis]=<a href="../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>([100 107 95 25*1i 12*1i 8*1i], Mass.Pelvis_Mass, [0 0 0], Length_Pelvis);
+0273 
+0274 <span class="comment">%% Cr�tion de la structure &quot;Human_model&quot;</span>
+0275 
+0276 num_solid=0;
+0277 <span class="comment">%% Pelvis</span>
+0278 <span class="comment">% Pelvis</span>
+0279 num_solid=num_solid+1;        <span class="comment">% solide num�o ...</span>
+0280 name=list_solid{num_solid}; <span class="comment">% nom du solide</span>
+0281 eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% num�o du solide dans le mod�e</span>
+0282 OsteoArticularModel(incr_solid).name=name;               <span class="comment">% nom du solide</span>
+0283 OsteoArticularModel(incr_solid).sister=0;                      <span class="comment">% sister</span>
+0284 OsteoArticularModel(incr_solid).child=0;       <span class="comment">% child</span>
+0285 OsteoArticularModel(incr_solid).mother=s_mother;                      <span class="comment">% mother</span>
+0286 OsteoArticularModel(incr_solid).a=[0 0 0]';                    <span class="comment">% axe de rotation</span>
+0287 OsteoArticularModel(incr_solid).joint=1;                       <span class="comment">% type d'articulation : 1:pivot / 2:glissi�e</span>
+0288 OsteoArticularModel(incr_solid).calib_k_constraint=[];         <span class="comment">% initialisation des contraintes d'optimisation pour la calibration de la longueur des membres</span>
+0289 OsteoArticularModel(incr_solid).u=[];                          <span class="comment">% rotation fixe selon l'axe u d'un angle theta (apr� la rotation q)</span>
+0290 OsteoArticularModel(incr_solid).theta=[];
+0291 OsteoArticularModel(incr_solid).KinematicsCut=[];              <span class="comment">% coupure cin�atique</span>
+0292 OsteoArticularModel(incr_solid).ClosedLoop=[];                 <span class="comment">% si solide de fermeture de boucle : {num�o du solide i sur lequel est attach�ce solide ; point d'attache (rep�e du solide i)}</span>
+0293 OsteoArticularModel(incr_solid).ActiveJoint=1;                 <span class="comment">% 1 si articulation active / 0 si articulation passive</span>
+0294 OsteoArticularModel(incr_solid).Visual=1;                      <span class="comment">% 1 si il y a un visuel associ�/ 0 sinon</span>
+0295 <span class="comment">% OsteoArticularModel(incr_solid).Group=[n_group 1];                   % groupe pour la calibration dynamique</span>
+0296 OsteoArticularModel(incr_solid).b=pos_attachment_pt;                    <span class="comment">% position du point d'attache par rapport au rep�e parent</span>
+0297 OsteoArticularModel(incr_solid).c=[0 0 0]';                    <span class="comment">% position du centre de masse dans le rep�e local</span>
+0298 OsteoArticularModel(incr_solid).m=Mass.Pelvis_Mass;                 <span class="comment">% masse</span>
+0299 OsteoArticularModel(incr_solid).I=[I_Pelvis(1) I_Pelvis(4) I_Pelvis(5); I_Pelvis(4) I_Pelvis(2) I_Pelvis(6); I_Pelvis(5) I_Pelvis(6) I_Pelvis(3)];                  <span class="comment">% matrice d'inertie de r��ence</span>
+0300 OsteoArticularModel(incr_solid).anat_position=Pelvis_position_set;
+0301 OsteoArticularModel(incr_solid).linear_constraint=[];
+0302 OsteoArticularModel(incr_solid).L={<span class="string">'Pelvis_HipJointsCenterNode'</span>;<span class="string">'Pelvis_LowerTrunkNode'</span>};
+0303 OsteoArticularModel(incr_solid).v= [];
+0304 OsteoArticularModel(incr_solid).visual_file = <span class="string">'TLEM/PelvisSacrum.mat'</span>;
+0305 
+0306 <span class="comment">% Wrapping</span>
+0307 OsteoArticularModel(incr_solid).wrap(1).name=[<span class="string">'Wrap'</span> <span class="string">'R'</span> <span class="string">'Pelvis'</span> <span class="string">'GluteusMaximus'</span>];
+0308 OsteoArticularModel(incr_solid).wrap(1).anat_position=[<span class="string">'Wrap'</span> <span class="string">'R'</span> <span class="string">'Pelvis'</span> <span class="string">'GluteusMaximus'</span>];
+0309 OsteoArticularModel(incr_solid).wrap(1).type=<span class="string">'C'</span>; <span class="comment">% C: Cylinder or S: Sphere</span>
+0310 OsteoArticularModel(incr_solid).wrap(1).R=0.0600;
+0311 OsteoArticularModel(incr_solid).wrap(1).orientation=[-0.999158540440827,    -0.0232314727333666 ,   0.03380;<span class="keyword">...</span>
+0312                                                     -0.0410147664159582,    0.565940670078522   ,   -0.8234;<span class="keyword">...</span>
+0313                                                     0                  ,    -0.824118593787152  ,   -0.5664];
+0314 OsteoArticularModel(incr_solid).wrap(1).location=(k*[-0.0201;    0.1060;    0.0435]-Hip_midRASISASIS)-CoM_Pelvis;
+0315 OsteoArticularModel(incr_solid).wrap(1).h=0.35;
+0316 OsteoArticularModel(incr_solid).wrap(1).num_solid=incr_solid;
+0317 
+0318 
+0319 <span class="comment">% Wrapping</span>
+0320 OsteoArticularModel(incr_solid).wrap(2).name=[<span class="string">'Wrap'</span> <span class="string">'L'</span> <span class="string">'Pelvis'</span> <span class="string">'GluteusMaximus'</span>];
+0321 OsteoArticularModel(incr_solid).wrap(2).anat_position=[<span class="string">'Wrap'</span> <span class="string">'L'</span> <span class="string">'Pelvis'</span> <span class="string">'GluteusMaximus'</span>];
+0322 OsteoArticularModel(incr_solid).wrap(2).type=<span class="string">'C'</span>; <span class="comment">% C: Cylinder or S: Sphere</span>
+0323 OsteoArticularModel(incr_solid).wrap(2).R=0.0600;
+0324 OsteoArticularModel(incr_solid).wrap(2).orientation=[-0.999158540440827,    0.0232314727333666, 0.03380000  ;<span class="keyword">...</span>
+0325                                                      -0.0410147664159582,   -0.565940670078522,-0.82340     ;<span class="keyword">...</span>
+0326                                                       0                 ,   -0.824118593787152, 0.56640     ];
+0327 OsteoArticularModel(incr_solid).wrap(2).location=[1 0 0;0 1 0;0 0 -1]*(k*[-0.0201;    0.1060;    0.0435]-Hip_midRASISASIS)-CoM_Pelvis;
+0328 OsteoArticularModel(incr_solid).wrap(2).h=0.35;
+0329 OsteoArticularModel(incr_solid).wrap(2).num_solid=incr_solid;
+0330 
+0331 
+0332 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

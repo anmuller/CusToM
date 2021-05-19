@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ShoulderMuscles</title>
+  <meta name="keywords" content="ShoulderMuscles">
+  <meta name="description" content="Definition of an arm muscle model">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- ../menu.html Models --><!-- menu.html Muscles -->
+<h1>ShoulderMuscles
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Definition of an arm muscle model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [Muscles]=ShoulderMuscles(Muscles,Signe) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Definition of an arm muscle model
+   This model contains 9 muscles, actuating the elbow joint
+
+    Based on:
+    - Holzbaur, K. R., Murray, W. M., &amp; Delp, S. L., 2005.
+    A model of the upper extremity for simulating musculoskeletal surgery and analyzing neuromuscular control. Annals of biomedical engineering, 33(6), 829-840
+
+   INPUT
+   - Muscles: set of muscles (see the Documentation for the structure)
+   - Signe: side of the arm model ('R' for right side or 'L' for left side)
+   OUTPUT
+   - Muscles: new set of muscles (see the Documentation for the structure)
+________________________________________________________
+
+ Licence
+ Toolbox distributed under 3-Clause BSD License
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Muscles]=ShoulderMuscles(Muscles,Signe)</a>
+0002 <span class="comment">% Definition of an arm muscle model</span>
+0003 <span class="comment">%   This model contains 9 muscles, actuating the elbow joint</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    Based on:</span>
+0006 <span class="comment">%    - Holzbaur, K. R., Murray, W. M., &amp; Delp, S. L., 2005.</span>
+0007 <span class="comment">%    A model of the upper extremity for simulating musculoskeletal surgery and analyzing neuromuscular control. Annals of biomedical engineering, 33(6), 829-840</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%   INPUT</span>
+0010 <span class="comment">%   - Muscles: set of muscles (see the Documentation for the structure)</span>
+0011 <span class="comment">%   - Signe: side of the arm model ('R' for right side or 'L' for left side)</span>
+0012 <span class="comment">%   OUTPUT</span>
+0013 <span class="comment">%   - Muscles: new set of muscles (see the Documentation for the structure)</span>
+0014 <span class="comment">%________________________________________________________</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% Licence</span>
+0017 <span class="comment">% Toolbox distributed under 3-Clause BSD License</span>
+0018 <span class="comment">%________________________________________________________</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0021 <span class="comment">% Georges Dumont</span>
+0022 <span class="comment">%________________________________________________________</span>
+0023 <span class="keyword">if</span> strcmp(Signe,<span class="string">'Right'</span>)
+0024     Side = <span class="string">'R'</span>;
+0025 <span class="keyword">else</span>
+0026     Side = <span class="string">'L'</span>;
+0027 <span class="keyword">end</span>
+0028 
+0029 s=cell(0);
+0030 
+0031 
+0032 s=[s;{
+0033     [Side <span class="string">'_serr_ant_1'</span>],61,0.1635,[],0.025,0,{[Side <span class="string">'_Scapula_serr_ant_1-P1'</span>];[Side <span class="string">'_Thorax_serr_ant_1-P2'</span>]},{};<span class="keyword">...</span>
+0034     [Side <span class="string">'_serr_ant_2'</span>],110,0.1667,[],0.009,0,{[Side <span class="string">'_Scapula_serr_ant_2-P1'</span>];[Side <span class="string">'_Thorax_serr_ant_2-P2'</span>]},{};<span class="keyword">...</span>
+0035     [Side <span class="string">'_serr_ant_3'</span>],105,0.1622,[],0.007,0,{[Side <span class="string">'_Scapula_serr_ant_3-P1'</span>];[Side <span class="string">'_Thorax_serr_ant_3-P2'</span>]},{};<span class="keyword">...</span>
+0036     [Side <span class="string">'_serr_ant_4'</span>],110,0.1289,[],0.011,0,{[Side <span class="string">'_Scapula_serr_ant_4-P1'</span>];[Side <span class="string">'_Thorax_serr_ant_4-P2'</span>]},{};<span class="keyword">...</span>
+0037     [Side <span class="string">'_serr_ant_5'</span>],64,0.1259,[],0.011,0,{[Side <span class="string">'_Scapula_serr_ant_5-P1'</span>];[Side <span class="string">'_Thorax_serr_ant_5-P2'</span>]},{};<span class="keyword">...</span>
+0038     [Side <span class="string">'_serr_ant_6'</span>],97,0.122,[],0.011,0,{[Side <span class="string">'_Scapula_serr_ant_6-P1'</span>];[Side <span class="string">'_Thorax_serr_ant_6-P2'</span>]},{};<span class="keyword">...</span>
+0039     [Side <span class="string">'_serr_ant_7'</span>],47,0.1133,[],0.009,0,{[Side <span class="string">'_Scapula_serr_ant_7-P1'</span>];[Side <span class="string">'_Thorax_serr_ant_7-P2'</span>]},{};<span class="keyword">...</span>
+0040     [Side <span class="string">'_serr_ant_8'</span>],76,0.0845,[],0.011,0,{[Side <span class="string">'_Scapula_serr_ant_8-P1'</span>];[Side <span class="string">'_Thorax_serr_ant_8-P2'</span>]},{};<span class="keyword">...</span>
+0041     [Side <span class="string">'_serr_ant_9'</span>],79,0.08,[],0.007,0,{[Side <span class="string">'_Scapula_serr_ant_9-P1'</span>];[Side <span class="string">'_Thorax_serr_ant_9-P2'</span>]},{};<span class="keyword">...</span>
+0042     [Side <span class="string">'_serr_ant_10'</span>],63,0.066,[],0.005,0,{[Side <span class="string">'_Scapula_serr_ant_10-P1'</span>];[Side <span class="string">'_Thorax_serr_ant_10-P2'</span>]},{};<span class="keyword">...</span>
+0043     [Side <span class="string">'_serr_ant_11'</span>],23,0.0885,[],0.003,0,{[Side <span class="string">'_Scapula_serr_ant_11-P1'</span>];[Side <span class="string">'_Thorax_serr_ant_11-P2'</span>]},{};<span class="keyword">...</span>
+0044     [Side <span class="string">'_serr_ant_12'</span>],112,0.0945,[],0.001,0,{[Side <span class="string">'_Scapula_serr_ant_12-P1'</span>];[Side <span class="string">'_Thorax_serr_ant_12-P2'</span>]},{};<span class="keyword">...</span>
+0045     [Side <span class="string">'_rhomboid_min'</span>],51,0.0986,[],0.015,0,{[Side <span class="string">'_Thorax_rhomboid_min-P1'</span>];[Side <span class="string">'_Scapula_rhomboid_min-P2'</span>]},{};<span class="keyword">...</span>
+0046     [Side <span class="string">'_rhomboid_maj'</span>],383,0.1193,[],0.0423,0,{[Side <span class="string">'_Thorax_rhomboid_min-P1'</span>];[Side <span class="string">'_Scapula_rhomboid_min-P2'</span>]},{};<span class="keyword">...</span><span class="comment">        </span>
+0047     [Side <span class="string">'_Deltoid_ant'</span>],1218.9,0.0976,[],0.093,0.38397,{[Side <span class="string">'_humerus_r_DELT1_r-P1'</span>];[Side <span class="string">'_humerus_r_DELT1_r-P1'</span>];[Side <span class="string">'_Scapula_DELT1-P3'</span>];[Side <span class="string">'_clavicle_r_DELT1_r-P4'</span>]},{};<span class="keyword">...</span><span class="comment"> </span>
+0048     [Side <span class="string">'_Deltoid_mid'</span>],1103.5,0.1078,[],0.1095,0.2618,{[Side <span class="string">'_humerus_r_DELT2_r-P1'</span>];[Side <span class="string">'_Scapula_DELT2-P3'</span>];[Side <span class="string">'_Scapula_DELT2-P4'</span>]},{};<span class="keyword">...</span><span class="comment"> </span>
+0049     [Side <span class="string">'_Deltoid_pos'</span>],201.6,0.1367,[],0.038,0.31416,{[Side <span class="string">'_Scapula_DELT3-P1'</span>];[Side <span class="string">'_Scapula_DELT3-P2'</span>];[Side <span class="string">'_humerus_r_DELT3_r-P3'</span>]},{};<span class="keyword">...</span>
+0050     [Side <span class="string">'_PECM1'</span>],444.3,0.1442,[],0.0028,0.29671,{[Side <span class="string">'_humerus_r_PECM1_r-P1'</span>];[Side <span class="string">'_humerus_r_PECM1_r-P2'</span>];[Side <span class="string">'_Thorax_PECM1-P3'</span>];[Side <span class="string">'_clavicle_r_PECM1_r-P4'</span>]},{};<span class="keyword">...</span>
+0051     [Side <span class="string">'_PECM2'</span>],658.3,0.1385,[],0.089,0.45379,{[Side <span class="string">'_humerus_r_PECM2_r-P1'</span>];[Side <span class="string">'_humerus_r_PECM2_r-P2'</span>];[Side <span class="string">'_Thorax_PECM2-P3'</span>];[Side <span class="string">'_Thorax_PECM2-P4'</span>];[Side <span class="string">'_Thorax_PECM2-P5'</span>]},{};<span class="keyword">...</span><span class="comment"> </span>
+0052     [Side <span class="string">'_PECM3'</span>],498.1,0.1385,[],0.132,0.43633,{[Side <span class="string">'_humerus_r_PECM3_r-P1'</span>];[Side <span class="string">'_humerus_r_PECM3_r-P2'</span>];[Side <span class="string">'_Thorax_PECM3-P3'</span>];[Side <span class="string">'_Thorax_PECM3-P4'</span>];[Side <span class="string">'_Thorax_PECM3-P5'</span>]},{};<span class="keyword">...</span><span class="comment"> </span>
+0053  
+0054 <span class="comment">%     [Side '_SUPSP'],499.2,0.0682,[],0.0395,0.12217... EDIT</span>
+0055 <span class="comment">%     [Side '_INFSP'],1075.8,0.0755,[],0.0308,0.33161... EDIT</span>
+0056 <span class="comment">%     [Side '_SUBSC'],1306.9,0.0873,[],0.033,0.34907... EDIT</span>
+0057 <span class="comment">%     [Side '_TMIN'],269.5,0.0741,[],0.0713,0.41888... EDIT</span>
+0058 <span class="comment">%     [Side '_TMAJ'],144,0.1624,[],0.02,0.27925... EDIT</span>
+0059 <span class="comment">%     [Side '_LAT1'],290.5,0.254,[],0.12,0.43633... EDIT</span>
+0060 <span class="comment">%     [Side '_LAT2'],317.5,0.2324,[],0.1765,0.33161... EDIT</span>
+0061 <span class="comment">%     [Side '_LAT3'],189,0.2789,[],0.1403,0.36652... EDIT</span>
+0062 <span class="comment">%     [Side '_CORB'],208.2,0.0932,[],0.097,0.47124... EDIT</span>
+0063 <span class="comment">%     [Side '_TRIlong'],771.8,0.134,[],0.143,0.20944... EDIT</span>
+0064 <span class="comment">%     [Side '_TRIlat'],717.5,0.1138,[],0.098,0.15708... EDIT</span>
+0065 <span class="comment">%     [Side '_TRImed'],717.5,0.1138,[],0.0908,0.15708... EDIT</span>
+0066 <span class="comment">%     [Side '_ANC'],283.2,0.027,[],0.018,0 ... EDIT</span>
+0067 <span class="comment">%     [Side '_SUP'],379.6,0.033,[],0.028,0 ... EDIT</span>
+0068 <span class="comment">%     [Side '_BIClong'],525.1,0.1157,[],0.2723,0 ... EDIT</span>
+0069 <span class="comment">%     [Side '_BICshort'],316.8,0.1321,[],0.1923,0 ... EDIT</span>
+0070 <span class="comment">%     [Side '_BRA'],1177.37,0.0858,[],0.0535,0 ... EDIT</span>
+0071 <span class="comment">%     [Side '_BRD'],276,0.1726,[],0.133,0 ... EDIT</span>
+0072 <span class="comment">%     [Side '_ECRL'],337.3,0.081,[],0.244,0 ... EDIT</span>
+0073 <span class="comment">%     [Side '_ECRB'],252.5,0.0585,[],0.2223,0.15708... EDIT</span>
+0074 <span class="comment">%     [Side '_ECU'],192.9,0.0622,[],0.2285,0.069813... EDIT</span>
+0075 <span class="comment">%     [Side '_FCR'],407.9,0.0628,[],0.244,0.05236... EDIT</span>
+0076 <span class="comment">%     [Side '_FCU'],479.8,0.0509,[],0.265,0.20944... EDIT</span>
+0077 <span class="comment">%     [Side '_PL'],101,0.0638,[],0.2694,0.069813... EDIT</span>
+0078 <span class="comment">%     [Side '_PT'],557.2,0.0492,[],0.098,0.17453... EDIT</span>
+0079 <span class="comment">%     [Side '_PQ'],284.7,0.0282,[],0.005,0.17453... EDIT</span>
+0080 <span class="comment">%     [Side '_FDSL'],75.3,0.0515,[],0.3386,0.087266... EDIT</span>
+0081 <span class="comment">%     [Side '_FDSR'],171.2,0.0736,[],0.328,0.069813... EDIT</span>
+0082 <span class="comment">%     [Side '_EDCL'],39.4,0.065,[],0.335,0.034907... EDIT</span>
+0083 <span class="comment">%     [Side '_EDCR'],109.2,0.0626,[],0.365,0.05236... EDIT</span>
+0084 <span class="comment">%     [Side '_EDCM'],94.4,0.0724,[],0.365,0.05236... EDIT</span>
+0085 <span class="comment">%     [Side '_stern_mast'],68.95,0.108,[],0.056123,... EDIT</span>
+0086 <span class="comment">%     [Side '_cleid_mast'],34.475,0.108,[],0.035198,... EDIT</span>
+0087 <span class="comment">%     [Side '_cleid_occ'],34.475,0.108,[],0.069467,... EDIT</span>
+0088 <span class="comment">%     [Side '_trap_cl'],77.6,0.084,[],0.11922,... EDIT</span>
+0089 <span class="comment">%     [Side '_trap_acr'],376.95,0.092,[],0.076582,... EDIT</span>
+0090 <span class="comment">%     [Side '_levator_scap'],76.3,0.113,[],0.021875,... EDIT</span>
+0091 }];
+0092 
+0093 <span class="comment">% Structure generation</span>
+0094 Muscles=[Muscles;struct(<span class="string">'name'</span>,{s{:,1}}',<span class="string">'f0'</span>,{s{:,2}}',<span class="string">'l0'</span>,{s{:,3}}',<span class="keyword">...</span>
+0095     <span class="string">'Kt'</span>,{s{:,4}}',<span class="string">'ls'</span>,{s{:,5}}',<span class="string">'alpha0'</span>,{s{:,6}}',<span class="string">'path'</span>,{s{:,7}}',<span class="string">'wrap'</span>,{s{:,8}}')]; <span class="comment">%#ok&lt;CCAT1&gt;</span>
+0096 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

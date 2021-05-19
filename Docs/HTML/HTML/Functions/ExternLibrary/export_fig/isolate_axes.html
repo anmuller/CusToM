@@ -1,0 +1,196 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of isolate_axes</title>
+  <meta name="keywords" content="isolate_axes">
+  <meta name="description" content="ISOLATE_AXES Isolate the specified axes in a figure on their own">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- # ExternLibrary --><!-- menu.html export_fig -->
+<h1>isolate_axes
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>ISOLATE_AXES Isolate the specified axes in a figure on their own</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function fh = isolate_axes(ah, vis) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">ISOLATE_AXES Isolate the specified axes in a figure on their own
+
+ Examples:
+   fh = isolate_axes(ah)
+   fh = isolate_axes(ah, vis)
+
+ This function will create a new figure containing the axes/uipanels
+ specified, and also their associated legends and colorbars. The objects
+ specified must all be in the same figure, but they will generally only be
+ a subset of the objects in the figure.
+
+ IN:
+    ah - An array of axes and uipanel handles, which must come from the
+         same figure.
+    vis - A boolean indicating whether the new figure should be visible.
+          Default: false.
+
+ OUT:
+    fh - The handle of the created figure.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="copyfig.html" class="code" title="function fh = copyfig(fh)">copyfig</a>	COPYFIG Create a copy of a figure, without changing the figure</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="export_fig.html" class="code" title="function [imageData, alpha] = export_fig(varargin) %#ok<*STRCL1>">export_fig</a>	EXPORT_FIG  Exports figures in a publication-quality format</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function ah = allchildren(ah)</a></li><li><a href="#_sub2" class="code">function ph = allancestors(ah)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function fh = isolate_axes(ah, vis)</a>
+0002 <span class="comment">%ISOLATE_AXES Isolate the specified axes in a figure on their own</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Examples:</span>
+0005 <span class="comment">%   fh = isolate_axes(ah)</span>
+0006 <span class="comment">%   fh = isolate_axes(ah, vis)</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% This function will create a new figure containing the axes/uipanels</span>
+0009 <span class="comment">% specified, and also their associated legends and colorbars. The objects</span>
+0010 <span class="comment">% specified must all be in the same figure, but they will generally only be</span>
+0011 <span class="comment">% a subset of the objects in the figure.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% IN:</span>
+0014 <span class="comment">%    ah - An array of axes and uipanel handles, which must come from the</span>
+0015 <span class="comment">%         same figure.</span>
+0016 <span class="comment">%    vis - A boolean indicating whether the new figure should be visible.</span>
+0017 <span class="comment">%          Default: false.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% OUT:</span>
+0020 <span class="comment">%    fh - The handle of the created figure.</span>
+0021 
+0022 <span class="comment">% Copyright (C) Oliver Woodford 2011-2013</span>
+0023 
+0024 <span class="comment">% Thank you to Rosella Blatt for reporting a bug to do with axes in GUIs</span>
+0025 <span class="comment">% 16/03/12: Moved copyfig to its own function. Thanks to Bob Fratantonio</span>
+0026 <span class="comment">%           for pointing out that the function is also used in export_fig.m</span>
+0027 <span class="comment">% 12/12/12: Add support for isolating uipanels. Thanks to michael for suggesting it</span>
+0028 <span class="comment">% 08/10/13: Bug fix to allchildren suggested by Will Grant (many thanks!)</span>
+0029 <span class="comment">% 05/12/13: Bug fix to axes having different units. Thanks to Remington Reid for reporting</span>
+0030 <span class="comment">% 21/04/15: Bug fix for exporting uipanels with legend/colorbar on HG1 (reported by Alvaro</span>
+0031 <span class="comment">%           on FEX page as a comment on 24-Apr-2014); standardized indentation &amp; help section</span>
+0032 <span class="comment">% 22/04/15: Bug fix: legends and colorbars were not exported when exporting axes handle in HG2</span>
+0033 
+0034     <span class="comment">% Make sure we have an array of handles</span>
+0035     <span class="keyword">if</span> ~all(ishandle(ah))
+0036         error(<span class="string">'ah must be an array of handles'</span>);
+0037     <span class="keyword">end</span>
+0038     <span class="comment">% Check that the handles are all for axes or uipanels, and are all in the same figure</span>
+0039     fh = ancestor(ah(1), <span class="string">'figure'</span>);
+0040     nAx = numel(ah);
+0041     <span class="keyword">for</span> a = 1:nAx
+0042         <span class="keyword">if</span> ~ismember(get(ah(a), <span class="string">'Type'</span>), {<span class="string">'axes'</span>, <span class="string">'uipanel'</span>})
+0043             error(<span class="string">'All handles must be axes or uipanel handles.'</span>);
+0044         <span class="keyword">end</span>
+0045         <span class="keyword">if</span> ~isequal(ancestor(ah(a), <span class="string">'figure'</span>), fh)
+0046             error(<span class="string">'Axes must all come from the same figure.'</span>);
+0047         <span class="keyword">end</span>
+0048     <span class="keyword">end</span>
+0049     <span class="comment">% Tag the objects so we can find them in the copy</span>
+0050     old_tag = get(ah, <span class="string">'Tag'</span>);
+0051     <span class="keyword">if</span> nAx == 1
+0052         old_tag = {old_tag};
+0053     <span class="keyword">end</span>
+0054     set(ah, <span class="string">'Tag'</span>, <span class="string">'ObjectToCopy'</span>);
+0055     <span class="comment">% Create a new figure exactly the same as the old one</span>
+0056     fh = <a href="copyfig.html" class="code" title="function fh = copyfig(fh)">copyfig</a>(fh); <span class="comment">%copyobj(fh, 0);</span>
+0057     <span class="keyword">if</span> nargin &lt; 2 || ~vis
+0058         set(fh, <span class="string">'Visible'</span>, <span class="string">'off'</span>);
+0059     <span class="keyword">end</span>
+0060     <span class="comment">% Reset the object tags</span>
+0061     <span class="keyword">for</span> a = 1:nAx
+0062         set(ah(a), <span class="string">'Tag'</span>, old_tag{a});
+0063     <span class="keyword">end</span>
+0064     <span class="comment">% Find the objects to save</span>
+0065     ah = findall(fh, <span class="string">'Tag'</span>, <span class="string">'ObjectToCopy'</span>);
+0066     <span class="keyword">if</span> numel(ah) ~= nAx
+0067         close(fh);
+0068         error(<span class="string">'Incorrect number of objects found.'</span>);
+0069     <span class="keyword">end</span>
+0070     <span class="comment">% Set the axes tags to what they should be</span>
+0071     <span class="keyword">for</span> a = 1:nAx
+0072         set(ah(a), <span class="string">'Tag'</span>, old_tag{a});
+0073     <span class="keyword">end</span>
+0074     <span class="comment">% Keep any legends and colorbars which overlap the subplots</span>
+0075     <span class="comment">% Note: in HG1 these are axes objects; in HG2 they are separate objects, therefore we</span>
+0076     <span class="comment">%       don't test for the type, only the tag (hopefully nobody but Matlab uses them!)</span>
+0077     lh = findall(fh, <span class="string">'Tag'</span>, <span class="string">'legend'</span>, <span class="string">'-or'</span>, <span class="string">'Tag'</span>, <span class="string">'Colorbar'</span>);
+0078     nLeg = numel(lh);
+0079     <span class="keyword">if</span> nLeg &gt; 0
+0080         set([ah(:); lh(:)], <span class="string">'Units'</span>, <span class="string">'normalized'</span>);
+0081         <span class="keyword">try</span>
+0082             ax_pos = get(ah, <span class="string">'OuterPosition'</span>); <span class="comment">% axes and figures have the OuterPosition property</span>
+0083         <span class="keyword">catch</span>
+0084             ax_pos = get(ah, <span class="string">'Position'</span>); <span class="comment">% uipanels only have Position, not OuterPosition</span>
+0085         <span class="keyword">end</span>
+0086         <span class="keyword">if</span> nAx &gt; 1
+0087             ax_pos = cell2mat(ax_pos(:));
+0088         <span class="keyword">end</span>
+0089         ax_pos(:,3:4) = ax_pos(:,3:4) + ax_pos(:,1:2);
+0090         <span class="keyword">try</span>
+0091             leg_pos = get(lh, <span class="string">'OuterPosition'</span>);
+0092         <span class="keyword">catch</span>
+0093             leg_pos = get(lh, <span class="string">'Position'</span>);  <span class="comment">% No OuterPosition in HG2, only in HG1</span>
+0094         <span class="keyword">end</span>
+0095         <span class="keyword">if</span> nLeg &gt; 1;
+0096             leg_pos = cell2mat(leg_pos);
+0097         <span class="keyword">end</span>
+0098         leg_pos(:,3:4) = leg_pos(:,3:4) + leg_pos(:,1:2);
+0099         ax_pos = shiftdim(ax_pos, -1);
+0100         <span class="comment">% Overlap test</span>
+0101         M = bsxfun(@lt, leg_pos(:,1), ax_pos(:,:,3)) &amp; <span class="keyword">...</span>
+0102             bsxfun(@lt, leg_pos(:,2), ax_pos(:,:,4)) &amp; <span class="keyword">...</span>
+0103             bsxfun(@gt, leg_pos(:,3), ax_pos(:,:,1)) &amp; <span class="keyword">...</span>
+0104             bsxfun(@gt, leg_pos(:,4), ax_pos(:,:,2));
+0105         ah = [ah; lh(any(M, 2))];
+0106     <span class="keyword">end</span>
+0107     <span class="comment">% Get all the objects in the figure</span>
+0108     axs = findall(fh);
+0109     <span class="comment">% Delete everything except for the input objects and associated items</span>
+0110     delete(axs(~ismember(axs, [ah; <a href="#_sub1" class="code" title="subfunction ah = allchildren(ah)">allchildren</a>(ah); <a href="#_sub2" class="code" title="subfunction ph = allancestors(ah)">allancestors</a>(ah)])));
+0111 <span class="keyword">end</span>
+0112 
+0113 <a name="_sub1" href="#_subfunctions" class="code">function ah = allchildren(ah)</a>
+0114     ah = findall(ah);
+0115     <span class="keyword">if</span> iscell(ah)
+0116         ah = cell2mat(ah);
+0117     <span class="keyword">end</span>
+0118     ah = ah(:);
+0119 <span class="keyword">end</span>
+0120 
+0121 <a name="_sub2" href="#_subfunctions" class="code">function ph = allancestors(ah)</a>
+0122     ph = [];
+0123     <span class="keyword">for</span> a = 1:numel(ah)
+0124         h = get(ah(a), <span class="string">'parent'</span>);
+0125         <span class="keyword">while</span> h ~= 0
+0126             ph = [ph; h];
+0127             h = get(h, <span class="string">'parent'</span>);
+0128         <span class="keyword">end</span>
+0129     <span class="keyword">end</span>
+0130 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

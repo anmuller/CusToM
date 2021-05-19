@@ -1,0 +1,339 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ShankFoot</title>
+  <meta name="keywords" content="ShankFoot">
+  <meta name="description" content="Addition of a shank/foot model">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../../menu.html Functions --><!-- ../../../menu.html Models --><!-- ../../menu.html Osteoarticular --><!-- ../menu.html Leg --><!-- menu.html ModelParts -->
+<h1>ShankFoot
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>Addition of a shank/foot model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function [OsteoArticularModel]= ShankFoot(OsteoArticularModel,k,Signe,Mass,AttachmentPoint) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Addition of a shank/foot model
+   This shank/foot model contains one solid (shank/foot), exhibits 1 dof for the
+   knee
+
+   INPUT
+   - OsteoArticularModel: osteo-articular model of an already existing
+   model (see the Documentation for the structure)
+   - k: homothety coefficient for the geometrical parameters (defined as
+   the subject size in cm divided by 180)
+   - Signe: side of the shank/foot model ('R' for right side or 'L' for left side)
+   - Mass: mass of the solids
+   - AttachmentPoint: name of the attachment point of the model on the
+   already existing model (character string)
+   OUTPUT
+   - OsteoArticularModel: new osteo-articular model (see the Documentation
+   for the structure) 
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="../../../../../Functions/AlgoMathsModel/Huygens.html" class="code" title="function [Io] = Huygens(OG,Ig,m)">Huygens</a>	Computation of inertia matrix at point O</li><li><a href="../../../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>	Computation of the Rodrigues equation</li><li><a href="../../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>	Computation of inertia matrix from radius of gyration</li><li><a href="../../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>	Addition of a sister to a solid</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="../../../../../Functions/Models/Osteoarticular/Leg/LegWithoutAnkle.html" class="code" title="function [OsteoArticularModel]= LegWithoutAnkle(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)">LegWithoutAnkle</a>	Addition of a leg model</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [OsteoArticularModel]= ShankFoot(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)</a>
+0002 <span class="comment">% Addition of a shank/foot model</span>
+0003 <span class="comment">%   This shank/foot model contains one solid (shank/foot), exhibits 1 dof for the</span>
+0004 <span class="comment">%   knee</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   INPUT</span>
+0007 <span class="comment">%   - OsteoArticularModel: osteo-articular model of an already existing</span>
+0008 <span class="comment">%   model (see the Documentation for the structure)</span>
+0009 <span class="comment">%   - k: homothety coefficient for the geometrical parameters (defined as</span>
+0010 <span class="comment">%   the subject size in cm divided by 180)</span>
+0011 <span class="comment">%   - Signe: side of the shank/foot model ('R' for right side or 'L' for left side)</span>
+0012 <span class="comment">%   - Mass: mass of the solids</span>
+0013 <span class="comment">%   - AttachmentPoint: name of the attachment point of the model on the</span>
+0014 <span class="comment">%   already existing model (character string)</span>
+0015 <span class="comment">%   OUTPUT</span>
+0016 <span class="comment">%   - OsteoArticularModel: new osteo-articular model (see the Documentation</span>
+0017 <span class="comment">%   for the structure)</span>
+0018 <span class="comment">%________________________________________________________</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% Licence</span>
+0021 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0022 <span class="comment">%________________________________________________________</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0025 <span class="comment">% Georges Dumont</span>
+0026 <span class="comment">%________________________________________________________</span>
+0027 list_solid={<span class="string">'ShankFoot'</span>};
+0028 
+0029 <span class="comment">%% Choose leg right or left</span>
+0030 <span class="keyword">if</span> Signe == <span class="string">'R'</span>
+0031     Mirror=[1 0 0; 0 1 0; 0 0 1];
+0032 <span class="keyword">else</span>
+0033     <span class="keyword">if</span> Signe == <span class="string">'L'</span>
+0034         Mirror=[1 0 0; 0 1 0; 0 0 -1];
+0035     <span class="keyword">end</span>
+0036 <span class="keyword">end</span>
+0037 
+0038 <span class="comment">%% solid numbering incremation</span>
+0039 
+0040 s=size(OsteoArticularModel,2)+1;  <span class="comment">%#ok&lt;NASGU&gt; % number of the first solid</span>
+0041 <span class="keyword">for</span> i=1:size(list_solid,2)      <span class="comment">% each solid numbering: s_&quot;nom du solide&quot;</span>
+0042     <span class="keyword">if</span> i==1
+0043         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s;'</span>))
+0044     <span class="keyword">else</span>
+0045         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s_'</span>,list_solid{i-1},<span class="string">'+1;'</span>))
+0046     <span class="keyword">end</span>
+0047 <span class="keyword">end</span>
+0048 
+0049 <span class="comment">% find the number of the mother from the attachment point: 'attachment_pt'</span>
+0050 <span class="keyword">if</span> ~numel(AttachmentPoint)
+0051     s_mother=0;
+0052     pos_attachment_pt=[0 0 0]';
+0053 <span class="keyword">else</span>
+0054     test=0;
+0055     <span class="keyword">for</span> i=1:numel(OsteoArticularModel)
+0056         <span class="keyword">for</span> j=1:size(OsteoArticularModel(i).anat_position,1)
+0057             <span class="keyword">if</span> strcmp(AttachmentPoint,OsteoArticularModel(i).anat_position{j,1})
+0058                 s_mother=i;
+0059                 pos_attachment_pt=OsteoArticularModel(i).anat_position{j,2}+OsteoArticularModel(s_mother).c;
+0060                 test=1;
+0061                 <span class="keyword">break</span>
+0062             <span class="keyword">end</span>
+0063         <span class="keyword">end</span>
+0064         <span class="keyword">if</span> i==numel(OsteoArticularModel) &amp;&amp; test==0
+0065             error([AttachmentPoint <span class="string">' is no existent'</span>])
+0066         <span class="keyword">end</span>
+0067     <span class="keyword">end</span>
+0068     <span class="keyword">if</span> OsteoArticularModel(s_mother).child == 0      <span class="comment">% if the mother don't have any child</span>
+0069         OsteoArticularModel(s_mother).child = eval([<span class="string">'s_'</span> list_solid{1}]);    <span class="comment">% the child of this mother is this solid</span>
+0070     <span class="keyword">else</span>
+0071         [OsteoArticularModel]=<a href="../../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval([<span class="string">'s_'</span> list_solid{1}]));   <span class="comment">% recherche de la derni�e soeur</span>
+0072     <span class="keyword">end</span>
+0073 <span class="keyword">end</span>
+0074 
+0075 <span class="comment">%%                      Definition of anatomical landmarks (joint)</span>
+0076 
+0077 <span class="comment">% --------------------------- Shank ---------------------------------------</span>
+0078 
+0079 MetatarsalJoint2Node = (k*[0 -0.0725 0.015])*Mirror;
+0080 MalleousLateralNode = (k*[0.065 0.053 0.025])*Mirror;
+0081 CoM_Foot=0.5*(MetatarsalJoint2Node-MalleousLateralNode)+MalleousLateralNode;
+0082 <span class="comment">%</span>
+0083 <span class="comment">%</span>
+0084 <span class="comment">% % Node locations</span>
+0085 Shank_AnkleJointNode = (k*[0 -0.2608 0])*Mirror;
+0086 Shank_KneeJointNode = (k*[0 0.1992 0])*Mirror;
+0087 
+0088 Foot_AnkleJointNode = (k*[0.06 0.06 0])*Mirror - CoM_Foot; <span class="comment">%center of masse of the foot</span>
+0089 Foot_ToetipNode = (k*[-0.012 -0.126 0.023])*Mirror-CoM_Foot;
+0090 Foot_HellNode = (k*[0.009 0.115 0])*Mirror-CoM_Foot;
+0091 Rot=<a href="../../../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([0 0 1]',pi/2);
+0092 
+0093 HEE=Rot*(k*Mirror*[-0.009479;0.12946;-0.02]-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0094 TAR= Rot*(k*Mirror*[-0.021708;-0.04;0.04]-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0095 TOE= Rot*(k*Mirror*[-0.02;-0.11625;-0.015]-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0096 TARI = Rot*(k*Mirror*[-0.021708;-0.055;-0.05]-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0097 MetatarsalJoint1 = Rot*(k*Mirror*[-0.0275;-0.06025;-0.03]-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0098 MetatarsalJoint2 =  Rot*(k*Mirror*[-0.0325;-0.06275;-0.005]-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0099 MetatarsalJoint3 = Rot*(k*Mirror*[-0.0325;-0.05525;0.007]-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0100 MetatarsalJoint4 =  Rot*(k*Mirror*[-0.0375;-0.04025;0.017] -Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0101 MetatarsalJoint5 =  Rot*(k*Mirror*[-0.0375;-0.03325;0.03] -Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0102 MalleousLateral= Rot*(k*Mirror*[0.0325;0.06275;0.005]-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0103 Soleus= Rot*(k*Mirror*[-0.0045;0.11775;-0.021]-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0104 Gastrocnemius=Rot*(k*Mirror*[-0.0045;0.11775;-0.021]-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0105 TibialisPosterior=Rot*(k*Mirror*[-0.0205;0.01675;-0.04]-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0106 TibialisPosteriorVia=Rot*(k*Mirror*[0.0045;0.09475;-0.04]-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0107 FlexorDigitorumLongus=Rot*(k*Mirror*[-0.0455;-0.09025;0.02]-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0108 FlexorDigitorumLongusVia=Rot*(k*Mirror*[0.0045;0.07975;-0.04]-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0109 FlexorHallucisLongus=Rot*(k*Mirror*[-0.0405;-0.10325;-0.021]-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0110 FlexorHallucisLongusVia=Rot*(k*Mirror*[-0.0055;0.08975;-0.03]-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0111 PeroneusBrevis=Rot*(k*Mirror*[-0.0285;0.03475;0.016]-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0112 PeroneusBrevisVia=Rot*(k*Mirror*[0.0045;0.07975;-0.002]-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0113 TibialisAnterior=Rot*(k*Mirror*[-0.0025;0.00975;-0.04]-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0114 TibialisAnteriorVia=Rot*(k*Mirror*[0.0225;0.02475;-0.03]-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0115 ExtensorDigitorumLongus=Rot*(k*Mirror*[-0.0395;-0.09025;0.02]-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0116 ExtensorDigitorumVia=Rot*(k*Mirror*[0.0225;0.02475;-0.01]-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0117 ExtensorHallucisLongus=Rot*(k*Mirror*[-0.0355;-0.10325;-0.021]-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0118 ExtensorHallucisVia=Rot*(k*Mirror*[0.0225;0.02475;-0.02]-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0119 FootPrediction1=Rot*(k*Mirror*[-0.04;0.1185;-0.03]*0.9359-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0120 FootPrediction2=Rot*(k*Mirror*[-0.04;0.1185;-0.007]*0.9359-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0121 FootPrediction3=Rot*(k*Mirror*[-0.03;0.035;0.015]*0.9359-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0122 FootPrediction4=Rot*(k*Mirror*[-0.025;0.01;-0.04]*0.9359-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0123 FootPrediction5=Rot*(k*Mirror*[-0.04;-0.0525;-0.035]*0.9359-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0124 FootPrediction6=Rot*(k*Mirror*[-0.035;-0.0525;-0.0125]*0.9359-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0125 FootPrediction7=Rot*(k*Mirror*[-0.03;-0.045;0.0015]*0.9359-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0126 FootPrediction8=Rot*(k*Mirror*[-0.04;-0.035;0.015]*0.9359-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0127 FootPrediction9=Rot*(k*Mirror*[-0.04;-0.02;0.025]*0.9359-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0128 FootPrediction10=Rot*(k*Mirror*[-0.04;-0.075;0.04]*0.9359-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0129 FootPrediction11=Rot*(k*Mirror*[-0.045;-0.117;0.002]*0.9359-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0130 FootPrediction12=Rot*(k*Mirror*[-0.04;-0.095;-0.025]*0.9359-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0131 FootPrediction13=Rot*(k*Mirror*[-0.045;-0.1;0.015]*0.9359-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0132 FootPrediction14=Rot*(k*Mirror*[-0.045;-0.09;0.03]*0.9359-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0133 Foot_HellNode = Rot*(Foot_HellNode'-Foot_AnkleJointNode')+Shank_AnkleJointNode'; <span class="comment">%#ok&lt;NASGU&gt;</span>
+0134 
+0135 <span class="comment">%%                     Scaling of inertia parameters</span>
+0136 
+0137     <span class="comment">%% [&quot;Adjustments to McConville et al. and Young et al. body segment inertial parameters&quot;] R. Dumas</span>
+0138     <span class="comment">% --------------------------- Shank ---------------------------------------</span>
+0139     Length_Shank=norm(Shank_AnkleJointNode-Shank_KneeJointNode);
+0140     [I_Shank]=<a href="../../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>([28 10 28 4*1i 2*1i 5], Mass.Shank_Mass, [0 0 0], Length_Shank, Signe);
+0141 
+0142     <span class="comment">%% [&quot;Adjustments to McConville et al. and Young et al. body segment inertial parameters&quot;] R. Dumas</span>
+0143     <span class="comment">% --------------------------- Foot ----------------------------------------</span>
+0144     Length_Foot = norm(Foot_AnkleJointNode-Foot_ToetipNode);
+0145     [I_Foot]=<a href="../../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>([37 17 36 13 0 8*1i], Mass.Foot_Mass, [0 0 0], Length_Foot, Signe);
+0146 
+0147     
+0148 Knee_CoMFoot=-Rot*Foot_AnkleJointNode'+Shank_AnkleJointNode'-Shank_KneeJointNode';
+0149 CoM_bary=(Knee_CoMFoot*Mass.Foot_Mass-Shank_KneeJointNode'*Mass.Shank_Mass)/(Mass.Foot_Mass+Mass.Shank_Mass);
+0150 
+0151 Ishank=[I_Shank(1) I_Shank(4) I_Shank(5); I_Shank(4) I_Shank(2) I_Shank(6); I_Shank(5) I_Shank(6) I_Shank(3)];
+0152 Ishank_dep=<a href="../../../../../Functions/AlgoMathsModel/Huygens.html" class="code" title="function [Io] = Huygens(OG,Ig,m)">Huygens</a>(-Shank_KneeJointNode-CoM_bary,Ishank,Mass.Shank_Mass);
+0153 
+0154 Ifoot=[I_Foot(1) I_Foot(4) I_Foot(5); I_Foot(4) I_Foot(2) I_Foot(6); I_Foot(5) I_Foot(6) I_Foot(3)];
+0155 Ifoot=Ifoot*Rot;
+0156 Ifoot_dep=<a href="../../../../../Functions/AlgoMathsModel/Huygens.html" class="code" title="function [Io] = Huygens(OG,Ig,m)">Huygens</a>(Knee_CoMFoot-CoM_bary,Ifoot,Mass.Foot_Mass);
+0157 
+0158 Iglob=Ishank_dep+Ifoot_dep;
+0159 diff=(-Shank_KneeJointNode'-CoM_bary);
+0160 Foot_ToetipNode = Rot*(Foot_ToetipNode'-Foot_AnkleJointNode')+Shank_AnkleJointNode';
+0161 
+0162 <span class="comment">%% Definition of anatomical landmarks</span>
+0163 Shank_position_set= {<span class="keyword">...</span>
+0164     [Signe <span class="string">'ANE'</span>], k*Mirror*[0 -0.27 0.041487]'+diff; <span class="keyword">...</span>
+0165     [Signe <span class="string">'ANI'</span>], k*Mirror*[0.02 -0.24892 -0.04]'+diff; <span class="keyword">...</span>
+0166     [Signe <span class="string">'KNI'</span>], k*Mirror*[0 0.17 -0.056]'+diff; <span class="keyword">...</span>
+0167     [Signe <span class="string">'Shank_KneeJointNode'</span>], Shank_KneeJointNode'+diff; <span class="keyword">...</span>
+0168 <span class="comment">%     [Signe 'Shank_AnkleJointNode'], Shank_AnkleJointNode'+diff; ...</span>
+0169     [<span class="string">'Quadriceps'</span> Signe <span class="string">'Shank'</span>],k*Mirror*[0.032;0.11;0.01]+diff;<span class="keyword">...</span>
+0170     [<span class="string">'SemitendinosusVia'</span> Signe <span class="string">'Shank'</span>],k*Mirror*[-0.025;0.15;-0.032]+diff;<span class="keyword">...</span>
+0171     [<span class="string">'Semitendinosus'</span> Signe <span class="string">'Shank'</span>],k*Mirror*[0;0.125;-0.016]+diff;<span class="keyword">...</span>
+0172     [<span class="string">'Semimembranosus'</span> Signe <span class="string">'Shank'</span>],k*Mirror*[-0.024;0.155;-0.018]+diff;<span class="keyword">...</span>
+0173     [<span class="string">'SemimembranosusVia'</span> Signe <span class="string">'Shank'</span>],k*Mirror*[-0.027;0.165;-0.018]+diff;<span class="keyword">...</span>
+0174     [<span class="string">'BicepsFemorisCaputLongum'</span> Signe <span class="string">'Shank'</span>],k*Mirror*[-0.015;0.16;0.043]+diff;<span class="keyword">...</span>
+0175     [<span class="string">'BicepsFemorisCaputLongumVia'</span> Signe <span class="string">'Shank'</span>],k*Mirror*[-0.0185;0.17;0.043]+diff;<span class="keyword">...</span>
+0176     [<span class="string">'BicepsFemorisCaputBreve'</span> Signe <span class="string">'Shank'</span>],k*Mirror*[-0.015;0.16;0.043]+diff;<span class="keyword">...</span>
+0177     [<span class="string">'BicepsFemorisCaputBreveVia'</span> Signe <span class="string">'Shank'</span>],k*Mirror*[-0.0185;0.17;0.043]+diff;<span class="keyword">...</span>
+0178     [<span class="string">'Soleus'</span> Signe <span class="string">'Shank'</span>],k*Mirror*[-0.02;0.1292;0]+diff;<span class="keyword">...</span>
+0179     [<span class="string">'GastrocnemiusVia'</span> Signe <span class="string">'Shank'</span>],k*Mirror*[-0.05;0.05;0]+diff;<span class="keyword">...</span>
+0180     [<span class="string">'FlexorDigitorumLongus'</span> Signe <span class="string">'Shank'</span>],k*Mirror*[0;0.04;-0.01]+diff;<span class="keyword">...</span>
+0181     [<span class="string">'FlexorHallucisLongus'</span> Signe <span class="string">'Shank'</span>],k*Mirror*[0;-0.04;0.01]+diff;<span class="keyword">...</span>
+0182     [<span class="string">'TibialisPosterior'</span> Signe <span class="string">'Shank'</span>],k*Mirror*[0;0.13;0]+diff;<span class="keyword">...</span>
+0183     [<span class="string">'PeroneusBrevis'</span> Signe <span class="string">'Shank'</span>],k*Mirror*[0;-0.04;0.03]+diff;<span class="keyword">...</span>
+0184     [<span class="string">'TibialisAnterior'</span> Signe <span class="string">'Shank'</span>],k*Mirror*[0;0.0115;-0.01]+diff;<span class="keyword">...</span>
+0185     [<span class="string">'ExtensorDigitorumLongus'</span> Signe <span class="string">'Shank'</span>],k*Mirror*[0;0.16;0.01]+diff;<span class="keyword">...</span>
+0186     [<span class="string">'ExtensorHallucisLongus'</span> Signe <span class="string">'Shank'</span>],k*Mirror*[0;-0.05;0]+diff;<span class="keyword">...</span>
+0187     [<span class="string">'SartoriusVia2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*[0.0065;0.18;-0.038]+diff;<span class="keyword">...</span>
+0188     [<span class="string">'SartoriusVia3'</span> Signe <span class="string">'Shank'</span>],k*Mirror*[0.01;0.15;-0.047]+diff;<span class="keyword">...</span>
+0189     [<span class="string">'Sartorius'</span> Signe <span class="string">'Shank'</span>],k*Mirror*[0.018;0.13;-0.016]+diff;<span class="keyword">...</span>
+0190     [<span class="string">'GracilisVia'</span> Signe <span class="string">'Shank'</span>],k*Mirror*[-0.0185;0.18;-0.018]+diff;<span class="keyword">...</span>
+0191     [<span class="string">'GracilisVia1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*[0.005;0.15;-0.042]+diff;<span class="keyword">...</span>
+0192     [<span class="string">'Gracilis'</span> Signe <span class="string">'Shank'</span>],k*Mirror*[0.018;0.13;-0.016]+diff;<span class="keyword">...</span>
+0193     [<span class="string">'GluteusMaximus1'</span> Signe <span class="string">'Shank'</span>],k*Mirror*[-0.0185;0.185;0.043]+diff;<span class="keyword">...</span>
+0194     [<span class="string">'GluteusMaximus2'</span> Signe <span class="string">'Shank'</span>],k*Mirror*[-0.0185;0.185;0.043]+diff;<span class="keyword">...</span>
+0195     [<span class="string">'TensorFasciaeLatae'</span> Signe <span class="string">'Shank'</span>],k*Mirror*[-0.0185;0.185;0.043]+diff;<span class="keyword">...</span>
+0196     [Signe <span class="string">'HEE'</span>], HEE+diff; <span class="keyword">...</span>
+0197     [Signe <span class="string">'TAR'</span>], TAR+diff; <span class="keyword">...</span>
+0198     [Signe <span class="string">'TOE'</span>], TOE+diff; <span class="keyword">...</span>
+0199     [Signe <span class="string">'TARI'</span>], TARI+diff; <span class="keyword">...</span>
+0200     [Signe <span class="string">'Foot_AnkleJointNode'</span>], Shank_AnkleJointNode'+diff; <span class="keyword">...</span>
+0201     [Signe <span class="string">'Foot_ToetipNode'</span>], Foot_ToetipNode+diff; <span class="keyword">...</span>
+0202     [<span class="string">'MetatarsalJoint1'</span> Signe <span class="string">'Foot'</span>],MetatarsalJoint1+diff;<span class="keyword">...</span>
+0203     [<span class="string">'MetatarsalJoint2'</span> Signe <span class="string">'Foot'</span>],MetatarsalJoint2+diff;<span class="keyword">...</span>
+0204     [<span class="string">'MetatarsalJoint3'</span> Signe <span class="string">'Foot'</span>],MetatarsalJoint3+diff;<span class="keyword">...</span>
+0205     [<span class="string">'MetatarsalJoint4'</span> Signe <span class="string">'Foot'</span>],MetatarsalJoint4+diff;<span class="keyword">...</span>
+0206     [<span class="string">'MetatarsalJoint5'</span> Signe <span class="string">'Foot'</span>],MetatarsalJoint5+diff;<span class="keyword">...</span>
+0207     [<span class="string">'MalleousLateral'</span> Signe <span class="string">'Foot'</span>],MalleousLateral+diff;<span class="keyword">...</span>
+0208     [<span class="string">'Soleus'</span> Signe <span class="string">'Foot'</span>],Soleus+diff;<span class="keyword">...</span>
+0209     [<span class="string">'Gastrocnemius'</span> Signe <span class="string">'Foot'</span>],Gastrocnemius+diff;<span class="keyword">...</span>
+0210     [<span class="string">'TibialisPosterior'</span> Signe <span class="string">'Foot'</span>],TibialisPosterior+diff;<span class="keyword">...</span>
+0211     [<span class="string">'TibialisPosteriorVia'</span> Signe <span class="string">'Foot'</span>],TibialisPosteriorVia+diff;<span class="keyword">...</span>
+0212     [<span class="string">'FlexorDigitorumLongus'</span> Signe <span class="string">'Foot'</span>],FlexorDigitorumLongus+diff;<span class="keyword">...</span>
+0213     [<span class="string">'FlexorDigitorumLongusVia'</span> Signe <span class="string">'Foot'</span>],FlexorDigitorumLongusVia+diff;<span class="keyword">...</span>
+0214     [<span class="string">'FlexorHallucisLongus'</span> Signe <span class="string">'Foot'</span>],FlexorHallucisLongus+diff;<span class="keyword">...</span>
+0215     [<span class="string">'FlexorHallucisLongusVia'</span> Signe <span class="string">'Foot'</span>],FlexorHallucisLongusVia+diff;<span class="keyword">...</span>
+0216     [<span class="string">'PeroneusBrevis'</span> Signe <span class="string">'Foot'</span>],PeroneusBrevis+diff;<span class="keyword">...</span>
+0217     [<span class="string">'PeroneusBrevisVia'</span> Signe <span class="string">'Foot'</span>],PeroneusBrevisVia+diff;<span class="keyword">...</span>
+0218     [<span class="string">'TibialisAnterior'</span> Signe <span class="string">'Foot'</span>],TibialisAnterior+diff;<span class="keyword">...</span>
+0219     [<span class="string">'TibialisAnteriorVia'</span> Signe <span class="string">'Foot'</span>],TibialisAnteriorVia+diff;<span class="keyword">...</span>
+0220     [<span class="string">'ExtensorDigitorumLongus'</span> Signe <span class="string">'Foot'</span>],ExtensorDigitorumLongus+diff;<span class="keyword">...</span>
+0221     [<span class="string">'ExtensorDigitorumVia'</span> Signe <span class="string">'Foot'</span>],ExtensorDigitorumVia+diff;<span class="keyword">...</span>
+0222     [<span class="string">'ExtensorHallucisLongus'</span> Signe <span class="string">'Foot'</span>],ExtensorHallucisLongus+diff;<span class="keyword">...</span>
+0223     [<span class="string">'ExtensorHallucisVia'</span> Signe <span class="string">'Foot'</span>],ExtensorHallucisVia+diff;<span class="keyword">...</span>
+0224     [Signe <span class="string">'FootPrediction1'</span>], FootPrediction1+diff;<span class="keyword">...</span>
+0225     [Signe <span class="string">'FootPrediction2'</span>], FootPrediction2+diff;<span class="keyword">...</span>
+0226     [Signe <span class="string">'FootPrediction3'</span>], FootPrediction3+diff;<span class="keyword">...</span>
+0227     [Signe <span class="string">'FootPrediction4'</span>], FootPrediction4+diff;<span class="keyword">...</span>
+0228     [Signe <span class="string">'FootPrediction5'</span>], FootPrediction5+diff;<span class="keyword">...</span>
+0229     [Signe <span class="string">'FootPrediction6'</span>], FootPrediction6+diff;<span class="keyword">...</span>
+0230     [Signe <span class="string">'FootPrediction7'</span>], FootPrediction7+diff;<span class="keyword">...</span>
+0231     [Signe <span class="string">'FootPrediction8'</span>], FootPrediction8+diff;<span class="keyword">...</span>
+0232     [Signe <span class="string">'FootPrediction9'</span>], FootPrediction9+diff;<span class="keyword">...</span>
+0233     [Signe <span class="string">'FootPrediction10'</span>], FootPrediction10+diff;<span class="keyword">...</span>
+0234     [Signe <span class="string">'FootPrediction11'</span>], FootPrediction11+diff;<span class="keyword">...</span>
+0235     [Signe <span class="string">'FootPrediction12'</span>], FootPrediction12+diff;<span class="keyword">...</span>
+0236     [Signe <span class="string">'FootPrediction13'</span>], FootPrediction13+diff;<span class="keyword">...</span>
+0237     [Signe <span class="string">'FootPrediction14'</span>], FootPrediction14+diff;<span class="keyword">...</span>
+0238     };
+0239 
+0240 <span class="comment">%% %% &quot;Human_model&quot; structure generation</span>
+0241 
+0242 num_solid=0;
+0243 <span class="comment">%% Shank/Foot</span>
+0244 num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0245 name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0246 eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0247 OsteoArticularModel(incr_solid).name=[Signe name];
+0248 OsteoArticularModel(incr_solid).sister=0;
+0249 OsteoArticularModel(incr_solid).child=0;
+0250 OsteoArticularModel(incr_solid).mother=s_mother;
+0251 OsteoArticularModel(incr_solid).a=[0 0 1]';
+0252 OsteoArticularModel(incr_solid).joint=1;
+0253 OsteoArticularModel(incr_solid).limit_inf=-pi;
+0254 OsteoArticularModel(incr_solid).limit_sup=0;
+0255 OsteoArticularModel(incr_solid).Visual=1;
+0256 OsteoArticularModel(incr_solid).m=Mass.Shank_Mass+Mass.Foot_Mass;
+0257 OsteoArticularModel(incr_solid).b=pos_attachment_pt;
+0258 OsteoArticularModel(incr_solid).I=Iglob;
+0259 OsteoArticularModel(incr_solid).c=CoM_bary;
+0260 OsteoArticularModel(incr_solid).anat_position=Shank_position_set;
+0261 OsteoArticularModel(incr_solid).L={[Signe <span class="string">'Shank_KneeJointNode'</span>];[Signe <span class="string">'Shank_AnkleJointNode'</span>]};
+0262 
+0263 <span class="comment">%Axis of rotation calibration</span>
+0264 OsteoArticularModel(incr_solid).limit_alpha= [ 20 , 30;<span class="keyword">...</span>
+0265     -20, -30] ;
+0266 OsteoArticularModel(incr_solid).v= [ [1; 0; 0] , [0 ;1;0] ] ;
+0267 OsteoArticularModel(incr_solid).comment= <span class="string">'Knee Flexion(-)/Extension(+)'</span> ;
+0268 
+0269 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

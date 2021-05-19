@@ -1,0 +1,7 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+
+  Clavicle_Shoulder [URL="Clavicle_Shoulder.html"];
+  Scapula_Shoulder [URL="Scapula_Shoulder.html"];
+  Thorax_Shoulder [URL="Thorax_Shoulder.html"];
+}

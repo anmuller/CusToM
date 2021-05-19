@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of VerifMarkersOnModel</title>
+  <meta name="keywords" content="VerifMarkersOnModel">
+  <meta name="description" content="Verification that each marker is correctly defined on the osteo-articular model">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html Functions --><!-- ../../menu.html Models --><!-- ../menu.html Markers --><!-- menu.html Functions -->
+<h1>VerifMarkersOnModel
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>Verification that each marker is correctly defined on the osteo-articular model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [Markers_set]=VerifMarkersOnModel(Human_model,Markers_set) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Verification that each marker is correctly defined on the osteo-articular model
+   Each anatomical position used in the set of markers has to be defined
+   on the osteo-articular model. If it is not the case, the corresponded
+   marker will be not considered. 
+   
+   INPUT
+   - Human_model: osteo-articular model (see the Documentation for the structure)
+   - Markers_set: set of markers (see the Documentation for the structure)
+   OUTPUT
+   - Markers_set: set of markers with additional informations about the position
+   of the anatomatical positions on the osteo-articular model (see the
+   Documentation for the structure)
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Functions/Animation/DataExtractionForAnimation.html" class="code" title="function [filename,DataXSens,q,q6dof,Markers_set,Muscles,real_markers,PelvisPosition,PelvisOrientation,EnableModel,Human_model,AnalysisParameters,InverseKinematicsResults,ExperimentalData,BiomechanicalModel]=DataExtractionForAnimation(AnimateParameters,ModelParameters)">DataExtractionForAnimation</a>	Extraction of useful data for animation</li><li><a href="../../../../Functions/Models/ModelGeneration.html" class="code" title="function [OsteoArticularModel, Markers, Muscles, EnableModel] = ModelGeneration(ModelParameters)">ModelGeneration</a>	Generation of the anthropometric model</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Markers_set]=VerifMarkersOnModel(Human_model,Markers_set)</a>
+0002 <span class="comment">% Verification that each marker is correctly defined on the osteo-articular model</span>
+0003 <span class="comment">%   Each anatomical position used in the set of markers has to be defined</span>
+0004 <span class="comment">%   on the osteo-articular model. If it is not the case, the corresponded</span>
+0005 <span class="comment">%   marker will be not considered.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   INPUT</span>
+0008 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the structure)</span>
+0009 <span class="comment">%   - Markers_set: set of markers (see the Documentation for the structure)</span>
+0010 <span class="comment">%   OUTPUT</span>
+0011 <span class="comment">%   - Markers_set: set of markers with additional informations about the position</span>
+0012 <span class="comment">%   of the anatomatical positions on the osteo-articular model (see the</span>
+0013 <span class="comment">%   Documentation for the structure)</span>
+0014 <span class="comment">%________________________________________________________</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% Licence</span>
+0017 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0018 <span class="comment">%________________________________________________________</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0021 <span class="comment">% Georges Dumont</span>
+0022 <span class="comment">%________________________________________________________</span>
+0023 markers_ex=cell(0);
+0024 <span class="keyword">for</span> i=1:numel(Markers_set)
+0025     test=0;
+0026     name=Markers_set(i).anat_position;
+0027     <span class="keyword">for</span> j=1:numel(Human_model)
+0028         <span class="keyword">for</span> k=1:size(Human_model(j).anat_position,1)
+0029             <span class="keyword">if</span> strcmp(name,Human_model(j).anat_position(k,1))
+0030                 Markers_set(i).exist=1;
+0031                 Markers_set(i).num_solid=j;
+0032                 Markers_set(i).num_markers=k;
+0033                 test=1;
+0034                 <span class="keyword">break</span>
+0035             <span class="keyword">end</span>
+0036         <span class="keyword">end</span>
+0037         <span class="keyword">if</span> test == 1
+0038             <span class="keyword">break</span>
+0039         <span class="keyword">end</span>
+0040     <span class="keyword">end</span>
+0041     <span class="keyword">if</span> test == 0
+0042         markers_ex{end+1,1}=Markers_set(i).name; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0043         Markers_set(i).exist=0;
+0044     <span class="keyword">end</span>    
+0045 <span class="keyword">end</span>
+0046 
+0047 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

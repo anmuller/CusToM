@@ -1,0 +1,358 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ChangeRoot</title>
+  <meta name="keywords" content="ChangeRoot">
+  <meta name="description" content="Root changement in the osteoarticular model">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html Models -->
+<h1>ChangeRoot
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Root changement in the osteoarticular model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function Human_model = ChangeRoot(Human_model, new_root) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Root changement in the osteoarticular model
+
+   INPUT
+   - Human_model: current osteo-articular model (see the Documentation for the structure)
+   - new_root: name of the new solid root 
+   OUTPUT
+   - Human_model: new osteo-articular model (see the Documentation for the structure)
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="ModelGeneration.html" class="code" title="function [OsteoArticularModel, Markers, Muscles, EnableModel] = ModelGeneration(ModelParameters)">ModelGeneration</a>	Generation of the anthropometric model</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [Human_model1] = ConvertHumanModelChild(Human_model, Human_model1, j)</a></li><li><a href="#_sub2" class="code">function [Human_model1] = AddNewChild(Human_model, Human_model1, j, i)</a></li><li><a href="#_sub3" class="code">function [Human_model2] = ConvertHumanModelNewRoot(Human_model1, Human_model2, j)</a></li><li><a href="#_sub4" class="code">function [Human_model2] = AddSameChild(Human_model1, Human_model2, j)</a></li><li><a href="#_sub5" class="code">function [Human_model4] = ConvertHumanModelParameters(Human_model, Human_model4, j)</a></li><li><a href="#_sub6" class="code">function [Human_model5] = ConvertHumanModelSister(Human_model5, j)</a></li><li><a href="#_sub7" class="code">function [Human_model]=AddSister(Human_model,j,i)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function Human_model = ChangeRoot(Human_model, new_root)</a>
+0002 <span class="comment">% Root changement in the osteoarticular model</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - Human_model: current osteo-articular model (see the Documentation for the structure)</span>
+0006 <span class="comment">%   - new_root: name of the new solid root</span>
+0007 <span class="comment">%   OUTPUT</span>
+0008 <span class="comment">%   - Human_model: new osteo-articular model (see the Documentation for the structure)</span>
+0009 <span class="comment">%________________________________________________________</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% Licence</span>
+0012 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0013 <span class="comment">%________________________________________________________</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0016 <span class="comment">% Georges Dumont</span>
+0017 <span class="comment">%________________________________________________________</span>
+0018 
+0019 [~, new_root_num] = intersect({Human_model.name}, new_root);
+0020 
+0021 <span class="comment">%% Use only children and parents</span>
+0022 
+0023 init_root_num = find([Human_model.mother] == 0);
+0024 
+0025 <span class="comment">% Human_model1 initialization</span>
+0026 Human_model1 = struct(<span class="string">'name'</span>,{Human_model.name}, <span class="string">'child'</span>, [], <span class="string">'mother'</span>, []);
+0027 Human_model1(init_root_num).mother = 0;
+0028 
+0029 <span class="comment">% 1st conversion (use only children and parents)</span>
+0030 [Human_model1] = <a href="#_sub1" class="code" title="subfunction [Human_model1] = ConvertHumanModelChild(Human_model, Human_model1, j)">ConvertHumanModelChild</a>(Human_model, Human_model1, init_root_num);
+0031 <span class="keyword">for</span> i=1:numel(Human_model1)
+0032     <span class="keyword">for</span> j=1:numel(Human_model1(i).child)
+0033         <span class="keyword">if</span> Human_model1(i).child(j)
+0034             Human_model1(Human_model1(i).child(j)).mother = i; 
+0035         <span class="keyword">end</span>
+0036     <span class="keyword">end</span>  
+0037 <span class="keyword">end</span>
+0038 
+0039 <span class="comment">%% Root change</span>
+0040 
+0041 <span class="comment">% Human_model2 initialization</span>
+0042 Human_model2 = struct(<span class="string">'name'</span>,{Human_model.name}, <span class="string">'child'</span>, [], <span class="string">'mother'</span>, [], <span class="string">'new_child'</span>, []);
+0043 Human_model2(new_root_num).mother = 0;
+0044 
+0045 <span class="comment">% 2nd conversion (new root)</span>
+0046 [Human_model2] = <a href="#_sub3" class="code" title="subfunction [Human_model2] = ConvertHumanModelNewRoot(Human_model1, Human_model2, j)">ConvertHumanModelNewRoot</a>(Human_model1, Human_model2, new_root_num);
+0047 Human_model3 = Human_model2;
+0048 <span class="keyword">for</span> i=1:numel(Human_model3)
+0049     <span class="keyword">if</span> Human_model3(i).new_child
+0050         <span class="keyword">if</span> Human_model3(i).child
+0051             Human_model3(i).child = [Human_model3(i).child Human_model3(i).new_child];
+0052         <span class="keyword">else</span>
+0053             Human_model3(i).child = Human_model3(i).new_child;
+0054         <span class="keyword">end</span>
+0055     <span class="keyword">end</span>    
+0056 <span class="keyword">end</span>
+0057 <span class="keyword">for</span> i=1:numel(Human_model3)
+0058     <span class="keyword">for</span> j=1:numel(Human_model3(i).child)
+0059         <span class="keyword">if</span> Human_model3(i).child(j)
+0060             Human_model2(Human_model3(i).child(j)).mother = i; 
+0061         <span class="keyword">end</span>
+0062     <span class="keyword">end</span>  
+0063 <span class="keyword">end</span>
+0064 
+0065 <span class="comment">%% Geometrical parameters change</span>
+0066 
+0067 <span class="comment">% Human_model4 initialization</span>
+0068 Human_model4 = Human_model2;
+0069 Human_model4(new_root_num).b = zeros(3,1); Human_model4(new_root_num).c = Human_model(new_root_num).c;
+0070 Human_model4(new_root_num).a = zeros(3,1);
+0071 
+0072 <span class="comment">% Conversion (new geometrical parameters)</span>
+0073 [Human_model4] = <a href="#_sub5" class="code" title="subfunction [Human_model4] = ConvertHumanModelParameters(Human_model, Human_model4, j)">ConvertHumanModelParameters</a>(Human_model, Human_model4, new_root_num);
+0074 <span class="keyword">for</span> i=1:numel(Human_model4)
+0075     <span class="keyword">if</span> ~numel(Human_model4(i).new_child)
+0076         Human_model4(i).c = Human_model(i).c;
+0077         Human_model4(i).a = Human_model(i).a;
+0078         Human_model4(i).limit_inf = Human_model(i).limit_inf;
+0079         Human_model4(i).limit_sup = Human_model(i).limit_sup;
+0080         Human_model4(i).u = Human_model(i).u;
+0081         Human_model4(i).theta = Human_model(i).theta;
+0082         <span class="keyword">if</span> numel(Human_model4(i).b)
+0083             Human_model4(i).b = Human_model4(i).b + Human_model(i).b;
+0084         <span class="keyword">else</span>
+0085             Human_model4(i).b = Human_model(i).b;
+0086         <span class="keyword">end</span>        
+0087     <span class="keyword">end</span>
+0088 <span class="keyword">end</span>
+0089 
+0090 <span class="comment">%% Re-use sisters</span>
+0091 
+0092 <span class="comment">% Initilization</span>
+0093 Human_model5 = Human_model4; 
+0094 <span class="keyword">for</span> i=1:numel(Human_model5)
+0095     Human_model5(i).sister = 0;
+0096 <span class="keyword">end</span>
+0097 <span class="keyword">for</span> i=1:numel(Human_model5)
+0098     <span class="keyword">if</span> Human_model5(i).new_child
+0099         <span class="keyword">if</span> Human_model5(i).child
+0100             Human_model5(i).child = [Human_model5(i).child Human_model5(i).new_child];
+0101         <span class="keyword">else</span>
+0102             Human_model5(i).child = Human_model5(i).new_child;
+0103         <span class="keyword">end</span>
+0104     <span class="keyword">end</span>    
+0105 <span class="keyword">end</span>
+0106 Human_model5 = rmfield(Human_model5, <span class="string">'new_child'</span>);
+0107 
+0108 <span class="comment">% Conversion</span>
+0109 Human_model5 = <a href="#_sub6" class="code" title="subfunction [Human_model5] = ConvertHumanModelSister(Human_model5, j)">ConvertHumanModelSister</a>(Human_model5, new_root_num);
+0110 Human_model5 = rmfield(Human_model5, <span class="string">'child'</span>);
+0111 [Human_model5.(<span class="string">'child'</span>)] = Human_model5.(<span class="string">'new_child'</span>);
+0112 Human_model5 = rmfield(Human_model5, <span class="string">'new_child'</span>);
+0113 
+0114 <span class="comment">%% Root in first position</span>
+0115 
+0116 <span class="keyword">for</span> i=1:numel(Human_model5)
+0117     Human_model(i).sister = Human_model5(i).sister; 
+0118     Human_model(i).mother = Human_model5(i).mother;
+0119     Human_model(i).child = Human_model5(i).child;
+0120     Human_model(i).b = Human_model5(i).b;
+0121     Human_model(i).c = Human_model5(i).c;
+0122     Human_model(i).a = Human_model5(i).a;
+0123     Human_model(i).limit_inf = Human_model5(i).limit_inf;
+0124     Human_model(i).limit_sup = Human_model5(i).limit_sup;
+0125     Human_model(i).u = Human_model5(i).u;
+0126     Human_model(i).theta = Human_model5(i).theta;
+0127 <span class="keyword">end</span>
+0128 save_new_root = Human_model(new_root_num);
+0129 Human_model(new_root_num) = Human_model(init_root_num);
+0130 Human_model(init_root_num) = save_new_root;
+0131 <span class="keyword">for</span> i=1:numel(Human_model)
+0132     <span class="comment">% sister</span>
+0133     <span class="keyword">if</span> Human_model(i).sister == init_root_num
+0134         test = 1;
+0135     <span class="keyword">elseif</span> Human_model(i).sister == new_root_num
+0136         test = 2;
+0137     <span class="keyword">else</span>
+0138         test = 0;
+0139     <span class="keyword">end</span>
+0140     <span class="keyword">if</span> test == 1
+0141         Human_model(i).sister = new_root_num;
+0142     <span class="keyword">elseif</span> test == 2
+0143         Human_model(i).sister = init_root_num;
+0144     <span class="keyword">end</span>
+0145     <span class="comment">% mother</span>
+0146     <span class="keyword">if</span> Human_model(i).mother == init_root_num
+0147         test = 1;
+0148     <span class="keyword">elseif</span> Human_model(i).mother == new_root_num
+0149         test = 2;
+0150     <span class="keyword">else</span>
+0151         test = 0;
+0152     <span class="keyword">end</span>
+0153     <span class="keyword">if</span> test == 1
+0154         Human_model(i).mother = new_root_num;
+0155     <span class="keyword">elseif</span> test == 2
+0156         Human_model(i).mother = init_root_num;
+0157     <span class="keyword">end</span>
+0158     <span class="comment">% child</span>
+0159     <span class="keyword">if</span> Human_model(i).child == init_root_num
+0160         test = 1;
+0161     <span class="keyword">elseif</span> Human_model(i).child == new_root_num
+0162         test = 2;
+0163     <span class="keyword">else</span>
+0164         test = 0;
+0165     <span class="keyword">end</span>
+0166     <span class="keyword">if</span> test == 1
+0167         Human_model(i).child = new_root_num;
+0168     <span class="keyword">elseif</span> test == 2
+0169         Human_model(i).child = init_root_num;
+0170     <span class="keyword">end</span>
+0171 <span class="keyword">end</span>
+0172 
+0173 <span class="keyword">end</span>
+0174 
+0175 <a name="_sub1" href="#_subfunctions" class="code">function [Human_model1] = ConvertHumanModelChild(Human_model, Human_model1, j)</a>
+0176 <span class="comment">% Use only children and mother</span>
+0177 
+0178 <span class="keyword">if</span> j
+0179     Human_model1(j).child = Human_model(j).child;
+0180     <span class="keyword">if</span> Human_model(j).child    
+0181         Human_model1 = <a href="#_sub2" class="code" title="subfunction [Human_model1] = AddNewChild(Human_model, Human_model1, j, i)">AddNewChild</a>(Human_model, Human_model1, Human_model(j).child, j);
+0182     <span class="keyword">end</span>
+0183     
+0184     [Human_model1] = <a href="#_sub1" class="code" title="subfunction [Human_model1] = ConvertHumanModelChild(Human_model, Human_model1, j)">ConvertHumanModelChild</a>(Human_model, Human_model1, Human_model(j).sister);
+0185     [Human_model1] = <a href="#_sub1" class="code" title="subfunction [Human_model1] = ConvertHumanModelChild(Human_model, Human_model1, j)">ConvertHumanModelChild</a>(Human_model, Human_model1, Human_model(j).child);
+0186 <span class="keyword">else</span> 
+0187     <span class="keyword">return</span>;
+0188 <span class="keyword">end</span>
+0189 
+0190 <span class="keyword">end</span>
+0191 
+0192 <a name="_sub2" href="#_subfunctions" class="code">function [Human_model1] = AddNewChild(Human_model, Human_model1, j, i)</a>
+0193 
+0194 <span class="keyword">if</span> Human_model(j).sister
+0195     Human_model1(i).child = [Human_model1(i).child Human_model(j).sister];
+0196     Human_model1 = <a href="#_sub2" class="code" title="subfunction [Human_model1] = AddNewChild(Human_model, Human_model1, j, i)">AddNewChild</a>(Human_model, Human_model1, Human_model(j).sister, i);
+0197 <span class="keyword">else</span>
+0198     <span class="keyword">return</span>;
+0199 <span class="keyword">end</span>
+0200 
+0201 <span class="keyword">end</span>
+0202 
+0203 <a name="_sub3" href="#_subfunctions" class="code">function [Human_model2] = ConvertHumanModelNewRoot(Human_model1, Human_model2, j)</a>
+0204 <span class="comment">% Conversion with the new root</span>
+0205 
+0206 <span class="keyword">if</span> j
+0207     <span class="keyword">for</span> i=1:numel(Human_model1(j).child) <span class="comment">% added of previous children (by removing the current parent)</span>
+0208         <span class="keyword">if</span> Human_model1(j).child
+0209             <span class="keyword">if</span> ~numel(Human_model2(Human_model1(j).child(i)).new_child) || Human_model2(Human_model1(j).child(i)).new_child ~= j
+0210                 Human_model2(j).child = [Human_model2(j).child Human_model1(j).child(i)];
+0211             <span class="keyword">end</span>
+0212         <span class="keyword">end</span>
+0213     <span class="keyword">end</span>
+0214     Human_model2(j).new_child = Human_model1(j).mother;
+0215     
+0216     <span class="keyword">for</span> i = 1:numel(Human_model2(j).child)
+0217         <span class="keyword">if</span> Human_model2(j).child
+0218             Human_model2 = <a href="#_sub4" class="code" title="subfunction [Human_model2] = AddSameChild(Human_model1, Human_model2, j)">AddSameChild</a>(Human_model1, Human_model2, Human_model2(j).child(i));
+0219         <span class="keyword">end</span>
+0220     <span class="keyword">end</span>
+0221     
+0222     Human_model2 = <a href="#_sub3" class="code" title="subfunction [Human_model2] = ConvertHumanModelNewRoot(Human_model1, Human_model2, j)">ConvertHumanModelNewRoot</a>(Human_model1, Human_model2, Human_model2(j).new_child);
+0223 <span class="keyword">else</span>
+0224     <span class="keyword">return</span>;
+0225 <span class="keyword">end</span>
+0226 
+0227 
+0228 <span class="keyword">end</span>
+0229 
+0230 <a name="_sub4" href="#_subfunctions" class="code">function [Human_model2] = AddSameChild(Human_model1, Human_model2, j)</a>
+0231 
+0232 <span class="keyword">if</span> j
+0233     Human_model2(j).child = Human_model1(j).child;
+0234     <span class="keyword">for</span> i = 1:numel(Human_model1(j).child)
+0235         <span class="keyword">if</span> Human_model1(j).child
+0236             Human_model2 = <a href="#_sub4" class="code" title="subfunction [Human_model2] = AddSameChild(Human_model1, Human_model2, j)">AddSameChild</a>(Human_model1, Human_model2, Human_model1(j).child(i));
+0237         <span class="keyword">end</span>
+0238     <span class="keyword">end</span>
+0239 <span class="keyword">else</span>
+0240     <span class="keyword">return</span>;
+0241 <span class="keyword">end</span>
+0242 
+0243 <span class="keyword">end</span>
+0244 
+0245 <a name="_sub5" href="#_subfunctions" class="code">function [Human_model4] = ConvertHumanModelParameters(Human_model, Human_model4, j)</a>
+0246 
+0247 <span class="keyword">if</span> Human_model4(j).mother
+0248     <span class="keyword">if</span> Human_model4(Human_model4(j).mother).mother
+0249         Human_model4(j).b = - Human_model(Human_model4(Human_model4(j).mother).mother).b;
+0250     <span class="keyword">else</span>
+0251         Human_model4(j).b = zeros(3,1);
+0252     <span class="keyword">end</span>
+0253     Human_model4(j).c = -Human_model(Human_model4(j).mother).b + Human_model(j).c;
+0254     Human_model4(j).a = Human_model(Human_model4(j).mother).a;
+0255     Human_model4(j).limit_inf = Human_model(Human_model4(j).mother).limit_inf;
+0256     Human_model4(j).limit_sup = Human_model(Human_model4(j).mother).limit_sup;
+0257     Human_model4(j).u = Human_model(Human_model4(j).mother).u;
+0258     Human_model4(j).theta = -Human_model(Human_model4(j).mother).theta;
+0259 <span class="keyword">end</span>
+0260 <span class="keyword">if</span> Human_model4(j).new_child
+0261     [Human_model4] = <a href="#_sub5" class="code" title="subfunction [Human_model4] = ConvertHumanModelParameters(Human_model, Human_model4, j)">ConvertHumanModelParameters</a>(Human_model, Human_model4, Human_model4(j).new_child);
+0262 <span class="keyword">else</span>
+0263     <span class="keyword">for</span> i=1:numel(Human_model4(j).child)
+0264         Human_model4(Human_model4(j).child(i)).b = - Human_model(Human_model4(j).mother).b;
+0265     <span class="keyword">end</span>
+0266     <span class="keyword">return</span>;
+0267 <span class="keyword">end</span>
+0268 
+0269 <span class="keyword">end</span>
+0270 
+0271 <a name="_sub6" href="#_subfunctions" class="code">function [Human_model5] = ConvertHumanModelSister(Human_model5, j)</a>
+0272 
+0273 <span class="keyword">if</span> j
+0274     Human_model5(j).new_child = Human_model5(j).child(1);
+0275     <span class="keyword">for</span> i=2:numel(Human_model5(j).child)
+0276         Human_model5 = <a href="#_sub7" class="code" title="subfunction [Human_model]=AddSister(Human_model,j,i)">AddSister</a>(Human_model5,Human_model5(j).new_child,Human_model5(j).child(i));
+0277     <span class="keyword">end</span>
+0278     [Human_model5] = <a href="#_sub6" class="code" title="subfunction [Human_model5] = ConvertHumanModelSister(Human_model5, j)">ConvertHumanModelSister</a>(Human_model5, Human_model5(j).new_child);
+0279     [Human_model5] = <a href="#_sub6" class="code" title="subfunction [Human_model5] = ConvertHumanModelSister(Human_model5, j)">ConvertHumanModelSister</a>(Human_model5, Human_model5(j).sister);
+0280 <span class="keyword">else</span>
+0281     <span class="keyword">return</span>;
+0282 <span class="keyword">end</span>
+0283 
+0284 <span class="keyword">end</span>
+0285 
+0286 <a name="_sub7" href="#_subfunctions" class="code">function [Human_model]=AddSister(Human_model,j,i)</a>
+0287 
+0288 <span class="keyword">if</span> Human_model(j).sister == 0
+0289     Human_model(j).sister = i;
+0290     <span class="keyword">return</span>;
+0291 <span class="keyword">end</span>
+0292 
+0293 [Human_model]=<a href="#_sub7" class="code" title="subfunction [Human_model]=AddSister(Human_model,j,i)">AddSister</a>(Human_model,Human_model(j).sister,i);
+0294 
+0295 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,966 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of vcw</title>
+  <meta name="keywords" content="vcw">
+  <meta name="description" content="function vcw(hf,buttonOpt)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html Functions --><!-- # ExternLibrary --><!-- # GIBBON --><!-- menu.html functions -->
+<h1>vcw
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function vcw(hf,buttonOpt)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [varargout]=vcw(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> function vcw(hf,buttonOpt)
+ ------------------------------------------------------------------------
+ vcw, View Control Widget, Allows users to manipulate a view in 3D using
+ key and button presses
+
+   vcw(hf,buttonOpt)
+
+ Allows the user to rotate, pan and zoom a figure using key presses and
+ mouse gestures. Additionally, press q to quit the widget, r to reset the
+ axes and escape to close the figure. This function is non-blocking, but
+ fixes axes aspect ratios.
+
+ IN:
+   hf - Handle of the figure to be manipulated (default: gcf).
+   buttonOpt - 4x1 cell array indicating the function to associate with
+             each mouse button (left to right) and the scroll action.
+             Functions can be any of:
+                'rot' - Rotate about x and y axes of viewer's coordinate
+                        frame
+                'rotz' - Rotate about z axis of viewer's coordinate frame
+                'zoom' - Zoom (change canera view angle)
+                'zoomz' - Move along z axis of viewer's coordinate frame
+                'pan' - Pan
+                '' - Don't use that button
+             Default: {'pan','rot','zoomz','zoomz'};).
+
+ This code was inspired by the fcw function by Oliver Woodford (which was
+ based on Torsten Vogel's view3d function, which was in turn inspired by
+ rotate3d from The MathWorks, Inc.).
+
+ See modification log below to see how vcw function differs from the fcw
+ function. 
+
+
+ Kevin Mattheus Moerman
+ gibbon.toolbox@gmail.com
+
+ 2015/04/15 %Copied from fcw and renamed to vcw due to planned revision
+ 2015/04/15 %Added: 1) handing of colorbars (bug in fcw when view(2) is
+ used combined with panning which induced zooming and panning), 2) overobj
+ axes selection so that the current axes is determined based on mouse
+ pointer location for most functions, 3) A toggle button for activation
+ and deactivation in the figure toolbar, 4) ability to start vcw before
+ objects are plotted, 5) &quot;proper&quot; closure of the vcw widget, in fcw the q
+ button did not exit the keyDown functions such as panning etc. Now the
+ quit action deactivates the widget, 6) Uppon activation of the vcw widget
+ the plotting and default view manipulation tools and buttons are disabled
+ (to avoid interference with vcw), 7) Added &quot;linked&quot; mode by using ALT
+ button to alter views for all axes in figure uppon keypress, 8) Altered
+ keypress functions and behaviour with SHIFT, also added i to display help
+ information for the vcw function.
+ 2015/04/20 Added to GIBBON toolbox
+ 2015/04/22 Added JavaFrame handling of ALT related mnemonics
+ 2015/04/28 Fixed behaviour for repated vcw; commands (only generate a
+ single vcw button even if vcw is called multiple times). 
+ 2015/04/28 Fixed behaviour for figures without axes. I.e. vcw will only
+ start if an axis is present. 
+ 2016/01/13 Added that clipping is turned off
+
+ TO DO: 1) Improved handling of colorbars. Currently requires colorbar
+ locations to be set to 'manual' for vcw. However this causes the figure
+ to rescale/adjust after deactivation/activation of vcw. It would be best
+ if the colorbar locations settings could remain constant. 2) Proper
+ restoring of all figure properties. Currently defaults are set manually
+ which could remove user defined figure features.
+ 2) Turn back the clipping type after exciting vcw
+------------------------------------------------------------------------</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Functions/ExternLibrary/fcw/camview.html" class="code" title="function Vo = camview(varargin)">camview</a>	function Vo = camview([hAx], [Vi])</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="anim8.html" class="code" title="function hf=anim8(varargin)">anim8</a>	function hf=anim8(hf,animStruct)</li><li><a href="cFigure.html" class="code" title="function [varargout]=cFigure(varargin)">cFigure</a>	function [h]=cFigure(figStruct)</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function start_vcw_toggle(hObject,callbackdata,indputCell)</a></li><li><a href="#_sub2" class="code">function keyPress_wait(src,eventData,buttonOpt,hp,hf)</a></li><li><a href="#_sub3" class="code">function start_vcw(hf,buttonOpt,hp)</a></li><li><a href="#_sub4" class="code">function keypress(src, eventData,buttonOpt,hp,hf)</a></li><li><a href="#_sub5" class="code">function mousedown(src, eventData, funcs, hf)</a></li><li><a href="#_sub6" class="code">function mouseup(src, eventData,hf)</a></li><li><a href="#_sub7" class="code">function scroll(src, eventData, func, hf)</a></li><li><a href="#_sub8" class="code">function d = check_vals(s, d)</a></li><li><a href="#_sub9" class="code">function vcw_rot(s, d, cax, hf)</a></li><li><a href="#_sub10" class="code">function vcw_rotz(s, d, cax, hf)</a></li><li><a href="#_sub11" class="code">function vcw_zoom(s, d, cax, hf)</a></li><li><a href="#_sub12" class="code">function vcw_zoomz(s, d, cax, hf)</a></li><li><a href="#_sub13" class="code">function vcw_pan(s, d, cax, hf)</a></li><li><a href="#_sub14" class="code">function colorbarLocSet(hf,locOpt)</a></li><li><a href="#_sub15" class="code">function checkAxisLimits(hf)</a></li><li><a href="#_sub16" class="code">function quit_vcw_toggle(~,~,indputCell)</a></li><li><a href="#_sub17" class="code">function quit_vcw(hf,buttonOpt,hp)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [varargout]=vcw(varargin)</a>
+0002 
+0003 <span class="comment">% function vcw(hf,buttonOpt)</span>
+0004 <span class="comment">% ------------------------------------------------------------------------</span>
+0005 <span class="comment">% vcw, View Control Widget, Allows users to manipulate a view in 3D using</span>
+0006 <span class="comment">% key and button presses</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%   vcw(hf,buttonOpt)</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Allows the user to rotate, pan and zoom a figure using key presses and</span>
+0011 <span class="comment">% mouse gestures. Additionally, press q to quit the widget, r to reset the</span>
+0012 <span class="comment">% axes and escape to close the figure. This function is non-blocking, but</span>
+0013 <span class="comment">% fixes axes aspect ratios.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% IN:</span>
+0016 <span class="comment">%   hf - Handle of the figure to be manipulated (default: gcf).</span>
+0017 <span class="comment">%   buttonOpt - 4x1 cell array indicating the function to associate with</span>
+0018 <span class="comment">%             each mouse button (left to right) and the scroll action.</span>
+0019 <span class="comment">%             Functions can be any of:</span>
+0020 <span class="comment">%                'rot' - Rotate about x and y axes of viewer's coordinate</span>
+0021 <span class="comment">%                        frame</span>
+0022 <span class="comment">%                'rotz' - Rotate about z axis of viewer's coordinate frame</span>
+0023 <span class="comment">%                'zoom' - Zoom (change canera view angle)</span>
+0024 <span class="comment">%                'zoomz' - Move along z axis of viewer's coordinate frame</span>
+0025 <span class="comment">%                'pan' - Pan</span>
+0026 <span class="comment">%                '' - Don't use that button</span>
+0027 <span class="comment">%             Default: {'pan','rot','zoomz','zoomz'};).</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">% This code was inspired by the fcw function by Oliver Woodford (which was</span>
+0030 <span class="comment">% based on Torsten Vogel's view3d function, which was in turn inspired by</span>
+0031 <span class="comment">% rotate3d from The MathWorks, Inc.).</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">% See modification log below to see how vcw function differs from the fcw</span>
+0034 <span class="comment">% function.</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">% Kevin Mattheus Moerman</span>
+0038 <span class="comment">% gibbon.toolbox@gmail.com</span>
+0039 <span class="comment">%</span>
+0040 <span class="comment">% 2015/04/15 %Copied from fcw and renamed to vcw due to planned revision</span>
+0041 <span class="comment">% 2015/04/15 %Added: 1) handing of colorbars (bug in fcw when view(2) is</span>
+0042 <span class="comment">% used combined with panning which induced zooming and panning), 2) overobj</span>
+0043 <span class="comment">% axes selection so that the current axes is determined based on mouse</span>
+0044 <span class="comment">% pointer location for most functions, 3) A toggle button for activation</span>
+0045 <span class="comment">% and deactivation in the figure toolbar, 4) ability to start vcw before</span>
+0046 <span class="comment">% objects are plotted, 5) &quot;proper&quot; closure of the vcw widget, in fcw the q</span>
+0047 <span class="comment">% button did not exit the keyDown functions such as panning etc. Now the</span>
+0048 <span class="comment">% quit action deactivates the widget, 6) Uppon activation of the vcw widget</span>
+0049 <span class="comment">% the plotting and default view manipulation tools and buttons are disabled</span>
+0050 <span class="comment">% (to avoid interference with vcw), 7) Added &quot;linked&quot; mode by using ALT</span>
+0051 <span class="comment">% button to alter views for all axes in figure uppon keypress, 8) Altered</span>
+0052 <span class="comment">% keypress functions and behaviour with SHIFT, also added i to display help</span>
+0053 <span class="comment">% information for the vcw function.</span>
+0054 <span class="comment">% 2015/04/20 Added to GIBBON toolbox</span>
+0055 <span class="comment">% 2015/04/22 Added JavaFrame handling of ALT related mnemonics</span>
+0056 <span class="comment">% 2015/04/28 Fixed behaviour for repated vcw; commands (only generate a</span>
+0057 <span class="comment">% single vcw button even if vcw is called multiple times).</span>
+0058 <span class="comment">% 2015/04/28 Fixed behaviour for figures without axes. I.e. vcw will only</span>
+0059 <span class="comment">% start if an axis is present.</span>
+0060 <span class="comment">% 2016/01/13 Added that clipping is turned off</span>
+0061 <span class="comment">%</span>
+0062 <span class="comment">% TO DO: 1) Improved handling of colorbars. Currently requires colorbar</span>
+0063 <span class="comment">% locations to be set to 'manual' for vcw. However this causes the figure</span>
+0064 <span class="comment">% to rescale/adjust after deactivation/activation of vcw. It would be best</span>
+0065 <span class="comment">% if the colorbar locations settings could remain constant. 2) Proper</span>
+0066 <span class="comment">% restoring of all figure properties. Currently defaults are set manually</span>
+0067 <span class="comment">% which could remove user defined figure features.</span>
+0068 <span class="comment">% 2) Turn back the clipping type after exciting vcw</span>
+0069 <span class="comment">%------------------------------------------------------------------------</span>
+0070 
+0071 <span class="comment">%% Parse input arguments</span>
+0072 <span class="keyword">switch</span> nargin
+0073     <span class="keyword">case</span> 0
+0074         hf = gcf;
+0075         buttonOpt = {<span class="string">'pan'</span>,<span class="string">'rot'</span>,<span class="string">'zoomz'</span>,<span class="string">'zoomz'</span>};
+0076     <span class="keyword">case</span> 1
+0077         hf=varargin{1};
+0078         buttonOpt = {<span class="string">'pan'</span>,<span class="string">'rot'</span>,<span class="string">'zoomz'</span>,<span class="string">'zoomz'</span>};
+0079     <span class="keyword">case</span> 2
+0080         hf=varargin{1};
+0081         buttonOpt=varargin{2};
+0082     <span class="keyword">otherwise</span>
+0083         error(<span class="string">'Wrong number of input arguments'</span>);
+0084 <span class="keyword">end</span>
+0085 
+0086 <span class="keyword">if</span> ~ishandle(hf)
+0087     buttonOpt=hf;
+0088     hf = gcf;
+0089 <span class="keyword">end</span>
+0090 
+0091 <span class="comment">%% Check axis limits</span>
+0092 
+0093 h = findobj(hf, <span class="string">'Type'</span>, <span class="string">'axes'</span>, <span class="string">'-depth'</span>, 1)'; <span class="comment">%All axis handles</span>
+0094 <span class="keyword">if</span> ~isempty(h)
+0095     <span class="keyword">for</span> h = findobj(hf, <span class="string">'Type'</span>, <span class="string">'axes'</span>, <span class="string">'-depth'</span>, 1)'
+0096         axis(h);
+0097         
+0098         xLim=get(h,<span class="string">'xlim'</span>);
+0099         yLim=get(h,<span class="string">'ylim'</span>);
+0100         zLim=get(h,<span class="string">'zlim'</span>);
+0101         
+0102         wx=abs(diff(xlim));
+0103         wy=abs(diff(ylim));
+0104         wz=abs(diff(zlim));
+0105         
+0106         w_max=max([wx wy wz]);
+0107         min_w=0.1;
+0108         <span class="keyword">if</span> w_max&lt;min_w
+0109             w_max=min_w;
+0110         <span class="keyword">end</span>
+0111         
+0112         w_min=w_max/10;
+0113         <span class="keyword">if</span> w_min&lt;min_w
+0114             w_min=min_w;
+0115         <span class="keyword">end</span>
+0116         w_add=[-w_min w_min]/2;       
+0117         
+0118         <span class="keyword">if</span> wx&lt;w_min
+0119             set(h,<span class="string">'xlim'</span>,xLim+w_add);
+0120         <span class="keyword">end</span>
+0121         
+0122         <span class="keyword">if</span> wy&lt;w_min
+0123             set(h,<span class="string">'ylim'</span>,yLim+w_add);
+0124         <span class="keyword">end</span>
+0125         
+0126         <span class="keyword">if</span> wz&lt;w_min
+0127             set(h,<span class="string">'zlim'</span>,zLim+w_add);
+0128         <span class="keyword">end</span>              
+0129     <span class="keyword">end</span>
+0130 <span class="keyword">end</span>
+0131 
+0132 
+0133 <span class="comment">%% Initialise button and button/keypress wait</span>
+0134 hb = findall(hf,<span class="string">'Type'</span>,<span class="string">'uitoolbar'</span>);
+0135 
+0136 <span class="comment">%Check for presence of a vcw button</span>
+0137 hp = findobj(hb,<span class="string">'Tag'</span>,<span class="string">'tBar'</span>);
+0138 <span class="keyword">if</span> isempty(hp) <span class="comment">%If vcw button is not present create one and wait for key/button press</span>
+0139     
+0140     <span class="comment">% Build icon</span>
+0141     s=[ NaN,NaN,1  ,1  ,1  ,1  ,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN;<span class="keyword">...</span>
+0142         NaN,NaN,NaN,1  ,1  ,1  ,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN;<span class="keyword">...</span>
+0143         NaN,NaN,1  ,1  ,1  ,1  ,NaN,NaN,NaN,NaN,1  ,1  ,NaN,NaN,NaN,NaN;<span class="keyword">...</span>
+0144         NaN,1  ,1  ,1  ,NaN,1  ,NaN,NaN,NaN,NaN,1  ,1  ,1  ,NaN,NaN,NaN;<span class="keyword">...</span>
+0145         NaN,1  ,1  ,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,1  ,1  ,1  ,NaN,NaN;<span class="keyword">...</span>
+0146         1,1  ,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,1  ,1  ,NaN;<span class="keyword">...</span>
+0147         1,1  ,NaN,NaN,NaN,1  ,NaN,NaN,NaN,NaN,1  ,NaN,NaN,1  ,1  ,NaN;<span class="keyword">...</span>
+0148         1,1  ,NaN,NaN,NaN,1  ,1  ,NaN,NaN,1  ,1  ,NaN,NaN,NaN,1  ,1  ;<span class="keyword">...</span>
+0149         1,1  ,NaN,NaN,NaN,NaN,1  ,NaN,NaN,1  ,NaN,NaN,NaN,NaN,1  ,1  ;<span class="keyword">...</span>
+0150         NaN,1  ,1  ,NaN,NaN,NaN,1  ,1  ,1  ,1  ,NaN,NaN,NaN,NaN,1  ,1  ;<span class="keyword">...</span>
+0151         NaN,1  ,1  ,NaN,NaN,NaN,NaN,1  ,1  ,NaN,NaN,NaN,NaN,NaN,1  ,1  ;<span class="keyword">...</span>
+0152         NaN,NaN,1  ,1  ,1  ,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,1  ,1  ,NaN;<span class="keyword">...</span>
+0153         NaN,NaN,NaN,1  ,1  ,1  ,NaN,NaN,NaN,NaN,1  ,NaN,1  ,1  ,1  ,NaN;<span class="keyword">...</span>
+0154         NaN,NaN,NaN,NaN,1  ,1  ,NaN,NaN,NaN,NaN,1  ,1  ,1  ,1  ,NaN,NaN;<span class="keyword">...</span>
+0155         NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,1  ,1  ,1  ,NaN,NaN,NaN;<span class="keyword">...</span>
+0156         NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,1  ,1  ,1  ,1  ,NaN,NaN];
+0157     
+0158     S=zeros(16,16,3);
+0159     S(:,:,1)=0.7.*s;
+0160     S(:,:,2)=0.25.*s;
+0161     S(:,:,3)=0.05.*s;
+0162     
+0163     <span class="comment">% Create a uipushtool in the toolbar</span>
+0164     hp=uitoggletool(hb,<span class="string">'TooltipString'</span>,<span class="string">'Activate View Control Widget (or enter v)'</span>,<span class="string">'CData'</span>,S,<span class="string">'Tag'</span>,<span class="string">'tBar'</span>,<span class="string">'Separator'</span>,<span class="string">'on'</span>);
+0165     set(hp,<span class="string">'OnCallback'</span>,{@<a href="#_sub1" class="code" title="subfunction start_vcw_toggle(hObject,callbackdata,indputCell)">start_vcw_toggle</a>,{hf,buttonOpt,hp}});
+0166     set(hp,<span class="string">'OffCallback'</span>,{@<a href="#_sub16" class="code" title="subfunction quit_vcw_toggle(~,~,indputCell)">quit_vcw_toggle</a>,{hf,buttonOpt,hp}});
+0167 
+0168     <span class="comment">%% Wait for start using key-press</span>
+0169     
+0170     set(hf,<span class="string">'KeyPressFcn'</span>, {@<a href="#_sub2" class="code" title="subfunction keyPress_wait(src,eventData,buttonOpt,hp,hf)">keyPress_wait</a>,buttonOpt,hp,hf},<span class="string">'BusyAction'</span>,<span class="string">'cancel'</span>);
+0171     
+0172 <span class="keyword">end</span>
+0173 
+0174 <span class="comment">%% Outputs</span>
+0175 <span class="keyword">switch</span> nargout
+0176     <span class="keyword">case</span> 1
+0177         varargout{1}=hp;
+0178 <span class="keyword">end</span>
+0179 
+0180 <span class="keyword">end</span>
+0181 
+0182 <span class="comment">%%</span>
+0183 <a name="_sub1" href="#_subfunctions" class="code">function start_vcw_toggle(hObject,callbackdata,indputCell)</a>
+0184 <a href="#_sub3" class="code" title="subfunction start_vcw(hf,buttonOpt,hp)">start_vcw</a>(indputCell{1},indputCell{2},indputCell{3});
+0185 <span class="keyword">end</span>
+0186 
+0187 <a name="_sub2" href="#_subfunctions" class="code">function keyPress_wait(src,eventData,buttonOpt,hp,hf)</a>
+0188 
+0189 cax = overobj2(<span class="string">'axes'</span>);
+0190 
+0191 <span class="keyword">if</span> isempty(cax)
+0192 <span class="comment">%     cax=gca; %this gets current axis or if none exists creates one</span>
+0193 cax = get(hf, <span class="string">'CurrentAxes'</span>);
+0194 <span class="keyword">else</span>
+0195     axes(cax)
+0196 <span class="keyword">end</span>
+0197 
+0198 <span class="keyword">if</span> isempty(cax)
+0199     <span class="keyword">return</span>
+0200 <span class="keyword">end</span>
+0201 
+0202 <span class="comment">%Key actions</span>
+0203 <span class="keyword">switch</span> eventData.Key
+0204     <span class="keyword">case</span> {<span class="string">'v'</span>} <span class="comment">%Start vcw</span>
+0205         <a href="#_sub3" class="code" title="subfunction start_vcw(hf,buttonOpt,hp)">start_vcw</a>(hf,buttonOpt,hp);
+0206 <span class="keyword">end</span>
+0207 <span class="keyword">end</span>
+0208 <span class="comment">%%</span>
+0209 <a name="_sub3" href="#_subfunctions" class="code">function start_vcw(hf,buttonOpt,hp)</a>
+0210 
+0211 <span class="comment">% Store current settings</span>
+0212 hf.UserData.WindowButtonDownFcn=hf.WindowButtonDownFcn;
+0213 hf.UserData.WindowButtonUpFcn=hf.WindowButtonUpFcn;
+0214 hf.UserData.KeyPressFcn=hf.KeyPressFcn;
+0215 hf.UserData.WindowScrollWheelFcn=hf.WindowScrollWheelFcn;
+0216 hf.UserData.BusyAction=hf.BusyAction;
+0217 
+0218 <a href="#_sub15" class="code" title="subfunction checkAxisLimits(hf)">checkAxisLimits</a>(hf);
+0219 
+0220 set(hp,<span class="string">'State'</span>,<span class="string">'On'</span>);
+0221 set(hp,<span class="string">'TooltipString'</span>,<span class="string">'Dectivate View Control Widget (or enter v)'</span>);
+0222 
+0223 <span class="comment">% Clear any visualization modes we might be in</span>
+0224 pan(hf, <span class="string">'off'</span>);
+0225 zoom(hf, <span class="string">'off'</span>);
+0226 rotate3d(hf, <span class="string">'off'</span>);
+0227 
+0228 <span class="comment">%Quick fix for colorbars</span>
+0229 H=findobj(hf,<span class="string">'Type'</span>,<span class="string">'colorbar'</span>); <span class="comment">%Handle set</span>
+0230 figUserDataStruct=get(hf,<span class="string">'UserData'</span>);
+0231 <span class="keyword">if</span> isempty(figUserDataStruct)
+0232     figUserDataStruct.colorbarLocSet=get(H,<span class="string">'Location'</span>);
+0233     set(hf,<span class="string">'UserData'</span>,figUserDataStruct);
+0234 <span class="keyword">end</span>
+0235 <a href="#_sub14" class="code" title="subfunction colorbarLocSet(hf,locOpt)">colorbarLocSet</a>(hf,<span class="string">'manual'</span>);
+0236 
+0237 <span class="comment">% Disable Plottools Buttons and Exploration Buttons</span>
+0238 initialState.toolbar = findobj(allchild(hf),<span class="string">'flat'</span>,<span class="string">'Type'</span>,<span class="string">'uitoolbar'</span>);
+0239 <span class="keyword">if</span> ~isempty(initialState.toolbar)
+0240     initialState.ptButtons = [uigettool(initialState.toolbar,<span class="string">'Plottools.PlottoolsOff'</span>), <span class="keyword">...</span>
+0241         uigettool(initialState.toolbar,<span class="string">'Plottools.PlottoolsOn'</span>),<span class="keyword">...</span>
+0242         uigettool(initialState.toolbar,<span class="string">'Exploration.Rotate'</span>), <span class="keyword">...</span>
+0243         uigettool(initialState.toolbar,<span class="string">'Exploration.Pan'</span>),<span class="keyword">...</span>
+0244         uigettool(initialState.toolbar,<span class="string">'Exploration.ZoomIn'</span>),<span class="keyword">...</span>
+0245         uigettool(initialState.toolbar,<span class="string">'Exploration.ZoomOut'</span>),<span class="keyword">...</span>
+0246         ];
+0247     initialState.ptState = get (initialState.ptButtons,<span class="string">'Enable'</span>);
+0248     set (initialState.ptButtons,<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0249 <span class="keyword">end</span>
+0250 
+0251 <span class="comment">% For each set of axes</span>
+0252 cax = get(hf,<span class="string">'CurrentAxes'</span>);
+0253 <span class="comment">% cax=gca; %this gets current axis or if none exists creates one</span>
+0254 <span class="keyword">if</span> isempty(cax)
+0255     set(hp,<span class="string">'State'</span>,<span class="string">'Off'</span>);
+0256     set(hp,<span class="string">'TooltipString'</span>,<span class="string">'Activate View Control Widget (or enter v)'</span>);
+0257     <span class="keyword">return</span>
+0258 <span class="keyword">end</span>
+0259 h = findobj(hf, <span class="string">'Type'</span>, <span class="string">'axes'</span>, <span class="string">'-depth'</span>, 1)'; <span class="comment">%All axis handles</span>
+0260 
+0261 <span class="keyword">if</span> ~isempty(h)
+0262     <span class="keyword">for</span> h = findobj(hf, <span class="string">'Type'</span>, <span class="string">'axes'</span>, <span class="string">'-depth'</span>, 1)'
+0263         <span class="comment">% Set everything to manual</span>
+0264         set(h, <span class="string">'CameraViewAngleMode'</span>, <span class="string">'manual'</span>, <span class="string">'CameraTargetMode'</span>, <span class="string">'manual'</span>, <span class="string">'CameraPositionMode'</span>, <span class="string">'manual'</span>);
+0265         <span class="comment">% Store the camera viewpoint</span>
+0266         axes(h); axis vis3d;
+0267         caxUserDataStruct.defaultView=<a href="../../../../Functions/ExternLibrary/fcw/camview.html" class="code" title="function Vo = camview(varargin)">camview</a>(h);
+0268         set(h, <span class="string">'UserData'</span>,caxUserDataStruct);
+0269         <span class="comment">%Turn clipping off</span>
+0270         set(h,<span class="string">'Clipping'</span>,<span class="string">'off'</span>);   
+0271     <span class="keyword">end</span>
+0272     axes(cax);
+0273 <span class="keyword">else</span>
+0274     set(hp,<span class="string">'State'</span>,<span class="string">'Off'</span>);
+0275     set(hp,<span class="string">'TooltipString'</span>,<span class="string">'Activate View Control Widget (or enter v)'</span>);
+0276     <span class="keyword">return</span>
+0277 <span class="keyword">end</span>
+0278 
+0279 <span class="comment">% Initialize the callbacks</span>
+0280 set(hf, <span class="string">'WindowButtonDownFcn'</span>, {@<a href="#_sub5" class="code" title="subfunction mousedown(src, eventData, funcs, hf)">mousedown</a>, {str2func([<span class="string">'vcw_'</span> buttonOpt{1}]), str2func([<span class="string">'vcw_'</span> buttonOpt{2}]), str2func([<span class="string">'vcw_'</span> buttonOpt{3}])},hf}, <span class="keyword">...</span>
+0281     <span class="string">'WindowButtonUpFcn'</span>, {@<a href="#_sub6" class="code" title="subfunction mouseup(src, eventData,hf)">mouseup</a>,hf}, <span class="keyword">...</span>
+0282     <span class="string">'KeyPressFcn'</span>, {@<a href="#_sub4" class="code" title="subfunction keypress(src, eventData,buttonOpt,hp,hf)">keypress</a>,buttonOpt,hp,hf}, <span class="keyword">...</span>
+0283     <span class="string">'WindowScrollWheelFcn'</span>, {@<a href="#_sub7" class="code" title="subfunction scroll(src, eventData, func, hf)">scroll</a>, str2func([<span class="string">'vcw_'</span> buttonOpt{4}])}, <span class="keyword">...</span>
+0284     <span class="string">'BusyAction'</span>, <span class="string">'cancel'</span>);
+0285 
+0286 <span class="keyword">end</span>
+0287 
+0288 <span class="comment">%%</span>
+0289 <a name="_sub4" href="#_subfunctions" class="code">function keypress(src, eventData,buttonOpt,hp,hf)</a>
+0290 
+0291 cax = overobj2(<span class="string">'axes'</span>);
+0292 <span class="keyword">if</span> isempty(cax)
+0293     cax = get(hf, <span class="string">'CurrentAxes'</span>);
+0294 <span class="keyword">else</span>
+0295     axes(cax)
+0296 <span class="keyword">end</span>
+0297 <span class="keyword">if</span> isempty(cax)
+0298     <span class="keyword">return</span>;
+0299 <span class="keyword">end</span>
+0300 
+0301 <span class="comment">% checkAxisLimits(hf);</span>
+0302 
+0303 step = 1;
+0304 <span class="keyword">if</span> ismember(<span class="string">'shift'</span>, eventData.Modifier)
+0305     step = -step; <span class="comment">%Make negative while shift is down</span>
+0306 <span class="keyword">end</span>
+0307 
+0308 <span class="keyword">if</span> ismember(<span class="string">'control'</span>, eventData.Modifier)
+0309     step = step * 4; <span class="comment">%Increase speed</span>
+0310 <span class="keyword">end</span>
+0311 
+0312 mnemOff=1;
+0313 <span class="keyword">if</span> ismember(<span class="string">'alt'</span>, eventData.Modifier)
+0314     linkedOn=1;
+0315     <span class="comment">% Try to turn off menu Mnemonics</span>
+0316     <span class="keyword">try</span>
+0317         warning off; <span class="comment">%Stop jframe warning</span>
+0318         jFrame = get(handle(hf),<span class="string">'JavaFrame'</span>);
+0319         jMenuBar=jFrame.fHG2Client.getMenuBar;
+0320         <span class="keyword">for</span> q=0:1:jMenuBar.getComponentCount-1
+0321             jComp=jMenuBar.getComponent(q);
+0322             jComp.setMnemonic(<span class="string">' '</span>);
+0323         <span class="keyword">end</span>
+0324         mnemOff=1;
+0325         warning on;
+0326     <span class="keyword">catch</span>
+0327         <span class="comment">%Remove toolbar when ALT is pressed (QUICK FIX)</span>
+0328         mnemOff=0;
+0329         set(hf,<span class="string">'MenuBar'</span>,<span class="string">'none'</span>);
+0330         t = uitoolbar;
+0331         set(t,<span class="string">'Tag'</span>,<span class="string">'emptyBar_vcw'</span>);
+0332     <span class="keyword">end</span>
+0333 <span class="keyword">else</span>
+0334     linkedOn=0;
+0335 <span class="keyword">end</span>
+0336 
+0337 <span class="comment">% Key input options</span>
+0338 <span class="keyword">switch</span> eventData.Key
+0339     <span class="keyword">case</span> <span class="string">'leftarrow'</span> <span class="comment">% Pan left</span>
+0340         <span class="keyword">if</span> linkedOn==1
+0341             <span class="keyword">for</span> h = findobj(hf, <span class="string">'Type'</span>, <span class="string">'axes'</span>, <span class="string">'-depth'</span>, 1)'
+0342                 <a href="#_sub13" class="code" title="subfunction vcw_pan(s, d, cax, hf)">vcw_pan</a>([], [step 0], h, hf);
+0343             <span class="keyword">end</span>
+0344         <span class="keyword">else</span>
+0345             <a href="#_sub13" class="code" title="subfunction vcw_pan(s, d, cax, hf)">vcw_pan</a>([], [step 0], cax, hf);
+0346         <span class="keyword">end</span>
+0347     <span class="keyword">case</span> <span class="string">'rightarrow'</span> <span class="comment">% Pan right</span>
+0348         <span class="keyword">if</span> linkedOn==1
+0349             <span class="keyword">for</span> h = findobj(hf, <span class="string">'Type'</span>, <span class="string">'axes'</span>, <span class="string">'-depth'</span>, 1)'
+0350                 <a href="#_sub13" class="code" title="subfunction vcw_pan(s, d, cax, hf)">vcw_pan</a>([], [-step 0], h, hf);
+0351             <span class="keyword">end</span>
+0352         <span class="keyword">else</span>
+0353             <a href="#_sub13" class="code" title="subfunction vcw_pan(s, d, cax, hf)">vcw_pan</a>([], [-step 0], cax, hf);
+0354         <span class="keyword">end</span>
+0355     <span class="keyword">case</span> <span class="string">'downarrow'</span> <span class="comment">% Pan down</span>
+0356         <span class="keyword">if</span> linkedOn==1
+0357             <span class="keyword">for</span> h = findobj(hf, <span class="string">'Type'</span>, <span class="string">'axes'</span>, <span class="string">'-depth'</span>, 1)'
+0358                 <a href="#_sub13" class="code" title="subfunction vcw_pan(s, d, cax, hf)">vcw_pan</a>([], [0 step], h, hf);
+0359             <span class="keyword">end</span>
+0360         <span class="keyword">else</span>
+0361             <a href="#_sub13" class="code" title="subfunction vcw_pan(s, d, cax, hf)">vcw_pan</a>([], [0 step], cax, hf);
+0362         <span class="keyword">end</span>
+0363     <span class="keyword">case</span> <span class="string">'uparrow'</span> <span class="comment">% Pan up</span>
+0364         <span class="keyword">if</span> linkedOn==1
+0365             <span class="keyword">for</span> h = findobj(hf, <span class="string">'Type'</span>, <span class="string">'axes'</span>, <span class="string">'-depth'</span>, 1)'
+0366                 <a href="#_sub13" class="code" title="subfunction vcw_pan(s, d, cax, hf)">vcw_pan</a>([], [0 -step], h, hf);
+0367             <span class="keyword">end</span>
+0368         <span class="keyword">else</span>
+0369             <a href="#_sub13" class="code" title="subfunction vcw_pan(s, d, cax, hf)">vcw_pan</a>([], [0 -step], cax, hf);
+0370         <span class="keyword">end</span>
+0371     <span class="keyword">case</span> <span class="string">'x'</span> <span class="comment">% Rotate around x</span>
+0372         <span class="keyword">if</span> linkedOn==1
+0373             <span class="keyword">for</span> h = findobj(hf, <span class="string">'Type'</span>, <span class="string">'axes'</span>, <span class="string">'-depth'</span>, 1)'
+0374                 <a href="#_sub9" class="code" title="subfunction vcw_rot(s, d, cax, hf)">vcw_rot</a>([], [0 step], h, hf);
+0375             <span class="keyword">end</span>
+0376         <span class="keyword">else</span>
+0377             <a href="#_sub9" class="code" title="subfunction vcw_rot(s, d, cax, hf)">vcw_rot</a>([], [0 step], cax, hf);
+0378         <span class="keyword">end</span>
+0379     <span class="keyword">case</span> <span class="string">'y'</span> <span class="comment">% Rotate around y</span>
+0380         <span class="keyword">if</span> linkedOn==1
+0381             <span class="keyword">for</span> h = findobj(hf, <span class="string">'Type'</span>, <span class="string">'axes'</span>, <span class="string">'-depth'</span>, 1)'
+0382                 <a href="#_sub9" class="code" title="subfunction vcw_rot(s, d, cax, hf)">vcw_rot</a>([], [step 0], h, hf);
+0383             <span class="keyword">end</span>
+0384         <span class="keyword">else</span>
+0385             <a href="#_sub9" class="code" title="subfunction vcw_rot(s, d, cax, hf)">vcw_rot</a>([], [step 0], cax, hf);
+0386         <span class="keyword">end</span>
+0387     <span class="keyword">case</span> <span class="string">'z'</span> <span class="comment">% Rotate around z</span>
+0388         <span class="keyword">if</span> linkedOn==1
+0389             <span class="keyword">for</span> h = findobj(hf, <span class="string">'Type'</span>, <span class="string">'axes'</span>, <span class="string">'-depth'</span>, 1)'
+0390                 <a href="#_sub10" class="code" title="subfunction vcw_rotz(s, d, cax, hf)">vcw_rotz</a>([], [0 step], h, hf);
+0391             <span class="keyword">end</span>
+0392         <span class="keyword">else</span>
+0393             <a href="#_sub10" class="code" title="subfunction vcw_rotz(s, d, cax, hf)">vcw_rotz</a>([], [0 step], cax, hf);
+0394         <span class="keyword">end</span>
+0395     <span class="keyword">case</span> <span class="string">'m'</span> <span class="comment">% Magnify/zoom (positive or negative)</span>
+0396         <span class="keyword">if</span> linkedOn==1
+0397             <span class="keyword">for</span> h = findobj(hf, <span class="string">'Type'</span>, <span class="string">'axes'</span>, <span class="string">'-depth'</span>, 1)'
+0398                 <a href="#_sub11" class="code" title="subfunction vcw_zoom(s, d, cax, hf)">vcw_zoom</a>([], [0 -step],h, hf);
+0399             <span class="keyword">end</span>
+0400         <span class="keyword">else</span>
+0401             <a href="#_sub11" class="code" title="subfunction vcw_zoom(s, d, cax, hf)">vcw_zoom</a>([], [0 -step], cax, hf);
+0402         <span class="keyword">end</span>
+0403     <span class="keyword">case</span> <span class="string">'t'</span> <span class="comment">% top view</span>
+0404         <span class="keyword">if</span> linkedOn==1
+0405             <span class="keyword">for</span> h = findobj(hf, <span class="string">'Type'</span>, <span class="string">'axes'</span>, <span class="string">'-depth'</span>, 1)'
+0406                 axes(h);view(0,90);
+0407             <span class="keyword">end</span>
+0408         <span class="keyword">else</span>
+0409             view(0,90);
+0410         <span class="keyword">end</span>
+0411     <span class="keyword">case</span> <span class="string">'b'</span> <span class="comment">% bottom view</span>
+0412         <span class="keyword">if</span> linkedOn==1
+0413             <span class="keyword">for</span> h = findobj(hf, <span class="string">'Type'</span>, <span class="string">'axes'</span>, <span class="string">'-depth'</span>, 1)'
+0414                 axes(h);view(0,-90);
+0415             <span class="keyword">end</span>
+0416         <span class="keyword">else</span>
+0417             view(0,-90);
+0418         <span class="keyword">end</span>
+0419     <span class="keyword">case</span> <span class="string">'f'</span> <span class="comment">% front view</span>
+0420         <span class="keyword">if</span> linkedOn==1
+0421             <span class="keyword">for</span> h = findobj(hf, <span class="string">'Type'</span>, <span class="string">'axes'</span>, <span class="string">'-depth'</span>, 1)'
+0422                 axes(h);view(-90,0);
+0423             <span class="keyword">end</span>
+0424         <span class="keyword">else</span>
+0425             view(-90,0);
+0426         <span class="keyword">end</span>
+0427     <span class="keyword">case</span> <span class="string">'h'</span> <span class="comment">% back view</span>
+0428         <span class="keyword">if</span> linkedOn==1
+0429             <span class="keyword">for</span> h = findobj(hf, <span class="string">'Type'</span>, <span class="string">'axes'</span>, <span class="string">'-depth'</span>, 1)'
+0430                 axes(h);view(90,0);
+0431             <span class="keyword">end</span>
+0432         <span class="keyword">else</span>
+0433             view(90,0);
+0434         <span class="keyword">end</span>
+0435     <span class="keyword">case</span> <span class="string">'l'</span> <span class="comment">% left view</span>
+0436         <span class="keyword">if</span> linkedOn==1
+0437             <span class="keyword">for</span> h = findobj(hf, <span class="string">'Type'</span>, <span class="string">'axes'</span>, <span class="string">'-depth'</span>, 1)'
+0438                 axes(h);view(0,0);
+0439             <span class="keyword">end</span>
+0440         <span class="keyword">else</span>
+0441             view(0,0);
+0442         <span class="keyword">end</span>
+0443     <span class="keyword">case</span> <span class="string">'r'</span> <span class="comment">% right view</span>
+0444         <span class="keyword">if</span> linkedOn==1
+0445             <span class="keyword">for</span> h = findobj(hf, <span class="string">'Type'</span>, <span class="string">'axes'</span>, <span class="string">'-depth'</span>, 1)'
+0446                 axes(h);view(-180,0);
+0447             <span class="keyword">end</span>
+0448         <span class="keyword">else</span>
+0449             view(-180,0);
+0450         <span class="keyword">end</span>
+0451     <span class="keyword">case</span> <span class="string">'s'</span> <span class="comment">% Store current views as default/initial views (return to it using 'd')</span>
+0452         <span class="keyword">if</span> linkedOn==1
+0453             <span class="keyword">for</span> h = findobj(hf, <span class="string">'Type'</span>, <span class="string">'axes'</span>, <span class="string">'-depth'</span>, 1)'
+0454                 caxUserDataStruct=get(h,<span class="string">'UserData'</span>);
+0455                 caxUserDataStruct.defaultView=<a href="../../../../Functions/ExternLibrary/fcw/camview.html" class="code" title="function Vo = camview(varargin)">camview</a>(h);
+0456                 set(h,<span class="string">'UserData'</span>,caxUserDataStruct);
+0457             <span class="keyword">end</span>
+0458         <span class="keyword">else</span>
+0459             caxUserDataStruct=get(cax,<span class="string">'UserData'</span>);
+0460             caxUserDataStruct.defaultView=<a href="../../../../Functions/ExternLibrary/fcw/camview.html" class="code" title="function Vo = camview(varargin)">camview</a>(cax);
+0461             set(cax,<span class="string">'UserData'</span>,caxUserDataStruct);
+0462         <span class="keyword">end</span>
+0463     <span class="keyword">case</span> <span class="string">'d'</span> <span class="comment">% Reset all the axes to default</span>
+0464         <span class="keyword">if</span> linkedOn==1
+0465             <span class="keyword">for</span> h = findobj(hf, <span class="string">'Type'</span>, <span class="string">'axes'</span>, <span class="string">'-depth'</span>, 1)'
+0466                 caxUserDataStruct=get(h,<span class="string">'UserData'</span>);
+0467                 <a href="../../../../Functions/ExternLibrary/fcw/camview.html" class="code" title="function Vo = camview(varargin)">camview</a>(h,caxUserDataStruct.defaultView);
+0468             <span class="keyword">end</span>
+0469         <span class="keyword">else</span>
+0470             caxUserDataStruct=get(cax,<span class="string">'UserData'</span>);
+0471             <a href="../../../../Functions/ExternLibrary/fcw/camview.html" class="code" title="function Vo = camview(varargin)">camview</a>(cax,caxUserDataStruct.defaultView);
+0472         <span class="keyword">end</span>
+0473     <span class="keyword">case</span> <span class="string">'i'</span> <span class="comment">% Show help</span>
+0474         msgText={<span class="string">'Key input options:'</span>,<span class="keyword">...</span>
+0475             <span class="string">'------------------------------------------------------------------------'</span>,<span class="keyword">...</span>
+0476             <span class="string">'Arrow keys = panning'</span>,<span class="keyword">...</span>
+0477             <span class="string">'x = Rotate around viewer x-axis'</span>,<span class="keyword">...</span>
+0478             <span class="string">'y = Rotate around viewer y-axis'</span>,<span class="keyword">...</span>
+0479             <span class="string">'z = Rotate around viewer z-axis'</span>,<span class="keyword">...</span>
+0480             <span class="string">'m = Zoom/magnify'</span>,<span class="keyword">...</span>
+0481             <span class="string">'Hold down SHIFT to change direction of change for key input based rotation/pan/zoom'</span>,<span class="keyword">...</span>
+0482             <span class="string">'Hold down CTRL to use x4 speed of change  for key input based rotation/pan/zoom'</span>,<span class="keyword">...</span>
+0483             <span class="string">'Hold down ALT to link manipulations for all figure axes for key input based rotation/pan/zoom'</span>,<span class="keyword">...</span>
+0484             <span class="string">'f,h,t,b,l,r = Set front, hind, top, bottom, left, or right view respectively'</span>,<span class="keyword">...</span>
+0485             <span class="string">'s = Store current view states as default (return to default using d)'</span>,<span class="keyword">...</span>
+0486             <span class="string">'d = Restore/reset to default view'</span>,<span class="keyword">...</span>
+0487             <span class="string">'v = activate/deactivate vcw mode'</span>,<span class="keyword">...</span>
+0488             <span class="string">'i = Display help information'</span>,<span class="keyword">...</span>
+0489             <span class="string">'The key inputs and mouse scroll work in the axis defined by mouse pointer location (overobj)'</span>,<span class="keyword">...</span>
+0490             <span class="string">'The mouse inputs (other than scroll) work in current axis (e.g. gca) irrespective of point location'</span>,<span class="keyword">...</span>
+0491             <span class="string">'------------------------------------------------------------------------'</span>,<span class="keyword">...</span>
+0492             };
+0493         helpButton = questdlg(msgText,<span class="string">'Help for vcw'</span>,<span class="string">'OK'</span>,<span class="string">'OK'</span>);
+0494     <span class="keyword">case</span> <span class="string">'v'</span> <span class="comment">% Quit vcw mode</span>
+0495         <a href="#_sub17" class="code" title="subfunction quit_vcw(hf,buttonOpt,hp)">quit_vcw</a>(hf,buttonOpt,hp);
+0496     <span class="keyword">otherwise</span>
+0497 <span class="comment">%         quit_vcw(hf,buttonOpt,hp);</span>
+0498 <span class="keyword">end</span>
+0499 
+0500 <span class="keyword">if</span> mnemOff==0
+0501     set(hf,<span class="string">'MenuBar'</span>,<span class="string">'figure'</span>);
+0502     h1 = findobj(hf,<span class="string">'Tag'</span>,<span class="string">'emptyBar_vcw'</span>);
+0503     <span class="keyword">if</span> ~isempty(h1)
+0504         delete(h1);
+0505     <span class="keyword">end</span>
+0506 <span class="keyword">end</span>
+0507 <span class="keyword">end</span>
+0508 
+0509 <span class="comment">%%</span>
+0510 <a name="_sub5" href="#_subfunctions" class="code">function mousedown(src, eventData, funcs, hf)</a>
+0511 
+0512 <span class="comment">% Get the button pressed</span>
+0513 <span class="comment">% cax = overobj2('axes');</span>
+0514 
+0515 cax = get(hf, <span class="string">'CurrentAxes'</span>);
+0516 <span class="keyword">if</span> isempty(cax)
+0517     <span class="keyword">return</span>;
+0518 <span class="keyword">end</span>
+0519 
+0520 <span class="comment">% checkAxisLimits(hf);</span>
+0521 
+0522 <span class="keyword">switch</span> get(hf, <span class="string">'SelectionType'</span>)
+0523     <span class="keyword">case</span> <span class="string">'extend'</span> <span class="comment">% Middle button</span>
+0524         method = funcs{2};
+0525     <span class="keyword">case</span> <span class="string">'alt'</span> <span class="comment">% Right hand button</span>
+0526         method = funcs{3};
+0527     <span class="keyword">case</span> <span class="string">'open'</span> <span class="comment">% Double click</span>
+0528         caxUserDataStruct=get(cax,<span class="string">'UserData'</span>);
+0529         <a href="../../../../Functions/ExternLibrary/fcw/camview.html" class="code" title="function Vo = camview(varargin)">camview</a>(cax,caxUserDataStruct.defaultView);
+0530         <span class="keyword">return</span>;
+0531     <span class="keyword">otherwise</span>
+0532         method = funcs{1};
+0533 <span class="keyword">end</span>
+0534 
+0535 <span class="comment">% Set the cursor</span>
+0536 <span class="keyword">switch</span> func2str(method)
+0537     <span class="keyword">case</span> {<span class="string">'vcw_zoom'</span>, <span class="string">'vcw_zoomz'</span>}
+0538         shape=[ 2   2   2   2   2   2   2   2   2   2 NaN NaN NaN NaN NaN NaN  ;
+0539             2   1   1   1   1   1   1   1   1   2 NaN NaN NaN NaN NaN NaN  ;
+0540             2   1   2   2   2   2   2   2   2   2 NaN NaN NaN NaN NaN NaN  ;
+0541             2   1   2   1   1   1   1   1   1   2 NaN NaN NaN NaN NaN NaN  ;
+0542             2   1   2   1   1   1   1   1   2 NaN NaN NaN NaN NaN NaN NaN  ;
+0543             2   1   2   1   1   1   1   2 NaN NaN NaN NaN NaN NaN NaN NaN  ;
+0544             2   1   2   1   1   1   1   1   2 NaN NaN NaN   2   2   2   2  ;
+0545             2   1   2   1   1   2   1   1   1   2 NaN   2   1   2   1   2  ;
+0546             2   1   2   1   2 NaN   2   1   1   1   2   1   1   2   1   2  ;
+0547             2   2   2   2 NaN NaN NaN   2   1   1   1   1   1   2   1   2  ;
+0548             NaN NaN NaN NaN NaN NaN NaN NaN   2   1   1   1   1   2   1   2  ;
+0549             NaN NaN NaN NaN NaN NaN NaN   2   1   1   1   1   1   2   1   2  ;
+0550             NaN NaN NaN NaN NaN NaN   2   1   1   1   1   1   1   2   1   2  ;
+0551             NaN NaN NaN NaN NaN NaN   2   2   2   2   2   2   2   2   1   2  ;
+0552             NaN NaN NaN NaN NaN NaN   2   1   1   1   1   1   1   1   1   2  ;
+0553             NaN NaN NaN NaN NaN NaN   2   2   2   2   2   2   2   2   2   2  ];
+0554     <span class="keyword">case</span> <span class="string">'vcw_pan'</span>
+0555         shape=[ NaN NaN NaN NaN NaN NaN NaN   2   2 NaN NaN NaN NaN NaN NaN NaN ;
+0556             NaN NaN NaN NaN NaN NaN   2   1   1   2 NaN NaN NaN NaN NaN NaN ;
+0557             NaN NaN NaN NaN NaN   2   1   1   1   1   2 NaN NaN NaN NaN NaN ;
+0558             NaN NaN NaN NaN NaN   1   1   1   1   1   1 NaN NaN NaN NaN NaN ;
+0559             NaN NaN NaN NaN NaN NaN   2   1   1   2 NaN NaN NaN NaN NaN NaN ;
+0560             NaN NaN   2   1 NaN NaN   2   1   1   2 NaN NaN   1   2 NaN NaN ;
+0561             NaN   2   1   1   2   2   2   1   1   2   2   2   1   1   2 NaN ;
+0562             2   1   1   1   1   1   1   1   1   1   1   1   1   1   1   2 ;
+0563             2   1   1   1   1   1   1   1   1   1   1   1   1   1   1   2 ;
+0564             NaN   2   1   1   2   2   2   1   1   2   2   2   1   1   2 NaN ;
+0565             NaN NaN   2   1 NaN NaN   2   1   1   2 NaN NaN   1   2 NaN NaN ;
+0566             NaN NaN NaN NaN NaN NaN   2   1   1   2 NaN NaN NaN NaN NaN NaN ;
+0567             NaN NaN NaN NaN NaN   1   1   1   1   1   1 NaN NaN NaN NaN NaN ;
+0568             NaN NaN NaN NaN NaN   2   1   1   1   1   2 NaN NaN NaN NaN NaN ;
+0569             NaN NaN NaN NaN NaN NaN   2   1   1   2 NaN NaN NaN NaN NaN NaN ;
+0570             NaN NaN NaN NaN NaN NaN NaN   2   2 NaN NaN NaN NaN NaN NaN NaN ];
+0571     <span class="keyword">case</span> {<span class="string">'vcw_rotz'</span>, <span class="string">'vcw_rot'</span>}
+0572         <span class="comment">% Rotate</span>
+0573         shape=[ NaN NaN NaN   2   2   2   2   2 NaN   2   2 NaN NaN NaN NaN NaN ;
+0574             NaN NaN NaN   1   1   1   1   1   2   1   1   2 NaN NaN NaN NaN ;
+0575             NaN NaN NaN   2   1   1   1   1   2   1   1   1   2 NaN NaN NaN ;
+0576             NaN NaN   2   1   1   1   1   1   2   2   1   1   1   2 NaN NaN ;
+0577             NaN   2   1   1   1   2   1   1   2 NaN NaN   2   1   1   2 NaN ;
+0578             NaN   2   1   1   2 NaN   2   1   2 NaN NaN   2   1   1   2 NaN ;
+0579             2   1   1   2 NaN NaN NaN NaN NaN NaN NaN NaN   2   1   1   2 ;
+0580             2   1   1   2 NaN NaN NaN NaN NaN NaN NaN NaN   2   1   1   2 ;
+0581             2   1   1   2 NaN NaN NaN NaN NaN NaN NaN NaN   2   1   1   2 ;
+0582             2   1   1   2 NaN NaN NaN NaN NaN NaN NaN NaN   2   1   1   2 ;
+0583             NaN   2   1   1   2 NaN NaN   2   1   2 NaN   2   1   1   2 NaN ;
+0584             NaN   2   1   1   2 NaN NaN   2   1   1   2   1   1   1   2 NaN ;
+0585             NaN NaN   2   1   1   1   2   2   1   1   1   1   1   2 NaN NaN ;
+0586             NaN NaN NaN   2   1   1   1   2   1   1   1   1   2 NaN NaN NaN ;
+0587             NaN NaN NaN NaN   2   1   1   2   1   1   1   1   1 NaN NaN NaN ;
+0588             NaN NaN NaN NaN NaN   2   2 NaN   2   2   2   2   2 NaN NaN NaN ];
+0589     <span class="keyword">otherwise</span>
+0590         <span class="keyword">return</span>
+0591 <span class="keyword">end</span>
+0592 
+0593 <span class="comment">% Record where the pointer is</span>
+0594 <span class="keyword">global</span> VCW_POS
+0595 VCW_POS = get(0, <span class="string">'PointerLocation'</span>);
+0596 <span class="comment">% Set the cursor and callback</span>
+0597 set(hf, <span class="string">'Pointer'</span>, <span class="string">'custom'</span>, <span class="string">'pointershapecdata'</span>, shape, <span class="string">'WindowButtonMotionFcn'</span>, {method, cax,hf});
+0598 
+0599 <span class="keyword">end</span>
+0600 
+0601 <span class="comment">%%</span>
+0602 <a name="_sub6" href="#_subfunctions" class="code">function mouseup(src, eventData,hf)</a>
+0603 <span class="comment">% Clear the cursor and callback</span>
+0604 set(hf, <span class="string">'WindowButtonMotionFcn'</span>, <span class="string">''</span>, <span class="string">'Pointer'</span>, <span class="string">'arrow'</span>);
+0605 <span class="keyword">end</span>
+0606 
+0607 <span class="comment">%%</span>
+0608 <a name="_sub7" href="#_subfunctions" class="code">function scroll(src, eventData, func, hf)</a>
+0609 <span class="comment">% Get the axes handle</span>
+0610 cax = overobj2(<span class="string">'axes'</span>);
+0611 <span class="keyword">if</span> isempty(cax)
+0612     cax = get(hf, <span class="string">'CurrentAxes'</span>);
+0613 <span class="keyword">else</span>
+0614     axes(cax)
+0615 <span class="keyword">end</span>
+0616 <span class="keyword">if</span> isempty(cax)
+0617     <span class="keyword">return</span>;
+0618 <span class="keyword">end</span>
+0619 
+0620 <span class="comment">% Call the scroll function</span>
+0621 func([], [0 -10*eventData.VerticalScrollCount], cax);
+0622 <span class="keyword">end</span>
+0623 
+0624 <span class="comment">%%</span>
+0625 
+0626 <a name="_sub8" href="#_subfunctions" class="code">function d = check_vals(s, d)</a>
+0627 <span class="comment">% Check the inputs to the manipulation methods are valid</span>
+0628 <span class="keyword">global</span> VCW_POS
+0629 <span class="keyword">if</span> ~isempty(s)
+0630     <span class="comment">% Return the mouse pointers displacement</span>
+0631     new_pt = get(0, <span class="string">'PointerLocation'</span>);
+0632     d = VCW_POS - new_pt;
+0633     VCW_POS = new_pt;
+0634 <span class="keyword">end</span>
+0635 <span class="keyword">end</span>
+0636 
+0637 <span class="comment">%%</span>
+0638 
+0639 <span class="comment">% function setLightPos(hf,cax)</span>
+0640 <span class="comment">%</span>
+0641 <span class="comment">% hLights=findobj(cax,'Type','light');</span>
+0642 <span class="comment">%</span>
+0643 <span class="comment">% cameraPositionsNew=cax.CameraPosition;</span>
+0644 <span class="comment">%</span>
+0645 <span class="comment">% cameraPositionsOld=hf.UserData.CameraPosition;</span>
+0646 <span class="comment">%</span>
+0647 <span class="comment">% a=vecnormalize(cameraPositionsOld);</span>
+0648 <span class="comment">% b=vecnormalize(cameraPositionsNew);</span>
+0649 <span class="comment">% [R]=vecAngle2Rot(acos(dot(a,b)),vecnormalize(cross(a,b)));</span>
+0650 <span class="comment">%</span>
+0651 <span class="comment">% % [F,V,~]=quiver3Dpatch(0,0,0,a(1),a(2),a(3),[],[2 2]);</span>
+0652 <span class="comment">% % patch('Faces',F,'Vertices',V,'FaceColor','r');</span>
+0653 <span class="comment">% %</span>
+0654 <span class="comment">% % c=b*R</span>
+0655 <span class="comment">% %</span>
+0656 <span class="comment">% % [F,V,~]=quiver3Dpatch(0,0,0,c(1),c(2),c(3),[],[2 2]);</span>
+0657 <span class="comment">% % patch('Faces',F,'Vertices',V,'FaceColor','none','EdgeColor','g');</span>
+0658 <span class="comment">%</span>
+0659 <span class="comment">% for q=1:1:numel(hLights)</span>
+0660 <span class="comment">%     hLights(q).Position=hLights(q).Position*R';</span>
+0661 <span class="comment">%     drawnow;</span>
+0662 <span class="comment">% end</span>
+0663 <span class="comment">%</span>
+0664 <span class="comment">% end</span>
+0665 
+0666 <span class="comment">% Figure manipulation functions</span>
+0667 <a name="_sub9" href="#_subfunctions" class="code">function vcw_rot(s, d, cax, hf)</a>
+0668 d = <a href="#_sub8" class="code" title="subfunction d = check_vals(s, d)">check_vals</a>(s, d);
+0669 <span class="comment">% hf.UserData.CameraPosition=cax.CameraPosition;</span>
+0670 <span class="keyword">try</span>
+0671     <span class="comment">% Rotate XYt</span>
+0672     camorbit(cax, d(1), d(2), <span class="string">'camera'</span>, [0 0 1]);              
+0673 <span class="keyword">catch</span>
+0674     <span class="comment">% Error, so release mouse down</span>
+0675     <a href="#_sub6" class="code" title="subfunction mouseup(src, eventData,hf)">mouseup</a>([],[],hf);
+0676 <span class="keyword">end</span>
+0677 <span class="keyword">end</span>
+0678 
+0679 <a name="_sub10" href="#_subfunctions" class="code">function vcw_rotz(s, d, cax, hf)    </a>
+0680 <span class="comment">%     hf.UserData.CameraPosition=cax.CameraPosition;</span>
+0681 d = <a href="#_sub8" class="code" title="subfunction d = check_vals(s, d)">check_vals</a>(s, d);
+0682 <span class="keyword">try</span>
+0683     <span class="comment">% Rotate Z</span>
+0684     camroll(cax, d(2));        
+0685 <span class="keyword">catch</span>
+0686     <span class="comment">% Error, so release mouse down</span>
+0687     <a href="#_sub6" class="code" title="subfunction mouseup(src, eventData,hf)">mouseup</a>([],[],hf);
+0688 <span class="keyword">end</span>
+0689 <span class="keyword">end</span>
+0690 
+0691 <a name="_sub11" href="#_subfunctions" class="code">function vcw_zoom(s, d, cax, hf)</a>
+0692 d = <a href="#_sub8" class="code" title="subfunction d = check_vals(s, d)">check_vals</a>(s, d);
+0693 <span class="comment">% Zoom</span>
+0694 d = (1 - 0.01 * sign(d(2))) ^ abs(d(2));
+0695 <span class="keyword">try</span>
+0696     camzoom(cax, d);
+0697 <span class="keyword">catch</span>
+0698     <span class="comment">% Error, so release mouse down</span>
+0699     <a href="#_sub6" class="code" title="subfunction mouseup(src, eventData,hf)">mouseup</a>([],[],hf);
+0700 <span class="keyword">end</span>
+0701 <span class="keyword">end</span>
+0702 
+0703 <a name="_sub12" href="#_subfunctions" class="code">function vcw_zoomz(s, d, cax, hf)</a>
+0704 d = <a href="#_sub8" class="code" title="subfunction d = check_vals(s, d)">check_vals</a>(s, d);
+0705 <span class="comment">% Zoom by moving towards the camera</span>
+0706 d = (1 - 0.01 * sign(d(2))) ^ abs(d(2)) - 1;
+0707 <span class="keyword">try</span>
+0708     camdolly(cax, 0, 0, d, <span class="string">'fixtarget'</span>, <span class="string">'camera'</span>);
+0709 <span class="keyword">catch</span>
+0710     <span class="comment">% Error, so release mouse down</span>
+0711     <a href="#_sub6" class="code" title="subfunction mouseup(src, eventData,hf)">mouseup</a>([],[],hf);
+0712 <span class="keyword">end</span>
+0713 <span class="keyword">end</span>
+0714 
+0715 <a name="_sub13" href="#_subfunctions" class="code">function vcw_pan(s, d, cax, hf)</a>
+0716 d = <a href="#_sub8" class="code" title="subfunction d = check_vals(s, d)">check_vals</a>(s, d);
+0717 <span class="keyword">try</span>
+0718     <span class="comment">% Pan</span>
+0719     camdolly(cax, d(1), d(2), 0, <span class="string">'movetarget'</span>, <span class="string">'pixels'</span>);
+0720 <span class="keyword">catch</span>
+0721     <span class="comment">% Error, so release mouse down</span>
+0722     <a href="#_sub6" class="code" title="subfunction mouseup(src, eventData,hf)">mouseup</a>([],[],hf);
+0723 <span class="keyword">end</span>
+0724 <span class="keyword">end</span>
+0725 
+0726 <a name="_sub14" href="#_subfunctions" class="code">function colorbarLocSet(hf,locOpt)</a>
+0727 H=findobj(hf,<span class="string">'Type'</span>,<span class="string">'colorbar'</span>); <span class="comment">%Handle set</span>
+0728 <span class="keyword">for</span> q=1:1:numel(H)
+0729     <span class="keyword">if</span> isa(locOpt,<span class="string">'cell'</span>)
+0730         set(H(q),<span class="string">'Location'</span>,locOpt{q});
+0731     <span class="keyword">else</span>
+0732         set(H(q),<span class="string">'Location'</span>,locOpt);
+0733     <span class="keyword">end</span>
+0734 <span class="keyword">end</span>
+0735 <span class="keyword">end</span>
+0736 
+0737 
+0738 <a name="_sub15" href="#_subfunctions" class="code">function checkAxisLimits(hf)</a>
+0739 
+0740 h = findobj(hf, <span class="string">'Type'</span>, <span class="string">'axes'</span>, <span class="string">'-depth'</span>, 1)'; <span class="comment">%All axis handles</span>
+0741 <span class="keyword">if</span> ~isempty(h)
+0742     <span class="keyword">for</span> h = findobj(hf, <span class="string">'Type'</span>, <span class="string">'axes'</span>, <span class="string">'-depth'</span>, 1)'
+0743         axis(h);
+0744         
+0745         xLim=get(h,<span class="string">'xlim'</span>);
+0746         yLim=get(h,<span class="string">'ylim'</span>);
+0747         zLim=get(h,<span class="string">'zlim'</span>);
+0748         
+0749         wx=abs(diff(xlim));
+0750         wy=abs(diff(ylim));
+0751         wz=abs(diff(zlim));
+0752         
+0753         w_max=max([wx wy wz]);
+0754         min_w=1e-3;
+0755         <span class="keyword">if</span> w_max&lt;min_w
+0756             w_max=min_w;
+0757         <span class="keyword">end</span>
+0758         
+0759         w_min=w_max/10;
+0760         <span class="keyword">if</span> w_min&lt;min_w
+0761             w_min=min_w;
+0762         <span class="keyword">end</span>
+0763         w_add=[-w_min w_min]/2;       
+0764         
+0765         <span class="keyword">if</span> wx&lt;w_min
+0766             set(h,<span class="string">'xlim'</span>,xLim+w_add);
+0767         <span class="keyword">end</span>
+0768         
+0769         <span class="keyword">if</span> wy&lt;w_min
+0770             set(h,<span class="string">'ylim'</span>,yLim+w_add);
+0771         <span class="keyword">end</span>
+0772         
+0773         <span class="keyword">if</span> wz&lt;w_min
+0774             set(h,<span class="string">'zlim'</span>,zLim+w_add);
+0775         <span class="keyword">end</span>              
+0776     <span class="keyword">end</span>
+0777     drawnow; 
+0778 <span class="keyword">end</span>
+0779 
+0780 <span class="keyword">end</span>
+0781 
+0782 <span class="comment">%%</span>
+0783 <a name="_sub16" href="#_subfunctions" class="code">function quit_vcw_toggle(~,~,indputCell)</a>
+0784 <a href="#_sub17" class="code" title="subfunction quit_vcw(hf,buttonOpt,hp)">quit_vcw</a>(indputCell{1},indputCell{2},indputCell{3})
+0785 <span class="keyword">end</span>
+0786 
+0787 <span class="comment">%%</span>
+0788 
+0789 <a name="_sub17" href="#_subfunctions" class="code">function quit_vcw(hf,buttonOpt,hp)</a>
+0790 
+0791 <span class="comment">% Restore colorbar state</span>
+0792 figUserDataStruct=get(hf,<span class="string">'UserData'</span>);
+0793 <span class="keyword">if</span> isfield(figUserDataStruct,<span class="string">'colorbarLocSet'</span>)
+0794     <a href="#_sub14" class="code" title="subfunction colorbarLocSet(hf,locOpt)">colorbarLocSet</a>(hf,figUserDataStruct.colorbarLocSet);
+0795 <span class="keyword">end</span>
+0796 <span class="comment">% Enable Plottools Buttons and Exploration Buttons</span>
+0797 initialState.toolbar = findobj(allchild(hf),<span class="string">'flat'</span>,<span class="string">'Type'</span>,<span class="string">'uitoolbar'</span>);
+0798 <span class="keyword">if</span> ~isempty(initialState.toolbar)
+0799     initialState.ptButtons = [uigettool(initialState.toolbar,<span class="string">'Plottools.PlottoolsOff'</span>), <span class="keyword">...</span>
+0800         uigettool(initialState.toolbar,<span class="string">'Plottools.PlottoolsOn'</span>),<span class="keyword">...</span>
+0801         uigettool(initialState.toolbar,<span class="string">'Exploration.Rotate'</span>), <span class="keyword">...</span>
+0802         uigettool(initialState.toolbar,<span class="string">'Exploration.Pan'</span>),<span class="keyword">...</span>
+0803         uigettool(initialState.toolbar,<span class="string">'Exploration.ZoomIn'</span>),<span class="keyword">...</span>
+0804         uigettool(initialState.toolbar,<span class="string">'Exploration.ZoomOut'</span>),<span class="keyword">...</span>
+0805         ];
+0806     initialState.ptState = get (initialState.ptButtons,<span class="string">'Enable'</span>);
+0807     set (initialState.ptButtons,<span class="string">'Enable'</span>,<span class="string">'on'</span>);
+0808 <span class="keyword">end</span>
+0809 
+0810 <span class="comment">%         hp=findobj(hf,'Tag','tBar');</span>
+0811 set(hp,<span class="string">'State'</span>,<span class="string">'Off'</span>);
+0812 set(hp,<span class="string">'TooltipString'</span>,<span class="string">'Activate View Control Widget (or enter v)'</span>);
+0813 
+0814 <span class="comment">% Restore figure settings except for key press (if empty) to allow for</span>
+0815 <span class="comment">% reactivation with v key</span>
+0816 hf.WindowButtonDownFcn=hf.UserData.WindowButtonDownFcn;
+0817 hf.WindowButtonUpFcn=hf.UserData.WindowButtonUpFcn;
+0818 <span class="keyword">if</span> isempty(hf.UserData.KeyPressFcn)
+0819     hf.KeyPressFcn={@<a href="#_sub2" class="code" title="subfunction keyPress_wait(src,eventData,buttonOpt,hp,hf)">keyPress_wait</a>,buttonOpt,hp,hf};<span class="comment">%[];%hf.UserData.KeyPressFcn;</span>
+0820 <span class="keyword">else</span>
+0821     hf.KeyPressFcn=hf.UserData.KeyPressFcn;
+0822 <span class="keyword">end</span>
+0823 hf.WindowScrollWheelFcn=hf.UserData.WindowScrollWheelFcn;
+0824 hf.BusyAction=hf.UserData.BusyAction;
+0825 hf.MenuBar=<span class="string">'figure'</span>;
+0826 
+0827 <span class="keyword">end</span>
+0828 
+0829  
+0830 <span class="comment">%%</span>
+0831 <span class="comment">% _*GIBBON footer text*_</span>
+0832 <span class="comment">%</span>
+0833 <span class="comment">% License: &lt;https://github.com/gibbonCode/GIBBON/blob/master/LICENSE&gt;</span>
+0834 <span class="comment">%</span>
+0835 <span class="comment">% GIBBON: The Geometry and Image-based Bioengineering add-On. A toolbox for</span>
+0836 <span class="comment">% image segmentation, image-based modeling, meshing, and finite element</span>
+0837 <span class="comment">% analysis.</span>
+0838 <span class="comment">%</span>
+0839 <span class="comment">% Copyright (C) 2018  Kevin Mattheus Moerman</span>
+0840 <span class="comment">%</span>
+0841 <span class="comment">% This program is free software: you can redistribute it and/or modify</span>
+0842 <span class="comment">% it under the terms of the GNU General Public License as published by</span>
+0843 <span class="comment">% the Free Software Foundation, either version 3 of the License, or</span>
+0844 <span class="comment">% (at your option) any later version.</span>
+0845 <span class="comment">%</span>
+0846 <span class="comment">% This program is distributed in the hope that it will be useful,</span>
+0847 <span class="comment">% but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+0848 <span class="comment">% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+0849 <span class="comment">% GNU General Public License for more details.</span>
+0850 <span class="comment">%</span>
+0851 <span class="comment">% You should have received a copy of the GNU General Public License</span>
+0852 <span class="comment">% along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

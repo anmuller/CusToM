@@ -1,0 +1,312 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of UpperTrunkHead</title>
+  <meta name="keywords" content="UpperTrunkHead">
+  <meta name="description" content="Addition of an upper trunk / head model">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html Functions --><!-- ../../menu.html Models --><!-- ../menu.html Osteoarticular --><!-- menu.html UpperTrunk -->
+<h1>UpperTrunkHead
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>Addition of an upper trunk / head model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [OsteoArticularModel]=UpperTrunkHead(OsteoArticularModel,k,Mass,AttachmentPoint) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Addition of an upper trunk / head model
+   This upper trunk / head model contains one solid (thorax/head),
+   exhibits 3 dof for lower trunk / thorax joint 
+
+    Based on:
+    - Damsgaard, M., Rasmussen, J., Christensen, S. T., Surma, E., &amp; De Zee, M., 2006.
+     Analysis of musculoskeletal systems in the AnyBody Modeling System. Simulation Modelling Practice and Theory, 14(8), 1100-1111.
+
+   INPUT
+   - OsteoArticularModel: osteo-articular model of an already existing
+   model (see the Documentation for the structure)
+   - k: homothety coefficient for the geometrical parameters (defined as
+   the subject size in cm divided by 180)
+   - Mass: mass of the solids
+   - AttachmentPoint: name of the attachment point of the model on the
+   already existing model (character string)
+   OUTPUT
+   - OsteoArticularModel: new osteo-articular model (see the Documentation
+   for the structure) 
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Functions/AlgoMathsModel/Huygens.html" class="code" title="function [Io] = Huygens(OG,Ig,m)">Huygens</a>	Computation of inertia matrix at point O</li><li><a href="../../../../Functions/AlgoMathsModel/distance_point.html" class="code" title="function [L,Typ] = distance_point(Point1,Bone1,Point2,Bone2,Human_model,q)">distance_point</a>	Computation of the distance between two points</li><li><a href="../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>	Computation of inertia matrix from radius of gyration</li><li><a href="../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>	Addition of a sister to a solid</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [OsteoArticularModel]=UpperTrunkHead(OsteoArticularModel,k,Mass,AttachmentPoint)</a>
+0002 <span class="comment">% Addition of an upper trunk / head model</span>
+0003 <span class="comment">%   This upper trunk / head model contains one solid (thorax/head),</span>
+0004 <span class="comment">%   exhibits 3 dof for lower trunk / thorax joint</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%    Based on:</span>
+0007 <span class="comment">%    - Damsgaard, M., Rasmussen, J., Christensen, S. T., Surma, E., &amp; De Zee, M., 2006.</span>
+0008 <span class="comment">%     Analysis of musculoskeletal systems in the AnyBody Modeling System. Simulation Modelling Practice and Theory, 14(8), 1100-1111.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   INPUT</span>
+0011 <span class="comment">%   - OsteoArticularModel: osteo-articular model of an already existing</span>
+0012 <span class="comment">%   model (see the Documentation for the structure)</span>
+0013 <span class="comment">%   - k: homothety coefficient for the geometrical parameters (defined as</span>
+0014 <span class="comment">%   the subject size in cm divided by 180)</span>
+0015 <span class="comment">%   - Mass: mass of the solids</span>
+0016 <span class="comment">%   - AttachmentPoint: name of the attachment point of the model on the</span>
+0017 <span class="comment">%   already existing model (character string)</span>
+0018 <span class="comment">%   OUTPUT</span>
+0019 <span class="comment">%   - OsteoArticularModel: new osteo-articular model (see the Documentation</span>
+0020 <span class="comment">%   for the structure)</span>
+0021 <span class="comment">%________________________________________________________</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% Licence</span>
+0024 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0025 <span class="comment">%________________________________________________________</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0028 <span class="comment">% Georges Dumont</span>
+0029 <span class="comment">%________________________________________________________</span>
+0030 list_solid={<span class="string">'UpperTrunk_J1'</span> <span class="string">'UpperTrunk_J2'</span> <span class="string">'ThoraxHead'</span>};
+0031     
+0032 <span class="comment">%% solid numbering incremation</span>
+0033 
+0034 s=size(OsteoArticularModel,2)+1;  <span class="comment">%#ok&lt;NASGU&gt; % number of the first solid</span>
+0035 <span class="keyword">for</span> i=1:size(list_solid,2)      <span class="comment">% each solid numbering: s_&quot;nom du solide&quot;</span>
+0036     <span class="keyword">if</span> i==1
+0037         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s;'</span>))
+0038     <span class="keyword">else</span>
+0039         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s_'</span>,list_solid{i-1},<span class="string">'+1;'</span>))
+0040     <span class="keyword">end</span>
+0041 <span class="keyword">end</span>  
+0042     
+0043 <span class="comment">% find the number of the mother from the attachment point: 'attachment_pt'</span>
+0044 <span class="keyword">if</span> ~numel(AttachmentPoint)
+0045     s_mother=0;
+0046     pos_attachment_pt=[0 0 0]';
+0047 <span class="keyword">else</span>
+0048     test=0;
+0049     <span class="keyword">for</span> i=1:numel(OsteoArticularModel)
+0050         <span class="keyword">for</span> j=1:size(OsteoArticularModel(i).anat_position,1)
+0051             <span class="keyword">if</span> strcmp(AttachmentPoint,OsteoArticularModel(i).anat_position{j,1})
+0052                s_mother=i;
+0053                pos_attachment_pt=OsteoArticularModel(i).anat_position{j,2}+OsteoArticularModel(s_mother).c;
+0054                test=1;
+0055                <span class="keyword">break</span>
+0056             <span class="keyword">end</span>
+0057         <span class="keyword">end</span>
+0058         <span class="keyword">if</span> i==numel(OsteoArticularModel) &amp;&amp; test==0
+0059             error([AttachmentPoint <span class="string">' is no existent'</span>])        
+0060         <span class="keyword">end</span>       
+0061     <span class="keyword">end</span>
+0062     <span class="keyword">if</span> OsteoArticularModel(s_mother).child == 0      <span class="comment">% if the mother don't have any child</span>
+0063         OsteoArticularModel(s_mother).child = eval([<span class="string">'s_'</span> list_solid{1}]);    <span class="comment">% the child of this mother is this solid</span>
+0064     <span class="keyword">else</span>
+0065         [OsteoArticularModel]=<a href="../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval([<span class="string">'s_'</span> list_solid{1}]));   <span class="comment">% recherche de la derni�e soeur</span>
+0066     <span class="keyword">end</span>
+0067 <span class="keyword">end</span>    
+0068 <span class="comment">%%</span>
+0069 <span class="comment">% Rigid upper trunk segments mass</span>
+0070 UpperTrunk_Mass = Mass.Thorax_Mass + 2*(Mass.Scapula_Mass + Mass.Clavicle_Mass); <span class="comment">% equal to McConville uppertrunk mass</span>
+0071 <span class="comment">% Center of mass location with respect to the reference frame of the thorax</span>
+0072 CoM_Thorax = k*[0.060 0.303 0];
+0073 <span class="comment">% Node locations</span>
+0074 Thorax_T12L1JointNode = k*[0.022 0.154 0] - CoM_Thorax;
+0075 Thorax_C1HatNode = k*[0.026 0.6 0] - CoM_Thorax;
+0076 Thorax_T1C5 = k*[0.013 0.462 0] - CoM_Thorax;
+0077 Thorax_scjJointCenter=k*[0 0.1240 0]; <span class="comment">%#ok&lt;NASGU&gt;</span>
+0078 NeckNode=Thorax_C1HatNode-Thorax_T12L1JointNode;
+0079 
+0080 <span class="comment">% Center of mass location with respect to the reference frame of the Skull</span>
+0081 Skull_NeckNode = k*[0 0 0]+NeckNode;
+0082 Skull_TopOfHead = k*[0 0.14 0]+NeckNode;
+0083 CoM_bary= (-Thorax_T12L1JointNode*UpperTrunk_Mass + Skull_NeckNode*Mass.Skull_Mass)/(UpperTrunk_Mass+Mass.Skull_Mass);
+0084 diff=-Thorax_T12L1JointNode-CoM_bary;
+0085 
+0086 
+0087 <span class="comment">%%                     Scaling inertial parameters</span>
+0088 
+0089 <span class="comment">% distance between 'Pelvis_L5JointNode' and 'Thorax_T1C5'</span>
+0090 Lpts={<span class="string">'Pelvis_LowerTrunkNode'</span>;<span class="string">'LowerTrunk_UpperTrunkNode'</span>};
+0091 <span class="keyword">for</span> pp=1:2
+0092     test=0;
+0093     <span class="keyword">for</span> i=1:numel(OsteoArticularModel)
+0094         <span class="keyword">for</span> j=1:size(OsteoArticularModel(i).anat_position,1)
+0095             <span class="keyword">if</span> strcmp(Lpts{pp},OsteoArticularModel(i).anat_position{j,1})
+0096                Lpts{pp,2}=i; <span class="comment">% solid number</span>
+0097                Lpts{pp,3}=j; <span class="comment">% number of the anatomical landmarks</span>
+0098                test=1;
+0099                <span class="keyword">break</span>
+0100             <span class="keyword">end</span>
+0101         <span class="keyword">end</span>
+0102         <span class="keyword">if</span> i==numel(OsteoArticularModel) &amp;&amp; test==0
+0103             error([Lpts{pp} <span class="string">' is no existent'</span>])        
+0104         <span class="keyword">end</span>       
+0105     <span class="keyword">end</span>
+0106 <span class="keyword">end</span>
+0107 Length_Thorax = <a href="../../../../Functions/AlgoMathsModel/distance_point.html" class="code" title="function [L,Typ] = distance_point(Point1,Bone1,Point2,Bone2,Human_model,q)">distance_point</a>(Lpts{1,3},Lpts{1,2},Lpts{2,3},Lpts{2,2},OsteoArticularModel,zeros(numel(OsteoArticularModel),1)) <span class="keyword">...</span>
+0108     +norm(Thorax_T12L1JointNode-Thorax_T1C5);
+0109 
+0110 Length_Skull = norm(Skull_TopOfHead - Skull_NeckNode);
+0111 
+0112     <span class="comment">%% [&quot;Adjustments to McConville et al. and Young et al. body segment inertial parameters&quot;] R. Dumas</span>
+0113     <span class="comment">% ------------------------- Thorax ----------------------------------------</span>
+0114     [I_Thorax]=<a href="../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>([27 25 28 18 2 4*1i], UpperTrunk_Mass, [0 0 0], Length_Thorax);
+0115     <span class="comment">% ------------------------- Skull ----------------------------------------</span>
+0116     [I_Skull]=<a href="../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>([31 25 33 9*1i 2*1i 3],Mass.Skull_Mass, [0 0 0], Length_Skull); 
+0117 
+0118 Ihead=[I_Skull(1) I_Skull(4) I_Skull(5); I_Skull(4) I_Skull(2) I_Skull(6); I_Skull(5) I_Skull(6) I_Skull(3)];
+0119 Ithorax=[I_Thorax(1) I_Thorax(4) I_Thorax(5); I_Thorax(4) I_Thorax(2) I_Thorax(6); I_Thorax(5) I_Thorax(6) I_Thorax(3)];
+0120 
+0121 Ihead_dep=<a href="../../../../Functions/AlgoMathsModel/Huygens.html" class="code" title="function [Io] = Huygens(OG,Ig,m)">Huygens</a>(Skull_NeckNode-CoM_bary,Ihead,Mass.Skull_Mass);
+0122 Ithorax_dep=<a href="../../../../Functions/AlgoMathsModel/Huygens.html" class="code" title="function [Io] = Huygens(OG,Ig,m)">Huygens</a>(Thorax_T12L1JointNode-CoM_bary,Ithorax,UpperTrunk_Mass);
+0123 Iglob=Ihead_dep+Ithorax_dep;
+0124 
+0125     <span class="comment">%%                     Definition of anatomical landmarks</span>
+0126 
+0127 <span class="comment">% ------------------------- Thorax ----------------------------------------</span>
+0128 Thorax_T12L1JointNode = k*[0.022 0.154 0] - CoM_Thorax+diff;
+0129 Thorax_C1HatNode = k*[0.026 0.6 0] - CoM_Thorax+diff;
+0130 Thorax_T1C5 = k*[0.013 0.462 0] - CoM_Thorax+diff;
+0131 Thorax_scjJointRightNode = k*[0.0010 0.1240 0.0207]+diff; <span class="comment">%#ok&lt;NASGU&gt;</span>
+0132 Thorax_scjJointLeftNode = k*[0.0010 0.1240 -0.0207]+diff; <span class="comment">%#ok&lt;NASGU&gt;</span>
+0133 Thorax_ShoulderRightNode=k*[-0.0408 0.1099 0.1929]-Thorax_T12L1JointNode;
+0134 Thorax_ShoulderLeftNode=k*[-0.0408 0.1099 -0.1929]-Thorax_T12L1JointNode;
+0135 Thorax_scjJointCenter=k*[0 0.1240 0]+diff; <span class="comment">%#ok&lt;NASGU&gt;</span>
+0136 NeckNode=Thorax_C1HatNode-Thorax_T12L1JointNode;
+0137 
+0138 <span class="comment">% ----------------------- Skull -------------------------------------------</span>
+0139 Skull_NeckNode = k*[0 0 0]+NeckNode+diff;
+0140 Skull_TopOfHead = k*[0 0.14 0]+NeckNode+diff;
+0141 RFHD = k*[0.09 0.095 0.065]+NeckNode+diff;
+0142 LFHD = k*[0.09 0.095 -0.065] +NeckNode+diff;
+0143 RBHD = k*[-0.08 0.08 0.07] +NeckNode+diff;
+0144 LBHD = k*[-0.08 0.08 -0.07] +NeckNode+diff;
+0145 
+0146 <span class="comment">%% Definition of anatomical landmarks</span>
+0147 
+0148 Thorax_position_set= {<span class="keyword">...</span>
+0149     <span class="string">'STRN'</span>, k*[0.095 -0.055 0]'+diff'; <span class="keyword">...</span>
+0150     <span class="string">'CLAV'</span>, k*[0.01 0.13 0]'+diff'; <span class="keyword">...</span>
+0151     <span class="string">'T10'</span>, k*[-0.12 -0.115 0]'+diff'; <span class="keyword">...</span>
+0152     <span class="string">'T8'</span>, k*[-0.13 -0.05 0]'+diff'; <span class="keyword">...</span>
+0153     <span class="string">'T12'</span>, k*[-0.10 -0.175 0]'+diff'; <span class="keyword">...</span>
+0154     <span class="string">'C7'</span>, k*[-0.105 0.165 0]'+diff'; <span class="keyword">...</span>
+0155     <span class="string">'RSHO'</span>, k*[-0.0416 0.1707 0.1853]'+diff'; <span class="keyword">...</span>
+0156     <span class="string">'LSHO'</span>, k*[-0.0416 0.1707 -0.1853]'+diff'; <span class="keyword">...</span>
+0157     <span class="string">'Thorax_ShoulderRightNode'</span>, Thorax_ShoulderRightNode'+Thorax_T12L1JointNode'; <span class="keyword">...</span><span class="comment"> %+diff already put into T12L1</span>
+0158     <span class="string">'Thorax_ShoulderLeftNode'</span>, Thorax_ShoulderLeftNode'+Thorax_T12L1JointNode'; <span class="keyword">...</span>
+0159 <span class="comment">%     'NeckNode', NeckNode'; ...</span>
+0160     <span class="string">'Thorax_T1C5'</span>, Thorax_T1C5'; <span class="keyword">...</span>
+0161     <span class="string">'Thorax_T12L1JointNode'</span>, Thorax_T12L1JointNode'; <span class="keyword">...</span>
+0162     <span class="string">'RFHD'</span>, RFHD'; <span class="keyword">...</span>
+0163     <span class="string">'LFHD'</span>, LFHD'; <span class="keyword">...</span>
+0164     <span class="string">'RBHD'</span>, RBHD'; <span class="keyword">...</span>
+0165     <span class="string">'LBHD'</span>, LBHD'; <span class="keyword">...</span>
+0166     <span class="string">'RMHD'</span>, 0.5*(RFHD'+RBHD');
+0167     <span class="string">'LMHD'</span>,0.5*(LFHD'+LBHD');
+0168     <span class="string">'Skull_TopOfHead'</span>, Skull_TopOfHead'; <span class="keyword">...</span>
+0169     <span class="string">'Skull_NeckNode'</span>, Skull_NeckNode'; <span class="keyword">...</span>
+0170     <span class="string">'CoM_bary'</span>, CoM_bary';<span class="keyword">...</span>
+0171     };
+0172 
+0173                     <span class="comment">%% %% &quot;Human_model&quot; structure generation</span>
+0174  
+0175 num_solid=0;
+0176 <span class="comment">%% Thorax</span>
+0177     <span class="comment">% UpperTrunk_J1</span>
+0178     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0179     name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0180     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0181     OsteoArticularModel(incr_solid).name=name;               <span class="comment">% solid name</span>
+0182     OsteoArticularModel(incr_solid).sister=0;                
+0183     OsteoArticularModel(incr_solid).child=s_UpperTrunk_J2;                   
+0184     OsteoArticularModel(incr_solid).mother=s_mother;           
+0185     OsteoArticularModel(incr_solid).a=[0 0 1]'; 
+0186     OsteoArticularModel(incr_solid).joint=1;  
+0187     OsteoArticularModel(incr_solid).limit_inf=-0.2;
+0188     OsteoArticularModel(incr_solid).limit_sup=0.2;
+0189     OsteoArticularModel(incr_solid).linear_constraint=[];
+0190     OsteoArticularModel(incr_solid).Visual=0;
+0191     OsteoArticularModel(incr_solid).b=pos_attachment_pt;
+0192     OsteoArticularModel(incr_solid).c=[0 0 0]';
+0193     OsteoArticularModel(incr_solid).m=0;                 
+0194     OsteoArticularModel(incr_solid).I=zeros(3,3);
+0195     OsteoArticularModel(incr_solid).comment=<span class="string">'Trunk Flexion(-)/Extension(+)'</span>;
+0196 
+0197     <span class="comment">% UpperTrunk_J2</span>
+0198     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0199     name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0200     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0201     OsteoArticularModel(incr_solid).name=name;               <span class="comment">% solid name</span>
+0202     OsteoArticularModel(incr_solid).sister=0;                
+0203     OsteoArticularModel(incr_solid).child=s_ThoraxHead;                   
+0204     OsteoArticularModel(incr_solid).mother=s_UpperTrunk_J1;           
+0205     OsteoArticularModel(incr_solid).a=[1 0 0]';
+0206     OsteoArticularModel(incr_solid).joint=1;
+0207     OsteoArticularModel(incr_solid).limit_inf=-0.2;
+0208     OsteoArticularModel(incr_solid).limit_sup=0.2;
+0209     OsteoArticularModel(incr_solid).linear_constraint=[];
+0210     OsteoArticularModel(incr_solid).Visual=0;
+0211     OsteoArticularModel(incr_solid).b=[0 0 0]';  
+0212     OsteoArticularModel(incr_solid).c=[0 0 0]';
+0213     OsteoArticularModel(incr_solid).m=0;                 
+0214     OsteoArticularModel(incr_solid).I=zeros(3,3);
+0215     OsteoArticularModel(incr_solid).comment=<span class="string">'Trunk Axial Rotation Right(+)/Left(-)'</span>;
+0216 
+0217     <span class="comment">% Thorax</span>
+0218     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0219     name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0220     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0221     OsteoArticularModel(incr_solid).name=name;               <span class="comment">% solid name</span>
+0222     OsteoArticularModel(incr_solid).sister=0;                
+0223     OsteoArticularModel(incr_solid).child=0;                   
+0224     OsteoArticularModel(incr_solid).mother=s_UpperTrunk_J2;           
+0225     OsteoArticularModel(incr_solid).a=[0 1 0]';    
+0226     OsteoArticularModel(incr_solid).joint=1;
+0227     OsteoArticularModel(incr_solid).limit_inf=-0.2;
+0228     OsteoArticularModel(incr_solid).limit_sup=0.2;
+0229     OsteoArticularModel(incr_solid).Visual=1;
+0230     OsteoArticularModel(incr_solid).calib_k_constraint=[];
+0231     OsteoArticularModel(incr_solid).b=[0 0 0]';  
+0232     OsteoArticularModel(incr_solid).c=CoM_bary';
+0233     OsteoArticularModel(incr_solid).m=UpperTrunk_Mass+Mass.Skull_Mass;
+0234     OsteoArticularModel(incr_solid).I=Iglob;
+0235     OsteoArticularModel(incr_solid).anat_position=Thorax_position_set;
+0236     OsteoArticularModel(incr_solid).L={<span class="string">'Pelvis_L5JointNode'</span>;<span class="string">'Thorax_T1C5'</span>};
+0237     OsteoArticularModel(incr_solid).comment=<span class="string">'Trunk Lateral Bending Right(+)/Left(-)'</span>;
+0238 
+0239 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

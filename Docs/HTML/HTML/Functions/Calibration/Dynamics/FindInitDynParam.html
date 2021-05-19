@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of FindInitDynParam</title>
+  <meta name="keywords" content="FindInitDynParam">
+  <meta name="description" content="Identification of the stadium solid parameters from inertial parameters">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- ../menu.html Calibration --><!-- menu.html Dynamics -->
+<h1>FindInitDynParam
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Identification of the stadium solid parameters from inertial parameters</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [Human_model] = FindInitDynParam(Human_model) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Identification of the stadium solid parameters from inertial parameters
+
+   INPUT
+   - Human_model: osteo-articular model (see the Documentation for the structure)
+   OUTPUT
+   - Human_model: osteo-articular model with additionnal stadium solid
+   parameters (see the Documentation for the structure)
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Functions/AlgoMathsModel/distance_point.html" class="code" title="function [L,Typ] = distance_point(Point1,Bone1,Point2,Bone2,Human_model,q)">distance_point</a>	Computation of the distance between two points</li><li><a href="DynParametersComputation.html" class="code" title="function [Masse,Zc,Ix,Iy,Iz] = DynParametersComputation(D,r0,t0,r1,t1,h)">DynParametersComputation</a>	Computation of the inertial parameters of a stadium solid from its geometrical parameters</li><li><a href="distance_point_anthropo.html" class="code" title="function [L] = distance_point_anthropo(Point1,Bone1,Human_model,q,s)">distance_point_anthropo</a>	Computation of the distance between a point and the center of mass of a solid</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="DynamicCalibration.html" class="code" title="function [BiomechanicalModel] = DynamicCalibration(ModelParameters,AnalysisParameters, BiomechanicalModel)">DynamicCalibration</a>	Calibration of the inertial parameters</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Human_model] = FindInitDynParam(Human_model)</a>
+0002 <span class="comment">% Identification of the stadium solid parameters from inertial parameters</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the structure)</span>
+0006 <span class="comment">%   OUTPUT</span>
+0007 <span class="comment">%   - Human_model: osteo-articular model with additionnal stadium solid</span>
+0008 <span class="comment">%   parameters (see the Documentation for the structure)</span>
+0009 <span class="comment">%________________________________________________________</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% Licence</span>
+0012 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0013 <span class="comment">%________________________________________________________</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0016 <span class="comment">% Georges Dumont</span>
+0017 <span class="comment">%________________________________________________________</span>
+0018 
+0019 <span class="comment">%% On fixe des param�res (cylindre)</span>
+0020 
+0021 nb_solid_opt = numel([Human_model.L]);
+0022 
+0023 t1=zeros(nb_solid_opt,1);
+0024 t0=zeros(nb_solid_opt,1);
+0025 D=1000*ones(nb_solid_opt,1);
+0026 
+0027 <span class="comment">%% On cherche les dimensions g�m�riques pour coller aux donn�s anthropom�riques</span>
+0028 <span class="comment">%% Looking for geometrical dimensions for fitting with anthropometric data</span>
+0029 
+0030 num_solid_L = 0; <span class="comment">% num�o du solide �optimiser (solid number)</span>
+0031 <span class="keyword">for</span> i=1:numel(Human_model) <span class="comment">% Pour chaque solide (loop for each solid)</span>
+0032     <span class="keyword">if</span> numel(Human_model(i).L) ~= 0 <span class="comment">% Pour les solides poss�ant le champ &quot;L&quot;</span>
+0033         num_solid_L = num_solid_L + 1;  <span class="comment">% incr�entation</span>
+0034         <span class="comment">% On d�lare les variables symboliques</span>
+0035         syms(<span class="string">'r0'</span>,<span class="string">'real'</span>)
+0036         syms(<span class="string">'r1'</span>,<span class="string">'real'</span>)
+0037         <span class="comment">% Donn�s anthropo</span>
+0038             <span class="comment">% masse</span>
+0039             MassAnthro = Human_model(i).m;
+0040             <span class="comment">% position centre de masse / center of mass position</span>
+0041                 <span class="comment">% on cherche la position des points / looking for points position</span>
+0042                 <span class="keyword">for</span> s=1:numel(Human_model) <span class="comment">% pour chaque solide (loop for each solid)</span>
+0043                     <span class="keyword">for</span> p=1:size(Human_model(s).anat_position,1) <span class="comment">% pour chaque position anatomique de ce solide</span>
+0044                         <span class="keyword">if</span> strcmp(Human_model(i).L{1,1},Human_model(s).anat_position{p,1})
+0045                             N_Bone1 = s; <span class="comment">% num�o du solide qui contient ce point (solid number to which this point belongs)</span>
+0046                             N_Point1 = p; <span class="comment">% positionnement de la position anatomique dans ce solide (number of anatomical position within the anatomical position list)</span>
+0047                         <span class="keyword">elseif</span> strcmp(Human_model(i).L{2,1},Human_model(s).anat_position{p,1})
+0048                             N_Bone2 = s; <span class="comment">% num�o du solide qui contient ce point (solid number to which this point belongs)</span>
+0049                             N_Point2 = p; <span class="comment">% positionnement de la position anatomique dans ce solide (number of anatomical position within the anatomical position list)</span>
+0050                         <span class="keyword">end</span>
+0051                     <span class="keyword">end</span>
+0052                 <span class="keyword">end</span>
+0053             ZcAnthro = <a href="distance_point_anthropo.html" class="code" title="function [L] = distance_point_anthropo(Point1,Bone1,Human_model,q,s)">distance_point_anthropo</a>(N_Point1,N_Bone1,Human_model,zeros(numel(Human_model),1),i);
+0054         <span class="comment">% calcul de la hauteur / computation of height</span>
+0055         [h,Typ] = <a href="../../../Functions/AlgoMathsModel/distance_point.html" class="code" title="function [L,Typ] = distance_point(Point1,Bone1,Point2,Bone2,Human_model,q)">distance_point</a>(N_Point1,N_Bone1,N_Point2,N_Bone2,Human_model,zeros(numel(Human_model),1));       
+0056         <span class="comment">% Equations �r�oudre / equations to solve</span>
+0057         [Mass,Zc] = <a href="DynParametersComputation.html" class="code" title="function [Masse,Zc,Ix,Iy,Iz] = DynParametersComputation(D,r0,t0,r1,t1,h)">DynParametersComputation</a>(D(num_solid_L),r0,t0(num_solid_L),r1,t1(num_solid_L),h);
+0058         eq1 = Mass == MassAnthro;
+0059         eq2 = Zc == ZcAnthro;
+0060         sys=solve([eq1 eq2],[r0 r1]);
+0061         <span class="comment">% Evaluation de la bonne solution (r0 et r1 &gt; 0)</span>
+0062         <span class="keyword">if</span> ~isempty(sys.r0) <span class="comment">% si il y a une solution (if the is a solution)</span>
+0063             <span class="keyword">for</span> sol = 1:numel(sys.r0)
+0064                 <span class="keyword">if</span> eval(sys.r0(sol))&gt;=0 &amp;&amp; eval(sys.r1(sol))&gt;=0
+0065                     r0 = eval(sys.r0(sol));
+0066                     r1 = eval(sys.r1(sol));
+0067                 <span class="keyword">end</span>
+0068             <span class="keyword">end</span>
+0069         <span class="keyword">else</span> <span class="comment">% pas de solution : donn�s inertielles nulles (no solution found: set inertia to 0)</span>
+0070             r0=0;
+0071             r1=0;
+0072         <span class="keyword">end</span>
+0073         <span class="comment">% Sauvegarde des donn�s dans le mod�e (save within the model)</span>
+0074         Human_model(i).ParamAnthropo.r0 = r0;
+0075         Human_model(i).ParamAnthropo.r1 = r1;
+0076         Human_model(i).ParamAnthropo.t0 = t0(num_solid_L);
+0077         Human_model(i).ParamAnthropo.t1 = t1(num_solid_L);
+0078         Human_model(i).ParamAnthropo.D = D(num_solid_L);
+0079         Human_model(i).ParamAnthropo.h = h;
+0080         Human_model(i).ParamAnthropo.Zc = ZcAnthro;
+0081         Human_model(i).ParamAnthropo.Typ = Typ;
+0082     <span class="keyword">end</span>
+0083 <span class="keyword">end</span>
+0084 
+0085 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

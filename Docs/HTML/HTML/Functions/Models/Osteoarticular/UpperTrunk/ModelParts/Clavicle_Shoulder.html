@@ -1,0 +1,247 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Clavicle_Shoulder</title>
+  <meta name="keywords" content="Clavicle_Shoulder">
+  <meta name="description" content="Addition of a thorax model">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../../menu.html Functions --><!-- ../../../menu.html Models --><!-- ../../menu.html Osteoarticular --><!-- ../menu.html UpperTrunk --><!-- menu.html ModelParts -->
+<h1>Clavicle_Shoulder
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>Addition of a thorax model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function [Human_model]= Clavicle_Shoulder(Human_model,k,Mass,Side,AttachmentPoint) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Addition of a thorax model
+   INPUT
+   - Human_model: osteo-articular model of an already existing
+   model (see the Documentation for the structure)
+   - k: homothety coefficient for the geometrical parameters (defined as
+   the subject size in cm divided by 180)
+   - Mass: mass of the solids
+   - AttachmentPoint: name of the attachment point of the model on the
+   already existing model (character string)
+   OUTPUT
+   - Human_model: new osteo-articular model (see the Documentation
+   for the structure) 
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________
+% Solid list</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="../../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>	Addition of a sister to a solid</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="../../../../../Functions/Models/Osteoarticular/UpperTrunk/UpperTrunkShoulder.html" class="code" title="function [OsteoArticularModel]= UpperTrunkShoulder(OsteoArticularModel,k,Mass,AttachmentPoint)">UpperTrunkShoulder</a>	Addition of an upper trunk model</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Human_model]= Clavicle_Shoulder(Human_model,k,Mass,Side,AttachmentPoint)</a>
+0002 <span class="comment">% Addition of a thorax model</span>
+0003 <span class="comment">%   INPUT</span>
+0004 <span class="comment">%   - Human_model: osteo-articular model of an already existing</span>
+0005 <span class="comment">%   model (see the Documentation for the structure)</span>
+0006 <span class="comment">%   - k: homothety coefficient for the geometrical parameters (defined as</span>
+0007 <span class="comment">%   the subject size in cm divided by 180)</span>
+0008 <span class="comment">%   - Mass: mass of the solids</span>
+0009 <span class="comment">%   - AttachmentPoint: name of the attachment point of the model on the</span>
+0010 <span class="comment">%   already existing model (character string)</span>
+0011 <span class="comment">%   OUTPUT</span>
+0012 <span class="comment">%   - Human_model: new osteo-articular model (see the Documentation</span>
+0013 <span class="comment">%   for the structure)</span>
+0014 <span class="comment">%________________________________________________________</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% Licence</span>
+0017 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0018 <span class="comment">%________________________________________________________</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0021 <span class="comment">% Georges Dumont</span>
+0022 <span class="comment">%________________________________________________________</span>
+0023 <span class="comment">%% Solid list</span>
+0024 
+0025 list_solid={<span class="string">'Clavicle_J1'</span> <span class="string">'Clavicle_J2'</span> <span class="string">'Clavicle'</span>};
+0026 
+0027 <span class="comment">%% Choix jambe droite ou gauche</span>
+0028 <span class="keyword">if</span> Side == <span class="string">'R'</span>
+0029     Mirror=[1 0 0; 0 1 0; 0 0 1];
+0030     Sign=1;
+0031     Cote=<span class="string">'D'</span>;
+0032 <span class="keyword">elseif</span> Side == <span class="string">'L'</span>
+0033     Mirror=[1 0 0; 0 1 0; 0 0 -1];
+0034     Sign=-1;
+0035     Cote=<span class="string">'G'</span>;
+0036 <span class="keyword">end</span>
+0037 
+0038 <span class="comment">%% Solid numbering incremation</span>
+0039 
+0040 s=size(Human_model,2)+1;  <span class="comment">%#ok&lt;NASGU&gt; % num�o du premier solide</span>
+0041 <span class="keyword">for</span> i=1:size(list_solid,2)      <span class="comment">% num�otation de chaque solide : s_&quot;nom du solide&quot;</span>
+0042     <span class="keyword">if</span> i==1
+0043         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s;'</span>))
+0044     <span class="keyword">else</span>
+0045         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s_'</span>,list_solid{i-1},<span class="string">'+1;'</span>))
+0046     <span class="keyword">end</span>
+0047 <span class="keyword">end</span>
+0048 
+0049 <span class="comment">% find the number of the mother from the attachment point: 'attachment_pt'</span>
+0050 <span class="keyword">if</span> numel(Human_model) == 0
+0051     s_mother=0;
+0052     pos_attachment_pt=[0 0 0]';
+0053 <span class="keyword">else</span>
+0054     test=0;
+0055     <span class="keyword">for</span> i=1:numel(Human_model)
+0056         <span class="keyword">for</span> j=1:size(Human_model(i).anat_position,1)
+0057             <span class="keyword">if</span> strcmp(AttachmentPoint,Human_model(i).anat_position{j,1})
+0058                 s_mother=i;
+0059                 pos_attachment_pt=Human_model(i).anat_position{j,2}+Human_model(s_mother).c;
+0060                 test=1;
+0061                 <span class="keyword">break</span>
+0062             <span class="keyword">end</span>
+0063         <span class="keyword">end</span>
+0064         <span class="keyword">if</span> i==numel(Human_model) &amp;&amp; test==0
+0065             error([AttachmentPoint <span class="string">' is no existent'</span>])
+0066         <span class="keyword">end</span>
+0067     <span class="keyword">end</span>
+0068     <span class="keyword">if</span> Human_model(s_mother).child == 0      <span class="comment">% si la m�e n'a pas d'enfant</span>
+0069         Human_model(s_mother).child = eval([<span class="string">'s_'</span> list_solid{1}]);    <span class="comment">% l'enfant de cette m�e est ce solide</span>
+0070     <span class="keyword">else</span>
+0071         [Human_model]=<a href="../../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>(Human_model,Human_model(s_mother).child,eval([<span class="string">'s_'</span> list_solid{1}]));   <span class="comment">% recherche de la derni�e soeur</span>
+0072     <span class="keyword">end</span>
+0073 <span class="keyword">end</span>
+0074 
+0075 <span class="comment">%%                     Definition of anatomical landmarks</span>
+0076 
+0077 <span class="comment">% ------------------------- Thorax ----------------------------------------</span>
+0078 <span class="comment">% scaling coef based on shoulder width</span>
+0079 
+0080 CoM_Thorax = k*[0.060 0.303 0];
+0081 Thorax_T12L1JointNode = k*[0.022 0.154 0] - CoM_Thorax;
+0082 Thorax_ShoulderRightNode=k*[-0.0408 0.1099 0.1929]-Thorax_T12L1JointNode;
+0083 Thorax_osim2antoine = [k k Thorax_ShoulderRightNode(3)/0.17];
+0084 
+0085 <span class="comment">% ------------------------ Clavicle ---------------------------------------</span>
+0086 <span class="comment">% Center of mass location with respect to the reference frame</span>
+0087 CoM_Clavicle = Thorax_osim2antoine.*Mirror*[-0.011096 0.0063723 0.054168]';
+0088 <span class="comment">% Node locations in CusToM frame</span>
+0089 Clavicle_acJointNode = Thorax_osim2antoine.*Mirror*[-0.02924 0.02024 0.12005]' - CoM_Clavicle;
+0090 Clavicle_scJointNode = Thorax_osim2antoine.*Mirror*[0 0 0]' - CoM_Clavicle;
+0091 Clavicle_marker_set1 = Thorax_osim2antoine.*Mirror*[0.005 0.02 0.07]';
+0092 
+0093 
+0094 <span class="comment">%% Definition of anatomical landmarks (with respect to the center of mass of the solid)</span>
+0095 
+0096 Clavicle_position_set= {<span class="keyword">...</span>
+0097     <span class="comment">% Markers</span>
+0098     [<span class="string">'CLAV'</span> Cote], Clavicle_marker_set1; <span class="keyword">...</span>
+0099     <span class="comment">% Joint Nodes</span>
+0100     [Side <span class="string">'_Clavicle_acJointNode'</span>], Clavicle_acJointNode;<span class="keyword">...</span>
+0101     <span class="comment">% Muscle paths</span>
+0102     [Side <span class="string">'_clavicle_r_DELT1_r-P4'</span>],Thorax_osim2antoine.*Mirror*([-0.014;0.01106;0.08021])-CoM_Clavicle;<span class="keyword">...</span>
+0103     [Side <span class="string">'_clavicle_r_PECM1_r-P4'</span>],Thorax_osim2antoine.*Mirror*([0.00321;-0.00013;0.05113])-CoM_Clavicle;<span class="keyword">...</span>
+0104     [Side <span class="string">'_clavicle_r_cleid_mast_r-P1'</span>],Thorax_osim2antoine.*Mirror*([0.0022;0.0043;0.0257])-CoM_Clavicle;<span class="keyword">...</span>
+0105     [Side <span class="string">'_clavicle_r_cleid_occ_r-P1'</span>],Thorax_osim2antoine.*Mirror*([0.0022;0.0043;0.0257])-CoM_Clavicle;<span class="keyword">...</span>
+0106     [Side <span class="string">'_clavicle_r_trap_cl_r-P1'</span>],Thorax_osim2antoine.*Mirror*([-0.0171;0.019;0.0727])-CoM_Clavicle;<span class="keyword">...</span>
+0107     };
+0108 
+0109 <span class="comment">%% Scaling inertial parameters</span>
+0110 
+0111 <span class="comment">% Generic Inertia extraced from (Klein Breteler et al. 1999)</span>
+0112 Clavicle_Mass_generic=0.156;
+0113 I_clavicle_generic=[0.00024259 0.00025526 0.00004442 -0.00001898 Sign*-0.00006994 Sign*0.00005371];
+0114 I_clavicle=(norm(Thorax_osim2antoine)^2*Mass.Clavicle_Mass/Clavicle_Mass_generic).*I_clavicle_generic;
+0115 
+0116 <span class="comment">%% &quot;Human_model&quot; structure generation</span>
+0117  
+0118 num_solid=0;
+0119 <span class="comment">% Clavicle_J1</span>
+0120 num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0121 name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0122 eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0123 Human_model(incr_solid).name=[Side name];               <span class="comment">% solid name</span>
+0124 Human_model(incr_solid).sister=0;              
+0125 Human_model(incr_solid).child=s_Clavicle_J2;                   
+0126 Human_model(incr_solid).mother=s_mother;           
+0127 Human_model(incr_solid).a=[0 0 1]';
+0128 Human_model(incr_solid).joint=1;
+0129 Human_model(incr_solid).limit_inf=-pi/2;
+0130 Human_model(incr_solid).limit_sup=pi/2;
+0131 Human_model(incr_solid).Visual=0;
+0132 Human_model(incr_solid).m=0;                 
+0133 Human_model(incr_solid).b=pos_attachment_pt;  
+0134 Human_model(incr_solid).I=zeros(3,3);
+0135 Human_model(incr_solid).c=[0 0 0]';
+0136 Human_model(incr_solid).comment=<span class="string">'Clavicle Axial Rotation Forward(-)/Backward(+)'</span>;
+0137 
+0138 <span class="comment">% Clavicle_J2</span>
+0139 num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0140 name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0141 eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0142 Human_model(incr_solid).name=[Side name];               <span class="comment">% solid name</span>
+0143 Human_model(incr_solid).sister=0;              
+0144 Human_model(incr_solid).child=s_Clavicle;                   
+0145 Human_model(incr_solid).mother=s_Clavicle_J1;           
+0146 Human_model(incr_solid).a=[1 0 0]';
+0147 Human_model(incr_solid).joint=1;
+0148 Human_model(incr_solid).limit_inf=-pi/2;
+0149 Human_model(incr_solid).limit_sup=pi/2;
+0150 Human_model(incr_solid).Visual=0;
+0151 Human_model(incr_solid).m=0;                 
+0152 Human_model(incr_solid).b=[0 0 0]';  
+0153 Human_model(incr_solid).I=zeros(3,3);
+0154 Human_model(incr_solid).c=[0 0 0]';
+0155 Human_model(incr_solid).comment=<span class="string">'Clavivle Depression(-)/Elevation(+)'</span>;
+0156 
+0157 <span class="comment">% Clavicle</span>
+0158 num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0159 name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0160 eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0161 Human_model(incr_solid).name=[Side name];               <span class="comment">% solid name</span>
+0162 Human_model(incr_solid).sister=0;                
+0163 Human_model(incr_solid).child=0;                   
+0164 Human_model(incr_solid).mother=s_Clavicle_J2;           
+0165 Human_model(incr_solid).a=[0 1 0]';    
+0166 Human_model(incr_solid).joint=1;
+0167 Human_model(incr_solid).limit_inf=-pi/2;
+0168 Human_model(incr_solid).limit_sup=pi/2;
+0169 Human_model(incr_solid).Visual=1;
+0170 Human_model(incr_solid).calib_k_constraint=s_mother;
+0171 Human_model(incr_solid).m=Mass.Clavicle_Mass;                 
+0172 Human_model(incr_solid).b=[0 0 0]';  
+0173 Human_model(incr_solid).I=[I_clavicle(1) I_clavicle(4) I_clavicle(5); I_clavicle(4) I_clavicle(2) I_clavicle(6); I_clavicle(5) I_clavicle(6) I_clavicle(3)];
+0174 Human_model(incr_solid).c=-Clavicle_scJointNode;
+0175 Human_model(incr_solid).anat_position=Clavicle_position_set;
+0176 Human_model(incr_solid).visual_file = [<span class="string">'Holzbaur/clavicle_'</span> lower(Side) <span class="string">'.mat'</span>];
+0177 Human_model(incr_solid).comment=<span class="string">'Clavivle Protraction(+)/Retraction(-)'</span>;
+0178 
+0179 <span class="keyword">end</span>
+0180</pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

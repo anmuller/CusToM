@@ -1,0 +1,6 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  ForwardKinematicsAnimation_Interf -> ForwardKinematicsAnimation_Interf;
+
+  ForwardKinematicsAnimation_Interf [URL="ForwardKinematicsAnimation_Interf.html"];
+}

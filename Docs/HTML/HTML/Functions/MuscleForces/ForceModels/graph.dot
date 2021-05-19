@@ -1,0 +1,7 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+
+  ForceLengthMuscleModel [URL="ForceLengthMuscleModel.html"];
+  ForceLengthVelocityMuscleModel [URL="ForceLengthVelocityMuscleModel.html"];
+  SimpleMuscleModel [URL="SimpleMuscleModel.html"];
+}

@@ -1,0 +1,21 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  ForwardKinematicsR -> ForwardKinematicsR;
+  MomentArmsComputation -> Muscle_length;
+  MomentArmsComputationInit -> Muscle_lengthNum;
+  MomentArmsComputationNum -> Muscle_lengthNum;
+  MomentArmsComputationNumMuscleJoint -> Muscle_lengthNum;
+  MuscleLengthComputationNum -> Muscle_lengthNum;
+
+  ForwardKinematicsPoint [URL="ForwardKinematicsPoint.html"];
+  ForwardKinematicsR [URL="ForwardKinematicsR.html"];
+  MomentArmsComputation [URL="MomentArmsComputation.html"];
+  MomentArmsComputationInit [URL="MomentArmsComputationInit.html"];
+  MomentArmsComputationNum [URL="MomentArmsComputationNum.html"];
+  MomentArmsComputationNumMuscleJoint [URL="MomentArmsComputationNumMuscleJoint.html"];
+  MuscleForcesComputation [URL="MuscleForcesComputation.html"];
+  MuscleForcesComputationNum [URL="MuscleForcesComputationNum.html"];
+  MuscleLengthComputationNum [URL="MuscleLengthComputationNum.html"];
+  Muscle_length [URL="Muscle_length.html"];
+  Muscle_lengthNum [URL="Muscle_lengthNum.html"];
+}
