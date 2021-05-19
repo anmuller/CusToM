@@ -56,8 +56,7 @@ Finally the subject-specific model is used to understand recorded motions of the
 However, musculoskeletal simulation requires high computational cost. Editing and assembling features to modify generic models. 
 Subject-specific calibrations and multiple simulations are required to compute subject-specific quantities on recorded trials. 
 And current available musculoskeletal softwares are heavy and requires expertise like SIMM (MusculoGraphics, Inc., Santa Rosa, CA), Anybody (Anybody Technology, Aalborg, Denmark) and OpenSim OpenSim (Simtk, Stanford, CA). 
-Moreover, SIMM and Anybody are commercial softwares and, OpenSim is a freely available software but main algorithms source codes are not available. 
-That's why, there was a need in developping a complete open-source software for musculoskeletal simulation. 
+Moreover, SIMM and Anybody are commercial softwares. OpenSim is open source and available at https://github.com/opensim-org. Core simulation elements are however difficult to handle and modify for research purposes, therefore we thought necessary to build our own musculoskeletal simulation code.
 The source code was developped with Matlab to allow many researchers to understand and contribute to the code.
 
 # Summary <a name="Summary"></a>
