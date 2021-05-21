@@ -112,6 +112,40 @@ else
     l_sup1=[Human_model.limit_sup]';
 end
 
+% la
+q = sym('q', [nb_solid 1]);  assume(q,'real')
+Rcut=sym('Rcut',[3,3,nb_cut]);  assume(Rcut,'real')
+pcut=sym('pcut',[3,1,nb_cut]); assume(pcut,'real')
+for c=1:nb_cut
+	[fRcut(:,:,c),fpcut(:,:,c)]=list_function{c}(q,pcut,Rcut);
+end
+matlabFunction(fRcut,fpcut,'File',['Symbolic_function/fcut.m'],'Outputs',{['Rcut' ],['pcut' ]},...;
+        'vars',{q,pcut,Rcut});
+
+error=0;
+for m=1:numel(list_function_markers)
+    a= norm(list_function_markers{m}(q,pcut,Rcut) - real_markers(m).position(1,:)')^2;
+    if ~isnan(a)
+        error = error + a;
+    end
+end
+matlabFunction(error,'File',['Symbolic_function/error_marker.m'],'Outputs',{['error' ]},...;
+        'vars',{q,pcut,Rcut});
+
+Rcut=zeros(3,3,nb_cut);   % initialization of the position and the rotation of the cut coordinate frames
+pcut=zeros(3,1,nb_cut);
+q0=zeros(nb_solid,1);   
+
+tic
+ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar,nb_cut,real_markers,1,list_function,list_function_markers,Rcut,pcut);
+[q(:,1)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,[],options1);
+toc
+
+tic
+ik_function_objective=@(qvar)CostFunctionSymbolicIK(qvar,nb_cut,real_markers,1,list_function,list_function_markers,Rcut,pcut);
+[q(:,1)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,[],options1);
+toc
+
 h = waitbar(0,['Inverse Kinematics (' filename ')']);
 % 1st frame : classical optimization
 
