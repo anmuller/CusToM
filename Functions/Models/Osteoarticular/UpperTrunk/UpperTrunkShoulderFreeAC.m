@@ -2,8 +2,9 @@ function [OsteoArticularModel]= UpperTrunkShoulderFreeAC(OsteoArticularModel,k,M
 % Addition of an upper trunk model
 %   This upper trunk model contains 5 solids (thorax, clavicles, and
 %   scapulae), exhibits 3 dof for lower trunk / upper trunk joint, 3
-%   dof for each upper trunk / clavicle joint. It shall be used with the
-%   shoulder model of upper limbs
+%   dof for each upper trunk / clavicle joint. In this model, the 
+%   acromio-clavicular joint allows for a dsplacement between the
+%   clavicle and scapula at the acromion.
 %
 %	Based on:
 %	- Damsgaard, M., Rasmussen, J., Christensen, S. T., Surma, E., & De Zee, M., 2006.
