@@ -25,6 +25,13 @@ function [error] = CostFunctionSymbolicIK2(q,nb_cut,real_markers,f,list_function
 %________________________________________________________
 [Rcut,pcut]=fcut(q,pcut,Rcut);
 
-error=error_marker(q,pcut,Rcut);
+error = 0;
+for m=1:numel(list_function_markers)
+        a = norm(list_function_markers{m}(q,pcut,Rcut) - real_markers(m).position(f,:)')^2;
+        if ~isnan(a)
+            error = error + a;
+        end
+end
+% error=error_marker(q,pcut,Rcut);
 
 end
