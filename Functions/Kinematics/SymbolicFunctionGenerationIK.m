@@ -253,16 +253,30 @@ for ii=1:length(ind_mk)
 end
 
 % Cut solid
-for ii=1:length(ind_Kcut) % solide i
-    i_Kc = ind_Kcut(ii);
+% disp("old")
+% tic
+% for ii=1:length(ind_Kcut) % solide i
+%     i_Kc = ind_Kcut(ii);
 %     matlabFunction(Human_model(i_Kc).R,Human_model(i_Kc).p,'File',['Symbolic_function/f' num2str(Human_model(i_Kc).KinematicsCut) 'cut.m'],...
 %         'Outputs',{['R' num2str(num2str(Human_model(i_Kc).KinematicsCut)) 'cut' ],['p' num2str(num2str(Human_model(i_Kc).KinematicsCut)) 'cut' ]},...;
-%         'vars',{q,pcut,Rcut});
-    matlabFunction(Human_model(i_Kc).R,Human_model(i_Kc).p,'File',['Symbolic_function/f' num2str(Human_model(i_Kc).KinematicsCut) 'cut.m'],...
-        'Outputs',{['R' num2str(num2str(Human_model(i_Kc).KinematicsCut)) 'cut' ],['p' num2str(num2str(Human_model(i_Kc).KinematicsCut)) 'cut' ]},...;
-        'vars',{q_red,pcut,Rcut});
+%         'vars',{q_red,pcut,Rcut});
+% end
+% toc
+
+disp("new")
+tic
+fRcut_all=sym('Rcut',[3,3,length(ind_Kcut)]);
+fpcut_all=sym('pcut',[3,1,length(ind_Kcut)]);
+for ii=1:length(ind_Kcut) % solide i
+    i_Kc = ind_Kcut(ii);
+    fRcut_all(:,:,ii) = Human_model(i_Kc).R;
+    fpcut_all(:,:,ii) = Human_model(i_Kc).p;
 end
 
+matlabFunction(fRcut_all,fpcut_all,'File',['Symbolic_function/fcut.m'],'Outputs',{['Rcut' ],['pcut' ]},...
+        'vars',{q_red,pcut,Rcut});
+toc
+    
 % Closed loops
 for i=1:numel(c_ClosedLoop)
     matlabFunction(c_ClosedLoop{i},ceq_ClosedLoop{i},'File',['Symbolic_function/fCL' num2str(i) '.m'],...
