@@ -190,14 +190,14 @@ end
 % end
 
 % la
-% q = sym('q', [nb_solid 1]);  assume(q,'real')
-% Rcut = sym('Rcut',[3,3,nb_cut]);  assume(Rcut,'real')
-% pcut = sym('pcut',[3,1,nb_cut]); assume(pcut,'real')
-% for c=1:nb_cut
-% 	[fRcut(:,:,c),fpcut(:,:,c)]=list_function{c}(q,pcut,Rcut);
-% end
-% matlabFunction(fRcut,fpcut,'File',['Symbolic_function/fcut.m'],'Outputs',{['Rcut' ],['pcut' ]},...
-%         'vars',{q,pcut,Rcut});
+q = sym('q', [nb_solid 1]);  assume(q,'real')
+Rcut = sym('Rcut',[3,3,nb_cut]);  assume(Rcut,'real')
+pcut = sym('pcut',[3,1,nb_cut]); assume(pcut,'real')
+for c=1:nb_cut
+	[fRcut(:,:,c),fpcut(:,:,c)]=list_function{c}(q,pcut,Rcut);
+end
+matlabFunction(fRcut,fpcut,'File',['Symbolic_function/fcut.m'],'Outputs',{['Rcut' ],['pcut' ]},...
+        'vars',{q,pcut,Rcut});
 
 % error=0;
 % for m=1:numel(list_function_markers)
