@@ -1,4 +1,4 @@
-function [error] = CostFunctionSymbolicIK2(q,nb_cut,real_markers,f,list_function,list_function_markers,Rcut,pcut)
+function [error] = CostFunctionSymbolicIK2(q,real_markers,f,list_function_markers,Rcut,pcut)
 % Cost function used for the inverse kinematics step using an optimization method
 %   
 %   INPUT

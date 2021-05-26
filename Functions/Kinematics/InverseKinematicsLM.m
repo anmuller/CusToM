@@ -72,7 +72,7 @@ end
 
 options1 = optimoptions(@fmincon,'Algorithm','interior-point','Display','final','TolFun',1e-6,'TolCon',1e-6,'MaxFunEvals',10000000,'MaxIter',10000);
 q=zeros(nb_solid,nb_frame);
-ceq=zeros(6*nbClosedLoop,nb_frame);
+ceq=zeros(7*nbClosedLoop,nb_frame);
 
 addpath('Symbolic_function')
 
@@ -112,24 +112,18 @@ else
     l_sup1=[Human_model.limit_sup]';
 end
 
-Rcut=zeros(3,3,nb_cut);   % initialization of the position and the rotation of the cut coordinate frames
-pcut=zeros(3,1,nb_cut);
-q0=zeros(nb_solid,1);   
-
-ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar,nb_cut,real_markers,1,list_function,list_function_markers,Rcut,pcut);
-[q(:,1)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,[],options1);
 
 h = waitbar(0,['Inverse Kinematics (' filename ')']);
 % 1st frame : classical optimization
 
 if ~isfield(BiomechanicalModel,'ClosedLoopData')
     q0=zeros(nb_solid,1);   
-    ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar,nb_cut,real_markers,1,list_function,list_function_markers,Rcut,pcut);
+    ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar,real_markers,1,list_function_markers,Rcut,pcut);
     [q(:,1)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,[],options1);
     hclosedloophandle =@(x) 0 ;
 else
     q0=zeros(nb_solid,1);
-    ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar,nb_cut,real_markers,1,list_function,list_function_markers,Rcut,pcut);
+    ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar,real_markers,1,list_function_markers,Rcut,pcut);
     nonlcon=@(qvar)ClosedLoop(qvar,nbClosedLoop);
     [q(:,1)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,nonlcon,options1);
     hclosedloophandle = BiomechanicalModel.ClosedLoopData.ConstraintEq;
@@ -141,11 +135,11 @@ zeta = 20;
 
 waitbar(1/nb_frame) 
 
-optionsLM = optimset('Algorithm','Levenberg-Marquardt','Display','off','MaxIter',4e6,'MaxFunEval',5e6);
+optionsLM = optimset('Algorithm','Levenberg-Marquardt','Display','on','MaxIter',4e6,'MaxFunEval',5e6);
 
 for f = 2:nb_frame
-  
-   fun = @(q) CostFunctionLM(q, f, nb_cut,pcut,Rcut,gamma,hclosedloophandle,list_function,real_markers,list_function_markers,zeta,buteehandle);
+    
+   fun = @(q) CostFunctionLM(q, f,pcut,Rcut,gamma,hclosedloophandle,real_markers,list_function_markers,zeta,buteehandle);
    q(:,f)= lsqnonlin(fun,q(:,f-1),[],[],optionsLM);
 
     waitbar(f/nb_frame)
@@ -163,13 +157,13 @@ KinematicsError=zeros(numel(list_markers),nb_frame);
 nb_cut=max([Human_model.KinematicsCut]);
 if nbClosedLoop == 0
     for f=1:nb_frame
-        [KinematicsError(:,f)] = ErrorMarkersIK(q(:,f),nb_cut,real_markers,f,list_markers,Rcut,pcut);
+        [KinematicsError(:,f)] = ErrorMarkersIK(q(:,f),real_markers,f,list_markers,Rcut,pcut);
     end
 else
     nonlcon=@(qvar)ClosedLoop(qvar,nbClosedLoop);
 
     for f=1:nb_frame
-        [KinematicsError(:,f)] = ErrorMarkersIK(q(:,f),nb_cut,real_markers,f,list_markers,Rcut,pcut);
+        [KinematicsError(:,f)] = ErrorMarkersIK(q(:,f),real_markers,f,list_markers,Rcut,pcut);
         [~,ceq(:,f)]=nonlcon(q(:,f));
     end
 end
