@@ -253,6 +253,7 @@ for ii=1:length(ind_mk)
 end
 
 % Cut solid
+
 % disp("old")
 % tic
 % for ii=1:length(ind_Kcut) % solide i
@@ -263,10 +264,6 @@ end
 % end
 % toc
 
-disp("new")
-tic
-fRcut_all=sym('Rcut',[3,3,length(ind_Kcut)]);
-fpcut_all=sym('pcut',[3,1,length(ind_Kcut)]);
 for ii=1:length(ind_Kcut) % solide i
     i_Kc = ind_Kcut(ii);
     fRcut_all(:,:,ii) = Human_model(i_Kc).R;
@@ -275,7 +272,6 @@ end
 
 matlabFunction(fRcut_all,fpcut_all,'File',['Symbolic_function/fcut.m'],'Outputs',{['Rcut' ],['pcut' ]},...
         'vars',{q_red,pcut,Rcut});
-toc
     
 % Closed loops
 for i=1:numel(c_ClosedLoop)
