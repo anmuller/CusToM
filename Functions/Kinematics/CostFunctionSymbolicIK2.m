@@ -1,4 +1,4 @@
-function [error] = CostFunctionSymbolicIK2(q,real_markers,f,list_function_markers,Rcut,pcut)
+function [error] = CostFunctionSymbolicIK2(q,real_markers,f,list_function_markers)
 % Cost function used for the inverse kinematics step using an optimization method
 %   
 %   INPUT
@@ -23,15 +23,20 @@ function [error] = CostFunctionSymbolicIK2(q,real_markers,f,list_function_marker
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
 % Georges Dumont
 %________________________________________________________
-[Rcut,pcut]=fcut(q,pcut,Rcut);
+[Rcut,pcut]=fcut(q);
 
-error = 0;
+% error = 0;
+% for m=1:numel(list_function_markers)
+%         a = norm(list_function_markers{m}(q,pcut,Rcut) - real_markers(m).position(f,:)')^2;
+%         if ~isnan(a)
+%             error = error + a;
+%         end
+% end
+a= zeros(numel(list_function_markers),1);
 for m=1:numel(list_function_markers)
-        a = norm(list_function_markers{m}(q,pcut,Rcut) - real_markers(m).position(f,:)')^2;
-        if ~isnan(a)
-            error = error + a;
-        end
+        a(m) = norm(list_function_markers{m}(q,pcut,Rcut) - real_markers(m).position(f,:)')^2;
 end
+error = sum(a(~isnan(a)));
 % error=error_marker(q,pcut,Rcut);
 
 end

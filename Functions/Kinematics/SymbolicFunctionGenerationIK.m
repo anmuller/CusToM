@@ -282,13 +282,21 @@ for c=1:length(ind_Kcut)
 end
 
 matlabFunction(Rcutsave,pcutsave,'File',['Symbolic_function/fcut.m'],'Outputs',{['Rcut' ],['pcut' ]},...
-        'vars',{q_red,pcut,Rcut});
+        'vars',{q_red});
     
 % Closed loops
-for i=1:numel(c_ClosedLoop)
-    matlabFunction(c_ClosedLoop{i},ceq_ClosedLoop{i},'File',['Symbolic_function/fCL' num2str(i) '.m'],...
+Fullc_ClosedLoop = [c_ClosedLoop{:}];
+Fullceq_ClosedLoop = [ceq_ClosedLoop{:}];
+Fullc_ClosedLoop = Fullc_ClosedLoop(:);
+Fullceq_ClosedLoop = Fullceq_ClosedLoop(:);
+
+matlabFunction(Fullc_ClosedLoop,Fullceq_ClosedLoop,'File',['Symbolic_function/fCL.m'],...
             'Outputs',{'c','ceq'},'vars',{q_red});   
-end
+
+% for i=1:numel(c_ClosedLoop)
+%     matlabFunction(c_ClosedLoop{i},ceq_ClosedLoop{i},'File',['Symbolic_function/fCL' num2str(i) '.m'],...
+%             'Outputs',{'c','ceq'},'vars',{q_red});   
+% end
 
 %We delete p and R fields
 Human_model = rmfield(Human_model, 'p');

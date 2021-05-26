@@ -17,13 +17,7 @@ function [c,ceq] = ClosedLoop(q,nb_ClosedLoop) %#ok<*INUSL>
 % Georges Dumont
 %________________________________________________________
 
-c=[];
-ceq=zeros(nb_ClosedLoop*7,1); % number of equations = number of closed loop * 9 (9 terms in the rotation matrix)
-
-for i=1:nb_ClosedLoop
-    eval(['[ci,ceqi] = fCL' num2str(i) '(q);'])  
-    ceq(1+7*(i-1):7*i,1) = ceqi;     
-end
+[c,ceq] = fCL(q);
 
 end
 
