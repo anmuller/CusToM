@@ -139,13 +139,28 @@ else
     l_sup1=[Human_model.limit_sup]';
 end
 
-% Inverse kinematics
+% error = sym('error',[1 nb_frame]); assume(error,'real');
+% for f=1:nb_frame
+%     error(f)=0;
+%     for m=1:numel(list_function_markers)
+%             a = norm(list_function_markers{m}(q,pcut,Rcut) - real_markers(m).position(f,:)')^2;
+%             if ~isnan(a)
+%                 error(f) = error(f) + a;
+%             end
+%     end
+% end
+% matlabFunction(error,'File',['Symbolic_function/error_marker.m'],'Outputs',{['error' ]},'vars',{q,pcut,Rcut});
+
+Rcut=zeros(3,3,nb_cut);   % initialization of the position and the rotation of the cut coordinate frames
+pcut=zeros(3,1,nb_cut);
+q=zeros(nb_solid,nb_frame);
 h = waitbar(0,['Inverse Kinematics (' filename ')']);
+
 if nbClosedLoop == 0 % if there is no closed loop
     for f=1:nb_frame
         if f == 1      % initial value
-            q0=zeros(nb_solid,1);
-            ik_function_objective=@(qvar)CostFunctionSymbolicIK(qvar,nb_cut,real_markers,f,list_function,list_function_markers,Rcut,pcut);
+            q0=zeros(nb_solid,1);   
+            ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar,real_markers,f,list_function_markers,Rcut,pcut);
             [q(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,[],options1);
         else
             if f > 2
@@ -154,10 +169,10 @@ if nbClosedLoop == 0 % if there is no closed loop
             else
                 q0=q(:,f-1);
             end
-            l_inf=max(q(:,f-1)-0.2,l_inf1);
-            l_sup=min(q(:,f-1)+0.2,l_sup1);
-            ik_function_objective=@(qvar)CostFunctionSymbolicIK(qvar,nb_cut,real_markers,f,list_function,list_function_markers,Rcut,pcut);
-            [q(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf,l_sup,[],options2);
+        l_inf=max(q(:,f-1)-0.2,l_inf1);
+        l_sup=min(q(:,f-1)+0.2,l_sup1); 
+        ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar,real_markers,f,list_function_markers,Rcut,pcut);
+        [q(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf,l_sup,[],options2); 
         end
         waitbar(f/nb_frame)
     end
@@ -171,8 +186,8 @@ else
     
     for f=1:nb_frame
         if f == 1      % initial value
-            q0=zeros(nb_solid,1);
-            ik_function_objective=@(qvar)CostFunctionSymbolicIK(qvar,nb_cut,real_markers,f,list_function,list_function_markers,Rcut,pcut);
+            q0=zeros(nb_solid,1);   
+            ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar,real_markers,f,list_function_markers,Rcut,pcut);
             nonlcon=@(qvar)ClosedLoop(qvar,nbClosedLoop);
             %             q=Generalized_Coordinates.q_dep_map*Generalized_Coordinates.fq_dep(q_red)+Generalized_Coordinates.q_map*q_red;
             %             nonlcon=@(qvar)NonLinCon_ClosedLoop_Num(Human_model,solid_path1,solid_path2,num_solid,num_markers,qvar,k);
@@ -187,8 +202,8 @@ else
                 q0=q(:,f-1);
             end
             l_inf=max(q(:,f-1)-0.2,l_inf1);
-            l_sup=min(q(:,f-1)+0.2,l_sup1);
-            ik_function_objective=@(qvar)CostFunctionSymbolicIK(qvar,nb_cut,real_markers,f,list_function,list_function_markers,Rcut,pcut);
+            l_sup=min(q(:,f-1)+0.2,l_sup1); 
+            ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar,real_markers,f,list_function_markers,Rcut,pcut);
 %             nonlcon=@(qvar)NonLinCon_ClosedLoop(qvar,nb_cut,list_function,pcut,Rcut);
             nonlcon=@(qvar)ClosedLoop(qvar,nbClosedLoop);
 %             nonlcon=@(qvar)NonLinCon_ClosedLoop_Num(Human_model,BiomechanicalModel.Generalized_Coordinates,solid_path1,solid_path2,num_solid,num_markers,qvar,k);
@@ -221,14 +236,14 @@ nb_cut=max([Human_model.KinematicsCut]);
 
 if nbClosedLoop == 0
     for f=1:nb_frame
-        [KinematicsError(:,f)] = ErrorMarkersIK(q(:,f),nb_cut,real_markers,f,list_markers,Rcut,pcut);
+        [KinematicsError(:,f)] = ErrorMarkersIK(q(:,f),real_markers,f,list_markers,Rcut,pcut);
     end
 else
     %     nonlcon2=@(qvar)NonLinCon_ClosedLoop(qvar,nb_cut,list_function,pcut,Rcut);
     for f=1:nb_frame
+        [KinematicsError(:,f)] = ErrorMarkersIK(q(:,f),real_markers,f,list_markers,Rcut,pcut);
 %         q(:,f) = ForwardKConstrained(q(:,f),startingq0,numqu,numqv,Jv,hconstr);
 %         startingq0 = q(:,f);
-        [KinematicsError(:,f)] = ErrorMarkersIK(q(:,f),nb_cut,real_markers,f,list_markers,Rcut,pcut);
         [~,ceq(:,f)]=nonlcon(q(:,f));
         %         [~,ceq2(:,f)]=nonlcon2(q(:,f));
     end

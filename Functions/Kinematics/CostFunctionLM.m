@@ -1,4 +1,4 @@
-function func=CostFunctionLM(q, f, nb_cut,pcut,Rcut,gamma,hclosedloophandle,list_function,real_markers,list_function_markers,zeta,hbutees)
+function func=CostFunctionLM(q, f,pcut,Rcut,gamma,hclosedloophandle,real_markers,list_function_markers,zeta,hbutees)
 % Limit penalisation for LM algorithm
 %   
 %   INPUT
@@ -28,15 +28,14 @@ function func=CostFunctionLM(q, f, nb_cut,pcut,Rcut,gamma,hclosedloophandle,list
 % Georges Dumont
 %________________________________________________________
 
-% cut evaluation
-    for c=1:nb_cut
-        [Rcut(:,:,c),pcut(:,:,c)]=list_function{c}(q,pcut,Rcut);
-    end
+
+ % cut evaluation
+    [Rcut,pcut]=fcut(q,pcut,Rcut);
+
     % dx
     for m=1:numel(list_function_markers)
         dX((m-1)*3+1:3*m,:) = real_markers(m).position(f,:)'-list_function_markers{m}(q,pcut,Rcut);
     end
-    
     
     
     func = [ dX ; gamma*hclosedloophandle(q) ; zeta*hbutees(q)];
