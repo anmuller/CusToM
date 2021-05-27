@@ -159,11 +159,11 @@ h = waitbar(0,['Inverse Kinematics (' filename ')']);
 if nbClosedLoop == 0 % if there is no closed loop
     f = 1;     % initial value
     q0=zeros(nb_solid,1);
-    ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar,real_markers,f,list_function_markers,Rcut,pcut);
+    ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar,real_markers,f,list_function_markers);
     [q(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,[],options1);
     f=2;
     q0=q(:,f-1);
-    ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar,real_markers,f,list_function_markers,Rcut,pcut);
+    ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar,real_markers,f,list_function_markers);
     [q(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,[],options1);
     
     for f=3:nb_frame
@@ -171,7 +171,7 @@ if nbClosedLoop == 0 % if there is no closed loop
         q0=q(:,f-1)+delta;
         l_inf=max(q(:,f-1)-0.2,l_inf1);
         l_sup=min(q(:,f-1)+0.2,l_sup1);
-        ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar,real_markers,f,list_function_markers,Rcut,pcut);
+        ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar,real_markers,f,list_function_markers);
         [q(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf,l_sup,[],options2);
         
         waitbar(f/nb_frame)

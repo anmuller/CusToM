@@ -281,17 +281,17 @@ for c=1:length(ind_Kcut)
     [Rcutsave,pcutsave]=cutfunc(q_red,pcutsave,Rcutsave);
 end
 
-matlabFunction(Rcutsave,pcutsave,'File',['Symbolic_function/fcut.m'],'Outputs',{['Rcut' ],['pcut' ]},...
-        'vars',{q_red});
-    
+matlabFunction(Rcutsave,pcutsave,'File',['Symbolic_function/fcut.m'],'Outputs',{['Rcut' ],['pcut' ]},'vars',{q_red});
+        
 % Closed loops
 Fullc_ClosedLoop = [c_ClosedLoop{:}];
 Fullceq_ClosedLoop = [ceq_ClosedLoop{:}];
 Fullc_ClosedLoop = Fullc_ClosedLoop(:);
 Fullceq_ClosedLoop = Fullceq_ClosedLoop(:);
 
-matlabFunction(Fullc_ClosedLoop,Fullceq_ClosedLoop,'File',['Symbolic_function/fCL.m'],...
-            'Outputs',{'c','ceq'},'vars',{q_red});   
+if  ~isempty(Fullceq_ClosedLoop)
+    matlabFunction(Fullc_ClosedLoop,Fullceq_ClosedLoop,'File',['Symbolic_function/fCL.m'],'Outputs',{'c','ceq'},'vars',{q_red});
+end
 
 % for i=1:numel(c_ClosedLoop)
 %     matlabFunction(c_ClosedLoop{i},ceq_ClosedLoop{i},'File',['Symbolic_function/fCL' num2str(i) '.m'],...
