@@ -23,7 +23,7 @@ function [error] = ErrorMarkersIK(q,real_markers,f,list_markers,Rcut,pcut)
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
 % Georges Dumont
 %________________________________________________________
-[Rcut,pcut]=fcut(q,pcut,Rcut);
+[Rcut,pcut]=fcut(q);
 
 error=zeros(numel(list_markers),1);
 for m=1:numel(list_markers)

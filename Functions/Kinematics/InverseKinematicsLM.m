@@ -72,7 +72,7 @@ end
 
 options1 = optimoptions(@fmincon,'Algorithm','interior-point','Display','final','TolFun',1e-6,'TolCon',1e-6,'MaxFunEvals',10000000,'MaxIter',10000);
 q=zeros(nb_solid,nb_frame);
-ceq=zeros(7*nbClosedLoop,nb_frame);
+ceq=zeros(6*nbClosedLoop,nb_frame);
 
 addpath('Symbolic_function')
 
@@ -118,12 +118,12 @@ h = waitbar(0,['Inverse Kinematics (' filename ')']);
 
 if ~isfield(BiomechanicalModel,'ClosedLoopData')
     q0=zeros(nb_solid,1);   
-    ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar,real_markers,1,list_function_markers,Rcut,pcut);
+    ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar,real_markers,1,list_function_markers);
     [q(:,1)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,[],options1);
     hclosedloophandle =@(x) 0 ;
 else
     q0=zeros(nb_solid,1);
-    ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar,real_markers,1,list_function_markers,Rcut,pcut);
+    ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar,real_markers,1,list_function_markers);
     nonlcon=@(qvar)ClosedLoop(qvar,nbClosedLoop);
     [q(:,1)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,nonlcon,options1);
     hclosedloophandle = BiomechanicalModel.ClosedLoopData.ConstraintEq;
@@ -139,7 +139,7 @@ optionsLM = optimset('Algorithm','Levenberg-Marquardt','Display','on','MaxIter',
 
 for f = 2:nb_frame
     
-   fun = @(q) CostFunctionLM(q, f,pcut,Rcut,gamma,hclosedloophandle,real_markers,list_function_markers,zeta,buteehandle);
+   fun = @(q) CostFunctionLM(q, f,gamma,hclosedloophandle,real_markers,list_function_markers,zeta,buteehandle);
    q(:,f)= lsqnonlin(fun,q(:,f-1),[],[],optionsLM);
 
     waitbar(f/nb_frame)
