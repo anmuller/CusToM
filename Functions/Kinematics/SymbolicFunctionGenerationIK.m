@@ -253,7 +253,10 @@ for ii=1:length(ind_mk)
     m = ind_mk(ii);
 %     matlabFunction(Markers_set(m).position_symbolic,'file',['Symbolic_function/' Markers_set(m).name '_Position.m'],'vars',{q,pcut,Rcut});
     matlabFunction(Markers_set(m).position_symbolic,'file',['Symbolic_function/' Markers_set(m).name '_Position.m'],'vars',{q_red,pcut,Rcut});
+    dX((ii-1)*3+1:3*ii,:) = Markers_set(m).position_symbolic ;
 end
+% One function for all markers
+matlabFunction(dX,'file',['Symbolic_function/X_markers'],'vars',{q_red,pcut,Rcut});
 
 % Cut solid
 
