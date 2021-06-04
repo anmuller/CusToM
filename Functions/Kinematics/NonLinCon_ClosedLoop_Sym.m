@@ -34,10 +34,10 @@ if isempty(solid_path2) % if the beginning coincides with the end of the loop
 
     % Computation on path
     s = Human_model(num_solid).c + Human_model(num_solid).anat_position{num_markers,2}; % position with respects to the position of the mother solid joint of the closed loop
-    [Human_model,p_ClosedLoop,R_ClosedLoop] = ForwardKinematics_ClosedLoop(Human_model,1,s,solid_path1,[0 0 0]',eye(3),q,k);
+    [~,p_ClosedLoop,R_ClosedLoop] = ForwardKinematics_ClosedLoop(Human_model,1,s,solid_path1,[0 0 0]',eye(3),q,k);
 
     % Rotation matrix and Position vector
-    Rtemp=R_ClosedLoop;
+  %  Rtemp=R_ClosedLoop;
     ptemp=p_ClosedLoop;
 
 %         % Rotation matrix must be equal to eye
@@ -68,10 +68,10 @@ else
 
         % Computation on path
         s = Human_model(num_solid).c + Human_model(num_solid).anat_position{num_markers,2}; % position with respects to the position of the mother solid joint of the closed loop
-        [Human_model,p_ClosedLoop,R_ClosedLoop] = ForwardKinematics_ClosedLoop(Human_model,1,s,solid_path2,[0 0 0]',eye(3),q,k);
+        [~,p_ClosedLoop,R_ClosedLoop] = ForwardKinematics_ClosedLoop(Human_model,1,s,solid_path2,[0 0 0]',eye(3),q,k);
 
         % Rotation matrix and Position vector
-        Rtemp=R_ClosedLoop;
+        %Rtemp=R_ClosedLoop;
         ptemp=p_ClosedLoop;
 
 %             % Rotation matrix must be equal to eye
@@ -110,7 +110,7 @@ else
 
         % Rotation matrix and Position vector
         ptemp=p_ClosedLoop2-p_ClosedLoop1;
-        Rtemp=R_ClosedLoop1*R_ClosedLoop2';
+        %Rtemp=R_ClosedLoop1*R_ClosedLoop2';
 
 %             % Rotation matrix must be eye
             Rtemp=R_ClosedLoop1*R_ClosedLoop2' -eye(3);
