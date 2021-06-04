@@ -1,4 +1,4 @@
-function [Human_model,Generalized_Coordinates,nb_k,k_map,nb_p,p_map,nb_alpha,alpha_map,...
+function [Human_model,nbClosedLoop,Generalized_Coordinates,nb_k,k_map,nb_p,p_map,nb_alpha,alpha_map,...
 A_norm,b_norm]=SymbolicFunctionGeneration_A(Human_model, Markers_set)
 % Generation of symbolic function containing the position of markers according to joint coordinates and geometrical parameters
 %
@@ -9,6 +9,7 @@ A_norm,b_norm]=SymbolicFunctionGeneration_A(Human_model, Markers_set)
 %   OUTPUT
 %   - Human_model: osteo-articular model (see the Documentation for the
 %   structure) 
+%   - nbClosedLoop: number of closed loop in the model
 %   - q: symbolic vector of joint coordinates
 %   - nk_k: number of variables k to optimize
 %   - k_map: matrix allowing the mapping of variables k in the global
@@ -318,48 +319,38 @@ if exist([cd '/Symbolic_function'])~=7 %#ok<EXIST>
     mkdir('Symbolic_function')
 end
 
-E = [Markers_set.exist]';
-ind_mk = find(E==1);
 % marqueurs % trop long avec les nouvelles variables
-for ii=1:length(ind_mk)
-        m = ind_mk(ii);
-       dX((ii-1)*3+1:3*ii,:) = Markers_set(m).position_symbolic ;
-end
-% One function for all markers
-matlabFunction(dX,'file',['Symbolic_function/X_markers'],'vars',{pPelvis,RPelvis,q_red,var_sym,pcut,Rcut});
-
-ind_Kcut = find(cellfun(@isempty,{Human_model.KinematicsCut} )==0);
-
-for ii=1:length(ind_Kcut) % solide i
-    i_Kc = ind_Kcut(ii);
-    fRcut_all(:,:,Human_model(i_Kc).KinematicsCut) = Human_model(i_Kc).R;
-    fpcut_all(:,:,Human_model(i_Kc).KinematicsCut) = Human_model(i_Kc).p;
+for i=1:numel(Markers_set)
+   if Markers_set(i).exist
+       matlabFunction(Markers_set(i).position_symbolic,'file',['Symbolic_function/' Markers_set(i).name '_Position.m'],'vars',{pPelvis,RPelvis,q_red,var_sym,pcut,Rcut});
+   end
 end
 
-cutfunc = matlabFunction(fRcut_all,fpcut_all,'Outputs',{['Rcut' ],['pcut' ]}, 'vars',{pPelvis,RPelvis,q_red,var_sym,pcut,Rcut});
+% % marqueurs
+% E = [Markers_set.exist]';
+% ind = find(E==1);
+% parfor ii=1:length(ind) 
+%     x = ind(ii);
+%     matlabFunction(Markers_set(x).position_symbolic,'file',['Symbolic_function/' Markers_set(x).name '_Position.m'],'vars',{pPelvis,RPelvis,q,k,p_adapt,alpha,pcut,Rcut});
+% end
+% poolobj = gcp('nocreate');
+% delete(poolobj);
 
-pcutsave = pcut;    
-Rcutsave = Rcut;    
-for c=1:length(ind_Kcut)
-    [Rcutsave,pcutsave]=cutfunc(pPelvis,RPelvis,q_red,var_sym,pcutsave,Rcutsave);
+% solide(s) de coupure (Solids where cuts are performed)
+for i=1:numel(Human_model)  % solide i
+    if size(Human_model(i).KinematicsCut) ~= 0
+        matlabFunction(Human_model(i).R,Human_model(i).p,'File',['Symbolic_function/f' num2str(Human_model(i).KinematicsCut) 'cut.m'],...
+            'Outputs',{['R' num2str(num2str(Human_model(i).KinematicsCut)) 'cut' ],['p' num2str(num2str(Human_model(i).KinematicsCut)) 'cut' ]},...;
+            'vars',{pPelvis,RPelvis,q_red,var_sym,pcut,Rcut});
+    end
 end
-matlabFunction(Rcutsave,pcutsave,'File',['Symbolic_function/fcut.m'],'Outputs',{['Rcut' ],['pcut' ]},'vars',{pPelvis,RPelvis,q_red,var_sym});
 
-
-
-% Closed loops
-Fullc_ClosedLoop = [c_ClosedLoop{:}];
-Fullceq_ClosedLoop = [ceq_ClosedLoop{:}];
-Fullc_ClosedLoop = Fullc_ClosedLoop(:);
-Fullceq_ClosedLoop = Fullceq_ClosedLoop(:);
-
-if  ~isempty(Fullceq_ClosedLoop)
-    matlabFunction(Fullc_ClosedLoop,Fullceq_ClosedLoop,'File',['Symbolic_function/fCL.m'],'Outputs',{'c','ceq'},'vars',{pPelvis,RPelvis,q_red,var_sym});
-else
-    matlabFunction(0*q_red,0*q_red,'File',['Symbolic_function/fCL.m'],'Outputs',{'c','ceq'},'vars',{pPelvis,RPelvis,q_red,var_sym});
+% boucle(s) fermée(s) (Closed loops)
+for i=1:numel(c_ClosedLoop)
+    matlabFunction(ceq_ClosedLoop{i},c_ClosedLoop{i},'File',['Symbolic_function/fCL' num2str(i) '.m'],...
+            'Outputs',{'c','ceq'},'vars',{pPelvis,RPelvis,q_red,var_sym,pcut,Rcut});   
 end
-    
-
+nbClosedLoop=numel(c_ClosedLoop);
 
 end
 

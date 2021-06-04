@@ -1,11 +1,16 @@
-function [error] = ErrorMarkersIK(q,positions)
+function [error] = ErrorMarkersIK(q,real_markers,f,list_markers,Rcut,pcut)
 % Computation of reconstruction error for the inverse kinematics step
 %   Computation of the distance between the position of each experimental 
 %   marker and the position of the corresponded model marker
 %
 %   INPUT
 %   - q: vector of joint coordinates at a given instant
-%   - positions : matrix of experimental marker positions
+%   - nb_cut: number of geometrical cut done in the osteo-articular model
+%   - real_markers: 3D position of experimental markers
+%   - f: current frame
+%   - list_markers: list of the marker names
+%   - Rcut: pre-initialization of Rcut
+%   - pcut: pre-initialization of pcut
 %   OUTPUT
 %   - error: distance between the position of each experimental marker and
 %   the position of the corresponded model marker 
@@ -20,6 +25,9 @@ function [error] = ErrorMarkersIK(q,positions)
 %________________________________________________________
 [Rcut,pcut]=fcut(q);
 
-error =  sqrt(sum(reshape(-X_markers(q,pcut,Rcut) + positions,3,length(positions)/3).^2,1));
+error=zeros(numel(list_markers),1);
+for m=1:numel(list_markers)
+    error(m,:) = norm(feval([list_markers{m} '_Position'],q,pcut,Rcut) - real_markers(m).position(f,:)');
+end
 
 end
