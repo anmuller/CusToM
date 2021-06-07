@@ -54,7 +54,9 @@ s_root=find([Human_model.mother]==0);
 q_map(s_root,s_root)=0;
 
 [~,col]=find(sum(q_map,1)==0); q_map(:,col)=[];
+% q_map=orth(q_map); %kernel of A in A*K=K (Kernal of A matrix)
 [~,col]=find(sum(q_dep_map,1)==0); q_dep_map(:,col)=[];
+%q_dep_map=orth(q_dep_map); %kernel of A in A*K=K (Kernal of A matrix)
 % matrix mapping coordinates without the moving basis.
 q_map_unsix=q_map;[~,col]=find(q_map_unsix(end-5:end,:));
     q_map_unsix(:,col)=[];
@@ -98,6 +100,7 @@ Human_model(s_root).p=pPelvis;
 Human_model(s_root).R=RPelvis;
 
 % Computation of the symbolic markers position
+%[Human_model,Markers_set,~,~,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure(Human_model,Markers_set,s_root,q,k,p_adapt,1,1);
 [Human_model,Markers_set,~,~,c_ClosedLoop,ceq_ClosedLoop]=Symbolic_ForwardKinematicsCoupure(Human_model,Markers_set,s_root,q_complete,k,p_adapt,1,1);
 
 % position and rotation of the solids used as cuts
@@ -122,20 +125,151 @@ end
 % %% Jacobian matrix computation (thanks to several matrix)
 E = [Markers_set.exist]';
 ind_mk = find(E==1);
+
+% pos_root =find([Human_model.mother]==0);
+% % ind_s = 1:numel(Human_model)~=pos_root;
+% ind_s = logical(q_map'*(1:numel(Human_model)~=pos_root)');
+% 
+% % what if cuts are not in the reduce set ???
+ind_Kcut = find(cellfun(@isempty,{Human_model.KinematicsCut} )==0);
+% % ind_Kcut = logical(q_map'*not(cellfun(@isempty,{Human_model.KinematicsCut} ))');
+% 
+% %Nb_q = numel(Human_model)-1;
+% Nb_q = numel(q_red);%-1;
+% Nb_mk=numel(list_markers);
+% Nb_dir_mk=3*Nb_mk;
+% 
+% % Array of marker functions for each direction of space x,y,z 
+% f=sym(zeros(Nb_dir_mk,1));
+% for ii=1:Nb_mk
+%     iie = ind_mk(ii);
+%     for jj=1:3
+%         ind = sub2ind([3 Nb_mk],jj,ii);
+%         f(ind) = Markers_set(iie).position_symbolic(jj);
+%     end
+% end
+% 
+% % Jfq
+% Jfq_sym = jacobian(f,q_red(ind_s));
+% %Jfq_sym = jacobian(f,q(ind_s)); q_complete
+% 
+% Jfq =zeros(Nb_dir_mk,Nb_q);
+% % idx=Jfq_sym(:)==0;
+% % Jfq(idx)=0;
+% idx=Jfq_sym(:)==1;
+% Jfq(idx)=1;
+% 
+% indexesNumericJfq = find(Jfq_sym~=0 & Jfq_sym~=1)';
+% % nonNumericJfq = matlabFunction(Jfq_sym(indexesNumericJfq), 'Vars', {q,pcut,Rcut});
+% nonNumericJfq = matlabFunction(Jfq_sym(indexesNumericJfq), 'Vars', {q_red,pcut,Rcut});
+% 
+% % Jfcut
+% Nb_cut = size(pcut,3);
+% Nb_param_1cut= 12; %3 coordinates in translations, 9 in rotations
+% Nb_param_cut = Nb_param_1cut*Nb_cut;
+% 
+% % kinematic cuts parameters
+% param=[pcut,permute(Rcut,[2,1,3])];
+% 
+% Jfcut_sym = jacobian(f,param(:));
+% 
+% Jfcut = zeros(Nb_dir_mk,Nb_param_cut);
+% % idx=Jfcut_sym(:)==0;
+% % Jfcut(idx)=0;
+% idx=Jfcut_sym(:)==1;
+% Jfcut(idx)=1;
+% 
+% indexesNumericJfcut = find(Jfcut_sym~=0 & Jfcut_sym~=1)';
+% %nonNumericJfcut = matlabFunction(Jfcut_sym(indexesNumericJfcut), 'Vars', {q,pcut,Rcut});
+% nonNumericJfcut = matlabFunction(Jfcut_sym(indexesNumericJfcut), 'Vars', {q_red,pcut,Rcut});
+% 
+% % Fonctions pcut and Rcut for kinematic cut indices
+% fcut=sym(zeros(Nb_param_1cut,Nb_cut));
+% num_cut = [Human_model(ind_Kcut).KinematicsCut];
+% for ii=1:Nb_cut
+%     i_cut=ind_Kcut(ii);
+%     fpcut = [Human_model(i_cut).p];
+%     fpcut = fpcut(:);
+%     
+%     fRcut = [Human_model(i_cut).R];
+%     fRcut = permute(fRcut,[2,1,3]);
+%     fRcut = fRcut(:);
+%     fcut(:,num_cut(ii))=[fpcut;fRcut]; % ordered by the number of the cut
+% end
+% fcut=fcut(:);
+% 
+% % Jcutq
+% Jcutq_sym = jacobian(fcut,q_red(ind_s));
+% % Jcutq_sym=jacobian(fcut,q(ind_s)); %complete
+% 
+% Jcutq = zeros(Nb_param_cut,Nb_q); 
+% % idx=Jcutq_sym(:)==0;
+% % Jcutq(idx)=0;
+% idx=Jcutq_sym(:)==1;
+% Jcutq(idx)=1;
+% 
+% indexesNumericJcutq=find(Jcutq_sym~=0 & Jcutq_sym~=1);
+% % nonNumericJcutq = matlabFunction(Jcutq_sym(indexesNumericJcutq), 'Vars', {q,pcut,Rcut});
+% nonNumericJcutq = matlabFunction(Jcutq_sym(indexesNumericJcutq), 'Vars', {q_red,pcut,Rcut});
+% 
+% % Jcutcut
+% Jcutcut_sym=jacobian(fcut,param(:));
+% 
+% Jcutcut = eye(Nb_param_cut,Nb_param_cut);
+% % Diagonal terms are the derivatives of themselves 
+% % dy/dy=1
+% % idx=Jcutcut_sym(:)==0;
+% % Jcutcut(idx)=0;
+% idx=Jcutcut_sym(:)==1;
+% Jcutcut(idx)=1;
+% 
+% indexesNumericJcutcut=find(Jcutcut_sym~=0 & Jcutcut_sym~=1);
+% % if ~isempty(indexesNumericJcutcut)
+% %     nonNumericJcutcut = matlabFunction(Jcutcut_sym(indexesNumericJcutcut), 'Vars', {q,pcut,Rcut});
+% nonNumericJcutcut = matlabFunction(Jcutcut_sym(indexesNumericJcutcut), 'Vars', {q_red,pcut,Rcut});
+% % end
+% 
+% % Find solides without marqueurs at the end of the chains.
+% RmvInd_q = intersect(find(sum(Jcutq_sym,1)==0),find(sum(Jfq_sym,1)==0));
+% %% Sauvegarde des données relatives à la matrice Jacobienne
+% Jacob.Jfq = Jfq;
+% Jacob.indexesNumericJfq = indexesNumericJfq;
+% Jacob.nonNumericJfq = nonNumericJfq;
+% Jacob.Jfcut = Jfcut;
+% Jacob.indexesNumericJfcut = indexesNumericJfcut;
+% Jacob.nonNumericJfcut = nonNumericJfcut;
+% Jacob.Jcutq = Jcutq;
+% Jacob.indexesNumericJcutq = indexesNumericJcutq;
+% Jacob.nonNumericJcutq = nonNumericJcutq;
+% Jacob.Jcutcut = Jcutcut;
+% Jacob.indexesNumericJcutcut = indexesNumericJcutcut;
+% Jacob.nonNumericJcutcut = nonNumericJcutcut;
+% Jacob.RmvInd_q=RmvInd_q;
 Jacob=[];
 
 %% Création des fonctions pour chaque marqueurs et chaque solide de coupure
 
 for ii=1:length(ind_mk)
     m = ind_mk(ii);
+%     matlabFunction(Markers_set(m).position_symbolic,'file',['Symbolic_function/' Markers_set(m).name '_Position.m'],'vars',{q,pcut,Rcut});
     matlabFunction(Markers_set(m).position_symbolic,'file',['Symbolic_function/' Markers_set(m).name '_Position.m'],'vars',{q_red,pcut,Rcut});
     dX((ii-1)*3+1:3*ii,:) = Markers_set(m).position_symbolic ;
 end
 % One function for all markers
-matlabFunction(dX,'file',['Symbolic_function/X_markers'],'vars',{q_red,pcut,Rcut},'Optimize',true);
+matlabFunction(dX,'file',['Symbolic_function/X_markers'],'vars',{q_red,pcut,Rcut});
 
-ind_Kcut = find(cellfun(@isempty,{Human_model.KinematicsCut} )==0);
 % Cut solid
+
+% disp("old")
+% % tic
+% for ii=1:length(ind_Kcut) % solide i
+%     i_Kc = ind_Kcut(ii);
+%     matlabFunction(Human_model(i_Kc).R,Human_model(i_Kc).p,'File',['Symbolic_function/f' num2str(Human_model(i_Kc).KinematicsCut) 'cut.m'],...
+%         'Outputs',{['R' num2str(num2str(Human_model(i_Kc).KinematicsCut)) 'cut' ],['p' num2str(num2str(Human_model(i_Kc).KinematicsCut)) 'cut' ]},...;
+%         'vars',{q_red,pcut,Rcut});
+% end
+% % toc
+
 for ii=1:length(ind_Kcut) % solide i
     i_Kc = ind_Kcut(ii);
     fRcut_all(:,:,Human_model(i_Kc).KinematicsCut) = Human_model(i_Kc).R;
@@ -150,7 +284,7 @@ for c=1:length(ind_Kcut)
     [Rcutsave,pcutsave]=cutfunc(q_red,pcutsave,Rcutsave);
 end
 
-matlabFunction(Rcutsave,pcutsave,'File',['Symbolic_function/fcut.m'],'Outputs',{['Rcut' ],['pcut' ]},'vars',{q_red},'Optimize',true);
+matlabFunction(Rcutsave,pcutsave,'File',['Symbolic_function/fcut.m'],'Outputs',{['Rcut' ],['pcut' ]},'vars',{q_red});
         
 % Closed loops
 Fullc_ClosedLoop = [c_ClosedLoop{:}];
@@ -162,7 +296,28 @@ if  ~isempty(Fullceq_ClosedLoop)
     matlabFunction(Fullc_ClosedLoop,Fullceq_ClosedLoop,'File',['Symbolic_function/fCL.m'],'Outputs',{'c','ceq'},'vars',{q_red});
 end
 
+% for i=1:numel(c_ClosedLoop)
+%     matlabFunction(c_ClosedLoop{i},ceq_ClosedLoop{i},'File',['Symbolic_function/fCL' num2str(i) '.m'],...
+%             'Outputs',{'c','ceq'},'vars',{q_red});   
+% end
+
 %We delete p and R fields
 Human_model = rmfield(Human_model, 'p');
 Human_model = rmfield(Human_model, 'R');
+
+%% find kinematic cuts to add them again to human model
+% if bool_kd
+%     ind_reduce = find(~cellfun(@isempty,{Human_model.KinematicsCut}')==1);
+%     for ii=1:length(ind_reduce)
+%         [~,ind_complete]=intersect({Human_model_save.name}',Human_model(ind_reduce(ii)).name);
+%         Human_model_save(ind_complete).KinematicsCut=Human_model(ind_reduce(ii)).KinematicsCut;
+%     end
+%     Human_model = Human_model_save;
+% end
+
 end
+
+
+
+
+
