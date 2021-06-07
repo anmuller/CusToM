@@ -542,8 +542,8 @@ num_solid=0;
     OsteoArticularModel(incr_solid).c=[0 0 0]';
     OsteoArticularModel(incr_solid).m=0;                 
     OsteoArticularModel(incr_solid).I=zeros(3,3);
-    OsteoArticularModel(incr_solid).comment='Trunk Axial Rotation Right(+)/Left(-)';
-    OsteoArticularModel(incr_solid).FunctionalAngle='Trunk Axial Rotation Right(+)/Left(-)';
+    OsteoArticularModel(incr_solid).comment='Trunk Lateral Bending Right(+)/Left(-)';
+    OsteoArticularModel(incr_solid).FunctionalAngle='Trunk Lateral Bending Right(+)/Left(-)';
 
     % Thorax
     num_solid=num_solid+1;        % number of the solid ...
@@ -555,8 +555,8 @@ num_solid=0;
     OsteoArticularModel(incr_solid).mother=s_UpperTrunk_J2;           
     OsteoArticularModel(incr_solid).a=[0 1 0]';    
     OsteoArticularModel(incr_solid).joint=1;
-    OsteoArticularModel(incr_solid).limit_inf=-0.2;
-    OsteoArticularModel(incr_solid).limit_sup=0.2;
+    OsteoArticularModel(incr_solid).limit_inf=-pi/4;
+    OsteoArticularModel(incr_solid).limit_sup=pi/4;
     OsteoArticularModel(incr_solid).Visual=1;
     OsteoArticularModel(incr_solid).calib_k_constraint=[];
     OsteoArticularModel(incr_solid).b=[0 0 0]';  
@@ -566,8 +566,8 @@ num_solid=0;
     OsteoArticularModel(incr_solid).anat_position=Thorax_position_set;
     OsteoArticularModel(incr_solid).visual_file = ['Holzbaur/thorax.mat'];
     OsteoArticularModel(incr_solid).L={'Pelvis_LowerTrunkNode';'Thorax_T1C5'};
-    OsteoArticularModel(incr_solid).comment='Trunk Lateral Bending Right(+)/Left(-)';
-    OsteoArticularModel(incr_solid).FunctionalAngle='Trunk Lateral Bending Right(+)/Left(-)';
+    OsteoArticularModel(incr_solid).comment='Trunk Axial Rotation Right(+)/Left(-)';
+    OsteoArticularModel(incr_solid).FunctionalAngle='Trunk Axial Rotation Right(+)/Left(-)';
 
     
     %% Rclavicle
