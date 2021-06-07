@@ -3,15 +3,7 @@ function [error] = CostFunctionSymbolicIK2(q,positions)
 %   
 %   INPUT
 %   - q: vector of joint coordinates at a given instant
-%   - nb_cut: number of geometrical cut done in the osteo-articular model
-%   - real_markers: 3D position of experimental markers
-%   - f: current frame
-%   - list_function: list of functions used for the evaluation of the
-%   geometrical cuts position 
-%   - list_function_markers: list of functions used for the evaluation of the
-%   markers position 
-%   - Rcut: pre-initialization of Rcut
-%   - pcut: pre-initialization of pcut
+%   - positions : vector of experimental marker positions
 %   OUTPUT
 %   - error: cost function value
 %________________________________________________________
