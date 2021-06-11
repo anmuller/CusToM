@@ -1,4 +1,4 @@
-function [OsteoArticularModel]= Upperarm(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)
+function [OsteoArticularModel]= Upperarm(OsteoArticularModel,k,Signe,Mass,AttachmentPoint,varargin)
 % Addition of an upper arm model
 %   This upper arm model contains one solid (humerus), exhibits 3 dof for the
 %   shoulder
@@ -363,14 +363,59 @@ OsteoArticularModel(incr_solid).density=1.07; %kg.L-1
 % OsteoArticularModel(incr_solid).wrap(2).num_solid=incr_solid;
 
 % Wrapping Lat
-OsteoArticularModel(incr_solid).wrap(3).name=['Wrap' Signe 'HumerusLat'];
-OsteoArticularModel(incr_solid).wrap(3).anat_position=['Wrap' Signe 'HumerusLat'];
-OsteoArticularModel(incr_solid).wrap(3).type='S'; % C: Cylinder or S: Sphere
-OsteoArticularModel(incr_solid).wrap(3).radius=k*0.03;
-OsteoArticularModel(incr_solid).wrap(3).R=[ 0.9619    -0.0190    (-1)^Signe_bool*0.2726;
-                                            -0.0150    0.9924    (-1)^Signe_bool*0.1221;
-                                            (-1)^Signe_bool*-0.2729   (-1)^Signe_bool*-0.1215    0.9543];
-OsteoArticularModel(incr_solid).wrap(3).location=Mirror*osim2antoine'.*[-0.0016 0.0092 0.0052]'+Humerus_ghJointNode';
-OsteoArticularModel(incr_solid).wrap(3).h=0;
-OsteoArticularModel(incr_solid).wrap(3).num_solid=incr_solid;
+% OsteoArticularModel(incr_solid).wrap(3).name=['Wrap' Signe 'HumerusLat'];
+% OsteoArticularModel(incr_solid).wrap(3).anat_position=['Wrap' Signe 'HumerusLat'];
+% OsteoArticularModel(incr_solid).wrap(3).type='S'; % C: Cylinder or S: Sphere
+% OsteoArticularModel(incr_solid).wrap(3).radius=k*0.03;
+% OsteoArticularModel(incr_solid).wrap(3).R=[ 0.9619    -0.0190    (-1)^Signe_bool*0.2726;
+%                                             -0.0150    0.9924    (-1)^Signe_bool*0.1221;
+%                                             (-1)^Signe_bool*-0.2729   (-1)^Signe_bool*-0.1215    0.9543];
+% OsteoArticularModel(incr_solid).wrap(3).location=Mirror*osim2antoine'.*[-0.0016 0.0092 0.0052]'+Humerus_ghJointNode';
+% OsteoArticularModel(incr_solid).wrap(3).h=0;
+% OsteoArticularModel(incr_solid).wrap(3).num_solid=incr_solid;
+
+
+
+
+
+
+cell = varargin{1};
+
+if strcmp(func2str(cell{1}),'UpperTrunkClavicle')
+    
+    %% RScapula
+    % Scapula_J1
+    incr_solid = find(strcmp({OsteoArticularModel.name},[Signe 'Scapula_J1']));
+    % Dependancy
+    OsteoArticularModel(incr_solid).kinematic_dependancy.active=1;
+    OsteoArticularModel(incr_solid).kinematic_dependancy.Joint=s_Glenohumeral_J2;
+    % Kinematic dependancy function
+    syms Hz 
+    f_z = matlabFunction((1-2*Signe_bool)*(27.939*pi/180+0.088*Hz));
+    OsteoArticularModel(incr_solid).kinematic_dependancy.q=f_z;
+    
+    % Scapula_J2
+    incr_solid = find(strcmp({OsteoArticularModel.name},[Signe 'Scapula_J2']));
+    % Dependancy
+    OsteoArticularModel(incr_solid).kinematic_dependancy.active=1;
+    OsteoArticularModel(incr_solid).kinematic_dependancy.Joint=s_Glenohumeral_J2; % Thoracicellips
+    % Kinematic dependancy function
+    f_x = matlabFunction(-6.970*pi/180+0.220*Hz);
+    OsteoArticularModel(incr_solid).kinematic_dependancy.q=f_x;
+%     
+    % Scapula
+    incr_solid = find(strcmp({OsteoArticularModel.name},[Signe 'Scapula']));
+    % Dependancy
+    OsteoArticularModel(incr_solid).kinematic_dependancy.active=1;
+    OsteoArticularModel(incr_solid).kinematic_dependancy.Joint=s_Glenohumeral_J2; % Thoracicellips
+    % Kinematic dependancy function
+    f_y = matlabFunction(-4.884*pi/180+0.145*Hz);
+    OsteoArticularModel(incr_solid).kinematic_dependancy.q=f_y;
+
+    
+end
+
+
+
+
 end

@@ -1,4 +1,4 @@
-function [OsteoArticularModel]= Arm(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)
+function [OsteoArticularModel]= Arm(OsteoArticularModel,k,Signe,Mass,AttachmentPoint,varargin)
 % Addition of an arm model
 %   This arm model contains 3 solids (upper arm, forearm and hand),
 %   exhibits 3 dof for the shoulder, 2 dof for the elbow and 2 dof for the
@@ -29,7 +29,7 @@ function [OsteoArticularModel]= Arm(OsteoArticularModel,k,Signe,Mass,AttachmentP
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
 % Georges Dumont
 %________________________________________________________
-[OsteoArticularModel]= Upperarm(OsteoArticularModel,k,Signe,Mass,AttachmentPoint);
+[OsteoArticularModel]= Upperarm(OsteoArticularModel,k,Signe,Mass,AttachmentPoint,varargin);
 [OsteoArticularModel]= Forearm(OsteoArticularModel,k,Signe,Mass,[Signe 'Humerus_ElbowJointNode']);
 [OsteoArticularModel]= Hand(OsteoArticularModel,k,Signe,Mass,[Signe 'Forearm_WristJointNode']);
 
