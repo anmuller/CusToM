@@ -46,20 +46,19 @@ Colors.nb_ms=[];
 Colors.NbPointsPrediction=[];
 
 if options.mod_marker_anim || options.exp_marker_anim || options.mass_centers_anim
-    if options.mod_marker_anim || options.exp_marker_anim
-        nb_set= options.mod_marker_anim + options.exp_marker_anim;
+    if options.mod_marker_anim 
         % Creating a mesh with all the markers to do only one gpatch
         nbmk=numel(Markers_set);
-        Colors.fmk=1:1:nbmk*nb_set;
-        Colors.C_mk = zeros(nbmk*nb_set,3); % RGB;
-        if options.mod_marker_anim && ~options.exp_marker_anim
-            Colors.C_mk(1:nbmk,:)=repmat([255 102 0]/255,[nbmk 1]);
-        elseif ~options.mod_marker_anim && options.exp_marker_anim
-            Colors.C_mk(1:nbmk,:)=repmat([0 153 255]/255,[nbmk 1]);
-        elseif options.mod_marker_anim && options.exp_marker_anim
-            Colors.C_mk(1:nbmk,:)=repmat([255 102 0]/255,[nbmk 1]);
-            Colors.C_mk(nbmk+1:nbmk*nb_set,:)=repmat([0 153 255]/255,[nbmk 1]);
-        end
+        Colors.fmk=1:1:nbmk;
+        Colors.C_mk = zeros(nbmk,3); % RGB;  
+        Colors.C_mk(1:nbmk,:)=repmat([255 102 0]/255,[nbmk 1]);
+    end
+    if  options.exp_marker_anim
+        % Creating a mesh with all the markers to do only one gpatch
+        nbmk=numel(Markers_set);
+        Colors.fmkXP=1:1:nbmk;
+        Colors.C_mkXP = zeros(nbmk,3); % RGB;
+        Colors.C_mkXP(1:nbmk,:)=repmat([0 153 255]/255,[nbmk 1]);
     end
     if options.mass_centers_anim
         Colors.num_s_mass_center=find([Human_model.Visual]);

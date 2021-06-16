@@ -36,7 +36,7 @@ function [animStruct]=AnimationFramebyFrame(ax,fig,filename,AnalysisParameters,M
 options=OptionsChoices(BiomechanicalModel,AnimateParameters);
 Colors=ColorsAnimation(filename,Muscles,AnimateParameters,Human_model,ModelParameters,AnalysisParameters,options,Markers_set);
 
-for f=f_affich   
+for f=f_affich
     if isfield(AnimateParameters,'Mode')  && (isequal(AnimateParameters.Mode, 'Figure') || isequal(AnimateParameters.Mode, 'Picture'))
         clf  % just for figure
         ax = gca;
@@ -72,7 +72,7 @@ for f=f_affich
         [Human_model_bis,Muscles_test, Markers_set_test]=...
             ForwardKinematicsAnimation8(Human_model,Markers_set,Muscles,qf,find(~[Human_model.mother]),...
             bone_anim,muscle_anim,options.mod_marker_anim);
-    end  
+    end
     
     %% Segments
     if options.seg_anim
@@ -105,7 +105,7 @@ for f=f_affich
             h_seg = gpatch(F_seg,V_seg,[],0.4*[1 1 1],1,4);
         end
         animStruct.Handles{f} = [animStruct.Handles{f} h_seg];
-        animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices'}; 
+        animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices'};
         animStruct.Set{f} = {animStruct.Set{f}{:},V_seg};
     end
     
@@ -122,7 +122,7 @@ for f=f_affich
                 cur_nb_F=length(Human_model_bis(jjj).F);
                 tot_nb_F=length(Fbones);
                 tot_nb_V=length(X);
-                Fbones((1:cur_nb_F)+tot_nb_F,:)=Human_model_bis(jjj).F+tot_nb_V; 
+                Fbones((1:cur_nb_F)+tot_nb_F,:)=Human_model_bis(jjj).F+tot_nb_V;
                 onearray = ones([1,cur_nb_V]);
                 if isempty(Human_model_bis(jjj).V)
                     temp=[];
@@ -152,7 +152,7 @@ for f=f_affich
                 warning('No osteo-articular bone model is available');
             end
         end
-    end   
+    end
     
     %% Markers
     % Model
@@ -163,25 +163,41 @@ for f=f_affich
                 cur_Vs=Markers_set_test(i_m).pos_anim';
                 Vsmk=[Vsmk;cur_Vs];
             end
+            
+            if f==f_affich(1) || (isfield(AnimateParameters,'Mode')  && isequal(AnimateParameters.Mode, 'Figure'))
+                m1 = patch(ax,'Faces',Colors.fmk,'Vertices',Vsmk,'FaceColor','none','FaceVertexCData',Colors.C_mk,'EdgeColor','none');
+                m1.Marker='o';
+                m1.MarkerFaceColor='flat';
+                m1.MarkerEdgeColor='k';
+                m1.MarkerSize=6;
+            end
+            animStruct.Handles{f}=[animStruct.Handles{f} m1];
+            animStruct.Props{f}={ animStruct.Props{f}{:},'Vertices'};
+            animStruct.Set{f}={animStruct.Set{f}{:},Vsmk};
         end
         % XP
+        VsmkXP=[];
+        
         if options.exp_marker_anim %% Experimental markers
-            for i_m = 1:numel(Markers_set_test)
-                cur_Vs=real_markers(i_m).position(f,:);
-                Vsmk=[Vsmk;cur_Vs];
+            for i_m = 1:numel(real_markers)
+                cur_VsXP=real_markers(i_m).position(f,:);
+                VsmkXP=[VsmkXP;cur_VsXP];
             end
+            
+            if f==f_affich(1) || (isfield(AnimateParameters,'Mode')  && isequal(AnimateParameters.Mode, 'Figure'))
+                m = patch(ax,'Faces',Colors.fmkXP(1:numel(real_markers)),'Vertices',VsmkXP,'FaceColor','none','FaceVertexCData',Colors.C_mkXP(1:numel(real_markers),:),'EdgeColor','none');
+                m.Marker='o';
+                m.MarkerFaceColor='flat';
+                m.MarkerEdgeColor='k';
+                m.MarkerSize=6;
+            end
+            animStruct.Handles{f}=[animStruct.Handles{f} m];
+            animStruct.Props{f}={ animStruct.Props{f}{:},'Vertices'};
+            animStruct.Set{f}={animStruct.Set{f}{:},VsmkXP};
         end
-        if f==f_affich(1) || (isfield(AnimateParameters,'Mode')  && isequal(AnimateParameters.Mode, 'Figure'))
-            m = patch(ax,'Faces',Colors.fmk,'Vertices',Vsmk,'FaceColor','none','FaceVertexCData',Colors.C_mk,'EdgeColor','none');
-            m.Marker='o';
-            m.MarkerFaceColor='flat';
-            m.MarkerEdgeColor='k';
-            m.MarkerSize=6;
-        end
-        animStruct.Handles{f}=[animStruct.Handles{f} m];
-        animStruct.Props{f}={ animStruct.Props{f}{:},'Vertices'};
-        animStruct.Set{f}={animStruct.Set{f}{:},Vsmk};
-    end   
+        
+        
+    end
     
     %% Anatomical landmarks
     
@@ -220,7 +236,7 @@ for f=f_affich
                     
                     labels=[labels; BiomechanicalModel.OsteoArticularModel(index).anat_position(:,1)];
                     
-                end           
+                end
             end
             
             C_col_p=repmat([253,108,168]/255,[size(anat_pointsold,1) 1]);
@@ -269,15 +285,15 @@ for f=f_affich
                 end
                 
                 animStruct.Handles{f} = [animStruct.Handles{f} hanat];
-                animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices'}; 
+                animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices'};
                 
                 animStruct.Set{f} = {animStruct.Set{f}{:},an};
-                             
+                
                 for num_fleche=0:length(options.Segment)-1
                     animStruct.Handles{f} = [animStruct.Handles{f} hframe(6*num_fleche+1) hframe(6*num_fleche+1) hframe(6*num_fleche+1) hframe(6*num_fleche+1) hframe(6*num_fleche+1) hframe(6*num_fleche+1) ];
                     animStruct.Handles{f} = [animStruct.Handles{f} hframe(6*num_fleche+2) hframe(6*num_fleche+2) hframe(6*num_fleche+2) hframe(6*num_fleche+2) hframe(6*num_fleche+2) hframe(6*num_fleche+2)];
                     animStruct.Handles{f} = [animStruct.Handles{f} hframe(6*num_fleche+3) hframe(6*num_fleche+3) hframe(6*num_fleche+3) hframe(6*num_fleche+3) hframe(6*num_fleche+3) hframe(6*num_fleche+3) ];
-                    animStruct.Props{f} = {animStruct.Props{f}{:},'XData','YData','ZData','UData','VData','WData'}; 
+                    animStruct.Props{f} = {animStruct.Props{f}{:},'XData','YData','ZData','UData','VData','WData'};
                     animStruct.Props{f} = {animStruct.Props{f}{:},'XData','YData','ZData','UData','VData','WData'};
                     animStruct.Props{f} = {animStruct.Props{f}{:},'XData','YData','ZData','UData','VData','WData'};
                     
@@ -288,9 +304,9 @@ for f=f_affich
                     animStruct.Handles{f} = [animStruct.Handles{f} hframe(6*num_fleche+4) hframe(6*num_fleche+4) hframe(6*num_fleche+4)  ];
                     animStruct.Handles{f} = [animStruct.Handles{f} hframe(6*num_fleche+5) hframe(6*num_fleche+5) hframe(6*num_fleche+5)  ];
                     animStruct.Handles{f} = [animStruct.Handles{f} hframe(6*num_fleche+6) hframe(6*num_fleche+6) hframe(6*num_fleche+6)  ];
-                    animStruct.Props{f} = {animStruct.Props{f}{:},'Position','String','FontWeight'}; 
                     animStruct.Props{f} = {animStruct.Props{f}{:},'Position','String','FontWeight'};
-                    animStruct.Props{f} = {animStruct.Props{f}{:},'Position','String','FontWeight'}; 
+                    animStruct.Props{f} = {animStruct.Props{f}{:},'Position','String','FontWeight'};
+                    animStruct.Props{f} = {animStruct.Props{f}{:},'Position','String','FontWeight'};
                     animStruct.Set{f} = {animStruct.Set{f}{:},[p1(num_fleche+1)+R11(num_fleche+1)*scale, p2(num_fleche+1)+R12(num_fleche+1)*scale, p3(num_fleche+1)+R13(num_fleche+1)*scale],'x','bold'};
                     animStruct.Set{f} = {animStruct.Set{f}{:},[p1(num_fleche+1)+R21(num_fleche+1)*scale, p2(num_fleche+1)+R22(num_fleche+1)*scale, p3(num_fleche+1)+R23(num_fleche+1)*scale],'y','bold'};
                     animStruct.Set{f} = {animStruct.Set{f}{:},[p1(num_fleche+1)+R31(num_fleche+1)*scale, p2(num_fleche+1)+R32(num_fleche+1)*scale, p3(num_fleche+1)+R33(num_fleche+1)*scale],'z','bold'};
@@ -321,7 +337,7 @@ for f=f_affich
                 else
                     F_seg =[F_seg; length(V_seg) length(V_seg)+1]; %need to be done before V_seg !
                 end
-                V_seg = [V_seg; pts]; 
+                V_seg = [V_seg; pts];
             end
             if isfield(AnimateParameters,'Mode')  && (isequal(AnimateParameters.Mode, 'Figure') ...
                     || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
@@ -443,7 +459,7 @@ for f=f_affich
             
             animStruct.Set{f} = {animStruct.Set{f}{:},an};
             
-                
+            
             for num_fleche=0:(length(concerned_bones)-1)
                 animStruct.Handles{f} = [animStruct.Handles{f} hframe(6*num_fleche+1) hframe(6*num_fleche+1) hframe(6*num_fleche+1) hframe(6*num_fleche+1) hframe(6*num_fleche+1) hframe(6*num_fleche+1) ];
                 animStruct.Handles{f} = [animStruct.Handles{f} hframe(6*num_fleche+2) hframe(6*num_fleche+2) hframe(6*num_fleche+2) hframe(6*num_fleche+2) hframe(6*num_fleche+2) hframe(6*num_fleche+2)];
@@ -512,7 +528,7 @@ for f=f_affich
         animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices'};
         animStruct.Set{f} = {animStruct.Set{f}{:},V_seg};
         
-             
+        
         Fmu=[];
         CEmu=[];
         Vmu=[];
@@ -552,25 +568,25 @@ for f=f_affich
                             nb_added_pts=size([pts_mu(imw,:);pt_wrap(:,:,imw)],1);
                             cur_Fmu = repmat([1 2],[nb_added_pts-1 1])+(0:nb_added_pts-2)'+size(Vmu,1);
                             Vmu=[Vmu;pts_mu(imw,:);pt_wrap(:,:,imw)];
-                            Fmu =[Fmu; cur_Fmu]; 
-                            CEmu=[CEmu; repmat(color_mus(mu,:),[nb_added_pts 1])]; 
+                            Fmu =[Fmu; cur_Fmu];
+                            CEmu=[CEmu; repmat(color_mus(mu,:),[nb_added_pts 1])];
                         else
                             if imw>1
                                 cur_Fmu = [1 2]+size(Vmu,1);
-                                Fmu =[Fmu; cur_Fmu]; 
+                                Fmu =[Fmu; cur_Fmu];
                             end
                             Vmu=[Vmu ;pts_mu(imw,:)];
                             CEmu=[CEmu; color_mus(mu,:)];
                         end
                     end
                     cur_Fmu = repmat([0 1],[1 1])+size(Vmu,1);
-                    Fmu =[Fmu; cur_Fmu]; 
+                    Fmu =[Fmu; cur_Fmu];
                     Vmu=[Vmu ;pts_mu(end,:)];
                     CEmu=[CEmu; color_mus];
                 else
                     cur_Fmu = repmat([1 2],[nbpts_mu-1 1])+(0:nbpts_mu-2)'+size(Vmu,1);
-                    Fmu =[Fmu; cur_Fmu]; 
-                    Vmu=[Vmu ;pts_mu]; 
+                    Fmu =[Fmu; cur_Fmu];
+                    Vmu=[Vmu ;pts_mu];
                     CEmu=[CEmu; repmat(color_mus,[nbpts_mu 1])];
                 end
             end
@@ -590,7 +606,7 @@ for f=f_affich
         animStruct.Props{f} = {animStruct.Props{f}{:},'Faces','Vertices','FaceVertexCData'};
         animStruct.Set{f} = {animStruct.Set{f}{:},Fmu,Vmu,CEmu};
         
-
+        
         if isfield(Human_model,'wrap')
             Fw=[];
             CEw=[];
@@ -612,7 +628,7 @@ for f=f_affich
                 end
             end
             if isfield(AnimateParameters,'Mode')  && (isequal(AnimateParameters.Mode, 'Figure') ...
-                    || isequal(AnimateParameters.Mode, 'GenerateParameters') ...     
+                    || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
                     || isequal(AnimateParameters.Mode, 'Modelling') ...
                     || isequal(AnimateParameters.Mode, 'GenerateAnimate'))
                 finv = figure('visible','off');
@@ -625,9 +641,9 @@ for f=f_affich
             animStruct.Handles{f} = [animStruct.Handles{f} hw];
             animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices'};
             animStruct.Set{f} = {animStruct.Set{f}{:},Vw};
-        end        
+        end
     end
- 
+    
     
     %% Mass Centers
     if options.mass_centers_anim
@@ -696,7 +712,7 @@ for f=f_affich
         animStruct.Set{f}={animStruct.Set{f}{:},Vpt_p};
     end
     
-        %% Scapulo-thoracic Ellipsoid
+    %% Scapulo-thoracic Ellipsoid
     if options.ellipsoid_anim
         %&& sum(cellfun(@isempty,[Muscles.wrap]'))==0
         Fe=[];
@@ -725,7 +741,7 @@ for f=f_affich
             Ve=[Ve ;Vell_R0(:,1:3)]; %#ok<AGROW>
         end
         if isfield(AnimateParameters,'Mode')  &&  (isequal(AnimateParameters.Mode, 'Figure') ...
-                || isequal(AnimateParameters.Mode, 'GenerateParameters') ...                
+                || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
                 || isequal(AnimateParameters.Mode, 'Modelling') ...
                 || isequal(AnimateParameters.Mode, 'GenerateAnimate'))
             finv = figure('visible','off');
@@ -761,7 +777,7 @@ for f=f_affich
             Vw=[Vw ;Vcyl_R0(:,1:3)];
         end
         if isfield(AnimateParameters,'Mode')  && (isequal(AnimateParameters.Mode, 'Figure') ...
-                || isequal(AnimateParameters.Mode, 'GenerateParameters') ...               
+                || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
                 || isequal(AnimateParameters.Mode, 'Modelling') ...
                 || isequal(AnimateParameters.Mode, 'GenerateAnimate'))
             finv = figure('visible','off');
@@ -788,11 +804,11 @@ for f=f_affich
             pts_mu = Muscles_test(mu).pos_pts';
             nbpts_mu = size(pts_mu,1);
             
-                cur_Fmu = repmat([1 2],[nbpts_mu-1 1])+(0:nbpts_mu-2)'+size(Vmu,1);
-                Fmu =[Fmu; cur_Fmu];
-                Vmu=[Vmu ;pts_mu];
-                CEmu=[CEmu; repmat(color_mus(mu,:),[nbpts_mu 1])];
-           
+            cur_Fmu = repmat([1 2],[nbpts_mu-1 1])+(0:nbpts_mu-2)'+size(Vmu,1);
+            Fmu =[Fmu; cur_Fmu];
+            Vmu=[Vmu ;pts_mu];
+            CEmu=[CEmu; repmat(color_mus(mu,:),[nbpts_mu 1])];
+            
         end
         if isfield(AnimateParameters,'Mode')  && (isequal(AnimateParameters.Mode, 'Figure') ...
                 || isequal(AnimateParameters.Mode, 'GenerateParameters') ...
@@ -855,7 +871,7 @@ for f=f_affich
                 Z_array=[extern_forces_f(3,i_for),...
                     extern_forces_f(3,i_for) + extern_forces_f(6,i_for)/Colors.coef_f_visual];
                 F_efp = [F_efp; [1 2]+size(V_efp,1)];
-                V_efp = [V_efp; [X_array' Y_array' Z_array']]; 
+                V_efp = [V_efp; [X_array' Y_array' Z_array']];
             end
         end
         if isfield(AnimateParameters,'Mode')  && (isequal(AnimateParameters.Mode, 'Figure') ...
