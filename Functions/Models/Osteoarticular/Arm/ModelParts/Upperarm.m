@@ -381,7 +381,7 @@ OsteoArticularModel(incr_solid).density=1.07; %kg.L-1
 
 cell = varargin{1};
 
-if strcmp(func2str(cell{1}),'UpperTrunkClavicle')
+if ~isempty(cell) && strcmp(func2str(cell{1}),'UpperTrunkClavicle')
     
     %% RScapula
     % Scapula_J1
