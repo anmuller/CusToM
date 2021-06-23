@@ -44,7 +44,7 @@ load([filename '/ExperimentalData.mat']); %#ok<LOAD>
 time = ExperimentalData.Time;
 
 freq=1/time(2);
-
+Prediction=[];
 %% Creation of a structure to add contact points
 for i=1:numel(AnalysisParameters.Prediction.ContactPoint)
     Prediction(i).points_prediction_efforts = AnalysisParameters.Prediction.ContactPoint{i}; %#ok<AGROW>
