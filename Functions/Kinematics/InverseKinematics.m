@@ -33,7 +33,7 @@ else
 end
 
 % Inverse kinematics
-for i = 1:numel(AnalysisParameters.filename)
+parfor i = 1:numel(AnalysisParameters.filename)
     if isequal(AnalysisParameters.General.InputData, @MVNX_V3) % Load inverse kinematics from a MVNX
         MVNXInverseKinematics(AnalysisParameters.filename{i}(1:end-(numel(AnalysisParameters.General.Extension)-1)), AnalysisParameters);
    else
@@ -45,8 +45,7 @@ for i = 1:numel(AnalysisParameters.filename)
         end
 
         % Save data
-        save([filename '/ExperimentalData'],'ExperimentalData');
-        save([filename '/InverseKinematicsResults'],'InverseKinematicsResults');
+        SaveDataIK(filename,ExperimentalData,InverseKinematicsResults);
     end
 end
 
