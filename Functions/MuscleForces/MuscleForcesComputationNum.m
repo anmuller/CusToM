@@ -19,7 +19,8 @@ function [] = MuscleForcesComputationNum(AnalysisParameters)
 % Georges Dumont
 %________________________________________________________
 
-parfor i = 1:numel(AnalysisParameters.filename)
+if numel(AnalysisParameters.filename)==1
+    i=1;
     filename = AnalysisParameters.filename{i}(1:end-(numel(AnalysisParameters.General.Extension)-1));
     BiomechanicalModel = load('BiomechanicalModel.mat');
     BiomechanicalModel = BiomechanicalModel.BiomechanicalModel;
@@ -29,6 +30,19 @@ parfor i = 1:numel(AnalysisParameters.filename)
         [MuscleForcesComputationResults] = ForcesComputationMusIC(filename, BiomechanicalModel, AnalysisParameters); %#ok<NASGU>
     end
     SaveDataMuscles(filename,MuscleForcesComputationResults);
+    
+else
+    parfor i = 1:numel(AnalysisParameters.filename)
+        filename = AnalysisParameters.filename{i}(1:end-(numel(AnalysisParameters.General.Extension)-1));
+        BiomechanicalModel = load('BiomechanicalModel.mat');
+        BiomechanicalModel = BiomechanicalModel.BiomechanicalModel;
+        if AnalysisParameters.Muscles.Method == 1
+            [MuscleForcesComputationResults] = ForcesComputationOptiNum(filename, BiomechanicalModel, AnalysisParameters); %#ok<NASGU>
+        elseif AnalysisParameters.Muscles.Method == 2
+            [MuscleForcesComputationResults] = ForcesComputationMusIC(filename, BiomechanicalModel, AnalysisParameters); %#ok<NASGU>
+        end
+        SaveDataMuscles(filename,MuscleForcesComputationResults);
+    end
 end
 
 end

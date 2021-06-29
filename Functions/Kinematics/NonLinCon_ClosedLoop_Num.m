@@ -28,8 +28,7 @@ function [c,ceq]=NonLinCon_ClosedLoop_Num(Human_model,solid_path1,solid_path2,nu
 
 % Contraints initialization
 c=[];
-%ceq=zeros(9*length(num_solid),1);
-ceq=zeros(7*length(num_solid),1);
+ceq=zeros(6*length(num_solid),1);
 
 
 for pp=1:numel(num_solid)
@@ -45,26 +44,26 @@ for pp=1:numel(num_solid)
         ptemp=p_ClosedLoop;
        
 %         % Rotation matrix must be equal to eye
-%         Rtemp=R_ClosedLoop -eye(3);
-%         ceq(1+9*(pp-1))=Rtemp(1,1);
-%         ceq(2+9*(pp-1))=Rtemp(2,2);
-%         ceq(3+9*(pp-1))=Rtemp(3,3);
+        Rtemp=R_ClosedLoop -eye(3);
+        ceq(1+6*(pp-1))=Rtemp(1,1);
+        ceq(2+6*(pp-1))=Rtemp(2,2);
+        ceq(3+6*(pp-1))=Rtemp(3,3);
 %         ceq(4+9*(pp-1))=Rtemp(1,2);
 %         ceq(5+9*(pp-1))=Rtemp(1,3);
 %         ceq(6+9*(pp-1))=Rtemp(2,3);
-%         ceq(7+9*(pp-1))=ptemp(1);
-%         ceq(8+9*(pp-1))=ptemp(2);
-%         ceq(9+9*(pp-1))=ptemp(3);
+        ceq(4+6*(pp-1))=ptemp(1);
+        ceq(5+6*(pp-1))=ptemp(2);
+        ceq(6+6*(pp-1))=ptemp(3);
         
         % Quaternion expression of rotation matrix   
-        r=1/2*sqrt(1+Rtemp(1,1)+Rtemp(2,2)+Rtemp(3,3));
-        ceq(1+7*(pp-1))=r-1;
-        ceq(2+7*(pp-1))=Rtemp(2,3);
-        ceq(3+7*(pp-1))=Rtemp(1,3);
-        ceq(4+7*(pp-1))=Rtemp(1,2);
-        ceq(5+7*(pp-1))=ptemp(1); 
-        ceq(6+7*(pp-1))=ptemp(2);
-        ceq(7+7*(pp-1))=ptemp(3);
+%         r=1/2*sqrt(1+Rtemp(1,1)+Rtemp(2,2)+Rtemp(3,3));
+%         ceq(1+7*(pp-1))=r-1;
+%         ceq(2+7*(pp-1))=Rtemp(2,3);
+%         ceq(3+7*(pp-1))=Rtemp(1,3);
+%         ceq(4+7*(pp-1))=Rtemp(1,2);
+%         ceq(5+7*(pp-1))=ptemp(1); 
+%         ceq(6+7*(pp-1))=ptemp(2);
+%         ceq(7+7*(pp-1))=ptemp(3);
 
         
     else
@@ -78,27 +77,27 @@ for pp=1:numel(num_solid)
             Rtemp=R_ClosedLoop;
             ptemp=p_ClosedLoop;
             
-%             % Rotation matrix must be equal to eye
-%             Rtemp=R_ClosedLoop -eye(3);
-%             ceq(1+9*(pp-1))=Rtemp(1,1);
-%             ceq(2+9*(pp-1))=Rtemp(2,2);
-%             ceq(3+9*(pp-1))=Rtemp(3,3);
+            % Rotation matrix must be equal to eye
+            Rtemp=R_ClosedLoop -eye(3);
+            ceq(1+6*(pp-1))=Rtemp(1,1);
+            ceq(2+6*(pp-1))=Rtemp(2,2);
+            ceq(3+6*(pp-1))=Rtemp(3,3);
 %             ceq(4+9*(pp-1))=Rtemp(1,2);
 %             ceq(5+9*(pp-1))=Rtemp(1,3);
 %             ceq(6+9*(pp-1))=Rtemp(2,3);
-%             ceq(7+9*(pp-1))=ptemp(1);
-%             ceq(8+9*(pp-1))=ptemp(2);
-%             ceq(9+9*(pp-1))=ptemp(3);
+            ceq(4+6*(pp-1))=ptemp(1);
+            ceq(5+6*(pp-1))=ptemp(2);
+            ceq(6+6*(pp-1))=ptemp(3);
        
             % Quaternion expression of rotation matrix   
-            r=1/2*sqrt(1+Rtemp(1,1)+Rtemp(2,2)+Rtemp(3,3));
-            ceq(1+7*(pp-1))=r-1;
-            ceq(2+7*(pp-1))=Rtemp(2,3);
-            ceq(3+7*(pp-1))=Rtemp(1,3);
-            ceq(4+7*(pp-1))=Rtemp(1,2);
-            ceq(5+7*(pp-1))=ptemp(1); 
-            ceq(6+7*(pp-1))=ptemp(2);
-            ceq(7+7*(pp-1))=ptemp(3);
+%             r=1/2*sqrt(1+Rtemp(1,1)+Rtemp(2,2)+Rtemp(3,3));
+%             ceq(1+7*(pp-1))=r-1;
+%             ceq(2+7*(pp-1))=Rtemp(2,3);
+%             ceq(3+7*(pp-1))=Rtemp(1,3);
+%             ceq(4+7*(pp-1))=Rtemp(1,2);
+%             ceq(5+7*(pp-1))=ptemp(1); 
+%             ceq(6+7*(pp-1))=ptemp(2);
+%             ceq(7+7*(pp-1))=ptemp(3);
 
 
         else% if the loop is cut elsewhere in the loop
@@ -116,27 +115,27 @@ for pp=1:numel(num_solid)
             ptemp=p_ClosedLoop2-p_ClosedLoop1;
             Rtemp=R_ClosedLoop1*R_ClosedLoop2';
   
-%             % Rotation matrix must be eye
-%             Rtemp=R_ClosedLoop1*R_ClosedLoop2' -eye(3);
-%             ceq(1+9*(pp-1))=Rtemp(1,1);
-%             ceq(2+9*(pp-1))=Rtemp(2,2);
-%             ceq(3+9*(pp-1))=Rtemp(3,3);
+            % Rotation matrix must be eye
+            Rtemp=R_ClosedLoop1*R_ClosedLoop2' -eye(3);
+            ceq(1+6*(pp-1))=Rtemp(1,1);
+            ceq(2+6*(pp-1))=Rtemp(2,2);
+           ceq(3+6*(pp-1))=Rtemp(3,3);
 %             ceq(4+9*(pp-1))=Rtemp(1,2);
 %             ceq(5+9*(pp-1))=Rtemp(1,3);
 %             ceq(6+9*(pp-1))=Rtemp(2,3);
-%             ceq(7+9*(pp-1))=ptemp(1);
-%             ceq(8+9*(pp-1))=ptemp(2);
-%             ceq(9+9*(pp-1))=ptemp(3);
+            ceq(4+6*(pp-1))=ptemp(1);
+            ceq(5+6*(pp-1))=ptemp(2);
+            ceq(6+6*(pp-1))=ptemp(3);
 
             % Quaternion expression of rotation matrix   
-            r=1/2*sqrt(1+Rtemp(1,1)+Rtemp(2,2)+Rtemp(3,3));
-            ceq(1+7*(pp-1))=r-1;
-            ceq(2+7*(pp-1))=Rtemp(2,3);
-            ceq(3+7*(pp-1))=Rtemp(1,3);
-            ceq(4+7*(pp-1))=Rtemp(1,2);
-            ceq(5+7*(pp-1))=ptemp(1); 
-            ceq(6+7*(pp-1))=ptemp(2);
-            ceq(7+7*(pp-1))=ptemp(3);
+%             r=1/2*sqrt(1+Rtemp(1,1)+Rtemp(2,2)+Rtemp(3,3));
+%             ceq(1+7*(pp-1))=r-1;
+%             ceq(2+7*(pp-1))=Rtemp(2,3);
+%             ceq(3+7*(pp-1))=Rtemp(1,3);
+%             ceq(4+7*(pp-1))=Rtemp(1,2);
+%             ceq(5+7*(pp-1))=ptemp(1); 
+%             ceq(6+7*(pp-1))=ptemp(2);
+%             ceq(7+7*(pp-1))=ptemp(3);
         
             
         end

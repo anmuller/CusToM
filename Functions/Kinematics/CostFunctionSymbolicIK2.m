@@ -1,14 +1,11 @@
-function [error] = ErrorMarkersIK(q,positions)
-% Computation of reconstruction error for the inverse kinematics step
-%   Computation of the distance between the position of each experimental 
-%   marker and the position of the corresponded model marker
-%
+function [error] = CostFunctionSymbolicIK2(q,positions,weights)
+% Cost function used for the inverse kinematics step using an optimization method
+%   
 %   INPUT
 %   - q: vector of joint coordinates at a given instant
 %   - positions : vector of experimental marker positions
 %   OUTPUT
-%   - error: distance between the position of each experimental marker and
-%   the position of the corresponded model marker 
+%   - error: cost function value
 %________________________________________________________
 %
 % Licence
@@ -20,6 +17,8 @@ function [error] = ErrorMarkersIK(q,positions)
 %________________________________________________________
 [Rcut,pcut]=fcut(q);
 
-error =  sqrt(sum(reshape(-X_markers(q,pcut,Rcut) + positions,3,length(positions)/3).^2,1));
+% Vectorial norm of marker distance 
+a = weights.*sum((-X_markers(q,pcut,Rcut) + positions).^2);
+error = sum(a(~isnan(a)));
 
 end
