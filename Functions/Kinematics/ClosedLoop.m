@@ -1,8 +1,9 @@
-function [c,ceq] = ClosedLoop(q) %#ok<*INUSL>
+function [c,ceq] = ClosedLoop(q,nb_ClosedLoop) %#ok<*INUSL>
 % Non-linear equation used in the inverse kinematics step for closed loops
 %
 %   INPUT
 %   - q: vector of joint coordinates at a given instant
+%   - nb_ClosedLoop: number of closed loop in the model
 %   OUTPUT
 %   - c: non-linar inequality
 %   - ceq: non-linear equality
@@ -16,7 +17,13 @@ function [c,ceq] = ClosedLoop(q) %#ok<*INUSL>
 % Georges Dumont
 %________________________________________________________
 
-[c,ceq] = fCL(q);
+c=[];
+ceq=zeros(nb_ClosedLoop*7,1); % number of equations = number of closed loop * 9 (9 terms in the rotation matrix)
+
+for i=1:nb_ClosedLoop
+    eval(['[ci,ceqi] = fCL' num2str(i) '(q);'])  
+    ceq(1+7*(i-1):7*i,1) = ceqi;     
+end
 
 end
 

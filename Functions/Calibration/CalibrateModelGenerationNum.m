@@ -57,8 +57,8 @@ end
 
 %% Symbolic functions
 disp('Preliminary Computations ...')
-  [BiomechanicalModel.OsteoArticularModel] = Add6dof(BiomechanicalModel.OsteoArticularModel);
-[BiomechanicalModel.OsteoArticularModel, ...
+[BiomechanicalModel.OsteoArticularModel] = Add6dof(BiomechanicalModel.OsteoArticularModel);
+[BiomechanicalModel.OsteoArticularModel, BiomechanicalModel.Jacob,...
     BiomechanicalModel.Generalized_Coordinates] = SymbolicFunctionGenerationIK(BiomechanicalModel.OsteoArticularModel,BiomechanicalModel.Markers);
 disp('... Preliminary Computations done')
 
@@ -68,7 +68,6 @@ if AnalysisParameters.CalibID.Active
     [BiomechanicalModel] = DynamicCalibration(ModelParameters,AnalysisParameters, BiomechanicalModel);
     disp('... Dynamic Calibration done')
 end
-
 
 %% Moment arms matrix et muscular coupling
 % not applicable here
@@ -114,13 +113,4 @@ dp=0.001;
  
  
 save('BiomechanicalModel','BiomechanicalModel');
-
-
-%% Closedloop equations
-disp('Closed loop equations ...')
-BiomechanicalModel = AddClosedLoopEquations(BiomechanicalModel);
-disp('... Closed loop equations  done')
-
-save('BiomechanicalModel','BiomechanicalModel');
-
 end

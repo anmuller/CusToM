@@ -67,7 +67,7 @@ else
     if OsteoArticularModel(s_mother).child == 0      % if the mother don't have any child
         OsteoArticularModel(s_mother).child = eval(['s_' list_solid{1}]);    % the child of this mother is this solid
     else
-        [OsteoArticularModel]=sister_actualize(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la derniï¿½re soeur
+        [OsteoArticularModel]=sister_actualize(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la dernière soeur
     end
 end
 
@@ -75,7 +75,7 @@ end
 
 % --------------------------- Foot ----------------------------------------
 
-% Position du CoM par rapport au repï¿½re de rï¿½fï¿½rence
+% Position du CoM par rapport au repère de référence
 MetatarsalJoint2Node = (k*[0 -0.0725 0.015])*Mirror;
 MalleousLateralNode = (k*[0.065 0.053 0.025])*Mirror;
 CoM_Foot=0.5*(MetatarsalJoint2Node-MalleousLateralNode)+MalleousLateralNode;
@@ -165,8 +165,7 @@ num_solid=0;
     OsteoArticularModel(incr_solid).I=zeros(3,3);
     OsteoArticularModel(incr_solid).c=[0 0 0]';
 	OsteoArticularModel(incr_solid).comment='Ankle Flexion(+)/Extension(-)';
-    OsteoArticularModel(incr_solid).FunctionalAngle='Ankle Flexion(+)/Extension(-)';
-
+    
     % Ankle_J2
     num_solid=num_solid+1;        % number of the solid ...
     name=list_solid{num_solid}; % solid name
@@ -186,10 +185,8 @@ num_solid=0;
     OsteoArticularModel(incr_solid).c=[0 0 0]';
 	if Signe=='R'
 		OsteoArticularModel(incr_solid).comment='Ankle Inversion(-)/Eversion(+)';
-        OsteoArticularModel(incr_solid).FunctionalAngle='Ankle Inversion(-)/Eversion(+)';
 	else
-		OsteoArticularModel(incr_solid).comment='Ankle Inversion(+)/Eversion(-)';        
-        OsteoArticularModel(incr_solid).FunctionalAngle='Ankle Inversion(+)/Eversion(-)';        
+		OsteoArticularModel(incr_solid).comment='Ankle Inversion(+)/Eversion(-)';
 	end
     % Ankle_J2
     num_solid=num_solid+1;        % number of the solid ...
@@ -214,9 +211,7 @@ num_solid=0;
     OsteoArticularModel(incr_solid).L={[Signe 'Foot_AnkleJointNode'];[Signe 'Foot_ToetipNode']};
 	if Signe=='R'
 		OsteoArticularModel(incr_solid).comment='Ankle Internal(-)/External(+) Rotation';
-        OsteoArticularModel(incr_solid).FunctionalAngle='Ankle Internal(-)/External(+) Rotation';
 	else
 		OsteoArticularModel(incr_solid).comment='Ankle Internal(+)/External(-) Rotation';
-        OsteoArticularModel(incr_solid).FunctionalAngle='Ankle Internal(+)/External(-) Rotation';
 	end
 end

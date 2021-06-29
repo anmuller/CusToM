@@ -68,7 +68,7 @@ else
     if OsteoArticularModel(s_mother).child == 0      % if the mother don't have any child
         OsteoArticularModel(s_mother).child = eval(['s_' list_solid{1}]);    % the child of this mother is this solid
     else
-        [OsteoArticularModel]=sister_actualize(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la derniï¿½re soeur
+        [OsteoArticularModel]=sister_actualize(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la dernière soeur
     end
 end
 
@@ -152,6 +152,5 @@ num_solid=0;
     OsteoArticularModel(incr_solid).anat_position=Forearm_position_set;
     OsteoArticularModel(incr_solid).Visual=1;
     OsteoArticularModel(incr_solid).L={[Signe 'Forearm_ElbowJointNode'];[Signe 'Forearm_WristJointNode']};
-    OsteoArticularModel(incr_solid).FunctionalAngle='Elbow flexion(+)/extension(-)' ;
-
+    
 end

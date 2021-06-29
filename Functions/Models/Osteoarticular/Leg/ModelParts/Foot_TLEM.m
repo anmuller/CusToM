@@ -1,12 +1,12 @@
 function [Human_model]= Foot_TLEM(Human_model,k,Signe,Mass,AttachmentPoint)
-%% Fichier de description du modï¿½le de jambe
-% Human_model : partie du modï¿½le dï¿½jï¿½ construite (si il existe)
+%% Fichier de description du modèle de jambe
+% Human_model : partie du modèle déjà construite (si il existe)
 % attachment_pt : nom du points d'attache (si il existe)
-% k : coefficient multiplicateur pour le scaling linï¿½aire
+% k : coefficient multiplicateur pour le scaling linéaire
 % Signe : 'R' ou 'L' (Right ou Left)
-% Mass : masse du modï¿½le complet
-% scaling_choice  : choix de la mï¿½thode de mise ï¿½ l'ï¿½chelle des donnï¿½es inertielles
-% Density : densitï¿½ du corps
+% Mass : masse du modèle complet
+% scaling_choice  : choix de la méthode de mise à l'échelle des données inertielles
+% Density : densité du corps
 
 %% Variables de sortie :
 % "enrichissement de la structure "Human_model""
@@ -23,7 +23,7 @@ else
     end
 end
 
-%% Incrï¿½mentation du numï¿½ro des groupes
+%% Incrémentation du numéro des groupes
 % n_group=0;
 % for i=1:numel(Human_model)
 %     if size(Human_model(i).Group) ~= [0 0] %#ok<BDSCA>
@@ -32,10 +32,10 @@ end
 % end
 % n_group=n_group+1;
 
-%% Incrï¿½mentation de la numï¿½rotation des solides
+%% Incrémentation de la numérotation des solides
 
-s=size(Human_model,2)+1;  %#ok<NASGU> % numï¿½ro du premier solide
-for i=1:size(list_solid,2)      % numï¿½rotation de chaque solide : s_"nom du solide"
+s=size(Human_model,2)+1;  %#ok<NASGU> % numéro du premier solide
+for i=1:size(list_solid,2)      % numérotation de chaque solide : s_"nom du solide"
     if i==1
         eval(strcat('s_',list_solid{i},'=s;'))
     else
@@ -43,7 +43,7 @@ for i=1:size(list_solid,2)      % numï¿½rotation de chaque solide : s_"nom du so
     end
 end
 
-% trouver le numï¿½ro de la mï¿½re ï¿½ partir du nom du point d'attache : 'attachment_pt'
+% trouver le numéro de la mère à partir du nom du point d'attache : 'attachment_pt'
 if numel(Human_model) == 0
     s_mother=0;
     pos_attachment_pt=[0 0 0]';
@@ -62,15 +62,15 @@ else
             error([AttachmentPoint ' is no existent'])
         end
     end
-    if Human_model(s_mother).child == 0      % si la mï¿½re n'a pas d'enfant
-        Human_model(s_mother).child = eval(['s_' list_solid{1}]);    % l'enfant de cette mï¿½re est ce solide
+    if Human_model(s_mother).child == 0      % si la mère n'a pas d'enfant
+        Human_model(s_mother).child = eval(['s_' list_solid{1}]);    % l'enfant de cette mère est ce solide
     else
-        [Human_model]=sister_actualize(Human_model,Human_model(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la derniï¿½re soeur
+        [Human_model]=sister_actualize(Human_model,Human_model(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la dernière soeur
     end
 end
 
-%%                      Dï¿½finition des noeuds (articulaires)
-% TLEM 2.0 ï¿½ A COMPREHENSIVE MUSCULOSKELETAL GEOMETRY DATASET FOR SUBJECT-SPECIFIC MODELING OF LOWER EXTREMITY
+%%                      Définition des noeuds (articulaires)
+% TLEM 2.0 – A COMPREHENSIVE MUSCULOSKELETAL GEOMETRY DATASET FOR SUBJECT-SPECIFIC MODELING OF LOWER EXTREMITY
 %
 %  V. Carbonea*, R. Fluita*, P. Pellikaana, M.M. van der Krogta,b, D. Janssenc, M. Damsgaardd, L. Vignerone, T. Feilkasf, H.F.J.M. Koopmana, N. Verdonschota,c
 %
@@ -86,7 +86,7 @@ end
 k=k*1.2063; %to fit 50th percentile person of 1.80m height 
 % --------------------------- Foot ----------------------------------------
 
-% Position du CoM par rapport au repï¿½re de rï¿½fï¿½rence
+% Position du CoM par rapport au repère de référence
 CoM_Foot=k*Mirror*([0.0509	;-0.0161	;0.0139]);
 
 % Position des noeuds
@@ -98,7 +98,7 @@ HeelContact=	(k*Mirror *[-0.026100;-0.049100;-0.0021000])            - CoM_Foot;
 BigToe=	(k*Mirror *[0.17410;-0.040800;-0.0060000])                      - CoM_Foot;
 Cal = k*Mirror*[-0.045 ;  -0.0156  ;  0.0046]                           - CoM_Foot; %measured from stl
 TAR = k*Mirror*[105 ;-38.69 ;43]/1000                                   - CoM_Foot; %measured from stl
-%% Dï¿½finition des positions anatomiques
+%% Définition des positions anatomiques
 
 Foot_position_set= {...
     [Signe 'HEE'], Cal ;... 
@@ -226,20 +226,20 @@ Foot_position_set= {...
     [Signe 'ANEManutention'], k*Mirror*[0.01 0.05 0.015]'; ...% A replacer
     };
 
-%%                     Mise ï¿½ l'ï¿½chelle des inerties
+%%                     Mise à l'échelle des inerties
     %% ["Adjustments to McConville et al. and Young et al. body segment inertial parameters"] R. Dumas
     % --------------------------- Foot ----------------------------------------
     Length_Foot = norm(HeelContact-SecondMetatarsalContact);
     [I_Foot]=rgyration2inertia([37 17 36 13 0 8*1i], Mass.Foot_Mass, [0 0 0], Length_Foot, Signe);
 
-%% Crï¿½ation de la structure "Human_model"
+%% Création de la structure "Human_model"
 
 num_solid=0;
 %% Foot
 % s_Foot
-num_solid=num_solid+1;        % solide numï¿½ro ...
+num_solid=num_solid+1;        % solide numéro ...
 name=list_solid{num_solid}; % nom du solide
-eval(['incr_solid=s_' name ';'])  % numï¿½ro du solide dans le modï¿½le
+eval(['incr_solid=s_' name ';'])  % numéro du solide dans le modèle
 Human_model(incr_solid).name=[Signe name];
 Human_model(incr_solid).sister=0;
 Human_model(incr_solid).child=0;
@@ -264,18 +264,15 @@ a1=Human_model(incr_solid).a;
 [~,Ind]=max(abs(a1));
 a2=zeros(3,1);
 a2(Ind)=1;
-R=Rodrigues_from_two_axes(a2,a1); % recherche des deux axes orthogonaux ï¿½ l'axe de rotation
+R=Rodrigues_from_two_axes(a2,a1); % recherche des deux axes orthogonaux à l'axe de rotation
 Human_model(incr_solid).limit_alpha= [ 20 , -20;... %[limit_sup premier axe, limit_inf premier axe;...
                                         30, -30]; %limit_sup 2nd axe, limit_inf 2nd axe;...
 Human_model(incr_solid).v= [ R(:,2) , R(:,3) ];
 Human_model(incr_solid).visual_file = ['TLEM/' Signe 'Foot.mat'];
 if Signe == 'R'
     Human_model(incr_solid).comment='Subtalar Inversion(-)/Eversion(+)';
-    Human_model(incr_solid).FunctionalAngle='Subtalar Inversion(-)/Eversion(+)';
 else
     Human_model(incr_solid).comment='Subtalar Inversion(+)/Eversion(-)';
-    Human_model(incr_solid).FunctionalAngle='Subtalar Inversion(+)/Eversion(-)';
-
 end
 
 

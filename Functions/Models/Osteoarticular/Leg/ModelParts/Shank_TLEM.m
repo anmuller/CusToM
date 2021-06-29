@@ -1,6 +1,6 @@
 function [Human_model]= Shank_TLEM(Human_model,k,Signe,Mass,AttachmentPoint)
 %   Based on:
-%	V. Carbone et al., ï¿½TLEM 2.0 - A comprehensive musculoskeletal geometry dataset for subject-specific modeling of lower extremity,ï¿½ J. Biomech., vol. 48, no. 5, pp. 734ï¿½741, 2015.
+%	V. Carbone et al., “TLEM 2.0 - A comprehensive musculoskeletal geometry dataset for subject-specific modeling of lower extremity,” J. Biomech., vol. 48, no. 5, pp. 734–741, 2015.
 %   INPUT
 %   - OsteoArticularModel: osteo-articular model of an already existing
 %   model (see the Documentation for the structure)
@@ -39,7 +39,7 @@ else
     end
 end
 
-% %% Incrï¿½mentation du numï¿½ro des groupes
+% %% Incrémentation du numéro des groupes
 % n_group=0;
 % for i=1:numel(Human_model)
 %     if size(Human_model(i).Group) ~= [0 0] %#ok<BDSCA>
@@ -48,10 +48,10 @@ end
 % end
 % n_group=n_group+1;
 
-%% Incrï¿½mentation de la numï¿½rotation des solides
+%% Incrémentation de la numérotation des solides
 
-s=size(Human_model,2)+1;  %#ok<NASGU> % numï¿½ro du premier solide
-for i=1:size(list_solid,2)      % numï¿½rotation de chaque solide : s_"nom du solide"
+s=size(Human_model,2)+1;  %#ok<NASGU> % numéro du premier solide
+for i=1:size(list_solid,2)      % numérotation de chaque solide : s_"nom du solide"
     if i==1
         eval(strcat('s_',list_solid{i},'=s;'))
     else
@@ -59,7 +59,7 @@ for i=1:size(list_solid,2)      % numï¿½rotation de chaque solide : s_"nom du so
     end
 end
 
-% trouver le numï¿½ro de la mï¿½re ï¿½ partir du nom du point d'attache : 'attachment_pt'
+% trouver le numéro de la mère à partir du nom du point d'attache : 'attachment_pt'
 if numel(Human_model) == 0
     s_mother=0;
     pos_attachment_pt=[0 0 0]';
@@ -78,15 +78,15 @@ else
             error([AttachmentPoint ' is no existent'])
         end
     end
-    if Human_model(s_mother).child == 0      % si la mï¿½re n'a pas d'enfant
-        Human_model(s_mother).child = eval(['s_' list_solid{1}]);    % l'enfant de cette mï¿½re est ce solide
+    if Human_model(s_mother).child == 0      % si la mère n'a pas d'enfant
+        Human_model(s_mother).child = eval(['s_' list_solid{1}]);    % l'enfant de cette mère est ce solide
     else
-        [Human_model]=sister_actualize(Human_model,Human_model(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la derniï¿½re soeur
+        [Human_model]=sister_actualize(Human_model,Human_model(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la dernière soeur
     end
 end
 
-%%                      Dï¿½finition des noeuds (articulaires)
-% TLEM 2.0 ï¿½ A COMPREHENSIVE MUSCULOSKELETAL GEOMETRY DATASET FOR SUBJECT-SPECIFIC MODELING OF LOWER EXTREMITY
+%%                      Définition des noeuds (articulaires)
+% TLEM 2.0 – A COMPREHENSIVE MUSCULOSKELETAL GEOMETRY DATASET FOR SUBJECT-SPECIFIC MODELING OF LOWER EXTREMITY
 %
 %  V. Carbonea*, R. Fluita*, P. Pellikaana, M.M. van der Krogta,b, D. Janssenc, M. Damsgaardd, L. Vignerone, T. Feilkasf, H.F.J.M. Koopmana, N. Verdonschota,c
 %
@@ -102,7 +102,7 @@ end
 k=k*1.2063; %to fit 50th percentile person of 1.80m height 
 % --------------------------- Shank ---------------------------------------
 
-% centre de masse dans le repï¿½re de rï¿½fï¿½rence du segment
+% centre de masse dans le repère de référence du segment
 CoM_Shank=k*Mirror*[-0.0095;	0.2076;	0.0052];
 
 % Position des noeuds
@@ -120,7 +120,7 @@ ANE=	k*Mirror*[-0.017065 ;-0.0049672 ; 0.04 ]    -CoM_Shank;
 KNI =	k*Mirror*[0 ; 0.32146 ;-0.05 ]              -CoM_Shank;
 
 PatellarLigament2=k*Mirror*[0.0321	0.2932	0.0114]'-CoM_Shank;
-%% Dï¿½finition des positions anatomiques
+%% Définition des positions anatomiques
 
 Shank_position_set= {...
     [Signe 'ANE'], ANE; ...
@@ -318,19 +318,19 @@ Shank_position_set= {...
     
     };
 
-%%                     Mise ï¿½ l'ï¿½chelle des inerties
+%%                     Mise à l'échelle des inerties
 %% ["Adjustments to McConville et al. and Young et al. body segment inertial parameters"] R. Dumas
 % --------------------------- Shank ---------------------------------------
 Length_Shank=norm(Shank_TalocruralJointNode	-Shank_KneeJointNode);
 [I_Shank]=rgyration2inertia([28 10 28 4*1i 2*1i 5], Mass.Shank_Mass, [0 0 0], Length_Shank, Signe);
 
-%% Crï¿½ation de la structure "Human_model"
+%% Création de la structure "Human_model"
 
 num_solid=0;
 %% Shank
-num_solid=num_solid+1;        % solide numï¿½ro ...
+num_solid=num_solid+1;        % solide numéro ...
 name=list_solid{num_solid}; % nom du solide
-eval(['incr_solid=s_' name ';'])  % numï¿½ro du solide dans le modï¿½le
+eval(['incr_solid=s_' name ';'])  % numéro du solide dans le modèle
 Human_model(incr_solid).name=[Signe name];
 Human_model(incr_solid).sister=0;
 Human_model(incr_solid).child=0;
@@ -345,7 +345,7 @@ Human_model(incr_solid).Visual=1;
 Human_model(incr_solid).m=Mass.Shank_Mass;
 Human_model(incr_solid).b=pos_attachment_pt;
 Human_model(incr_solid).I=[I_Shank(1) I_Shank(4) I_Shank(5); I_Shank(4) I_Shank(2) I_Shank(6); I_Shank(5) I_Shank(6) I_Shank(3)];
-Human_model(incr_solid).c=-Shank_KneeJointNode; % dans le repï¿½re du joint prï¿½cï¿½dent
+Human_model(incr_solid).c=-Shank_KneeJointNode; % dans le repère du joint précédent
 Human_model(incr_solid).anat_position=Shank_position_set;
 Human_model(incr_solid).L={[Signe 'Shank_KneeJointNode'];[Signe 'Shank_TalocruralJointNode']};
 %Calibration de l'axe de rotation
@@ -353,13 +353,12 @@ a1=Human_model(incr_solid).a;
 [~,Ind]=max(abs(a1));
 a2=zeros(3,1);
 a2(Ind)=1;
-R=Rodrigues_from_two_axes(a2,a1);% recherche des deux axes orthogonaux ï¿½ l'axe de rotation
+R=Rodrigues_from_two_axes(a2,a1);% recherche des deux axes orthogonaux à l'axe de rotation
 Human_model(incr_solid).limit_alpha= [10 , -10;...
                                         10, -10];
 Human_model(incr_solid).v= [ R(:,1) , R(:,2) ];
 Human_model(incr_solid).calib_a=1;
 Human_model(incr_solid).visual_file = ['TLEM/' Signe 'Shank.mat'];
 Human_model(incr_solid).comment='Knee Flexion(-)/Extension(-)';
-Human_model(incr_solid).FunctionalAngle='Knee Flexion(-)/Extension(-)';
 
 end

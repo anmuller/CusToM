@@ -1,4 +1,4 @@
-function [Human_model] = Arm_model_Pennestri(Human_model,k,Signe,Mass,AttachmentPoint,varargin)
+function [Human_model] = Arm_model_Pennestri(Human_model,k,Signe,Mass,varargin)
 % Addition of an arm model
 %   This arm model contains 3 solids (upper arm, forearm and hand),
 %   exhibits 3 dof for the shoulder, 2 dof for the elbow and 2 dof for the
@@ -33,7 +33,7 @@ function [Human_model] = Arm_model_Pennestri(Human_model,k,Signe,Mass,Attachment
 
 
 %% Ajout d'un bras
-[Human_model]= Upperarm(Human_model,k,Signe,Mass,AttachmentPoint,varargin);
+[Human_model]= Upperarm(Human_model,k,Signe,Mass,varargin);
 
 %% Ajout d'un avant-bras
 [Human_model]=Forearm_Pennestri_model_definition(Human_model,k,Signe,Mass,[Signe 'Humerus_RadiusJointNode']);

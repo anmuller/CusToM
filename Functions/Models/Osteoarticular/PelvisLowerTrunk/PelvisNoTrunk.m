@@ -61,7 +61,7 @@ else
     if OsteoArticularModel(s_mother).child == 0      % if the mother don't have any child
         OsteoArticularModel(s_mother).child = eval(['s_' list_solid{1}]);    % the child of this mother is this solid
     else
-        [OsteoArticularModel]=sister_actualize(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la derniï¿½re soeur
+        [OsteoArticularModel]=sister_actualize(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la dernière soeur
     end
 end    
 
@@ -165,13 +165,13 @@ num_solid=0;
     OsteoArticularModel(incr_solid).child=0;       % child
     OsteoArticularModel(incr_solid).mother=s_mother;                      % mother
     OsteoArticularModel(incr_solid).a=[0 0 0]';                    % axe de rotation
-    OsteoArticularModel(incr_solid).joint=1;                       % type d'articulation : 1:pivot / 2:glissiï¿½re
+    OsteoArticularModel(incr_solid).joint=1;                       % type d'articulation : 1:pivot / 2:glissière
     OsteoArticularModel(incr_solid).calib_k_constraint=[];         % initialisation des contraintes d'optimisation pour la calibration de la longueur des membres
     OsteoArticularModel(incr_solid).u=[];                          % fixed rotation with respect to u axis of theta angle
     OsteoArticularModel(incr_solid).theta=[];
     OsteoArticularModel(incr_solid).KinematicsCut=[];              % kinematic cut
     OsteoArticularModel(incr_solid).ClosedLoop=[];                 % if this solid close a closed-loop chain : {number of solid i on which is attached this solid ; attachement point (local frame of solid i}
-    OsteoArticularModel(incr_solid).Visual=1;                      % 1 si il y a un visuel associï¿½ / 0 sinon
+    OsteoArticularModel(incr_solid).Visual=1;                      % 1 si il y a un visuel associé / 0 sinon
     OsteoArticularModel(incr_solid).b=pos_attachment_pt;                    % attachment point with respect to the parent's frame
     OsteoArticularModel(incr_solid).c=[0 0 0]';                    % center of mass location in the local frame
     OsteoArticularModel(incr_solid).m=Mass.Pelvis_Mass;                 % masse
@@ -181,6 +181,5 @@ num_solid=0;
     OsteoArticularModel(incr_solid).L={'Pelvis_HipJointsCenterNode';'Pelvis_LowerTrunkNode'};
     OsteoArticularModel(incr_solid).limit_alpha= [];
     OsteoArticularModel(incr_solid).v= [] ;
-    OsteoArticularModel(incr_solid).FunctionalAngle=name;
-
+    
 end

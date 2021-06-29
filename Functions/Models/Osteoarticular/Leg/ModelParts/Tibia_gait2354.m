@@ -48,7 +48,7 @@ else
     end
 end
 
-% %% Incrï¿½mentation du numï¿½ro des groupes
+% %% Incrémentation du numéro des groupes
 % n_group=0;
 % for i=1:numel(Human_model)
 %     if size(Human_model(i).Group) ~= [0 0] %#ok<BDSCA>
@@ -57,10 +57,10 @@ end
 % end
 % n_group=n_group+1;
 
-%% Incrï¿½mentation de la numï¿½rotation des solides
+%% Incrémentation de la numérotation des solides
 
-s=size(Human_model,2)+1;  %#ok<NASGU> % numï¿½ro du premier solide
-for i=1:size(list_solid,2)      % numï¿½rotation de chaque solide : s_"nom du solide"
+s=size(Human_model,2)+1;  %#ok<NASGU> % numéro du premier solide
+for i=1:size(list_solid,2)      % numérotation de chaque solide : s_"nom du solide"
     if i==1
         eval(strcat('s_',list_solid{i},'=s;'))
     else
@@ -68,7 +68,7 @@ for i=1:size(list_solid,2)      % numï¿½rotation de chaque solide : s_"nom du so
     end
 end
 
-% trouver le numï¿½ro de la mï¿½re ï¿½ partir du nom du point d'attache : 'attachment_pt'
+% trouver le numéro de la mère à partir du nom du point d'attache : 'attachment_pt'
 if numel(Human_model) == 0
     s_mother=0;
     pos_attachment_pt=[0 0 0]';
@@ -87,17 +87,17 @@ else
             error([AttachmentPoint ' is no existent'])
         end
     end
-    if Human_model(s_mother).child == 0      % si la mï¿½re n'a pas d'enfant
-        Human_model(s_mother).child = eval(['s_' list_solid{1}]);    % l'enfant de cette mï¿½re est ce solide
+    if Human_model(s_mother).child == 0      % si la mère n'a pas d'enfant
+        Human_model(s_mother).child = eval(['s_' list_solid{1}]);    % l'enfant de cette mère est ce solide
     else
-        [Human_model]=sister_actualize(Human_model,Human_model(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la derniï¿½re soeur
+        [Human_model]=sister_actualize(Human_model,Human_model(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la dernière soeur
     end
 end
 
-%%                      Dï¿½finition des noeuds (articulaires)
+%%                      Définition des noeuds (articulaires)
 % --------------------------- Shank ---------------------------------------
 
-% centre de masse dans le repï¿½re de rï¿½fï¿½rence du segment
+% centre de masse dans le repère de référence du segment
 CoM_tibia=k*Mirror*[0   -0.1867         0]';
 
 % Position des noeuds
@@ -115,7 +115,7 @@ ANI=	k*Mirror*([0.06;-0.3888;-0.038])-CoM_tibia;
 ANE=	k*Mirror*([-0.05;-0.41;0.053])-CoM_tibia;
 KNI =	k*Mirror*[.06 .145 -.0475]';
 
-%% Dï¿½finition des positions anatomiques
+%% Définition des positions anatomiques
 
 Shank_position_set= {...
     [Signe 'ANE'], ANE; ...
@@ -144,13 +144,13 @@ Shank_position_set= {...
     ['rect_fem_' lower(Signe) '-P3'],k*Mirror*([0.0617576; 0.020984; -0.0014])-CoM_tibia;...
     };
 
-%%                     Mise ï¿½ l'ï¿½chelle des inerties
+%%                     Mise à l'échelle des inerties
 %% ["Adjustments to McConville et al. and Young et al. body segment inertial parameters"] R. Dumas
 % --------------------------- Shank ---------------------------------------
 Length_Shank=norm(Shank_TalocruralJointNode	-Shank_KneeJointNode);
 [I_Shank]=rgyration2inertia([28 10 28 4*1i 2*1i 5], Mass.Shank_Mass, [0 0 0], Length_Shank, Signe);
 
-%% Crï¿½ation de la structure "Human_model"
+%% Création de la structure "Human_model"
 
 num_solid=0;
 %% Knee_Tx
@@ -171,8 +171,6 @@ Human_model(incr_solid).b=pos_attachment_pt;
 Human_model(incr_solid).I=zeros(3,3);
 Human_model(incr_solid).c=[0 0 0]';
 Human_model(incr_solid).comment='Knee Antero-Posterior Translation';
-Human_model(incr_solid).FunctionalAngle='Knee Antero-Posterior Translation';
-
 % Dependancy
 Human_model(incr_solid).kinematic_dependancy.active=1;
 Human_model(incr_solid).kinematic_dependancy.Joint=[incr_solid+2]; % tibia_r
@@ -280,7 +278,6 @@ Human_model(incr_solid).b=[0 0 0]';
 Human_model(incr_solid).I=zeros(3,3);
 Human_model(incr_solid).c=[0 0 0]';
 Human_model(incr_solid).comment='Knee Longitudinal Translation';
-Human_model(incr_solid).FunctionalAngle='Knee Longitudinal Translation';
 
 % Dependancy
 Human_model(incr_solid).kinematic_dependancy.active=1;
@@ -307,9 +304,9 @@ q=matlabFunction(f_ty);
 Human_model(incr_solid).kinematic_dependancy.q=q;
 
 %% Tibia
-num_solid=num_solid+1;        % solide numï¿½ro ...
+num_solid=num_solid+1;        % solide numéro ...
 name=list_solid{num_solid}; % nom du solide
-eval(['incr_solid=s_' name ';'])  % numï¿½ro du solide dans le modï¿½le
+eval(['incr_solid=s_' name ';'])  % numéro du solide dans le modèle
 Human_model(incr_solid).name=[name '_' lower(Signe)];
 Human_model(incr_solid).sister=0;
 Human_model(incr_solid).child=0;
@@ -325,7 +322,7 @@ Human_model(incr_solid).visual_file = ['gait2354/tibia_'  lower(Signe) '.mat'];
 Human_model(incr_solid).m=Mass.Shank_Mass;
 Human_model(incr_solid).b=[0;0;0];
 Human_model(incr_solid).I=[I_Shank(1) I_Shank(4) I_Shank(5); I_Shank(4) I_Shank(2) I_Shank(6); I_Shank(5) I_Shank(6) I_Shank(3)];
-Human_model(incr_solid).c=-Shank_KneeJointNode; % dans le repï¿½re du joint prï¿½cï¿½dent
+Human_model(incr_solid).c=-Shank_KneeJointNode; % dans le repère du joint précédent
 Human_model(incr_solid).anat_position=Shank_position_set;
 Human_model(incr_solid).L={[Signe 'Shank_KneeJointNode'];[Signe 'Shank_TalocruralJointNode']};
 Human_model(incr_solid).limit_alpha= [10 , -10;...
@@ -333,8 +330,7 @@ Human_model(incr_solid).limit_alpha= [10 , -10;...
 %     OsteoArticularModel(incr_solid).v= [ [1; 0; 0] , [0 ;1;0] ] ;
 Human_model(incr_solid).v= [] ;
 Human_model(incr_solid).calib_a=1;
-Human_model(incr_solid).comment='Knee Flexion(+)/Extension(-)';
-Human_model(incr_solid).FunctionalAngle='Knee Flexion(+)/Extension(-)';
+Human_model(incr_solid).comment='Knee Flexion(-)/Extension(-)';
 
 
 end

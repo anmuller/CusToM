@@ -2,7 +2,7 @@ function [Human_model]= Thigh_TLEM(Human_model,k,Signe,Mass,AttachmentPoint)
 % Addition of a thigh model
 %   This thigh model contains one solid (thigh), exhibits 3 dof for the hip
 %   Based on:
-%	V. Carbone et al., ï¿½TLEM 2.0 - A comprehensive musculoskeletal geometry dataset for subject-specific modeling of lower extremity,ï¿½ J. Biomech., vol. 48, no. 5, pp. 734ï¿½741, 2015.
+%	V. Carbone et al., “TLEM 2.0 - A comprehensive musculoskeletal geometry dataset for subject-specific modeling of lower extremity,” J. Biomech., vol. 48, no. 5, pp. 734–741, 2015.
 %   INPUT
 %   - Human_model: osteo-articular model of an already existing
 %   model (see the Documentation for the structure)
@@ -40,10 +40,10 @@ else
     end
 end
 
-%% Incrï¿½mentation de la numï¿½rotation des solides
+%% Incrémentation de la numérotation des solides
 
-s=size(Human_model,2)+1;  %#ok<NASGU> % numï¿½ro du premier solide
-for i=1:size(list_solid,2)      % numï¿½rotation de chaque solide : s_"nom du solide"
+s=size(Human_model,2)+1;  %#ok<NASGU> % numéro du premier solide
+for i=1:size(list_solid,2)      % numérotation de chaque solide : s_"nom du solide"
     if i==1
         eval(strcat('s_',list_solid{i},'=s;'))
     else
@@ -51,7 +51,7 @@ for i=1:size(list_solid,2)      % numï¿½rotation de chaque solide : s_"nom du so
     end
 end
 
-% trouver le numï¿½ro de la mï¿½re ï¿½ partir du nom du point d'attache : 'attachment_pt'
+% trouver le numéro de la mère à partir du nom du point d'attache : 'attachment_pt'
 if numel(Human_model) == 0
     s_mother=0;
     pos_attachment_pt=[0 0 0]';
@@ -70,16 +70,16 @@ else
             error([AttachmentPoint ' is no existent'])
         end
     end
-    if Human_model(s_mother).child == 0      % si la mï¿½re n'a pas d'enfant
-        Human_model(s_mother).child = eval(['s_' list_solid{1}]);    % l'enfant de cette mï¿½re est ce solide
+    if Human_model(s_mother).child == 0      % si la mère n'a pas d'enfant
+        Human_model(s_mother).child = eval(['s_' list_solid{1}]);    % l'enfant de cette mère est ce solide
     else
-        [Human_model]=sister_actualize(Human_model,Human_model(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la derniï¿½re soeur
+        [Human_model]=sister_actualize(Human_model,Human_model(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la dernière soeur
     end
 end
 
-%%                      Dï¿½finition des noeuds (articulaires)
+%%                      Définition des noeuds (articulaires)
 %
-% TLEM 2.0 ï¿½ A COMPREHENSIVE MUSCULOSKELETAL GEOMETRY DATASET FOR SUBJECT-SPECIFIC MODELING OF LOWER EXTREMITY
+% TLEM 2.0 – A COMPREHENSIVE MUSCULOSKELETAL GEOMETRY DATASET FOR SUBJECT-SPECIFIC MODELING OF LOWER EXTREMITY
 %
 %  V. Carbonea*, R. Fluita*, P. Pellikaana, M.M. van der Krogta,b, D. Janssenc, M. Damsgaardd, L. Vignerone, T. Feilkasf, H.F.J.M. Koopmana, N. Verdonschota,c
 %
@@ -96,9 +96,9 @@ k=k*1.2063; %to fit 50th percentile person of 1.80m height
 % ---------------------------- Thigh --------------------------------------
 
 %Centre de masse
-CoM_Thigh=(k*Mirror*[-0.0088	;0.2217;	0.0208]); % dans le repï¿½re femur
+CoM_Thigh=(k*Mirror*[-0.0088	;0.2217;	0.0208]); % dans le repère femur
 
-% Position des noeuds (-CoM pour placer dans un repï¿½re centrï¿½ en son centre
+% Position des noeuds (-CoM pour placer dans un repère centré en son centre
 % de masse)
 
 MedialEpicondyle    = k*Mirror*[0 ; 0.00431040; -0.0408280]         -CoM_Thigh; % Condyle femoral medial
@@ -111,7 +111,7 @@ Thigh_HipJointNode = (k*Mirror*[0 ; 0.3591 ;	0])             -CoM_Thigh;
 Thigh_KneeJointNode = (k*Mirror*[-0.0022	;0.0067;	0])     -CoM_Thigh;
 Thigh_PatellaFemurJointNode = (k*Mirror*[0.0055;	0.0057;	0]) -CoM_Thigh;
 
-%% Dï¿½finition des positions anatomiques
+%% Définition des positions anatomiques
 
 Thigh_position_set = {...
     [Signe 'KNE']                                       , KNE; ...
@@ -258,47 +258,47 @@ Thigh_position_set = {...
     };
 
 
-%%                     Mise ï¿½ l'ï¿½chelle des inerties
+%%                     Mise à l'échelle des inerties
     %% ["Adjustments to McConville et al. and Young et al. body segment inertial parameters"] R. Dumas
     % ---------------------------- Thigh --------------------------------------
     Length_Thigh=norm(Thigh_KneeJointNode-Thigh_HipJointNode);
     [I_Thigh]=rgyration2inertia([29 15 30 7 2*1i 7*1i], Mass.Thigh_Mass, [0 0 0], Length_Thigh, Signe);
 
 
-%% Crï¿½ation de la structure "Human_model"
+%% Création de la structure "Human_model"
 
 num_solid=0;
 %% Thigh
 % Hip_J1
-num_solid=num_solid+1;        % solide numï¿½ro ...
+num_solid=num_solid+1;        % solide numéro ...
 name=list_solid{num_solid}; % nom du solide
-eval(['incr_solid=s_' name ';'])  % numï¿½ro du solide dans le modï¿½le
+eval(['incr_solid=s_' name ';'])  % numéro du solide dans le modèle
 Human_model(incr_solid).name=[Signe name];   % nom du solide ('R' ou 'L' en suffixe)
-Human_model(incr_solid).sister=0;                 % sister : dï¿½finit en entrï¿½e de la fonction
+Human_model(incr_solid).sister=0;                 % sister : définit en entrée de la fonction
 Human_model(incr_solid).child=s_Hip_J2;                % child : Shank
-Human_model(incr_solid).mother=s_mother;                 % mother : dï¿½finit en fonction du pt d'attache
+Human_model(incr_solid).mother=s_mother;                 % mother : définit en fonction du pt d'attache
 Human_model(incr_solid).a=[0 0 1]';                    % rotation /z
 Human_model(incr_solid).joint=1;                        % liaison pivot
-Human_model(incr_solid).limit_inf=-pi/4;               % butï¿½e articulaire infï¿½rieure
-Human_model(incr_solid).limit_sup=2*pi/3;                % butï¿½e articulaire supï¿½rieure
+Human_model(incr_solid).limit_inf=-pi/4;               % butée articulaire inférieure
+Human_model(incr_solid).limit_sup=2*pi/3;                % butée articulaire supérieure
 Human_model(incr_solid).ActiveJoint=1;
 Human_model(incr_solid).Visual=0;
-Human_model(incr_solid).m=0;                           % masse de rï¿½fï¿½rence
-Human_model(incr_solid).b=pos_attachment_pt;              % position du point d'attache par rapport au repï¿½re parent                     A MODIFIER
-Human_model(incr_solid).I=zeros(3,3);                  % matrice d'inertie de rï¿½fï¿½rence
-Human_model(incr_solid).c=[0 0 0]';                    % position du centre de masse dans le repï¿½re local
+Human_model(incr_solid).m=0;                           % masse de référence
+Human_model(incr_solid).b=pos_attachment_pt;              % position du point d'attache par rapport au repère parent                     A MODIFIER
+Human_model(incr_solid).I=zeros(3,3);                  % matrice d'inertie de référence
+Human_model(incr_solid).c=[0 0 0]';                    % position du centre de masse dans le repère local
 Human_model(incr_solid).calib_k_constraint=[];
-Human_model(incr_solid).u=[];                          % rotation fixe selon l'axe u d'un angle theta (aprï¿½s la rotation q)
+Human_model(incr_solid).u=[];                          % rotation fixe selon l'axe u d'un angle theta (après la rotation q)
 Human_model(incr_solid).theta=[];
-Human_model(incr_solid).KinematicsCut=[];              % coupure cinï¿½matique
-Human_model(incr_solid).ClosedLoop=[];                 % si solide de fermeture de boucle : {numï¿½ro du solide i sur lequel est attachï¿½ ce solide ; point d'attache (repï¿½re du solide i)}
+Human_model(incr_solid).KinematicsCut=[];              % coupure cinématique
+Human_model(incr_solid).ClosedLoop=[];                 % si solide de fermeture de boucle : {numéro du solide i sur lequel est attaché ce solide ; point d'attache (repère du solide i)}
 Human_model(incr_solid).linear_constraint=[];
-Human_model(incr_solid).comment='Hip Flexion(+)/Extension(-) - Z-Rotation';
-Human_model(incr_solid).FunctionalAngle='Hip Flexion(+)/Extension(-)';
+OsteoArticularModel(incr_solid).comment='Hip Flexion(+)/Extension(-) - Z-Rotation';
+
 % Hip_J2
-num_solid=num_solid+1;        % solide numï¿½ro ...
+num_solid=num_solid+1;        % solide numéro ...
 name=list_solid{num_solid}; % nom du solide
-eval(['incr_solid=s_' name ';'])  % numï¿½ro du solide dans le modï¿½le
+eval(['incr_solid=s_' name ';'])  % numéro du solide dans le modèle
 Human_model(incr_solid).name=[Signe name];
 Human_model(incr_solid).sister=0;
 Human_model(incr_solid).child=s_Thigh;
@@ -315,16 +315,14 @@ Human_model(incr_solid).I=zeros(3,3);
 Human_model(incr_solid).c=[0 0 0]';
 if Signe=='R'
     Human_model(incr_solid).comment='Hip Abduction(-)/Adduction(+) - X-Rotation';
-    Human_model(incr_solid).FunctionalAngle='Hip Abduction(-)/Adduction(+)';
 else
-    Human_model(incr_solid).comment='Hip Abduction(+)/Adduction(-) - X-Rotation';    
-    Human_model(incr_solid).FunctionalAngle='Hip Abduction(+)/Adduction(-)';    
+    Human_model(incr_solid).comment='Hip Abduction(+)/Adduction(-) - X-Rotation';
 end
 
 % Thigh
-num_solid=num_solid+1;        % solide numï¿½ro ...
+num_solid=num_solid+1;        % solide numéro ...
 name=list_solid{num_solid}; % nom du solide
-eval(['incr_solid=s_' name ';'])  % numï¿½ro du solide dans le modï¿½le
+eval(['incr_solid=s_' name ';'])  % numéro du solide dans le modèle
 Human_model(incr_solid).name=[Signe name];
 Human_model(incr_solid).sister=0;
 Human_model(incr_solid).child=0;
@@ -344,10 +342,8 @@ Human_model(incr_solid).L={[Signe 'Thigh_HipJointNode'];[Signe 'Thigh_KneeJointN
 Human_model(incr_solid).visual_file = ['TLEM/' Signe 'Thigh.mat'];
 if Signe=='R'
     Human_model(incr_solid).comment='Hip Internal(+)/External(-) Rotation';
-    Human_model(incr_solid).FunctionalAngle='Hip Internal(+)/External(-) Rotation';
 else
     Human_model(incr_solid).comment='Hip Internal(-)/External(+) Rotation';
-    Human_model(incr_solid).FunctionalAngle='Hip Internal(-)/External(+) Rotation';
 end
 
 

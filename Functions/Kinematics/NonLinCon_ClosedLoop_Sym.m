@@ -28,39 +28,39 @@ function [c,ceq]=NonLinCon_ClosedLoop_Sym(Human_model,solid_path1,solid_path2,nu
 
 % Contraints initialization
 c=[];
-ceq=sym('ceq',[6,1]);
+ceq=sym('ceq',[7,1]);
     
 if isempty(solid_path2) % if the beginning coincides with the end of the loop
 
     % Computation on path
     s = Human_model(num_solid).c + Human_model(num_solid).anat_position{num_markers,2}; % position with respects to the position of the mother solid joint of the closed loop
-    [~,p_ClosedLoop,R_ClosedLoop] = ForwardKinematics_ClosedLoop(Human_model,1,s,solid_path1,[0 0 0]',eye(3),q,k);
+    [Human_model,p_ClosedLoop,R_ClosedLoop] = ForwardKinematics_ClosedLoop(Human_model,1,s,solid_path1,[0 0 0]',eye(3),q,k);
 
     % Rotation matrix and Position vector
-  %  Rtemp=R_ClosedLoop;
+    Rtemp=R_ClosedLoop;
     ptemp=p_ClosedLoop;
 
 %         % Rotation matrix must be equal to eye
-        Rtemp=R_ClosedLoop -eye(3);
-        ceq(1)=Rtemp(1,1);
-        ceq(2)=Rtemp(2,2);
-        ceq(3)=Rtemp(3,3);
-%         ceq(4)=Rtemp(1,2);
-%         ceq(5)=Rtemp(1,3);
-%         ceq(6)=Rtemp(2,3);
-        ceq(4)=ptemp(1);
-        ceq(5)=ptemp(2);
-        ceq(6)=ptemp(3);
+%         Rtemp=R_ClosedLoop -eye(3);
+%         ceq(1+9*(pp-1))=Rtemp(1,1);
+%         ceq(2+9*(pp-1))=Rtemp(2,2);
+%         ceq(3+9*(pp-1))=Rtemp(3,3);
+%         ceq(4+9*(pp-1))=Rtemp(1,2);
+%         ceq(5+9*(pp-1))=Rtemp(1,3);
+%         ceq(6+9*(pp-1))=Rtemp(2,3);
+%         ceq(7+9*(pp-1))=ptemp(1);
+%         ceq(8+9*(pp-1))=ptemp(2);
+%         ceq(9+9*(pp-1))=ptemp(3);
 
     % Quaternion expression of rotation matrix   
-%     r=1/2*sqrt(1+Rtemp(1,1)+Rtemp(2,2)+Rtemp(3,3));
-%     ceq(1)=r-1;
-%     ceq(2)=Rtemp(2,3);
-%     ceq(3)=Rtemp(1,3);
-%     ceq(4)=Rtemp(1,2);
-%     ceq(5)=ptemp(1); 
-%     ceq(6)=ptemp(2);
-%     ceq(7)=ptemp(3);
+    r=1/2*sqrt(1+Rtemp(1,1)+Rtemp(2,2)+Rtemp(3,3));
+    ceq(1)=r-1;
+    ceq(2)=Rtemp(2,3);
+    ceq(3)=Rtemp(1,3);
+    ceq(4)=Rtemp(1,2);
+    ceq(5)=ptemp(1); 
+    ceq(6)=ptemp(2);
+    ceq(7)=ptemp(3);
 
 
 else
@@ -68,33 +68,33 @@ else
 
         % Computation on path
         s = Human_model(num_solid).c + Human_model(num_solid).anat_position{num_markers,2}; % position with respects to the position of the mother solid joint of the closed loop
-        [~,p_ClosedLoop,R_ClosedLoop] = ForwardKinematics_ClosedLoop(Human_model,1,s,solid_path2,[0 0 0]',eye(3),q,k);
+        [Human_model,p_ClosedLoop,R_ClosedLoop] = ForwardKinematics_ClosedLoop(Human_model,1,s,solid_path2,[0 0 0]',eye(3),q,k);
 
         % Rotation matrix and Position vector
-        %Rtemp=R_ClosedLoop;
+        Rtemp=R_ClosedLoop;
         ptemp=p_ClosedLoop;
 
 %             % Rotation matrix must be equal to eye
-            Rtemp=R_ClosedLoop -eye(3);
-            ceq(1)=Rtemp(1,1);
-            ceq(2)=Rtemp(2,2);
-            ceq(3)=Rtemp(3,3);
-%             ceq(4)=Rtemp(1,2);
-%             ceq(5)=Rtemp(1,3);
-%             ceq(6)=Rtemp(2,3);
-            ceq(4)=ptemp(1);
-            ceq(5)=ptemp(2);
-            ceq(6)=ptemp(3);
+%             Rtemp=R_ClosedLoop -eye(3);
+%             ceq(1+9*(pp-1))=Rtemp(1,1);
+%             ceq(2+9*(pp-1))=Rtemp(2,2);
+%             ceq(3+9*(pp-1))=Rtemp(3,3);
+%             ceq(4+9*(pp-1))=Rtemp(1,2);
+%             ceq(5+9*(pp-1))=Rtemp(1,3);
+%             ceq(6+9*(pp-1))=Rtemp(2,3);
+%             ceq(7+9*(pp-1))=ptemp(1);
+%             ceq(8+9*(pp-1))=ptemp(2);
+%             ceq(9+9*(pp-1))=ptemp(3);
 
         % Quaternion expression of rotation matrix   
-%         r=1/2*sqrt(1+Rtemp(1,1)+Rtemp(2,2)+Rtemp(3,3));
-%         ceq(1)=r-1;
-%         ceq(2)=Rtemp(2,3);
-%         ceq(3)=Rtemp(1,3);
-%         ceq(4)=Rtemp(1,2);
-%         ceq(5)=ptemp(1); 
-%         ceq(6)=ptemp(2);
-%         ceq(7)=ptemp(3);
+        r=1/2*sqrt(1+Rtemp(1,1)+Rtemp(2,2)+Rtemp(3,3));
+        ceq(1)=r-1;
+        ceq(2)=Rtemp(2,3);
+        ceq(3)=Rtemp(1,3);
+        ceq(4)=Rtemp(1,2);
+        ceq(5)=ptemp(1); 
+        ceq(6)=ptemp(2);
+        ceq(7)=ptemp(3);
 
 
     else% if the loop is cut elsewhere in the loop
@@ -110,29 +110,29 @@ else
 
         % Rotation matrix and Position vector
         ptemp=p_ClosedLoop2-p_ClosedLoop1;
-        %Rtemp=R_ClosedLoop1*R_ClosedLoop2';
+        Rtemp=R_ClosedLoop1*R_ClosedLoop2';
 
 %             % Rotation matrix must be eye
-            Rtemp=R_ClosedLoop1*R_ClosedLoop2' -eye(3);
-            ceq(1)=Rtemp(1,1);
-            ceq(2)=Rtemp(2,2);
-            ceq(3)=Rtemp(3,3);
-%             ceq(4)=Rtemp(1,2);
-%             ceq(5)=Rtemp(1,3);
-%             ceq(6)=Rtemp(2,3);
-            ceq(4)=ptemp(1);
-            ceq(5)=ptemp(2);
-            ceq(6)=ptemp(3);
+%             Rtemp=R_ClosedLoop1*R_ClosedLoop2' -eye(3);
+%             ceq(1+9*(pp-1))=Rtemp(1,1);
+%             ceq(2+9*(pp-1))=Rtemp(2,2);
+%             ceq(3+9*(pp-1))=Rtemp(3,3);
+%             ceq(4+9*(pp-1))=Rtemp(1,2);
+%             ceq(5+9*(pp-1))=Rtemp(1,3);
+%             ceq(6+9*(pp-1))=Rtemp(2,3);
+%             ceq(7+9*(pp-1))=ptemp(1);
+%             ceq(8+9*(pp-1))=ptemp(2);
+%             ceq(9+9*(pp-1))=ptemp(3);
 
         % Quaternion expression of rotation matrix   
-%         r=1/2*sqrt(1+Rtemp(1,1)+Rtemp(2,2)+Rtemp(3,3));
-%         ceq(1)=r-1;
-%         ceq(2)=Rtemp(2,3);
-%         ceq(3)=Rtemp(1,3);
-%         ceq(4)=Rtemp(1,2);
-%         ceq(5)=ptemp(1); 
-%         ceq(6)=ptemp(2);
-%         ceq(7)=ptemp(3);
+        r=1/2*sqrt(1+Rtemp(1,1)+Rtemp(2,2)+Rtemp(3,3));
+        ceq(1)=r-1;
+        ceq(2)=Rtemp(2,3);
+        ceq(3)=Rtemp(1,3);
+        ceq(4)=Rtemp(1,2);
+        ceq(5)=ptemp(1); 
+        ceq(6)=ptemp(2);
+        ceq(7)=ptemp(3);
 
 
     end

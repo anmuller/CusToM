@@ -42,20 +42,8 @@ end
 %% Computation of moment arms
 R=zeros(nmr,length(q));%init R
 
-
-%joints_names = {BiomechanicalModel.OsteoArticularModel.FunctionalAngle};
-
-
 for k=1:length(row)
-     i = col(k); % q indice
-
-    %% Moment arm from litterature
-%     musname = {BiomechanicalModel.Muscles(idxm(row(k))).name};
-%     axis = BiomechanicalModel.OsteoArticularModel(i).FunctionalAngle;
-%     MomentArm = RankinNeptune(musname,axis,joints_names,q);
-%     if ~isempty(MomentArm)
-%             R(row(k),i) = MomentArm;
-%     else
+    i = col(k); % q indice
     dq=zeros(length(q),1); %differentiation step vector
     dq(i)=dp;
     
@@ -66,7 +54,6 @@ for k=1:length(row)
     Lmdq = Muscle_lengthNum(Human_model,Muscles(idxm(j)),q-dq);
 
     R(j,i)=(-Lpdq+Lmdq)/(2*dp); % it is -dl/dq
-  %  end
 end
 % beware that the matrix is finally nq*nm
 R=R';

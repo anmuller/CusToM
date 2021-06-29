@@ -34,7 +34,7 @@ if n==(numel(solid_path)+1) % quand on arrive au bout de la cha�ne
 end
 
 %% incr�mentation de la position et orientation
-if n ~= 0
+if n ~= 1
    % if n~=(numel(solid_path))
         j=solid_path(n); % num�ro du solide
         i=Human_model(j).mother; % num�ro de la m�re

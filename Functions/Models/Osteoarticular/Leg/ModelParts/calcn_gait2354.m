@@ -46,10 +46,10 @@ else
     end
 end
 
-%% Incrï¿½mentation de la numï¿½rotation des solides
+%% Incrémentation de la numérotation des solides
 
-s=size(Human_model,2)+1;  %#ok<NASGU> % numï¿½ro du premier solide
-for i=1:size(list_solid,2)      % numï¿½rotation de chaque solide : s_"nom du solide"
+s=size(Human_model,2)+1;  %#ok<NASGU> % numéro du premier solide
+for i=1:size(list_solid,2)      % numérotation de chaque solide : s_"nom du solide"
     if i==1
         eval(strcat('s_',list_solid{i},'=s;'))
     else
@@ -57,7 +57,7 @@ for i=1:size(list_solid,2)      % numï¿½rotation de chaque solide : s_"nom du so
     end
 end
 
-% trouver le numï¿½ro de la mï¿½re ï¿½ partir du nom du point d'attache : 'attachment_pt'
+% trouver le numéro de la mère à partir du nom du point d'attache : 'attachment_pt'
 if numel(Human_model) == 0
     s_mother=0;
     pos_attachment_pt=[0 0 0]';
@@ -76,10 +76,10 @@ else
             error([AttachmentPoint ' is no existent'])
         end
     end
-    if Human_model(s_mother).child == 0      % si la mï¿½re n'a pas d'enfant
-        Human_model(s_mother).child = eval(['s_' list_solid{1}]);    % l'enfant de cette mï¿½re est ce solide
+    if Human_model(s_mother).child == 0      % si la mère n'a pas d'enfant
+        Human_model(s_mother).child = eval(['s_' list_solid{1}]);    % l'enfant de cette mère est ce solide
     else
-        [Human_model]=sister_actualize(Human_model,Human_model(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la derniï¿½re soeur
+        [Human_model]=sister_actualize(Human_model,Human_model(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la dernière soeur
     end
 end
 
@@ -90,7 +90,7 @@ CoM_calcn=k*Mirror*[0.1; 0.03; 0];
 calcn_talusJointNode = (k*Mirror*[0 ; 0 ;	0])-CoM_calcn;
 calcn_toeJointNode = (k*Mirror*[0.1788; -0.002; 0.00108]) -CoM_calcn;
 
-%% Dï¿½finition des positions anatomiques
+%% Définition des positions anatomiques
 
 calcn_position_set = {...
     [Signe 'calcn_talusJointNode'],calcn_talusJointNode;...
@@ -109,17 +109,17 @@ calcn_position_set = {...
     };
 
 
-%%                     Mise ï¿½ l'ï¿½chelle des inerties
+%%                     Mise à l'échelle des inerties
 
 I_calcn = k*eye(3).*[0.0001;0.0002;0.0001];
 
-%% Crï¿½ation de la structure "Human_model"
+%% Création de la structure "Human_model"
 
 num_solid=0;
 %% Calcn
-num_solid=num_solid+1;        % solide numï¿½ro ...
+num_solid=num_solid+1;        % solide numéro ...
 name=list_solid{num_solid}; % nom du solide
-eval(['incr_solid=s_' name ';'])  % numï¿½ro du solide dans le modï¿½le
+eval(['incr_solid=s_' name ';'])  % numéro du solide dans le modèle
 Human_model(incr_solid).name=[name '_' lower(Signe)];
 Human_model(incr_solid).sister=0;
 Human_model(incr_solid).child=0;
@@ -140,9 +140,7 @@ Human_model(incr_solid).visual_file = ['gait2354/calcn_'  lower(Signe) '.mat'];
 
 if Signe == 'R'
     Human_model(incr_solid).comment='Subtalar Inversion(-)/Eversion(+)';
-    Human_model(incr_solid).FunctionalAngle='Subtalar Inversion(-)/Eversion(+)';
 else
     Human_model(incr_solid).comment='Subtalar Inversion(+)/Eversion(-)';
-    Human_model(incr_solid).FunctionalAngle='Subtalar Inversion(+)/Eversion(-)';
 end
 end

@@ -21,11 +21,7 @@ s=[s;{'TMPD' 'RFHD' {'Off';'Off';'On'}; 'TMPG' 'LFHD' {'Off';'Off';'On'}; 'OCCD'
     'EASD' 'RFWT' {'On';'Off';'On'}; 'EASG' 'LFWT' {'On';'Off';'On'}; 'EPSD' 'RBWT' {'On';'Off';'On'}; 'EPSG' 'LBWT' {'On';'Off';'On'}; ...
     'T8' 'T8' {'Off';'On';'Off'}; 'T12' 'T12' {'Off';'On';'Off'}; ...
     'CLAVD' 'CLAVD' {'On';'On';'On'}; 'CLAVG' 'CLAVG' {'On';'On';'On'}; ...
-    'MTACDL' 'MTACDL' {'On';'On';'On'}; 'MTACGL' 'MTACGL' {'On';'On';'On'};...
-    'MTACDB' 'MTACDB' {'On';'On';'On'}; 'MTACGB' 'MTACGB' {'On';'On';'On'};...
-    'MTACDM' 'MTACDM' {'On';'On';'On'}; 'MTACGM' 'MTACGM' {'On';'On';'On'};...
     }];
-
 
 Side1={'D';'G'};
 Side2={'R';'L'};
@@ -45,22 +41,6 @@ for i=1:2
         ['MT1' Side1{i}] [Side2{i} 'TARI'] {'Off';'On';'On'}; ['MT5' Side1{i}] [Side2{i} 'TAR'] {'Off';'Off';'Off'}; ...
         }];
 end
-
-
-if length(varargin)>1
-    Scapulalocator = varargin{2};
-    if Scapulalocator.active
-        for idx=1:2
-            if ~isempty(find(strcmp(Scapulalocator.side,Side2{idx}),1))
-                s=[s;{'ScapLocAA' ['ScapLoc_AA_',Side2{idx}] {'On';'On';'On'};...
-                    'ScapLocTS' ['ScapLoc_TS_',Side2{idx}] {'On';'On';'On'};...
-                    'ScapLocAI' ['ScapLoc_AI_',Side2{idx}] {'On';'On';'On'};...
-                   }];
-            end
-        end
-    end
-end
-
 
 Markers=struct('name',{s{:,1}}','anat_position',{s{:,2}}','calib_dir',{s{:,3}}'); %#ok<CCAT1>
 

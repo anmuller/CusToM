@@ -114,15 +114,10 @@ else
 end
 
 if isfield(AnimateParameters,'Segment')
-    options.Segment=AnimateParameters.Segment;
+    [~,options.Segment]=intersect({BiomechanicalModel.OsteoArticularModel.name},AnimateParameters.Segment);
+    options.Segment=options.Segment';
 else
     options.Segment=[];
-end
-
-if isfield(AnimateParameters,'AnatLandmarknum')
-    options.AnatLandmarknum=AnimateParameters.AnatLandmarknum;
-else
-    options.AnatLandmarknum=[];
 end
 
 if isfield(AnimateParameters,'Muscles') && ~isempty(AnimateParameters.Muscles)

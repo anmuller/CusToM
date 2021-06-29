@@ -32,7 +32,7 @@ Human_model(s_root).a=[0 0 1]';
 Human_model(s_root).limit_inf=-Inf;
 Human_model(s_root).limit_sup=Inf;
 Human_model(s_root).comment='Rotation - Z-Rotation - Anterior(-)/Posterior(+)';%
-Human_model(s_root).FunctionalAngle = 'Rotation - Z-Rotation - Anterior(-)/Posterior(+)';%
+
 %% Solids definition of the 6-dof joint
 
 Human_model(s_root0).name='root0';   
@@ -48,7 +48,6 @@ Human_model(s_root0).b=[0 0 0]';
 Human_model(s_root0).I=zeros(3,3);  
 Human_model(s_root0).c=[0 0 0]';   
 Human_model(s_root0).comment='';%
-Human_model(s_root0).FunctionalAngle = ' ';%
 
 Human_model(s_6dofTx).name='6dofTx';   
 Human_model(s_6dofTx).sister=0;        
@@ -64,7 +63,6 @@ Human_model(s_6dofTx).b=[0 0 0]';
 Human_model(s_6dofTx).I=zeros(3,3);  
 Human_model(s_6dofTx).c=[0 0 0]'; 
 Human_model(s_6dofTx).comment='Antero-Posterior Translation';%
-Human_model(s_6dofTx).FunctionalAngle = 'Antero-Posterior Translation';%
 
 Human_model(s_6dofTy).name='6dofTy';   
 Human_model(s_6dofTy).sister=0;        
@@ -80,7 +78,6 @@ Human_model(s_6dofTy).b=[0 0 0]';
 Human_model(s_6dofTy).I=zeros(3,3);  
 Human_model(s_6dofTy).c=[0 0 0]';  
 Human_model(s_6dofTy).comment='Vertical Translation';%
-Human_model(s_6dofTy).FunctionalAngle = 'Vertical Translation';%
 
 Human_model(s_6dofTz).name='6dofTz';   
 Human_model(s_6dofTz).sister=0;        
@@ -96,7 +93,6 @@ Human_model(s_6dofTz).b=[0 0 0]';
 Human_model(s_6dofTz).I=zeros(3,3);  
 Human_model(s_6dofTz).c=[0 0 0]';
 Human_model(s_6dofTz).comment='Mediolateral Translation';%
-Human_model(s_6dofTz).FunctionalAngle = 'Mediolateral Translation';%
 
 Human_model(s_6dofRx).name='6dofRx';   
 Human_model(s_6dofRx).sister=0;        
@@ -112,7 +108,6 @@ Human_model(s_6dofRx).b=[0 0 0]';
 Human_model(s_6dofRx).I=zeros(3,3);  
 Human_model(s_6dofRx).c=[0 0 0]';
 Human_model(s_6dofRx).comment='Obliquity - X-Rotation - Right(-)/Left(+))';%
-Human_model(s_6dofRx).FunctionalAngle = 'Obliquity - X-Rotation - Right(-)/Left(+))';%
 
 Human_model(s_6dofRy).name='6dofRy';   
 Human_model(s_6dofRy).sister=0;        
@@ -128,6 +123,5 @@ Human_model(s_6dofRy).b=[0 0 0]';
 Human_model(s_6dofRy).I=zeros(3,3);  
 Human_model(s_6dofRy).c=[0 0 0]';
 Human_model(s_6dofRy).comment='Rotation - Y-Rotation - Internal(-)/External(+))';%
-Human_model(s_6dofRy).FunctionalAngle = 'Rotation - Y-Rotation - Internal(-)/External(+))';%
 
 end
