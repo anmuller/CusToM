@@ -1,19 +1,11 @@
-function func=CostFunctionLM(q, f, nb_cut,pcut,Rcut,gamma,hclosedloophandle,list_function,real_markers,list_function_markers,zeta,hbutees)
+function func=CostFunctionLM(q,positions,gamma,hclosedloophandle,zeta,hbutees)
 % Limit penalisation for LM algorithm
 %   
 %   INPUT
 %   - q: vector of joint coordinates at a given instant
-%   - f: current frame
-%   - nb_cut: number of geometrical cut done in the osteo-articular model
-%   - pcut: pre-initialization of pcut
-%   - Rcut: pre-initialization of Rcut
+%   - positions : vector of experimental marker positions
 %   - gamma: closed loop penalisation
 %   - hclosedloophandle: closed loop function handle
-%   - list_function: list of functions used for the evaluation of the
-%   geometrical cuts position 
-%   - real_markers: 3D position of experimental markers
-%   - list_function_markers: list of functions used for the evaluation of the
-%   markers position 
 %   - zeta: bound penalisation
 %   - hbutees: bound function handle
 %   OUTPUT
@@ -28,16 +20,12 @@ function func=CostFunctionLM(q, f, nb_cut,pcut,Rcut,gamma,hclosedloophandle,list
 % Georges Dumont
 %________________________________________________________
 
-% cut evaluation
-    for c=1:nb_cut
-        [Rcut(:,:,c),pcut(:,:,c)]=list_function{c}(q,pcut,Rcut);
-    end
+
+ % cut evaluation
+    [Rcut,pcut]=fcut(q);
+
     % dx
-    for m=1:numel(list_function_markers)
-        dX((m-1)*3+1:3*m,:) = real_markers(m).position(f,:)'-list_function_markers{m}(q,pcut,Rcut);
-    end
-    
-    
+    dX = -X_markers(q,pcut,Rcut) + positions;
     
     func = [ dX ; gamma*hclosedloophandle(q) ; zeta*hbutees(q)];
     

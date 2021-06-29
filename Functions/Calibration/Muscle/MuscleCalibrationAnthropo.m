@@ -7,10 +7,11 @@ if isfield(BiomechanicalModel,'Generalized_Coordinates')
     q=BiomechanicalModel.Generalized_Coordinates.q_complete;
     Nb_q= size(q,1);
 else
-    Nb_q = numel(Human_model)-6;
+    Nb_q = numel(BiomechanicalModel.OsteoArticularModel)-6;
 end
 
-Nb_m=length(RefBiomechanicalModel.Muscles);
+Muscles_list = [RefBiomechanicalModel.Muscles.exist];
+Nb_m=sum(Muscles_list);
 
 
 %% Scaling l0 and ls
@@ -35,13 +36,13 @@ k_m = L_MT_scaled ./ L_MT_ref;
 BiomechanicalModelscaled.AnthropometricMuscleScaling=k_m;
 
 for ii=1:Nb_m
-    
-BiomechanicalModelscaled.Muscles(ii).l0 = ...
-    k_m(ii)*BiomechanicalModel.Muscles(ii).l0;
+    if Muscles_list(ii)
+        BiomechanicalModelscaled.Muscles(ii).l0 = ...
+            k_m(ii)*BiomechanicalModel.Muscles(ii).l0;
 
-BiomechanicalModelscaled.Muscles(ii).ls = ...
-    k_m(ii)*BiomechanicalModel.Muscles(ii).ls;
-
+        BiomechanicalModelscaled.Muscles(ii).ls = ...
+            k_m(ii)*BiomechanicalModel.Muscles(ii).ls;
+    end
 end
 
 %% Scaling F0

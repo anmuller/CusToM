@@ -156,6 +156,7 @@ num_solid=0;
     OsteoArticularModel(incr_solid).c=[0 0 0]';
     OsteoArticularModel(incr_solid).m=0;                 
     OsteoArticularModel(incr_solid).I=zeros(3,3);
+    OsteoArticularModel(incr_solid).FunctionalAngle=name;
 
     % LowerTrunk_J2
     num_solid=num_solid+1;        % number of the solid ...
@@ -175,6 +176,7 @@ num_solid=0;
     OsteoArticularModel(incr_solid).c=[0 0 0]';
     OsteoArticularModel(incr_solid).m=0;                 
     OsteoArticularModel(incr_solid).I=zeros(3,3);
+    OsteoArticularModel(incr_solid).FunctionalAngle=name;
 
     % LowerTrunk
     num_solid=num_solid+1;        % number of the solid ...
@@ -197,5 +199,6 @@ num_solid=0;
     OsteoArticularModel(incr_solid).I=[I_LowerTrunk(1) I_LowerTrunk(4) I_LowerTrunk(5); I_LowerTrunk(4) I_LowerTrunk(2) I_LowerTrunk(6); I_LowerTrunk(5) I_LowerTrunk(6) I_LowerTrunk(3)];
     OsteoArticularModel(incr_solid).anat_position=LowerTrunk_position_set;
     OsteoArticularModel(incr_solid).L={'LowerTrunk_Origin';'LowerTrunk_UpperTrunkNode'};
+    OsteoArticularModel(incr_solid).FunctionalAngle=name;
     
 end

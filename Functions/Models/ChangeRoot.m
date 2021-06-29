@@ -270,8 +270,12 @@ end
 
 function [Human_model5] = ConvertHumanModelSister(Human_model5, j)
 
-if j
+if j 
+    if ~isempty(Human_model5(j).child)
     Human_model5(j).new_child = Human_model5(j).child(1);
+    else
+        Human_model5(j).new_child = 0;
+    end
     for i=2:numel(Human_model5(j).child)
         Human_model5 = AddSister(Human_model5,Human_model5(j).new_child,Human_model5(j).child(i));
     end

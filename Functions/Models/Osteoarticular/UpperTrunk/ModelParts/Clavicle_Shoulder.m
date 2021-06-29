@@ -22,7 +22,7 @@ function [Human_model]= Clavicle_Shoulder(Human_model,k,Mass,Side,AttachmentPoin
 %________________________________________________________
 %% Solid list
 
-list_solid={'Clavicle_J1' 'Clavicle_J2' 'Clavicle'};
+list_solid={'Clavicle_J1' 'Clavicle_J2' 'Clavicle' 'AcromioClavicular_J1' 'AcromioClavicular_J2' 'AcromioClavicular_J3'};
 
 %% Choix jambe droite ou gauche
 if Side == 'R'
@@ -37,8 +37,8 @@ end
 
 %% Solid numbering incremation
 
-s=size(Human_model,2)+1;  %#ok<NASGU> % numéro du premier solide
-for i=1:size(list_solid,2)      % numérotation de chaque solide : s_"nom du solide"
+s=size(Human_model,2)+1;  %#ok<NASGU> % numï¿½ro du premier solide
+for i=1:size(list_solid,2)      % numï¿½rotation de chaque solide : s_"nom du solide"
     if i==1
         eval(strcat('s_',list_solid{i},'=s;'))
     else
@@ -65,10 +65,10 @@ else
             error([AttachmentPoint ' is no existent'])
         end
     end
-    if Human_model(s_mother).child == 0      % si la mère n'a pas d'enfant
-        Human_model(s_mother).child = eval(['s_' list_solid{1}]);    % l'enfant de cette mère est ce solide
+    if Human_model(s_mother).child == 0      % si la mï¿½re n'a pas d'enfant
+        Human_model(s_mother).child = eval(['s_' list_solid{1}]);    % l'enfant de cette mï¿½re est ce solide
     else
-        [Human_model]=sister_actualize(Human_model,Human_model(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la dernière soeur
+        [Human_model]=sister_actualize(Human_model,Human_model(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la derniï¿½re soeur
     end
 end
 
@@ -97,13 +97,13 @@ Clavicle_position_set= {...
     % Markers
     ['CLAV' Cote], Clavicle_marker_set1; ...
     % Joint Nodes
-    [Side '_Clavicle_acJointNode'], Clavicle_acJointNode;...
+    [Side 'Clavicle_AcromioClavicularJointNode'], Clavicle_acJointNode;...
     % Muscle paths
-    [Side '_clavicle_r_DELT1_r-P4'],Thorax_osim2antoine.*Mirror*([-0.014;0.01106;0.08021])-CoM_Clavicle;...
-    [Side '_clavicle_r_PECM1_r-P4'],Thorax_osim2antoine.*Mirror*([0.00321;-0.00013;0.05113])-CoM_Clavicle;...
-    [Side '_clavicle_r_cleid_mast_r-P1'],Thorax_osim2antoine.*Mirror*([0.0022;0.0043;0.0257])-CoM_Clavicle;...
-    [Side '_clavicle_r_cleid_occ_r-P1'],Thorax_osim2antoine.*Mirror*([0.0022;0.0043;0.0257])-CoM_Clavicle;...
-    [Side '_clavicle_r_trap_cl_r-P1'],Thorax_osim2antoine.*Mirror*([-0.0171;0.019;0.0727])-CoM_Clavicle;...
+    [Side 'clavicle_r_DELT1_r-P4'],Thorax_osim2antoine.*Mirror*([-0.014;0.01106;0.08021])-CoM_Clavicle;...
+    [Side 'clavicle_r_PECM1_r-P4'],Thorax_osim2antoine.*Mirror*([0.00321;-0.00013;0.05113])-CoM_Clavicle;...
+    [Side 'clavicle_r_cleid_mast_r-P1'],Thorax_osim2antoine.*Mirror*([0.0022;0.0043;0.0257])-CoM_Clavicle;...
+    [Side 'clavicle_r_cleid_occ_r-P1'],Thorax_osim2antoine.*Mirror*([0.0022;0.0043;0.0257])-CoM_Clavicle;...
+    [Side 'clavicle_r_trap_cl_r-P1'],Thorax_osim2antoine.*Mirror*([-0.0171;0.019;0.0727])-CoM_Clavicle;...
     };
 
 %% Scaling inertial parameters
@@ -124,7 +124,7 @@ Human_model(incr_solid).name=[Side name];               % solid name
 Human_model(incr_solid).sister=0;              
 Human_model(incr_solid).child=s_Clavicle_J2;                   
 Human_model(incr_solid).mother=s_mother;           
-Human_model(incr_solid).a=[0 0 1]';
+Human_model(incr_solid).a=[0 1 0]';
 Human_model(incr_solid).joint=1;
 Human_model(incr_solid).limit_inf=-pi/2;
 Human_model(incr_solid).limit_sup=pi/2;
@@ -133,7 +133,8 @@ Human_model(incr_solid).m=0;
 Human_model(incr_solid).b=pos_attachment_pt;  
 Human_model(incr_solid).I=zeros(3,3);
 Human_model(incr_solid).c=[0 0 0]';
-Human_model(incr_solid).comment='Clavicle Axial Rotation Forward(-)/Backward(+)';
+Human_model(incr_solid).comment='Clavicle Protraction(+)/Retraction(-)';
+Human_model(incr_solid).FunctionalAngle='Clavicle Protraction(+)/Retraction(-)';
 
 % Clavicle_J2
 num_solid=num_solid+1;        % number of the solid ...
@@ -152,7 +153,9 @@ Human_model(incr_solid).m=0;
 Human_model(incr_solid).b=[0 0 0]';  
 Human_model(incr_solid).I=zeros(3,3);
 Human_model(incr_solid).c=[0 0 0]';
-Human_model(incr_solid).comment='Clavivle Depression(-)/Elevation(+)';
+Human_model(incr_solid).comment='Clavicle Depression(-)/Elevation(+)';
+Human_model(incr_solid).FunctionalAngle='Clavicle Depression(-)/Elevation(+)';
+
 
 % Clavicle
 num_solid=num_solid+1;        % number of the solid ...
@@ -160,9 +163,9 @@ name=list_solid{num_solid}; % solid name
 eval(['incr_solid=s_' name ';'])  % number of the solid in the model
 Human_model(incr_solid).name=[Side name];               % solid name
 Human_model(incr_solid).sister=0;                
-Human_model(incr_solid).child=0;                   
+Human_model(incr_solid).child=s_AcromioClavicular_J1;                   
 Human_model(incr_solid).mother=s_Clavicle_J2;           
-Human_model(incr_solid).a=[0 1 0]';    
+Human_model(incr_solid).a=[0 0 1]';    
 Human_model(incr_solid).joint=1;
 Human_model(incr_solid).limit_inf=-pi/2;
 Human_model(incr_solid).limit_sup=pi/2;
@@ -174,7 +177,89 @@ Human_model(incr_solid).I=[I_clavicle(1) I_clavicle(4) I_clavicle(5); I_clavicle
 Human_model(incr_solid).c=-Clavicle_scJointNode;
 Human_model(incr_solid).anat_position=Clavicle_position_set;
 Human_model(incr_solid).visual_file = ['Holzbaur/clavicle_' lower(Side) '.mat'];
-Human_model(incr_solid).comment='Clavivle Protraction(+)/Retraction(-)';
+Human_model(incr_solid).comment='Clavicle Axial Rotation Forward(-)/Backward(+)';
+Human_model(incr_solid).FunctionalAngle='Clavicle Axial Rotation Forward(-)/Backward(+)';
+
+% AcromioClavicular_J1
+num_solid=num_solid+1;                                      % solid number
+name=list_solid{num_solid};                                 % solid name
+eval(['incr_solid=s_' name ';'])                            % solid number in model tree
+Human_model(incr_solid).name=[Side name];          % solid name with side
+Human_model(incr_solid).sister=0;                   % Solid's sister
+Human_model(incr_solid).child=s_AcromioClavicular_J2;         % Solid's child
+Human_model(incr_solid).mother=s_Clavicle;            % Solid's mother
+Human_model(incr_solid).a=[0 1 0]';                          
+Human_model(incr_solid).joint=1;
+Human_model(incr_solid).limit_inf=-pi;
+Human_model(incr_solid).limit_sup=pi;
+Human_model(incr_solid).ActiveJoint=1;
+Human_model(incr_solid).m=0;                        % Reference mass
+Human_model(incr_solid).b=Clavicle_acJointNode-Clavicle_scJointNode;        % Attachment point position in mother's frame
+Human_model(incr_solid).I=zeros(3,3);               % Reference inertia matrix
+Human_model(incr_solid).c=[0 0 0]';                 % Centre of mass position in local frame
+Human_model(incr_solid).calib_k_constraint=[];
+Human_model(incr_solid).u=[];                       % fixed rotation with respect to u axis of theta angle
+Human_model(incr_solid).theta=[];
+Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
+Human_model(incr_solid).linear_constraint=[];
+Human_model(incr_solid).Visual=0;
+Human_model(incr_solid).comment='to be completed';
+Human_model(incr_solid).FunctionalAngle=[Side name];
+
+
+% AcromioClavicular_J2
+num_solid=num_solid+1;                                      % solid number
+name=list_solid{num_solid};                                 % solid name
+eval(['incr_solid=s_' name ';'])                            % solid number in model tree
+Human_model(incr_solid).name=[Side name];          % solid name with side
+Human_model(incr_solid).sister=0;                   % Solid's sister
+Human_model(incr_solid).child=s_AcromioClavicular_J3;            % Solid's child
+Human_model(incr_solid).mother=s_AcromioClavicular_J1;            % Solid's mother
+Human_model(incr_solid).a=[1 0 0]';                          
+Human_model(incr_solid).joint=1;
+Human_model(incr_solid).limit_inf=-pi;
+Human_model(incr_solid).limit_sup=pi;
+Human_model(incr_solid).ActiveJoint=1;
+Human_model(incr_solid).m=0;                        % Reference mass
+Human_model(incr_solid).b=[0 0 0]';        % Attachment point position in mother's frame
+Human_model(incr_solid).I=zeros(3,3);               % Reference inertia matrix
+Human_model(incr_solid).c=[0 0 0]';                 % Centre of mass position in local frame
+Human_model(incr_solid).calib_k_constraint=[];
+Human_model(incr_solid).u=[];                       % fixed rotation with respect to u axis of theta angle
+Human_model(incr_solid).theta=[];
+Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
+Human_model(incr_solid).linear_constraint=[];
+Human_model(incr_solid).Visual=0;
+Human_model(incr_solid).comment='to be completed';
+Human_model(incr_solid).FunctionalAngle=[Side name];
+
+
+% AcromioClavicular_J3
+num_solid=num_solid+1;                                      % solid number
+name=list_solid{num_solid};                                 % solid name
+eval(['incr_solid=s_' name ';'])                            % solid number in model tree
+Human_model(incr_solid).name=[Side name];          % solid name with side
+Human_model(incr_solid).sister=0;                   % Solid's sister
+Human_model(incr_solid).child=0;         % Solid's child
+Human_model(incr_solid).mother=s_AcromioClavicular_J2;            % Solid's mother
+Human_model(incr_solid).a=[0 0 1]';                          
+Human_model(incr_solid).joint=1;
+Human_model(incr_solid).limit_inf=-pi;
+Human_model(incr_solid).limit_sup=pi;
+Human_model(incr_solid).ActiveJoint=1;
+Human_model(incr_solid).m=0;        % Reference mass
+Human_model(incr_solid).b=[0 0 0]';        % Attachment point position in mother's frame
+Human_model(incr_solid).I=zeros(3,3);               % Reference inertia matrix
+Human_model(incr_solid).c=[0 0 0]';                 % Centre of mass position in local frame
+Human_model(incr_solid).calib_k_constraint=[];
+Human_model(incr_solid).u=[];                       % fixed rotation with respect to u axis of theta angle
+Human_model(incr_solid).theta=[];
+Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
+Human_model(incr_solid).ClosedLoop=[Side 'Scapula_AcromioClavicularJointNode'];              % if this solid close a closed-loop chain : {number of solid i on which is attached this solid ; attachement point (local frame of solid i}
+Human_model(incr_solid).linear_constraint=[];
+Human_model(incr_solid).Visual=0;
+Human_model(incr_solid).comment='to be completed';
+Human_model(incr_solid).FunctionalAngle=[Side name];
 
 end
 

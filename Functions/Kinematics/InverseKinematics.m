@@ -36,13 +36,13 @@ end
 parfor i = 1:numel(AnalysisParameters.filename)
     if isequal(AnalysisParameters.General.InputData, @MVNX_V3) % Load inverse kinematics from a MVNX
         MVNXInverseKinematics(AnalysisParameters.filename{i}(1:end-(numel(AnalysisParameters.General.Extension)-1)), AnalysisParameters);
-    else
+   else
         filename = AnalysisParameters.filename{i}(1:end-(numel(AnalysisParameters.General.Extension)-1));
-        if AnalysisParameters.IK.Method == 1
-            [ExperimentalData, InverseKinematicsResults] = InverseKinematicsOpti(filename,AnalysisParameters,BiomechanicalModel); % Optimization method
-        elseif AnalysisParameters.IK.Method == 2
+       if AnalysisParameters.IK.Method == 1
+           [ExperimentalData, InverseKinematicsResults] = InverseKinematicsOpti(filename,AnalysisParameters,BiomechanicalModel); % Optimization method
+       elseif AnalysisParameters.IK.Method == 2
             [ExperimentalData, InverseKinematicsResults] = InverseKinematicsLM(filename,AnalysisParameters,BiomechanicalModel); % Levenberg-Marquardt algorithm
-    end
+        end
 
         % Save data
         SaveDataIK(filename,ExperimentalData,InverseKinematicsResults);

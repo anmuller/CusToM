@@ -68,7 +68,7 @@ else
     if OsteoArticularJoint(s_mother).child == 0      % if the mother don't have any child
         OsteoArticularJoint(s_mother).child = eval(['s_' list_solid{1}]);    % the child of this mother is this solid
     else
-        [OsteoArticularJoint]=sister_actualize(OsteoArticularJoint,OsteoArticularJoint(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la dernière soeur
+        [OsteoArticularJoint]=sister_actualize(OsteoArticularJoint,OsteoArticularJoint(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la derniï¿½re soeur
     end
 end
 
@@ -145,6 +145,7 @@ OsteoArticularJoint(incr_solid).b=pos_attachment_pt;
 OsteoArticularJoint(incr_solid).I=zeros(3,3);
 OsteoArticularJoint(incr_solid).c=[0 0 0]';
 OsteoArticularJoint(incr_solid).comment='Knee Flexion(-)/Extension(-)';
+OsteoArticularJoint(incr_solid).FunctionalAngle='Knee Flexion(-)/Extension(-)';
 
 %% Knee_J2
 num_solid=num_solid+1;        % number of the solid ...
@@ -166,8 +167,10 @@ OsteoArticularJoint(incr_solid).I=zeros(3,3);
 OsteoArticularJoint(incr_solid).c=[0 0 0]';
 if Signe=='R'
     OsteoArticularJoint(incr_solid).comment='Knee Abduction(-)/Adduction(+) - X-Rotation';
+    OsteoArticularJoint(incr_solid).FunctionalAngle='Knee Abduction(-)/Adduction(+)';
 else
     OsteoArticularJoint(incr_solid).comment='Knee Abduction(+)/Adduction(-) - X-Rotation';
+    OsteoArticularJoint(incr_solid).FunctionalAngle='Knee Abduction(+)/Adduction(-)';
 end
 
 %% Shank
@@ -191,8 +194,10 @@ OsteoArticularJoint(incr_solid).anat_position=Shank_position_set;
 OsteoArticularJoint(incr_solid).L={[Signe 'Shank_KneeJointNode'];[Signe 'Shank_AnkleJointNode']};
 if Signe=='R'
     OsteoArticularJoint(incr_solid).comment='Knee Internal(+)/External(-) Rotation';
+    OsteoArticularJoint(incr_solid).FunctionalAngle='Knee Internal(+)/External(-) Rotation';
 else
     OsteoArticularJoint(incr_solid).comment='Knee Internal(-)/External(+) Rotation';
+    OsteoArticularJoint(incr_solid).FunctionalAngle='Knee Internal(-)/External(+) Rotation';
 end
 
 end

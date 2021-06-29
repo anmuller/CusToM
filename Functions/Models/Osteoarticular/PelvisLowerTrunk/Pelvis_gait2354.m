@@ -37,7 +37,7 @@ function [OsteoArticularModel]= Pelvis_gait2354(OsteoArticularModel,k,Mass,Attac
 
 list_solid={'pelvis'};
 
-% %% Incrémentation du numéro des groupes
+% %% Incrï¿½mentation du numï¿½ro des groupes
 % n_group=0;
 % for i=1:numel(OsteoArticularModel)
 %     if size(OsteoArticularModel(i).Group) ~= [0 0] %#ok<BDSCA>
@@ -46,10 +46,10 @@ list_solid={'pelvis'};
 % end
 % n_group=n_group+1;
 
-%% Incrémentation de la numérotation des solides
+%% Incrï¿½mentation de la numï¿½rotation des solides
 
-s=size(OsteoArticularModel,2)+1;  %#ok<NASGU> % numéro du premier solide
-for i=1:size(list_solid,2)      % numérotation de chaque solide : s_"nom du solide"
+s=size(OsteoArticularModel,2)+1;  %#ok<NASGU> % numï¿½ro du premier solide
+for i=1:size(list_solid,2)      % numï¿½rotation de chaque solide : s_"nom du solide"
     if i==1
         eval(strcat('s_',list_solid{i},'=s;'))
     else
@@ -57,7 +57,7 @@ for i=1:size(list_solid,2)      % numérotation de chaque solide : s_"nom du soli
     end
 end
 
-% trouver le numéro de la mère à partir du nom du point d'attache : 'attachment_pt'
+% trouver le numï¿½ro de la mï¿½re ï¿½ partir du nom du point d'attache : 'attachment_pt'
 if numel(OsteoArticularModel) == 0
     s_mother=0;
     pos_attachment_pt=[0 0 0]';
@@ -77,22 +77,22 @@ else
             error([AttachmentPoint ' is no existent'])
         end
     end
-    if OsteoArticularModel(s_mother).child == 0      % si la mère n'a pas d'enfant
-        OsteoArticularModel(s_mother).child = eval(['s_' list_solid{1}]);    % l'enfant de cette mère est ce solide
+    if OsteoArticularModel(s_mother).child == 0      % si la mï¿½re n'a pas d'enfant
+        OsteoArticularModel(s_mother).child = eval(['s_' list_solid{1}]);    % l'enfant de cette mï¿½re est ce solide
     else
-        [OsteoArticularModel]=sister_actualize(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la dernière soeur
+        [OsteoArticularModel]=sister_actualize(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la derniï¿½re soeur
     end
 end
 
 %% ------------------------- Pelvis ----------------------------------------
 
-% Position du CoM par rapport au repère de centré au milieu RASIS-LASIS
+% Position du CoM par rapport au repï¿½re de centrï¿½ au milieu RASIS-LASIS
 CoM_Pelvis = k*[-0.0707 0 0]';
 
-%milieu de RASIS et ASIS dans le repère centré à la hanche droite
+%milieu de RASIS et ASIS dans le repï¿½re centrï¿½ ï¿½ la hanche droite
 Hip_midRASISASIS = k*[0; 0; 0]-CoM_Pelvis;
 
-% Position des noeuds dans le repère centré au milieu de RASIS et ASIS
+% Position des noeuds dans le repï¿½re centrï¿½ au milieu de RASIS et ASIS
 Pelvis_HipJointRightNode = k*[-0.0707 -0.0661 0.0835]'                        - CoM_Pelvis;
 Pelvis_HipJointLeftNode = k*[-0.0707 -0.0661 -0.0835]'                          - CoM_Pelvis;
 Pelvis_HipJointsCenterNode = (Pelvis_HipJointLeftNode+Pelvis_HipJointRightNode)/2-CoM_Pelvis;
@@ -100,12 +100,12 @@ Pelvis_HipJointsCenterNode = (Pelvis_HipJointLeftNode+Pelvis_HipJointRightNode)/
 % ------------------------- Sacrum ----------------------------------------
 
 % Position des noeuds
-% Sacrum_L5JointNode = k*[-65;30;0]/1000- CoM_Pelvis; % Défini à la main sur la géométrie du Sacrum .STL
+% Sacrum_L5JointNode = k*[-65;30;0]/1000- CoM_Pelvis; % Dï¿½fini ï¿½ la main sur la gï¿½omï¿½trie du Sacrum .STL
 
 Pelvis_L5JointNode = k*[-0.1007 0.0815 0]'-CoM_Pelvis;
 LowerTrunk_UpperTrunkNode = k*[-0.1007 0.0815 0]'-CoM_Pelvis;
 
-%% Définition des positions anatomiques
+%% Dï¿½finition des positions anatomiques
 
 Pelvis_position_set= {...
     'RFWT',k*([0.02;0.03;0.128])-CoM_Pelvis;...
@@ -184,43 +184,44 @@ Pelvis_position_set = [Pelvis_position_set;...
     ['extobl_l-P1'],k*([-0.03;-0.0636;-0.01])-CoM_Pelvis;...
     }]; %#ok<AGROW>
 
-%%                     Mise à l'échelle des inerties
+%%                     Mise ï¿½ l'ï¿½chelle des inerties
 
     %% ["Adjustments to McConville et al. and Young et al. body segment inertial parameters"] R. Dumas
     % ------------------------- Pelvis ----------------------------------------
     Length_Pelvis = norm(Pelvis_HipJointsCenterNode-Pelvis_L5JointNode);
     [I_Pelvis]=rgyration2inertia([100 107 95 25*1i 12*1i 8*1i], Mass.Pelvis_Mass, [0 0 0], Length_Pelvis);
 
-%% Création de la structure "Human_model"
+%% Crï¿½ation de la structure "Human_model"
 
 num_solid=0;
 %% Pelvis
 % Pelvis
-num_solid=num_solid+1;        % solide numéro ...
+num_solid=num_solid+1;        % solide numï¿½ro ...
 name=list_solid{num_solid}; % nom du solide
-eval(['incr_solid=s_' name ';'])  % numéro du solide dans le modèle
+eval(['incr_solid=s_' name ';'])  % numï¿½ro du solide dans le modï¿½le
 OsteoArticularModel(incr_solid).name=name;               % nom du solide
 OsteoArticularModel(incr_solid).sister=0;                      % sister
 OsteoArticularModel(incr_solid).child=0;       % child
 OsteoArticularModel(incr_solid).mother=s_mother;                      % mother
 OsteoArticularModel(incr_solid).a=[0 0 0]';                    % axe de rotation
-OsteoArticularModel(incr_solid).joint=1;                       % type d'articulation : 1:pivot / 2:glissière
+OsteoArticularModel(incr_solid).joint=1;                       % type d'articulation : 1:pivot / 2:glissiï¿½re
 OsteoArticularModel(incr_solid).calib_k_constraint=[];         % initialisation des contraintes d'optimisation pour la calibration de la longueur des membres
-OsteoArticularModel(incr_solid).u=[];                          % rotation fixe selon l'axe u d'un angle theta (après la rotation q)
+OsteoArticularModel(incr_solid).u=[];                          % rotation fixe selon l'axe u d'un angle theta (aprï¿½s la rotation q)
 OsteoArticularModel(incr_solid).theta=[];
-OsteoArticularModel(incr_solid).KinematicsCut=[];              % coupure cinématique
-OsteoArticularModel(incr_solid).ClosedLoop=[];                 % si solide de fermeture de boucle : {numéro du solide i sur lequel est attaché ce solide ; point d'attache (repère du solide i)}
+OsteoArticularModel(incr_solid).KinematicsCut=[];              % coupure cinï¿½matique
+OsteoArticularModel(incr_solid).ClosedLoop=[];                 % si solide de fermeture de boucle : {numï¿½ro du solide i sur lequel est attachï¿½ ce solide ; point d'attache (repï¿½re du solide i)}
 OsteoArticularModel(incr_solid).ActiveJoint=1;                 % 1 si articulation active / 0 si articulation passive
-OsteoArticularModel(incr_solid).Visual=1;                      % 1 si il y a un visuel associé / 0 sinon
+OsteoArticularModel(incr_solid).Visual=1;                      % 1 si il y a un visuel associï¿½ / 0 sinon
 % OsteoArticularModel(incr_solid).Group=[n_group 1];                   % groupe pour la calibration dynamique
-OsteoArticularModel(incr_solid).b=pos_attachment_pt;                    % position du point d'attache par rapport au repère parent
-OsteoArticularModel(incr_solid).c=[0 0 0]';                    % position du centre de masse dans le repère local
+OsteoArticularModel(incr_solid).b=pos_attachment_pt;                    % position du point d'attache par rapport au repï¿½re parent
+OsteoArticularModel(incr_solid).c=[0 0 0]';                    % position du centre de masse dans le repï¿½re local
 OsteoArticularModel(incr_solid).m=Mass.Pelvis_Mass;                 % masse
-OsteoArticularModel(incr_solid).I=[I_Pelvis(1) I_Pelvis(4) I_Pelvis(5); I_Pelvis(4) I_Pelvis(2) I_Pelvis(6); I_Pelvis(5) I_Pelvis(6) I_Pelvis(3)];                  % matrice d'inertie de référence
+OsteoArticularModel(incr_solid).I=[I_Pelvis(1) I_Pelvis(4) I_Pelvis(5); I_Pelvis(4) I_Pelvis(2) I_Pelvis(6); I_Pelvis(5) I_Pelvis(6) I_Pelvis(3)];                  % matrice d'inertie de rï¿½fï¿½rence
 OsteoArticularModel(incr_solid).anat_position=Pelvis_position_set;
 OsteoArticularModel(incr_solid).linear_constraint=[];
 OsteoArticularModel(incr_solid).L={'Pelvis_HipJointsCenterNode';'Pelvis_LowerTrunkNode'};
 OsteoArticularModel(incr_solid).v= [] ;
 OsteoArticularModel(incr_solid).visual_file = ['gait2354/pelvis.mat'];
+    OsteoArticularModel(incr_solid).FunctionalAngle=name;
 
 end

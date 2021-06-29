@@ -67,7 +67,7 @@ else
     if OsteoArticularModel(s_mother).child == 0      % if the mother don't have any child
         OsteoArticularModel(s_mother).child = eval(['s_' list_solid{1}]);    % the child of this mother is this solid
     else
-        [OsteoArticularModel]=sister_actualize(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la dernière soeur
+        [OsteoArticularModel]=sister_actualize(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval(['s_' list_solid{1}]));   % recherche de la derniï¿½re soeur
     end
 end
 
@@ -125,7 +125,7 @@ Thigh_position_set = {...
 Length_Thigh=norm(Thigh_KneeJointNode-Thigh_HipJointNode);
 [I_Thigh]=rgyration2inertia([29 15 30 7 2*1i 7*1i], Mass.Thigh_Mass, [0 0 0], Length_Thigh, Signe);
 
-            %% Création de la structure "Human_model"
+            %% Crï¿½ation de la structure "Human_model"
     
 num_solid=0;
 %% Thigh
@@ -153,7 +153,8 @@ num_solid=0;
     OsteoArticularModel(incr_solid).ClosedLoop=[];                 % if this solid close a closed-loop chain : {number of solid i on which is attached this solid ; attachement point (local frame of solid i}
     OsteoArticularModel(incr_solid).linear_constraint=[];
     OsteoArticularModel(incr_solid).comment='Hip Flexion(+)/Extension(-) - Z-Rotation';
-    
+    OsteoArticularModel(incr_solid).FunctionalAngle='Hip Flexion(+)/Extension(-)';
+
     % Hip_J2
     num_solid=num_solid+1;        % number of the solid ...
     name=list_solid{num_solid}; % nom du solide
@@ -173,8 +174,10 @@ num_solid=0;
     OsteoArticularModel(incr_solid).c=[0 0 0]';
     if Signe=='R'
         OsteoArticularModel(incr_solid).comment='Hip Abduction(-)/Adduction(+) - X-Rotation';
+        OsteoArticularModel(incr_solid).FunctionalAngle='Hip Abduction(-)/Adduction(+) ';
     else
         OsteoArticularModel(incr_solid).comment='Hip Abduction(+)/Adduction(-) - X-Rotation';
+        OsteoArticularModel(incr_solid).FunctionalAngle='Hip Abduction(+)/Adduction(-) ';
     end
     % Thigh
     num_solid=num_solid+1;        % number of the solid ...
@@ -197,8 +200,10 @@ num_solid=0;
     OsteoArticularModel(incr_solid).L={[Signe 'Thigh_HipJointNode'];[Signe 'Thigh_KneeJointNode']};
     if Signe=='R'
         OsteoArticularModel(incr_solid).comment='Hip Internal(+)/External(-) Rotation';
+        OsteoArticularModel(incr_solid).FunctionalAngle='Hip Internal(+)/External(-) Rotation';
     else
         OsteoArticularModel(incr_solid).comment='Hip Internal(-)/External(+) Rotation';
+        OsteoArticularModel(incr_solid).FunctionalAngle='Hip Internal(-)/External(+) Rotation';
     end
 
 end

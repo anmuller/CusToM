@@ -57,7 +57,7 @@ else
         end
         if Human_model(n).joint == 2
             Human_model(n).p = Human_model(m).R * Human_model(n).b + Human_model(m).p+ q(n)*Human_model(n).a;
-            Human_model(n).R = Human_model(m).R * Rodrigues(Human_model(n).a,q(n)) * Rodrigues(Human_model(n).u,Human_model(n).theta);
+            Human_model(n).R = Human_model(m).R  * Rodrigues(Human_model(n).u,Human_model(n).theta);
         end
     end
     l = solid1(end);
@@ -77,7 +77,7 @@ else
         end
         if Human_model(n).joint == 2
             Human_model(n).p = Human_model(m).R * Human_model(n).b + Human_model(m).p+ q(n)*Human_model(n).a;
-            Human_model(n).R = Human_model(m).R * Rodrigues(Human_model(n).a,q(n)) * Rodrigues(Human_model(n).u,Human_model(n).theta);
+            Human_model(n).R = Human_model(m).R * Rodrigues(Human_model(n).u,Human_model(n).theta);
         end
     end
     l = solid2(end);

@@ -1,4 +1,4 @@
-function K=ConstraintsJacobian(Human_model,q,solid_path1,solid_path2,num_solid,num_markers,k,dq,dependancies)
+function K=ConstraintsJacobian(BiomechanicalModel,q,solid_path1,solid_path2,num_solid,num_markers,k,dq,dependancies)
 % Return the constraint matrix K, which is the jacobian of the constraints
 % by q
 
@@ -29,13 +29,14 @@ function K=ConstraintsJacobian(Human_model,q,solid_path1,solid_path2,num_solid,n
 %________________________________________________________
 
 for qchoix=1:length(q)
-    qp=q;
-    qm=q;
-    qp(qchoix)=qp(qchoix)+dq;
-    qm(qchoix)=qm(qchoix)-dq;
-    [~,dhp]=NonLinCon_ClosedLoop_Num(Human_model.OsteoArticularModel,solid_path1,solid_path2,num_solid,num_markers,qp,k);
-    [~,dhm]=NonLinCon_ClosedLoop_Num(Human_model.OsteoArticularModel,solid_path1,solid_path2,num_solid,num_markers,qm,k);
-    K(:,qchoix)=(dhp-dhm)/(2*dq);   
+%     qp=q;
+%     qm=q;
+%     qp(qchoix)=qp(qchoix)+dq;
+%     qm(qchoix)=qm(qchoix)-dq;
+%     [~,dhp]=NonLinCon_ClosedLoop_Num(BiomechanicalModel.OsteoArticularModel,solid_path1,solid_path2,num_solid,num_markers,qp,k);
+%     [~,dhm]=NonLinCon_ClosedLoop_Num(BiomechanicalModel.OsteoArticularModel,solid_path1,solid_path2,num_solid,num_markers,qm,k);
+%     K(:,qchoix)=(dhp-dhm)/(2*dq);       
+    K(:,qchoix) =  ConstraintProjection(BiomechanicalModel.OsteoArticularModel,solid_path1,solid_path2,num_solid,num_markers,q,k,qchoix,"one");
 end
 
 
