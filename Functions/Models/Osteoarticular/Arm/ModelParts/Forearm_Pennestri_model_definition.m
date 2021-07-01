@@ -277,7 +277,7 @@ Human_model(incr_solid).mother=s_mother;
 Human_model(incr_solid).a=Zrot;
 Human_model(incr_solid).joint=1;
 Human_model(incr_solid).limit_inf=0;
-Human_model(incr_solid).limit_sup=100*pi/180;
+Human_model(incr_solid).limit_sup=180*pi/180;
 Human_model(incr_solid).ActiveJoint=1;
 Human_model(incr_solid).m=0;
 Human_model(incr_solid).b=pos_attachment_pt;
@@ -317,12 +317,12 @@ Human_model(incr_solid).mother=s_Radius_J2;
 Human_model(incr_solid).a=Pro_supi_axis;
 Human_model(incr_solid).joint=1;
 if Signe == 'R'
-    Human_model(incr_solid).limit_inf=-pi/2;
-    Human_model(incr_solid).limit_sup=pi/2;
+    Human_model(incr_solid).limit_inf=0;
+    Human_model(incr_solid).limit_sup=pi;
     Human_model(incr_solid).FunctionalAngle='Forearm pronation(+)/supination(-)';
 else
-    Human_model(incr_solid).limit_inf=-pi/2;
-    Human_model(incr_solid).limit_sup=pi/2;
+    Human_model(incr_solid).limit_inf=0;
+    Human_model(incr_solid).limit_sup=pi;
     Human_model(incr_solid).FunctionalAngle='Forearm pronation(-)/supination(+)';
 end
 Human_model(incr_solid).ActiveJoint=1;

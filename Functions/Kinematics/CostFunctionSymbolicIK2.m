@@ -1,4 +1,4 @@
-function [error] = CostFunctionSymbolicIK2(q,positions)
+function [error] = CostFunctionSymbolicIK2(q,positions,weights)
 % Cost function used for the inverse kinematics step using an optimization method
 %   
 %   INPUT
@@ -18,7 +18,7 @@ function [error] = CostFunctionSymbolicIK2(q,positions)
 [Rcut,pcut]=fcut(q);
 
 % Vectorial norm of marker distance 
-a = sum((-X_markers(q,pcut,Rcut) + positions).^2);
+a = weights.*sum((-X_markers(q,pcut,Rcut) + positions).^2);
 error = sum(a(~isnan(a)));
 
 end

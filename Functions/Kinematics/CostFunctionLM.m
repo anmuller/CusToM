@@ -1,4 +1,4 @@
-function func=CostFunctionLM(q,positions,gamma,hclosedloophandle,zeta,hbutees)
+function func=CostFunctionLM(q,positions,gamma,hclosedloophandle,zeta,hbutees,weights)
 % Limit penalisation for LM algorithm
 %   
 %   INPUT
@@ -24,8 +24,9 @@ function func=CostFunctionLM(q,positions,gamma,hclosedloophandle,zeta,hbutees)
  % cut evaluation
     [Rcut,pcut]=fcut(q);
 
+    newweights= repmat(weights,1,3)';
     % dx
-    dX = -X_markers(q,pcut,Rcut) + positions;
+    dX = newweights(:).*(-X_markers(q,pcut,Rcut) + positions);
     
     func = [ dX ; gamma*hclosedloophandle(q) ; zeta*hbutees(q)];
     

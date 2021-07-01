@@ -33,6 +33,21 @@ for i=1:2
 %         }]; %#ok<AGROW>
 end
 
+if length(varargin)>=1
+    Scapulalocator = varargin{1};
+    if Scapulalocator.active
+        for idx=1:2
+            if ~isempty(find(strcmp(Scapulalocator.side,Side{idx}),1))
+                s=[s;{'ScapLocAA' ['ScapLoc_AA_',Side{idx}] {'On';'On';'On'};...
+                    'ScapLocTS' ['ScapLoc_TS_',Side{idx}] {'On';'On';'On'};...
+                    'ScapLocAI' ['ScapLoc_AI_',Side{idx}] {'On';'On';'On'};...
+                   }];
+            end
+        end
+    end
+end
+
+
 
 % Arm
 for i=1:2
