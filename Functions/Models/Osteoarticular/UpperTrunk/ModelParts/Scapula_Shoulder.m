@@ -86,7 +86,7 @@ Thorax_ShoulderRightNode = k*[-0.0408 0.1099 0.1929]-Thorax_T12L1JointNode;
 Thorax_osim2antoine      = [k k Thorax_ShoulderRightNode(3)/0.17]; 
 
 % ------------------------ Scapula ----------------------------------------
-% Centre of motion location in OpenSim frame
+% Centre of mass location in OpenSim frame
 Scapula_CoM = Thorax_osim2antoine.*Mirror*[-0.054694 -0.035032 -0.043734]';
 % Landmarks location in CusToM frame
 Scapula_ghJointNode = Thorax_osim2antoine.*Mirror*[-0.00955; -0.034; 0.009] - Scapula_CoM;
@@ -347,7 +347,7 @@ Human_model(incr_solid).ActiveJoint=1;
 Human_model(incr_solid).m=0;                        % Reference mass
 Human_model(incr_solid).b=[0 0 0]';        % Attachment point position in mother's frame
 Human_model(incr_solid).I=zeros(3,3);               % Reference inertia matrix
-Human_model(incr_solid).c=-Scapula_stJointNode;                 % Centre of mass position in local frame
+Human_model(incr_solid).c=[0 0 0]';                 % Centre of mass position in local frame
 Human_model(incr_solid).calib_k_constraint=[];
 Human_model(incr_solid).u=[];                       % fixed rotation with respect to u axis of theta angle
 Human_model(incr_solid).theta=[];
