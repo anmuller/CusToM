@@ -1,5 +1,5 @@
 function R=FromEulerAngles2Rotation(psi,theta,phi)
-
+R=eye(3,3);
 R(1,1)= cos(psi)*cos(phi)-sin(psi)*cos(theta)*sin(phi);
 R(1,2) = - cos(psi)*sin(phi)- sin(psi)*cos(theta)*cos(phi);
 R(1,3) = sin(psi)*sin(theta);

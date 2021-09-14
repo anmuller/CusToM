@@ -57,21 +57,27 @@ list_markers{end+1} = 'SCAPDH';
 % end
 
 
-    O_SCAP_arr=[0.257816131591797,0.341655364990234,1.167387939453125];
-    O_SCAP_av=[0.268450561523438,0.303168792724609,1.199984863281250];
+O_SCAP_ar=[0.268450561523438,0.303168792724609,1.199984863281250];
+O_SCAP_av=[0.257816131591797,0.341655364990234,1.167387939453125];
+
+O_SCAPLOC_vers_epine_ar=[-0.096698717365621;-0.083096646855050;-0.082256762444728];
+O_SCAPLOC_vers_epine_av=[-0.106325551646658;-0.064652286888516;-0.058320663311548];
+PHI_SCAPLOC_vers_epine_ar=1.456665832886619;
+PHI_SCAPLOC_vers_epine_av=1.539222035502378;
+PSI_SCAPLOC_vers_epine_ar=-1.072163818955886;
+PSI_SCAPLOC_vers_epine_av=-1.336313060053991;
+SCAPLOCB_SCAPLOC=[0,0,0];
+SCAPLOCLM_SCAPLOC=[0.173844228161935,0,0];
+SCAPLOCMM_SCAPLOC=[0.057781760489578,0.079114354889957,0];
+THETA_SCAPLOC_vers_epine_ar=0.872158736632194;
+THETA_SCAPLOC_vers_epine_av=0.742379743226504;
     
-    
-    SCAPLOCMM_SCAPLOC=[0.057781760489578,0.079114354889957,0];
-    SCAPLOCLM_SCAPLOC=[0.173844228161935,0,0];
-    SCAPLOCB_SCAPLOC=[0,0,0];
-    
-    
-real_markers=LinearScapLocTransformation(Lastframe,Firstframe,real_markers,O_SCAP_arr,O_SCAP_av,...
-                                                                                                                    PSI_SCAPLOC_vers_epine_av,PSI_SCAPLOC_vers_epine_ar,...
-                                                                                                                    THETA_SCAPLOC_vers_epine_av, THETA_SCAPLOC_vers_epine_ar,...
-                                                                                                                    PHI_SCAPLOC_vers_epine_av, PHI_SCAPLOC_vers_epine_ar,...
-                                                                                                                    O_SCAPLOC_vers_epine_av,O_SCAPLOC_vers_epine_ar,...
-                                                                                                                    SCAPLOCB_SCAPLOC, SCAPLOCLM_SCAPLOC,SCAPLOCMM_SCAPLOC  );
+real_markers=LinearScapLocTransformation(Lastframe,Firstframe,real_markers,O_SCAP_ar,O_SCAP_av,...
+PSI_SCAPLOC_vers_epine_av,PSI_SCAPLOC_vers_epine_ar,...
+THETA_SCAPLOC_vers_epine_av, THETA_SCAPLOC_vers_epine_ar,...
+PHI_SCAPLOC_vers_epine_av, PHI_SCAPLOC_vers_epine_ar,...
+O_SCAPLOC_vers_epine_av,O_SCAPLOC_vers_epine_ar,...
+SCAPLOCB_SCAPLOC, SCAPLOCLM_SCAPLOC,SCAPLOCMM_SCAPLOC  );
 
 
 
