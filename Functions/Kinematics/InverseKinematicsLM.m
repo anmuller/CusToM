@@ -113,7 +113,7 @@ if ~isfield(BiomechanicalModel,'ClosedLoopData')
     
     ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar,positions(:),weights);
     [q(:,1)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,[],options1);
-    hclosedloophandle = @(x) Aeq_ik*x - beq_ik   ;
+    hclosedloophandle = {@(x) Aeq_ik*x - beq_ik}   ;
 else
     q0=zeros(nb_solid,1);
     positions = zeros(3, length(real_markers));
