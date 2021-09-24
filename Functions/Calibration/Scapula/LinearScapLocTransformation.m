@@ -1,4 +1,4 @@
-function real_markers=LinearScapLocTransformation(Lastframe,Firstframe,real_markers,O_SCAP_arr,O_SCAP_av,...
+function real_markers=LinearScapLocTransformation(Lastframe,Firstframe,real_markers,O_SCAP_ar,O_SCAP_av,...
 PSI_SCAPLOC_vers_epine_av,PSI_SCAPLOC_vers_epine_ar,...
 THETA_SCAPLOC_vers_epine_av, THETA_SCAPLOC_vers_epine_ar,...
 PHI_SCAPLOC_vers_epine_av, PHI_SCAPLOC_vers_epine_ar,...
@@ -16,7 +16,7 @@ for i=1:Lastframe-Firstframe+1
     Y_SCAP = cross(Z_SCAP,X_SCAP);
     H_epine_vers_monde = [X_SCAP' Y_SCAP' Z_SCAP' O_SCAP'; 0 0 0 1];
     
-    p=norm(O_SCAP_av-O_SCAP)/norm(O_SCAP_av-O_SCAP_arr);
+    p=norm(O_SCAP_ar-O_SCAP)/norm(O_SCAP_av-O_SCAP_ar);    
     
     
     PSI_SCAPLOC_vers_epine = (PSI_SCAPLOC_vers_epine_av-PSI_SCAPLOC_vers_epine_ar)*p +PSI_SCAPLOC_vers_epine_ar;
@@ -40,6 +40,5 @@ for i=1:Lastframe-Firstframe+1
     real_markers(end-4).position_c3d(i,:)=SCAPLOCMM;
     real_markers(end-3).position_c3d(i,:)=SCAPLOCB;
 end
-
 
 end
