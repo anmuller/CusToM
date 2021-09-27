@@ -88,11 +88,39 @@ if isfield(AnalysisParameters.IK,'clustercalibration')
                 SCAPLOCB_SCAPLOC, SCAPLOCLM_SCAPLOC,SCAPLOCMM_SCAPLOC  );
             
         case 3 % Spline calibration
+            O_SCAP_ar=[0.268450561523438,0.303168792724609,1.199984863281250];
+            O_SCAP_mi=[0.262549407958984,0.313541717529297,1.193681152343750];
+            O_SCAP_av=[0.257816131591797,0.341655364990234,1.167387939453125];
             
+            O_SCAPLOC_vers_epine_ar=[-0.096698717365621;-0.083096646855050;-0.082256762444728];
+            O_SCAPLOC_vers_epine_mi=[-0.104814208786034;-0.069138724350582;-0.079669765002649];
+            O_SCAPLOC_vers_epine_av=[-0.106325551646658;-0.064652286888516;-0.058320663311548];
+            
+            PHI_SCAPLOC_vers_epine_ar=1.456665832886619;
+            PHI_SCAPLOC_vers_epine_mi=1.463172350974032;
+            PHI_SCAPLOC_vers_epine_av=1.539222035502378;
+            PSI_SCAPLOC_vers_epine_ar=-1.072163818955886;
+            PSI_SCAPLOC_vers_epine_mi=-1.188613447502503;
+            PSI_SCAPLOC_vers_epine_av=-1.336313060053991;
+            THETA_SCAPLOC_vers_epine_ar=0.872158736632194;
+            THETA_SCAPLOC_vers_epine_mi=0.851013690759128;
+            THETA_SCAPLOC_vers_epine_av=0.742379743226504;
+            
+            SCAPLOCB_SCAPLOC=[0,0,0];
+            SCAPLOCLM_SCAPLOC=[0.173844228161935,0,0];
+            SCAPLOCMM_SCAPLOC=[0.057781760489578,0.079114354889957,0];
+            
+            
+            real_markers=SplineScapLocTransformation(Lastframe,Firstframe,real_markers,O_SCAP_ar,O_SCAP_mi,O_SCAP_av,...
+                PSI_SCAPLOC_vers_epine_av, PSI_SCAPLOC_vers_epine_mi,PSI_SCAPLOC_vers_epine_ar,...
+                THETA_SCAPLOC_vers_epine_av, THETA_SCAPLOC_vers_epine_mi, THETA_SCAPLOC_vers_epine_ar,...
+                PHI_SCAPLOC_vers_epine_av, PHI_SCAPLOC_vers_epine_mi, PHI_SCAPLOC_vers_epine_ar,...
+                O_SCAPLOC_vers_epine_av, O_SCAPLOC_vers_epine_mi, O_SCAPLOC_vers_epine_ar,...
+                SCAPLOCB_SCAPLOC, SCAPLOCLM_SCAPLOC,SCAPLOCMM_SCAPLOC  );
             
     end
     
-    %real_markers(end-2:end)=[];
+    real_markers(end-2:end)=[];
 else
     
     % Data extraction
