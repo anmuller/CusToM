@@ -247,8 +247,14 @@ else
     limit_alpha_sup=[];
 end
 
+
+%% Ellipsoid radii definition
+radius_sym = sym('radius', [6 1]);
+
+assume(radius_sym,'real');
+
 %% toutes les variables
-var_sym = [k_sym;p_adapt_sym;alpha_sym];
+var_sym = [k_sym;p_adapt_sym;alpha_sym;radius_sym];
 %% Normalisation des variables
 % limites : 0.8<k<1.2 et déplacement max de 5 cm pour chaque marqueur dans chaque direction
 % et limites angulaire pour alpha
@@ -257,15 +263,15 @@ var_sym = [k_sym;p_adapt_sym;alpha_sym];
 %% variable normalization within boundaries (0.8<k<1.2) and max displacement of 5cm for each marker in each direction and angular limits for alpha
 % all variables should vary only between-1 and +1 during optimisation process
 
-limit_inf_calib=[0.8*ones([nb_k 1]) ; -0.05*ones([nb_p 1]) ; limit_alpha_inf];
-limit_sup_calib=[1.2*ones([nb_k 1]) ;  0.05*ones([nb_p 1]) ; limit_alpha_sup];
+limit_inf_calib=[0.8*ones([nb_k 1]) ; -0.05*ones([nb_p 1]) ; limit_alpha_inf;  [0.056  0.12   0.056  0.056   0.12  0.056]'];
+limit_sup_calib=[1.2*ones([nb_k 1]) ;  0.05*ones([nb_p 1]) ; limit_alpha_sup;[0.084  0.18   0.095   0.084   0.18  0.095]'];
 
 %Normaliser Variables toutes les variables sont normalisés entre -1 et 1 de
 %sorte que l'optimisation fasse varier les variables de la même manière.
 % All variables are normalized between -1 and +1 to ensure same weight for every variable
 % a'= 2*(a-a_min)/(a_max-a_min)-1
 % Mise sous forme matricielle A'=AX+b (under a matrix form A'=AX+b)
-taille =nb_k+nb_p+nb_alpha;
+taille =length(var_sym);
 A_norm = eye(taille);
 for ii=1:taille
 A_norm(ii,ii) = 2*A_norm(ii,ii)/( limit_sup_calib(ii) - limit_inf_calib(ii));
@@ -281,7 +287,10 @@ k=k_map*[var_unnormalized(1:nb_k);1];
 p_adapt=p_map*var_unnormalized(nb_k+1:nb_k+nb_p);
 p_adapt_mat=reshape(p_adapt,3,nb_markers)';
 
-alpha=alpha_map*var_unnormalized(nb_k+nb_p+1:taille);
+alpha=alpha_map*var_unnormalized(nb_k+nb_p+1:nb_k+nb_p+nb_alpha);
+
+radius = var_unnormalized(nb_k+nb_p+nb_alpha+1:end);
+
 
 
 %% détermination des fonctions symbolique pour chaque position de repère 
@@ -294,7 +303,10 @@ Human_model(s_root).p=pPelvis;
 Human_model(s_root).R=RPelvis;
 
 % Calcul de la position de chaque marqueurs de façon symbolique (computation of markers position under a symbolic form)
-[Human_model,Markers_set,~,~,c_ClosedLoop,ceq_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,s_root,q_complete_k,k,p_adapt_mat,alpha,1,1);
+
+
+[Human_model,Markers_set,~,~,c_ClosedLoop,ceq_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_Shoulder(Human_model,Markers_set,s_root,q_complete_k,k,p_adapt_mat,alpha,radius,1,1);
+%[Human_model,Markers_set,~,~,c_ClosedLoop,ceq_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,s_root,q_complete_k,k,p_adapt_mat,alpha,1,1);
 % [Human_model,Markers_set,~,~,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,s_root,q,k,p_adapt_mat,alpha,1,1);
 
 % position et rotation des solides servant de coupure (position and rotation of solids defining the cuts)
@@ -346,11 +358,18 @@ for i=1:numel(Human_model)  % solide i
 end
 
 % boucle(s) fermée(s) (Closed loops)
-for i=1:numel(c_ClosedLoop)
-    matlabFunction(ceq_ClosedLoop{i},c_ClosedLoop{i},'File',['Symbolic_function/fCL' num2str(i) '.m'],...
-            'Outputs',{'c','ceq'},'vars',{pPelvis,RPelvis,q_red,var_sym,pcut,Rcut});   
+
+% Closed loops
+Fullc_ClosedLoop = [c_ClosedLoop{:}];
+Fullceq_ClosedLoop = [ceq_ClosedLoop{:}];
+Fullc_ClosedLoop = Fullc_ClosedLoop(:);
+Fullceq_ClosedLoop = Fullceq_ClosedLoop(:);
+
+if  ~isempty(Fullceq_ClosedLoop)
+    matlabFunction(Fullc_ClosedLoop,Fullceq_ClosedLoop,'File',['Symbolic_function/fCL.m'],'Outputs',{'c','ceq'},'vars',{pPelvis,RPelvis,q_red,var_sym,pcut,Rcut});   
 end
-nbClosedLoop=numel(c_ClosedLoop);
+
+nbClosedLoop=length(Fullc_ClosedLoop);
 
 end
 

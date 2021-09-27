@@ -110,9 +110,9 @@ for i=1:nb_frame
 end
 
 %% Initializations
-taille = nb_k+nb_p+nb_alpha;
+taille = nb_k+nb_p+nb_alpha+6;
 
-k_init=zeros(taille,1);
+k_init=[zeros(taille-6,1); 0.5*ones(6,1)];
 
 Nb_qred=size(GC.q_red,1);
 % linear constraints for inverse kinemeatics, same joint angles for two
@@ -279,10 +279,11 @@ kp_opt_unormalized=A_norm\(kp_opt(:,end)-b_norm);
 
 calib_parameters.k_calib=k_map*[kp_opt_unormalized(1:nb_k,end); 1];
 calib_parameters.p_calib=p_map*kp_opt_unormalized(nb_k+1:nb_k+nb_p,end);
-calib_parameters.alpha_calib=alpha_map*kp_opt_unormalized(nb_k+nb_p+1:taille,end);
+calib_parameters.alpha_calib=alpha_map*kp_opt_unormalized(nb_k+nb_p+1:nb_k+nb_p+nb_alpha,end);
 calib_parameters.alpha_calib=...
 [calib_parameters.alpha_calib(1:2:length(calib_parameters.alpha_calib)),...
 calib_parameters.alpha_calib(2:2:length(calib_parameters.alpha_calib))];
+calib_parameters.radius =kp_opt_unormalized(nb_k+nb_p+nb_alpha+1:end,end);
 
 %% Model actualisation with obtained k and p values.
 Human_model_calib=Human_model_save;
@@ -327,6 +328,36 @@ if size(GC.q_dep,1)>0
 %                         calib_parameters.k_calib(vect_k_dep(j))*Human_model_calib(j).kinematic_dependancy.numerical_estimates(:,2);   
 %                  end
         end
+        
+    switch Human_model_calib(j).name
+        case 'RScapuloThoracic_J1'
+
+            Human_model_calib(j).kinematic_dependancy.q=matlabFunction(calib_parameters.radius(1)*sin(lambda),'vars',{lambda});
+            
+        case 'RScapuloThoracic_J2'
+            
+            Human_model_calib(j).kinematic_dependancy.q=matlabFunction(-calib_parameters.radius(2)*sin(phi)*cos(lambda),'vars',{phi,lambda});
+            
+        case 'RScapuloThoracic_J3'
+            
+            Human_model_calib(j).kinematic_dependancy.q=matlabFunction(calib_parameters.radius(3)*cos(phi)*cos(lambda),'vars',{phi,lambda});
+            
+        case 'LScapuloThoracic_J1'
+            
+            Human_model_calib(j).kinematic_dependancy.q=matlabFunction(calib_parameters.radius(4)*sin(lambda),'vars',{lambda});
+
+            
+        case 'LScapuloThoracic_J2'
+            
+            Human_model_calib(j).kinematic_dependancy.q=matlabFunction(-calib_parameters.radius(5)*sin(phi)*cos(lambda),'vars',{phi,lambda});
+            
+        case 'LScapuloThoracic_J3'
+            
+            Human_model_calib(j).kinematic_dependancy.q=matlabFunction(calib_parameters.radius(6)*cos(phi)*cos(lambda),'vars',{phi,lambda});
+
+            
+    end
+        
     end
 end
 
