@@ -248,10 +248,13 @@ else
 end
 
 
-%% Ellipsoid radii definition
+%% Thorax Ellipsoid radii definition
 
+% Adding Thorax Ellipsoid dimensions if Closed Loop Shoulder model
+% Searches for scapula
 [~, idx] = intersect({Human_model.name},'RScapula');
 if isscalar(idx)
+    % Searches for Thorax Ellipsoid dimensions
     [~, idy] = intersect(Human_model(idx).anat_position(:,1),'ThoracicEllipsoid_radius');
     if isscalar(idy)
         radius_sym = sym('radius', [6 1]);
@@ -264,10 +267,12 @@ if isscalar(idx)
         
         radius_length = [radius_R{1} ; radius_L{1}];
     else
+        % If no Thorax Ellipsoid : no need to optimize its parameters
         radius_sym = [];
         radius_length = [];
     end
 else
+    % If no Scapula : no need to optimize its parameters
     radius_sym = [];
     radius_length = [];
 end
@@ -310,6 +315,7 @@ p_adapt_mat=reshape(p_adapt,3,nb_markers)';
 
 alpha=alpha_map*var_unnormalized(nb_k+nb_p+1:nb_k+nb_p+nb_alpha);
 
+% Adding Thorax Ellipsoid dimensions if Closed Loop Shoulder model 
 if ~isempty(radius_length)
     radius = var_unnormalized(nb_k+nb_p+nb_alpha+1:end);
 else
