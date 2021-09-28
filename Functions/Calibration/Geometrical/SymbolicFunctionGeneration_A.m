@@ -332,45 +332,45 @@ if exist([cd '/Symbolic_function'])~=7 %#ok<EXIST>
 end
 
 E = [Markers_set.exist]';
-% ind_mk = find(E==1);
-% % marqueurs % trop long avec les nouvelles variables
-% for ii=1:length(ind_mk)
-%         m = ind_mk(ii);
-%        dX((ii-1)*3+1:3*ii,:) = Markers_set(m).position_symbolic ;
-% end
-% % One function for all markers
-% matlabFunction(dX,'file',['Symbolic_function/X_markers'],'vars',{pPelvis,RPelvis,q_red,var_sym,pcut,Rcut});
-% 
-% ind_Kcut = find(cellfun(@isempty,{Human_model.KinematicsCut} )==0);
-% 
-% for ii=1:length(ind_Kcut) % solide i
-%     i_Kc = ind_Kcut(ii);
-%     fRcut_all(:,:,Human_model(i_Kc).KinematicsCut) = Human_model(i_Kc).R;
-%     fpcut_all(:,:,Human_model(i_Kc).KinematicsCut) = Human_model(i_Kc).p;
-% end
-% 
-% cutfunc = matlabFunction(fRcut_all,fpcut_all,'Outputs',{['Rcut' ],['pcut' ]}, 'vars',{pPelvis,RPelvis,q_red,var_sym,pcut,Rcut});
-% 
-% pcutsave = pcut;    
-% Rcutsave = Rcut;    
-% for c=1:length(ind_Kcut)
-%     [Rcutsave,pcutsave]=cutfunc(pPelvis,RPelvis,q_red,var_sym,pcutsave,Rcutsave);
-% end
-% matlabFunction(Rcutsave,pcutsave,'File',['Symbolic_function/fcut.m'],'Outputs',{['Rcut' ],['pcut' ]},'vars',{pPelvis,RPelvis,q_red,var_sym});
-% 
-% 
-% 
-% % Closed loops
-% Fullc_ClosedLoop = [c_ClosedLoop{:}];
-% Fullceq_ClosedLoop = [ceq_ClosedLoop{:}];
-% Fullc_ClosedLoop = Fullc_ClosedLoop(:);
-% Fullceq_ClosedLoop = Fullceq_ClosedLoop(:);
-% 
-% if  ~isempty(Fullceq_ClosedLoop)
-%     matlabFunction(Fullc_ClosedLoop,Fullceq_ClosedLoop,'File',['Symbolic_function/fCL.m'],'Outputs',{'c','ceq'},'vars',{pPelvis,RPelvis,q_red,var_sym});
-% else
-%     matlabFunction(0*q_red,0*q_red,'File',['Symbolic_function/fCL.m'],'Outputs',{'c','ceq'},'vars',{pPelvis,RPelvis,q_red,var_sym});
-% end
+ind_mk = find(E==1);
+% marqueurs % trop long avec les nouvelles variables
+for ii=1:length(ind_mk)
+        m = ind_mk(ii);
+       dX((ii-1)*3+1:3*ii,:) = Markers_set(m).position_symbolic ;
+end
+% One function for all markers
+matlabFunction(dX,'file',['Symbolic_function/X_markers'],'vars',{pPelvis,RPelvis,q_red,var_sym,pcut,Rcut});
+
+ind_Kcut = find(cellfun(@isempty,{Human_model.KinematicsCut} )==0);
+
+for ii=1:length(ind_Kcut) % solide i
+    i_Kc = ind_Kcut(ii);
+    fRcut_all(:,:,Human_model(i_Kc).KinematicsCut) = Human_model(i_Kc).R;
+    fpcut_all(:,:,Human_model(i_Kc).KinematicsCut) = Human_model(i_Kc).p;
+end
+
+cutfunc = matlabFunction(fRcut_all,fpcut_all,'Outputs',{['Rcut' ],['pcut' ]}, 'vars',{pPelvis,RPelvis,q_red,var_sym,pcut,Rcut});
+
+pcutsave = pcut;    
+Rcutsave = Rcut;    
+for c=1:length(ind_Kcut)
+    [Rcutsave,pcutsave]=cutfunc(pPelvis,RPelvis,q_red,var_sym,pcutsave,Rcutsave);
+end
+matlabFunction(Rcutsave,pcutsave,'File',['Symbolic_function/fcut.m'],'Outputs',{['Rcut' ],['pcut' ]},'vars',{pPelvis,RPelvis,q_red,var_sym});
+
+
+
+% Closed loops
+Fullc_ClosedLoop = [c_ClosedLoop{:}];
+Fullceq_ClosedLoop = [ceq_ClosedLoop{:}];
+Fullc_ClosedLoop = Fullc_ClosedLoop(:);
+Fullceq_ClosedLoop = Fullceq_ClosedLoop(:);
+
+if  ~isempty(Fullceq_ClosedLoop)
+    matlabFunction(Fullc_ClosedLoop,Fullceq_ClosedLoop,'File',['Symbolic_function/fCL.m'],'Outputs',{'c','ceq'},'vars',{pPelvis,RPelvis,q_red,var_sym});
+else
+    matlabFunction(0*q_red,0*q_red,'File',['Symbolic_function/fCL.m'],'Outputs',{'c','ceq'},'vars',{pPelvis,RPelvis,q_red,var_sym});
+end
     
 
 
