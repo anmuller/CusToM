@@ -1,4 +1,4 @@
-function [c,ceq] = ClosedLoopCalib(Pelvis_position,Pelvis_rotation,q,k,pcut,Rcut,nb_ClosedLoop) %#ok<*INUSL>
+function [c,ceq] = ClosedLoopCalib(Pelvis_position,Pelvis_rotation,q,k) %#ok<*INUSL>
 % Non-linear equation used in the geometrical calibration step for closed loops
 %
 %   INPUT
@@ -22,6 +22,6 @@ function [c,ceq] = ClosedLoopCalib(Pelvis_position,Pelvis_rotation,q,k,pcut,Rcut
 % Georges Dumont
 %________________________________________________________
 
-[c,ceq] = fCL(Pelvis_position,Pelvis_rotation,q,k,pcut,Rcut);
+[c,ceq] = fCL(Pelvis_position,Pelvis_rotation,q,k);
 
 end

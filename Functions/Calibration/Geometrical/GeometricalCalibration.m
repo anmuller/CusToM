@@ -72,7 +72,7 @@ s_root=find([OsteoArticularModel.mother]==0); %#ok<NASGU> % numéro du solide roo
 
 %% Symbolical function generation
 % Markers position according to the joint coordinates
-[OsteoArticularModel,nbClosedLoop,GC,nb_k,k_map,nb_p,p_map,nb_alpha,alpha_map,A_norm,b_norm]=SymbolicFunctionGeneration_A(OsteoArticularModel, Markers_set);
+[OsteoArticularModel,GC,nb_k,k_map,nb_p,p_map,nb_alpha,alpha_map,A_norm,b_norm]=SymbolicFunctionGeneration_A(OsteoArticularModel, Markers_set);
 
 %% list of markers from the model
 list_markers={};
@@ -112,7 +112,7 @@ end
 %% Initializations
 taille = nb_k+nb_p+nb_alpha+6;
 
-k_init=[zeros(taille-6,1); 0.5*ones(6,1)];
+k_init=zeros(taille,1);
 
 Nb_qred=size(GC.q_red,1);
 % linear constraints for inverse kinemeatics, same joint angles for two
@@ -181,21 +181,29 @@ l_inf(l_inf==1i)=-inf;
 l_sup(l_sup==1i)=+inf;
 
 
+
+positions = zeros(3,length(real_markers));
 for f=1:nb_frame_calib
     if f == 1      % initial frame
         q0=zeros(Nb_qred,1);
     else
         q0=q_value{1}(:,f-1);
     end
-    ik_function_objective=@(qvar)CostFunctionSymbolicCalib(qvar,k_init,OsteoArticularModel,real_markers_calib,f,list_function,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut);
-    nonlcon=@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,k_init,pcut,Rcut,nbClosedLoop); % pas tester
+    for m=1:length(real_markers)
+        positions(:,m) = real_markers(m).position(f,:)';
+    end
+    ik_function_objective=@(qvar)CostFunctionSymbolicCalib(qvar,k_init,Base_position{f},Base_rotation{f},positions(:));
+    nonlcon=@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,k_init); % pas tester
     [q_value{1}(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf,l_sup,nonlcon,options);
 end
 
 % Error computation
-errorm{1}=zeros(numel(list_markers),nb_frame_calib);
+errorm{1}=zeros(length(real_markers),nb_frame_calib);
 for f=1:nb_frame_calib
-    [errorm{1}(:,f)] = ErrorMarkersCalib(q_value{1}(:,f),k_init,OsteoArticularModel,real_markers_calib,f,list_markers,Base_position{f},Base_rotation{f},Rcut,pcut);
+    for m=1:length(real_markers)
+        positions(:,m) = real_markers(m).position(f,:)';
+    end
+    [errorm{1}(:,f)] = ErrorMarkersCalib(q_value{1}(:,f),k_init,Base_position{f},Base_rotation{f},positions(:));
 end
 
 %% Calibration
@@ -235,10 +243,10 @@ kp_opt(:,g)=k_init;
 while crit(:,g) > 0.05
     
     % Geometric parameters optimisation
+   
     pk_function_objective=@(kp)OptCalibrationSymbolic(...
-                          q_value{g},kp,...
-                          OsteoArticularModel,real_markers_calib,nb_frame_calib,list_function,list_function_markers,Base_position,Base_rotation,Rcut,pcut);
-                      
+        q_value{g},kp,nb_frame_calib,Base_position,Base_rotation,real_markers);
+    
     [kp_opt(:,g+1)] = fmincon(pk_function_objective,kp_opt(:,g),[],[],Aeq_calib,beq_calib,limit_inf_calib,limit_sup_calib,[],options);
     
     q_value{g+1}=zeros(size(q_value{g})); %#ok<AGROW>
@@ -246,23 +254,27 @@ while crit(:,g) > 0.05
     % Articular coordinates optimisation
     for f=1:nb_frame_calib
         q0=q_value{g}(:,f);
+        for m=1:length(real_markers)
+            positions(:,m) = real_markers(m).position(f,:)';
+        end
         
         ik_function_objective=@(qvar)CostFunctionSymbolicCalib(...
-            qvar,kp_opt(:,g+1),...
-            OsteoArticularModel,real_markers_calib,f,list_function,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut);
-                            
+            qvar,kp_opt(:,g+1),Base_position{f},Base_rotation{f},positions(:));
+        
         nonlcon=@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,...
-            kp_opt(:,g+1),...
-            pcut,Rcut,nbClosedLoop);
-    
+            kp_opt(:,g+1));
+        
         [q_value{g+1}(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf,l_sup,nonlcon,options);
     end
     
     % Error computation
-    errorm{g+1}=zeros(numel(list_markers),nb_frame_calib); %#ok<AGROW>
+    errorm{g+1}=zeros(length(real_markers),nb_frame_calib); %#ok<AGROW>
     for f=1:nb_frame_calib
+        for m=1:length(real_markers)
+            positions(:,m) = real_markers(m).position(f,:)';
+        end
         [errorm{g+1}(:,f)] = ErrorMarkersCalib(q_value{g+1}(:,f),kp_opt(:,g+1),...
-            OsteoArticularModel,real_markers_calib,f,list_markers,Base_position{f},Base_rotation{f},Rcut,pcut);
+            Base_position{f},Base_rotation{f},positions(:));
     end
     
     % Stop criteria
@@ -332,27 +344,39 @@ if size(GC.q_dep,1)>0
     switch Human_model_calib(j).name
         case 'RScapuloThoracic_J1'
 
+            syms phi lambda % latitude longitude
+
             Human_model_calib(j).kinematic_dependancy.q=matlabFunction(calib_parameters.radius(1)*sin(lambda),'vars',{lambda});
             
         case 'RScapuloThoracic_J2'
             
+            syms phi lambda % latitude longitude
+
             Human_model_calib(j).kinematic_dependancy.q=matlabFunction(-calib_parameters.radius(2)*sin(phi)*cos(lambda),'vars',{phi,lambda});
             
         case 'RScapuloThoracic_J3'
             
+            syms phi lambda % latitude longitude
+
             Human_model_calib(j).kinematic_dependancy.q=matlabFunction(calib_parameters.radius(3)*cos(phi)*cos(lambda),'vars',{phi,lambda});
             
         case 'LScapuloThoracic_J1'
             
+            syms phi lambda % latitude longitude
+
             Human_model_calib(j).kinematic_dependancy.q=matlabFunction(calib_parameters.radius(4)*sin(lambda),'vars',{lambda});
 
             
         case 'LScapuloThoracic_J2'
             
+            syms phi lambda % latitude longitude
+
             Human_model_calib(j).kinematic_dependancy.q=matlabFunction(-calib_parameters.radius(5)*sin(phi)*cos(lambda),'vars',{phi,lambda});
             
         case 'LScapuloThoracic_J3'
             
+            syms phi lambda % latitude longitude
+
             Human_model_calib(j).kinematic_dependancy.q=matlabFunction(calib_parameters.radius(6)*cos(phi)*cos(lambda),'vars',{phi,lambda});
 
             
