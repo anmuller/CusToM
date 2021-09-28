@@ -249,9 +249,30 @@ end
 
 
 %% Ellipsoid radii definition
-radius_sym = sym('radius', [6 1]);
 
-assume(radius_sym,'real');
+[~, idx] = intersect({Human_model.name},'RScapula');
+if isscalar(idx)
+    [~, idy] = intersect(Human_model(idx).anat_position(:,1),'ThoracicEllipsoid_radius');
+    if isscalar(idy)
+        radius_sym = sym('radius', [6 1]);
+        assume(radius_sym,'real');
+        
+        radius_R = Human_model(idx).anat_position(idy,2);
+        
+        [~, idx] = intersect({Human_model.name},'LScapula');
+        radius_L = Human_model(idx).anat_position(idy,2);
+        
+        radius_length = [radius_R{1} ; radius_L{1}];
+    else
+        radius_sym = [];
+        radius_length = [];
+    end
+else
+    radius_sym = [];
+    radius_length = [];
+end
+
+
 
 %% toutes les variables
 var_sym = [k_sym;p_adapt_sym;alpha_sym;radius_sym];
@@ -263,8 +284,8 @@ var_sym = [k_sym;p_adapt_sym;alpha_sym;radius_sym];
 %% variable normalization within boundaries (0.8<k<1.2) and max displacement of 5cm for each marker in each direction and angular limits for alpha
 % all variables should vary only between-1 and +1 during optimisation process
 
-limit_inf_calib=[0.8*ones([nb_k 1]) ; -0.05*ones([nb_p 1]) ; limit_alpha_inf;  [0.056  0.12   0.056  0.056   0.12  0.056]'];
-limit_sup_calib=[1.2*ones([nb_k 1]) ;  0.05*ones([nb_p 1]) ; limit_alpha_sup;[0.084  0.18   0.095   0.084   0.18  0.095]'];
+limit_inf_calib=[0.8*ones([nb_k 1]) ; -0.05*ones([nb_p 1]) ; limit_alpha_inf;  0.8*radius_length];
+limit_sup_calib=[1.2*ones([nb_k 1]) ;  0.05*ones([nb_p 1]) ; limit_alpha_sup; 1.2*radius_length];
 
 %Normaliser Variables toutes les variables sont normalisés entre -1 et 1 de
 %sorte que l'optimisation fasse varier les variables de la même manière.
@@ -289,7 +310,11 @@ p_adapt_mat=reshape(p_adapt,3,nb_markers)';
 
 alpha=alpha_map*var_unnormalized(nb_k+nb_p+1:nb_k+nb_p+nb_alpha);
 
-radius = var_unnormalized(nb_k+nb_p+nb_alpha+1:end);
+if ~isempty(radius_length)
+    radius = var_unnormalized(nb_k+nb_p+nb_alpha+1:end);
+else
+    radius=[];
+end
 
 
 
@@ -305,9 +330,9 @@ Human_model(s_root).R=RPelvis;
 % Calcul de la position de chaque marqueurs de façon symbolique (computation of markers position under a symbolic form)
 
 
-[Human_model,Markers_set,~,~,c_ClosedLoop,ceq_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_Shoulder(Human_model,Markers_set,s_root,q_complete_k,k,p_adapt_mat,alpha,radius,1,1);
-%[Human_model,Markers_set,~,~,c_ClosedLoop,ceq_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,s_root,q_complete_k,k,p_adapt_mat,alpha,1,1);
-% [Human_model,Markers_set,~,~,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,s_root,q,k,p_adapt_mat,alpha,1,1);
+% [Human_model,Markers_set,~,~,c_ClosedLoop,ceq_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_Shoulder(Human_model,Markers_set,s_root,q_complete_k,k,p_adapt_mat,alpha,radius,1,1);
+% [Human_model,Markers_set,~,~,c_ClosedLoop,ceq_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,s_root,q_complete_k,k,p_adapt_mat,alpha,1,1);
+[Human_model,Markers_set,~,~,c_ClosedLoop,ceq_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,s_root,q_complete_k,k,p_adapt_mat,alpha,radius,1,1);
 
 % position et rotation des solides servant de coupure (position and rotation of solids defining the cuts)
 for ii=1:max([Human_model.KinematicsCut])

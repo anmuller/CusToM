@@ -59,34 +59,44 @@ if Human_model(j).mother ~= 0
         q=Human_model(j).linear_constraint(2)*Q(Human_model(j).linear_constraint(1)); % qj=alpha*q
     end
     
-    switch Human_model(j).name
+   switch Human_model(j).name
         case 'RScapuloThoracic_J1'
             
-            [~,idx]= intersect({Human_model.name},'RScapuloThoracic_J5');
-            q= radius(1)*sin(q(idx));
+            [~,idx] = intersect({Human_model.name},'RScapuloThoracic_J5');
+            q= radius(1)*sin(Q(idx));
             
         case 'RScapuloThoracic_J2'
             
+            [~,idx1] = intersect({Human_model.name},'RScapuloThoracic_J4');
+            [~,idx2] = intersect({Human_model.name},'RScapuloThoracic_J5');
+            q= -radius(2)*sin(Q(idx1))*cos(Q(idx2));
             
         case 'RScapuloThoracic_J3'
             
+            [~,idx1] = intersect({Human_model.name},'RScapuloThoracic_J4');
+            [~,idx2] = intersect({Human_model.name},'RScapuloThoracic_J5');
+            q= radius(3)*cos(Q(idx1))*cos(Q(idx2));
             
         case 'LScapuloThoracic_J1'
             
+            [~,idx] = intersect({Human_model.name},'LScapuloThoracic_J5');
+            q= radius(4)*sin(Q(idx));
+            
         case 'LScapuloThoracic_J2'
+            
+            [~,idx1] = intersect({Human_model.name},'LScapuloThoracic_J4');
+            [~,idx2] = intersect({Human_model.name},'LScapuloThoracic_J5');
+            q= -radius(5)*sin(Q(idx1))*cos(Q(idx2));
             
             
         case 'LScapuloThoracic_J3'
             
+            [~,idx1] = intersect({Human_model.name},'LScapuloThoracic_J4');
+            [~,idx2] = intersect({Human_model.name},'LScapuloThoracic_J5');
+            q= -radius(6)*cos(Q(idx1))*cos(Q(idx2));
             
-    end
+   end
             
-            
-    
-%     if BiomechanicalModel.OsteoArticular(j).name == 'ScapuloThoracic_J3'
-%         [~,SAMERE] = intersect({BiomechanicalModel.OsteoArticular.name}, 'ScapuloThoracic_J1');
-%         q = Rayon(3)*cos(Q(SAMERE))*cos(Q(SASOEUR));
-%     end
     
     %Axe
     %On fait varier la position de ces axes selon
