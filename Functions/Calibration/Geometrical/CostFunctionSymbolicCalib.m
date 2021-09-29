@@ -1,4 +1,4 @@
-function [error] = CostFunctionSymbolicCalib(q,k,Pelvis_position,Pelvis_rotation,positions)
+function [error] = CostFunctionSymbolicCalib(q,k,Pelvis_position,Pelvis_rotation,list_function,Rcut,pcut,real_markers,nbcut,list_function_markers,f)
 % Cost function used for the geometrical calibration step
 %   
 %   INPUT
@@ -19,9 +19,25 @@ function [error] = CostFunctionSymbolicCalib(q,k,Pelvis_position,Pelvis_rotation
 % Georges Dumont
 %________________________________________________________
 
-[Rcut,pcut]=fcut(Pelvis_position,Pelvis_rotation,q,k);
+for c=1:nbcut
+            if c==1          
+        [Rcut(:,:,c),pcut(:,:,c)]=list_function{c}(Pelvis_position,Pelvis_rotation,q,k,[],[]);
+        else
+    [Rcut(:,:,c),pcut(:,:,c)]=...
+        list_function{c}(Pelvis_position,Pelvis_rotation,q,k,pcut,Rcut);
+end
 
-e =  sqrt(sum(reshape(-X_markers(Pelvis_position,Pelvis_rotation,q,k,pcut,Rcut) + positions,3,length(positions)/3).^2,1))';
 
-error=e'*e;
+nb_mk=numel(list_function_markers);
+
+e=zeros(nb_mk,1);
+for m=1:nb_mk
+    e(m,1)= norm(list_function_markers{m}...
+        (Pelvis_position,Pelvis_rotation,q,k,...
+        pcut,Rcut) - real_markers(m).position(f,:)') ;    
+end
+
+W=eye(nb_mk); %Weighted markers each markers are weighted by one
+error=e'*W*e;
+
 end

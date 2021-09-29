@@ -1,4 +1,5 @@
-function [error] = ErrorMarkersCalib(q,k,Pelvis_position,Pelvis_rotation,positions)
+function [error] = ErrorMarkersCalib(q,k,real_markers,f,list_markers,Pelvis_position,Pelvis_rotation,Rcut,pcut,nbcut,list_function)
+
 % Computation of reconstruction error for the geometrical calibration
 %   Computation of the distance between the position of each experimental 
 %   marker and the position of the corresponded model marker
@@ -22,8 +23,20 @@ function [error] = ErrorMarkersCalib(q,k,Pelvis_position,Pelvis_rotation,positio
 % Georges Dumont
 %________________________________________________________
 
-[Rcut,pcut]=fcut(Pelvis_position,Pelvis_rotation,q,k);
+    for c=1:nbcut
+        if c==1          
+        [Rcut(:,:,c),pcut(:,:,c)]=list_function{c}(Pelvis_position,Pelvis_rotation,q,k,[],[]);
+        else
+            [Rcut(:,:,c),pcut(:,:,c)]=list_function{c}(Pelvis_position,Pelvis_rotation,q,k,pcut,Rcut);
+        end
+    end
 
-error =  sqrt(sum(reshape(-X_markers(Pelvis_position,Pelvis_rotation,q,k,pcut,Rcut) + positions,3,length(positions)/3).^2,1))';
+    error=zeros(numel(list_markers),1);
+    for m=1:numel(list_markers)
+%         error(m,:) = norm(eval([list_markers{m} '_Position(Pelvis_position,Pelvis_rotation,q,k,pcut,Rcut)']) - real_markers(m).position(f,:)');
+        error(m,:) =    norm(list_markers{m}...
+                (Pelvis_position,Pelvis_rotation,q,k,...
+                pcut,Rcut)  - real_markers(m).position(f,:)');
+    end
 
 end

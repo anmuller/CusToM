@@ -99,9 +99,9 @@ Scapula_cluster_mid = Thorax_osim2antoine.*Mirror*[-0.119492 0.0147336 -0.038580
 Scapula_locator_AI  = Thorax_osim2antoine.*Mirror*[-0.109351 -0.1132 -0.0903848]' - Scapula_CoM;
 Scapula_locator_TS  = Thorax_osim2antoine.*Mirror*[-0.0874576 -0.0120416 -0.098654]' - Scapula_CoM;
 Scapula_locator_AA  = Thorax_osim2antoine.*Mirror*[-0.0393614 -0.00318483 0.0080672]' - Scapula_CoM;
-Thorax_Rx           = Mirror(1,1)*Thorax_osim2antoine(1)*0.07;
-Thorax_Ry           = Mirror(2,2)*Thorax_osim2antoine(2)*0.15;
-Thorax_Rz           = Mirror(3,3)*Thorax_osim2antoine(3)*0.07;
+Thorax_Rx           = Thorax_osim2antoine(1)*0.07;
+Thorax_Ry           = Thorax_osim2antoine(2)*0.15;
+Thorax_Rz           = Thorax_osim2antoine(3)*0.07;
 
 %% Definition of anatomical landmarThorax_osim2antoine.s (with respect to the center of mass of the solid)
 
@@ -301,7 +301,7 @@ Human_model(incr_solid).comment='scapulothoracic z regression';
 Human_model(incr_solid).kinematic_dependancy.active=1;
 Human_model(incr_solid).kinematic_dependancy.Joint=[incr_solid+1; incr_solid+2]; % Thoracicellips
 % Kinematic dependancy function
-f_tz = matlabFunction(Thorax_Rz*cos(lambda)*cos(phi),'vars',{phi,lambda});
+f_tz = matlabFunction(Mirror(3,3)*Thorax_Rz*cos(lambda)*cos(phi),'vars',{phi,lambda});
 Human_model(incr_solid).kinematic_dependancy.q=f_tz;
 
 % ScapuloThoracic_J4
