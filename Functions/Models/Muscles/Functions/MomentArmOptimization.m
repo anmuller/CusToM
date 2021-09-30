@@ -1,4 +1,4 @@
-function [RMSE,BiomechanicalModel]=MomentArmOptimization(num_muscle,BiomechanicalModel,InputMomentArm,nb_points,radius)
+function [RMSE,BiomechanicalModel]=MomentArmOptimization(num_muscle,BiomechanicalModel,InputMomentArm,nb_points,radius,involved_solids)
 % Placing new via points for matching given moment arm
 %
 %   INPUT
@@ -36,7 +36,6 @@ name_mus=name_mus(2:end);
 
 %% Modification of BiomechanicalModel  : adding new VP points : one at each side of joints
 
-involved_solids=PathConstruction(HumanModel,[Muscles(num_muscle).num_solid(1), Muscles(num_muscle).num_solid(end)]);
 involved_solid=[Muscles(num_muscle).num_solid(1);  Muscles(num_muscle).num_solid(end);  involved_solids' ];
 num_markers=[Muscles(num_muscle).num_markers(1) ;  Muscles(num_muscle).num_markers(end) ];
 num_markersprov=[];
