@@ -220,9 +220,7 @@ parfor f = 1:nb_frame_calib
     
     fun = @(q) CostFunctionLMCalib(q,ik_function_objective,gamma,hclosedloophandle,zeta,buteehandle);
 
-    tic()
     [q_inter(:,f)] = lsqnonlin(fun,q0,[],[],optionsLM);
-    toc();
     
     waitbar(f/nb_frame_calib)
     

@@ -25,7 +25,7 @@ function [error] = ErrorMarkersCalib(q,k,real_markers,f,list_markers,Pelvis_posi
 
     for c=1:nbcut
         if c==1          
-        [Rcut(:,:,c),pcut(:,:,c)]=list_function{c}(Pelvis_position,Pelvis_rotation,q,k,[],[]);
+            [Rcut(:,:,c),pcut(:,:,c)]=list_function{c}(Pelvis_position,Pelvis_rotation,q,k,[],[]);
         else
             [Rcut(:,:,c),pcut(:,:,c)]=list_function{c}(Pelvis_position,Pelvis_rotation,q,k,pcut,Rcut);
         end
