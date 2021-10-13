@@ -20,12 +20,12 @@ function [error] = CostFunctionSymbolicCalib(q,k,Pelvis_position,Pelvis_rotation
 %________________________________________________________
 
 for c=1:nbcut
-            if c==1          
+    if c==1          
         [Rcut(:,:,c),pcut(:,:,c)]=list_function{c}(Pelvis_position,Pelvis_rotation,q,k,[],[]);
-        else
-    [Rcut(:,:,c),pcut(:,:,c)]=...
+    else
+        [Rcut(:,:,c),pcut(:,:,c)]=...
         list_function{c}(Pelvis_position,Pelvis_rotation,q,k,pcut,Rcut);
-            end
+    end
 end
 
 
