@@ -25,6 +25,7 @@ for c=1:nbcut
         else
     [Rcut(:,:,c),pcut(:,:,c)]=...
         list_function{c}(Pelvis_position,Pelvis_rotation,q,k,pcut,Rcut);
+            end
 end
 
 
