@@ -2,7 +2,7 @@ function [Markers]=Marker_set7(varargin)
 % Definition of the markers set used in ENSAM
 %
 %   OUTPUT
-%   - Markers: set of markers (see the Documentation for the structure)
+%   - Markers: set of markers (see the Documentation for the structure) 
 %________________________________________________________
 %
 % Licence
@@ -13,6 +13,7 @@ function [Markers]=Marker_set7(varargin)
 % Georges Dumont
 %________________________________________________________
 s=cell(0);
+
 % Trunk
 s=[s;{'TMPD' 'RFHD' {'Off';'Off';'On'}; 'TMPG' 'LFHD' {'Off';'Off';'On'}; 'OCCD' 'RBHD' {'Off';'On';'On'}; 'OCCG' 'LBHD' {'Off';'Off';'On'}; ...
     'C7' 'C7' {'On';'On';'Off'}; 'MAN' 'CLAV' {'On';'On';'Off'}; ...
@@ -24,6 +25,8 @@ s=[s;{'TMPD' 'RFHD' {'Off';'Off';'On'}; 'TMPG' 'LFHD' {'Off';'Off';'On'}; 'OCCD'
     'SCAPDB' 'MTACDB' {'On';'On';'On'}; 'SCAPGB' 'MTACGB' {'On';'On';'On'};...
     'SCAPDH' 'MTACDM' {'On';'On';'On'}; 'SCAPGH' 'MTACGM' {'On';'On';'On'};...
     }];
+
+
 Side1={'D';'G'};
 Side2={'R';'L'};
 % Arm
@@ -33,6 +36,7 @@ for i=1:2
         ['MC2' Side1{i}] [Side2{i} 'CAR2'] {'Off';'Off';'Off'}; ['MC5' Side1{i}] [Side2{i} 'OHAND'] {'Off';'Off';'Off'}; ...
         }];
 end
+
 % Leg
 for i=1:2
     s=[s;{['CL' Side1{i}] [Side2{i} 'KNE'] {'Off';'Off';'On'}; ['CM' Side1{i}] [Side2{i} 'KNI'] {'Off';'On';'On'}; ...
@@ -41,6 +45,8 @@ for i=1:2
         ['MT1' Side1{i}] [Side2{i} 'TARI'] {'Off';'On';'On'}; ['MT5' Side1{i}] [Side2{i} 'TAR'] {'Off';'Off';'Off'}; ...
         }];
 end
+
+
 if length(varargin)>1
     Scapulalocator = varargin{2};
     if Scapulalocator.active
@@ -54,5 +60,8 @@ if length(varargin)>1
         end
     end
 end
+
+
 Markers=struct('name',{s{:,1}}','anat_position',{s{:,2}}','calib_dir',{s{:,3}}'); %#ok<CCAT1>
+
 end

@@ -18,14 +18,17 @@ function [error] = CostFunctionSymbolicCalib(q,k,Pelvis_position,Pelvis_rotation
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
 % Georges Dumont
 %________________________________________________________
+
 for c=1:nbcut
-    if c==1
+    if c==1          
         [Rcut(:,:,c),pcut(:,:,c)]=list_function{c}(Pelvis_position,Pelvis_rotation,q,k,[],[]);
     else
         [Rcut(:,:,c),pcut(:,:,c)]=...
         list_function{c}(Pelvis_position,Pelvis_rotation,q,k,pcut,Rcut);
     end
 end
+
+
 nb_mk=numel(list_function_markers);
 e=zeros(nb_mk,1);
 for m=1:nb_mk
@@ -35,4 +38,5 @@ for m=1:nb_mk
 end
 W=eye(nb_mk); %Weighted markers each markers are weighted by one
 error=e'*W*e;
+
 end

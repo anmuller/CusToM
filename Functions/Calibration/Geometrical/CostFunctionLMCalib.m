@@ -1,6 +1,6 @@
 function func=CostFunctionLMCalib(q,ik_function_objective,gamma,hclosedloophandle,zeta,hbutees)
 % Limit penalisation for LM algorithm
-%
+%   
 %   INPUT
 %   - q: vector of joint coordinates at a given instant
 %   - positions : vector of experimental marker positions
@@ -19,11 +19,16 @@ function func=CostFunctionLMCalib(q,ik_function_objective,gamma,hclosedloophandl
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
 % Georges Dumont
 %________________________________________________________
+
+    
     constraints=[];
     for k=1:length(hclosedloophandle)
         fonc = hclosedloophandle{k};
         constraints = [constraints ; fonc(q)];
     end
+    
     dX = ik_function_objective(q);
+    
     func = [ dX ; gamma*constraints ; zeta*hbutees(q)];
+    
 end

@@ -21,5 +21,7 @@ function [c,ceq] = ClosedLoopCalib(Pelvis_position,Pelvis_rotation,q,k) %#ok<*IN
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
 % Georges Dumont
 %________________________________________________________
+
 [c,ceq] = fCL(Pelvis_position,Pelvis_rotation,q,k);
+
 end

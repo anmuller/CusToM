@@ -1,4 +1,5 @@
 function [error] = ErrorMarkersCalib(q,k,real_markers,f,list_markers,Pelvis_position,Pelvis_rotation,Rcut,pcut,nbcut,list_function)
+
 % Computation of reconstruction error for the geometrical calibration
 %   Computation of the distance between the position of each experimental
 %   marker and the position of the corresponded model marker
@@ -21,8 +22,9 @@ function [error] = ErrorMarkersCalib(q,k,real_markers,f,list_markers,Pelvis_posi
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
 % Georges Dumont
 %________________________________________________________
+
     for c=1:nbcut
-        if c==1
+        if c==1          
             [Rcut(:,:,c),pcut(:,:,c)]=list_function{c}(Pelvis_position,Pelvis_rotation,q,k,[],[]);
         else
             [Rcut(:,:,c),pcut(:,:,c)]=list_function{c}(Pelvis_position,Pelvis_rotation,q,k,pcut,Rcut);

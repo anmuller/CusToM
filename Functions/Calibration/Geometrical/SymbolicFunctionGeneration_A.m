@@ -3,7 +3,7 @@ A_norm,b_norm]=SymbolicFunctionGeneration_A(Human_model, Markers_set, castest)
 % Generation of symbolic function containing the position of markers according to joint coordinates and geometrical parameters
 %
 %   INPUT
-%   - Human_model: osteo-articular model (see the Documentation for the≤
+%   - Human_model: osteo-articular model (see the Documentation for the¬≤
 %   structure) 
 %   - Markers_set: set of markers (see the Documentation for the structure)
 %   OUTPUT
@@ -32,7 +32,7 @@ A_norm,b_norm]=SymbolicFunctionGeneration_A(Human_model, Markers_set, castest)
 % Georges Dumont
 %________________________________________________________
 
-%% liste des marqueurs ‡ partir du modËle (Markers list from the model)
+%% liste des marqueurs √† partir du mod√®le (Markers list from the model)
 list_markers={};
 for i=1:numel(Markers_set)
     if Markers_set(i).exist
@@ -43,7 +43,7 @@ nb_markers=size(list_markers,1);
 
 %% initialisation des variables (initialisation of variables)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% CoordonnÈes articulaires
+% Coordonn√©es articulaires
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 q = sym('q', [numel(Human_model) 1]);  %initialisation de q (nb de solides -1 (pelvis))
 assume(q,'real')
@@ -103,7 +103,7 @@ Generalized_Coordinates.q_dep_map=q_dep_map;
 Generalized_Coordinates.q_complete=q_complete;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% facteurs d'homothÈtie (homothetic factors)
+% facteurs d'homoth√©tie (homothetic factors)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ind=1:numel(Human_model);
 ind_k = unique([Markers_set.num_solid]);% takes solids with markers 
@@ -114,7 +114,7 @@ k_map=zeros(numel(Human_model));
 for i=1:nb_k
 k_map(ind_k(i),ind_k(i))=1;
 end
-%k_map=orth(k_map); %Noyau de A dans le systËme d'equation linÈaire A*K=K (Kernal of A matrix)
+%k_map=orth(k_map); %Noyau de A dans le syst√®me d'equation lin√©aire A*K=K (Kernal of A matrix)
 [~,col]=find(sum(k_map,1)==0); k_map(:,col)=[];
 [~,V]=setdiff(ind,ind_k);
 k_map(V,nb_k+1)=1;
@@ -164,7 +164,7 @@ Generalized_Coordinates.fq_dep_k=fq_dep_k;
 Generalized_Coordinates.q_complete_k=q_complete_k;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% dÈplacement des marqueurs p (displacement of markers p)
+% d√©placement des marqueurs p (displacement of markers p)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 list_dir={};
 for i=1:numel(Markers_set)
@@ -189,9 +189,9 @@ p_map=zeros(length(list_dir),length(list_dir));
 for i=1:nb_p
 p_map(ind_m(i),ind_m(i))=1;
 end
-p_map=orth(p_map); % Noyau de A dans le systËme d'equation linÈaire A*P=P
+p_map=orth(p_map); % Noyau de A dans le syst√®me d'equation lin√©aire A*P=P
 
-p_adapt_sym = sym('p_adapt_sym',[nb_p 1]);  % dÈplacement des marqueurs lors de la calibration (Markers displacement due to calibration)
+p_adapt_sym = sym('p_adapt_sym',[nb_p 1]);  % d√©placement des marqueurs lors de la calibration (Markers displacement due to calibration)
 assume(p_adapt_sym,'real');
 
 % Rotation orientation du pelvis (position and orientation of pelvis)
@@ -201,7 +201,7 @@ RPelvis = sym('RPelvis', [3 3]);
 assume(pPelvis,'real');
 assume(RPelvis,'real');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Angles associÈs (associated angles)
+% Angles associ√©s (associated angles)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 nb_alpha =0;
 if isfield(Human_model,'v')
@@ -225,7 +225,7 @@ if isfield(Human_model,'v')
     % for i=1:nb_alpha
     % alpha_map(ind_alpha(i),ind_alpha(i))=1;
     % end
-    % alpha_map=orth(alpha_map); %Noyau de A dans le systËme d'equation linÈaire A*ALPHA=ALPHA;
+    % alpha_map=orth(alpha_map); %Noyau de A dans le syst√®me d'equation lin√©aire A*ALPHA=ALPHA;
     
     alpha_sym = sym('alpha', [nb_alpha 1]);  %initialiation de q (nb de solides -1 (pelvis))
     assume(alpha_sym,'real');
@@ -247,25 +247,57 @@ else
     limit_alpha_sup=[];
 end
 
+
+%% Thorax Ellipsoid radii definition
+
+% Adding Thorax Ellipsoid dimensions if Closed Loop Shoulder model
+% Searches for scapula
+[~, idx] = intersect({Human_model.name},'RScapula');
+if isscalar(idx)
+    % Searches for Thorax Ellipsoid dimensions
+    [~, idy] = intersect(Human_model(idx).anat_position(:,1),'ThoracicEllipsoid_radius');
+    if isscalar(idy)
+        radius_sym = sym('radius', [6 1]);
+        assume(radius_sym,'real');
+        
+        radius_R = Human_model(idx).anat_position(idy,2);
+        
+        [~, idx] = intersect({Human_model.name},'LScapula');
+        radius_L = Human_model(idx).anat_position(idy,2);
+        
+        radius_length = [radius_R{1} ; radius_L{1}];
+    else
+        % If no Thorax Ellipsoid : no need to optimize its parameters
+        radius_sym = [];
+        radius_length = [];
+    end
+else
+    % If no Scapula : no need to optimize its parameters
+    radius_sym = [];
+    radius_length = [];
+end
+
+
+
 %% toutes les variables
-var_sym = [k_sym;p_adapt_sym;alpha_sym];
+var_sym = [k_sym;p_adapt_sym;alpha_sym;radius_sym];
 %% Normalisation des variables
-% limites : 0.8<k<1.2 et dÈplacement max de 5 cm pour chaque marqueur dans chaque direction
+% limites : 0.8<k<1.2 et d√©placement max de 5 cm pour chaque marqueur dans chaque direction
 % et limites angulaire pour alpha
 % On veut faire varier toutes les variables seulement entre -1 et 1 lors de
 % l'optimisation
 %% variable normalization within boundaries (0.8<k<1.2) and max displacement of 5cm for each marker in each direction and angular limits for alpha
 % all variables should vary only between-1 and +1 during optimisation process
 
-limit_inf_calib=[0.8*ones([nb_k 1]) ; -0.05*ones([nb_p 1]) ; limit_alpha_inf];
-limit_sup_calib=[1.2*ones([nb_k 1]) ;  0.05*ones([nb_p 1]) ; limit_alpha_sup];
+limit_inf_calib=[0.8*ones([nb_k 1]) ; -0.05*ones([nb_p 1]) ; limit_alpha_inf;  0.8*radius_length];
+limit_sup_calib=[1.2*ones([nb_k 1]) ;  0.05*ones([nb_p 1]) ; limit_alpha_sup; 1.2*radius_length];
 
-%Normaliser Variables toutes les variables sont normalisÈs entre -1 et 1 de
-%sorte que l'optimisation fasse varier les variables de la mÍme maniËre.
+%Normaliser Variables toutes les variables sont normalis√©s entre -1 et 1 de
+%sorte que l'optimisation fasse varier les variables de la m√™me mani√®re.
 % All variables are normalized between -1 and +1 to ensure same weight for every variable
 % a'= 2*(a-a_min)/(a_max-a_min)-1
 % Mise sous forme matricielle A'=AX+b (under a matrix form A'=AX+b)
-taille =nb_k+nb_p+nb_alpha;
+taille =length(var_sym);
 A_norm = eye(taille);
 for ii=1:taille
 A_norm(ii,ii) = 2*A_norm(ii,ii)/( limit_sup_calib(ii) - limit_inf_calib(ii));
@@ -281,75 +313,79 @@ k=k_map*[var_unnormalized(1:nb_k);1];
 p_adapt=p_map*var_unnormalized(nb_k+1:nb_k+nb_p);
 p_adapt_mat=reshape(p_adapt,3,nb_markers)';
 
-alpha=alpha_map*var_unnormalized(nb_k+nb_p+1:taille);
+alpha=alpha_map*var_unnormalized(nb_k+nb_p+1:nb_k+nb_p+nb_alpha);
+
+% Adding Thorax Ellipsoid dimensions if Closed Loop Shoulder model 
+if ~isempty(radius_length)
+    radius = var_unnormalized(nb_k+nb_p+nb_alpha+1:end);
+else
+    radius=[];
+end
 
 
-%% dÈtermination des fonctions symbolique pour chaque position de repËre 
+
+%% d√©termination des fonctions symbolique pour chaque position de rep√®re 
 %% Computation of symbolic functions for markers and cuts
 
-s_root=find([Human_model.mother]==0); % numÈro du solide root (Number of root solid)
+s_root=find([Human_model.mother]==0); % num√©ro du solide root (Number of root solid)
 
 % initialisation de la position et de la rotation du pelvis (setting initial position and rotation for pelvis)
 Human_model(s_root).p=pPelvis;
 Human_model(s_root).R=RPelvis;
 
-% Calcul de la position de chaque marqueurs de faÁon symbolique (computation of markers position under a symbolic form)
-[Human_model,Markers_set,~,~,c_ClosedLoop,ceq_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,s_root,q_complete_k,k,p_adapt_mat,alpha,1,1,castest,{},{});
-% [Human_model,Markers_set,~,~,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,s_root,q,k,p_adapt_mat,alpha,1,1);
+% Calcul de la position de chaque marqueurs de fa√ßon symbolique (computation of markers position under a symbolic form)
+
+
+% [Human_model,Markers_set,~,~,c_ClosedLoop,ceq_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_Shoulder(Human_model,Markers_set,s_root,q_complete_k,k,p_adapt_mat,alpha,radius,1,1);
+% [Human_model,Markers_set,~,~,c_ClosedLoop,ceq_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,s_root,q_complete_k,k,p_adapt_mat,alpha,1,1);
+[Human_model,Markers_set,~,~,c_ClosedLoop,ceq_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,s_root,q_complete_k,k,p_adapt_mat,alpha,radius,1,1);
 
 % position et rotation des solides servant de coupure (position and rotation of solids defining the cuts)
-% for ii=1:max([Human_model.KinematicsCut])
-%     eval(['p' num2str(ii) 'cut = sym([''p'' num2str(ii) ''cut''], [3 1]);'])
-%     eval(['R' num2str(ii) 'cut = sym([''R'' num2str(ii) ''cut''], [3 3]);'])
-%         for i=1:3
-%             eval(['assume(p' num2str(ii) 'cut(' num2str(i) ',1),''real'');'])
-%             for z=1:3
-%                 eval(['assume(R' num2str(ii) 'cut(' num2str(i) ',' num2str(z) '),''real'');'])
-%             end
-%         end   
-%         pcut(:,:,ii)=eval(['p' num2str(ii) 'cut']);
-%         Rcut(:,:,ii)=eval(['R' num2str(ii) 'cut']);
-% end
-% 
-% %% crÈation des fonctions pour chaque marqueur et chaque solide de coupure
-% %% computation, i-under a symbolic expression, for every marker and every solid
-% 
-% % CrÈation du dossier "Symbolic_function"
-% if exist([cd '/Symbolic_function'])~=7 %#ok<EXIST>
-%     mkdir('Symbolic_function')
-% end
-% 
-% % marqueurs % trop long avec les nouvelles variables
-% for i=1:numel(Markers_set)
-%    if Markers_set(i).exist
-%        matlabFunction(Markers_set(i).position_symbolic,'file',['Symbolic_function/' Markers_set(i).name '_Position.m'],'vars',{pPelvis,RPelvis,q_red,var_sym,pcut,Rcut});
-%    end
-% end
-% 
-% % % marqueurs
-% % E = [Markers_set.exist]';
-% % ind = find(E==1);
-% % parfor ii=1:length(ind) 
-% %     x = ind(ii);
-% %     matlabFunction(Markers_set(x).position_symbolic,'file',['Symbolic_function/' Markers_set(x).name '_Position.m'],'vars',{pPelvis,RPelvis,q,k,p_adapt,alpha,pcut,Rcut});
-% % end
-% % poolobj = gcp('nocreate');
-% % delete(poolobj);
-% 
-% % solide(s) de coupure (Solids where cuts are performed)
-% for i=1:numel(Human_model)  % solide i
-%     if size(Human_model(i).KinematicsCut) ~= 0
-%         matlabFunction(Human_model(i).R,Human_model(i).p,'File',['Symbolic_function/f' num2str(Human_model(i).KinematicsCut) 'cut.m'],...
-%             'Outputs',{['R' num2str(num2str(Human_model(i).KinematicsCut)) 'cut' ],['p' num2str(num2str(Human_model(i).KinematicsCut)) 'cut' ]},...;
-%             'vars',{pPelvis,RPelvis,q_red,var_sym,pcut,Rcut});
-%     end
-% end
-% 
+for ii=1:max([Human_model.KinematicsCut])
+    eval(['p' num2str(ii) 'cut = sym([''p'' num2str(ii) ''cut''], [3 1]);'])
+    eval(['R' num2str(ii) 'cut = sym([''R'' num2str(ii) ''cut''], [3 3]);'])
+        for i=1:3
+            eval(['assume(p' num2str(ii) 'cut(' num2str(i) ',1),''real'');'])
+            for z=1:3
+                eval(['assume(R' num2str(ii) 'cut(' num2str(i) ',' num2str(z) '),''real'');'])
+            end
+        end   
+        pcut(:,:,ii)=eval(['p' num2str(ii) 'cut']);
+        Rcut(:,:,ii)=eval(['R' num2str(ii) 'cut']);
+end
+
+%% cr√©ation des fonctions pour chaque marqueur et chaque solide de coupure
+%% computation, i-under a symbolic expression, for every marker and every solid
+
+% Cr√©ation du dossier "Symbolic_function"
+if exist([cd '/Symbolic_function'])~=7 %#ok<EXIST>
+    mkdir('Symbolic_function')
+end
+
+for i=1:numel(Markers_set)
+   if Markers_set(i).exist
+       matlabFunction(Markers_set(i).position_symbolic,'file',['Symbolic_function/' Markers_set(i).name '_Position.m'],'vars',{pPelvis,RPelvis,q_red,var_sym,pcut,Rcut});
+   end
+end
+
+
+for i=1:numel(Human_model)  % solide i
+    if size(Human_model(i).KinematicsCut) ~= 0
+        matlabFunction(Human_model(i).R,Human_model(i).p,'File',['Symbolic_function/f' num2str(Human_model(i).KinematicsCut) 'cut.m'],...
+            'Outputs',{['R' num2str(num2str(Human_model(i).KinematicsCut)) 'cut' ],['p' num2str(num2str(Human_model(i).KinematicsCut)) 'cut' ]},...;
+            'vars',{pPelvis,RPelvis,q_red,var_sym,pcut,Rcut});
+    end
+end
+
+
+
+
 % Closed loops
 Fullc_ClosedLoop = [c_ClosedLoop{:}];
 Fullceq_ClosedLoop = [ceq_ClosedLoop{:}];
 Fullc_ClosedLoop = Fullc_ClosedLoop(:);
 Fullceq_ClosedLoop = Fullceq_ClosedLoop(:);
+
 if  ~isempty(Fullceq_ClosedLoop)
     matlabFunction(Fullc_ClosedLoop,Fullceq_ClosedLoop,'File',['Symbolic_function/fCL.m'],'Outputs',{'c','ceq'},'vars',{pPelvis,RPelvis,q_red,var_sym});
 else
@@ -357,6 +393,9 @@ else
 end
 
 
+
 nbClosedLoop=numel(c_ClosedLoop);
+
+
 
 end

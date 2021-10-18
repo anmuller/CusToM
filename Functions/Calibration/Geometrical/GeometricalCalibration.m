@@ -4,14 +4,14 @@ function [Human_model_calib, calib_parameters, Markers_set] = GeometricalCalibra
 %   of rotation) are subject-specific calibrated from motion capture data.
 %
 %   Associated publication:
-%	- Muller, A., Germain, C., Pontonnier, C., Dumont, G., 2015. 
-%	A Simple Method to Calibrate Kinematical Invariants: Application to Overhead Throwing. Int. Soc. Biomech. Sport. 2–5.
+%	- Muller, A., Germain, C., Pontonnier, C., Dumont, G., 2015.
+%	A Simple Method to Calibrate Kinematical Invariants: Application to Overhead Throwing. Int. Soc. Biomech. Sport. 2ï¿½5.
 %
 %   Based on:
-%	- Reinbolt, J.A., Schutte, J.F., Fregly, B.J., Koh, B. Il, Haftka, R.T., George, A.D., Mitchell, K.H., 2005. 
-%	Determination of patient-specific multi-joint kinematic models through two-level optimization. J. Biomech. 38, 621–626.
-%	- Andersen, M.S., Damsgaard, M., MacWilliams, B., Rasmussen, J., 2010. 
-%	A computationally efficient optimisation-based method for parameter identification of kinematically determinate and over-determinate biomechanical systems. Comput. Methods Biomech. Biomed. Engin. 13, 171–183.
+%	- Reinbolt, J.A., Schutte, J.F., Fregly, B.J., Koh, B. Il, Haftka, R.T., George, A.D., Mitchell, K.H., 2005.
+%	Determination of patient-specific multi-joint kinematic models through two-level optimization. J. Biomech. 38, 621ï¿½626.
+%	- Andersen, M.S., Damsgaard, M., MacWilliams, B., Rasmussen, J., 2010.
+%	A computationally efficient optimisation-based method for parameter identification of kinematically determinate and over-determinate biomechanical systems. Comput. Methods Biomech. Biomed. Engin. 13, 171ï¿½183.
 %
 %   INPUT
 %   - OsteoArticularModel: osteo-articular model (see the Documentation for
@@ -53,12 +53,12 @@ end
 % v
 for i=1:size(AnalysisParameters.CalibIK.AxisDelete,1)
     [~,~,num_solid] = intersect(AnalysisParameters.CalibIK.AxisDelete{i,1},solid_names);
-%     OsteoArticularModel(num_solid).v = setdiff(OsteoArticularModel(num_solid).v',AnalysisParameters.CalibIK.AxisDelete{i,2}','rows')';
+    %     OsteoArticularModel(num_solid).v = setdiff(OsteoArticularModel(num_solid).v',AnalysisParameters.CalibIK.AxisDelete{i,2}','rows')';
     OsteoArticularModel(num_solid).v=[];
 end
 for i=1:size(AnalysisParameters.CalibIK.AxisAdd,1)
     [~,~,num_solid] = intersect(AnalysisParameters.CalibIK.AxisAdd{i,1},solid_names);
-    OsteoArticularModel(num_solid).v = [OsteoArticularModel(num_solid).v AnalysisParameters.CalibIK.AxisAdd{i,2}]; 
+    OsteoArticularModel(num_solid).v = [OsteoArticularModel(num_solid).v AnalysisParameters.CalibIK.AxisAdd{i,2}];
 end
 % Markers
 for i=1:size(AnalysisParameters.CalibIK.MarkersCalibModif,1)
@@ -68,11 +68,11 @@ end
 
 %% Adding 6 DOF joint (pelvis to world)
 [OsteoArticularModel] = Add6dof(OsteoArticularModel);
-s_root=find([OsteoArticularModel.mother]==0); %#ok<NASGU> % numéro du solide root
+s_root=find([OsteoArticularModel.mother]==0); %#ok<NASGU> % numï¿½ro du solide root
 
 %% Symbolical function generation
 % Markers position according to the joint coordinates
-[OsteoArticularModel,nbClosedLoop,GC,nb_k,k_map,nb_p,p_map,nb_alpha,alpha_map,A_norm,b_norm]=SymbolicFunctionGeneration_A(OsteoArticularModel, Markers_set);
+[OsteoArticularModel,nbclosedloop,GC,nb_k,k_map,nb_p,p_map,nb_alpha,alpha_map,A_norm,b_norm]=SymbolicFunctionGeneration_A(OsteoArticularModel, Markers_set);
 
 %% list of markers from the model
 list_markers={};
@@ -91,7 +91,9 @@ list_markers = [real_markers.name]';
 
 %% Selection/choice of frame sample
 nb_frame_calib = AnalysisParameters.CalibIK.Frames.NbFrames;
+
 [frame_calib] = AnalysisParameters.CalibIK.Frames.Method(nb_frame_calib, real_markers, list_markers);
+
 
 calib_parameters.frame_calib = frame_calib;
 % Frame to use for calibration
@@ -110,14 +112,14 @@ for i=1:nb_frame
 end
 
 %% Initializations
-taille = nb_k+nb_p+nb_alpha;
+taille = nb_k+nb_p+nb_alpha+6;
 
 k_init=zeros(taille,1);
 
 Nb_qred=size(GC.q_red,1);
 % linear constraints for inverse kinemeatics, same joint angles for two
 % joints
-Aeq_ik=zeros(Nb_qred);  
+Aeq_ik=zeros(Nb_qred);
 beq_ik=zeros(Nb_qred,1);
 solid_red = (GC.q_map'*[1:nb_solid]')';
 for i=1:length(solid_red)
@@ -132,7 +134,7 @@ for i=1:length(solid_red)
         Aeq_ik(i,c)=cc;
     end
 end
-% Aeq_ik=zeros(nb_solid);  
+% Aeq_ik=zeros(nb_solid);
 % beq_ik=zeros(nb_solid,1);
 % for i=1:nb_solid
 %     if size(OsteoArticularModel(i).linear_constraint) ~= [0 0] %#ok<BDSCA>
@@ -151,13 +153,13 @@ q_value{1}=zeros(Nb_qred,nb_frame_calib);
 addpath('Symbolic_function')
 nbcut = max([OsteoArticularModel.KinematicsCut]);
 
-
-Rcut=zeros(3,3,max([OsteoArticularModel.KinematicsCut]));  
-pcut=zeros(3,1,max([OsteoArticularModel.KinematicsCut]));
+nbcut = max([OsteoArticularModel.KinematicsCut]);
+Rcut=zeros(3,3,nbcut);
+pcut=zeros(3,1,nbcut);
 
 % Functions list for computing cost function
-list_function=cell(max([OsteoArticularModel.KinematicsCut]),1);
-for c=1:max([OsteoArticularModel.KinematicsCut])
+list_function=cell(nbcut,1);
+for c=1:nbcut
     list_function{c}=str2func(sprintf('f%dcut',c));
 end
 list_function_markers=cell(numel(list_markers),1);
@@ -183,53 +185,55 @@ l_inf(l_inf==1i)=-inf;
 l_sup(l_sup==1i)=+inf;
 
 
-% for f=1:nb_frame_calib
-%     if f == 1      % initial frame
-%         q0=zeros(Nb_qred,1);
-%     else
-%         q0=q_value{1}(:,f-1);
-%     end
-%     ik_function_objective=@(qvar)CostFunctionSymbolicCalib(qvar,k_init,OsteoArticularModel,real_markers_calib,f,list_function,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut);
-%     nonlcon=@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,k_init,pcut,Rcut,nbClosedLoop); % pas tester
-%     [q_value{1}(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf,l_sup,nonlcon,options);
-% end
-
 f = 1    ;  % initial frame
 q0=zeros(Nb_qred,1);
+
 ik_function_objective=@(qvar)CostFunctionSymbolicCalib(qvar,k_init,Base_position{f},Base_rotation{f},list_function ,Rcut,pcut,real_markers_calib,nbcut,list_function_markers,f);
 nonlcon=@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,k_init); % pas tester
 [q_value{1}(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf,l_sup,nonlcon,options);
+
+
 optionsLM = optimset('Algorithm','Levenberg-Marquardt','Display','off','MaxIter',4e6,'MaxFunEval',5e6,'TolFun',1e-4);
+
 buteehandle = @(q)  Limits(q,l_inf,l_sup);
 gamma = 150;
 zeta = 20;
+
 q0 = q_value{1}(:,f);
+
 parfor f = 1:nb_frame_calib
 %     for m=1:length(real_markers)
 %         positions(:,m) = real_markers(m).position(f,:)';
 %     end
-%
+%     
 %     ik_function_objective=@(qvar)ErrorMarkersCalibAcc(qvar,k_init,Base_position{f},Base_rotation{f},positions(:));
 %     hclosedloophandle = {@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,k_init);  @(x) Aeq_ik*x - beq_ik} ;
-%
+%     
 %     fun = @(q) CostFunctionLMCalib(q,ik_function_objective,gamma,hclosedloophandle,zeta,buteehandle);
-%
+%     
 %     tic()
 %     [q_inter1(:,f)] = lsqnonlin(fun,q0,[],[],optionsLM);
 %     toc()
+    
+    
     ik_function_objective=@(qvar) ErrorMarkersCalib(qvar,k_init,real_markers_calib,f,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut,nbcut,list_function);
     hclosedloophandle = {@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,k_init);  @(x) Aeq_ik*x - beq_ik} ;
+    
     fun = @(q) CostFunctionLMCalib(q,ik_function_objective,gamma,hclosedloophandle,zeta,buteehandle);
-    [q_inter(:,f)] = lsqnonlin(fun,q0,[],[],optionsLM);
-    waitbar(f/nb_frame_calib)
+
+    [q_inter(:,f)] = lsqnonlin(fun,q0,[],[],optionsLM);   
 end
+q_value{1}(:,2:nb_frame_calib) = q_inter(:,2:nb_frame_calib);
+
 q_value{1}(:,2:nb_frame_calib) = q_inter(:,2:nb_frame_calib);
 
 % Error computation
 errorm{1}=zeros(length(real_markers_calib),nb_frame_calib);
 for f=1:nb_frame_calib
+    
     [errorm{1}(:,f)] = ErrorMarkersCalib(q_value{1}(:,f),k_init,real_markers_calib,f,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut,nbcut,list_function);
 end
+
 
 %% Calibration
 
@@ -240,27 +244,27 @@ beq_calib=zeros(taille,1);
 % Constraints for k
 for i=1:nb_solid-6
     if size(OsteoArticularModel(i).calib_k_constraint) ~= [0 0]
-            vect2map = zeros(nb_solid,1);
-            vect2map(i,1) = 1;
-            cur_ind_k = find(k_map'*vect2map==1);
-%         if OsteoArticularModel(i).calib_k_constraint == 0
-%             Aeq_calib(cur_ind_k,cur_ind_k)=1;
-%             beq_calib(cur_ind_k,1)=-1;
-%         else
-            vect2map = zeros(nb_solid,1);
-            vect2map(OsteoArticularModel(i).calib_k_constraint,1) = 1;
-            ind_k_map_constraint = k_map'*vect2map==1;
-            Aeq_calib(cur_ind_k,cur_ind_k)=1;
-            Aeq_calib(cur_ind_k,ind_k_map_constraint)=-1;
-%         end
+        vect2map = zeros(nb_solid,1);
+        vect2map(i,1) = 1;
+        cur_ind_k = find(k_map'*vect2map==1);
+        %         if OsteoArticularModel(i).calib_k_constraint == 0
+        %             Aeq_calib(cur_ind_k,cur_ind_k)=1;
+        %             beq_calib(cur_ind_k,1)=-1;
+        %         else
+        vect2map = zeros(nb_solid,1);
+        vect2map(OsteoArticularModel(i).calib_k_constraint,1) = 1;
+        ind_k_map_constraint = k_map'*vect2map==1;
+        Aeq_calib(cur_ind_k,cur_ind_k)=1;
+        Aeq_calib(cur_ind_k,ind_k_map_constraint)=-1;
+        %         end
     end
 end
 
 %% Boundaries for setting variation limits
-limit_inf_calib = -ones(taille,1); 
-limit_sup_calib = ones(taille,1); 
+limit_inf_calib = -ones(taille,1);
+limit_sup_calib = ones(taille,1);
 
-g=1;       
+g=1;
 crit(:,g)=1; % stop criteria
 
 kp_opt(:,g)=k_init;
@@ -268,9 +272,10 @@ kp_opt(:,g)=k_init;
 while crit(:,g) > 0.05
     
     % Geometric parameters optimisation
+    
     pk_function_objective=@(kp)OptCalibrationSymbolic(...
         q_value{g},kp,nb_frame_calib,Base_position,Base_rotation,real_markers_calib,list_function,Rcut,pcut,nbcut,list_function_markers);
-                      
+    
     [kp_opt(:,g+1)] = fmincon(pk_function_objective,kp_opt(:,g),[],[],Aeq_calib,beq_calib,limit_inf_calib,limit_sup_calib,[],options);
     
     q_value{g+1}=zeros(size(q_value{g})); %#ok<AGROW>
@@ -278,33 +283,42 @@ while crit(:,g) > 0.05
 %     % Articular coordinates optimisation
 %     for f=1:nb_frame_calib
 %         q0=q_value{g}(:,f);
+%         for m=1:length(real_markers)
+%             positions(:,m) = real_markers(m).position(f,:)';
+%         end
 %         
 %         ik_function_objective=@(qvar)CostFunctionSymbolicCalib(...
-%             qvar,kp_opt(:,g+1),...
-%             OsteoArticularModel,real_markers_calib,f,list_function,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut);
-%                             
+%             qvar,kp_opt(:,g+1),Base_position{f},Base_rotation{f},list_function,Rcut,pcut,positions,nbcut,list_function_markers);
+%         
 %         nonlcon=@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,...
-%             kp_opt(:,g+1),...
-%             pcut,Rcut,nbClosedLoop);
-%     
+%             kp_opt(:,g+1));
+%         
 %         [q_value{g+1}(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf,l_sup,nonlcon,options);
 %     end
-% Articular coordinates optimisation
-    q0=q_value{g}(:,f);
+    
+        % Articular coordinates optimisation
+
+       q0=q_value{g}(:,f);
     parfor f =1:nb_frame_calib
-        ik_function_objective=@(qvar) ErrorMarkersCalib(qvar,kp_opt(:,g+1),real_markers_calib,f,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut,nbcut,list_function);
-        hclosedloophandle ={@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,kp_opt(:,g+1));@(x) Aeq_ik*x - beq_ik} ;
+        
+       ik_function_objective=@(qvar) ErrorMarkersCalib(qvar,kp_opt(:,g+1),real_markers_calib,f,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut,nbcut,list_function);
+       hclosedloophandle ={@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,kp_opt(:,g+1));@(x) Aeq_ik*x - beq_ik} ;
+        
         fun = @(q) CostFunctionLMCalib(q,ik_function_objective,gamma,hclosedloophandle,zeta,buteehandle);
         [q_inter(:,f)] = lsqnonlin(fun,q0,[],[],optionsLM);
+        
       %  waitbar(f/nb_frame)
+        
     end
-    q_value{g+1} = q_inter;    
+    q_value{g+1} = q_inter;
 
-
+    
     % Error computation
     errorm{g+1}=zeros(length(real_markers_calib),nb_frame_calib); %#ok<AGROW>
     for f=1:nb_frame_calib
+
         [errorm{g+1}(:,f)] = ErrorMarkersCalib(q_value{g+1}(:,f),kp_opt(:,g+1),real_markers_calib,f,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut,nbcut,list_function);
+
     end
     
     % Stop criteria
@@ -321,16 +335,17 @@ kp_opt_unormalized=A_norm\(kp_opt(:,end)-b_norm);
 
 calib_parameters.k_calib=k_map*[kp_opt_unormalized(1:nb_k,end); 1];
 calib_parameters.p_calib=p_map*kp_opt_unormalized(nb_k+1:nb_k+nb_p,end);
-calib_parameters.alpha_calib=alpha_map*kp_opt_unormalized(nb_k+nb_p+1:taille,end);
+calib_parameters.alpha_calib=alpha_map*kp_opt_unormalized(nb_k+nb_p+1:nb_k+nb_p+nb_alpha,end);
 calib_parameters.alpha_calib=...
-[calib_parameters.alpha_calib(1:2:length(calib_parameters.alpha_calib)),...
-calib_parameters.alpha_calib(2:2:length(calib_parameters.alpha_calib))];
+    [calib_parameters.alpha_calib(1:2:length(calib_parameters.alpha_calib)),...
+    calib_parameters.alpha_calib(2:2:length(calib_parameters.alpha_calib))];
+calib_parameters.radius =kp_opt_unormalized(nb_k+nb_p+nb_alpha+1:end,end);
 
 %% Model actualisation with obtained k and p values.
 Human_model_calib=Human_model_save;
 % k_calib %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 for i=1:numel(Human_model_save)
-    Human_model_calib(i).b=Human_model_save(i).b*calib_parameters.k_calib(OsteoArticularModel(i).mother); % b (k de la mère)
+    Human_model_calib(i).b=Human_model_save(i).b*calib_parameters.k_calib(OsteoArticularModel(i).mother); % b (k de la mï¿½re)
     Human_model_calib(i).c=Human_model_save(i).c*calib_parameters.k_calib(i); % c
     Human_model_calib(i).I=Human_model_save(i).I*calib_parameters.k_calib(i); % I
     for j=1:size(Human_model_save(i).anat_position,1)
@@ -363,19 +378,61 @@ if size(GC.q_dep,1)>0
     vect_k_dep = GC.q_dep_map*GC.ind_k_dep;
     for j=1:numel(Human_model_save)
         if isfield(Human_model_calib,'kinematic_dependancy') && ~isempty(Human_model_calib(j).kinematic_dependancy)
-                 Human_model_calib(j).kinematic_dependancy.q=matlabFunction(vect_q_dep(j));
-%                  if vect_k_dep(j)~=0
-%                     Human_model_calib(j).kinematic_dependancy.numerical_estimates(:,2)=...
-%                         calib_parameters.k_calib(vect_k_dep(j))*Human_model_calib(j).kinematic_dependancy.numerical_estimates(:,2);   
-%                  end
+            Human_model_calib(j).kinematic_dependancy.q=matlabFunction(vect_q_dep(j));
+            %                  if vect_k_dep(j)~=0
+            %                     Human_model_calib(j).kinematic_dependancy.numerical_estimates(:,2)=...
+            %                         calib_parameters.k_calib(vect_k_dep(j))*Human_model_calib(j).kinematic_dependancy.numerical_estimates(:,2);
+            %                  end
         end
+        
+        switch Human_model_calib(j).name
+            case 'RScapuloThoracic_J1'
+                
+                syms phi lambda % latitude longitude
+                
+                Human_model_calib(j).kinematic_dependancy.q=matlabFunction(calib_parameters.radius(1)*sin(lambda),'vars',{lambda});
+                
+            case 'RScapuloThoracic_J2'
+                
+                syms phi lambda % latitude longitude
+                
+                Human_model_calib(j).kinematic_dependancy.q=matlabFunction(-calib_parameters.radius(2)*sin(phi)*cos(lambda),'vars',{phi,lambda});
+                
+            case 'RScapuloThoracic_J3'
+                
+                syms phi lambda % latitude longitude
+                
+                Human_model_calib(j).kinematic_dependancy.q=matlabFunction(calib_parameters.radius(3)*cos(phi)*cos(lambda),'vars',{phi,lambda});
+                
+            case 'LScapuloThoracic_J1'
+                
+                syms phi lambda % latitude longitude
+                
+                Human_model_calib(j).kinematic_dependancy.q=matlabFunction(calib_parameters.radius(4)*sin(lambda),'vars',{lambda});
+                
+                
+            case 'LScapuloThoracic_J2'
+                
+                syms phi lambda % latitude longitude
+                
+                Human_model_calib(j).kinematic_dependancy.q=matlabFunction(-calib_parameters.radius(5)*sin(phi)*cos(lambda),'vars',{phi,lambda});
+                
+            case 'LScapuloThoracic_J3'
+                
+                syms phi lambda % latitude longitude
+                
+                Human_model_calib(j).kinematic_dependancy.q=matlabFunction(-calib_parameters.radius(6)*cos(phi)*cos(lambda),'vars',{phi,lambda});
+                
+                
+        end
+        
     end
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Symbolical fonction suppression
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-rmpath('Symbolic_function')
-rmdir('Symbolic_function','s')
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% rmpath('Symbolic_function')
+% rmdir('Symbolic_function','s')
 
 end
