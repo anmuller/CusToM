@@ -1,10 +1,10 @@
 function [Human_model,Markers_set,num_cut,numClosedLoop,c,ceq]=...
-Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,j,Q,k,p_adapt,alpha,radius,num_cut,numClosedLoop,castest,c,ceq)
-% Computation of a symbolic forward kinematics 
+    Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,j,Q,k,p_adapt,alpha,radius,num_cut,numClosedLoop,castest,c,ceq)
+% Computation of a symbolic forward kinematics
 %
 %   INPUT
 %   - Human_model: osteo-articular model (see the Documentation for the
-%   structure) 
+%   structure)
 %   - Markers_set: set of markers (see the Documentation for the structure)
 %   - j: current solid
 %   - Q: vector of joint coordinates
@@ -17,7 +17,7 @@ Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,j,Q,k,p_adapt,alpha,
 %   - R_ClosedLoop: matrix rotatio of the closed loops
 %   OUTPUT
 %   - Human_model: osteo-articular model (see the Documentation for the
-%   structure) 
+%   structure)
 %   - Markers_set: set of markers (see the Documentation for the structure)
 %   - num_cut: number of geometrical cut done in the osteo-articular model
 %   - numClosedLoop: number of closed loop in the model
@@ -53,38 +53,73 @@ if Human_model(j).mother ~= 0
     end
     
     
-       % Computation of ellipsoid coordinates kinematic dependancies
-   switch Human_model(j).name
-        case 'RScapuloThoracic_J1'
-            [~,idx] = intersect({Human_model.name},'RScapuloThoracic_J5');
-            q= radius(1)*sin(Q(idx));
-            
-        case 'RScapuloThoracic_J2'
-            [~,idx1] = intersect({Human_model.name},'RScapuloThoracic_J4');
-            [~,idx2] = intersect({Human_model.name},'RScapuloThoracic_J5');
-            q= -radius(2)*sin(Q(idx1))*cos(Q(idx2));
-            
-        case 'RScapuloThoracic_J3'
-            [~,idx1] = intersect({Human_model.name},'RScapuloThoracic_J4');
-            [~,idx2] = intersect({Human_model.name},'RScapuloThoracic_J5');
-            q= radius(3)*cos(Q(idx1))*cos(Q(idx2));
-            
-        case 'LScapuloThoracic_J1'
-            [~,idx] = intersect({Human_model.name},'LScapuloThoracic_J5');
-            q= radius(4)*sin(Q(idx));
-            
-        case 'LScapuloThoracic_J2'
-            [~,idx1] = intersect({Human_model.name},'LScapuloThoracic_J4');
-            [~,idx2] = intersect({Human_model.name},'LScapuloThoracic_J5');
-            q= -radius(5)*sin(Q(idx1))*cos(Q(idx2));
-                        
-        case 'LScapuloThoracic_J3'
-            [~,idx1] = intersect({Human_model.name},'LScapuloThoracic_J4');
-            [~,idx2] = intersect({Human_model.name},'LScapuloThoracic_J5');
-            q= -radius(6)*cos(Q(idx1))*cos(Q(idx2));
-            
-   end
+    % Computation of ellipsoid coordinates kinematic dependancies
     
+    if (castest(3)==2 || castest(3)==3) &&  castest(4)==2
+        switch Human_model(j).name
+            case 'RScapuloThoracic_J1'
+                [~,idx] = intersect({Human_model.name},'RScapuloThoracic_J5');
+                q= radius(1)*sin(Q(idx));
+                
+            case 'RScapuloThoracic_J2'
+                [~,idx1] = intersect({Human_model.name},'RScapuloThoracic_J4');
+                [~,idx2] = intersect({Human_model.name},'RScapuloThoracic_J5');
+                q= -radius(2)*sin(Q(idx1))*cos(Q(idx2));
+                
+            case 'RScapuloThoracic_J3'
+                [~,idx1] = intersect({Human_model.name},'RScapuloThoracic_J4');
+                [~,idx2] = intersect({Human_model.name},'RScapuloThoracic_J5');
+                q= radius(3)*cos(Q(idx1))*cos(Q(idx2));
+                
+            case 'LScapuloThoracic_J1'
+                [~,idx] = intersect({Human_model.name},'LScapuloThoracic_J5');
+                q= radius(4)*sin(Q(idx));
+                
+            case 'LScapuloThoracic_J2'
+                [~,idx1] = intersect({Human_model.name},'LScapuloThoracic_J4');
+                [~,idx2] = intersect({Human_model.name},'LScapuloThoracic_J5');
+                q= -radius(5)*sin(Q(idx1))*cos(Q(idx2));
+                
+            case 'LScapuloThoracic_J3'
+                [~,idx1] = intersect({Human_model.name},'LScapuloThoracic_J4');
+                [~,idx2] = intersect({Human_model.name},'LScapuloThoracic_J5');
+                q= -radius(6)*cos(Q(idx1))*cos(Q(idx2));
+                
+        end
+    elseif  (castest(3)==2 || castest(3)==3) &&  castest(4)==1
+        
+        % Mettre l'orientation ici
+        switch Human_model(j).name
+            case 'RScapuloThoracic_J1'
+                [~,idx] = intersect({Human_model.name},'RScapuloThoracic_J5');
+                q= radius(1)*sin(Q(idx));
+                
+            case 'RScapuloThoracic_J2'
+                [~,idx1] = intersect({Human_model.name},'RScapuloThoracic_J4');
+                [~,idx2] = intersect({Human_model.name},'RScapuloThoracic_J5');
+                q= -radius(2)*sin(Q(idx1))*cos(Q(idx2));
+                
+            case 'RScapuloThoracic_J3'
+                [~,idx1] = intersect({Human_model.name},'RScapuloThoracic_J4');
+                [~,idx2] = intersect({Human_model.name},'RScapuloThoracic_J5');
+                q= radius(3)*cos(Q(idx1))*cos(Q(idx2));
+                
+            case 'LScapuloThoracic_J1'
+                [~,idx] = intersect({Human_model.name},'LScapuloThoracic_J5');
+                q= radius(4)*sin(Q(idx));
+                
+            case 'LScapuloThoracic_J2'
+                [~,idx1] = intersect({Human_model.name},'LScapuloThoracic_J4');
+                [~,idx2] = intersect({Human_model.name},'LScapuloThoracic_J5');
+                q= -radius(5)*sin(Q(idx1))*cos(Q(idx2));
+                
+            case 'LScapuloThoracic_J3'
+                [~,idx1] = intersect({Human_model.name},'LScapuloThoracic_J4');
+                [~,idx2] = intersect({Human_model.name},'LScapuloThoracic_J5');
+                q= -radius(6)*cos(Q(idx1))*cos(Q(idx2));
+                
+        end
+    end
     
     
     %Axe
@@ -97,15 +132,15 @@ if Human_model(j).mother ~= 0
         % Nouvel axe
         axe = Rodrigues(Human_model(j).v(:,2),alpha_j(2))*Rodrigues(Human_model(j).v(:,1),alpha_j(1))*Human_model(j).a;
     end
-   
-   
-   
+    
+    
+    
     % si c'est sup�rieur � 10 : alors on coupe --> position de la m�re picoupure, rotation de la m�re : Ricoupure
     % If > 10, then proceed to a cut in the chain => position of the Mother picoupure, rotation of the Mother Ricoupure
     if num_solid > 6 % mother : coupure
-       Human_model(i).KinematicsCut=num_cut;
-       
-       
+        Human_model(i).KinematicsCut=num_cut;
+        
+        
         eval(['p' num2str(num_cut) 'cut = sym([''p'' num2str(num_cut) ''cut''], [3 1]);'])
         eval(['R' num2str(num_cut) 'cut = sym([''R'' num2str(num_cut) ''cut''], [3 3]);'])
         for zz=1:3   % d�calaration des variables de coupure
@@ -114,31 +149,31 @@ if Human_model(j).mother ~= 0
                 eval(['assume(R' num2str(num_cut) 'cut(' num2str(zz) ',' num2str(z) '),''real'');'])
             end
         end
-            if Human_model(j).joint == 1    % liaison pivot (pin joint)
-%        Human_model(j).p=eval(['R' num2str(num_cut) 'cut'])*(k(i)*Human_model(j).b)+eval(['p' num2str(num_cut) 'cut']); % position du rep�re (reference frame position)
-       Human_model(j).p=eval(['R' num2str(num_cut) 'cut'])*(k(i)*Human_model(j).b)+eval(['p' num2str(num_cut) 'cut']); % position du rep�re (reference frame position)
-       Human_model(j).R=eval(['R' num2str(num_cut) 'cut'])*Rodrigues(axe,q)*Rodrigues(Human_model(j).u,Human_model(j).theta); % orientation du rep�re (reference frame orientation)
-            end
-            if Human_model(j).joint == 2    % liaison glissi�re (slide joint)
-%        Human_model(j).p=eval(['R' num2str(num_cut) 'cut'])*(k(i)*Human_model(j).b + angle*Human_model(j).a)+eval(['p' num2str(num_cut) 'cut']);         
-       Human_model(j).p=eval(['R' num2str(num_cut) 'cut'])*(k(i)*Human_model(j).b + q*axe)+eval(['p' num2str(num_cut) 'cut']);         
-       Human_model(j).R=eval(['R' num2str(num_cut) 'cut'])*Rodrigues(Human_model(j).u,Human_model(j).theta);         
-            end
-       num_cut=num_cut+1; % incr�mentation du num�ro de coupure
-    else   
-            if Human_model(j).joint == 1    % liaison pivot (pin joint)
-%         Human_model(j).p=Human_model(i).R*(k(i)*Human_model(j).b)+Human_model(i).p; % position du rep�re     
-        Human_model(j).p=Human_model(i).R*(k(i)*Human_model(j).b)+Human_model(i).p; % position du rep�re     
-%         Human_model(j).R=Human_model(i).R*Rodrigues(Human_model(j).a,angle)*Rodrigues(Human_model(j).u,Human_model(j).theta); % orientation du rep�re
-        Human_model(j).R=Human_model(i).R*Rodrigues(axe,q)*Rodrigues(Human_model(j).u,Human_model(j).theta); % orientation du rep�re
-            end
-            if Human_model(j).joint == 2    % liaison glissi�re (slide joint)
-%         Human_model(j).p = Human_model(i).R *( k(i)*Human_model(j).b + angle* Human_model(j).a) + Human_model(i).p;
-        Human_model(j).p = Human_model(i).R *( k(i)*Human_model(j).b + q* axe ) + Human_model(i).p;
-        % l'orientation de l'axe de rotation d�pend de a, et d'une
-        % variation d'orientation
-        Human_model(j).R = Human_model(i).R * Rodrigues( Human_model(j).u , Human_model(j).theta );
-            end
+        if Human_model(j).joint == 1    % liaison pivot (pin joint)
+            %        Human_model(j).p=eval(['R' num2str(num_cut) 'cut'])*(k(i)*Human_model(j).b)+eval(['p' num2str(num_cut) 'cut']); % position du rep�re (reference frame position)
+            Human_model(j).p=eval(['R' num2str(num_cut) 'cut'])*(k(i)*Human_model(j).b)+eval(['p' num2str(num_cut) 'cut']); % position du rep�re (reference frame position)
+            Human_model(j).R=eval(['R' num2str(num_cut) 'cut'])*Rodrigues(axe,q)*Rodrigues(Human_model(j).u,Human_model(j).theta); % orientation du rep�re (reference frame orientation)
+        end
+        if Human_model(j).joint == 2    % liaison glissi�re (slide joint)
+            %        Human_model(j).p=eval(['R' num2str(num_cut) 'cut'])*(k(i)*Human_model(j).b + angle*Human_model(j).a)+eval(['p' num2str(num_cut) 'cut']);
+            Human_model(j).p=eval(['R' num2str(num_cut) 'cut'])*(k(i)*Human_model(j).b + q*axe)+eval(['p' num2str(num_cut) 'cut']);
+            Human_model(j).R=eval(['R' num2str(num_cut) 'cut'])*Rodrigues(Human_model(j).u,Human_model(j).theta);
+        end
+        num_cut=num_cut+1; % incr�mentation du num�ro de coupure
+    else
+        if Human_model(j).joint == 1    % liaison pivot (pin joint)
+            %         Human_model(j).p=Human_model(i).R*(k(i)*Human_model(j).b)+Human_model(i).p; % position du rep�re
+            Human_model(j).p=Human_model(i).R*(k(i)*Human_model(j).b)+Human_model(i).p; % position du rep�re
+            %         Human_model(j).R=Human_model(i).R*Rodrigues(Human_model(j).a,angle)*Rodrigues(Human_model(j).u,Human_model(j).theta); % orientation du rep�re
+            Human_model(j).R=Human_model(i).R*Rodrigues(axe,q)*Rodrigues(Human_model(j).u,Human_model(j).theta); % orientation du rep�re
+        end
+        if Human_model(j).joint == 2    % liaison glissi�re (slide joint)
+            %         Human_model(j).p = Human_model(i).R *( k(i)*Human_model(j).b + angle* Human_model(j).a) + Human_model(i).p;
+            Human_model(j).p = Human_model(i).R *( k(i)*Human_model(j).b + q* axe ) + Human_model(i).p;
+            % l'orientation de l'axe de rotation d�pend de a, et d'une
+            % variation d'orientation
+            Human_model(j).R = Human_model(i).R * Rodrigues( Human_model(j).u , Human_model(j).theta );
+        end
     end
     
     % Si fermeture de boucle
@@ -172,15 +207,15 @@ for m=1:numel(Markers_set)
     if Markers_set(m).exist
         if Markers_set(m).num_solid == j
             Markers_set(m).position_symbolic=( Human_model(j).p + ...
-                                    Human_model(j).R*(k(j)*( Human_model(j).c + Human_model(Markers_set(m).num_solid).anat_position{Markers_set(m).num_markers,2} + ...
-                                    p_adapt(sum([Markers_set(1:m).exist]),:)') ) );
+                Human_model(j).R*(k(j)*( Human_model(j).c + Human_model(Markers_set(m).num_solid).anat_position{Markers_set(m).num_markers,2} + ...
+                p_adapt(sum([Markers_set(1:m).exist]),:)') ) );
         end
     end
 end
 
 % [Human_model,Markers_set,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,Human_model(j).sister,Q,k,p_adapt,alpha,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop);
 % [Human_model,Markers_set,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,Human_model(j).child,Q,k,p_adapt,alpha,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop);
-[Human_model,Markers_set,num_cut,numClosedLoop,c,ceq]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,Human_model(j).sister,Q,k,p_adapt,alpha,num_cut,numClosedLoop,castest,c,ceq);
-[Human_model,Markers_set,num_cut,numClosedLoop,c,ceq]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,Human_model(j).child,Q,k,p_adapt,alpha,num_cut,numClosedLoop,castest,c,ceq);
+[Human_model,Markers_set,num_cut,numClosedLoop,c,ceq]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,Human_model(j).sister,Q,k,p_adapt,alpha,radius,num_cut,numClosedLoop,castest,c,ceq);
+[Human_model,Markers_set,num_cut,numClosedLoop,c,ceq]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,Human_model(j).child,Q,k,p_adapt,alpha,radius,num_cut,numClosedLoop,castest,c,ceq);
 
 end
