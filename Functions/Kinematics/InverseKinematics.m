@@ -4,7 +4,7 @@ function [] = InverseKinematics(AnalysisParameters,varargin)
 %   biomechanical model
 %
 %	Based on:
-% 	- Lu, T. W., & O’connor, J. J. (1999). 
+% 	- Lu, T. W., & Oï¿½connor, J. J. (1999). 
 %	Bone position estimation from skin marker co-ordinates using global optimisation with joint constraints. Journal of biomechanics, 32(2), 129-134.
 %
 %   INPUT
@@ -61,7 +61,7 @@ parfor i = 1:numel(AnalysisParameters.filename)
         end
 
         % Save data
-        SaveDataIK(filename,ExperimentalData,InverseKinematicsResults);
+        SaveDataIK([filename,'_', num2str(AnalysisParameters.CalibIK.cas_tests) ],ExperimentalData,InverseKinematicsResults);
     end
 end
 end
