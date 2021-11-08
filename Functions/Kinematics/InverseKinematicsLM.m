@@ -97,8 +97,14 @@ else
     l_sup1=[Human_model.limit_sup]';
 end
 
-weights = AnalysisParameters.IK.weights';
+if isfield(AnalysisParameters.IK,'weigths')
+    
+    weights = AnalysisParameters.IK.weights';
 
+else
+    
+    weights = ones(1,length(real_markers));
+end
 
 h = waitbar(0,['Inverse Kinematics (' filename ')']);
 % 1st frame : classical optimization
