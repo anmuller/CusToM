@@ -68,136 +68,135 @@ end
 
 if isfield(AnalysisParameters.CalibIK,'Scapactive') && AnalysisParameters.CalibIK.Scapactive
     
-    for j=1:numel(Human_model_save)
-        
-        ellipsoid_parameters = EllipsoidCalibration(AnalysisParameters ,Markers_set);
-        
-        switch Human_model_calib(j).name
-            
-            
-            case 'RScapuloThoracic_J1'
-                
-                syms phi lambda real% latitude longitude
-                
-                radius = ellipsoid_parameters(1:6);
-                angles = ellipsoid_parameters(7:12);
-                x= radius(1)*sin(lambda);
-                
-                y= -radius(2)*sin(phi)*cos(lambda);
-                
-                
-                z= radius(3)*cos(phi)*cos(lambda);
-                
-                R = FromEulerAngles2Rotation(angles(1),angles(2),angles(3));
-                
-                
-                Human_model_calib(j).kinematic_dependancy.q =  matlabFunction( R(1,:)*[x,y,z]','vars',{phi,lambda});
-                
-            case 'RScapuloThoracic_J2'
-                
-                
-                syms phi lambda real% latitude longitude
-                
-                radius = calib_parameters.ellipsoid_parameters(1:6);
-                angles = calib_parameters.ellipsoid_parameters(7:12);
-                x= radius(1)*sin(lambda);
-                
-                y= -radius(2)*sin(phi)*cos(lambda);
-                
-                
-                z= radius(3)*cos(phi)*cos(lambda);
-                
-                R = FromEulerAngles2Rotation(angles(1),angles(2),angles(3));
-                
-                
-                Human_model_calib(j).kinematic_dependancy.q =  matlabFunction( R(2,:)*[x,y,z]','vars',{phi,lambda});
-                
-                
-            case 'RScapuloThoracic_J3'
-                
-                syms phi lambda real% latitude longitude
-                
-                radius = calib_parameters.ellipsoid_parameters(1:6);
-                angles = calib_parameters.ellipsoid_parameters(7:12);
-                x= radius(1)*sin(lambda);
-                
-                y= -radius(2)*sin(phi)*cos(lambda);
-                
-                
-                z= radius(3)*cos(phi)*cos(lambda);
-                
-                R = FromEulerAngles2Rotation(angles(1),angles(2),angles(3));
-                
-                
-                Human_model_calib(j).kinematic_dependancy.q = matlabFunction( R(3,:)*[x,y,z]','vars',{phi,lambda});
-                
-            case 'LScapuloThoracic_J1'
-                
-                
-                syms phi lambda real% latitude longitude
-                
-                radius = calib_parameters.ellipsoid_parameters(1:6);
-                angles = calib_parameters.ellipsoid_parameters(7:12);
-                x= radius(4)*sin(lambda);
-                
-                y= -radius(5)*sin(phi)*cos(lambda);
-                
-                
-                z= -radius(6)*cos(phi)*cos(lambda);
-                
-                R = FromEulerAngles2Rotation(angles(4),angles(5),angles(6));
-                
-                Human_model_calib(j).kinematic_dependancy.q =  matlabFunction( R(1,:)*[x,y,z]','vars',{phi,lambda});
-                
-                
-                
-            case 'LScapuloThoracic_J2'
-                
-                
-                syms phi lambda real% latitude longitude
-                
-                radius = calib_parameters.ellipsoid_parameters(1:6);
-                angles = calib_parameters.ellipsoid_parameters(7:12);
-                x= radius(4)*sin(lambda);
-                
-                y= -radius(5)*sin(phi)*cos(lambda);
-                
-                
-                z= -radius(6)*cos(phi)*cos(lambda);
-                
-                R = FromEulerAngles2Rotation(angles(4),angles(5),angles(6));
-                
-                Human_model_calib(j).kinematic_dependancy.q =  matlabFunction( R(2,:)*[x,y,z]','vars',{phi,lambda});
-                
-                
-                
-                
-            case 'LScapuloThoracic_J3'
-                
-                syms phi lambda real% latitude longitude
-                
-                radius = calib_parameters.ellipsoid_parameters(1:6);
-                angles = calib_parameters.ellipsoid_parameters(7:12);
-                x= radius(4)*sin(lambda);
-                
-                y= -radius(5)*sin(phi)*cos(lambda);
-                
-                
-                z= -radius(6)*cos(phi)*cos(lambda);
-                
-                R = FromEulerAngles2Rotation(angles(4),angles(5),angles(6));
-                
-                Human_model_calib(j).kinematic_dependancy.q =  matlabFunction( R(3,:)*[x,y,z]','vars',{phi,lambda});
-                
-                
-                
-        end
-        
-    end
-    
-end
+%     for j=1:numel(Human_model_save)
+%         
+%         ellipsoid_parameters = EllipsoidCalibration(AnalysisParameters ,Markers_set);
+%         
+%         switch Human_model_calib(j).name
+%             
+%             
+%             case 'RScapuloThoracic_J1'
+%                 
+%                 syms phi lambda real% latitude longitude
+%                 
+%                 radius = ellipsoid_parameters(1:6);
+%                 angles = ellipsoid_parameters(7:12);
+%                 x= radius(1)*sin(lambda);
+%                 
+%                 y= -radius(2)*sin(phi)*cos(lambda);
+%                 
+%                 
+%                 z= radius(3)*cos(phi)*cos(lambda);
+%                 
+%                 R = FromEulerAngles2Rotation(angles(1),angles(2),angles(3));
+%                 
+%                 
+%                 Human_model_calib(j).kinematic_dependancy.q =  matlabFunction( R(1,:)*[x,y,z]','vars',{phi,lambda});
+%                 
+%             case 'RScapuloThoracic_J2'
+%                 
+%                 
+%                 syms phi lambda real% latitude longitude
+%                 
+%                 radius = calib_parameters.ellipsoid_parameters(1:6);
+%                 angles = calib_parameters.ellipsoid_parameters(7:12);
+%                 x= radius(1)*sin(lambda);
+%                 
+%                 y= -radius(2)*sin(phi)*cos(lambda);
+%                 
+%                 
+%                 z= radius(3)*cos(phi)*cos(lambda);
+%                 
+%                 R = FromEulerAngles2Rotation(angles(1),angles(2),angles(3));
+%                 
+%                 
+%                 Human_model_calib(j).kinematic_dependancy.q =  matlabFunction( R(2,:)*[x,y,z]','vars',{phi,lambda});
+%                 
+%                 
+%             case 'RScapuloThoracic_J3'
+%                 
+%                 syms phi lambda real% latitude longitude
+%                 
+%                 radius = calib_parameters.ellipsoid_parameters(1:6);
+%                 angles = calib_parameters.ellipsoid_parameters(7:12);
+%                 x= radius(1)*sin(lambda);
+%                 
+%                 y= -radius(2)*sin(phi)*cos(lambda);
+%                 
+%                 
+%                 z= radius(3)*cos(phi)*cos(lambda);
+%                 
+%                 R = FromEulerAngles2Rotation(angles(1),angles(2),angles(3));
+%                 
+%                 
+%                 Human_model_calib(j).kinematic_dependancy.q = matlabFunction( R(3,:)*[x,y,z]','vars',{phi,lambda});
+%                 
+%             case 'LScapuloThoracic_J1'
+%                 
+%                 
+%                 syms phi lambda real% latitude longitude
+%                 
+%                 radius = calib_parameters.ellipsoid_parameters(1:6);
+%                 angles = calib_parameters.ellipsoid_parameters(7:12);
+%                 x= radius(4)*sin(lambda);
+%                 
+%                 y= -radius(5)*sin(phi)*cos(lambda);
+%                 
+%                 
+%                 z= -radius(6)*cos(phi)*cos(lambda);
+%                 
+%                 R = FromEulerAngles2Rotation(angles(4),angles(5),angles(6));
+%                 
+%                 Human_model_calib(j).kinematic_dependancy.q =  matlabFunction( R(1,:)*[x,y,z]','vars',{phi,lambda});
+%                 
+%                 
+%                 
+%             case 'LScapuloThoracic_J2'
+%                 
+%                 
+%                 syms phi lambda real% latitude longitude
+%                 
+%                 radius = calib_parameters.ellipsoid_parameters(1:6);
+%                 angles = calib_parameters.ellipsoid_parameters(7:12);
+%                 x= radius(4)*sin(lambda);
+%                 
+%                 y= -radius(5)*sin(phi)*cos(lambda);
+%                 
+%                 
+%                 z= -radius(6)*cos(phi)*cos(lambda);
+%                 
+%                 R = FromEulerAngles2Rotation(angles(4),angles(5),angles(6));
+%                 
+%                 Human_model_calib(j).kinematic_dependancy.q =  matlabFunction( R(2,:)*[x,y,z]','vars',{phi,lambda});
+%                 
+%                 
+%                 
+%                 
+%             case 'LScapuloThoracic_J3'
+%                 
+%                 syms phi lambda real% latitude longitude
+%                 
+%                 radius = calib_parameters.ellipsoid_parameters(1:6);
+%                 angles = calib_parameters.ellipsoid_parameters(7:12);
+%                 x= radius(4)*sin(lambda);
+%                 
+%                 y= -radius(5)*sin(phi)*cos(lambda);
+%                 
+%                 
+%                 z= -radius(6)*cos(phi)*cos(lambda);
+%                 
+%                 R = FromEulerAngles2Rotation(angles(4),angles(5),angles(6));
+%                 
+%                 Human_model_calib(j).kinematic_dependancy.q =  matlabFunction( R(3,:)*[x,y,z]','vars',{phi,lambda});
+%                 
+%                 
+%                 
+%         end
+%         
+%     end
+%     
+% end
 
-end
 
 
 
@@ -248,7 +247,7 @@ for i=1:nb_frame
 end
 
 %% Initializations
-taille = nb_k+nb_p+nb_alpha+12;
+taille = length(b_norm);
 
 k_init=zeros(taille,1);
 
