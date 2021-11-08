@@ -58,8 +58,8 @@ end
 %% Initializations
 
 % Linear constraints for the inverse kinematics
-Aeq_ik=zeros(nb_solid);  % initialization
-beq_ik=zeros(nb_solid,1);
+Aeq_ik=[];  % initialization
+beq_ik=[];
 for ii=1:nb_solid
     if size(Human_model(ii).linear_constraint) ~= [0 0] %#ok<BDSCA>
         Aeq_ik(ii,ii)=-1;
@@ -103,7 +103,7 @@ weights = AnalysisParameters.IK.weights';
 h = waitbar(0,['Inverse Kinematics (' filename ')']);
 % 1st frame : classical optimization
 
-if ~isfield(BiomechanicalModel,'ClosedLoopData')
+if ~isempty([BiomechanicalModel.OsteoArticularModel.ClosedLoop])
     q0=zeros(nb_solid,1);
     positions = zeros(3, length(real_markers));
     % Precomputation of markers positions at each frame
@@ -113,9 +113,19 @@ if ~isfield(BiomechanicalModel,'ClosedLoopData')
     
     ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar,positions(:),weights);
     [q(:,1)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,[],options1);
-    hclosedloophandle = {@(x) Aeq_ik*x - beq_ik}   ;
+    
+    if ~isempty(Aeq_ik)
+        
+        hclosedloophandle = {@(qvar)ClosedLoopceq(qvar);  @(x) Aeq_ik*x - beq_ik} ;
+        
+    else
+        hclosedloophandle = {@(qvar)ClosedLoopceq(qvar)} ;
+        
+    end
 else
-    q0=BiomechanicalModel.ClosedLoopData.startingq0 ;
+    %    q0=BiomechanicalModel.ClosedLoopData.startingq0 ;
+    q0=zeros(nb_solid,1);
+    
     positions = zeros(3, length(real_markers));
     % Precomputation of markers positions at each frame
     for m=1:length(real_markers)
@@ -125,7 +135,17 @@ else
     ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar, positions(:),weights);
     nonlcon=@(qvar)ClosedLoop(qvar);
     [q(:,1)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,nonlcon,options1);
-    hclosedloophandle = {BiomechanicalModel.ClosedLoopData.ConstraintEq;  @(x) Aeq_ik*x - beq_ik} ;
+    %hclosedloophandle = {BiomechanicalModel.ClosedLoopData.ConstraintEq;  @(x) Aeq_ik*x - beq_ik} ;
+    
+    
+    if ~isempty(Aeq_ik)
+        
+        hclosedloophandle = {@(qvar)ClosedLoopceq(qvar);  @(x) Aeq_ik*x - beq_ik} ;
+        
+    else
+        hclosedloophandle = {@(qvar)ClosedLoopceq(qvar)} ;
+        
+    end
 end
 
 buteehandle = @(q)  Limits(q,l_inf1,l_sup1);

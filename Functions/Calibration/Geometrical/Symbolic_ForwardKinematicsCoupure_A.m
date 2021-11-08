@@ -1,5 +1,5 @@
 function [Human_model,Markers_set,num_cut,numClosedLoop,c,ceq]=...
-Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,j,Q,k,p_adapt,alpha,radius,num_cut,numClosedLoop,c,ceq)
+Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,j,Q,k,p_adapt,alpha,ellipsoid_parameters,num_cut,numClosedLoop,c,ceq)
 % Computation of a symbolic forward kinematics 
 %
 %   INPUT
@@ -62,32 +62,151 @@ if Human_model(j).mother ~= 0
    % Computation of ellipsoid coordinates kinematic dependancies
    switch Human_model(j).name
         case 'RScapuloThoracic_J1'
+            
+            radius = ellipsoid_parameters(1:6);
+            angles = ellipsoid_parameters(7:12);
+            
             [~,idx] = intersect({Human_model.name},'RScapuloThoracic_J5');
-            q= radius(1)*sin(Q(idx));
+            x= radius(1)*sin(Q(idx));
+            
+            
+            [~,idx1] = intersect({Human_model.name},'RScapuloThoracic_J4');
+            [~,idx2] = intersect({Human_model.name},'RScapuloThoracic_J5');
+            y= -radius(2)*sin(Q(idx1))*cos(Q(idx2));
+            
+            
+            [~,idx1] = intersect({Human_model.name},'RScapuloThoracic_J4');
+            [~,idx2] = intersect({Human_model.name},'RScapuloThoracic_J5');
+            z= radius(3)*cos(Q(idx1))*cos(Q(idx2));
+            
+            R = FromEulerAngles2Rotation(angles(1),angles(2),angles(3));
+            
+            
+            q=  R(1,:)*[x,y,z]';
             
         case 'RScapuloThoracic_J2'
+            
+            radius = ellipsoid_parameters(1:6);
+            angles = ellipsoid_parameters(7:12);
+            
+            [~,idx] = intersect({Human_model.name},'RScapuloThoracic_J5');
+            x= radius(1)*sin(Q(idx));
+            
+            
             [~,idx1] = intersect({Human_model.name},'RScapuloThoracic_J4');
             [~,idx2] = intersect({Human_model.name},'RScapuloThoracic_J5');
-            q= -radius(2)*sin(Q(idx1))*cos(Q(idx2));
+            y= -radius(2)*sin(Q(idx1))*cos(Q(idx2));
+            
+            
+            [~,idx1] = intersect({Human_model.name},'RScapuloThoracic_J4');
+            [~,idx2] = intersect({Human_model.name},'RScapuloThoracic_J5');
+            z= radius(3)*cos(Q(idx1))*cos(Q(idx2));
+            
+            R = FromEulerAngles2Rotation(angles(1),angles(2),angles(3));
+            
+            
+            q=  R(2,:)*[x,y,z]';
             
         case 'RScapuloThoracic_J3'
+            
+            radius = ellipsoid_parameters(1:6);
+            angles = ellipsoid_parameters(7:12);
+            
+            [~,idx] = intersect({Human_model.name},'RScapuloThoracic_J5');
+            x= radius(1)*sin(Q(idx));
+            
+            
             [~,idx1] = intersect({Human_model.name},'RScapuloThoracic_J4');
             [~,idx2] = intersect({Human_model.name},'RScapuloThoracic_J5');
-            q= radius(3)*cos(Q(idx1))*cos(Q(idx2));
+            y= -radius(2)*sin(Q(idx1))*cos(Q(idx2));
+            
+            
+            [~,idx1] = intersect({Human_model.name},'RScapuloThoracic_J4');
+            [~,idx2] = intersect({Human_model.name},'RScapuloThoracic_J5');
+            z= radius(3)*cos(Q(idx1))*cos(Q(idx2));
+            
+            R = FromEulerAngles2Rotation(angles(1),angles(2),angles(3));
+            
+            
+            q=  R(3,:)*[x,y,z]';
             
         case 'LScapuloThoracic_J1'
-            [~,idx] = intersect({Human_model.name},'LScapuloThoracic_J5');
-            q= radius(4)*sin(Q(idx));
+            
+            radius = ellipsoid_parameters(1:6);
+            angles = ellipsoid_parameters(7:12);
+            
+            [~,idx] = intersect({Human_model.name},'RScapuloThoracic_J5');
+            x= radius(4)*sin(Q(idx));
+            
+            
+            [~,idx1] = intersect({Human_model.name},'RScapuloThoracic_J4');
+            [~,idx2] = intersect({Human_model.name},'RScapuloThoracic_J5');
+            y= -radius(5)*sin(Q(idx1))*cos(Q(idx2));
+            
+            
+            [~,idx1] = intersect({Human_model.name},'RScapuloThoracic_J4');
+            [~,idx2] = intersect({Human_model.name},'RScapuloThoracic_J5');
+            z= -radius(6)*cos(Q(idx1))*cos(Q(idx2));
+            
+            R = FromEulerAngles2Rotation(angles(4),angles(5),angles(6));
+            
+            
+            q=  R(1,:)*[x,y,z]';
+            
+           
             
         case 'LScapuloThoracic_J2'
-            [~,idx1] = intersect({Human_model.name},'LScapuloThoracic_J4');
-            [~,idx2] = intersect({Human_model.name},'LScapuloThoracic_J5');
-            q= -radius(5)*sin(Q(idx1))*cos(Q(idx2));
+            
+            
+            
+            radius = ellipsoid_parameters(1:6);
+            angles = ellipsoid_parameters(7:12);
+            
+            [~,idx] = intersect({Human_model.name},'RScapuloThoracic_J5');
+            x= radius(4)*sin(Q(idx));
+            
+            
+            [~,idx1] = intersect({Human_model.name},'RScapuloThoracic_J4');
+            [~,idx2] = intersect({Human_model.name},'RScapuloThoracic_J5');
+            y= -radius(5)*sin(Q(idx1))*cos(Q(idx2));
+            
+            
+            [~,idx1] = intersect({Human_model.name},'RScapuloThoracic_J4');
+            [~,idx2] = intersect({Human_model.name},'RScapuloThoracic_J5');
+            z= -radius(6)*cos(Q(idx1))*cos(Q(idx2));
+            
+            R = FromEulerAngles2Rotation(angles(4),angles(5),angles(6));
+            
+            
+            q=  R(2,:)*[x,y,z]';
+            
+           
                         
         case 'LScapuloThoracic_J3'
-            [~,idx1] = intersect({Human_model.name},'LScapuloThoracic_J4');
-            [~,idx2] = intersect({Human_model.name},'LScapuloThoracic_J5');
-            q= -radius(6)*cos(Q(idx1))*cos(Q(idx2));
+            
+            
+            radius = ellipsoid_parameters(1:6);
+            angles = ellipsoid_parameters(7:12);
+            
+            [~,idx] = intersect({Human_model.name},'RScapuloThoracic_J5');
+            x= radius(4)*sin(Q(idx));
+            
+            
+            [~,idx1] = intersect({Human_model.name},'RScapuloThoracic_J4');
+            [~,idx2] = intersect({Human_model.name},'RScapuloThoracic_J5');
+            y= -radius(5)*sin(Q(idx1))*cos(Q(idx2));
+            
+            
+            [~,idx1] = intersect({Human_model.name},'RScapuloThoracic_J4');
+            [~,idx2] = intersect({Human_model.name},'RScapuloThoracic_J5');
+            z= -radius(6)*cos(Q(idx1))*cos(Q(idx2));
+            
+            R = FromEulerAngles2Rotation(angles(4),angles(5),angles(6));
+            
+            
+            q=  R(3,:)*[x,y,z]';
+            
+           
             
    end
             
@@ -185,7 +304,7 @@ end
 
 % [Human_model,Markers_set,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,Human_model(j).sister,Q,k,p_adapt,alpha,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop);
 % [Human_model,Markers_set,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,Human_model(j).child,Q,k,p_adapt,alpha,num_cut,numClosedLoop,p_ClosedLoop,R_ClosedLoop);
-[Human_model,Markers_set,num_cut,numClosedLoop,c,ceq]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,Human_model(j).sister,Q,k,p_adapt,alpha,radius,num_cut,numClosedLoop,c,ceq);
-[Human_model,Markers_set,num_cut,numClosedLoop,c,ceq]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,Human_model(j).child,Q,k,p_adapt,alpha,radius,num_cut,numClosedLoop,c,ceq);
+[Human_model,Markers_set,num_cut,numClosedLoop,c,ceq]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,Human_model(j).sister,Q,k,p_adapt,alpha,ellipsoid_parameters,num_cut,numClosedLoop,c,ceq);
+[Human_model,Markers_set,num_cut,numClosedLoop,c,ceq]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,Human_model(j).child,Q,k,p_adapt,alpha,ellipsoid_parameters,num_cut,numClosedLoop,c,ceq);
 
 end

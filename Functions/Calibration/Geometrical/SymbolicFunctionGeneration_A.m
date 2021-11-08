@@ -266,10 +266,18 @@ if isscalar(idx)
         radius_L = Human_model(idx).anat_position(idy,2);
         
         radius_length = [radius_R{1} ; radius_L{1}];
+        
+        angle_sym =  sym('angle', [6 1]);
+        assume(angle_sym,'real');
+        
+        angle_length = 2*pi*ones(6,1);
     else
         % If no Thorax Ellipsoid : no need to optimize its parameters
         radius_sym = [];
         radius_length = [];
+        
+        angle_sym = [];
+        angle_length = [];
     end
 else
     % If no Scapula : no need to optimize its parameters
@@ -280,7 +288,7 @@ end
 
 
 %% toutes les variables
-var_sym = [k_sym;p_adapt_sym;alpha_sym;radius_sym];
+var_sym = [k_sym;p_adapt_sym;alpha_sym;radius_sym;angle_sym];
 %% Normalisation des variables
 % limites : 0.8<k<1.2 et déplacement max de 5 cm pour chaque marqueur dans chaque direction
 % et limites angulaire pour alpha
@@ -289,8 +297,8 @@ var_sym = [k_sym;p_adapt_sym;alpha_sym;radius_sym];
 %% variable normalization within boundaries (0.8<k<1.2) and max displacement of 5cm for each marker in each direction and angular limits for alpha
 % all variables should vary only between-1 and +1 during optimisation process
 
-limit_inf_calib=[0.8*ones([nb_k 1]) ; -0.05*ones([nb_p 1]) ; limit_alpha_inf;  0.8*radius_length];
-limit_sup_calib=[1.2*ones([nb_k 1]) ;  0.05*ones([nb_p 1]) ; limit_alpha_sup; 1.2*radius_length];
+limit_inf_calib=[0.8*ones([nb_k 1]) ; -0.05*ones([nb_p 1]) ; limit_alpha_inf;  0.8*radius_length; zeros(6,1)];
+limit_sup_calib=[1.2*ones([nb_k 1]) ;  0.05*ones([nb_p 1]) ; limit_alpha_sup; 1.2*radius_length; angle_length];
 
 %Normaliser Variables toutes les variables sont normalisés entre -1 et 1 de
 %sorte que l'optimisation fasse varier les variables de la même manière.
@@ -317,9 +325,9 @@ alpha=alpha_map*var_unnormalized(nb_k+nb_p+1:nb_k+nb_p+nb_alpha);
 
 % Adding Thorax Ellipsoid dimensions if Closed Loop Shoulder model 
 if ~isempty(radius_length)
-    radius = var_unnormalized(nb_k+nb_p+nb_alpha+1:end);
+    ellipsoid_parameters = var_unnormalized(nb_k+nb_p+nb_alpha+1:end);
 else
-    radius=[];
+    ellipsoid_parameters=[];
 end
 
 
@@ -338,7 +346,7 @@ Human_model(s_root).R=RPelvis;
 
 % [Human_model,Markers_set,~,~,c_ClosedLoop,ceq_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_Shoulder(Human_model,Markers_set,s_root,q_complete_k,k,p_adapt_mat,alpha,radius,1,1);
 % [Human_model,Markers_set,~,~,c_ClosedLoop,ceq_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,s_root,q_complete_k,k,p_adapt_mat,alpha,1,1);
-[Human_model,Markers_set,~,~,c_ClosedLoop,ceq_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,s_root,q_complete_k,k,p_adapt_mat,alpha,radius,1,1);
+[Human_model,Markers_set,~,~,c_ClosedLoop,ceq_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,s_root,q_complete_k,k,p_adapt_mat,alpha,ellipsoid_parameters,1,1);
 
 % position et rotation des solides servant de coupure (position and rotation of solids defining the cuts)
 for ii=1:max([Human_model.KinematicsCut])
