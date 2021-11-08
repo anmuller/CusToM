@@ -66,8 +66,7 @@ for i=1:size(AnalysisParameters.CalibIK.MarkersCalibModif,1)
     Markers_set(num_solid).calib_dir = AnalysisParameters.CalibIK.MarkersCalibModif{i,2};
 end
 
-if isfield(AnalysisParameters.CalibIK,'Scapactive') && AnalysisParameters.CalibIK.Scapactive
-    
+% if isfield(AnalysisParameters.CalibIK,'Scapactive') && AnalysisParameters.CalibIK.Scapactive
 %     for j=1:numel(Human_model_save)
 %         
 %         ellipsoid_parameters = EllipsoidCalibration(AnalysisParameters ,Markers_set);
