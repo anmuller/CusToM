@@ -297,7 +297,7 @@ var_sym = [k_sym;p_adapt_sym;alpha_sym;radius_sym;angle_sym];
 %% variable normalization within boundaries (0.8<k<1.2) and max displacement of 5cm for each marker in each direction and angular limits for alpha
 % all variables should vary only between-1 and +1 during optimisation process
 
-limit_inf_calib=[0.8*ones([nb_k 1]) ; -0.05*ones([nb_p 1]) ; limit_alpha_inf;  0.8*radius_length; zeros(6,1)];
+limit_inf_calib=[0.8*ones([nb_k 1]) ; -0.05*ones([nb_p 1]) ; limit_alpha_inf;  0.8*radius_length; 0*angle_length];
 limit_sup_calib=[1.2*ones([nb_k 1]) ;  0.05*ones([nb_p 1]) ; limit_alpha_sup; 1.2*radius_length; angle_length];
 
 %Normaliser Variables toutes les variables sont normalisés entre -1 et 1 de
