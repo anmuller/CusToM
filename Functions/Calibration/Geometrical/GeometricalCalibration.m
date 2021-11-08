@@ -66,6 +66,142 @@ for i=1:size(AnalysisParameters.CalibIK.MarkersCalibModif,1)
     Markers_set(num_solid).calib_dir = AnalysisParameters.CalibIK.MarkersCalibModif{i,2};
 end
 
+if isfield(AnalysisParameters.CalibIK,'Scapactive') && AnalysisParameters.CalibIK.Scapactive
+    
+    for j=1:numel(Human_model_save)
+        
+        ellipsoid_parameters = EllipsoidCalibration(AnalysisParameters ,Markers_set);
+        
+        switch Human_model_calib(j).name
+            
+            
+            case 'RScapuloThoracic_J1'
+                
+                syms phi lambda real% latitude longitude
+                
+                radius = ellipsoid_parameters(1:6);
+                angles = ellipsoid_parameters(7:12);
+                x= radius(1)*sin(lambda);
+                
+                y= -radius(2)*sin(phi)*cos(lambda);
+                
+                
+                z= radius(3)*cos(phi)*cos(lambda);
+                
+                R = FromEulerAngles2Rotation(angles(1),angles(2),angles(3));
+                
+                
+                Human_model_calib(j).kinematic_dependancy.q =  matlabFunction( R(1,:)*[x,y,z]','vars',{phi,lambda});
+                
+            case 'RScapuloThoracic_J2'
+                
+                
+                syms phi lambda real% latitude longitude
+                
+                radius = calib_parameters.ellipsoid_parameters(1:6);
+                angles = calib_parameters.ellipsoid_parameters(7:12);
+                x= radius(1)*sin(lambda);
+                
+                y= -radius(2)*sin(phi)*cos(lambda);
+                
+                
+                z= radius(3)*cos(phi)*cos(lambda);
+                
+                R = FromEulerAngles2Rotation(angles(1),angles(2),angles(3));
+                
+                
+                Human_model_calib(j).kinematic_dependancy.q =  matlabFunction( R(2,:)*[x,y,z]','vars',{phi,lambda});
+                
+                
+            case 'RScapuloThoracic_J3'
+                
+                syms phi lambda real% latitude longitude
+                
+                radius = calib_parameters.ellipsoid_parameters(1:6);
+                angles = calib_parameters.ellipsoid_parameters(7:12);
+                x= radius(1)*sin(lambda);
+                
+                y= -radius(2)*sin(phi)*cos(lambda);
+                
+                
+                z= radius(3)*cos(phi)*cos(lambda);
+                
+                R = FromEulerAngles2Rotation(angles(1),angles(2),angles(3));
+                
+                
+                Human_model_calib(j).kinematic_dependancy.q = matlabFunction( R(3,:)*[x,y,z]','vars',{phi,lambda});
+                
+            case 'LScapuloThoracic_J1'
+                
+                
+                syms phi lambda real% latitude longitude
+                
+                radius = calib_parameters.ellipsoid_parameters(1:6);
+                angles = calib_parameters.ellipsoid_parameters(7:12);
+                x= radius(4)*sin(lambda);
+                
+                y= -radius(5)*sin(phi)*cos(lambda);
+                
+                
+                z= -radius(6)*cos(phi)*cos(lambda);
+                
+                R = FromEulerAngles2Rotation(angles(4),angles(5),angles(6));
+                
+                Human_model_calib(j).kinematic_dependancy.q =  matlabFunction( R(1,:)*[x,y,z]','vars',{phi,lambda});
+                
+                
+                
+            case 'LScapuloThoracic_J2'
+                
+                
+                syms phi lambda real% latitude longitude
+                
+                radius = calib_parameters.ellipsoid_parameters(1:6);
+                angles = calib_parameters.ellipsoid_parameters(7:12);
+                x= radius(4)*sin(lambda);
+                
+                y= -radius(5)*sin(phi)*cos(lambda);
+                
+                
+                z= -radius(6)*cos(phi)*cos(lambda);
+                
+                R = FromEulerAngles2Rotation(angles(4),angles(5),angles(6));
+                
+                Human_model_calib(j).kinematic_dependancy.q =  matlabFunction( R(2,:)*[x,y,z]','vars',{phi,lambda});
+                
+                
+                
+                
+            case 'LScapuloThoracic_J3'
+                
+                syms phi lambda real% latitude longitude
+                
+                radius = calib_parameters.ellipsoid_parameters(1:6);
+                angles = calib_parameters.ellipsoid_parameters(7:12);
+                x= radius(4)*sin(lambda);
+                
+                y= -radius(5)*sin(phi)*cos(lambda);
+                
+                
+                z= -radius(6)*cos(phi)*cos(lambda);
+                
+                R = FromEulerAngles2Rotation(angles(4),angles(5),angles(6));
+                
+                Human_model_calib(j).kinematic_dependancy.q =  matlabFunction( R(3,:)*[x,y,z]','vars',{phi,lambda});
+                
+                
+                
+        end
+        
+    end
+    
+end
+
+end
+
+
+
+
 %% Adding 6 DOF joint (pelvis to world)
 [OsteoArticularModel] = Add6dof(OsteoArticularModel);
 s_root=find([OsteoArticularModel.mother]==0); %#ok<NASGU> % numéro du solide root
@@ -91,7 +227,7 @@ list_markers = [real_markers.name]';
 
 %% Selection/choice of frame sample
 nb_frame_calib = AnalysisParameters.CalibIK.Frames.NbFrames;
-nb_frame_calib=15;
+%nb_frame_calib=15;
 [frame_calib] = AnalysisParameters.CalibIK.Frames.Method(nb_frame_calib, real_markers, list_markers);
 
 
@@ -115,6 +251,8 @@ end
 taille = nb_k+nb_p+nb_alpha+12;
 
 k_init=zeros(taille,1);
+
+
 
 Nb_qred=size(GC.q_red,1);
 % linear constraints for inverse kinemeatics, same joint angles for two
@@ -273,21 +411,6 @@ while crit(:,g) > 0.05
     
     q_value{g+1}=zeros(size(q_value{g})); %#ok<AGROW>
     
-    %     % Articular coordinates optimisation
-    %     for f=1:nb_frame_calib
-    %         q0=q_value{g}(:,f);
-    %         for m=1:length(real_markers)
-    %             positions(:,m) = real_markers(m).position(f,:)';
-    %         end
-    %
-    %         ik_function_objective=@(qvar)CostFunctionSymbolicCalib(...
-    %             qvar,kp_opt(:,g+1),Base_position{f},Base_rotation{f},list_function,Rcut,pcut,positions,nbcut,list_function_markers);
-    %
-    %         nonlcon=@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,...
-    %             kp_opt(:,g+1));
-    %
-    %         [q_value{g+1}(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf,l_sup,nonlcon,options);
-    %     end
     
     % Articular coordinates optimisation
     
