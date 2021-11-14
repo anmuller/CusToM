@@ -112,7 +112,7 @@ for i=1:nb_frame
 end
 
 %% Initializations
-taille = nb_k+nb_p+nb_alpha+6;
+taille = length(b_norm);
 
 k_init=zeros(taille,1);
 
