@@ -258,15 +258,8 @@ if isscalar(idx)
     [~, idy] = intersect(Human_model(idx).anat_position(:,1),'ThoracicEllipsoid_radius');
     if isscalar(idy)
         
-        if castest(3)==3
-            radius_sym = sym('radius', [6 1]);
-            assume(radius_sym,'real');
-        else
-            radius_sym = sym('radius', 1);
-            assume(radius_sym,'real');
-            
-            radius_sym = repmat(radius_sym,6,1);
-        end
+        radius_sym = sym('radius', [6 1]);
+        assume(radius_sym,'real');
         
         radius_R = Human_model(idx).anat_position(idy,2);
         

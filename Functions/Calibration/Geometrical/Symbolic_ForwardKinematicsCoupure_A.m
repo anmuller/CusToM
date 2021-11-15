@@ -55,7 +55,6 @@ if Human_model(j).mother ~= 0
     
     % Computation of ellipsoid coordinates kinematic dependancies
     
-    if (castest(3)==2 || castest(3)==3) &&  castest(4)==2
         switch Human_model(j).name
             case 'RScapuloThoracic_J1'
                 [~,idx] = intersect({Human_model.name},'RScapuloThoracic_J5');
@@ -86,40 +85,6 @@ if Human_model(j).mother ~= 0
                 q= -radius(6)*cos(Q(idx1))*cos(Q(idx2));
                 
         end
-    elseif  (castest(3)==2 || castest(3)==3) &&  castest(4)==1
-        
-        % Mettre l'orientation ici
-        switch Human_model(j).name
-            case 'RScapuloThoracic_J1'
-                [~,idx] = intersect({Human_model.name},'RScapuloThoracic_J5');
-                q= radius(1)*sin(Q(idx));
-                
-            case 'RScapuloThoracic_J2'
-                [~,idx1] = intersect({Human_model.name},'RScapuloThoracic_J4');
-                [~,idx2] = intersect({Human_model.name},'RScapuloThoracic_J5');
-                q= -radius(2)*sin(Q(idx1))*cos(Q(idx2));
-                
-            case 'RScapuloThoracic_J3'
-                [~,idx1] = intersect({Human_model.name},'RScapuloThoracic_J4');
-                [~,idx2] = intersect({Human_model.name},'RScapuloThoracic_J5');
-                q= radius(3)*cos(Q(idx1))*cos(Q(idx2));
-                
-            case 'LScapuloThoracic_J1'
-                [~,idx] = intersect({Human_model.name},'LScapuloThoracic_J5');
-                q= radius(4)*sin(Q(idx));
-                
-            case 'LScapuloThoracic_J2'
-                [~,idx1] = intersect({Human_model.name},'LScapuloThoracic_J4');
-                [~,idx2] = intersect({Human_model.name},'LScapuloThoracic_J5');
-                q= -radius(5)*sin(Q(idx1))*cos(Q(idx2));
-                
-            case 'LScapuloThoracic_J3'
-                [~,idx1] = intersect({Human_model.name},'LScapuloThoracic_J4');
-                [~,idx2] = intersect({Human_model.name},'LScapuloThoracic_J5');
-                q= -radius(6)*cos(Q(idx1))*cos(Q(idx2));
-                
-        end
-    end
     
     
     %Axe
