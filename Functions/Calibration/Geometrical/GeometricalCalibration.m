@@ -184,64 +184,35 @@ l_sup=q_map'*l_sup;
 l_inf(l_inf==1i)=-inf;
 l_sup(l_sup==1i)=+inf;
 
-BO = AnalysisParameters.CalibIK.castest(1) ;
-if AnalysisParameters.CalibIK.castest(2)==2
-    f = 1    ;  % initial frame
-    q0=zeros(Nb_qred,1);
-    
-    ik_function_objective=@(qvar)CostFunctionSymbolicCalib(qvar,k_init,Base_position{f},Base_rotation{f},list_function ,Rcut,pcut,real_markers_calib,nbcut,list_function_markers,f);
-    if AnalysisParameters.CalibIK.castest(1)==1
-        [q_value{1}(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf,l_sup,[],options);
-    else
-        nonlcon=@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,k_init); % pas tester
-        [q_value{1}(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf,l_sup,nonlcon,options);
-    end
-    
-    
-    optionsLM = optimset('Algorithm','Levenberg-Marquardt','Display','off','MaxIter',4e6,'MaxFunEval',5e6,'TolFun',1e-4);
-    
-    buteehandle = @(q)  Limits(q,l_inf,l_sup);
-    gamma = 150;
-    zeta = 20;
-    
-    q0 = q_value{1}(:,f);
-    
-    parfor f = 1:nb_frame_calib
-        
-        ik_function_objective=@(qvar) ErrorMarkersCalib(qvar,k_init,real_markers_calib,f,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut,nbcut,list_function);
-        
-        if BO ==1
-            hclosedloophandle = {@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,k_init);  @(x) Aeq_ik*x - beq_ik} ;
-        else
-            hclosedloophandle = {} ;
-        end
-        fun = @(q) CostFunctionLMCalib(q,ik_function_objective,gamma,hclosedloophandle,zeta,buteehandle);
-        
-        [q_inter(:,f)] = lsqnonlin(fun,q0,[],[],optionsLM);
-    end
-    q_value{1}(:,2:nb_frame_calib) = q_inter(:,2:nb_frame_calib);
-    
+f = 1    ;  % initial frame
+q0=zeros(Nb_qred,1);
+
+ik_function_objective=@(qvar)CostFunctionSymbolicCalib(qvar,k_init,Base_position{f},Base_rotation{f},list_function ,Rcut,pcut,real_markers_calib,nbcut,list_function_markers,f);
+if AnalysisParameters.CalibIK.castest(1)==1
+    [q_value{1}(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf,l_sup,[],options);
 else
-    
-    
-    for f=1:nb_frame_calib
-        if f == 1      % initial frame
-            q0=zeros(Nb_qred,1);
-        else
-            q0=q_value{1}(:,f-1);
-        end
-        ik_function_objective=@(qvar)CostFunctionSymbolicCalib(qvar,k_init,Base_position{f},Base_rotation{f},list_function ,Rcut,pcut,real_markers_calib,nbcut,list_function_markers,f);
-        if AnalysisParameters.CalibIK.castest(1)==1
-            [q_value{1}(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf,l_sup,[],options);
-        else
-            nonlcon=@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,k_init); % pas tester
-            [q_value{1}(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf,l_sup,nonlcon,options);
-        end
-    end
-    
-    
-    
+    nonlcon=@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,k_init); % pas tester
+    [q_value{1}(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf,l_sup,nonlcon,options);
 end
+
+
+optionsLM = optimset('Algorithm','Levenberg-Marquardt','Display','off','MaxIter',4e6,'MaxFunEval',5e6,'TolFun',1e-4);
+
+buteehandle = @(q)  Limits(q,l_inf,l_sup);
+gamma = 150;
+zeta = 20;
+
+q0 = q_value{1}(:,f);
+
+parfor f = 1:nb_frame_calib
+    
+    ik_function_objective=@(qvar) ErrorMarkersCalib(qvar,k_init,real_markers_calib,f,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut,nbcut,list_function);
+    
+    fun = @(q) CostFunctionLMCalib(q,ik_function_objective,0,{},zeta,buteehandle);
+    
+    [q_inter(:,f)] = lsqnonlin(fun,q0,[],[],optionsLM);
+end
+q_value{1}(:,2:nb_frame_calib) = q_inter(:,2:nb_frame_calib);
 
 
 % Error computation
@@ -297,54 +268,20 @@ while crit(:,g) > 0.05
     
     q_value{g+1}=zeros(size(q_value{g})); %#ok<AGROW>
     
-    if AnalysisParameters.CalibIK.castest(2)==1
+    % Articular coordinates optimisation
+    
+    q0=q_value{g}(:,f);
+    parfor f =1:nb_frame_calib
         
-        %      Articular coordinates optimisation
-        for f=1:nb_frame_calib
-            q0=q_value{g}(:,f);
-            for m=1:length(real_markers)
-                positions(:,m) = real_markers(m).position(f,:)';
-            end
-            
-            ik_function_objective=@(qvar)CostFunctionSymbolicCalib(qvar,kp_opt(:,g+1),Base_position{f},Base_rotation{f},list_function ,Rcut,pcut,real_markers_calib,nbcut,list_function_markers,f);
-  
-            if AnalysisParameters.CalibIK.castest(1)==1
-                [q_value{g+1}(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf,l_sup,[],options);
-            else
-                nonlcon=@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,...
-                    kp_opt(:,g+1));
-                [q_value{g+1}(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf,l_sup,nonlcon,options);
-            end
-            
-            nonlcon=@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,...
-                kp_opt(:,g+1));
-            
-            [q_value{g+1}(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf,l_sup,nonlcon,options);
-        end
+        ik_function_objective=@(qvar) ErrorMarkersCalib(qvar,kp_opt(:,g+1),real_markers_calib,f,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut,nbcut,list_function);
         
-    else
+        fun = @(q) CostFunctionLMCalib(q,ik_function_objective,0,{},zeta,buteehandle);
+        [q_inter(:,f)] = lsqnonlin(fun,q0,[],[],optionsLM);
         
-        % Articular coordinates optimisation
-        
-        q0=q_value{g}(:,f);
-        parfor f =1:nb_frame_calib
-            
-            ik_function_objective=@(qvar) ErrorMarkersCalib(qvar,kp_opt(:,g+1),real_markers_calib,f,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut,nbcut,list_function);
-            
-            if BO==1
-                hclosedloophandle ={} ;
-            else
-                hclosedloophandle ={@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,kp_opt(:,g+1));@(x) Aeq_ik*x - beq_ik} ;
-            end
-            fun = @(q) CostFunctionLMCalib(q,ik_function_objective,gamma,hclosedloophandle,zeta,buteehandle);
-            [q_inter(:,f)] = lsqnonlin(fun,q0,[],[],optionsLM);
-            
-            %  waitbar(f/nb_frame)
-            
-        end
-        q_value{g+1} = q_inter;
         
     end
+    q_value{g+1} = q_inter;
+    
     % Error computation
     errorm{g+1}=zeros(length(real_markers_calib),nb_frame_calib); %#ok<AGROW>
     for f=1:nb_frame_calib
