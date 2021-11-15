@@ -1,5 +1,5 @@
 function [Human_model,nbClosedLoop,Generalized_Coordinates,nb_k,k_map,nb_p,p_map,nb_alpha,alpha_map,...
-A_norm,b_norm]=SymbolicFunctionGeneration_A(Human_model, Markers_set, castest)
+A_norm,b_norm]=SymbolicFunctionGeneration_A(Human_model, Markers_set)
 % Generation of symbolic function containing the position of markers according to joint coordinates and geometrical parameters
 %
 %   INPUT
@@ -339,7 +339,7 @@ Human_model(s_root).R=RPelvis;
 
 % [Human_model,Markers_set,~,~,c_ClosedLoop,ceq_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_Shoulder(Human_model,Markers_set,s_root,q_complete_k,k,p_adapt_mat,alpha,radius,1,1);
 % [Human_model,Markers_set,~,~,c_ClosedLoop,ceq_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,s_root,q_complete_k,k,p_adapt_mat,alpha,1,1);
-[Human_model,Markers_set,~,~,c_ClosedLoop,ceq_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,s_root,q_complete_k,k,p_adapt_mat,alpha,radius,1,1,castest,{},{});
+[Human_model,Markers_set,~,~,c_ClosedLoop,ceq_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,s_root,q_complete_k,k,p_adapt_mat,alpha,radius,1,1,{},{});
 
 % position et rotation des solides servant de coupure (position and rotation of solids defining the cuts)
 for ii=1:max([Human_model.KinematicsCut])

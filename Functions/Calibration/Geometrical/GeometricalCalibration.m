@@ -72,7 +72,7 @@ s_root=find([OsteoArticularModel.mother]==0); %#ok<NASGU> % num�ro du solide r
 
 %% Symbolical function generation
 % Markers position according to the joint coordinates
-[OsteoArticularModel,nbclosedloop,GC,nb_k,k_map,nb_p,p_map,nb_alpha,alpha_map,A_norm,b_norm]=SymbolicFunctionGeneration_A(OsteoArticularModel, Markers_set,AnalysisParameters.CalibIK.castest);
+[OsteoArticularModel,nbclosedloop,GC,nb_k,k_map,nb_p,p_map,nb_alpha,alpha_map,A_norm,b_norm]=SymbolicFunctionGeneration_A(OsteoArticularModel, Markers_set);
 
 %% list of markers from the model
 list_markers={};
