@@ -151,7 +151,6 @@ options = optimoptions(@fmincon,'Algorithm','interior-point','Display','off','To
 q_value{1}=zeros(Nb_qred,nb_frame_calib);
 
 addpath('Symbolic_function')
-nbcut = max([OsteoArticularModel.KinematicsCut]);
 
 nbcut = max([OsteoArticularModel.KinematicsCut]);
 Rcut=zeros(3,3,nbcut);
@@ -207,8 +206,9 @@ q0 = q_value{1}(:,f);
 parfor f = 1:nb_frame_calib
     
     ik_function_objective=@(qvar) ErrorMarkersCalib(qvar,k_init,real_markers_calib,f,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut,nbcut,list_function);
+    hclosedloophandle = {@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,k_init);  @(x) Aeq_ik*x - beq_ik} ;
     
-    fun = @(q) CostFunctionLMCalib(q,ik_function_objective,0,{},zeta,buteehandle);
+    fun = @(q) CostFunctionLMCalib(q,ik_function_objective,gamma,hclosedloophandle,zeta,buteehandle);
     
     [q_inter(:,f)] = lsqnonlin(fun,q0,[],[],optionsLM);
 end
@@ -275,8 +275,10 @@ while crit(:,g) > 0.05
         
         ik_function_objective=@(qvar) ErrorMarkersCalib(qvar,kp_opt(:,g+1),real_markers_calib,f,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut,nbcut,list_function);
         
-        fun = @(q) CostFunctionLMCalib(q,ik_function_objective,0,{},zeta,buteehandle);
-        [q_inter(:,f)] = lsqnonlin(fun,q0,[],[],optionsLM);
+        hclosedloophandle = {@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,k_init);  @(x) Aeq_ik*x - beq_ik} ;
+
+        fun = @(q) CostFunctionLMCalib(q,ik_function_objective,gamma,hclosedloophandle,zeta,buteehandle);
+                [q_inter(:,f)] = lsqnonlin(fun,q0,[],[],optionsLM);
         
         
     end
