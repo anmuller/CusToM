@@ -257,6 +257,7 @@ if isscalar(idx)
     % Searches for Thorax Ellipsoid dimensions
     [~, idy] = intersect(Human_model(idx).anat_position(:,1),'ThoracicEllipsoid_radius');
     if isscalar(idy)
+        
         radius_sym = sym('radius', [6 1]);
         assume(radius_sym,'real');
         
@@ -346,7 +347,7 @@ Human_model(s_root).R=RPelvis;
 
 % [Human_model,Markers_set,~,~,c_ClosedLoop,ceq_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_Shoulder(Human_model,Markers_set,s_root,q_complete_k,k,p_adapt_mat,alpha,radius,1,1);
 % [Human_model,Markers_set,~,~,c_ClosedLoop,ceq_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,s_root,q_complete_k,k,p_adapt_mat,alpha,1,1);
-[Human_model,Markers_set,~,~,c_ClosedLoop,ceq_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,s_root,q_complete_k,k,p_adapt_mat,alpha,ellipsoid_parameters,1,1);
+[Human_model,Markers_set,~,~,c_ClosedLoop,ceq_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,s_root,q_complete_k,k,p_adapt_mat,alpha,radius,1,1,{},{});
 
 % position et rotation des solides servant de coupure (position and rotation of solids defining the cuts)
 for ii=1:max([Human_model.KinematicsCut])
@@ -407,10 +408,3 @@ nbClosedLoop=numel(c_ClosedLoop);
 
 
 end
-
-
-
-
-
-
-

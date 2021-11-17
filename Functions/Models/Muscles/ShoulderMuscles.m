@@ -96,34 +96,15 @@ s=[s;{
 %     [Side 'LAT2'],317.5,0.2324,[],0.1765,0.33161... EDIT
 %     [Side 'LAT3'],189,0.2789,[],0.1403,0.36652... EDIT
 %     [Side 'CORB'],208.2,0.0932,[],0.097,0.47124... EDIT
-%     [Side 'TRIlong'],771.8,0.134,[],0.143,0.20944... EDIT
-%     [Side 'TRIlat'],717.5,0.1138,[],0.098,0.15708... EDIT
-%     [Side 'TRImed'],717.5,0.1138,[],0.0908,0.15708... EDIT
-%     [Side 'ANC'],283.2,0.027,[],0.018,0 ... EDIT
-%     [Side 'SUP'],379.6,0.033,[],0.028,0 ... EDIT
-%     [Side 'BIClong'],525.1,0.1157,[],0.2723,0 ... EDIT
-%     [Side 'BICshort'],316.8,0.1321,[],0.1923,0 ... EDIT
-%     [Side 'BRA'],1177.37,0.0858,[],0.0535,0 ... EDIT
-%     [Side 'BRD'],276,0.1726,[],0.133,0 ... EDIT
-%     [Side 'ECRL'],337.3,0.081,[],0.244,0 ... EDIT
-%     [Side 'ECRB'],252.5,0.0585,[],0.2223,0.15708... EDIT
-%     [Side 'ECU'],192.9,0.0622,[],0.2285,0.069813... EDIT
-%     [Side 'FCR'],407.9,0.0628,[],0.244,0.05236... EDIT
-%     [Side 'FCU'],479.8,0.0509,[],0.265,0.20944... EDIT
-%     [Side 'PL'],101,0.0638,[],0.2694,0.069813... EDIT
-%     [Side 'PT'],557.2,0.0492,[],0.098,0.17453... EDIT
-%     [Side 'PQ'],284.7,0.0282,[],0.005,0.17453... EDIT
-%     [Side 'FDSL'],75.3,0.0515,[],0.3386,0.087266... EDIT
-%     [Side 'FDSR'],171.2,0.0736,[],0.328,0.069813... EDIT
-%     [Side 'EDCL'],39.4,0.065,[],0.335,0.034907... EDIT
-%     [Side 'EDCR'],109.2,0.0626,[],0.365,0.05236... EDIT
-%     [Side 'EDCM'],94.4,0.0724,[],0.365,0.05236... EDIT
-%     [Side 'stern_mast'],68.95,0.108,[],0.056123,... EDIT
-%     [Side 'cleid_mast'],34.475,0.108,[],0.035198,... EDIT
-%     [Side 'cleid_occ'],34.475,0.108,[],0.069467,... EDIT
-%     [Side 'trap_cl'],77.6,0.084,[],0.11922,{[Side 'clavicle_r_trap_cl_r-P1'];[...
-%     [Side 'trap_acr'],376.95,0.092,[],0.076582,... EDIT
-%     [Side 'levator_scap'],76.3,0.113,[],0.021875,... EDIT
+%     [Side 'FDSL'],75.3,0.0515,[],0.3386,0.087266... DOIGT BRASDELEVIER
+%     [Side 'FDSR'],171.2,0.0736,[],0.328,0.069813... DOIGT BRASDELEVIER
+%     [Side 'EDCL'],39.4,0.065,[],0.335,0.034907... DOIGT BRASDELEVIER
+%     [Side 'EDCR'],109.2,0.0626,[],0.365,0.05236... DOIGT EDIT
+%     [Side 'EDCM'],94.4,0.0724,[],0.365,0.05236... DOIGT EDIT
+%     [Side 'stern_mast'],68.95,0.108,[],0.056123,... COU BRASDELEVIER
+%     [Side 'cleid_mast'],34.475,0.108,[],0.035198,... COU BRASDELEVIER
+%     [Side 'cleid_occ'],34.475,0.108,[],0.069467,... COU BRASDELEVIER
+%     [Side 'levator_scap'],76.3,0.113,[],0.021875,... COU BRASDELEVIER
 }];
 
 % Structure generation

@@ -5,13 +5,13 @@ function [Human_model_calib, calib_parameters, Markers_set] = GeometricalCalibra
 %
 %   Associated publication:
 %	- Muller, A., Germain, C., Pontonnier, C., Dumont, G., 2015.
-%	A Simple Method to Calibrate Kinematical Invariants: Application to Overhead Throwing. Int. Soc. Biomech. Sport. 2–5.
+%	A Simple Method to Calibrate Kinematical Invariants: Application to Overhead Throwing. Int. Soc. Biomech. Sport. 2ï¿½5.
 %
 %   Based on:
 %	- Reinbolt, J.A., Schutte, J.F., Fregly, B.J., Koh, B. Il, Haftka, R.T., George, A.D., Mitchell, K.H., 2005.
-%	Determination of patient-specific multi-joint kinematic models through two-level optimization. J. Biomech. 38, 621–626.
+%	Determination of patient-specific multi-joint kinematic models through two-level optimization. J. Biomech. 38, 621ï¿½626.
 %	- Andersen, M.S., Damsgaard, M., MacWilliams, B., Rasmussen, J., 2010.
-%	A computationally efficient optimisation-based method for parameter identification of kinematically determinate and over-determinate biomechanical systems. Comput. Methods Biomech. Biomed. Engin. 13, 171–183.
+%	A computationally efficient optimisation-based method for parameter identification of kinematically determinate and over-determinate biomechanical systems. Comput. Methods Biomech. Biomed. Engin. 13, 171ï¿½183.
 %
 %   INPUT
 %   - OsteoArticularModel: osteo-articular model (see the Documentation for
@@ -202,7 +202,7 @@ end
 
 %% Adding 6 DOF joint (pelvis to world)
 [OsteoArticularModel] = Add6dof(OsteoArticularModel);
-s_root=find([OsteoArticularModel.mother]==0); %#ok<NASGU> % numéro du solide root
+s_root=find([OsteoArticularModel.mother]==0); %#ok<NASGU> % numï¿½ro du solide root
 
 %% Symbolical function generation
 % Markers position according to the joint coordinates
@@ -319,14 +319,15 @@ l_sup=q_map'*l_sup;
 l_inf(l_inf==1i)=-inf;
 l_sup(l_sup==1i)=+inf;
 
-
 f = 1    ;  % initial frame
 q0=zeros(Nb_qred,1);
 
 ik_function_objective=@(qvar)CostFunctionSymbolicCalib(qvar,k_init,Base_position{f},Base_rotation{f},list_function ,Rcut,pcut,real_markers_calib,nbcut,list_function_markers,f);
+
 nonlcon=@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,k_init); % pas tester
 [q_temp] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf,l_sup,[],options);
 [q_value{1}(:,f)] = fmincon(ik_function_objective,q_temp,[],[],Aeq_ik,beq_ik,l_inf,l_sup,nonlcon,options);
+
 
 
 optionsLM = optimset('Algorithm','Levenberg-Marquardt','Display','off','MaxIter',4e6,'MaxFunEval',5e6,'TolFun',1e-4);
@@ -337,7 +338,7 @@ zeta = 20;
 
 q0 = q_value{1}(:,f);
 
-for f = 1:nb_frame_calib
+parfor f = 1:nb_frame_calib
     
     ik_function_objective=@(qvar) ErrorMarkersCalib(qvar,k_init,real_markers_calib,f,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut,nbcut,list_function);
     
@@ -353,8 +354,8 @@ for f = 1:nb_frame_calib
     
     [q_inter(:,f)] = lsqnonlin(fun,q0,[],[],optionsLM);
 end
-
 q_value{1}(:,2:nb_frame_calib) = q_inter(:,2:nb_frame_calib);
+
 
 % Error computation
 errorm{1}=zeros(length(real_markers_calib),nb_frame_calib);
@@ -409,7 +410,6 @@ while crit(:,g) > 0.05
     
     q_value{g+1}=zeros(size(q_value{g})); %#ok<AGROW>
     
-    
     % Articular coordinates optimisation
     
     q0=q_value{g}(:,f);
@@ -417,18 +417,11 @@ while crit(:,g) > 0.05
         
         ik_function_objective=@(qvar) ErrorMarkersCalib(qvar,kp_opt(:,g+1),real_markers_calib,f,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut,nbcut,list_function);
         
-        if ~isempty(Aeq_ik)
-            
-            hclosedloophandle = {@(qvar)ClosedLoopCalibceq(Base_position{f},Base_rotation{f},qvar,k_init);  @(x) Aeq_ik*x - beq_ik} ;
-            
-        else
-            hclosedloophandle = {@(qvar)ClosedLoopCalibceq(Base_position{f},Base_rotation{f},qvar,k_init)} ;
-            
-        end
+        hclosedloophandle = {@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,k_init);  @(x) Aeq_ik*x - beq_ik} ;
+
         fun = @(q) CostFunctionLMCalib(q,ik_function_objective,gamma,hclosedloophandle,zeta,buteehandle);
-        [q_inter(:,f)] = lsqnonlin(fun,q0,[],[],optionsLM);
+                [q_inter(:,f)] = lsqnonlin(fun,q0,[],[],optionsLM);
         
-        %  waitbar(f/nb_frame)
         
     end
     q_value{g+1} = q_inter;
@@ -466,7 +459,7 @@ calib_parameters.ellipsoid_parameters =kp_opt_unormalized(nb_k+nb_p+nb_alpha+1:e
 Human_model_calib=Human_model_save;
 % k_calib %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 for i=1:numel(Human_model_save)
-    Human_model_calib(i).b=Human_model_save(i).b*calib_parameters.k_calib(OsteoArticularModel(i).mother); % b (k de la mère)
+    Human_model_calib(i).b=Human_model_save(i).b*calib_parameters.k_calib(OsteoArticularModel(i).mother); % b (k de la mï¿½re)
     Human_model_calib(i).c=Human_model_save(i).c*calib_parameters.k_calib(i); % c
     Human_model_calib(i).I=Human_model_save(i).I*calib_parameters.k_calib(i); % I
     for j=1:size(Human_model_save(i).anat_position,1)

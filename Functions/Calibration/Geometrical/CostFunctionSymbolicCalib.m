@@ -1,6 +1,6 @@
 function [error] = CostFunctionSymbolicCalib(q,k,Pelvis_position,Pelvis_rotation,list_function,Rcut,pcut,real_markers,nbcut,list_function_markers,f)
 % Cost function used for the geometrical calibration step
-%   
+%
 %   INPUT
 %   - q: vector of joint coordinates at a given instant
 %   - k: vector of homothety coefficient
@@ -30,14 +30,12 @@ end
 
 
 nb_mk=numel(list_function_markers);
-
 e=zeros(nb_mk,1);
 for m=1:nb_mk
     e(m,1)= norm(list_function_markers{m}...
         (Pelvis_position,Pelvis_rotation,q,k,...
-        pcut,Rcut) - real_markers(m).position(f,:)') ;    
+        pcut,Rcut) - real_markers(m).position(f,:)') ;
 end
-
 W=eye(nb_mk); %Weighted markers each markers are weighted by one
 error=e'*W*e;
 
