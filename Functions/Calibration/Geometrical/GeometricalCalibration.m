@@ -91,7 +91,7 @@ list_markers = [real_markers.name]';
 
 %% Selection/choice of frame sample
 nb_frame_calib = AnalysisParameters.CalibIK.Frames.NbFrames;
-
+nb_frame_calib=2;
 [frame_calib] = AnalysisParameters.CalibIK.Frames.Method(nb_frame_calib, real_markers, list_markers);
 
 
@@ -146,9 +146,7 @@ end
 %% Inverse kinematics
 
 % options = optimoptions(@fmincon,'Algorithm','interior-point','Display','iter-detailed','PlotFcns',@optimplotfval,'TolFun',1e-2,'MaxFunEvals',20000);
-options = optimoptions(@fmincon,'Algorithm','interior-point','Display','off','TolFun',1e-2,'MaxFunEvals',20000);
 
-q_value{1}=zeros(Nb_qred,nb_frame_calib);
 
 addpath('Symbolic_function')
 
@@ -183,43 +181,6 @@ l_sup=q_map'*l_sup;
 l_inf(l_inf==1i)=-inf;
 l_sup(l_sup==1i)=+inf;
 
-f = 1    ;  % initial frame
-q0=zeros(Nb_qred,1);
-
-ik_function_objective=@(qvar)CostFunctionSymbolicCalib(qvar,k_init,Base_position{f},Base_rotation{f},list_function ,Rcut,pcut,real_markers_calib,nbcut,list_function_markers,f);
-
-nonlcon=@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,k_init); % pas tester
-[q_value{1}(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf,l_sup,nonlcon,options);
-
-
-
-optionsLM = optimset('Algorithm','Levenberg-Marquardt','Display','off','MaxIter',4e6,'MaxFunEval',5e6,'TolFun',1e-4);
-
-buteehandle = @(q)  Limits(q,l_inf,l_sup);
-gamma = 150;
-zeta = 20;
-
-q0 = q_value{1}(:,f);
-
-parfor f = 1:nb_frame_calib
-    
-    ik_function_objective=@(qvar) ErrorMarkersCalib(qvar,k_init,real_markers_calib,f,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut,nbcut,list_function);
-    hclosedloophandle = {@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,k_init);  @(x) Aeq_ik*x - beq_ik} ;
-    
-    fun = @(q) CostFunctionLMCalib(q,ik_function_objective,gamma,hclosedloophandle,zeta,buteehandle);
-    
-    [q_inter(:,f)] = lsqnonlin(fun,q0,[],[],optionsLM);
-end
-q_value{1}(:,2:nb_frame_calib) = q_inter(:,2:nb_frame_calib);
-
-
-% Error computation
-errorm{1}=zeros(length(real_markers_calib),nb_frame_calib);
-for f=1:nb_frame_calib
-    
-    [errorm{1}(:,f)] = ErrorMarkersCalib(q_value{1}(:,f),k_init,real_markers_calib,f,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut,nbcut,list_function);
-end
-
 
 %% Calibration
 
@@ -246,57 +207,12 @@ for i=1:nb_solid-6
     end
 end
 
-%% Boundaries for setting variation limits
-limit_inf_calib = -ones(taille,1);
-limit_sup_calib = ones(taille,1);
+weights=zeros(length(list_markers),1);
+weights(27:29)=1;
+[kp_opt,crit,errorm]=GeomCalibOptimization(k_init,weights,Nb_qred,nb_frame_calib,Base_position,Base_rotation,list_function,Rcut,pcut,real_markers_calib,nbcut,list_function_markers,Aeq_ik,beq_ik,l_inf,l_sup,Aeq_calib,beq_calib);
+calib_parameters.crit = crit;
+calib_parameters.errorm = errorm;
 
-g=1;
-crit(:,g)=1; % stop criteria
-
-kp_opt(:,g)=k_init;
-
-while crit(:,g) > 0.05
-    
-    % Geometric parameters optimisation
-    
-    pk_function_objective=@(kp)OptCalibrationSymbolic(...
-        q_value{g},kp,nb_frame_calib,Base_position,Base_rotation,real_markers_calib,list_function,Rcut,pcut,nbcut,list_function_markers);
-    
-    [kp_opt(:,g+1)] = fmincon(pk_function_objective,kp_opt(:,g),[],[],Aeq_calib,beq_calib,limit_inf_calib,limit_sup_calib,[],options);
-    
-    q_value{g+1}=zeros(size(q_value{g})); %#ok<AGROW>
-    
-    % Articular coordinates optimisation
-    
-    q0=q_value{g}(:,f);
-    parfor f =1:nb_frame_calib
-        
-        ik_function_objective=@(qvar) ErrorMarkersCalib(qvar,kp_opt(:,g+1),real_markers_calib,f,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut,nbcut,list_function);
-        
-        hclosedloophandle = {@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,k_init);  @(x) Aeq_ik*x - beq_ik} ;
-
-        fun = @(q) CostFunctionLMCalib(q,ik_function_objective,gamma,hclosedloophandle,zeta,buteehandle);
-                [q_inter(:,f)] = lsqnonlin(fun,q0,[],[],optionsLM);
-        
-        
-    end
-    q_value{g+1} = q_inter;
-    
-    % Error computation
-    errorm{g+1}=zeros(length(real_markers_calib),nb_frame_calib); %#ok<AGROW>
-    for f=1:nb_frame_calib
-        
-        [errorm{g+1}(:,f)] = ErrorMarkersCalib(q_value{g+1}(:,f),kp_opt(:,g+1),real_markers_calib,f,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut,nbcut,list_function);
-        
-    end
-    
-    % Stop criteria
-    crit(:,g+1)=abs(mean(mean(errorm{g+1}))-mean(mean(errorm{g})))/mean(mean(errorm{g}));
-    
-    g=g+1;
-end
-calib_parameters.crit=crit;
-calib_parameters.errorm=errorm;
 
 %% Recuperation of k, p and alpha
 % Normalization

@@ -1,4 +1,4 @@
-function [error] = CostFunctionSymbolicCalib(q,k,Pelvis_position,Pelvis_rotation,list_function,Rcut,pcut,real_markers,nbcut,list_function_markers,f)
+function [error] = CostFunctionSymbolicCalib(q,k,Pelvis_position,Pelvis_rotation,list_function,Rcut,pcut,real_markers,nbcut,list_function_markers,f,weights)
 % Cost function used for the geometrical calibration step
 %
 %   INPUT
@@ -36,7 +36,7 @@ for m=1:nb_mk
         (Pelvis_position,Pelvis_rotation,q,k,...
         pcut,Rcut) - real_markers(m).position(f,:)') ;
 end
-W=eye(nb_mk); %Weighted markers each markers are weighted by one
+W=diag(weights);
 error=e'*W*e;
 
 end

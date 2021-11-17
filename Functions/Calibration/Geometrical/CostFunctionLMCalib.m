@@ -1,4 +1,4 @@
-function func=CostFunctionLMCalib(q,ik_function_objective,gamma,hclosedloophandle,zeta,hbutees)
+function func=CostFunctionLMCalib(q,ik_function_objective,gamma,hclosedloophandle,zeta,hbutees,weights)
 % Limit penalisation for LM algorithm
 %   
 %   INPUT
@@ -26,8 +26,8 @@ function func=CostFunctionLMCalib(q,ik_function_objective,gamma,hclosedloophandl
         fonc = hclosedloophandle{k};
         constraints = [constraints ; fonc(q)];
     end
-    
-    dX = ik_function_objective(q);
+
+    dX = weights.*ik_function_objective(q);
     
     func = [ dX ; gamma*constraints ; zeta*hbutees(q)];
     

@@ -1,4 +1,4 @@
-function [error] = OptCalibrationSymbolic(q,k,nb_frame,Pelvis_position,Pelvis_rotation,real_markers,list_function,Rcut,pcut,nbcut,list_function_markers)
+function [error] = OptCalibrationSymbolic(q,k,nb_frame,Pelvis_position,Pelvis_rotation,real_markers,list_function,Rcut,pcut,nbcut,list_function_markers,weights)
 % Cost function used for the calibration of the geometrical parameters
 %   It corresponds to the sum of reconstruction error for a set of frames
 %
@@ -25,7 +25,7 @@ error=0;
 % somme des erreurs pour chacune des frames s�lectionn�es (sum of reconstruction error for a set of selected frames)
 for f=1:nb_frame  
     
-    error = error + CostFunctionSymbolicCalib(q(:,f),k,Pelvis_position{f},Pelvis_rotation{f},list_function,Rcut,pcut,real_markers,nbcut,list_function_markers,f);
+    error = error + CostFunctionSymbolicCalib(q(:,f),k,Pelvis_position{f},Pelvis_rotation{f},list_function,Rcut,pcut,real_markers,nbcut,list_function_markers,f,weights);
 
 end
 end
