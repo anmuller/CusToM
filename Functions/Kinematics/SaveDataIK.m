@@ -1,8 +1,7 @@
-function    SaveDataIK(filename,ExperimentalData,InverseKinematicsResults,castest)
+function    SaveDataIK(filename,ExperimentalData,InverseKinematicsResults)
 
 
 save([filename '/ExperimentalData'],'ExperimentalData');
 save([filename '/InverseKinematicsResults'],'InverseKinematicsResults');
-%save([filename '/InverseKinematicsResults','_', num2str(castest) ],'InverseKinematicsResults');
 
 end

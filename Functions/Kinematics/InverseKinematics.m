@@ -46,7 +46,7 @@ if numel(AnalysisParameters.filename)==1
         end
 
         % Save data
-        SaveDataIK(filename,ExperimentalData,InverseKinematicsResults,AnalysisParameters.CalibIK.castest);
+        SaveDataIK(filename,ExperimentalData,InverseKinematicsResults);
     end
 else
 parfor i = 1:numel(AnalysisParameters.filename)
@@ -61,7 +61,7 @@ parfor i = 1:numel(AnalysisParameters.filename)
         end
 
         % Save data
-        SaveDataIK(filename,ExperimentalData,InverseKinematicsResults,AnalysisParameters.CalibIK.castest);
+        SaveDataIK(filename,ExperimentalData,InverseKinematicsResults);
     end
 end
 end
