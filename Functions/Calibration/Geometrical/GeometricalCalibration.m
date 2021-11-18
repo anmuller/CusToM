@@ -207,11 +207,28 @@ for i=1:nb_solid-6
     end
 end
 
+if isfield(AnalysisParameters.CalibIK,'Scapactive') && AnalysisParameters.CalibIK.Scapactive
+    real_markers_calib_scap=struct('name',{real_markers_calib.name});
+    real_markers_calib_scap(numel(real_markers_calib)).position=[];
+    for i=1:length(AnalysisParameters.CalibIK.ScapFiles)
+        filename_i = AnalysisParameters.CalibIK.ScapFiles{i};
+        [real_markers_i, ~]=Get_real_markers_Calibration(filename_i,list_markers, AnalysisParameters);
+        for j=1:numel(real_markers_i)
+            real_markers_calib_scap(j).position=[real_markers_calib_scap(j).position; real_markers_i(j).position(1,:)];
+        end
+    end
+    [weights] = ismember(find([Markers_set.exist]) , find(~cellfun(@isempty,strfind({Markers_set.anat_position},'ScapLoc'))) )';
+    [kp_opt_scap,crit_scap,errorm_scap]=GeomCalibOptimization(k_init,weights,Nb_qred,nb_frame_calib,Base_position,Base_rotation,list_function,Rcut,pcut,real_markers_calib,nbcut,list_function_markers,Aeq_ik,beq_ik,l_inf,l_sup,Aeq_calib,beq_calib);
+    calib_parameters.crit_scap = crit_scap;
+    calib_parameters.errorm_scap = errorm_scap;
+    calib_parameters.kp_opt_scap = kp_opt_scap(:,end);
+    k_init = kp_opt_scap(:,end);
+end
 weights=ones(length(list_markers),1);
-%weights(27:29)=1;
 [kp_opt,crit,errorm]=GeomCalibOptimization(k_init,weights,Nb_qred,nb_frame_calib,Base_position,Base_rotation,list_function,Rcut,pcut,real_markers_calib,nbcut,list_function_markers,Aeq_ik,beq_ik,l_inf,l_sup,Aeq_calib,beq_calib);
 calib_parameters.crit = crit;
 calib_parameters.errorm = errorm;
+
 
 
 %% Recuperation of k, p and alpha

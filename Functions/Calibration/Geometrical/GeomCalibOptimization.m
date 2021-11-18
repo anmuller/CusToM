@@ -8,8 +8,10 @@ ik_function_objective=@(qvar)CostFunctionSymbolicCalib(qvar,k_init,Base_position
 
 nonlcon=@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,k_init); % testé!
 
-options = optimoptions(@fmincon,'Algorithm','interior-point','Display','off','TolFun',1e-2,'MaxFunEvals',20000);
-[q_value{1}(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf,l_sup,nonlcon,options);
+options1 = optimoptions(@fmincon,'Algorithm','interior-point','Display','off','TolFun',1e-2,'MaxFunEvals',20000);
+options2 = optimoptions(@fmincon,'Algorithm','interior-point','Display','off','TolFun',1e-2,'MaxFunEvals',20000);
+
+[q_value{1}(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf,l_sup,nonlcon,options1);
 
 
 
@@ -58,7 +60,7 @@ while crit(:,g) > 0.05
     pk_function_objective=@(kp)OptCalibrationSymbolic(...
         q_value{g},kp,nb_frame_calib,Base_position,Base_rotation,real_markers_calib,list_function,Rcut,pcut,nbcut,list_function_markers,weights);
     
-    [kp_opt(:,g+1)] = fmincon(pk_function_objective,kp_opt(:,g),[],[],Aeq_calib,beq_calib,limit_inf_calib,limit_sup_calib,[],options);
+    [kp_opt(:,g+1)] = fmincon(pk_function_objective,kp_opt(:,g),[],[],Aeq_calib,beq_calib,limit_inf_calib,limit_sup_calib,[],options2);
     
     q_value{g+1}=zeros(size(q_value{g})); %#ok<AGROW>
     
