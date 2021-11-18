@@ -104,7 +104,11 @@ h = waitbar(0,['Inverse Kinematics (' filename ')']);
 % 1st frame : classical optimization
 
 if ~isfield(BiomechanicalModel,'ClosedLoopData')
+    if isfield(BiomechanicalModel,'GeometricalCalibration') &&  isfield(BiomechanicalModel.GeometricalCalibration,'q0') 
+        q0 = BiomechanicalModel.GeometricalCalibration.q0;
+    else
     q0=zeros(nb_solid,1);
+    end
     positions = zeros(3, length(real_markers));
     % Precomputation of markers positions at each frame
     for m=1:length(real_markers)
@@ -115,7 +119,11 @@ if ~isfield(BiomechanicalModel,'ClosedLoopData')
     [q(:,1)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,[],options1);
     hclosedloophandle = {@(x) Aeq_ik*x - beq_ik}   ;
 else
-    q0=BiomechanicalModel.ClosedLoopData.startingq0 ;
+    if isfield(BiomechanicalModel,'GeometricalCalibration') &&  isfield(BiomechanicalModel.GeometricalCalibration,'q0')
+        q0 = BiomechanicalModel.GeometricalCalibration.q0;
+    else
+        q0=BiomechanicalModel.ClosedLoopData.startingq0 ;
+    end
     positions = zeros(3, length(real_markers));
     % Precomputation of markers positions at each frame
     for m=1:length(real_markers)

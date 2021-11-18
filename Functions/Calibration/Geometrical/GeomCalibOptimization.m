@@ -1,4 +1,4 @@
-function [kp_opt,crit,errorm]=GeomCalibOptimization(k_init,weights,Nb_qred,nb_frame_calib,Base_position,Base_rotation,list_function,Rcut,pcut,real_markers_calib,nbcut,list_function_markers,Aeq_ik,beq_ik,l_inf,l_sup,Aeq_calib,beq_calib)
+function [kp_opt,crit,errorm,q0]=GeomCalibOptimization(k_init,weights,Nb_qred,nb_frame_calib,Base_position,Base_rotation,list_function,Rcut,pcut,real_markers_calib,nbcut,list_function_markers,Aeq_ik,beq_ik,l_inf,l_sup,Aeq_calib,beq_calib)
 f = 1    ;  % initial frame
 q0=zeros(Nb_qred,1);
 q_value{1}=zeros(Nb_qred,nb_frame_calib);
@@ -93,4 +93,8 @@ while crit(:,g) > 0.05
     crit(:,g+1)=abs(mean(mean(errorm{g+1}))-mean(mean(errorm{g})))/mean(mean(errorm{g}));
     
     g=g+1;
+end
+
+q0 = q_value{g-1}(:,1);
+
 end
