@@ -218,9 +218,6 @@ y= -Thorax_Ry*sin(phi)*cos(lambda);
 
 z= Mirror(3,3)*Thorax_Rz*cos(phi)*cos(lambda);
 
-R = FromEulerAngles2Rotation(0,0.0001,0);
-
-
 
 % ScapuloThoracic_J1
 num_solid=num_solid+1;                                      % solid number
@@ -247,9 +244,9 @@ Human_model(incr_solid).linear_constraint=[];
 Human_model(incr_solid).Visual=0;
 % Dependancy
 Human_model(incr_solid).kinematic_dependancy.active=1;
-Human_model(incr_solid).kinematic_dependancy.Joint=[incr_solid+4 ; incr_solid+3]; % Thoracicellips
+Human_model(incr_solid).kinematic_dependancy.Joint=[incr_solid+4]; % Thoracicellips
 % Kinematic dependancy function
-f_tx = matlabFunction( R(1,:)*[x,y,z]','vars',{phi,lambda});
+f_tx = matlabFunction( x,'vars',{lambda});
 Human_model(incr_solid).kinematic_dependancy.q=f_tx;
 Human_model(incr_solid).comment='scapulothoracic x regression';
 Human_model(incr_solid).FunctionalAngle=[Side name];
@@ -283,7 +280,7 @@ Human_model(incr_solid).FunctionalAngle=[Side name];
 Human_model(incr_solid).kinematic_dependancy.active=1;
 Human_model(incr_solid).kinematic_dependancy.Joint=[incr_solid+2; incr_solid+3]; % Thoracicellips
 % Kinematic dependancy function
-f_ty = matlabFunction(R(2,:)*[x,y,z]','vars',{phi,lambda});
+f_ty = matlabFunction(y,'vars',{phi,lambda});
 Human_model(incr_solid).kinematic_dependancy.q=f_ty;
 
 % ScapuloThoracic_J3
@@ -315,7 +312,7 @@ Human_model(incr_solid).comment='scapulothoracic z regression';
 Human_model(incr_solid).kinematic_dependancy.active=1;
 Human_model(incr_solid).kinematic_dependancy.Joint=[incr_solid+1; incr_solid+2]; % Thoracicellips
 % Kinematic dependancy function
-f_tz = matlabFunction(R(3,:)*[x,y,z]','vars',{phi,lambda});
+f_tz = matlabFunction(z,'vars',{phi,lambda});
 Human_model(incr_solid).kinematic_dependancy.q=f_tz;
 
 % ScapuloThoracic_J4
