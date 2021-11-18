@@ -91,7 +91,7 @@ list_markers = [real_markers.name]';
 
 %% Selection/choice of frame sample
 nb_frame_calib = AnalysisParameters.CalibIK.Frames.NbFrames;
-nb_frame_calib=2;
+
 [frame_calib] = AnalysisParameters.CalibIK.Frames.Method(nb_frame_calib, real_markers, list_markers);
 
 
@@ -207,8 +207,8 @@ for i=1:nb_solid-6
     end
 end
 
-weights=zeros(length(list_markers),1);
-weights(27:29)=1;
+weights=ones(length(list_markers),1);
+%weights(27:29)=1;
 [kp_opt,crit,errorm]=GeomCalibOptimization(k_init,weights,Nb_qred,nb_frame_calib,Base_position,Base_rotation,list_function,Rcut,pcut,real_markers_calib,nbcut,list_function_markers,Aeq_ik,beq_ik,l_inf,l_sup,Aeq_calib,beq_calib);
 calib_parameters.crit = crit;
 calib_parameters.errorm = errorm;

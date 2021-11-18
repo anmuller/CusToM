@@ -58,8 +58,8 @@ end
 %% Initializations
 
 % Linear constraints for the inverse kinematics
-Aeq_ik=[];  % initialization
-beq_ik=[];
+Aeq_ik=zeros(nb_solid);  % initialization
+beq_ik=zeros(nb_solid,1);
 for ii=1:nb_solid
     if size(Human_model(ii).linear_constraint) ~= [0 0] %#ok<BDSCA>
         Aeq_ik(ii,ii)=-1;
@@ -97,19 +97,13 @@ else
     l_sup1=[Human_model.limit_sup]';
 end
 
-if isfield(AnalysisParameters.IK,'weigths')
-    
-    weights = AnalysisParameters.IK.weights';
+weights = AnalysisParameters.IK.weights';
 
-else
-    
-    weights = ones(1,length(real_markers));
-end
 
 h = waitbar(0,['Inverse Kinematics (' filename ')']);
 % 1st frame : classical optimization
 
-if ~isempty([BiomechanicalModel.OsteoArticularModel.ClosedLoop])
+if ~isfield(BiomechanicalModel,'ClosedLoopData')
     q0=zeros(nb_solid,1);
     positions = zeros(3, length(real_markers));
     % Precomputation of markers positions at each frame
@@ -119,19 +113,9 @@ if ~isempty([BiomechanicalModel.OsteoArticularModel.ClosedLoop])
     
     ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar,positions(:),weights);
     [q(:,1)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,[],options1);
-    
-    if ~isempty(Aeq_ik)
-        
-        hclosedloophandle = {@(qvar)ClosedLoopceq(qvar);  @(x) Aeq_ik*x - beq_ik} ;
-        
-    else
-        hclosedloophandle = {@(qvar)ClosedLoopceq(qvar)} ;
-        
-    end
+    hclosedloophandle = {@(x) Aeq_ik*x - beq_ik}   ;
 else
-    %    q0=BiomechanicalModel.ClosedLoopData.startingq0 ;
-    q0=zeros(nb_solid,1);
-    
+    q0=BiomechanicalModel.ClosedLoopData.startingq0 ;
     positions = zeros(3, length(real_markers));
     % Precomputation of markers positions at each frame
     for m=1:length(real_markers)
@@ -141,17 +125,7 @@ else
     ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar, positions(:),weights);
     nonlcon=@(qvar)ClosedLoop(qvar);
     [q(:,1)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,nonlcon,options1);
-    %hclosedloophandle = {BiomechanicalModel.ClosedLoopData.ConstraintEq;  @(x) Aeq_ik*x - beq_ik} ;
-    
-    
-    if ~isempty(Aeq_ik)
-        
-        hclosedloophandle = {@(qvar)ClosedLoopceq(qvar);  @(x) Aeq_ik*x - beq_ik} ;
-        
-    else
-        hclosedloophandle = {@(qvar)ClosedLoopceq(qvar)} ;
-        
-    end
+    hclosedloophandle = {BiomechanicalModel.ClosedLoopData.ConstraintEq;  @(x) Aeq_ik*x - beq_ik} ;
 end
 
 buteehandle = @(q)  Limits(q,l_inf1,l_sup1);

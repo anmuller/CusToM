@@ -117,9 +117,9 @@ save('BiomechanicalModel','BiomechanicalModel');
 
 
 %% Closedloop equations
-% disp('Closed loop equations ...')
-% BiomechanicalModel = AddClosedLoopEquations(BiomechanicalModel);
-% disp('... Closed loop equations  done')
+disp('Closed loop equations ...')
+BiomechanicalModel = AddClosedLoopEquations(BiomechanicalModel);
+disp('... Closed loop equations  done')
 
 save('BiomechanicalModel','BiomechanicalModel');
 
