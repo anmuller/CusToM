@@ -132,7 +132,10 @@ else
     
     ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar, positions(:),weights);
     nonlcon=@(qvar)ClosedLoop(qvar);
-    [q(:,1)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,nonlcon,options1);
+    optionspattern = optimoptions(@patternsearch,'Display','iter','TolFun',1e-6,'TolCon',1e-6,'MaxFunEvals',10000000,'MaxIter',10000);
+    [q(:,1)] = patternsearch(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,[],optionspattern);
+
+%    [q(:,1)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,nonlcon,options1);
     hclosedloophandle = {BiomechanicalModel.ClosedLoopData.ConstraintEq;  @(x) Aeq_ik*x - beq_ik} ;
 end
 
