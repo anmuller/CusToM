@@ -69,7 +69,7 @@ end
 
 %% Inverse kinematics frame per frame
 
-options1 = optimoptions(@fmincon,'Algorithm','interior-point','Display','off','TolFun',1e-6,'TolCon',1e-6,'MaxFunEvals',10000000,'MaxIter',10000);
+options1 = optimoptions(@fmincon,'Algorithm','interior-point','Display','iter-detailed','TolFun',1e-6,'TolCon',1e-6,'MaxFunEvals',10000000,'MaxIter',10000);
 q=zeros(nb_solid,nb_frame);
 ceq=zeros(6*nbClosedLoop,nb_frame);
 
@@ -130,17 +130,23 @@ else
         positions(:,m) = real_markers(m).position(1,:)';
     end
     
-    ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar', positions(:),weights);
+    ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar, positions(:),weights);
     nonlcon=@(qvar)ClosedLoop(qvar);
-%     optionspattern = optimoptions(@patternsearch,'Display','iter','TolFun',1e-6,'TolCon',1e-6,'MaxFunEvals',10000000,'MaxIter',10000);
-%     tic()
-%     [q(:,1)] = patternsearch(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,[],optionspattern);
-%     toc()
-    rng default % For reproducibility
-    optionsga = optimoptions(@ga,'Display','iter','TolFun',1e-6,'TolCon',1e-6);
-    [q(:,1)] = ga(ik_function_objective,length(q0),[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,[],optionsga);
+    [q1] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,[],options1);
+    optionssqp = optimoptions(@fmincon,'Algorithm','sqp','Display','iter-detailed','TolFun',1e-6,'TolCon',1e-6,'MaxFunEvals',10000000,'MaxIter',10000);
 
-%    [q(:,1)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,nonlcon,options1);
+    [q(:,1)] = fmincon(ik_function_objective,q1,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,nonlcon,optionssqp);
+% 
+%     optionspattern = optimoptions(@patternsearch,'Display','iter','TolFun',1e-6,'TolCon',1e-6,...
+%                                                                     'MaxFunEvals',10000000,'MaxIter',10000,'PlotFcn',@psplotbestf,...
+%                                                                     'PollMethod','GSSPositiveBasisNp1');
+%     tic()
+%     [q(:,1)] = patternsearch(ik_function_objective,q1,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,nonlcon,optionspattern);
+%     toc()
+%     rng default % For reproducibility
+%     optionsga = optimoptions(@ga,'Display','iter','TolFun',1e-6,'TolCon',1e-6);
+%     [q(:,1)] = ga(ik_function_objective,length(q0),[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,[],optionsga);
+
    hclosedloophandle = {BiomechanicalModel.ClosedLoopData.ConstraintEq;  @(x) Aeq_ik*x - beq_ik} ;
 end
 
