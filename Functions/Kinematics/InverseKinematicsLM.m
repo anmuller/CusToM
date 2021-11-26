@@ -132,20 +132,21 @@ else
     
     ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar, positions(:),weights);
     nonlcon=@(qvar)ClosedLoop(qvar);
-%     [q1] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,[],options1);
-%     optionssqp = optimoptions(@fmincon,'Algorithm','sqp','Display','iter-detailed','TolFun',1e-6,'TolCon',1e-6,'MaxFunEvals',10000000,'MaxIter',10000);
-% 
-%     [q(:,1)] = fmincon(ik_function_objective,q1,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,nonlcon,optionssqp);
-
-    optionspattern = optimoptions(@patternsearch,'Display','iter','TolFun',1e-6,'TolCon',1e-6,...
-                                                                    'MaxFunEvals',10000000,'MaxIter',10000,'PlotFcn',@psplotbestf);
+    
+    rng default % For reproducibility
+    
+    q0 = l_inf1 + (-l_inf1+l_sup1).*rand(nb_solid,10);
+    q0(isnan(q0)) = rand(1,1);
     tic()
-    [q(:,1)] = patternsearch(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,nonlcon,optionspattern);
+%    for ii=1:10
+    parfor ii=1:10
+           [q1(:,ii)] = fmincon(ik_function_objective,q0(:,ii),[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,nonlcon,options1);
+           rmse(ii) = ik_function_objective(q1(:,ii));
+    end
     toc()
-%    rng default % For reproducibility
-%     optionsga = optimoptions(@ga,'Display','iter','TolFun',1e-6,'TolCon',1e-6);
-%     [q(:,1)] = ga(ik_function_objective,length(q0),[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,[],optionsga);
-
+    
+    q(:,1) = q1(:,rmse == min(rmse));
+    
    hclosedloophandle = {BiomechanicalModel.ClosedLoopData.ConstraintEq;  @(x) Aeq_ik*x - beq_ik} ;
 end
 
