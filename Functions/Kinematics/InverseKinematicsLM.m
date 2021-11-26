@@ -69,7 +69,7 @@ end
 
 %% Inverse kinematics frame per frame
 
-options1 = optimoptions(@fmincon,'Algorithm','sqp','Display','iter-detailed','TolFun',1e-6,'TolCon',1e-6,'MaxFunEvals',10000000,'MaxIter',10000);
+options1 = optimoptions(@fmincon,'Algorithm','interior-point','Display','iter-detailed','TolFun',1e-6,'TolCon',1e-6,'MaxFunEvals',10000000,'MaxIter',10000,'TolX',1e-9);
 q=zeros(nb_solid,nb_frame);
 ceq=zeros(6*nbClosedLoop,nb_frame);
 addpath('Symbolic_function')
@@ -144,13 +144,15 @@ else
 %     end
 %     toc()
     
+
     rng default % For reproducibility
     problem = createOptimProblem('fmincon','objective',...
     ik_function_objective,'x0',q0,'lb',l_inf1,'ub',l_sup1,'options',options1,'Aeq',Aeq_ik,'beq',beq_ik,'nonlcon',nonlcon);
     ms = MultiStart('UseParallel',true);
-    [q(:,1),rmse ] = run(ms,problem,10);
-    
-%     q(:,1) =  [0.0050
+    [q0int,rmse ] = run(ms,problem,10);
+
+      
+%     q0int =  [0.0050
 %     0.1987
 %     0.0452
 %     0.0794
@@ -211,6 +213,10 @@ else
 %     0.9717
 %     1.5912
 %    -2.0613];
+
+    options1 = optimoptions(@fmincon,'Algorithm','sqp','Display','iter-detailed','TolFun',1e-6,'TolCon',1e-6,'MaxFunEvals',10000000,'MaxIter',10000);
+
+    [q1(:,1),rmsesqp] = fmincon(ik_function_objective,q0int,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,nonlcon,options1);
 
    hclosedloophandle = {BiomechanicalModel.ClosedLoopData.ConstraintEq;  @(x) Aeq_ik*x - beq_ik} ;
 end
