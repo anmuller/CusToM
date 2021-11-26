@@ -133,19 +133,23 @@ else
     ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar, positions(:),weights);
     nonlcon=@(qvar)ClosedLoop(qvar);
     
+%     rng(0) % For reproducibility
+%     
+%     q0 = l_inf1 + (-l_inf1+l_sup1).*rand(nb_solid,10);
+%     q0(isnan(q0)) = rand(1,1);
+%     tic()
+% %    for ii=1:10
+%     parfor ii=1:10
+%            [q1(:,ii)] = fmincon(ik_function_objective,q0(:,ii),[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,nonlcon,options1);
+%            rmse(ii) = ik_function_objective(q1(:,ii));
+%     end
+%     toc()
+    
     rng default % For reproducibility
-    
-    q0 = l_inf1 + (-l_inf1+l_sup1).*rand(nb_solid,10);
-    q0(isnan(q0)) = rand(1,1);
-    tic()
-%    for ii=1:10
-    parfor ii=1:10
-           [q1(:,ii)] = fmincon(ik_function_objective,q0(:,ii),[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,nonlcon,options1);
-           rmse(ii) = ik_function_objective(q1(:,ii));
-    end
-    toc()
-    
-    q(:,1) = q1(:,rmse == min(rmse));
+    problem = createOptimProblem('fmincon','objective',...
+    ik_function_objective,'x0',q0,'lb',l_inf1,'ub',l_sup1,'options',options1,'Aeq',Aeq_ik,'beq',beq_ik,'nonlcon',nonlcon);
+    ms = MultiStart;
+    [q(:,1),rmse ] = run(ms,problem,10);
     
    hclosedloophandle = {BiomechanicalModel.ClosedLoopData.ConstraintEq;  @(x) Aeq_ik*x - beq_ik} ;
 end
