@@ -69,7 +69,7 @@ end
 
 %% Inverse kinematics frame per frame
 
-options1 = optimoptions(@fmincon,'Algorithm','interior-point','Display','iter-detailed','TolFun',1e-6,'TolCon',1e-6,'MaxFunEvals',10000000,'MaxIter',10000,'TolX',1e-9);
+options1 = optimoptions(@fmincon,'Algorithm','interior-point','Display','final','TolFun',1e-6,'TolCon',1e-6,'MaxFunEvals',10e9,'MaxIter',10e9,'TolX',1e-9);
 q=zeros(nb_solid,nb_frame);
 ceq=zeros(6*nbClosedLoop,nb_frame);
 addpath('Symbolic_function')
@@ -118,10 +118,9 @@ if ~isfield(BiomechanicalModel,'ClosedLoopData')
     [q(:,1)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,[],options1);
     hclosedloophandle = {@(x) Aeq_ik*x - beq_ik}   ;
 else
+   q0=zeros(nb_solid,1);
     if isfield(BiomechanicalModel,'GeometricalCalibration') &&  isfield(BiomechanicalModel.GeometricalCalibration,'q0')
         q0 = BiomechanicalModel.GeometricalCalibration.q0;
-    else
-        q0=BiomechanicalModel.ClosedLoopData.startingq0 ;
     end
     positions = zeros(3, length(real_markers));
     % Precomputation of markers positions at each frame
@@ -149,74 +148,19 @@ else
     problem = createOptimProblem('fmincon','objective',...
     ik_function_objective,'x0',q0,'lb',l_inf1,'ub',l_sup1,'options',options1,'Aeq',Aeq_ik,'beq',beq_ik,'nonlcon',nonlcon);
     ms = MultiStart('UseParallel',true);
-    [q0int,rmse ] = run(ms,problem,10);
+    [q0int,rmseint ] = run(ms,problem,10);
 
-      
-%     q0int =  [0.0050
-%     0.1987
-%     0.0452
-%     0.0794
-%    -0.1820
-%    -0.1336
-%     0.0503
-%    -0.4478
-%     0.2868
-%    -0.3238
-%     0.1370
-%    -0.1034
-%     0.2669
-%     0.6319
-%    -1.4315
-%     0.4138
-%     1.1691
-%     0.0961
-%     0.0633
-%     0.0246
-%     1.5494
-%    -0.3507
-%    -0.9517
-%    -1.1335
-%     0.6697
-%     0.3509
-%     0.6078
-%    -0.1599
-%     0.0568
-%    -0.0887
-%    -0.4908
-%    -0.5223
-%     0.7973
-%     0.6158
-%    -0.0299
-%     1.6500
-%     0.6158
-%    -0.0244
-%     2.1533
-%     1.4265
-%     1.9979
-%     0.0016
-%     0.3605
-%    -1.0461
-%     1.3163
-%    -0.4241
-%     0.6481
-%     0.0090
-%     3.0407
-%     0.6481
-%    -0.0023
-%    -3.1271
-%     0.0999
-%    -2.8487
-%     0.0819
-%    -0.4213
-%    -1.7675
-%     1.5728
-%     0.9717
-%     1.5912
-%    -2.0613];
-
-    options1 = optimoptions(@fmincon,'Algorithm','sqp','Display','iter-detailed','TolFun',1e-6,'TolCon',1e-6,'MaxFunEvals',10000000,'MaxIter',10000);
-
-    [q1(:,1),rmsesqp] = fmincon(ik_function_objective,q0int,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,nonlcon,options1);
+   %q0int = q0;
+    
+    ptmatrix = q0   + (-(-l_inf1+l_sup1)./2 +  (-l_inf1+l_sup1).*randn(nb_solid,10))*0.2;
+    ptmatrix(isnan(ptmatrix)) = 0;
+    ptmatrix(isinf(ptmatrix))= 0;
+    tpoints = CustomStartPointSet(ptmatrix');
+    options1 = optimoptions(@fmincon,'Algorithm','interior-point','Display','iter-detailed','TolFun',1e-6,'TolCon',1e-6,'MaxFunEvals',10000000,'MaxIter',10000,'TolX',1e-9);
+    problem = createOptimProblem('fmincon','objective',...
+    ik_function_objective,'x0',q0,'lb',l_inf1,'ub',l_sup1,'options',options1,'Aeq',Aeq_ik,'beq',beq_ik,'nonlcon',nonlcon);
+    ms = MultiStart('UseParallel',true);
+    [q(:,1),rmse] = run(ms,problem,tpoints);
 
    hclosedloophandle = {BiomechanicalModel.ClosedLoopData.ConstraintEq;  @(x) Aeq_ik*x - beq_ik} ;
 end
