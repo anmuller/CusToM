@@ -143,25 +143,26 @@ else
 %     end
 %     toc()
     
-
-    rng default % For reproducibility
-    problem = createOptimProblem('fmincon','objective',...
-    ik_function_objective,'x0',q0,'lb',l_inf1,'ub',l_sup1,'options',options1,'Aeq',Aeq_ik,'beq',beq_ik,'nonlcon',nonlcon);
-    ms = MultiStart('UseParallel',true);
-    [q0int,rmseint ] = run(ms,problem,10);
-
-   %q0int = q0;
-    
-    ptmatrix = q0   + (-(-l_inf1+l_sup1)./2 +  (-l_inf1+l_sup1).*randn(nb_solid,10))*0.2;
-    ptmatrix(isnan(ptmatrix)) = 0;
-    ptmatrix(isinf(ptmatrix))= 0;
-    tpoints = CustomStartPointSet(ptmatrix');
-    options1 = optimoptions(@fmincon,'Algorithm','interior-point','Display','iter-detailed','TolFun',1e-6,'TolCon',1e-6,'MaxFunEvals',10000000,'MaxIter',10000,'TolX',1e-9);
-    problem = createOptimProblem('fmincon','objective',...
-    ik_function_objective,'x0',q0,'lb',l_inf1,'ub',l_sup1,'options',options1,'Aeq',Aeq_ik,'beq',beq_ik,'nonlcon',nonlcon);
-    ms = MultiStart('UseParallel',true);
-    [q(:,1),rmse] = run(ms,problem,tpoints);
-
+% 
+%     rng default % For reproducibility
+%     problem = createOptimProblem('fmincon','objective',...
+%     ik_function_objective,'x0',q0,'lb',l_inf1,'ub',l_sup1,'options',options1,'Aeq',Aeq_ik,'beq',beq_ik,'nonlcon',nonlcon);
+%     ms = MultiStart('UseParallel',true);
+%     [q0int,rmseint ] = run(ms,problem,10);
+% 
+%    %q0int = q0;
+%     
+%     ptmatrix = q0   + (-(-l_inf1+l_sup1)./2 +  (-l_inf1+l_sup1).*randn(nb_solid,10))*0.2;
+%     ptmatrix(isnan(ptmatrix)) = 0;
+%     ptmatrix(isinf(ptmatrix))= 0;
+%     tpoints = CustomStartPointSet(ptmatrix');
+%     options1 = optimoptions(@fmincon,'Algorithm','interior-point','Display','iter-detailed','TolFun',1e-6,'TolCon',1e-6,'MaxFunEvals',10000000,'MaxIter',10000,'TolX',1e-9);
+%     problem = createOptimProblem('fmincon','objective',...
+%     ik_function_objective,'x0',q0,'lb',l_inf1,'ub',l_sup1,'options',options1,'Aeq',Aeq_ik,'beq',beq_ik,'nonlcon',nonlcon);
+%     ms = MultiStart('UseParallel',true);
+%     [q(:,1),rmse] = run(ms,problem,tpoints);
+%     
+   [q(:,1)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,nonlcon,options1);
    hclosedloophandle = {BiomechanicalModel.ClosedLoopData.ConstraintEq;  @(x) Aeq_ik*x - beq_ik} ;
 end
 
