@@ -302,14 +302,14 @@ OsteoArticularModel(incr_solid).name=[Signe name];
 OsteoArticularModel(incr_solid).sister=0;
 OsteoArticularModel(incr_solid).child=s_Humerus;
 OsteoArticularModel(incr_solid).mother=s_Glenohumeral_J1;
-OsteoArticularModel(incr_solid).a=[1 0 0]';
+OsteoArticularModel(incr_solid).a=[-1 0 0]';
 OsteoArticularModel(incr_solid).joint=1;
 if Signe == 'R'
-    OsteoArticularModel(incr_solid).limit_inf=-pi;                     % inferior joint biomechanical stop
-    OsteoArticularModel(incr_solid).limit_sup=pi/2;                    % superior joint biomechanical stop
+    OsteoArticularModel(incr_solid).limit_inf=-pi/4;                     % inferior joint biomechanical stop
+    OsteoArticularModel(incr_solid).limit_sup=4*pi/5;                    % superior joint biomechanical stop
 else
-    OsteoArticularModel(incr_solid).limit_inf=-pi/2;                   % inferior joint biomechanical stop
-    OsteoArticularModel(incr_solid).limit_sup=pi;                      % superior joint biomechanical stop
+    OsteoArticularModel(incr_solid).limit_inf=-4*pi/5;                   % inferior joint biomechanical stop
+    OsteoArticularModel(incr_solid).limit_sup=pi/4;                      % superior joint biomechanical stop
 end
 OsteoArticularModel(incr_solid).m=0;
 OsteoArticularModel(incr_solid).b=[0 0 0]';
@@ -328,10 +328,10 @@ OsteoArticularModel(incr_solid).name=[Signe name];
 OsteoArticularModel(incr_solid).sister=0;
 OsteoArticularModel(incr_solid).child=0;
 OsteoArticularModel(incr_solid).mother=s_Glenohumeral_J2;
-OsteoArticularModel(incr_solid).a=[0 1 0]';
+OsteoArticularModel(incr_solid).a=[-0.084599999999999995 0.99470000000000003 -0.058400000000000001]';
 OsteoArticularModel(incr_solid).joint=1;
-OsteoArticularModel(incr_solid).limit_inf=-2*pi/3;
-OsteoArticularModel(incr_solid).limit_sup=2*pi/3;
+OsteoArticularModel(incr_solid).limit_inf=-pi/2;
+OsteoArticularModel(incr_solid).limit_sup=-pi/2;
 OsteoArticularModel(incr_solid).m=Mass.UpperArm_Mass;
 OsteoArticularModel(incr_solid).b=[0 0 0]';
 OsteoArticularModel(incr_solid).I=[I_Humerus(1) I_Humerus(4) I_Humerus(5); I_Humerus(4) I_Humerus(2) I_Humerus(6); I_Humerus(5) I_Humerus(6) I_Humerus(3)];

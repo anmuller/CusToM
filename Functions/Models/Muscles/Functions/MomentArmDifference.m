@@ -56,10 +56,19 @@ for j=1:size(Regression,2)
         map_q(:,k) = B2;
     end
     
-    c = ['equation',Regression(j).equation] ;
-    fh = str2func(c);
-    
-    ideal_curve_temp=fh(Regression(j).coeffs,map_q);
+    if isfield(Regression,'equation')
+        c = ['equation',Regression(j).equation] ;
+        fh = str2func(c);
+
+        ideal_curve_temp=fh(Regression(j).coeffs,map_q);
+    elseif isfield(Regression,'EquationHandle')
+            
+        ideal_curve_temp = Regression(j).EquationHandle(map_q);
+        
+        end
+        
+            
+            
     
     norm_id=norm(ideal_curve_temp);
     
