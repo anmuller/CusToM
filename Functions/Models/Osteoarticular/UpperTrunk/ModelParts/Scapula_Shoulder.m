@@ -421,6 +421,7 @@ Human_model(incr_solid).Visual=1;
 Human_model(incr_solid).visual_file=['Holzbaur/Scapula_' lower(Side) '.mat'];
 Human_model(incr_solid).comment='Scapula internal rotation';
 Human_model(incr_solid).FunctionalAngle=[Side name];
+Human_model(incr_solid).density=1.04; %kg.L-1
 
 
 % AcromioClavicular Joint

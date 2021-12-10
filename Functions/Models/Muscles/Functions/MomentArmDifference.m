@@ -46,7 +46,7 @@ for j=1:size(Regression,2)
         joint_name=Regression(j).joints{k};
         [~,joint_num]=intersect(FunctionalAnglesofInterest,joint_name);
         joint_num=path(joint_num);
-        rangeq(:,k)=linspace(BiomechanicalModel.OsteoArticularModel(joint_num).limit_inf,BiomechanicalModel.OsteoArticularModel(joint_num).limit_sup,nb_points)';
+        rangeq(:,k)=linspace(BiomechanicalModel.OsteoArticularModel(joint_num).limit_inf+0.1,BiomechanicalModel.OsteoArticularModel(joint_num).limit_sup-0.1,nb_points)';
 
         B1=repmat(rangeq(:,k),1,nb_points^(k-1));
         B1=B1';

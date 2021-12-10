@@ -180,6 +180,7 @@ Human_model(incr_solid).anat_position=Clavicle_position_set;
 Human_model(incr_solid).visual_file = ['Holzbaur/clavicle_' lower(Side) '.mat'];
 Human_model(incr_solid).comment='Clavicle Axial Rotation Forward(-)/Backward(+)';
 Human_model(incr_solid).FunctionalAngle='Clavicle Axial Rotation Forward(-)/Backward(+)';
+Human_model(incr_solid).density=1.04; %kg.L-1
 
 % AcromioClavicular_J1
 num_solid=num_solid+1;                                      % solid number
