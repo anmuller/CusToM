@@ -8,7 +8,7 @@ ik_function_objective=@(qvar)CostFunctionSymbolicCalib(qvar,k_init,Base_position
 
 nonlcon=@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,k_init); % testé!
 
-options1 = optimoptions(@fmincon,'Algorithm','interior-point','Display','off','TolFun',1e-2,'MaxFunEvals',2e9,'MaxIter',2e9);
+options1 = optimoptions(@fmincon,'Algorithm','interior-point','Display','off','TolFun',1e-2,'MaxFunEvals',2e5,'MaxIter',2e5);
 options2 = optimoptions(@fmincon,'Algorithm','interior-point','Display','off','TolFun',1e-6,'MaxFunEvals',2e9,'MaxIter',2e9);
 
 [q_value{1}(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf,l_sup,nonlcon,options1);

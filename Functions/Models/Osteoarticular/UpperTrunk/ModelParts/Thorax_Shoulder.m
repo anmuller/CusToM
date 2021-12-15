@@ -251,5 +251,6 @@ Human_model(incr_solid).anat_position=Thorax_position_set;
 Human_model(incr_solid).L={'Pelvis_LowerTrunkNode';'Thorax_T1C5'};
 Human_model(incr_solid).comment='Trunk Lateral Bending Right(+)/Left(-)';
 Human_model(incr_solid).FunctionalAngle='Trunk Lateral Bending Right(+)/Left(-)';
+Human_model(incr_solid).density=0.92;
 
 end

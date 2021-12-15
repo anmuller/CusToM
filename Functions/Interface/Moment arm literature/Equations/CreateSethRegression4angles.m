@@ -1,4 +1,4 @@
-function  [MomentArm,RegressionStructure] = CreateSethRegression4angles(MuscleStruct,axis,joints_names,q)
+function  [MomentsArm,RegressionStructure] = CreateSethRegression4angles(MuscleStruct,axis,joints_names,q)
 
 Joints = {'ScapuloThoracic_J4', 'ScapuloThoracic_J5', 'ScapuloThoracic_J6','Scapula' };
 
@@ -20,9 +20,10 @@ for k = 1:length(Joints)
                 
                 for ll=1:length(W)
                     
-                    idx = find(sum([MuscleStruct.sampling_grid - [X(ii,jj,kk,ll) Y(ii,jj,kk,ll) Z(ii,jj,kk,ll)  W(ii,jj,kk,ll)]]')==0);
+                    idx =  find(sum([MuscleStruct.sampling_grid - [X(ii,jj,kk,ll) Y(ii,jj,kk,ll) Z(ii,jj,kk,ll)  W(ii,jj,kk,ll)]] == zeros(1,4),2)==4);
+
                     
-                    MomentArmMat(ii,jj,kk) = MuscleStruct.moment_arm(idx,k);
+                    MomentArmMat(ii,jj,kk,ll) = MuscleStruct.moment_arm(idx,k);
                     
                 end
                 
@@ -34,8 +35,9 @@ for k = 1:length(Joints)
     RegressionStructure(k).EquationHandle  =@(q) interpn(X,...
         Y,...
         Z,...
+        W,...
         MomentArmMat,...
-        q(:,1),q(:,2),q(:,3),q(:,4));
+        q(:,1),q(:,2),q(:,3),q(:,4),'spline');
     
 end
 
@@ -46,6 +48,9 @@ end
         [~,ind4] = intersect(joints_names,{'Scapula'});
         
         [~,indaxis] = intersect(axis,Joints);
+        
+        MomentsArm=[];
+
         
         if ~isempty(ind1) && ~isempty(ind2) && ~isempty(ind3) &&~isempty(ind4) && ~isempty(indaxis)
                         

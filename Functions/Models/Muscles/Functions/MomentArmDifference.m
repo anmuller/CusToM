@@ -31,7 +31,7 @@ ideal_curve=[];
 mac_norme=[];
  decalage=1;
  diff=0;
-
+diff2 =  0;
 [sp1,sp2]=find_solid_path(BiomechanicalModel.OsteoArticularModel,involved_solids(1),involved_solids(end));
 path = unique([sp1,sp2]);
 FunctionalAnglesofInterest = {BiomechanicalModel.OsteoArticularModel(path).FunctionalAngle};
@@ -46,7 +46,7 @@ for j=1:size(Regression,2)
         joint_name=Regression(j).joints{k};
         [~,joint_num]=intersect(FunctionalAnglesofInterest,joint_name);
         joint_num=path(joint_num);
-        rangeq(:,k)=linspace(BiomechanicalModel.OsteoArticularModel(joint_num).limit_inf+0.1,BiomechanicalModel.OsteoArticularModel(joint_num).limit_sup-0.1,nb_points)';
+        rangeq(:,k)=linspace(BiomechanicalModel.OsteoArticularModel(joint_num).limit_inf,BiomechanicalModel.OsteoArticularModel(joint_num).limit_sup,nb_points)';
 
         B1=repmat(rangeq(:,k),1,nb_points^(k-1));
         B1=B1';
@@ -59,13 +59,13 @@ for j=1:size(Regression,2)
     if isfield(Regression,'equation')
         c = ['equation',Regression(j).equation] ;
         fh = str2func(c);
-
+        
         ideal_curve_temp=fh(Regression(j).coeffs,map_q);
     elseif isfield(Regression,'EquationHandle')
-            
-        ideal_curve_temp = Regression(j).EquationHandle(map_q);
         
-        end
+        ideal_curve_temp = Regression(j).EquationHandle(map_q)';
+        
+    end
         
             
             

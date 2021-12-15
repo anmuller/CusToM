@@ -248,7 +248,7 @@ Human_model(incr_solid).kinematic_dependancy.Joint=[incr_solid+4]; % Thoracicell
 f_tx = matlabFunction( x,'vars',{lambda});
 Human_model(incr_solid).kinematic_dependancy.q=f_tx;
 Human_model(incr_solid).comment='scapulothoracic x regression';
-Human_model(incr_solid).FunctionalAngle=[Side name];
+Human_model(incr_solid).FunctionalAngle=[name];
 
 % ScapuloThoracic_J2
 num_solid=num_solid+1;                                      % solid number
@@ -274,7 +274,7 @@ Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
 Human_model(incr_solid).linear_constraint=[];
 Human_model(incr_solid).Visual=0;
 Human_model(incr_solid).comment='scapulothoracic y regression';
-Human_model(incr_solid).FunctionalAngle=[Side name];
+Human_model(incr_solid).FunctionalAngle=[name];
 % Dependancy
 Human_model(incr_solid).kinematic_dependancy.active=1;
 Human_model(incr_solid).kinematic_dependancy.Joint=[incr_solid+2; incr_solid+3]; % Thoracicellips
@@ -305,7 +305,7 @@ Human_model(incr_solid).theta=[];
 Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
 Human_model(incr_solid).linear_constraint=[];
 Human_model(incr_solid).Visual=0;
-Human_model(incr_solid).FunctionalAngle=[Side name];
+Human_model(incr_solid).FunctionalAngle=[name];
 Human_model(incr_solid).comment='scapulothoracic z regression';
 % Dependancy
 Human_model(incr_solid).kinematic_dependancy.active=1;
@@ -337,7 +337,7 @@ Human_model(incr_solid).theta=[];
 Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
 Human_model(incr_solid).linear_constraint=[];
 Human_model(incr_solid).Visual=0;
-Human_model(incr_solid).FunctionalAngle=[Side name];
+Human_model(incr_solid).FunctionalAngle=[name];
 Human_model(incr_solid).comment='Scapula abduction - adduction';
 
 
@@ -345,7 +345,7 @@ Human_model(incr_solid).comment='Scapula abduction - adduction';
 num_solid=num_solid+1;                                      % solid number
 name=list_solid{num_solid};                                 % solid name
 eval(['incr_solid=s_' name ';'])                            % solid number in model tree
-Human_model(incr_solid).name=[Side name];          % solid name with side
+Human_model(incr_solid).name=[name];          % solid name with side
 Human_model(incr_solid).sister=0;                   % Solid's sister
 Human_model(incr_solid).child=s_ScapuloThoracic_J6;         % Solid's child
 Human_model(incr_solid).mother=s_ScapuloThoracic_J4;            % Solid's mother
@@ -364,7 +364,7 @@ Human_model(incr_solid).theta=[];
 Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
 Human_model(incr_solid).linear_constraint=[];
 Human_model(incr_solid).Visual=0;
-Human_model(incr_solid).FunctionalAngle=[Side name];
+Human_model(incr_solid).FunctionalAngle=[name];
 Human_model(incr_solid).comment='Scapula elevation - depression';
 
 
@@ -392,7 +392,7 @@ Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
 Human_model(incr_solid).linear_constraint=[];
 Human_model(incr_solid).Visual=0;
 Human_model(incr_solid).comment='Scapula upward rotation';
-Human_model(incr_solid).FunctionalAngle=[Side name];
+Human_model(incr_solid).FunctionalAngle=[name];
 
 % Scapula
 num_solid=num_solid+1;                                      % solid number
@@ -420,7 +420,7 @@ Human_model(incr_solid).anat_position=Scapula_position_set;
 Human_model(incr_solid).Visual=1;
 Human_model(incr_solid).visual_file=['Holzbaur/Scapula_' lower(Side) '.mat'];
 Human_model(incr_solid).comment='Scapula internal rotation';
-Human_model(incr_solid).FunctionalAngle=[Side name];
+Human_model(incr_solid).FunctionalAngle=[name];
 Human_model(incr_solid).density=1.04; %kg.L-1
 
 

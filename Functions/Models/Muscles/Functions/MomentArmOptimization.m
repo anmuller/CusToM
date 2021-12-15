@@ -25,6 +25,10 @@ function [RMSE,BiomechanicalModel]=MomentArmOptimization(num_muscle,Biomechanica
 %________________________________________________________
 format long
 
+if nb_points==20
+    nb_points=5;
+end
+
 HumanModel=BiomechanicalModel.OsteoArticularModel;
 Muscles=BiomechanicalModel.Muscles;
 
@@ -134,7 +138,11 @@ problem = createOptimProblem('fmincon','x0',x0,...
     'objective',fun,'nonlcon',nonlcon,'options',optionsgs);
 x = run(gs,problem);
 
+% 
+% optionsfmincon = optimoptions(@fmincon,'MaxIter',30,'MaxFunEvals',1e10,'PlotFcn','optimplotfval','Display','iter-detailed');
+% x = fmincon(fun,x0,[],[],[], [],[],[], nonlcon, optionsfmincon);
 
+%x= x0;
 %% Affecting via points found to BiomechanicalModel
 
 num_solid=involved_solids;

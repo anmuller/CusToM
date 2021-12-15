@@ -57,11 +57,17 @@ for j=1:size(MARegression,2)
         q(joint_num,:) = B2;
     end
     
-    c = ['equation',MARegression(j).equation] ;
-    fh = str2func(c);
-    ideal_curve_temp=[ideal_curve_temp fh(MARegression(j).coeffs,map_q)];
+    if isfield(MARegression,'equation')
+        c = ['equation',MARegression(j).equation] ;
+        fh = str2func(c);
+        
+        ideal_curve_temp=fh(MARegression(j).coeffs,map_q);
+    elseif isfield(MARegression,'EquationHandle')
+        
+        ideal_curve_temp = MARegression(j).EquationHandle(map_q)';
+        
+    end
     
-
     joint_name=MARegression(j).axe;
     [~,joint_num]=intersect(FunctionalAnglesofInterest,joint_name);
     joint_num=path(joint_num);
@@ -71,16 +77,16 @@ for j=1:size(MARegression,2)
     end
     
     
-    ideal_curve=[ideal_curve ideal_curve_temp];
+    ideal_curve=[ideal_curve  ideal_curve_temp];
     
-    mac=[mac mactemp];
+    mac=[mac  mactemp];
     
     
 end
 
 
-RMSE.rms=  sqrt(1/length(mac) * sum((ideal_curve - mac).^2));
-RMSE.rmsr=  sqrt(1/length(mac) * sum((ideal_curve - mac).^2))/ sqrt(1/length(mac) * sum((ideal_curve).^2))* 100;
+RMSE.rms=  rms(ideal_curve - mac);
+RMSE.rmsr=  rms(ideal_curve - mac)/rms(ideal_curve)* 100;
 
 
 

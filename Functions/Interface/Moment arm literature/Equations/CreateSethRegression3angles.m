@@ -19,7 +19,7 @@ for k = 1:3
             
             for kk=1:length(Z)
                 
-                idx = find(sum([MuscleStruct.sampling_grid - [X(ii,jj,kk) Y(ii,jj,kk) Z(ii,jj,kk)]]')==0);
+                    idx =  find(sum([MuscleStruct.sampling_grid - [X(ii,jj,kk) Y(ii,jj,kk) Z(ii,jj,kk)]] == zeros(1,3),2)==3);
                 
                 MomentArmMat(ii,jj,kk) = MuscleStruct.moment_arm(idx,k);
                 
@@ -32,7 +32,7 @@ for k = 1:3
         Y,...
         Z,...
         MomentArmMat,...
-        q(:,1),q(:,2),q(:,3));
+        q(:,1),q(:,2),q(:,3),'spline');
     
     
     

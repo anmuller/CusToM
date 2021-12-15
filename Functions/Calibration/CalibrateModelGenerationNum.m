@@ -40,6 +40,10 @@ disp('Anthropometric Model Generation ...')
 [BiomechanicalModel.OsteoArticularModel, BiomechanicalModel.Markers, BiomechanicalModel.Muscles] = ModelGeneration(ModelParameters);
 disp('... Anthropometric Model Generation done')
 
+
+
+save('BiomechanicalModel','BiomechanicalModel');
+
 %% Geometrical calibration
 if AnalysisParameters.CalibIK.Active
     disp('Geometrical Calibration ...')
