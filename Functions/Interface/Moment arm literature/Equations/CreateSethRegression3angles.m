@@ -3,7 +3,7 @@ function [MomentsArm,RegressionStructure] = CreateSethRegression3angles(MuscleSt
 Joints = {'GH plane of elevation', 'Negative GH elevation angle', 'GH axial rotation'};
 
 
-for k = 1:3
+for k = 1:length(Joints)
     
     RegressionStructure(k).joints=   Joints;
     RegressionStructure(k).axe=Joints{k};
@@ -13,27 +13,20 @@ for k = 1:3
         unique(MuscleStruct.sampling_grid(:,2)),...
         unique(MuscleStruct.sampling_grid(:,3)));
     
-    for ii=1:length(X)
-        
-        for jj=1:length(Y)
-            
-            for kk=1:length(Z)
+                [~, idMuscles] = sortrows(MuscleStruct.sampling_grid );
+                [~, idX] = sortrows([X(:) Y(:) Z(:)]);
                 
-                    idx =  find(sum([MuscleStruct.sampling_grid - [X(ii,jj,kk) Y(ii,jj,kk) Z(ii,jj,kk)]] == zeros(1,3),2)==3);
+                MomentArmMat(idX) = MuscleStruct.moment_arm(idMuscles,k);
                 
-                MomentArmMat(ii,jj,kk) = MuscleStruct.moment_arm(idx,k);
+                MomentArmMat = reshape(MomentArmMat,10,10,10);
                 
-            end
-        end
-        
-    end
-    
-    RegressionStructure(k).EquationHandle  = @(q) interpn(X,...
-        Y,...
-        Z,...
-        MomentArmMat,...
-        q(:,1),q(:,2),q(:,3),'spline');
-    
+                
+            RegressionStructure(k).EquationHandle  = @(q) interpn(X,...
+                Y,...
+                Z,...
+                MomentArmMat,...
+                q(:,1),q(:,2),q(:,3),'spline');
+                
     
     
 end

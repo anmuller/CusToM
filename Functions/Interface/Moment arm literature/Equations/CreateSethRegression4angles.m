@@ -12,35 +12,22 @@ for k = 1:length(Joints)
         unique(MuscleStruct.sampling_grid(:,3)),...
         unique(MuscleStruct.sampling_grid(:,4)));
     
-    for ii=1:length(X)
-        
-        for jj=1:length(Y)
-            
-            for kk=1:length(Z)
-                
-                for ll=1:length(W)
-                    
-                    idx =  find(sum([MuscleStruct.sampling_grid - [X(ii,jj,kk,ll) Y(ii,jj,kk,ll) Z(ii,jj,kk,ll)  W(ii,jj,kk,ll)]] == zeros(1,4),2)==4);
+        [~, idMuscles] = sortrows(MuscleStruct.sampling_grid );
+        [~, idX] = sortrows([X(:) Y(:) Z(:) W(:)]);
 
-                    
-                    MomentArmMat(ii,jj,kk,ll) = MuscleStruct.moment_arm(idx,k);
-                    
-                end
-                
-            end
-        end
-        
-    end
-    
-    RegressionStructure(k).EquationHandle  =@(q) interpn(X,...
+        MomentArmMat(idX) = MuscleStruct.moment_arm(idMuscles,k);
+
+        MomentArmMat = reshape(MomentArmMat,10,10,10,10);
+
+
+    RegressionStructure(k).EquationHandle  = @(q) interpn(X,...
         Y,...
         Z,...
         W,...
         MomentArmMat,...
         q(:,1),q(:,2),q(:,3),q(:,4),'spline');
-    
+                
 end
-
 
      [~,ind1] = intersect(joints_names,{'ScapuloThoracic_J4'});
         [~,ind2] = intersect(joints_names,{'ScapuloThoracic_J5'});

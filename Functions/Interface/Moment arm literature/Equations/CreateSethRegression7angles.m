@@ -17,53 +17,42 @@ function  [MomentsArm,RegressionStructure] = CreateSethRegression7angles(MuscleS
                 unique(MuscleStruct.sampling_grid(10001:end,6)),...
                 unique(MuscleStruct.sampling_grid(10001:end,7)));
             
-            
-            for ii=1:length(X)
+            MomentArmMat =[];
+             if find(k==[1 2 3 4])
+                [~, idMuscles] = sortrows(MuscleStruct.sampling_grid(1:10000,1:4) );
+                [~, idX] = sortrows([X(:) Y(:) Z(:) W(:)]);
                 
-                for jj=1:length(Y)
-                    
-                    for kk=1:length(Z)
-                        
-                        for ll=1:length(W)
-                            
-                            for mm=1:length(A)
-                                
-                                for nn=1:length(B)
-                                    for oo=1:length(C)
-                                        
-                                        if find(k==[1 2 3 4])
-                                        idx = find(sum(  [MuscleStruct.sampling_grid(:,1:4) - [X(ii,jj,kk,ll), Y(ii,jj,kk,ll) ,...
-                                            Z(ii,jj,kk,ll) , W(ii,jj,kk,ll)]]== zeros(1,4),2)==4);
-                                        else
-                                            idx = find(sum(  [MuscleStruct.sampling_grid(:,5:7) - [A(mm,nn,oo) ,B(mm,nn,oo), ...
-                                            C(mm,nn,oo)]   ]== zeros(1,3),2)==3);
-                                        end
-                                            
-                                        
-                                        MomentArmMat(ii,jj,kk,ll,mm,nn,oo) = MuscleStruct.moment_arm(idx,k);
-                                        
-                                    end
-                                end
-                            end
-                        end
-                        
-                    end
-                end
+                MomentArmMat(idX) = MuscleStruct.moment_arm(idMuscles,k);
                 
-            end
-            
+                MomentArmMat = reshape(MomentArmMat,10,10,10,10);
+                
+                
             RegressionStructure(k).EquationHandle  = @(q) interpn(X,...
                 Y,...
                 Z,...
                 W,...
-                A,...
+                MomentArmMat,...
+                q(:,1),q(:,2),q(:,3),q(:,4),'spline');
+                
+             else
+                 
+                 
+                [~, idMuscles] = sortrows(MuscleStruct.sampling_grid(10001:end,5:7) );
+                [~, idX] = sortrows([A(:) B(:) C(:)]);
+                
+                MomentArmMat(idX) = MuscleStruct.moment_arm(idMuscles,k);
+                
+                MomentArmMat = reshape(MomentArmMat,10,10,10);
+                
+                
+            RegressionStructure(k).EquationHandle  = @(q) interpn(A,...
                 B,...
                 C,...
                 MomentArmMat,...
-                q(:,1),q(:,2),q(:,3),q(:,4),q(:,5),q(:,6),q(:,7),'spline');
+                q(:,1),q(:,2),q(:,3),'spline');
             
-        end
-        
+             end
+            
         [~,ind1] = intersect(joints_names,{'ScapuloThoracic_J4'});
         [~,ind2] = intersect(joints_names,{'ScapuloThoracic_J5'});
         [~,ind3] = intersect(joints_names,{'ScapuloThoracic_J6'});
@@ -79,8 +68,20 @@ function  [MomentsArm,RegressionStructure] = CreateSethRegression7angles(MuscleS
 
         if ~isempty(ind1) && ~isempty(ind2) && ~isempty(ind3) &&~isempty(ind4) && ~isempty(indaxis)
             
-            newq = [q(ind1,:);q(ind2,:);q(ind3,:);q(ind4,:);q(ind5,:);q(ind6,:);q(ind7,:)];
-            MomentsArm = RegressionStructure(indaxis).EquationHandle(newq');
+              if find(indaxis==[1 2 3 4])
+            
+                        newq = [q(ind1,:);q(ind2,:);q(ind3,:);q(ind4,:)];
+                        MomentsArm = RegressionStructure(indaxis).EquationHandle(newq');
+              end
+              
+        elseif ~isempty(ind5) && ~isempty(ind6) && ~isempty(ind7) &&  ~isempty(indaxis)
+                  
+              if find(indaxis==[5 6 7])
+            
+                        newq = [q(ind5,:);q(ind6,:);q(ind7,:)];
+                        MomentsArm = RegressionStructure(indaxis).EquationHandle(newq');
+              end
+                  
         end
         
         

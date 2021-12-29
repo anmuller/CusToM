@@ -53,7 +53,7 @@ if ~isempty(intersect(mus_name,{'Coracobrachialis','DeltoideusScapula_M','Deltoi
         
     elseif strcmp(mus_name,'DeltoideusScapula_M')
         
-        [MomentsArm,RegressionStructure] = CreateSethRegression3angles(DeltoideusScapula_Maxis,joints_names,q);
+        [MomentsArm,RegressionStructure] = CreateSethRegression3angles(DeltoideusScapula_M,axis,joints_names,q);
         
     elseif strcmp(mus_name,'DeltoideusScapula_P')
         
@@ -174,7 +174,7 @@ if ~isempty(intersect(mus_name,{'Coracobrachialis','DeltoideusScapula_M','Deltoi
 
     elseif strcmp(mus_name,'PectoralisMinor')
         
-                [MomentsArm,RegressionStructure] = CreateSethRegression7angles(PectoralisMinor,axis,joints_names,q);
+                [MomentsArm,RegressionStructure] = CreateSethRegression4angles(PectoralisMinor,axis,joints_names,q);
 
         
         %% Clavicle muscle
