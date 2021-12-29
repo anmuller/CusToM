@@ -36,7 +36,7 @@ osnames={HumanModel.name};
 musnames={Muscles.name};
 name_mus = musnames{num_muscle};
 name_mus=name_mus(2:end);
- [~,RegressionStructure]=InputMomentArm(musnames(num_muscle),[],[],[]);
+[~,RegressionStructure]=InputMomentArm(musnames(num_muscle),[],[],[]);
 
 %% Modification of BiomechanicalModel  : adding new VP points : one at each side of joints
 
@@ -108,7 +108,56 @@ end
 
 nonlcon=@(x) MusclesInCylinder(x,BiomechanicalModel.OsteoArticularModel,involved_solids,num_markersprov,insertion,origin,par_case,radius);
 
-fun = @(x) MomentArmDifference(x,BiomechanicalModel,num_muscle,RegressionStructure,nb_points,involved_solid,num_markers);
+
+%% Discretization
+
+Nb_q=numel(BiomechanicalModel.OsteoArticularModel)-6*(~isempty(intersect({BiomechanicalModel.OsteoArticularModel.name},'root0')));
+[sp1,sp2]=find_solid_path(BiomechanicalModel.OsteoArticularModel,involved_solids(1),involved_solids(end));
+path = unique([sp1,sp2]);
+FunctionalAnglesofInterest = {BiomechanicalModel.OsteoArticularModel(path).FunctionalAngle};
+ideal_curve =[];
+for j=1:size(RegressionStructure,2)
+    rangeq=zeros(nb_points,size(RegressionStructure(j).joints,2));
+    angles(j).q=zeros(Nb_q,nb_points^size(RegressionStructure(j).joints,2));
+    map_q=zeros(nb_points^size(RegressionStructure(j).joints,2),size(RegressionStructure(j).joints,2));
+    
+    for k=1:size(RegressionStructure(j).joints,2)
+        joint_name=RegressionStructure(j).joints{k};
+        [~,joint_num]=intersect(FunctionalAnglesofInterest, joint_name);
+        joint_num=path(joint_num);
+        rangeq(:,k)=linspace(BiomechanicalModel.OsteoArticularModel(joint_num).limit_inf,BiomechanicalModel.OsteoArticularModel(joint_num).limit_sup,nb_points)';
+        
+        B1=repmat(rangeq(:,k),1,nb_points^(k-1));
+        B1=B1';
+        B1=B1(:)';
+        B2=repmat(B1,1,nb_points^(size(RegressionStructure(j).joints,2)-k));
+        angles(j).q(joint_num,:) = B2;
+        map_q(:,k) = B2;
+        
+    end
+    
+    
+    ideal_curve_temp=[];
+    
+    
+    if isfield(RegressionStructure,'equation')
+        c = ['equation',RegressionStructure(j).equation] ;
+        fh = str2func(c);
+        
+        ideal_curve_temp=fh(RegressionStructure(j).coeffs,map_q);
+    elseif isfield(RegressionStructure,'EquationHandle')
+        
+        ideal_curve_temp = RegressionStructure(j).EquationHandle(map_q)';
+        
+    end
+    
+    
+    ideal_curve=[ ideal_curve  ideal_curve_temp];
+    
+    
+end
+
+fun = @(x) MomentArmDifference(x,BiomechanicalModel,num_muscle,RegressionStructure,nb_points,involved_solid,num_markers,angles,ideal_curve);
 
 x0=zeros(3* numel(involved_solids),1);
 
@@ -138,7 +187,7 @@ problem = createOptimProblem('fmincon','x0',x0,...
     'objective',fun,'nonlcon',nonlcon,'options',optionsgs);
 x = run(gs,problem);
 
-% 
+%
 % optionsfmincon = optimoptions(@fmincon,'MaxIter',30,'MaxFunEvals',1e10,'PlotFcn','optimplotfval','Display','iter-detailed');
 % x = fmincon(fun,x0,[],[],[], [],[],[], nonlcon, optionsfmincon);
 

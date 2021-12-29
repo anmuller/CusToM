@@ -1,4 +1,4 @@
-function [mac,BiomechanicalModel]=momentarmcurve(x,BiomechanicalModel,num_muscle,Regression,nb_points,num_solid,num_markers)
+function [mac,BiomechanicalModel]=momentarmcurve(x,BiomechanicalModel,num_muscle,Regression,nb_points,num_solid,num_markers,angles)
 % Computes the moment arm from BiomechanicalModel
 %
 %   INPUT
@@ -35,7 +35,6 @@ for k=1:numel(num_solid)
     end
 end
 
-Nb_q=numel(BiomechanicalModel.OsteoArticularModel)-6*(~isempty(intersect({BiomechanicalModel.OsteoArticularModel.name},'root0')));
 [sp1,sp2]=find_solid_path(BiomechanicalModel.OsteoArticularModel,num_solid(1),num_solid(end));
 path = unique([sp1,sp2]);
 FunctionalAnglesofInterest = {BiomechanicalModel.OsteoArticularModel(path).FunctionalAngle};
@@ -43,30 +42,17 @@ FunctionalAnglesofInterest = {BiomechanicalModel.OsteoArticularModel(path).Funct
 
 mac=[];
 for j=1:size(Regression,2)
-    rangeq=zeros(nb_points,size(Regression(j).joints,2));
-    q=zeros(Nb_q,nb_points^size(Regression(j).joints,2));
-    for k=1:size(Regression(j).joints,2)
-        joint_name=Regression(j).joints{k};
-        [~,joint_num]=intersect(FunctionalAnglesofInterest, joint_name);
-        joint_num=path(joint_num);
-        rangeq(:,k)=linspace(BiomechanicalModel.OsteoArticularModel(joint_num).limit_inf,BiomechanicalModel.OsteoArticularModel(joint_num).limit_sup,nb_points)';
-
-        B1=repmat(rangeq(:,k),1,nb_points^(k-1));
-        B1=B1';
-        B1=B1(:)';
-        B2=repmat(B1,1,nb_points^(size(Regression(j).joints,2)-k));
-        q(joint_num,:) = B2;
-    end
-
+    q=angles(j).q;
     
     
    joint_name=Regression(j).axe;
    [~,joint_num]=intersect(FunctionalAnglesofInterest,joint_name);
    joint_num=path(joint_num);
-
+   
    parfor i=1:nb_points^size(Regression(j).joints,2)
         mac  = [mac  MomentArmsComputationNumMuscleJoint(BiomechanicalModel,q(:,i),0.0001,num_muscle,joint_num)];
-    end
+   end
+   
 end
 
 end
