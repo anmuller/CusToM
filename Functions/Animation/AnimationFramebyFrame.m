@@ -569,14 +569,14 @@ for f=f_affich
                             cur_Fmu = repmat([1 2],[nb_added_pts-1 1])+(0:nb_added_pts-2)'+size(Vmu,1);
                             Vmu=[Vmu;pts_mu(imw,:);pt_wrap(:,:,imw)];
                             Fmu =[Fmu; cur_Fmu];
-                            CEmu=[CEmu; repmat(color_mus(mu,:),[nb_added_pts 1])];
+                            CEmu=[CEmu; repmat(color_mus,[nb_added_pts 1])];
                         else
                             if imw>1
                                 cur_Fmu = [1 2]+size(Vmu,1);
                                 Fmu =[Fmu; cur_Fmu];
                             end
                             Vmu=[Vmu ;pts_mu(imw,:)];
-                            CEmu=[CEmu; color_mus(mu,:)];
+                            CEmu=[CEmu; color_mus];
                         end
                     end
                     cur_Fmu = repmat([0 1],[1 1])+size(Vmu,1);

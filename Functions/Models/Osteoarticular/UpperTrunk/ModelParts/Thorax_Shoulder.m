@@ -253,4 +253,27 @@ Human_model(incr_solid).comment='Trunk Lateral Bending Right(+)/Left(-)';
 Human_model(incr_solid).FunctionalAngle='Trunk Lateral Bending Right(+)/Left(-)';
 Human_model(incr_solid).density=0.92;
 
+
+% Wrapping 1 : kind of right ellipsoid
+Human_model(incr_solid).wrap(1).name='Wrap R Ellipsoid';
+Human_model(incr_solid).wrap(1).anat_position='R_Thorax_EllipsoidNode';
+Human_model(incr_solid).wrap(1).type='C'; % C: Cylinder or S: Sphere
+Human_model(incr_solid).wrap(1).R=(Thorax_osim2antoine(2)*0.15+Thorax_osim2antoine(3)*0.07)/2;
+Human_model(incr_solid).wrap(1).orientation=eye(3);
+Human_model(incr_solid).wrap(1).location=Thorax_EllipsoidRightNode;
+Human_model(incr_solid).wrap(1).h=2;
+Human_model(incr_solid).wrap(1).num_solid=incr_solid;
+
+
+% Wrapping 1 : kind of left ellipsoid
+Human_model(incr_solid).wrap(2).name='Wrap L Ellipsoid';
+Human_model(incr_solid).wrap(2).anat_position='L_Thorax_EllipsoidNode';
+Human_model(incr_solid).wrap(2).type='C'; % C: Cylinder or S: Sphere
+Human_model(incr_solid).wrap(2).R=(Thorax_osim2antoine(2)*0.15+Thorax_osim2antoine(3)*0.07)/2;
+Human_model(incr_solid).wrap(2).orientation=eye(3);
+Human_model(incr_solid).wrap(2).location=Thorax_EllipsoidLeftNode;
+Human_model(incr_solid).wrap(2).h=2;
+Human_model(incr_solid).wrap(2).num_solid=incr_solid;
+
+
 end

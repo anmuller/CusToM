@@ -5,7 +5,6 @@ function  [MomentsArm,RegressionStructure] = CreateSethRegression7angles(MuscleS
         
         for k = 1:length(Joints)
             
-            RegressionStructure(k).joints=   Joints;
             RegressionStructure(k).axe=Joints{k};
             
             [X,Y,Z,W] = ndgrid(unique(MuscleStruct.sampling_grid(1:10000,1)),...
@@ -33,6 +32,8 @@ function  [MomentsArm,RegressionStructure] = CreateSethRegression7angles(MuscleS
                 W,...
                 MomentArmMat,...
                 q(:,1),q(:,2),q(:,3),q(:,4),'spline');
+            
+            RegressionStructure(k).joints=   Joints(1:4);
                 
              else
                  
@@ -50,6 +51,8 @@ function  [MomentsArm,RegressionStructure] = CreateSethRegression7angles(MuscleS
                 C,...
                 MomentArmMat,...
                 q(:,1),q(:,2),q(:,3),'spline');
+            
+                RegressionStructure(k).joints=   Joints(5:7);
             
              end
             

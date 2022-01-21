@@ -77,16 +77,17 @@ for j=1:size(MARegression,2)
     end
     
     
-    ideal_curve=[ideal_curve  ideal_curve_temp];
+%    ideal_curve=[ideal_curve ; ideal_curve_temp];
     
-    mac=[mac  mactemp];
+   % mac=[mac ;  mactemp];
     
     
+    RMSE(j).axe = joint_name;
+    RMSE(j).rms=  rms(ideal_curve_temp - mactemp);
+    RMSE(j).rmsr=  rms(ideal_curve_temp - mactemp)/rms(ideal_curve_temp)* 100;
+
+
 end
-
-
-RMSE.rms=  rms(ideal_curve - mac);
-RMSE.rmsr=  rms(ideal_curve - mac)/rms(ideal_curve)* 100;
 
 
 

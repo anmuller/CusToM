@@ -48,7 +48,15 @@ for k=1:numel(num_solid)
     
     rcarre= radius(k)^2;
     % Constraint about radius cylinder
+    
+    if temp1~=20
+    
     c =  [c (HumanModel(temp1).anat_position{temp2,2}(1) +  HumanModel(temp1).c(1)  )^2 +  (HumanModel(temp1).anat_position{temp2,2}(3) +  HumanModel(temp1).c(3) )^2 - rcarre];
+    
+    else
+        
+            c =  [c (HumanModel(temp1).anat_position{temp2,2}(1) +  HumanModel(temp1).c(1)  )^2 +  (HumanModel(temp1).anat_position{temp2,2}(2) +  HumanModel(temp1).c(2) )^2 - rcarre];
+    end
     
 end
 
@@ -70,26 +78,33 @@ else
     [~,numnode]=intersect( HumanModel(temp1).anat_position(:,1),[HumanModel(temp1).name '_EndNode']);
     ylength = HumanModel(temp1).anat_position{numnode,2}(2);
 end
-if abs(yorigin) - abs(ylength) <0 %If the origin point is well placed, ie not above the os
+% if abs(yorigin) - abs(ylength) <0 %If the origin point is well placed, ie not above the os
     c = [c  abs(HumanModel(temp1).anat_position{temp2,2}(2) +  HumanModel(temp1).c(2) ) - abs(ylength)];
-end
+% end
 
 
 % No uturn
-c = [c abs(yorigin)-abs(HumanModel(temp1).anat_position{temp2,2}(2) +  HumanModel(temp1).c(2) )];
+if temp1~=7
+    c = [c abs(yorigin)-abs(HumanModel(temp1).anat_position{temp2,2}(2) +  HumanModel(temp1).c(2) )];
+else
+    c = [c -abs(yorigin)+abs(HumanModel(temp1).anat_position{temp2,2}(2) -  HumanModel(temp1).c(2) )];
+end
 
 temp1=num_solid(end);
 temp2=num_markers(end);
 c = [c  abs(HumanModel(temp1).anat_position{temp2,2}(2) +  HumanModel(temp1).c(2) ) - abs(yinsertion)];
 
-if yinsertion < 0 %If the insertion point is well placed, ie negative in y
+% if yinsertion < 0 %If the insertion point is well placed, ie negative in y
     c = [c HumanModel(temp1).anat_position{temp2,2}(2) +  HumanModel(temp1).c(2) ];
-end
+% end
 
 
 for k=2:length(num_solid) -1
     temp1=num_solid(k);
     temp2=num_markers(k);
+    
+    if temp1~=20  && temp1~=10
+    
     % Constraint max length, not being above the os
     if HumanModel(temp1).child
         ylength=HumanModel(HumanModel(temp1).child).b(2);
@@ -104,8 +119,24 @@ for k=2:length(num_solid) -1
     end
     c = [c  abs(HumanModel(temp1).anat_position{temp2,2}(2) +  HumanModel(temp1).c(2) ) - abs(ylength)];
     c = [c HumanModel(temp1).anat_position{temp2,2}(2) +  HumanModel(temp1).c(2)];
+    
+    
+    else
+        
+        % Constraint max length, not being above the os
+    if HumanModel(temp1).child
+        ylength=HumanModel(HumanModel(temp1).child).b(3);
+        temp3=temp1;
+        while ~ylength && temp3
+            temp3=HumanModel(temp3).child;
+            ylength=HumanModel(HumanModel(temp3).child).b(3);
+        end
+    end
+    c = [c  abs(HumanModel(temp1).anat_position{temp2,2}(3) +  HumanModel(temp1).c(3) ) - abs(ylength)];
+    c = [c -HumanModel(temp1).anat_position{temp2,2}(3) - HumanModel(temp1).c(3)];
+    
+    end
 end
-
 
 else
     if abs(yorigin) < abs(yinsertion)
@@ -136,8 +167,7 @@ else
         
     end
     
-    
-    
+        
 end
 
 

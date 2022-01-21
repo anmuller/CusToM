@@ -1,7 +1,7 @@
 function [MomentsArm,RegressionStructure] = CreateSethRegression2angles(MuscleStruct,axis,joints_names,q)
 
 
-Joints = {'Clavicle_J1', 'Clavicle_J2' };
+Joints = {'Clavicle Protraction(+)/Retraction(-)', 'Clavicle Depression(-)/Elevation(+)' };
 
 
 for k = 1:length(Joints)
@@ -30,11 +30,11 @@ for k = 1:length(Joints)
     
 end
 
-[~,ind1] = intersect(joints_names,{'Clavicle_J1'});
-[~,ind2] = intersect(joints_names,{'Clavicle_J2'});
+[~,ind1] = intersect(joints_names,{'Clavicle Protraction(+)/Retraction(-)'});
+[~,ind2] = intersect(joints_names,{'Clavicle Depression(-)/Elevation(+)'});
 
-[~,indaxis] = intersect(axis,  {'Clavicle_J1', 'Clavicle_J2' });
-
+[~,indaxis] = intersect(axis,  {'Clavicle Protraction(+)/Retraction(-)', 'Clavicle Depression(-)/Elevation(+)' });
+MomentsArm =[];
 
 if ~isempty(ind1) && ~isempty(ind2) && ~isempty(indaxis)
     newq = [q(ind1,:);q(ind2,:)];
