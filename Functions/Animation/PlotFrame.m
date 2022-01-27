@@ -14,7 +14,7 @@ function [h] = PlotFrame(P,R,scale)
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
 % Georges Dumont
 %________________________________________________________
-
+R = R';
 hold on
 h(1) = quiver3(P(1),P(2),P(3),R(1,1),R(1,2),R(1,3),scale);
 h(2) = quiver3(P(1),P(2),P(3),R(2,1),R(2,2),R(2,3),scale);
