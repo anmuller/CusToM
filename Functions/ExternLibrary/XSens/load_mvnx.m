@@ -68,6 +68,10 @@ while n < length(cellContent)
         word{iWord} = line(2:end-1);
         oneword = true;
     end
+    if ~isempty(strfind(word{iWord},'>'))
+        abba = word{iWord};
+        word{iWord} = abba(1:end-1);
+    end
     if word{iWord}(1) ~= '/'
         if ~oneword && ~openandclose(n)
             k = find(line == 34);
