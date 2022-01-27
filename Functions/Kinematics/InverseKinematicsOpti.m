@@ -126,7 +126,11 @@ q=zeros(nb_solid,nb_frame);
 h = waitbar(0,['Inverse Kinematics (' filename ')']);
 positions = zeros(3, length(real_markers));
 
-weights = AnalysisParameters.IK.weights';
+if isfield(AnalysisParameters.IK,'weights')
+    weights = AnalysisParameters.IK.weights';
+else
+    weights = ones(1,length(real_markers));
+end
 
 
 
