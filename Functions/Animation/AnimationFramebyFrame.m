@@ -345,17 +345,17 @@ for f=f_affich
                     || isequal(AnimateParameters.Mode, 'GenerateAnimate'))
                 finv = figure('visible','off');
                 if F_seg(1)==0 && length(F_seg)==2
-                    h_seg = gpatch(F_seg(2),V_seg,[],0.4*[1 1 1],1,4);
+                    h_seg3 = gpatch(F_seg(2),V_seg,[],0.4*[1 1 1],1,4);
                 else
-                    h_seg = gpatch(F_seg,V_seg,[],0.4*[1 1 1],1,4);
+                    h_seg3 = gpatch(F_seg,V_seg,[],0.4*[1 1 1],1,4);
                 end
                 
-                copyobj(h_seg,ax);
+                copyobj(h_seg3,ax);
                 close(finv);
             elseif f==f_affich(1)
-                h_seg = gpatch(F_seg,V_seg,[],0.4*[1 1 1],1,4);
+                h_seg3 = gpatch(F_seg,V_seg,[],0.4*[1 1 1],1,4);
             end
-            animStruct.Handles{f} = [animStruct.Handles{f} h_seg];
+            animStruct.Handles{f} = [animStruct.Handles{f} h_seg3];
             animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices'}; %#ok<*CCAT>
             animStruct.Set{f} = {animStruct.Set{f}{:},V_seg};
             
@@ -514,17 +514,17 @@ for f=f_affich
                 || isequal(AnimateParameters.Mode, 'GenerateAnimate'))
             finv = figure('visible','off');
             if F_seg(1)==0 && length(F_seg)==2
-                h_seg = gpatch(F_seg(2),V_seg,[],0.4*[1 1 1],1,4);
+                h_seg2 = gpatch(F_seg(2),V_seg,[],0.4*[1 1 1],1,4);
             else
-                h_seg = gpatch(F_seg,V_seg,[],0.4*[1 1 1],1,4);
+                h_seg2 = gpatch(F_seg,V_seg,[],0.4*[1 1 1],1,4);
             end
             
-            copyobj(h_seg,ax);
+            copyobj(h_seg2,ax);
             close(finv);
         elseif f==f_affich(1)
-            h_seg = gpatch(F_seg,V_seg,[],0.4*[1 1 1],1,4);
+            h_seg2 = gpatch(F_seg,V_seg,[],0.4*[1 1 1],1,4);
         end
-        animStruct.Handles{f} = [animStruct.Handles{f} h_seg];
+        animStruct.Handles{f} = [animStruct.Handles{f} h_seg2];
         animStruct.Props{f} = {animStruct.Props{f}{:},'Vertices'};
         animStruct.Set{f} = {animStruct.Set{f}{:},V_seg};
         
