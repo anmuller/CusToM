@@ -55,36 +55,131 @@ if Human_model(j).mother ~= 0
     
     % Computation of ellipsoid coordinates kinematic dependancies
     
-        switch Human_model(j).name
-            case 'RScapuloThoracic_J1'
+    switch Human_model(j).name
+        case 'RScapuloThoracic_J1'
+            
+            if sum(contains({Human_model.name},'RScapuloThoracic_Jalpha'))
+                
+                [~,idx] = intersect({Human_model.name},'RScapuloThoracic_J0');
+                
+                q= radius(1)*sin(Q(idx));
+            else
+                
                 [~,idx] = intersect({Human_model.name},'RScapuloThoracic_J5');
                 q= radius(1)*sin(Q(idx));
+            end
+            
+        case 'RScapuloThoracic_J2'
+            if sum(contains({Human_model.name},'RScapuloThoracic_Jalpha'))
                 
-            case 'RScapuloThoracic_J2'
+                [~,idx1] = intersect({Human_model.name},'RScapuloThoracic_J4');
+                [~,idx2] = intersect({Human_model.name},'RScapuloThoracic_J0');
+                q= -radius(2)*sin(Q(idx1))*cos(Q(idx2));
+                
+            else
+                
                 [~,idx1] = intersect({Human_model.name},'RScapuloThoracic_J4');
                 [~,idx2] = intersect({Human_model.name},'RScapuloThoracic_J5');
                 q= -radius(2)*sin(Q(idx1))*cos(Q(idx2));
+            end
+        case 'RScapuloThoracic_J3'
+            
+            
+            if sum(contains({Human_model.name},'RScapuloThoracic_Jalpha'))
                 
-            case 'RScapuloThoracic_J3'
+                [~,idx1] = intersect({Human_model.name},'RScapuloThoracic_J4');
+                [~,idx2] = intersect({Human_model.name},'RScapuloThoracic_J0');
+                q= radius(3)*cos(Q(idx1))*cos(Q(idx2));
+                
+            else
+                
                 [~,idx1] = intersect({Human_model.name},'RScapuloThoracic_J4');
                 [~,idx2] = intersect({Human_model.name},'RScapuloThoracic_J5');
                 q= radius(3)*cos(Q(idx1))*cos(Q(idx2));
+            end
+            
+        case 'LScapuloThoracic_J1'
+            
+            
+            if sum(contains({Human_model.name},'LScapuloThoracic_Jalpha'))
                 
-            case 'LScapuloThoracic_J1'
+                [~,idx] = intersect({Human_model.name},'LScapuloThoracic_J0');
+                q= radius(4)*sin(Q(idx));
+                
+            else
+                
                 [~,idx] = intersect({Human_model.name},'LScapuloThoracic_J5');
                 q= radius(4)*sin(Q(idx));
                 
-            case 'LScapuloThoracic_J2'
+            end
+            
+        case 'LScapuloThoracic_J2'
+            
+            
+            if sum(contains({Human_model.name},'LScapuloThoracic_Jalpha'))
+                
+                [~,idx1] = intersect({Human_model.name},'LScapuloThoracic_J4');
+                [~,idx2] = intersect({Human_model.name},'LScapuloThoracic_J0');
+                q= -radius(5)*sin(Q(idx1))*cos(Q(idx2));
+                
+            else
+                
                 [~,idx1] = intersect({Human_model.name},'LScapuloThoracic_J4');
                 [~,idx2] = intersect({Human_model.name},'LScapuloThoracic_J5');
                 q= -radius(5)*sin(Q(idx1))*cos(Q(idx2));
                 
-            case 'LScapuloThoracic_J3'
+            end
+            
+        case 'LScapuloThoracic_J3'
+            
+            if sum(contains({Human_model.name},'LScapuloThoracic_Jalpha'))
+                
+                [~,idx1] = intersect({Human_model.name},'LScapuloThoracic_J4');
+                [~,idx2] = intersect({Human_model.name},'LScapuloThoracic_J0');
+                q= -radius(6)*cos(Q(idx1))*cos(Q(idx2));
+                
+            else
+                
                 [~,idx1] = intersect({Human_model.name},'LScapuloThoracic_J4');
                 [~,idx2] = intersect({Human_model.name},'LScapuloThoracic_J5');
                 q= -radius(6)*cos(Q(idx1))*cos(Q(idx2));
                 
-        end
+            end
+            
+            
+        case 'RScapuloThoracic_J5'
+            if sum(contains({Human_model.name},'RScapuloThoracic_Jalpha'))
+                
+                [~,idx1] = intersect({Human_model.name},'RScapuloThoracic_J4');
+                [~,idx2] = intersect({Human_model.name},'RScapuloThoracic_J0');
+                q = atan((radius(3)*radius(2)*tan(Q(idx2))*(1 - tan( Q(idx1))^2))/(radius(1)*radius(2)-radius(1)*radius(3)*tan( Q(idx1))^2));
+                
+            end
+            
+        case 'RScapuloThoracic_Jalpha'
+            
+            [~,idx] = intersect({Human_model.name},'RScapuloThoracic_J4');
+            
+            q= atan( tan(Q(idx))*(radius(3)*(1 - tan(Q(idx))^2)/(radius(2) - radius(3)*tan(Q(idx))^2) -1));
+ 
+            
+        case 'LScapuloThoracic_J5'
+            if sum(contains({Human_model.name},'LScapuloThoracic_Jalpha'))
+                
+                [~,idx1] = intersect({Human_model.name},'LScapuloThoracic_J4');
+                [~,idx2] = intersect({Human_model.name},'LScapuloThoracic_J0');
+                q = atan((radius(6)*radius(5)*tan(Q(idx2))*(1 - tan( Q(idx1))^2))/(radius(4)*radius(5)-radius(4)*radius(6)*tan( Q(idx1))^2));
+                
+            end
+            
+        case 'LScapuloThoracic_Jalpha'
+            
+            [~,idx] = intersect({Human_model.name},'LScapuloThoracic_J4');
+            
+            q= atan( tan(Q(idx))*(radius(3)*(1 - tan(Q(idx))^2)/(radius(2) - radius(3)*tan(Q(idx))^2) -1));
+            
+            
+    end
     
     
     %Axe

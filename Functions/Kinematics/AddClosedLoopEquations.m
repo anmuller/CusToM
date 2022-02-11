@@ -44,7 +44,7 @@ if ~isempty(ConstraintEq)
     
     
     ConstraintEq = ConstraintEq';
-    ConstraintEq = simplify(ConstraintEq);
+%    ConstraintEq = simplify(ConstraintEq);
     K=jacobian(ConstraintEq,qred);
     
     

@@ -38,7 +38,7 @@ load('SethMomentArmData.mat');
 
 
 if ~isempty(intersect(mus_name,{'Coracobrachialis','DeltoideusScapula_M','DeltoideusScapula_P','Infraspinatus_I','Infraspinatus_S',...
-        'LatissimusDorsi_I', 'LatissimusDorsi_S','LevatorScapulae','PectoralisMajorThorax_I','PectoralisMajorThorax_M'...
+        'LatissimusDorsi_I', 'LatissimusDorsi_S','LatissimusDorsi_M','LevatorScapulae','PectoralisMajorThorax_I','PectoralisMajorThorax_M'...
         'PectoralisMinor','Rhomboideus_I','Rhomboideus_S','SerratusAnterior_I','SerratusAnterior_M','SerratusAnterior_S',...
         'Subscapularis_I','Subscapularis_M','Subscapularis_S','Supraspinatus_A','Supraspinatus_P','TeresMajor',...
         'TeresMinor','TrapeziusClavicle_S','TrapeziusScapula_I','TrapeziusScapula_M','TrapeziusScapula_S'}))
@@ -162,6 +162,11 @@ if ~isempty(intersect(mus_name,{'Coracobrachialis','DeltoideusScapula_M','Deltoi
         
         
         [MomentsArm,RegressionStructure] = CreateSethRegression7angles(LatissimusDorsi_S,axis,joints_names,q);
+
+    elseif strcmp(mus_name,'LatissimusDorsi_M')        
+        
+        
+        [MomentsArm,RegressionStructure] = CreateSethRegression7angles(LatissimusDorsi_M,axis,joints_names,q);
 
         
         

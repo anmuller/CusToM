@@ -26,7 +26,7 @@ q1=q(:,1);
 q2=q(:,2);
 
 
-if size(a,1)<12
+if length(a)<12
     a=[a ; zeros(12-size(a,1),1)];    
     disp('Attention il manque des coeffs pour ce muscle (RRN4)');
 end

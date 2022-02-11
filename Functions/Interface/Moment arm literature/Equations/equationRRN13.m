@@ -27,7 +27,7 @@ q2=q(:,2);
 q3=q(:,3);
 
 
-if size(b,1)<30
+if length(b)<30
     b=[b ; zeros(30-size(b,1),1)];    
     disp('Attention il manque des coeffs pour ce muscle (RRN13)');
 end

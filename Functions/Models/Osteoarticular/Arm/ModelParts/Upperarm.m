@@ -81,7 +81,8 @@ end
 % Node positions
 Humerus_ghJointNode = (k*[0 0.1674 0])*Mirror;
 Humerus_ElbowJointNode = (k*[0 -0.1674 0])*Mirror;
-osim2antoine=[k (Humerus_ghJointNode(2)-Humerus_ElbowJointNode(2))/0.2904 k];
+osim2antoine=[k k k];
+%osim2antoine=[k (Humerus_ghJointNode(2)-Humerus_ElbowJointNode(2))/0.2904 k];
 Humerus_RadiusJointNode = (k*[0 -0.1674 0.0191])*Mirror;
 Humerus_UlnaJointNode = (k*[0 -0.1674 -0.0191])*Mirror;
 Humerus_Brachioradialis = (k*[-0.006 -0.209 -0.007])*Mirror; %in local frame gh Murray2001
@@ -167,7 +168,7 @@ Humerus_position_set = {...
     [Signe 'humerus_r_PECM3_r-P2'],osim2antoine.*Mirror*([0.014239;-0.049652;-0.0093637])+Humerus_ghJointNode';...
     [Signe 'humerus_r_LAT1_r-P1'],osim2antoine.*Mirror*([0.0058799957641284184 -0.019040131776404189 -0.0034499858058475164]')+Humerus_ghJointNode';...
     [Signe 'humerus_r_LAT2_r-P1'],osim2antoine.*Mirror*([0.0042200299999999996 -0.049998399999999998 -0.000179999]')+Humerus_ghJointNode';...
-    [Signe 'humerus_r_LAT3_r-P1'],osim2antoine.*Mirror*([0.01208;-0.03922;-0.00416])+Humerus_ghJointNode';...
+    [Signe 'humerus_r_LAT3_r-P1'],osim2antoine.*Mirror*([0.0057799963463681624 -0.04100027577871479 -0.0009999977843013195]')+Humerus_ghJointNode';...
     [Signe 'humerus_SUPSP-P1'],osim2antoine.*Mirror*([0.01777999647719139 0.017640077967619992 0.0096499482685446329]')+Humerus_ghJointNode';...
     [Signe 'humerus_SUPSP-P2'],osim2antoine.*Mirror*([0.010169740787382579 0.0095677577211598953 0.020050375624730808]')+Humerus_ghJointNode';...
     [Signe 'humerus_INFSP-P1'],osim2antoine.*Mirror*([-0.017162031747030893 -0.0057299955321240209 0.024807138325052238]')+Humerus_ghJointNode';...
@@ -179,6 +180,9 @@ Humerus_position_set = {...
     [Signe 'humerus_SUBSC-P2'],osim2antoine.*Mirror*([0.018000095195681718 -0.00023000183974550295 -0.011999885411722819]')+Humerus_ghJointNode';...
     [Signe 'humerus_SUBSC-P3'],osim2antoine.*Mirror*([0.018000095195681718 -0.00023000183974550295 -0.011999885411722819]')+Humerus_ghJointNode';...
     
+    [Signe 'humerus_DeltoideusClavicle-P3'],osim2antoine.*Mirror*([0.0066436613177381703 -0.10980522018450981 0.0011474186050816253]')+Humerus_ghJointNode';...
+    [Signe 'humerus_PectoralisMajorClavicle1-P3'],osim2antoine.*Mirror*([0.010075141338181376 -0.042144919771239353 -0.0026007368382806521]')+Humerus_ghJointNode';...
+
     % Muscles from (Pennestri et al., 2007)
     
     %  [Signe 'Humerus_Anconeus_o'],k_Pennestri2custom*[0 0 -1;-1 0 0;0 -1 0]*[0.265 0.005 -0.019]'+Humerus_ghJointNode';...
@@ -250,6 +254,41 @@ Humerus_position_set = {...
     [Signe 'Humerus_TricepsLat_o'], k*Mirror*[-0.0080 ; -0.1628 ; 0.0026] + Humerus_ghJointNode' ;...
     [Signe 'Humerus_TricepsLat_VP1'], k*Mirror*[-0.0270 ; -0.3257 ; -0.0138] + Humerus_ghJointNode' ;...
     
+    % Muscles from moment arm optimization
+    
+    [Signe 'Humerus_DeltoideusScapula_P_VP2'], k*Mirror*[-0.0050 ; -0.0912 ; 0.0066] - Humerus_ghJointNode' ;... 
+    
+    [Signe 'Humerus_DeltoideusScapula_M_VP2'], k*Mirror*[-0.0085 ; -0.1159 ; 0.0056]  - Humerus_ghJointNode' ;... 
+    
+    [Signe 'Humerus_Supraspinatus_P_VP2'], k*Mirror*[0.0108 ; 0.0101 ; 0.0212] - Humerus_ghJointNode' ;... 
+    
+    [Signe 'Humerus_Supraspinatus_A_VP2'], k*Mirror*[0.0198 ; 0.0203 ; 0.0108] - Humerus_ghJointNode' ;... 
+    
+    [Signe 'Humerus_Infraspinatus_I_VP2'], k*Mirror*[-0.0195 ; -0.0066 ; 0.0281] - Humerus_ghJointNode' ;... 
+    
+    [Signe 'Humerus_Infraspinatus_S_VP2'], k*Mirror*[-0.0160 ; 0.0031 ; 0.0260] - Humerus_ghJointNode' ;... 
+    
+    [Signe 'Humerus_Coracobrachialis_VP2'], k*Mirror*[-0.0025 ; -0.1543 ; -0.0099] - Humerus_ghJointNode' ;... 
+    
+    [Signe 'Humerus_TeresMajor_VP2'], k*Mirror*[ 0.0046 ; -0.0412 ; -0.0018] - Humerus_ghJointNode' ;... 
+    
+    [Signe 'Humerus_TeresMinor_VP2'], k*Mirror*[-0.0168 ; -0.0099 ; 0.0115] - Humerus_ghJointNode' ;... 
+
+    [Signe 'Humerus_PectoralisMajorThorax_I_VP4'], k*Mirror*[0.0030 ; -0.0115 ; -0.0003]  - Humerus_ghJointNode' ;... 
+        
+    [Signe 'Humerus_PectoralisMajorThorax_M_VP4'], k*Mirror*[0.0020 ; -0.0103 ; -0.0013]  - Humerus_ghJointNode' ;... 
+        
+    [Signe 'Humerus_LatissimusDorsi_S_VP4'], k*Mirror*[0.0032 ; -0.0081 ; -0.0014] - Humerus_ghJointNode' ;... 
+        
+
+    [Signe 'Humerus_LatissimusDorsi_I_VP4'], k*Mirror*[0.0033 ; -0.0174 ; -0.0015]  - Humerus_ghJointNode' ;... 
+    
+    [Signe 'Humerus_Subscapularis_I_VP2'], k*Mirror*[0.0117 ; -0.0034 ; -0.0208]  - Humerus_ghJointNode' ;... 
+
+    [Signe 'Humerus_Subscapularis_M_VP2'], k*Mirror*[0.0185 ; -0.0000 ; -0.0222]  - Humerus_ghJointNode' ;... 
+
+    [Signe 'Humerus_Subscapularis_S_VP2'], k*Mirror*[0.0187 ; -0.0003 ; -0.0128]  - Humerus_ghJointNode' ;... 
+
     };
 
 
@@ -275,11 +314,11 @@ OsteoArticularModel(incr_solid).mother=s_mother;                       % mother 
 OsteoArticularModel(incr_solid).a=[0 1 0]';                          % rotation /x
 OsteoArticularModel(incr_solid).joint=1;
 if Signe == 'R'
-    OsteoArticularModel(incr_solid).limit_inf=-pi/2;                       	% inferior joint biomechanical stop
-    OsteoArticularModel(incr_solid).limit_sup=pi;                      		% superior joint biomechanical stop
+    OsteoArticularModel(incr_solid).limit_inf=-pi/2+0.174532925199433;                       	% inferior joint biomechanical stop
+    OsteoArticularModel(incr_solid).limit_sup=pi-0.174532925199433;                      		% superior joint biomechanical stop
 else
-    OsteoArticularModel(incr_solid).limit_inf=-pi;                       % inferior joint biomechanical stop
-    OsteoArticularModel(incr_solid).limit_sup=pi/2;                      % superior joint biomechanical stop
+    OsteoArticularModel(incr_solid).limit_inf=-pi+0.174532925199433;                       % inferior joint biomechanical stop
+    OsteoArticularModel(incr_solid).limit_sup=pi/2-0.174532925199433;                      % superior joint biomechanical stop
 end
 OsteoArticularModel(incr_solid).m=0;                                 % reference mass
 OsteoArticularModel(incr_solid).b=pos_attachment_pt;                 % attachment point with respect to the parent's frame
@@ -305,11 +344,11 @@ OsteoArticularModel(incr_solid).mother=s_Glenohumeral_J1;
 OsteoArticularModel(incr_solid).a=[-1 0 0]';
 OsteoArticularModel(incr_solid).joint=1;
 if Signe == 'R'
-    OsteoArticularModel(incr_solid).limit_inf=-pi/4;                     % inferior joint biomechanical stop
-    OsteoArticularModel(incr_solid).limit_sup=4*pi/5;                    % superior joint biomechanical stop
+    OsteoArticularModel(incr_solid).limit_inf=-pi/4+0.174532925199433;                     % inferior joint biomechanical stop
+    OsteoArticularModel(incr_solid).limit_sup=4*pi/5-0.174532925199433;                    % superior joint biomechanical stop
 else
-    OsteoArticularModel(incr_solid).limit_inf=-4*pi/5;                   % inferior joint biomechanical stop
-    OsteoArticularModel(incr_solid).limit_sup=pi/4;                      % superior joint biomechanical stop
+    OsteoArticularModel(incr_solid).limit_inf=-4*pi/5+0.174532925199433;                   % inferior joint biomechanical stop
+    OsteoArticularModel(incr_solid).limit_sup=pi/4-0.174532925199433;                      % superior joint biomechanical stop
 end
 OsteoArticularModel(incr_solid).m=0;
 OsteoArticularModel(incr_solid).b=[0 0 0]';
@@ -330,8 +369,8 @@ OsteoArticularModel(incr_solid).child=0;
 OsteoArticularModel(incr_solid).mother=s_Glenohumeral_J2;
 OsteoArticularModel(incr_solid).a=[-0.084599999999999995 0.99470000000000003 -0.058400000000000001]';
 OsteoArticularModel(incr_solid).joint=1;
-OsteoArticularModel(incr_solid).limit_inf=-pi/2;
-OsteoArticularModel(incr_solid).limit_sup=pi/2;
+OsteoArticularModel(incr_solid).limit_inf=-pi/2+0.174532925199433;
+OsteoArticularModel(incr_solid).limit_sup=pi/2-0.174532925199433;
 OsteoArticularModel(incr_solid).m=Mass.UpperArm_Mass;
 OsteoArticularModel(incr_solid).b=[0 0 0]';
 OsteoArticularModel(incr_solid).I=[I_Humerus(1) I_Humerus(4) I_Humerus(5); I_Humerus(4) I_Humerus(2) I_Humerus(6); I_Humerus(5) I_Humerus(6) I_Humerus(3)];

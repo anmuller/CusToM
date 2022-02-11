@@ -211,13 +211,13 @@ if isfield(AnalysisParameters.CalibIK,'Scapactive') && AnalysisParameters.CalibI
     real_markers_calib_scap=struct('name',{real_markers_calib.name});
     real_markers_calib_scap(numel(real_markers_calib)).position=[];
     if iscell(AnalysisParameters.CalibIK.ScapFiles)
-    for i=1:length(AnalysisParameters.CalibIK.ScapFiles)
-        filename_i = AnalysisParameters.CalibIK.ScapFiles{i};
-        [real_markers_i, ~]=Get_real_markers_Calibration(filename_i,list_markers, AnalysisParameters);
-        for j=1:numel(real_markers_i)
-            real_markers_calib_scap(j).position=[real_markers_calib_scap(j).position; real_markers_i(j).position(1,:)];
+        for i=1:length(AnalysisParameters.CalibIK.ScapFiles)
+            filename_i = AnalysisParameters.CalibIK.ScapFiles{i};
+            [real_markers_i, ~]=Get_real_markers_Calibration(filename_i,list_markers, AnalysisParameters);
+            for j=1:numel(real_markers_i)
+                real_markers_calib_scap(j).position=[real_markers_calib_scap(j).position; real_markers_i(j).position(1,:)];
+            end
         end
-    end
     else
         filename_i = AnalysisParameters.CalibIK.ScapFiles;
         [real_markers_i, ~]=Get_real_markers_Calibration(filename_i,list_markers, AnalysisParameters);
@@ -225,7 +225,7 @@ if isfield(AnalysisParameters.CalibIK,'Scapactive') && AnalysisParameters.CalibI
             real_markers_calib_scap(i).position=real_markers_i(i).position(frame_calib,:);
         end
     end
-        
+    
     [weights] = ismember(find([Markers_set.exist]) , find(~cellfun(@isempty,strfind({Markers_set.anat_position},'ScapLoc'))) )';
     [kp_opt_scap,crit_scap,errorm_scap,~]=GeomCalibOptimization(k_init,weights,Nb_qred,nb_frame_calib,Base_position,Base_rotation,list_function,Rcut,pcut,real_markers_calib,nbcut,list_function_markers,Aeq_ik,beq_ik,l_inf,l_sup,Aeq_calib,beq_calib);
     calib_parameters.crit_scap = crit_scap;
@@ -336,7 +336,47 @@ if size(GC.q_dep,1)>0
                 Human_model_calib(j).kinematic_dependancy.q=matlabFunction(-calib_parameters.radius(6)*cos(phi)*cos(lambda),'vars',{phi,lambda});
                 
                 
+            case 'RScapuloThoracic_J5'
+                if sum(contains({Human_model_calib.name},'RScapuloThoracic_Jalpha'))
+                    
+                    syms phi lambda % latitude longitude
+                    
+                    Human_model_calib(j).kinematic_dependancy.q=matlabFunction(atan((calib_parameters.radius(3)*calib_parameters.radius(2)*tan(lambda)*(1 - tan(phi)^2))/(calib_parameters.radius(1)*calib_parameters.radius(2)-calib_parameters.radius(1)*calib_parameters.radius(3)*tan(phi)^2))...
+                        ,'vars',{phi,lambda});
+                    
+                end
+                
+            case 'RScapuloThoracic_Jalpha'
+                
+                syms phi
+                
+                Human_model_calib(j).kinematic_dependancy.q=matlabFunction(atan( tan(phi)*(calib_parameters.radius(3)*(1 - tan(phi)^2)/(calib_parameters.radius(2) - calib_parameters.radius(3)*tan(phi)^2) -1))...
+                    ,'vars',{phi,lambda});
+            case 'LScapuloThoracic_J5'
+                if sum(contains({Human_model_calib.name},'LScapuloThoracic_Jalpha'))
+                    
+                    syms phi lambda % latitude longitude
+                    
+                    Human_model_calib(j).kinematic_dependancy.q=matlabFunction(atan((calib_parameters.radius(6)*calib_parameters.radius(5)*tan(lambda)*(1 - tan(phi)^2))/(calib_parameters.radius(4)*calib_parameters.radius(5)-calib_parameters.radius(4)*calib_parameters.radius(6)*tan(phi)^2))...
+                        ,'vars',{phi,lambda});
+                    
+                end
+                
+            case 'LScapuloThoracic_Jalpha'
+                
+                syms phi
+                
+                
+                Human_model_calib(j).kinematic_dependancy.q=matlabFunction(atan( tan(phi)*(calib_parameters.radius(6)*(1 - tan(phi)^2)/(calib_parameters.radius(5) - calib_parameters.radius(6)*tan(phi)^2) -1))...
+                    ,'vars',{phi,lambda});
+                
+                
         end
+        
+        
+        
+        
+        
         
     end
 end

@@ -219,8 +219,8 @@ z= Mirror(3,3)*Thorax_Rz*cos(phi)*cos(lambda);
 
 PHI = atan((Thorax_Rz*Thorax_Ry*tan(lambda)*(1 - tan(phi)^2))/(Thorax_Rx*Thorax_Ry-Thorax_Rx*Thorax_Rz*tan(phi)^2));
 
-ALPHA = atan(Thorax_Rx*tan(PHI)*tan(phi)/(Thorax_Ry*tan(lambda)) - tan(phi));
-
+ALPHA = atan( tan(phi)*(Thorax_Rz*(1 - tan(phi)^2)/(Thorax_Ry- Thorax_Rz*tan(phi)^2) -1));
+                                                                                                                                                
 
 
 % ScapuloThoracic_J0 : theta_2
