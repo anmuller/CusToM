@@ -1,5 +1,6 @@
-function ConvertClustertoScaploc(filename_trial, filename_arr, filename_av)
+function ConvertClustertoScaploc(subject,filename_trial, filename_arr, filename_av)
 %% Open files
+subject = 'AM01SD'
 filename_arr='AM01SD_Propulsion_roue_reculee_02_ar'
 filename_av='AM01SD_Propulsion_roue_reculee_02_av'
 filename_trial='AM01SD_Propulsion_roue_reculee_02'
@@ -15,26 +16,47 @@ filename_trial='AM01SD_Propulsion_roue_reculee_02'
     markers_av=btkGetMarkers(h_av);
 
 %% Get positions of clusters and scaploc in filename arr and filename av
-    % Trial cluster
-    SCAPDB_trial=markers_trial.('SCAPDB');
-    SCAPDH_trial=markers_trial.('SCAPDH');
-    SCAPDL_trial=markers_trial.('SCAPDL');
+%     % Trial cluster
+%     SCAPDB_trial=markers_trial.([char(subject) '_SCAPDB']);
+%     SCAPDH_trial=markers_trial.([char(subject) '_SCAPDH']);
+%     SCAPDL_trial=markers_trial.([char(subject) '_SCAPDL']);
+%     % Rear cluster
+%     SCAPDB_arr=markers_arr.([char(subject) '_SCAPDB']);
+%     SCAPDH_arr=markers_arr.([char(subject) '_SCAPDH']);
+%     SCAPDL_arr=markers_arr.([char(subject) '_SCAPDL']);
+%     % Rear scaploc
+%     SCAPLOCB_arr=markers_arr.('ScapLoc_SCAPLOCB');
+%     SCAPLOCMM_arr=markers_arr.('ScapLoc_SCAPDLOCMM');
+%     SCAPLOCLM_arr=markers_arr.('ScapLoc_SCAPLOCLM');
+%     % Advanced cluster
+%     SCAPDB_av=markers_av.([char(subject) '_SCAPDB']);
+%     SCAPDH_av=markers_av.([char(subject) '_SCAPDH']);
+%     SCAPDL_av=markers_av.([char(subject) '_SCAPDL']);
+%     % Advanced scaploc
+%     SCAPLOCB_av=markers_av.('ScapLoc_SCAPLOCB');
+%     SCAPLOCMM_av=markers_av.('ScapLoc_SCAPLOCMM');
+%     SCAPLOCLM_av=markers_av.('ScapLoc_SCAPLOCLM');
+%     
+% Trial cluster
+    SCAPDB_trial=markers_trial.([char(subject) '_MTACDB']);
+    SCAPDH_trial=markers_trial.([char(subject) '_MTACDM']);
+    SCAPDL_trial=markers_trial.([char(subject) '_MTACDL']);
     % Rear cluster
-    SCAPDB_arr=markers_arr.('SCAPDB');
-    SCAPDH_arr=markers_arr.('SCAPDH');
-    SCAPDL_arr=markers_arr.('SCAPDL');
+    SCAPDB_arr=markers_arr.([char(subject) '_MTACDB']);
+    SCAPDH_arr=markers_arr.([char(subject) '_MTACDM']);
+    SCAPDL_arr=markers_arr.([char(subject) '_MTACDL']);
     % Rear scaploc
-    SCAPLOCB_arr=markers_arr.('SCAPLOCB');
-    SCAPLOCMM_arr=markers_arr.('SCAPDLOCMM');
-    SCAPLOCLM_arr=markers_arr.('SCAPLOCLM');
+    SCAPLOCB_arr=markers_arr.('ScapLoc_SCLB');
+    SCAPLOCMM_arr=markers_arr.('ScapLoc_SCLM');
+    SCAPLOCLM_arr=markers_arr.('ScapLoc_SCLL');
     % Advanced cluster
-    SCAPDB_av=markers_av.('SCAPDB');
-    SCAPDH_av=markers_av.('SCAPDH');
-    SCAPDL_av=markers_av.('SCAPDL');
+    SCAPDB_av=markers_av.([char(subject) '_MTACDB']);
+    SCAPDH_av=markers_av.([char(subject) '_MTACDM']);
+    SCAPDL_av=markers_av.([char(subject) '_MTACDL']);
     % Advanced scaploc
-    SCAPLOCB_av=markers_av.('SCAPLOCB');
-    SCAPLOCMM_av=markers_av.('SCAPLOCMM');
-    SCAPLOCLM_av=markers_av.('SCAPLOCLM');
+    SCAPLOCB_av=markers_av.('ScapLoc_SCLB');
+    SCAPLOCMM_av=markers_av.('ScapLoc_SCLM');
+    SCAPLOCLM_av=markers_av.('ScapLoc_SCLL');
     
 %% Mean the positions of the markers to reduce noise on static poses
     % Rear cluster    
@@ -108,7 +130,7 @@ filename_trial='AM01SD_Propulsion_roue_reculee_02'
     % Quaternion between scaploc and cluster on advanced pose
     Q_SCAPLOC_spine_av = rotm2quat(R_SCAPLOC_spine_av);
     
-    % Advanced cluster homogeneous matrix
+    % Trial cluster homogeneous matrix
     O_spine_trial = SCAPDB_trial;
     X_spine_trial = (SCAPDL_trial - SCAPDB_trial)/norm(SCAPDL_trial - SCAPDB_trial);
     yt_spine_trial = SCAPDH_trial - SCAPDB_trial;
