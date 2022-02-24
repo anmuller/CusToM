@@ -1,9 +1,9 @@
 function ConvertClustertoScaploc(subject,filename_trial, filename_arr, filename_av)
 %% Open files
-subject = 'AM01SD'
-filename_arr='AM01SD_Propulsion_roue_reculee_02_ar'
-filename_av='AM01SD_Propulsion_roue_reculee_02_av'
-filename_trial='AM01SD_Propulsion_roue_reculee_02'
+% subject = 'AM02SH'
+% filename_arr='AM02SH_Propulsion_roue_reculee_03_ar'
+% filename_av='AM02SH_Propulsion_roue_reculee_03_av'
+% filename_trial='AM02SH_Propulsion_roue_reculee_03'
     % Open file of trial
     h_trial = btkReadAcquisition([char(filename_trial) '.c3d']);
     markers_trial=btkGetMarkers(h_trial);
@@ -37,10 +37,19 @@ filename_trial='AM01SD_Propulsion_roue_reculee_02'
 %     SCAPLOCMM_av=markers_av.('ScapLoc_SCAPLOCMM');
 %     SCAPLOCLM_av=markers_av.('ScapLoc_SCAPLOCLM');
 %     
-% Trial cluster
+    % Trial cluster
+    
     SCAPDB_trial=markers_trial.([char(subject) '_MTACDB']);
+    nb_frame = size(SCAPDB_trial,1);
+    SCAPDB_trial = reshape(SCAPDB_trial, [nb_frame 1 3]);
+    SCAPDB_trial = permute(SCAPDB_trial, [3,2,1]);
     SCAPDH_trial=markers_trial.([char(subject) '_MTACDM']);
+    SCAPDH_trial = reshape(SCAPDH_trial, [nb_frame 1 3]);
+    SCAPDH_trial = permute(SCAPDH_trial, [3,2,1]);
     SCAPDL_trial=markers_trial.([char(subject) '_MTACDL']);
+    SCAPDL_trial = reshape(SCAPDL_trial, [nb_frame 1 3]);
+    SCAPDL_trial = permute(SCAPDL_trial, [3,2,1]);
+
     % Rear cluster
     SCAPDB_arr=markers_arr.([char(subject) '_MTACDB']);
     SCAPDH_arr=markers_arr.([char(subject) '_MTACDM']);
@@ -102,10 +111,12 @@ filename_trial='AM01SD_Propulsion_roue_reculee_02'
     T_SCAPLOC_spine_arr = T_spine_world_arr\T_SCAPLOC_world_arr;
     % Distance between scaploc and cluster on rear pose
     O_SCAPLOC_spine_arr = T_SCAPLOC_spine_arr(:,4);
+    O_SCAPLOC_spine_arr = O_SCAPLOC_spine_arr(1:3);
+
     % Rotation matrix between scaploc and cluster on rear pose
     R_SCAPLOC_spine_arr = T_SCAPLOC_spine_arr(1:3,1:3);
     % Quaternion between scaploc and cluster on rear pose
-    Q_SCAPLOC_spine_arr = rotm2quat(R_SCAPLOC_spine_arr);
+    Q_SCAPLOC_spine_arr = quaternion(rotm2quat(R_SCAPLOC_spine_arr));
 
     % Advanced cluster homogeneous matrix
     O_spine_av = SCAPDB_av;
@@ -125,47 +136,51 @@ filename_trial='AM01SD_Propulsion_roue_reculee_02'
     T_SCAPLOC_spine_av = T_spine_world_av\T_SCAPLOC_world_av;
     % Distance between scaploc and cluster on advance pose
     O_SCAPLOC_spine_av = T_SCAPLOC_spine_av(:,4);
+    O_SCAPLOC_spine_av = O_SCAPLOC_spine_av(1:3);
     % Rotation matrix between scaploc and cluster on advanced pose
     R_SCAPLOC_spine_av = T_SCAPLOC_spine_av(1:3,1:3);
     % Quaternion between scaploc and cluster on advanced pose
-    Q_SCAPLOC_spine_av = rotm2quat(R_SCAPLOC_spine_av);
+    Q_SCAPLOC_spine_av = quaternion(rotm2quat(R_SCAPLOC_spine_av));
     
     % Trial cluster homogeneous matrix
     O_spine_trial = SCAPDB_trial;
-    X_spine_trial = (SCAPDL_trial - SCAPDB_trial)/norm(SCAPDL_trial - SCAPDB_trial);
+    X_spine_trial = (SCAPDL_trial - SCAPDB_trial)./vecnorm(SCAPDL_trial - SCAPDB_trial);
     yt_spine_trial = SCAPDH_trial - SCAPDB_trial;
-    Z_spine_trial = (cross(X_spine_trial,yt_spine_trial))/norm(cross(X_spine_trial,yt_spine_trial));
+    Z_spine_trial = (cross(X_spine_trial,yt_spine_trial))./vecnorm(cross(X_spine_trial,yt_spine_trial));
     Y_spine_trial = cross(Z_spine_trial,X_spine_trial);
-    H_spine_world_trial = [X_spine_trial' Y_spine_trial' Z_spine_trial' O_spine_trial'; 0 0 0 1];
+    last_row = zeros(1,4,nb_frame);last_row(:,4,:)=1;
+    H_spine_world_trial = [X_spine_trial Y_spine_trial Z_spine_trial O_spine_trial];
+    H_spine_world_trial(4,:,:)=last_row;
 
 %% Apply quaternion interpolation to cluster from filename_trial
     % Interpolation coefficient based on cluster position
-    p_trial=norm(O_spine_arr-O_spine_trial)/norm(O_spine_av-O_spine_arr);
+    p_trial=vecnorm(O_spine_arr'-O_spine_trial)./norm(O_spine_av-O_spine_arr);
     % Slerp interpolation to compute quaternion between virtual scaploc and
     % cluster during trial
     Q_SCAPLOC_spine_trial = QuatSlerpAtHome(Q_SCAPLOC_spine_arr,Q_SCAPLOC_spine_av,p_trial);
     % Rotation matrix between virtual scaploc and cluster
-    R_SCAPLOC_spine_trial = quat2rotm(Q_SCAPLOC_spine_trial);
+    R_SCAPLOC_spine_trial = quat2rotm(Q_SCAPLOC_spine_trial(:));
     % Distance between virtual scaploc and cluster
-    O_SCAPLOC_spine_trial = (O_SCAPLOC_spine_av-O_SCAPLOC_spine_ar)*p + O_SCAPLOC_spine_arr;
+    O_SCAPLOC_spine_trial = (O_SCAPLOC_spine_av-O_SCAPLOC_spine_arr).*p_trial + O_SCAPLOC_spine_arr;
     % Homogeneous matrix between virtaul scaploc and cluster
-    H_SCAPLOC_spine_trial = [R_SCAPLOC_spine_trial O_SCAPLOC_spine_trial; 0 0 0 1];
+    H_SCAPLOC_spine_trial = [R_SCAPLOC_spine_trial O_SCAPLOC_spine_trial];
+    H_SCAPLOC_spine_trial(4,:,:)=last_row;
     % Homogeneous matrix between virtual scaploc and world
-    H_SCAPLOC_world_trial = H_spine_world_trial*H_SCAPLOC_spine_trial;
+    H_SCAPLOC_world_trial = pagemtimes(H_spine_world_trial,H_SCAPLOC_spine_trial);
     % Computation of virtual scaploc marker positions
-    SCAPLOCB_trial=H_SCAPLOC_world_trial*[SCAPLOCB_SCAPLOC';1];
-    SCAPLOCLM_trial=H_SCAPLOC_world_trial*[SCAPLOCLM_SCAPLOC';1];
-    SCAPLOCMM_trial=H_SCAPLOC_world_trial*[SCAPLOCMM_SCAPLOC';1];
-    SCAPLOCB_trial=SCAPLOCB_trial(1:3)';
-    SCAPLOCLM_trial=SCAPLOCLM_trial(1:3)';
-    SCAPLOCMM_trial=SCAPLOCMM_trial(1:3)';  
+    SCAPLOCB_trial=pagemtimes(H_SCAPLOC_world_trial,[SCAPLOCB_SCAPLOC';1]);
+    SCAPLOCLM_trial=pagemtimes(H_SCAPLOC_world_trial,[SCAPLOCLM_SCAPLOC';1]);
+    SCAPLOCMM_trial=pagemtimes(H_SCAPLOC_world_trial,[SCAPLOCMM_SCAPLOC';1]);
+    SCAPLOCB_trial=reshape(permute(SCAPLOCB_trial(1:3,:,:),[3,1,2]),[nb_frame 3]);
+    SCAPLOCLM_trial=reshape(permute(SCAPLOCLM_trial(1:3,:,:),[3,1,2]),[nb_frame 3]);
+    SCAPLOCMM_trial=reshape(permute(SCAPLOCMM_trial(1:3,:,:),[3,1,2]),[nb_frame 3]);  
 
 %% Write scaploc in filename_c3d and save it
     % Number of markers in trial
     pn_trial=btkGetPointNumber(h_trial);
     % Adding virtual SCAPLOC markers to list of markers
     pn_new=pn_trial+3;
-    labels={ListMarkersName_trial;'SCAPLOCB';'SCAPLOCMM';'SCAPLOCLM'};
+    labels=[ListMarkersName_trial; {'SCAPLOCB';'SCAPLOCMM';'SCAPLOCLM'}];
     % Number of frames in trial
     nb_frame_trial=btkGetLastFrame(h_trial)-btkGetFirstFrame(h_trial)+1;
     % Trial acquisition frequency
@@ -177,25 +192,20 @@ filename_trial='AM01SD_Propulsion_roue_reculee_02'
     btkSetFrequency(h_new, f_trial);
     
     % Copying markers from trial
-    values=zeroes(nb_frame_trial,pn_new);
     for i=1:pn_trial
         btkSetPointLabel(h_new, i, labels{i});
-        values(:,i)=markers_trial.(ListMarkersName_trial{i});
-        btkSetPoint(h_new, i, values(:,i));
+        btkSetPoint(h_new, i, markers_trial.(ListMarkersName_trial{i}));
     end
     % Defining virtual SCAPLOC markers
     % SCAPLOCB
     btkSetPointLabel(h_new, pn_new-2, labels{pn_new-2});
-    values(:,pn_new-2)=SCAPLOCB_trial;
-    btkSetPoint(h_new, pn_new-2, values(:,pn_new-2));
+    btkSetPoint(h_new, pn_new-2, SCAPLOCB_trial);
     % SCAPLOCMM
     btkSetPointLabel(h_new, pn_new-1, labels{pn_new-1});
-    values(:,pn_new-1)=SCAPLOCMM_trial;
-    btkSetPoint(h_new, pn_new-1, values(:,pn_new-1));
+    btkSetPoint(h_new, pn_new-1, SCAPLOCMM_trial);
     % SCAPLOCLM
     btkSetPointLabel(h_new, pn_new, labels{pn_new});
-    values(:,pn_new)=SCAPLOCLM_trial;
-    btkSetPoint(h_new, pn_new, values(:,pn_new));
+    btkSetPoint(h_new, pn_new, SCAPLOCLM_trial);
     
     % Write and save c3d
     btkWriteAcquisition(h_new, [char(filename_trial) '_scaploc.c3d']);
