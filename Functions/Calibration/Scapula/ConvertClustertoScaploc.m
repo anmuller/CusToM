@@ -14,53 +14,39 @@ function new_name=ConvertClustertoScaploc(filename_trial, filename_arr, filename
 
 %% Get positions of clusters and scaploc in filename arr and filename av 
     % Trial cluster
-    try
-        SCAPDB_trial=markers_trial.([char(subject) '_MTACDB']);
-    catch
-        SCAPDB_trial=markers_trial.('AM01SD_MTACDB');
-    end
+    names_trial = fieldnames(markers_trial);
+    prefix_trial = names_trial{contains(names_trial,'MTACDB')};
+    prefix_trial = prefix_trial(1:6);  
+    SCAPDB_trial=markers_trial.([prefix_trial '_MTACDB']);
     nb_frame = size(SCAPDB_trial,1);
     SCAPDB_trial = reshape(SCAPDB_trial, [nb_frame 1 3]);
     SCAPDB_trial = permute(SCAPDB_trial, [3,2,1]);
-    try
-        SCAPDH_trial = markers_trial.([char(subject) '_MTACDM']);
-    catch
-        SCAPDH_trial=markers_trial.('AM01SD_MTACDM');
-    end
+    SCAPDH_trial = markers_trial.([prefix_trial '_MTACDM']);
     SCAPDH_trial = reshape(SCAPDH_trial, [nb_frame 1 3]);
     SCAPDH_trial = permute(SCAPDH_trial, [3,2,1]);
-    try
-        SCAPDL_trial = markers_trial.([char(subject) '_MTACDL']);
-    catch
-        SCAPDL_trial=markers_trial.('AM01SD_MTACDL');
-    end
+    SCAPDL_trial = markers_trial.([prefix_trial '_MTACDL']);
     SCAPDL_trial = reshape(SCAPDL_trial, [nb_frame 1 3]);
     SCAPDL_trial = permute(SCAPDL_trial, [3,2,1]);
 
     % Rear cluster
-    try
-        SCAPDB_arr=markers_arr.([char(subject) '_MTACDB']);
-        SCAPDH_arr=markers_arr.([char(subject) '_MTACDM']);
-        SCAPDL_arr=markers_arr.([char(subject) '_MTACDL']);
-    catch
-         SCAPDB_arr=markers_arr.(['AM01SD_MTACDB']);
-        SCAPDH_arr=markers_arr.(['AM01SD_MTACDM']);
-        SCAPDL_arr=markers_arr.(['AM01SD_MTACDL']);
-    end
+    names_arr = fieldnames(markers_arr);
+    prefix_arr = names_arr{contains(names_arr,'MTACDB')};
+    prefix_arr = prefix_arr(1:6);
+    SCAPDB_arr=markers_arr.([prefix_arr '_MTACDB']);
+    SCAPDH_arr=markers_arr.([prefix_arr '_MTACDM']);
+    SCAPDL_arr=markers_arr.([prefix_arr '_MTACDL']);
     % Rear scaploc
     SCAPLOCB_arr=markers_arr.('ScapLoc_SCLB');
     SCAPLOCMM_arr=markers_arr.('ScapLoc_SCLM');
     SCAPLOCLM_arr=markers_arr.('ScapLoc_SCLL');
+    
     % Advanced cluster
-    try
-        SCAPDB_av=markers_av.([char(subject) '_MTACDB']);
-        SCAPDH_av=markers_av.([char(subject) '_MTACDM']);
-        SCAPDL_av=markers_av.([char(subject) '_MTACDL']);
-    catch
-        SCAPDB_av=markers_av.(['AM01SD_MTACDB']);
-        SCAPDH_av=markers_av.(['AM01SD_MTACDM']);
-        SCAPDL_av=markers_av.(['AM01SD_MTACDL']);
-    end
+    names_av = fieldnames(markers_av);
+    prefix_av = names_av{contains(names_av,'MTACDB')};
+    prefix_av = prefix_av(1:6);
+    SCAPDB_av=markers_av.([prefix_av '_MTACDB']);
+    SCAPDH_av=markers_av.([prefix_av '_MTACDM']);
+    SCAPDL_av=markers_av.([prefix_av '_MTACDL']);
     % Advanced scaploc
     SCAPLOCB_av=markers_av.('ScapLoc_SCLB');
     SCAPLOCMM_av=markers_av.('ScapLoc_SCLM');
