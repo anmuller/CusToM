@@ -1,4 +1,4 @@
-function new_name=ConvertClustertoScaploc(filename_trial, filename_arr, filename_av, token_mean)
+function [new_name,p_trial]=ConvertClustertoScaploc(filename_trial, filename_arr, filename_av, token_mean)
 %% Open files
     subject = char(filename_trial(1:6));
     % Open file of trial
