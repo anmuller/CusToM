@@ -350,11 +350,11 @@ Human_model(incr_solid).joint=1;
 if Signe == 'R'
     Human_model(incr_solid).limit_inf=0;
     Human_model(incr_solid).limit_sup=pi;
-    Human_model(incr_solid).FunctionalAngle='Forearm pronation(+)/supination(-)';
+    Human_model(incr_solid).FunctionalAngle='Forearm pronation(+)';
 else
-    Human_model(incr_solid).limit_inf=0;
-    Human_model(incr_solid).limit_sup=pi;
-    Human_model(incr_solid).FunctionalAngle='Forearm pronation(-)/supination(+)';
+    Human_model(incr_solid).limit_inf=-pi;
+    Human_model(incr_solid).limit_sup=0;
+    Human_model(incr_solid).FunctionalAngle='Forearm pronation(-)';
 end
 Human_model(incr_solid).ActiveJoint=1;
 Human_model(incr_solid).m=Radius_Mass;

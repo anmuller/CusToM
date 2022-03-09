@@ -319,11 +319,11 @@ num_solid=0;
     if Signe == 'R'
         OsteoArticularJoint(incr_solid).limit_inf=0;
         OsteoArticularJoint(incr_solid).limit_sup=pi;
-        OsteoArticularJoint(incr_solid).FunctionalAngle='Forearm pronation(+)/supination(-)';
+        OsteoArticularJoint(incr_solid).FunctionalAngle='Forearm Pronation(+)';
     else
-        OsteoArticularJoint(incr_solid).limit_inf=0;
-        OsteoArticularJoint(incr_solid).limit_sup=pi;
-        OsteoArticularJoint(incr_solid).FunctionalAngle='Forearm pronation(-)/supination(+)';
+        OsteoArticularJoint(incr_solid).limit_inf=-pi;
+        OsteoArticularJoint(incr_solid).limit_sup=0;
+        OsteoArticularJoint(incr_solid).FunctionalAngle='Forearm Pronation(-)';
     end
     OsteoArticularJoint(incr_solid).m=Mass.Forearm_Mass;
     OsteoArticularJoint(incr_solid).b=[0 0 0]';
