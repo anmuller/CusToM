@@ -247,15 +247,20 @@ Human_model(incr_solid).child=s_Clavicle_J2;
 Human_model(incr_solid).mother=s_mother;           
 Human_model(incr_solid).a=[0 1 0]';
 Human_model(incr_solid).joint=1;
-Human_model(incr_solid).limit_inf=-pi/2;
-Human_model(incr_solid).limit_sup=pi/2;
+Human_model(incr_solid).limit_inf=-pi/6;
+Human_model(incr_solid).limit_sup=pi/6;
 Human_model(incr_solid).Visual=0;
 Human_model(incr_solid).m=0;                 
 Human_model(incr_solid).b=pos_attachment_pt;  
 Human_model(incr_solid).I=zeros(3,3);
 Human_model(incr_solid).c=[0 0 0]';
-Human_model(incr_solid).comment='Clavicle Protraction(+)/Retraction(-)';
-Human_model(incr_solid).FunctionalAngle='Clavicle Protraction(+)/Retraction(-)';
+if Sign==1
+    Human_model(incr_solid).comment='Clavicle Protraction(+)/Retraction(-)';
+    Human_model(incr_solid).FunctionalAngle='Clavicle Protraction(+)/Retraction(-)';
+else
+    Human_model(incr_solid).comment='Clavicle Protraction(-)/Retraction(+)';
+    Human_model(incr_solid).FunctionalAngle='Clavicle Protraction(-)/Retraction(+)';
+end
 
 % Clavicle_J2
 num_solid=num_solid+1;        % number of the solid ...
@@ -267,6 +272,17 @@ Human_model(incr_solid).child=s_Clavicle;
 Human_model(incr_solid).mother=s_Clavicle_J1;           
 Human_model(incr_solid).a=[1 0 0]';
 Human_model(incr_solid).joint=1;
+if Sign==1
+    Human_model(incr_solid).limit_inf=-pi/4;
+    Human_model(incr_solid).limit_sup=0.2;
+    Human_model(incr_solid).comment='Clavicle Depression(+)/Elevation(-)';
+    Human_model(incr_solid).FunctionalAngle='Clavicle Depression(+)/Elevation(-)';
+else
+    Human_model(incr_solid).limit_inf=-0.2;
+    Human_model(incr_solid).limit_sup=pi/4;
+    Human_model(incr_solid).comment='Clavicle Depression(-)/Elevation(+)';
+    Human_model(incr_solid).FunctionalAngle='Clavicle Depression(-)/Elevation(+)';
+end
 Human_model(incr_solid).limit_inf=-pi/2;
 Human_model(incr_solid).limit_sup=pi/2;
 Human_model(incr_solid).Visual=0;
@@ -274,8 +290,6 @@ Human_model(incr_solid).m=0;
 Human_model(incr_solid).b=[0 0 0]';  
 Human_model(incr_solid).I=zeros(3,3);
 Human_model(incr_solid).c=[0 0 0]';
-Human_model(incr_solid).comment='Clavicle Depression(-)/Elevation(+)';
-Human_model(incr_solid).FunctionalAngle='Clavicle Depression(-)/Elevation(+)';
 
 
 % Clavicle
@@ -288,8 +302,8 @@ Human_model(incr_solid).child=s_AcromioClavicular_J1;
 Human_model(incr_solid).mother=s_Clavicle_J2;           
 Human_model(incr_solid).a=[0 0 1]';    
 Human_model(incr_solid).joint=1;
-Human_model(incr_solid).limit_inf=-pi/2;
-Human_model(incr_solid).limit_sup=pi/2;
+Human_model(incr_solid).limit_inf=-pi/4;
+Human_model(incr_solid).limit_sup=pi/4;
 Human_model(incr_solid).Visual=1;
 Human_model(incr_solid).calib_k_constraint=[];
 Human_model(incr_solid).m=Mass.Clavicle_Mass;                 
