@@ -305,7 +305,8 @@ Human_model(incr_solid).name=[Signe name];
 Human_model(incr_solid).sister=s_Ulna;
 Human_model(incr_solid).child=s_Radius_J2;
 Human_model(incr_solid).mother=s_mother;
-Human_model(incr_solid).a=Zrot;
+%Human_model(incr_solid).a=Zrot;
+Human_model(incr_solid).a=[0 0 1]';
 Human_model(incr_solid).joint=1;
 Human_model(incr_solid).limit_inf=0;
 Human_model(incr_solid).limit_sup=pi;
@@ -325,10 +326,11 @@ Human_model(incr_solid).name=[Signe name];
 Human_model(incr_solid).sister=0;
 Human_model(incr_solid).child=s_Radius;
 Human_model(incr_solid).mother=s_Radius_J1;
-Human_model(incr_solid).a=Xrot';
+%Human_model(incr_solid).a=Xrot';
+Human_model(incr_solid).a=[1 0 0]';
 Human_model(incr_solid).joint=1;
-Human_model(incr_solid).limit_inf=-pi/4;
-Human_model(incr_solid).limit_sup=pi/4;
+Human_model(incr_solid).limit_inf=-pi;
+Human_model(incr_solid).limit_sup=pi;
 Human_model(incr_solid).ActiveJoint=0;
 Human_model(incr_solid).m=0;
 Human_model(incr_solid).b=[0 0 0]';
@@ -345,17 +347,11 @@ Human_model(incr_solid).name=[Signe name];
 Human_model(incr_solid).sister=0;
 Human_model(incr_solid).child=0;
 Human_model(incr_solid).mother=s_Radius_J2;
-Human_model(incr_solid).a=Pro_supi_axis;
+%Human_model(incr_solid).a=Pro_supi_axis;
+Human_model(incr_solid).a=[0 1 0]';
 Human_model(incr_solid).joint=1;
-if Signe == 'R'
-    Human_model(incr_solid).limit_inf=0;
-    Human_model(incr_solid).limit_sup=pi;
-    Human_model(incr_solid).FunctionalAngle='Forearm pronation(+)';
-else
-    Human_model(incr_solid).limit_inf=-pi;
-    Human_model(incr_solid).limit_sup=0;
-    Human_model(incr_solid).FunctionalAngle='Forearm pronation(-)';
-end
+Human_model(incr_solid).limit_inf=-pi;
+Human_model(incr_solid).limit_sup=pi;
 Human_model(incr_solid).ActiveJoint=1;
 Human_model(incr_solid).m=Radius_Mass;
 % Human_model(incr_solid).Group=[n_group 2];
@@ -423,7 +419,7 @@ Human_model(incr_solid).b=(Ulna_RadiusJointNode-Ulna_HumerusJointNode)';
 Human_model(incr_solid).I=zeros(3,3);
 Human_model(incr_solid).c=[0 0 0]';
 Human_model(incr_solid).Visual=0;
-Human_model(incr_solid).FunctionalAngle=[Signe name];
+Human_model(incr_solid).FunctionalAngle=['Axial displacement'];
 
 % UlnaRadius_J2
 num_solid=num_solid+1;        % solide num�ro ...
@@ -433,17 +429,23 @@ Human_model(incr_solid).name=[Signe name];
 Human_model(incr_solid).sister=0;
 Human_model(incr_solid).child=s_UlnaRadius_J3;
 Human_model(incr_solid).mother=s_UlnaRadius_J1;
-Human_model(incr_solid).a=[0 0 1]';
+Human_model(incr_solid).a=[0 1 0]';
 Human_model(incr_solid).joint=1;
-Human_model(incr_solid).limit_inf=-pi;
-Human_model(incr_solid).limit_sup=pi;
+
+if Signe == 'R'
+    Human_model(incr_solid).limit_inf=0;
+    Human_model(incr_solid).limit_sup=pi;
+else
+    Human_model(incr_solid).limit_inf=-pi;
+    Human_model(incr_solid).limit_sup=0;
+end
 Human_model(incr_solid).ActiveJoint=0;
 Human_model(incr_solid).m=0;
 Human_model(incr_solid).b=[0 0 0]';
 Human_model(incr_solid).I=zeros(3,3);
 Human_model(incr_solid).c=[0 0 0]';
 Human_model(incr_solid).Visual=0;
-Human_model(incr_solid).FunctionalAngle=[Signe name];
+Human_model(incr_solid).FunctionalAngle=['Pronation Supination'];
 
 % UlnaRadius_J3
 num_solid=num_solid+1;        % solide num�ro ...
@@ -453,7 +455,7 @@ Human_model(incr_solid).name=[Signe name];
 Human_model(incr_solid).sister=0;
 Human_model(incr_solid).child=s_UlnaRadius;
 Human_model(incr_solid).mother=s_UlnaRadius_J2;
-Human_model(incr_solid).a=[0 1 0]';
+Human_model(incr_solid).a=[1 0 0]';
 Human_model(incr_solid).joint=1;
 Human_model(incr_solid).limit_inf=-pi;
 Human_model(incr_solid).limit_sup=pi;
@@ -463,7 +465,7 @@ Human_model(incr_solid).b=[0 0 0]';
 Human_model(incr_solid).I=zeros(3,3);
 Human_model(incr_solid).c=[0 0 0]';
 Human_model(incr_solid).Visual=0;
-Human_model(incr_solid).FunctionalAngle=[Signe name];
+Human_model(incr_solid).FunctionalAngle=['Torsional angle'];
 
 % UlnaRadius
 num_solid=num_solid+1;        % solide num�ro ...
@@ -473,7 +475,7 @@ Human_model(incr_solid).name=[Signe name];
 Human_model(incr_solid).sister=0;
 Human_model(incr_solid).child=0;
 Human_model(incr_solid).mother=s_UlnaRadius_J3;
-Human_model(incr_solid).a=[1 0 0]';
+Human_model(incr_solid).a=[0 0 1]';
 Human_model(incr_solid).m=0;
 Human_model(incr_solid).b=[0 0 0]';
 Human_model(incr_solid).I=zeros(3,3);
@@ -484,7 +486,7 @@ Human_model(incr_solid).limit_sup=pi;
 Human_model(incr_solid).ActiveJoint=0;
 Human_model(incr_solid).Visual=1;
 Human_model(incr_solid).ClosedLoop = [Signe 'Radius_UlnaJointNode'];
-Human_model(incr_solid).FunctionalAngle=[Signe name];
+Human_model(incr_solid).FunctionalAngle=['Aperture angle'];
 Human_model(incr_solid).anat_position=UlnaRadius_position_set;
 
 end
