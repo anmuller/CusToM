@@ -305,11 +305,10 @@ Human_model(incr_solid).name=[Signe name];
 Human_model(incr_solid).sister=s_Ulna;
 Human_model(incr_solid).child=s_Radius_J2;
 Human_model(incr_solid).mother=s_mother;
-%Human_model(incr_solid).a=Zrot;
 Human_model(incr_solid).a=[0 0 1]';
 Human_model(incr_solid).joint=1;
 Human_model(incr_solid).limit_inf=0;
-Human_model(incr_solid).limit_sup=pi;
+Human_model(incr_solid).limit_sup=140*pi/180;
 Human_model(incr_solid).ActiveJoint=1;
 Human_model(incr_solid).m=0;
 Human_model(incr_solid).b=pos_attachment_pt;
@@ -326,11 +325,17 @@ Human_model(incr_solid).name=[Signe name];
 Human_model(incr_solid).sister=0;
 Human_model(incr_solid).child=s_Radius;
 Human_model(incr_solid).mother=s_Radius_J1;
-%Human_model(incr_solid).a=Xrot';
 Human_model(incr_solid).a=[1 0 0]';
 Human_model(incr_solid).joint=1;
-Human_model(incr_solid).limit_inf=-pi;
-Human_model(incr_solid).limit_sup=pi;
+if Signe == 'R'
+%    Human_model(incr_solid).limit_inf=-15*pi/180;
+    Human_model(incr_solid).limit_inf=-pi;
+    Human_model(incr_solid).limit_sup=pi;
+else
+    Human_model(incr_solid).limit_inf=-pi;
+    Human_model(incr_solid).limit_sup=pi;
+%    Human_model(incr_solid).limit_sup=15*pi/180;
+end
 Human_model(incr_solid).ActiveJoint=0;
 Human_model(incr_solid).m=0;
 Human_model(incr_solid).b=[0 0 0]';
@@ -347,11 +352,15 @@ Human_model(incr_solid).name=[Signe name];
 Human_model(incr_solid).sister=0;
 Human_model(incr_solid).child=0;
 Human_model(incr_solid).mother=s_Radius_J2;
-%Human_model(incr_solid).a=Pro_supi_axis;
 Human_model(incr_solid).a=[0 1 0]';
 Human_model(incr_solid).joint=1;
-Human_model(incr_solid).limit_inf=-pi;
-Human_model(incr_solid).limit_sup=pi;
+if Signe == 'R'
+    Human_model(incr_solid).limit_inf=-pi;
+    Human_model(incr_solid).limit_sup=pi;
+else
+    Human_model(incr_solid).limit_inf=-pi;
+    Human_model(incr_solid).limit_sup=pi;
+end
 Human_model(incr_solid).ActiveJoint=1;
 Human_model(incr_solid).m=Radius_Mass;
 % Human_model(incr_solid).Group=[n_group 2];
@@ -361,6 +370,7 @@ Human_model(incr_solid).c=-Radius_ElbowJointNode';
 Human_model(incr_solid).anat_position=Radius_position_set;
 Human_model(incr_solid).Visual=1;
 Human_model(incr_solid).density=1.13; %kg.L-1
+Human_model(incr_solid).FunctionalAngle=' ' ;
 
 
 % Wrapping 1
@@ -389,7 +399,7 @@ Human_model(incr_solid).mother=s_mother;
 Human_model(incr_solid).a=[0 0 1]';
 Human_model(incr_solid).joint=1;
 Human_model(incr_solid).limit_inf=0;
-Human_model(incr_solid).limit_sup=pi;
+Human_model(incr_solid).limit_sup=140*pi/180;
 Human_model(incr_solid).m=Ulna_Mass;
 Human_model(incr_solid).I=[I_Ulna(1) I_Ulna(4) I_Ulna(5); I_Ulna(4) I_Ulna(2) I_Ulna(6); I_Ulna(5) I_Ulna(6) I_Ulna(3)];
 Human_model(incr_solid).c=-Ulna_HumerusJointNode';
@@ -431,7 +441,6 @@ Human_model(incr_solid).child=s_UlnaRadius_J3;
 Human_model(incr_solid).mother=s_UlnaRadius_J1;
 Human_model(incr_solid).a=[0 1 0]';
 Human_model(incr_solid).joint=1;
-
 if Signe == 'R'
     Human_model(incr_solid).limit_inf=0;
     Human_model(incr_solid).limit_sup=pi;
