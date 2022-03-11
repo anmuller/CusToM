@@ -292,15 +292,13 @@ Radius_ulna_longitudinal = k*0.0745;
 I_Ulna=[Radius_ulna_sagittal*Radius_ulna_sagittal*Ulna_Mass, Radius_ulna_longitudinal*Radius_ulna_longitudinal*Ulna_Mass, Radius_ulna_transverse*Radius_ulna_transverse*Ulna_Mass, 0, 0, 0];
 
 
-
-%% Cr�ation de la structure "Human_model"
-
+%% Human model structure creation
 num_solid=0;
 %% Radius
 % Radius_J1
-num_solid=num_solid+1;        % solide num�ro ...
-name=list_solid{num_solid}; % nom du solide
-eval(['incr_solid=s_' name ';'])  % num�ro du solide dans le mod�le
+num_solid=num_solid+1;       % solid number
+name=list_solid{num_solid}; % solid name
+eval(['incr_solid=s_' name ';'])  % solid number in human model
 Human_model(incr_solid).name=[Signe name];
 Human_model(incr_solid).sister=s_Ulna;
 Human_model(incr_solid).child=s_Radius_J2;
@@ -318,9 +316,9 @@ Human_model(incr_solid).Visual=0;
 Human_model(incr_solid).FunctionalAngle='Elbow flexion(+)/extension(-)' ;
 
 % Radius_J2
-num_solid=num_solid+1;        % solide num�ro ...
-name=list_solid{num_solid}; % nom du solide
-eval(['incr_solid=s_' name ';'])  % num�ro du solide dans le mod�le
+num_solid=num_solid+1;       % solid number
+name=list_solid{num_solid}; % solid name
+eval(['incr_solid=s_' name ';'])  % solid number in human model
 Human_model(incr_solid).name=[Signe name];
 Human_model(incr_solid).sister=0;
 Human_model(incr_solid).child=s_Radius;
@@ -338,9 +336,9 @@ Human_model(incr_solid).Visual=0;
 Human_model(incr_solid).FunctionalAngle=' ' ;
 
 % Radius
-num_solid=num_solid+1;        % solide num�ro ...
-name=list_solid{num_solid}; % nom du solide
-eval(['incr_solid=s_' name ';'])  % num�ro du solide dans le mod�le
+num_solid=num_solid+1;        % solid number
+name=list_solid{num_solid}; % solid name
+eval(['incr_solid=s_' name ';'])  % solid number in human model
 Human_model(incr_solid).name=[Signe name];
 Human_model(incr_solid).sister=0;
 Human_model(incr_solid).child=0;
@@ -366,26 +364,11 @@ Human_model(incr_solid).anat_position=Radius_position_set;
 Human_model(incr_solid).Visual=1;
 Human_model(incr_solid).density=1.13; %kg.L-1
 
-
-% Wrapping 1
-% Human_model(incr_solid).wrap(1).name=['Wrap' Signe 'RadiusQuadratus'];
-% Human_model(incr_solid).wrap(1).anat_position=['Wrap' Signe 'RadiusQuadratus'];
-% Human_model(incr_solid).wrap(1).type='C'; % C: Cylinder or S: Sphere
-% Human_model(incr_solid).wrap(1).radius=k*0.01;
-% Human_model(incr_solid).wrap(1).R=[ -0.8998    0.4361   -0.0127;
-%                                             0.0046    0.0387    0.9992;
-%                                             0.4363    0.8990   -0.0368];
-% Human_model(incr_solid).wrap(1).location=Mirror*[0.0281 -0.1986 0.0288]'+Radius_ElbowJointNode';
-% Human_model(incr_solid).wrap(1).h=k*0.1;
-% Human_model(incr_solid).wrap(1).num_solid=incr_solid;
-
-
 %% Ulna
-
 % Ulna
-num_solid=num_solid+1;        % solide num�ro ...
-name=list_solid{num_solid}; % nom du solide
-eval(['incr_solid=s_' name ';'])  % num�ro du solide dans le mod�le
+num_solid=num_solid+1;        % solid number
+name=list_solid{num_solid}; % solid name
+eval(['incr_solid=s_' name ';'])  % solid number in human model
 Human_model(incr_solid).name=[Signe name];
 Human_model(incr_solid).sister=0;
 Human_model(incr_solid).child=s_UlnaRadius_J1;
@@ -406,9 +389,9 @@ Human_model(incr_solid).FunctionalAngle='Elbow flexion(+)/extension(-)' ;
 Human_model(incr_solid).density=1.13; %kg.L-1
 
 % UlnaRadius_J1
-num_solid=num_solid+1;        % solide num�ro ...
-name=list_solid{num_solid}; % nom du solide
-eval(['incr_solid=s_' name ';'])  % num�ro du solide dans le mod�le
+num_solid=num_solid+1;       % solid number
+name=list_solid{num_solid}; % solid name
+eval(['incr_solid=s_' name ';'])  % solid number in human model
 Human_model(incr_solid).name=[Signe name];
 Human_model(incr_solid).sister=0;
 Human_model(incr_solid).child=s_UlnaRadius_J2;
@@ -426,9 +409,9 @@ Human_model(incr_solid).Visual=0;
 Human_model(incr_solid).FunctionalAngle=[Signe name];
 
 % UlnaRadius_J2
-num_solid=num_solid+1;        % solide num�ro ...
-name=list_solid{num_solid}; % nom du solide
-eval(['incr_solid=s_' name ';'])  % num�ro du solide dans le mod�le
+num_solid=num_solid+1;       % solid number
+name=list_solid{num_solid}; % solid name
+eval(['incr_solid=s_' name ';'])  % solid number in human model
 Human_model(incr_solid).name=[Signe name];
 Human_model(incr_solid).sister=0;
 Human_model(incr_solid).child=s_UlnaRadius_J3;
@@ -446,9 +429,9 @@ Human_model(incr_solid).Visual=0;
 Human_model(incr_solid).FunctionalAngle=[Signe name];
 
 % UlnaRadius_J3
-num_solid=num_solid+1;        % solide num�ro ...
-name=list_solid{num_solid}; % nom du solide
-eval(['incr_solid=s_' name ';'])  % num�ro du solide dans le mod�le
+num_solid=num_solid+1;       % solid number
+name=list_solid{num_solid}; % solid name
+eval(['incr_solid=s_' name ';'])  % solid number in human model
 Human_model(incr_solid).name=[Signe name];
 Human_model(incr_solid).sister=0;
 Human_model(incr_solid).child=s_UlnaRadius;
@@ -466,9 +449,9 @@ Human_model(incr_solid).Visual=0;
 Human_model(incr_solid).FunctionalAngle=[Signe name];
 
 % UlnaRadius
-num_solid=num_solid+1;        % solide num�ro ...
-name=list_solid{num_solid}; % nom du solide
-eval(['incr_solid=s_' name ';'])  % num�ro du solide dans le mod�le
+num_solid=num_solid+1;       % solid number
+name=list_solid{num_solid}; % solid name
+eval(['incr_solid=s_' name ';'])  % solid number in human model
 Human_model(incr_solid).name=[Signe name];
 Human_model(incr_solid).sister=0;
 Human_model(incr_solid).child=0;

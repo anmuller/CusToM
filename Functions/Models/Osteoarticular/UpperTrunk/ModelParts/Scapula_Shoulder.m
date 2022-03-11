@@ -83,7 +83,8 @@ end
 CoM_Thorax               = k*[0.060 0.303 0];
 Thorax_T12L1JointNode    = k*[0.022 0.154 0] - CoM_Thorax;
 Thorax_ShoulderRightNode = k*[-0.0408 0.1099 0.1929]-Thorax_T12L1JointNode;
-Thorax_osim2antoine      = [k k k]; 
+% Theta_seth_to_ISB        = Rodrigues([0 1 0]', pi/2);
+Thorax_osim2antoine      = [k k k];
 %Thorax_osim2antoine      = [k k Thorax_ShoulderRightNode(3)/0.17]; 
 
 % ------------------------ Scapula ----------------------------------------
@@ -100,9 +101,9 @@ Scapula_cluster_mid = Thorax_osim2antoine.*Mirror*[-0.119492 0.0147336 -0.038580
 Scapula_locator_AI  = Thorax_osim2antoine.*Mirror*[-0.109351 -0.1132 -0.0903848]' - Scapula_CoM;
 Scapula_locator_TS  = Thorax_osim2antoine.*Mirror*[-0.0874576 -0.0120416 -0.098654]' - Scapula_CoM;
 Scapula_locator_AA  = Thorax_osim2antoine.*Mirror*[-0.0393614 -0.00318483 0.0080672]' - Scapula_CoM;
-Thorax_Rx           = Thorax_osim2antoine(1)*0.07;
-Thorax_Ry           = Thorax_osim2antoine(2)*0.15;
-Thorax_Rz           = Thorax_osim2antoine(3)*0.07;
+Thorax_Rx           = abs(Thorax_osim2antoine(1)*0.07);
+Thorax_Ry           = abs(Thorax_osim2antoine(2)*0.15);
+Thorax_Rz           = abs(Thorax_osim2antoine(3)*0.07);
 
 %% Definition of anatomical landmarThorax_osim2antoine.s (with respect to the center of mass of the solid)
 
@@ -169,55 +170,55 @@ Scapula_position_set = {...
     
     % Via points from moment arm optimization
     
-    [Side 'Scapula_Rhomboideus_I_VP2'], k*Mirror*[-0.0203 ; -0.0141 ; 0.0030] - Scapula_CoM ;... 
+    [Side 'Scapula_Rhomboideus_I_VP2'], (k*Mirror*[-0.0203 ; -0.0141 ; 0.0030] - Scapula_CoM) ;... 
     
-    [Side 'Scapula_DeltoideusScapula_P_VP1'], k*Mirror*[0.0021 ; 0.0068 ; 0.0720] - Scapula_CoM ;...
+    [Side 'Scapula_DeltoideusScapula_P_VP1'], (k*Mirror*[0.0021 ; 0.0068 ; 0.0720] - Scapula_CoM) ;...
     
-    [Side 'Scapula_DeltoideusScapula_M_VP1'], k*Mirror*[0.0561 ; 0.0316 ; 0.0933] - Scapula_CoM ;...
+    [Side 'Scapula_DeltoideusScapula_M_VP1'], (k*Mirror*[0.0561 ; 0.0316 ; 0.0933] - Scapula_CoM) ;...
     
-    [Side 'Scapula_TrapeziusScapula_M_VP2'], k*Mirror*[-0.0172 ; 0.0204 ; -0.0067]  - Scapula_CoM ;...
+    [Side 'Scapula_TrapeziusScapula_M_VP2'], (k*Mirror*[-0.0172 ; 0.0204 ; -0.0067]  - Scapula_CoM) ;...
     
-    [Side 'Scapula_TrapeziusScapula_S_VP2'], k*Mirror*[-0.0141 ; 0.0147 ; -0.0028]- Scapula_CoM ;...
+    [Side 'Scapula_TrapeziusScapula_S_VP2'], (k*Mirror*[-0.0141 ; 0.0147 ; -0.0028]- Scapula_CoM) ;...
     
-    [Side 'Scapula_TrapeziusScapula_I_VP2'], k*Mirror*[-0.0163 ; 0.0325 ; -0.0073] - Scapula_CoM ;...
+    [Side 'Scapula_TrapeziusScapula_I_VP2'], (k*Mirror*[-0.0163 ; 0.0325 ; -0.0073] - Scapula_CoM) ;...
     
-    [Side 'Scapula_Supraspinatus_P_VP1'], k*Mirror*[-0.0040 ; 0.0398 ; 0.0115]  - Scapula_CoM ;...
+    [Side 'Scapula_Supraspinatus_P_VP1'], (k*Mirror*[-0.0040 ; 0.0398 ; 0.0115]  - Scapula_CoM) ;...
     
-    [Side 'Scapula_Supraspinatus_A_VP1'], k*Mirror*[-0.0176 ; 0.0694 ; -0.0654] - Scapula_CoM ;...
+    [Side 'Scapula_Supraspinatus_A_VP1'], (k*Mirror*[-0.0176 ; 0.0694 ; -0.0654] - Scapula_CoM) ;...
     
-    [Side 'Scapula_Infraspinatus_I_VP1'], k*Mirror*[-0.0649 ; -0.0304 ; 0.0004] - Scapula_CoM ;...
+    [Side 'Scapula_Infraspinatus_I_VP1'], (k*Mirror*[-0.0649 ; -0.0304 ; 0.0004] - Scapula_CoM) ;...
     
-    [Side 'Scapula_Infraspinatus_S_VP1'], k*Mirror*[-0.0649 ; 0.0318 ; -0.0041]  - Scapula_CoM ;...
+    [Side 'Scapula_Infraspinatus_S_VP1'], (k*Mirror*[-0.0649 ; 0.0318 ; -0.0041]  - Scapula_CoM) ;...
     
-    [Side 'Scapula_Coracobrachialis_VP1'], k*Mirror*[0.0691 ; -0.0039 ; 0.0345]- Scapula_CoM ;...
+    [Side 'Scapula_Coracobrachialis_VP1'], (k*Mirror*[0.0691 ; -0.0039 ; 0.0345]- Scapula_CoM) ;...
     
-    [Side 'Scapula_TeresMajor_VP1'], k*Mirror*[-0.0465 ; -0.0784 ; 0.0122] - Scapula_CoM ;...
+    [Side 'Scapula_TeresMajor_VP1'], (k*Mirror*[-0.0465 ; -0.0784 ; 0.0122] - Scapula_CoM) ;...
     
-    [Side 'Scapula_TeresMinor_VP1'], k*Mirror*[-0.0292 ; -0.0290 ; 0.0193] - Scapula_CoM ;...
+    [Side 'Scapula_TeresMinor_VP1'], (k*Mirror*[-0.0292 ; -0.0290 ; 0.0193] - Scapula_CoM) ;...
     
-    [Side 'Scapula_Subscapularis_I_VP1'], k*Mirror*[-0.0069 ; -0.0503 ; 0.0072] - Scapula_CoM ;...
+    [Side 'Scapula_Subscapularis_I_VP1'], (k*Mirror*[-0.0069 ; -0.0503 ; 0.0072] - Scapula_CoM) ;...
 
-    [Side 'Scapula_Subscapularis_M_VP1'], k*Mirror*[-0.0393 ; -0.0928 ; -0.0652] - Scapula_CoM ;...
+    [Side 'Scapula_Subscapularis_M_VP1'], (k*Mirror*[-0.0393 ; -0.0928 ; -0.0652] - Scapula_CoM) ;...
     
-    [Side 'Scapula_Subscapularis_S_VP1'], k*Mirror*[0.0272 ; -0.0259 ; 0.0133] - Scapula_CoM ;...
+    [Side 'Scapula_Subscapularis_S_VP1'], (k*Mirror*[0.0272 ; -0.0259 ; 0.0133] - Scapula_CoM) ;...
     
-    [Side 'Scapula_SerratusAnterior_M_VP2'], k*Mirror*[-0.0373 ; -0.0060 ; 0.0286] - Scapula_CoM ;...
+    [Side 'Scapula_SerratusAnterior_M_VP2'], (k*Mirror*[-0.0373 ; -0.0060 ; 0.0286] - Scapula_CoM) ;...
     
-    [Side 'Scapula_SerratusAnterior_I_VP2'], k*Mirror*[-0.0379 ; -0.0112 ; 0.0328]- Scapula_CoM ;...
+    [Side 'Scapula_SerratusAnterior_I_VP2'], (k*Mirror*[-0.0379 ; -0.0112 ; 0.0328]- Scapula_CoM) ;...
     
-    [Side 'Scapula_PectoralisMinor_VP2'], k*Mirror*[-0.0223 ; -0.0027 ; 0.0027] - Scapula_CoM ;...
+    [Side 'Scapula_PectoralisMinor_VP2'], (k*Mirror*[-0.0223 ; -0.0027 ; 0.0027] - Scapula_CoM) ;...
 
-    [Side 'Scapula_PectoralisMajorThorax_I_VP2'], k*Mirror*[0.0003 ; -0.0154 ; -0.0084] - Scapula_CoM ;... 
-    [Side 'Scapula_PectoralisMajorThorax_I_VP3'], k*Mirror*[0.0532 ; -0.0066 ; 0.0709] - Scapula_CoM ;... *
+    [Side 'Scapula_PectoralisMajorThorax_I_VP2'], (k*Mirror*[0.0003 ; -0.0154 ; -0.0084] - Scapula_CoM) ;... 
+    [Side 'Scapula_PectoralisMajorThorax_I_VP3'], (k*Mirror*[0.0532 ; -0.0066 ; 0.0709] - Scapula_CoM) ;... 
     
-    [Side 'Scapula_PectoralisMajorThorax_M_VP2'], k*Mirror*[0.0100 ; -0.0011 ; -0.0044] - Scapula_CoM ;... 
-    [Side 'Scapula_PectoralisMajorThorax_M_VP3'], k*Mirror*[0.0543 ; -0.0166 ; 0.0616] - Scapula_CoM ;... 
+    [Side 'Scapula_PectoralisMajorThorax_M_VP2'], (k*Mirror*[0.0100 ; -0.0011 ; -0.0044] - Scapula_CoM) ;... 
+    [Side 'Scapula_PectoralisMajorThorax_M_VP3'], (k*Mirror*[0.0543 ; -0.0166 ; 0.0616] - Scapula_CoM) ;... 
     
-    [Side 'Scapula_LatissimusDorsi_S_VP2'], k*Mirror*[0.0112 ; 0.0143 ; -0.0236] - Scapula_CoM ;... 
-    [Side 'Scapula_LatissimusDorsi_S_VP3'], k*Mirror*[0.0552 ; 0.0065 ; 0.0666] - Scapula_CoM ;... 
+    [Side 'Scapula_LatissimusDorsi_S_VP2'], (k*Mirror*[0.0112 ; 0.0143 ; -0.0236] - Scapula_CoM) ;... 
+    [Side 'Scapula_LatissimusDorsi_S_VP3'], (k*Mirror*[0.0552 ; 0.0065 ; 0.0666] - Scapula_CoM) ;... 
     
-    [Side 'Scapula_LatissimusDorsi_I_VP2'], k*Mirror*[0.0177 ; 0.0144 ; -0.0240] - Scapula_CoM ;... 
-    [Side 'Scapula_LatissimusDorsi_I_VP3'], k*Mirror*[0.0593 ; 0.0153 ; 0.0624] - Scapula_CoM ;... 
+    [Side 'Scapula_LatissimusDorsi_I_VP2'], (k*Mirror*[0.0177 ; 0.0144 ; -0.0240] - Scapula_CoM) ;... 
+    [Side 'Scapula_LatissimusDorsi_I_VP3'], (k*Mirror*[0.0593 ; 0.0153 ; 0.0624] - Scapula_CoM) ;... 
     
     [Side 'Scapula_DeltoideusClavicle-P2'],Thorax_osim2antoine.*Mirror*([0.019562226742916928 -0.0065870855556006396 0.01039769231874158]')-Scapula_CoM;...
 
@@ -261,15 +262,12 @@ I_Scapula=(norm(Thorax_osim2antoine)^2*Mass.Scapula_Mass/Scapula_Mass_generic)*I
 num_solid=0;
 %% Scapulo-thoracic joint
 
+syms theta phi real% latitude longitude
+x = -Thorax_Rx*cos(theta)*cos(phi);
 
+y = Thorax_Ry*sin(theta);
 
-syms phi lambda real% latitude longitude
-x= Thorax_Rx*sin(lambda);
-
-y= -Thorax_Ry*sin(phi)*cos(lambda);
-
-
-z= Mirror(3,3)*Thorax_Rz*cos(phi)*cos(lambda);
+z = Sign*Thorax_Rz*cos(theta)*sin(phi);
 
 
 % ScapuloThoracic_J1
@@ -297,12 +295,12 @@ Human_model(incr_solid).linear_constraint=[];
 Human_model(incr_solid).Visual=0;
 % Dependancy
 Human_model(incr_solid).kinematic_dependancy.active=1;
-Human_model(incr_solid).kinematic_dependancy.Joint=[incr_solid+4]; % Thoracicellips
+Human_model(incr_solid).kinematic_dependancy.Joint=[incr_solid+3; incr_solid+4]; % Thoracicellips
 % Kinematic dependancy function
-f_tx = matlabFunction( x,'vars',{lambda});
+f_tx = matlabFunction(x,'vars',{theta,phi});
 Human_model(incr_solid).kinematic_dependancy.q=f_tx;
-Human_model(incr_solid).comment='scapulothoracic x regression';
-Human_model(incr_solid).FunctionalAngle=[name];
+Human_model(incr_solid).comment='Scapulothoracic x displacement';
+Human_model(incr_solid).FunctionalAngle='Scapulothoracic x displacement';
 
 % ScapuloThoracic_J2
 num_solid=num_solid+1;                                      % solid number
@@ -327,13 +325,13 @@ Human_model(incr_solid).theta=[];
 Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
 Human_model(incr_solid).linear_constraint=[];
 Human_model(incr_solid).Visual=0;
-Human_model(incr_solid).comment='scapulothoracic y regression';
-Human_model(incr_solid).FunctionalAngle=[name];
+Human_model(incr_solid).comment='Scapulothoracic y displacement';
+Human_model(incr_solid).FunctionalAngle='Scapulothoracic y displacement';
 % Dependancy
 Human_model(incr_solid).kinematic_dependancy.active=1;
-Human_model(incr_solid).kinematic_dependancy.Joint=[incr_solid+2; incr_solid+3]; % Thoracicellips
+Human_model(incr_solid).kinematic_dependancy.Joint=[incr_solid+2]; % Thoracicellips
 % Kinematic dependancy function
-f_ty = matlabFunction(y,'vars',{phi,lambda});
+f_ty = matlabFunction(y,'vars',{theta});
 Human_model(incr_solid).kinematic_dependancy.q=f_ty;
 
 % ScapuloThoracic_J3
@@ -359,13 +357,13 @@ Human_model(incr_solid).theta=[];
 Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
 Human_model(incr_solid).linear_constraint=[];
 Human_model(incr_solid).Visual=0;
-Human_model(incr_solid).FunctionalAngle=[name];
-Human_model(incr_solid).comment='scapulothoracic z regression';
+Human_model(incr_solid).FunctionalAngle='Scapulothoracic z displacement';
+Human_model(incr_solid).comment='Scapulothoracic z displacement';
 % Dependancy
 Human_model(incr_solid).kinematic_dependancy.active=1;
 Human_model(incr_solid).kinematic_dependancy.Joint=[incr_solid+1; incr_solid+2]; % Thoracicellips
 % Kinematic dependancy function
-f_tz = matlabFunction(z,'vars',{phi,lambda});
+f_tz = matlabFunction(z,'vars',{theta,phi});
 Human_model(incr_solid).kinematic_dependancy.q=f_tz;
 
 % ScapuloThoracic_J4
@@ -376,7 +374,34 @@ Human_model(incr_solid).name=[Side name];          % solid name with side
 Human_model(incr_solid).sister=0;                   % Solid's sister
 Human_model(incr_solid).child=s_ScapuloThoracic_J5;         % Solid's child
 Human_model(incr_solid).mother=s_ScapuloThoracic_J3;            % Solid's mother
-Human_model(incr_solid).a=[1 0 0]';                          
+Human_model(incr_solid).a=[0 0 -1]';                          
+Human_model(incr_solid).joint=1;
+Human_model(incr_solid).limit_inf=-pi/2;
+Human_model(incr_solid).limit_sup=pi/2;
+Human_model(incr_solid).ActiveJoint=1;
+Human_model(incr_solid).m=0;                        % Reference mass
+Human_model(incr_solid).b=[0 0 0]';        % Attachment point position in mother's frame
+Human_model(incr_solid).I=zeros(3,3);               % Reference inertia matrix
+Human_model(incr_solid).c=[0 0 0]';                 % Centre of mass position in local frame
+Human_model(incr_solid).calib_k_constraint=[];
+Human_model(incr_solid).u=[];                       % fixed rotation with respect to u axis of theta angle
+Human_model(incr_solid).theta=[];
+Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
+Human_model(incr_solid).linear_constraint=[];
+Human_model(incr_solid).Visual=0;
+Human_model(incr_solid).FunctionalAngle='Scapula elevation(+)/depression(-)';
+Human_model(incr_solid).comment='Scapula elevation(+)/depression(-)';
+
+
+% ScapuloThoracic_J5
+num_solid=num_solid+1;                                      % solid number
+name=list_solid{num_solid};                                 % solid name
+eval(['incr_solid=s_' name ';'])                            % solid number in model tree
+Human_model(incr_solid).name=[Side name];          % solid name with side
+Human_model(incr_solid).sister=0;                   % Solid's sister
+Human_model(incr_solid).child=s_ScapuloThoracic_J6;         % Solid's child
+Human_model(incr_solid).mother=s_ScapuloThoracic_J4;            % Solid's mother
+Human_model(incr_solid).a=[0 1 0]';                          
 Human_model(incr_solid).joint=1;
 Human_model(incr_solid).limit_inf=-pi;
 Human_model(incr_solid).limit_sup=pi;
@@ -391,35 +416,8 @@ Human_model(incr_solid).theta=[];
 Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
 Human_model(incr_solid).linear_constraint=[];
 Human_model(incr_solid).Visual=0;
-Human_model(incr_solid).FunctionalAngle=[name];
-Human_model(incr_solid).comment='Scapula abduction - adduction';
-
-
-% ScapuloThoracic_J5
-num_solid=num_solid+1;                                      % solid number
-name=list_solid{num_solid};                                 % solid name
-eval(['incr_solid=s_' name ';'])                            % solid number in model tree
-Human_model(incr_solid).name=[Side name];          % solid name with side
-Human_model(incr_solid).sister=0;                   % Solid's sister
-Human_model(incr_solid).child=s_ScapuloThoracic_J6;         % Solid's child
-Human_model(incr_solid).mother=s_ScapuloThoracic_J4;            % Solid's mother
-Human_model(incr_solid).a=[0 1 0]';                          
-Human_model(incr_solid).joint=1;
-Human_model(incr_solid).limit_inf=-pi/2;
-Human_model(incr_solid).limit_sup=pi/2;
-Human_model(incr_solid).ActiveJoint=1;
-Human_model(incr_solid).m=0;                        % Reference mass
-Human_model(incr_solid).b=[0 0 0]';        % Attachment point position in mother's frame
-Human_model(incr_solid).I=zeros(3,3);               % Reference inertia matrix
-Human_model(incr_solid).c=[0 0 0]';                 % Centre of mass position in local frame
-Human_model(incr_solid).calib_k_constraint=[];
-Human_model(incr_solid).u=[];                       % fixed rotation with respect to u axis of theta angle
-Human_model(incr_solid).theta=[];
-Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
-Human_model(incr_solid).linear_constraint=[];
-Human_model(incr_solid).Visual=0;
-Human_model(incr_solid).FunctionalAngle=[name];
-Human_model(incr_solid).comment='Scapula elevation - depression';
+Human_model(incr_solid).FunctionalAngle='Scapula abduction(+)/adduction(-)';
+Human_model(incr_solid).comment='Scapula abduction(+)/adduction(-)';
 
 
 % ScapuloThoracic_J6
@@ -430,7 +428,7 @@ Human_model(incr_solid).name=[Side name];          % solid name with side
 Human_model(incr_solid).sister=0;                   % Solid's sister
 Human_model(incr_solid).child=s_Scapula;         % Solid's child
 Human_model(incr_solid).mother=s_ScapuloThoracic_J5;            % Solid's mother
-Human_model(incr_solid).a=[0 0 1]';                          
+Human_model(incr_solid).a=[1 0 0]';                          
 Human_model(incr_solid).joint=1;
 Human_model(incr_solid).limit_inf=-pi/2;
 Human_model(incr_solid).limit_sup=pi/2;
@@ -445,8 +443,8 @@ Human_model(incr_solid).theta=[];
 Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
 Human_model(incr_solid).linear_constraint=[];
 Human_model(incr_solid).Visual=0;
-Human_model(incr_solid).comment='Scapula upward rotation';
-Human_model(incr_solid).FunctionalAngle=[name];
+Human_model(incr_solid).comment='Scapula rotation Upward(-)/Downward(+)';
+Human_model(incr_solid).FunctionalAngle='Scapula rotation Upward(-)/Downward(+)';
 
 % Scapula
 num_solid=num_solid+1;                                      % solid number
@@ -467,101 +465,14 @@ Human_model(incr_solid).I=[I_Scapula(1) I_Scapula(4) I_Scapula(5); I_Scapula(4) 
 Human_model(incr_solid).c=-Scapula_stJointNode;                 % Centre of mass position in local frame
 Human_model(incr_solid).calib_k_constraint=[];
 Human_model(incr_solid).u=[];                       % fixed rotation with respect to u axis of theta angle
-Human_model(incr_solid).theta=[];
+Human_model(incr_solid).theta=0;
 Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
 Human_model(incr_solid).linear_constraint=[];
 Human_model(incr_solid).anat_position=Scapula_position_set;
 Human_model(incr_solid).Visual=1;
 Human_model(incr_solid).visual_file=['Holzbaur/Scapula_' lower(Side) '.mat'];
-Human_model(incr_solid).comment='Scapula internal rotation';
-Human_model(incr_solid).FunctionalAngle=[name];
+Human_model(incr_solid).comment='Scapula Internal rotation';
+Human_model(incr_solid).FunctionalAngle='Scapula Internal rotation';
 Human_model(incr_solid).density=1.04; %kg.L-1
-
 Human_model(incr_solid).volume_constraints=2*[Thorax_Rx Thorax_Ry Thorax_Rz ; Thorax_Rx Thorax_Ry Thorax_Rz]/2; 
-
-
-% AcromioClavicular Joint
-
-% % AcromioClavicular_J1
-% num_solid=num_solid+1;                                      % solid number
-% name=list_solid{num_solid};                                 % solid name
-% eval(['incr_solid=s_' name ';'])                            % solid number in model tree
-% Human_model(incr_solid).name=[Side name];          % solid name with side
-% Human_model(incr_solid).sister=0;                   % Solid's sister
-% Human_model(incr_solid).child=s_AcromioClavicular_J2;         % Solid's child
-% Human_model(incr_solid).mother=s_Scapula;            % Solid's mother
-% Human_model(incr_solid).a=[0 1 0]';                          
-% Human_model(incr_solid).joint=1;
-% Human_model(incr_solid).limit_inf=-pi;
-% Human_model(incr_solid).limit_sup=pi;
-% Human_model(incr_solid).ActiveJoint=1;
-% Human_model(incr_solid).m=0;                        % Reference mass
-% Human_model(incr_solid).b=Scapula_acJointNode-Scapula_stJointNode;        % Attachment point position in mother's frame
-% Human_model(incr_solid).I=zeros(3,3);               % Reference inertia matrix
-% Human_model(incr_solid).c=[0 0 0]';                 % Centre of mass position in local frame
-% Human_model(incr_solid).calib_k_constraint=[];
-% Human_model(incr_solid).u=[];                       % fixed rotation with respect to u axis of theta angle
-% Human_model(incr_solid).theta=[];
-% Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
-% Human_model(incr_solid).linear_constraint=[];
-% Human_model(incr_solid).Visual=0;
-% Human_model(incr_solid).comment='to be completed';
-% Human_model(incr_solid).FunctionalAngle=[Side name];
-% 
-% 
-% % AcromioClavicular_J2
-% num_solid=num_solid+1;                                      % solid number
-% name=list_solid{num_solid};                                 % solid name
-% eval(['incr_solid=s_' name ';'])                            % solid number in model tree
-% Human_model(incr_solid).name=[Side name];          % solid name with side
-% Human_model(incr_solid).sister=0;                   % Solid's sister
-% Human_model(incr_solid).child=s_AcromioClavicular_J3;            % Solid's child
-% Human_model(incr_solid).mother=s_AcromioClavicular_J1;            % Solid's mother
-% Human_model(incr_solid).a=[1 0 0]';                          
-% Human_model(incr_solid).joint=1;
-% Human_model(incr_solid).limit_inf=-pi;
-% Human_model(incr_solid).limit_sup=pi;
-% Human_model(incr_solid).ActiveJoint=1;
-% Human_model(incr_solid).m=0;                        % Reference mass
-% Human_model(incr_solid).b=[0 0 0]';        % Attachment point position in mother's frame
-% Human_model(incr_solid).I=zeros(3,3);               % Reference inertia matrix
-% Human_model(incr_solid).c=[0 0 0]';                 % Centre of mass position in local frame
-% Human_model(incr_solid).calib_k_constraint=[];
-% Human_model(incr_solid).u=[];                       % fixed rotation with respect to u axis of theta angle
-% Human_model(incr_solid).theta=[];
-% Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
-% Human_model(incr_solid).linear_constraint=[];
-% Human_model(incr_solid).Visual=0;
-% Human_model(incr_solid).comment='to be completed';
-% Human_model(incr_solid).FunctionalAngle=[Side name];
-% 
-% 
-% % AcromioClavicular_J3
-% num_solid=num_solid+1;                                      % solid number
-% name=list_solid{num_solid};                                 % solid name
-% eval(['incr_solid=s_' name ';'])                            % solid number in model tree
-% Human_model(incr_solid).name=[Side name];          % solid name with side
-% Human_model(incr_solid).sister=0;                   % Solid's sister
-% Human_model(incr_solid).child=0;         % Solid's child
-% Human_model(incr_solid).mother=s_AcromioClavicular_J2;            % Solid's mother
-% Human_model(incr_solid).a=[0 1 0]';                          
-% Human_model(incr_solid).joint=1;
-% Human_model(incr_solid).limit_inf=-pi;
-% Human_model(incr_solid).limit_sup=pi;
-% Human_model(incr_solid).ActiveJoint=1;
-% Human_model(incr_solid).m=0;        % Reference mass
-% Human_model(incr_solid).b=[0 0 0]';        % Attachment point position in mother's frame
-% Human_model(incr_solid).I=zeros(3,3);               % Reference inertia matrix
-% Human_model(incr_solid).c=[0 0 0]';                 % Centre of mass position in local frame
-% Human_model(incr_solid).calib_k_constraint=[];
-% Human_model(incr_solid).u=[];                       % fixed rotation with respect to u axis of theta angle
-% Human_model(incr_solid).theta=[];
-% Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
-% Human_model(incr_solid).ClosedLoop=[Side 'Clavicle_AcromioClavicularJointNode'];              % if this solid close a closed-loop chain : {number of solid i on which is attached this solid ; attachement point (local frame of solid i}
-% Human_model(incr_solid).linear_constraint=[];
-% Human_model(incr_solid).Visual=0;
-% Human_model(incr_solid).comment='to be completed';
-% Human_model(incr_solid).FunctionalAngle=[Side name];
-
 end
-

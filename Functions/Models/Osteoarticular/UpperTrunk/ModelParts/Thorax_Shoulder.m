@@ -73,7 +73,7 @@ CoM_Thorax = k*[0.060 0.303 0];
 Thorax_T12L1JointNode = k*[0.022 0.154 0] - CoM_Thorax;
 Thorax_C1HatNode = k*[0.026 0.6 0] - CoM_Thorax;
 Thorax_T1C5 = k*[0.013 0.462 0] - CoM_Thorax;
-Thorax_ShoulderRightNode=k*[-0.0408 0.1099 0.1929]-Thorax_T12L1JointNode;
+Thorax_ShoulderRightNode = k*[-0.0408 0.1099 0.1929]-Thorax_T12L1JointNode;
 NeckNode=Thorax_C1HatNode;
 
 % Joints imported and adjusted from (Puchaud et al. 2019)
