@@ -66,7 +66,7 @@ else
         end
         Markers_set = BiomechanicalModel.Markers;
         Muscles = BiomechanicalModel.Muscles;
-        q6dof = [0 0 0 pi -pi/2 pi/2]'; % rotation for visual
+        q6dof = [0 0 0 -pi/2 pi/2 -pi/2]'; % rotation for visual
         q = zeros(numel(Human_model),1);
         % Forward kinematics
         if isfield(AnimateParameters,'sol_anim')
