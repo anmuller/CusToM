@@ -401,7 +401,11 @@ Human_model(incr_solid).name=[Side name];          % solid name with side
 Human_model(incr_solid).sister=0;                   % Solid's sister
 Human_model(incr_solid).child=s_ScapuloThoracic_J6;         % Solid's child
 Human_model(incr_solid).mother=s_ScapuloThoracic_J4;            % Solid's mother
-Human_model(incr_solid).a=[0 1 0]';                          
+if Sign==1
+    Human_model(incr_solid).a=[0 1 0]';
+else
+    Human_model(incr_solid).a=[0 -1 0]';
+end
 Human_model(incr_solid).joint=1;
 Human_model(incr_solid).limit_inf=-pi;
 Human_model(incr_solid).limit_sup=pi;
