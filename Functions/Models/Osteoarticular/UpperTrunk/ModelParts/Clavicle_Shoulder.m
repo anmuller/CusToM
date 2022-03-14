@@ -88,7 +88,8 @@ CoM_Clavicle = Thorax_osim2antoine.*Mirror*[-0.011096 0.0063723 0.054168]';
 % Node locations in CusToM frame
 Clavicle_acJointNode = Thorax_osim2antoine.*Mirror*[-0.02924 0.02024 0.12005]' - CoM_Clavicle;
 Clavicle_scJointNode = Thorax_osim2antoine.*Mirror*[0 0 0]' - CoM_Clavicle;
-Clavicle_marker_set1 = Thorax_osim2antoine.*Mirror*[0.005 0.02 0.07]';
+% Clavicle_marker_set1 = Thorax_osim2antoine.*Mirror*[0.005 0.02 0.07]';
+Clavicle_marker_set1 = Thorax_osim2antoine.*Mirror*[0.0147438 0.0128003 0.0544239]'-CoM_Clavicle;
 
 
 %----------------- Scapula -------------------------------------------
@@ -255,11 +256,11 @@ Human_model(incr_solid).b=pos_attachment_pt;
 Human_model(incr_solid).I=zeros(3,3);
 Human_model(incr_solid).c=[0 0 0]';
 if Sign==1
-    Human_model(incr_solid).comment='Clavicle Protraction(+)/Retraction(-)';
-    Human_model(incr_solid).FunctionalAngle='Clavicle Protraction(+)/Retraction(-)';
+    Human_model(incr_solid).comment='Right Clavicle Protraction(+)/Retraction(-)';
+    Human_model(incr_solid).FunctionalAngle='Right Clavicle Protraction(+)/Retraction(-)';
 else
-    Human_model(incr_solid).comment='Clavicle Protraction(-)/Retraction(+)';
-    Human_model(incr_solid).FunctionalAngle='Clavicle Protraction(-)/Retraction(+)';
+    Human_model(incr_solid).comment='Left Clavicle Protraction(-)/Retraction(+)';
+    Human_model(incr_solid).FunctionalAngle='Left Clavicle Protraction(-)/Retraction(+)';
 end
 
 % Clavicle_J2
@@ -275,13 +276,13 @@ Human_model(incr_solid).joint=1;
 if Sign==1
     Human_model(incr_solid).limit_inf=-pi/4;
     Human_model(incr_solid).limit_sup=0.2;
-    Human_model(incr_solid).comment='Clavicle Depression(+)/Elevation(-)';
-    Human_model(incr_solid).FunctionalAngle='Clavicle Depression(+)/Elevation(-)';
+    Human_model(incr_solid).comment='Right Clavicle Depression(+)/Elevation(-)';
+    Human_model(incr_solid).FunctionalAngle='Right Clavicle Depression(+)/Elevation(-)';
 else
     Human_model(incr_solid).limit_inf=-0.2;
     Human_model(incr_solid).limit_sup=pi/4;
-    Human_model(incr_solid).comment='Clavicle Depression(-)/Elevation(+)';
-    Human_model(incr_solid).FunctionalAngle='Clavicle Depression(-)/Elevation(+)';
+    Human_model(incr_solid).comment='Left Clavicle Depression(-)/Elevation(+)';
+    Human_model(incr_solid).FunctionalAngle='Left Clavicle Depression(-)/Elevation(+)';
 end
 Human_model(incr_solid).limit_inf=-pi/2;
 Human_model(incr_solid).limit_sup=pi/2;
@@ -312,8 +313,13 @@ Human_model(incr_solid).I=[I_clavicle(1) I_clavicle(4) I_clavicle(5); I_clavicle
 Human_model(incr_solid).c=-Clavicle_scJointNode;
 Human_model(incr_solid).anat_position=Clavicle_position_set;
 Human_model(incr_solid).visual_file = ['Holzbaur/clavicle_' lower(Side) '.mat'];
-Human_model(incr_solid).comment='Clavicle Axial Rotation Forward(-)/Backward(+)';
-Human_model(incr_solid).FunctionalAngle='Clavicle Axial Rotation Forward(-)/Backward(+)';
+if Sign==1
+    Human_model(incr_solid).comment='Right Axial Rotation Forward(-)/Backward(+)';
+    Human_model(incr_solid).FunctionalAngle='Right Clavicle Axial Rotation Forward(-)/Backward(+)';
+else
+    Human_model(incr_solid).comment='Left Clavicle Axial Rotation Forward(-)/Backward(+)';
+    Human_model(incr_solid).FunctionalAngle='Left Clavicle Axial Rotation Forward(-)/Backward(+)';
+end
 Human_model(incr_solid).density=1.04; %kg.L-1
 
 % AcromioClavicular_J1
