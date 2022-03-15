@@ -29,10 +29,10 @@ list_solid={'Wrist_J1' 'Hand'};
 %% Choose right or left arm
 if Signe == 'R'
     Mirror=[1 0 0; 0 1 0; 0 0 1];
-else
-    if Signe == 'L'
-        Mirror=[1 0 0; 0 1 0; 0 0 -1];
-    end
+    FullSide='Right';
+elseif Signe == 'L'
+    Mirror=[1 0 0; 0 1 0; 0 0 -1];
+    FullSide='Left';
 end
 
 %% solid numbering incremation
@@ -87,15 +87,9 @@ L_forearm = 0.2628;
 k_Pennestri2custom = L_forearm/(cr-dr)*k*Mirror; % Forearm length homotethy
 Pennestri2custom = k_Pennestri2custom*[0 0 1;-1 0 0;0 -1 0];
 
-
-
-
-
-
 % From OpenSim
 osim2antoine = [k (Hand_WristJointNode(2)-Hand_EndNode(2))/0.23559 k];
 Wrist_origin =Mirror*osim2antoine'.*([0.003992 -0.015054 0.002327]');
-
 
 
 %%              Definition of anatomical landmarks
@@ -219,7 +213,7 @@ OsteoArticularModel(incr_solid).b=pos_attachment_pt;
 OsteoArticularModel(incr_solid).I=zeros(3,3);
 OsteoArticularModel(incr_solid).c=[0 0 0]';
 OsteoArticularModel(incr_solid).Visual=0;
-OsteoArticularModel(incr_solid).FunctionalAngle='Wrist flexion(+)/extension(-)' ;
+OsteoArticularModel(incr_solid).FunctionalAngle=[FullSide 'Wrist flexion(+)/extension(-)'];
 
 
 % Hand
@@ -235,11 +229,11 @@ OsteoArticularModel(incr_solid).joint=1;
 if Signe == 'R'
     OsteoArticularModel(incr_solid).limit_inf=-45*pi/180;
     OsteoArticularModel(incr_solid).limit_sup=90*pi/180;
-    OsteoArticularModel(incr_solid).FunctionalAngle='Wrist deviation ulnar(+)/radial(-)' ;
+    OsteoArticularModel(incr_solid).FunctionalAngle='Right Wrist deviation ulnar(+)/radial(-)' ;
 else
     OsteoArticularModel(incr_solid).limit_inf=-90*pi/180;
     OsteoArticularModel(incr_solid).limit_sup=45*pi/180;
-    OsteoArticularModel(incr_solid).FunctionalAngle='Wrist deviation ulnar(-)/radial(+)' ;
+    OsteoArticularModel(incr_solid).FunctionalAngle='Left Wrist deviation ulnar(-)/radial(+)' ;
 end
 OsteoArticularModel(incr_solid).m=Mass.Hand_Mass;
 OsteoArticularModel(incr_solid).b=[0 0 0]';
@@ -250,5 +244,4 @@ OsteoArticularModel(incr_solid).Visual=1;
 OsteoArticularModel(incr_solid).visual_file = ['Holzbaur/hand_' Signe '.mat'];
 OsteoArticularModel(incr_solid).L={[Signe 'Hand_WristJointNode'];[Signe 'Hand_EndNode']};
 OsteoArticularModel(incr_solid).density=1.16; %kg.L-1
-
 end

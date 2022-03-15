@@ -35,10 +35,10 @@ list_solid={'Radius_J1' 'Radius_J2' 'Radius' 'Ulna' 'UlnaRadius_J1' 'UlnaRadius_
 %% Choix bras droite ou gauche
 if Signe == 'R'
     Mirror=[1 0 0; 0 1 0; 0 0 1];
-else
-    if Signe == 'L'
-        Mirror=[1 0 0; 0 1 0; 0 0 -1];
-    end
+    FullSide='Right';
+elseif Signe == 'L'
+    Mirror=[1 0 0; 0 1 0; 0 0 -1];
+    FullSide='Left';
 end
 
 
@@ -313,7 +313,7 @@ Human_model(incr_solid).b=pos_attachment_pt;
 Human_model(incr_solid).I=zeros(3,3);
 Human_model(incr_solid).c=[0 0 0]';
 Human_model(incr_solid).Visual=0;
-Human_model(incr_solid).FunctionalAngle='Elbow flexion(+)/extension(-)' ;
+Human_model(incr_solid).FunctionalAngle=[FullSide 'Elbow flexion(+)/extension(-)'] ;
 
 % Radius_J2
 num_solid=num_solid+1;       % solid number
@@ -391,7 +391,7 @@ Human_model(incr_solid).b=pos_attachment_pt+(k*[0 0 -0.0382]*Mirror)';
 Human_model(incr_solid).calib_k_constraint=[];
 Human_model(incr_solid).anat_position=Ulna_position_set;
 Human_model(incr_solid).Visual=1;
-Human_model(incr_solid).FunctionalAngle='Elbow flexion(+)/extension(-)' ;
+Human_model(incr_solid).FunctionalAngle=[FullSide 'Elbow flexion(+)/extension(-)'];
 Human_model(incr_solid).density=1.13; %kg.L-1
 
 % UlnaRadius_J1
@@ -412,7 +412,7 @@ Human_model(incr_solid).b=(Ulna_RadiusJointNode-Ulna_HumerusJointNode)';
 Human_model(incr_solid).I=zeros(3,3);
 Human_model(incr_solid).c=[0 0 0]';
 Human_model(incr_solid).Visual=0;
-Human_model(incr_solid).FunctionalAngle=['Axial displacement'];
+Human_model(incr_solid).FunctionalAngle=[FullSide 'Radio-ulnar axial displacement'];
 
 % UlnaRadius_J2
 num_solid=num_solid+1;       % solid number
@@ -427,9 +427,11 @@ Human_model(incr_solid).joint=1;
 if Signe == 'R'
     Human_model(incr_solid).limit_inf=0;
     Human_model(incr_solid).limit_sup=pi;
+    Human_model(incr_solid).FunctionalAngle=['Right Elbow Pronation(+)'];
 else
     Human_model(incr_solid).limit_inf=-pi;
     Human_model(incr_solid).limit_sup=0;
+    Human_model(incr_solid).FunctionalAngle=['Left Elbow Pronation(-)'];
 end
 Human_model(incr_solid).ActiveJoint=0;
 Human_model(incr_solid).m=0;
@@ -437,7 +439,6 @@ Human_model(incr_solid).b=[0 0 0]';
 Human_model(incr_solid).I=zeros(3,3);
 Human_model(incr_solid).c=[0 0 0]';
 Human_model(incr_solid).Visual=0;
-Human_model(incr_solid).FunctionalAngle=['Pronation Supination'];
 
 % UlnaRadius_J3
 num_solid=num_solid+1;       % solid number
@@ -457,7 +458,7 @@ Human_model(incr_solid).b=[0 0 0]';
 Human_model(incr_solid).I=zeros(3,3);
 Human_model(incr_solid).c=[0 0 0]';
 Human_model(incr_solid).Visual=0;
-Human_model(incr_solid).FunctionalAngle=['Torsional angle'];
+Human_model(incr_solid).FunctionalAngle=[FullSide 'Radio-ulnar Torsional angle'];
 
 % UlnaRadius
 num_solid=num_solid+1;       % solid number
@@ -478,7 +479,6 @@ Human_model(incr_solid).limit_sup=pi;
 Human_model(incr_solid).ActiveJoint=0;
 Human_model(incr_solid).Visual=1;
 Human_model(incr_solid).ClosedLoop = [Signe 'Radius_UlnaJointNode'];
-Human_model(incr_solid).FunctionalAngle=['Aperture angle'];
+Human_model(incr_solid).FunctionalAngle=[FullSide 'Radio-ulnar Aperture angle'];
 Human_model(incr_solid).anat_position=UlnaRadius_position_set;
-
 end

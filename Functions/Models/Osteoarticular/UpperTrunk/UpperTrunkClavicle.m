@@ -91,10 +91,11 @@ NeckNode=Thorax_C1HatNode;
 Thorax_osim2antoine     = [k k Thorax_ShoulderRightNode(3)/0.17]; % scaling coef based on shoulder width
 CoM_Thorax_osim         = Thorax_osim2antoine.*[-0.0591 -0.1486 0];
 CoM_Clavicle_osim       = Thorax_osim2antoine.*[-0.011096 0.0063723 0.054168];
-Scapula_CoM_osim        = Thorax_osim2antoine'.*[-0.054694 -0.035032 -0.043734]';
-Clavicle_AcromioClavicularJointNode = Thorax_osim2antoine.*[-0.02924 0.02024 0.12005];
-Scapula_acJointNode     = Thorax_osim2antoine'.*[-0.01357 0.00011 -0.01523]';
-Clavicle2Scapula        = Scapula_acJointNode - Clavicle_AcromioClavicularJointNode;
+Scapula_CoM_osim        = Thorax_osim2antoine.*[-0.054694 -0.035032 -0.043734];
+Clavicle_acJointNode_osim = Thorax_osim2antoine.*[-0.02924 0.02024 0.12005]-CoM_Clavicle_osim;
+Scapula_acJointNode_osim     = Thorax_osim2antoine.*[-0.01357 0.00011 -0.01523]-Scapula_CoM_osim;
+Clavicle2Scapula        = Scapula_acJointNode_osim - Clavicle_acJointNode_osim;
+
 
 RThorax_Triceps = ([-0.05365 -0.01373 0.14723]).*Thorax_osim2antoine; % in the frame osimarm26
 LThorax_Triceps = ([-0.05365 -0.01373 -0.14723]).*Thorax_osim2antoine; % in the frame osimarm26
@@ -612,8 +613,8 @@ num_solid=0;
     OsteoArticularModel(incr_solid).b=Thorax_scjJointRightNode';  
     OsteoArticularModel(incr_solid).I=zeros(3,3);
     OsteoArticularModel(incr_solid).c=[0 0 0]';
-    OsteoArticularModel(incr_solid).comment='Clavicle Protraction(+)/Retraction(-)';
-    OsteoArticularModel(incr_solid).FunctionalAngle='Clavicle Protraction(+)/Retraction(-)';
+    OsteoArticularModel(incr_solid).comment='Right Clavicle Protraction(+)/Retraction(-)';
+    OsteoArticularModel(incr_solid).FunctionalAngle='Right Clavicle Protraction(+)/Retraction(-)';
 
     % RClavicle_J2
     num_solid=num_solid+1;        % number of the solid ...
@@ -632,8 +633,8 @@ num_solid=0;
     OsteoArticularModel(incr_solid).b=[0 0 0]';  
     OsteoArticularModel(incr_solid).I=zeros(3,3);
     OsteoArticularModel(incr_solid).c=[0 0 0]';
-    OsteoArticularModel(incr_solid).comment='Clavicle Depression(+)/Elevation(-)';
-    OsteoArticularModel(incr_solid).FunctionalAngle='Clavicle Depression(+)/Elevation(-)';
+    OsteoArticularModel(incr_solid).comment='Right Clavicle Depression(+)/Elevation(-)';
+    OsteoArticularModel(incr_solid).FunctionalAngle='Right Clavicle Depression(+)/Elevation(-)';
 
     % RClavicle
     num_solid=num_solid+1;        % number of the solid ...
@@ -655,8 +656,8 @@ num_solid=0;
     OsteoArticularModel(incr_solid).c=[0 0 0]';
     OsteoArticularModel(incr_solid).anat_position=RClavicle_position_set;
     OsteoArticularModel(incr_solid).visual_file = ['Holzbaur/clavicle_r.mat'];
-    OsteoArticularModel(incr_solid).comment='Clavicle Axial rotation Forward(-)/Backward(+)';
-    OsteoArticularModel(incr_solid).FunctionalAngle='Clavicle Axial rotation Forward(-)/Backward(+)';
+    OsteoArticularModel(incr_solid).comment='Right Clavicle Axial rotation Forward(-)/Backward(+)';
+    OsteoArticularModel(incr_solid).FunctionalAngle='Right Clavicle Axial rotation Forward(-)/Backward(+)';
   
     %% Lclavicle
     % LClavicle_J1
@@ -676,8 +677,8 @@ num_solid=0;
     OsteoArticularModel(incr_solid).b=Thorax_scjJointLeftNode';  
     OsteoArticularModel(incr_solid).I=zeros(3,3);
     OsteoArticularModel(incr_solid).c=[0 0 0]';
-    OsteoArticularModel(incr_solid).comment='Clavicle Protraction(-)/Retraction(+)';
-    OsteoArticularModel(incr_solid).FunctionalAngle='Clavicle Axial Rotation Forward(-)/Backward(+)';
+    OsteoArticularModel(incr_solid).comment='Left Clavicle Protraction(-)/Retraction(+)';
+    OsteoArticularModel(incr_solid).FunctionalAngle='Left Clavicle Axial Rotation Forward(-)/Backward(+)';
 
     
     % LClavicle_J2
@@ -697,8 +698,8 @@ num_solid=0;
     OsteoArticularModel(incr_solid).b=[0 0 0]';  
     OsteoArticularModel(incr_solid).I=zeros(3,3);
     OsteoArticularModel(incr_solid).c=[0 0 0]';
-    OsteoArticularModel(incr_solid).comment='Clavicle Depression(-)/Elevation(+)';
-    OsteoArticularModel(incr_solid).FunctionalAngle='Clavicle Depression(-)/Elevation(+)';
+    OsteoArticularModel(incr_solid).comment='Left Clavicle Depression(-)/Elevation(+)';
+    OsteoArticularModel(incr_solid).FunctionalAngle='Left Clavicle Depression(-)/Elevation(+)';
 
     % LClavicle
     num_solid=num_solid+1;        % number of the solid ...
@@ -720,6 +721,6 @@ num_solid=0;
     OsteoArticularModel(incr_solid).c=[0 0 0]';
     OsteoArticularModel(incr_solid).anat_position=LClavicle_position_set;
     OsteoArticularModel(incr_solid).visual_file = ['Holzbaur/clavicle_l.mat'];
-    OsteoArticularModel(incr_solid).comment='Clavicle Axial rotation Forward(-)/Backward(+)';
-    OsteoArticularModel(incr_solid).FunctionalAngle='Clavicle Axial rotation Forward(-)/Backward(+)';
+    OsteoArticularModel(incr_solid).comment='Left Clavicle Axial rotation Forward(-)/Backward(+)';
+    OsteoArticularModel(incr_solid).FunctionalAngle='Left Clavicle Axial rotation Forward(-)/Backward(+)';
 end

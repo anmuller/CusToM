@@ -30,11 +30,11 @@ list_solid={'Glenohumeral_J1' 'Glenohumeral_J2' 'Humerus'};
 if Signe == 'R'
     Mirror=[1 0 0; 0 1 0; 0 0 1];
     Signe_bool=0;
-else
-    if Signe == 'L'
-        Mirror=[1 0 0; 0 1 0; 0 0 -1];
-        Signe_bool=1;
-    end
+    FullSide='Right';
+elseif Signe == 'L'
+    Mirror=[1 0 0; 0 1 0; 0 0 -1];
+    Signe_bool=1;
+    FullSide='Left';
 end
 
 %% solid numbering incremation
@@ -313,13 +313,8 @@ OsteoArticularModel(incr_solid).child=s_Glenohumeral_J2;
 OsteoArticularModel(incr_solid).mother=s_mother;                       % mother : defined as an input of the function
 OsteoArticularModel(incr_solid).a=[0 1 0]';                          % rotation /x
 OsteoArticularModel(incr_solid).joint=1;
-if Signe == 'R'
-    OsteoArticularModel(incr_solid).limit_inf=-pi;                       	% inferior joint biomechanical stop
-    OsteoArticularModel(incr_solid).limit_sup=pi;                      		% superior joint biomechanical stop
-else
-    OsteoArticularModel(incr_solid).limit_inf=-pi;                       % inferior joint biomechanical stop
-    OsteoArticularModel(incr_solid).limit_sup=pi;                      % superior joint biomechanical stop
-end
+OsteoArticularModel(incr_solid).limit_inf=-pi;                       	% inferior joint biomechanical stop
+OsteoArticularModel(incr_solid).limit_sup=pi;                      		% superior joint biomechanical stop
 OsteoArticularModel(incr_solid).m=0;                                 % reference mass
 OsteoArticularModel(incr_solid).b=pos_attachment_pt;                 % attachment point with respect to the parent's frame
 OsteoArticularModel(incr_solid).I=zeros(3,3);                        % reference inertia matrix
@@ -331,7 +326,7 @@ OsteoArticularModel(incr_solid).KinematicsCut=[];              % kinematic cut
 OsteoArticularModel(incr_solid).ClosedLoop=[];                 % if this solid close a closed-loop chain : {number of solid i on which is attached this solid ; attachement point (local frame of solid i}
 OsteoArticularModel(incr_solid).linear_constraint=[];
 OsteoArticularModel(incr_solid).Visual=0;
-OsteoArticularModel(incr_solid).FunctionalAngle='GH plane of elevation';
+OsteoArticularModel(incr_solid).FunctionalAngle=[FullSide 'GH plane of elevation'];
 
 % Glenohumeral_J2           % Negative GH elevation (ISB recommandations: Wu et al. 2005)
 num_solid=num_solid+1;        % number of the solid ...
@@ -346,11 +341,11 @@ OsteoArticularModel(incr_solid).joint=1;
 if Signe == 'R'
     OsteoArticularModel(incr_solid).limit_inf=-4*pi/5;                     % inferior joint biomechanical stop
     OsteoArticularModel(incr_solid).limit_sup=pi/4;                    % superior joint biomechanical stop
-    OsteoArticularModel(incr_solid).FunctionalAngle='GH Elevation(-)/Depression(+)';
+    OsteoArticularModel(incr_solid).FunctionalAngle='Right GH Elevation(-)/Depression(+)';
 else
     OsteoArticularModel(incr_solid).limit_inf=-pi/4;                   % inferior joint biomechanical stop
     OsteoArticularModel(incr_solid).limit_sup=4*pi/5;                      % superior joint biomechanical stop
-    OsteoArticularModel(incr_solid).FunctionalAngle='GH Elevation(+)/Depression(-)';
+    OsteoArticularModel(incr_solid).FunctionalAngle='Left GH Elevation(+)/Depression(-)';
 end
 OsteoArticularModel(incr_solid).m=0;
 OsteoArticularModel(incr_solid).b=[0 0 0]';
@@ -381,9 +376,9 @@ OsteoArticularModel(incr_solid).Visual=1;
 OsteoArticularModel(incr_solid).visual_file = ['Holzbaur/humerus_' Signe '.mat'];
 OsteoArticularModel(incr_solid).L={[Signe 'Humerus_ghJointNode'];[Signe 'Humerus_ElbowJointNode']};
 if Signe == 'R'
-    OsteoArticularModel(incr_solid).FunctionalAngle='GH Axial rotation Internal(+)/External(-)';
+    OsteoArticularModel(incr_solid).FunctionalAngle='Right GH Axial rotation Internal(+)/External(-)';
 else
-    OsteoArticularModel(incr_solid).FunctionalAngle='GH Axial rotation Internal(-)/External(+)';
+    OsteoArticularModel(incr_solid).FunctionalAngle='Left GH Axial rotation Internal(-)/External(+)';
 end
 OsteoArticularModel(incr_solid).density=1.07; %kg.L-1
 

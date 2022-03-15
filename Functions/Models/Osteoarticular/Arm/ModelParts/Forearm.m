@@ -28,11 +28,11 @@ list_solid={'Elbow_J1' 'Forearm'};
 
 %% Choose arm right or left
 if Signe == 'R'
-Mirror=[1 0 0; 0 1 0; 0 0 1];
-else
-    if Signe == 'L'
+    Mirror=[1 0 0; 0 1 0; 0 0 1];
+    FullSide='Right';
+elseif Signe == 'L'
     Mirror=[1 0 0; 0 1 0; 0 0 -1];
-    end
+    FullSide='Left';
 end
 
 %% solid numbering incremation
@@ -305,7 +305,7 @@ num_solid=0;
     OsteoArticularJoint(incr_solid).c=-Forearm_ElbowJointNode';
     OsteoArticularJoint(incr_solid).anat_position=Elbow_J1_position_set;
     OsteoArticularJoint(incr_solid).Visual=0;
-    OsteoArticularJoint(incr_solid).FunctionalAngle='Elbow flexion(+)/extension(-)' ;
+    OsteoArticularJoint(incr_solid).FunctionalAngle=[FullSide 'Elbow flexion(+)/extension(-)'] ;
     % Forearm
     num_solid=num_solid+1;        % number of the solid ...
     name=list_solid{num_solid}; % nom du solide
@@ -319,11 +319,11 @@ num_solid=0;
     if Signe == 'R'
         OsteoArticularJoint(incr_solid).limit_inf=0;
         OsteoArticularJoint(incr_solid).limit_sup=pi;
-        OsteoArticularJoint(incr_solid).FunctionalAngle='Forearm Pronation(+)';
+        OsteoArticularJoint(incr_solid).FunctionalAngle='Right Forearm Pronation(+)';
     else
         OsteoArticularJoint(incr_solid).limit_inf=-pi;
         OsteoArticularJoint(incr_solid).limit_sup=0;
-        OsteoArticularJoint(incr_solid).FunctionalAngle='Forearm Pronation(-)';
+        OsteoArticularJoint(incr_solid).FunctionalAngle='Left Forearm Pronation(-)';
     end
     OsteoArticularJoint(incr_solid).m=Mass.Forearm_Mass;
     OsteoArticularJoint(incr_solid).b=[0 0 0]';
@@ -333,6 +333,4 @@ num_solid=0;
     OsteoArticularJoint(incr_solid).Visual=1;
     OsteoArticularJoint(incr_solid).visual_file = ['Holzbaur/radius_' Signe '.mat'];
     OsteoArticularJoint(incr_solid).L={[Signe 'Forearm_ElbowJointNode'];[Signe 'Forearm_WristJointNode']};
-   
-
 end

@@ -29,10 +29,12 @@ if Side == 'R'
     Mirror=[1 0 0; 0 1 0; 0 0 1];
     Sign=1;
     Cote='D';
+    FullSide='Right';
 elseif Side == 'L'
     Mirror=[1 0 0; 0 1 0; 0 0 -1];
     Sign=-1;
     Cote='G';
+    FullSide='Left';
 end
 
 %% Solid numbering incremation
@@ -313,13 +315,8 @@ Human_model(incr_solid).I=[I_clavicle(1) I_clavicle(4) I_clavicle(5); I_clavicle
 Human_model(incr_solid).c=-Clavicle_scJointNode;
 Human_model(incr_solid).anat_position=Clavicle_position_set;
 Human_model(incr_solid).visual_file = ['Holzbaur/clavicle_' lower(Side) '.mat'];
-if Sign==1
-    Human_model(incr_solid).comment='Right Axial Rotation Forward(-)/Backward(+)';
-    Human_model(incr_solid).FunctionalAngle='Right Clavicle Axial Rotation Forward(-)/Backward(+)';
-else
-    Human_model(incr_solid).comment='Left Clavicle Axial Rotation Forward(-)/Backward(+)';
-    Human_model(incr_solid).FunctionalAngle='Left Clavicle Axial Rotation Forward(-)/Backward(+)';
-end
+Human_model(incr_solid).comment=[FullSide 'Clavicle Axial Rotation Forward(-)/Backward(+)'];
+Human_model(incr_solid).FunctionalAngle=[FullSide 'Clavicle Axial Rotation Forward(-)/Backward(+)'];
 Human_model(incr_solid).density=1.04; %kg.L-1
 
 % AcromioClavicular_J1

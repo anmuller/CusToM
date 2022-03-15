@@ -91,19 +91,20 @@ Thorax_osim2antoine      = [k k k];
 % Centre of mass location in OpenSim frame
 Scapula_CoM = Thorax_osim2antoine.*Mirror*[-0.054694 -0.035032 -0.043734]';
 % Landmarks location in CusToM frame
-Scapula_ghJointNode = Thorax_osim2antoine.*Mirror*[-0.00955; -0.034; 0.009] - Scapula_CoM;
-Scapula_stJointNode = Thorax_osim2antoine.*Mirror*[-0.05982; -0.03904; -0.056] - Scapula_CoM;
-Scapula_acJointNode = Thorax_osim2antoine.*Mirror*[-0.01357; 0.00011; -0.01523] - Scapula_CoM;
-Scapula_acromion_marker    = Thorax_osim2antoine.*Mirror*[-0.0142761 0.0131922 -0.00563961]' - Scapula_CoM;
-Scapula_cluster_med = Thorax_osim2antoine.*Mirror*[-0.0860033 0.0298369 -0.00786593]' - Scapula_CoM;
-Scapula_cluster_lat = Thorax_osim2antoine.*Mirror*[-0.0956621 0.0398035 -0.0552027]' - Scapula_CoM;
-Scapula_cluster_mid = Thorax_osim2antoine.*Mirror*[-0.119492 0.0147336 -0.0385808]' - Scapula_CoM;
-Scapula_locator_AI  = Thorax_osim2antoine.*Mirror*[-0.109351 -0.1132 -0.0903848]' - Scapula_CoM;
-Scapula_locator_TS  = Thorax_osim2antoine.*Mirror*[-0.0874576 -0.0120416 -0.098654]' - Scapula_CoM;
-Scapula_locator_AA  = Thorax_osim2antoine.*Mirror*[-0.0393614 -0.00318483 0.0080672]' - Scapula_CoM;
-Thorax_Rx           = abs(Thorax_osim2antoine(1)*0.07);
-Thorax_Ry           = abs(Thorax_osim2antoine(2)*0.15);
-Thorax_Rz           = abs(Thorax_osim2antoine(3)*0.07);
+Scapula_ghJointNode         = Thorax_osim2antoine.*Mirror*[-0.00955; -0.034; 0.009] - Scapula_CoM;
+Scapula_stJointNode         = Thorax_osim2antoine.*Mirror*[-0.05982; -0.03904; -0.056] - Scapula_CoM;
+Scapula_acJointNode         = Thorax_osim2antoine.*Mirror*[-0.01357; 0.00011; -0.01523] - Scapula_CoM;
+Scapula_acromion_plane      = Thorax_osim2antoine.*Mirror*[-0.0142761 0.0131922 -0.00563961]' - Scapula_CoM;
+Scapula_acromion            = Thorax_osim2antoine.*Mirror*[-0.0449693 -0.00324551 0.00460274]' - Scapula_CoM;
+Scapula_cluster_med         = Thorax_osim2antoine.*Mirror*[-0.0860033 0.0298369 -0.00786593]' - Scapula_CoM;
+Scapula_cluster_lat         = Thorax_osim2antoine.*Mirror*[-0.0956621 0.0398035 -0.0552027]' - Scapula_CoM;
+Scapula_cluster_mid         = Thorax_osim2antoine.*Mirror*[-0.119492 0.0147336 -0.0385808]' - Scapula_CoM;
+Scapula_locator_AI          = Thorax_osim2antoine.*Mirror*[-0.109351 -0.1132 -0.0903848]' - Scapula_CoM;
+Scapula_locator_TS          = Thorax_osim2antoine.*Mirror*[-0.0874576 -0.0120416 -0.098654]' - Scapula_CoM;
+Scapula_locator_AA          = Thorax_osim2antoine.*Mirror*[-0.0393614 -0.00318483 0.0080672]' - Scapula_CoM;
+Thorax_Rx                   = abs(Thorax_osim2antoine(1)*0.07);
+Thorax_Ry                   = abs(Thorax_osim2antoine(2)*0.15);
+Thorax_Rz                   = abs(Thorax_osim2antoine(3)*0.07);
 
 %% Definition of anatomical landmarThorax_osim2antoine.s (with respect to the center of mass of the solid)
 
@@ -112,11 +113,12 @@ Scapula_position_set = {...
     [Side 'Scapula_AcromioClavicularJointNode'], Scapula_acJointNode;...
     ['Thorax_Shoulder' FullSide 'Node'], Scapula_ghJointNode;...
     % MarThorax_osim2antoine.ers
-    [Side 'SHO'], Scapula_acromion_marker;...
+    [Side 'SHO'], Scapula_acromion_plane;...
     ['MTAC' Cote 'M'], Scapula_cluster_med;...
     ['MTAC' Cote 'B'], Scapula_cluster_mid;...
     ['MTAC' Cote 'L'], Scapula_cluster_lat;...
     'ThoracicEllipsoid_radius', [Thorax_Rx Thorax_Ry Thorax_Rz]';...
+    [Side 'Acromion summit'], Scapula_acromion;...
     % Muscle paths
     
     % Muscles adapted from ArmMuscles
@@ -299,8 +301,8 @@ Human_model(incr_solid).kinematic_dependancy.Joint=[incr_solid+3; incr_solid+4];
 % Kinematic dependancy function
 f_tx = matlabFunction(x,'vars',{theta,phi});
 Human_model(incr_solid).kinematic_dependancy.q=f_tx;
-Human_model(incr_solid).comment='Scapulothoracic x displacement';
-Human_model(incr_solid).FunctionalAngle='Scapulothoracic x displacement';
+Human_model(incr_solid).comment=[FullSide 'Scapulothoracic x displacement'];
+Human_model(incr_solid).FunctionalAngle=[FullSide 'Scapulothoracic x displacement'];
 
 % ScapuloThoracic_J2
 num_solid=num_solid+1;                                      % solid number
@@ -325,8 +327,8 @@ Human_model(incr_solid).theta=[];
 Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
 Human_model(incr_solid).linear_constraint=[];
 Human_model(incr_solid).Visual=0;
-Human_model(incr_solid).comment='Scapulothoracic y displacement';
-Human_model(incr_solid).FunctionalAngle='Scapulothoracic y displacement';
+Human_model(incr_solid).comment=[FullSide 'Scapulothoracic y displacement'];
+Human_model(incr_solid).FunctionalAngle=[FullSide 'Scapulothoracic y displacement'];
 % Dependancy
 Human_model(incr_solid).kinematic_dependancy.active=1;
 Human_model(incr_solid).kinematic_dependancy.Joint=incr_solid+2; % Thoracicellips
@@ -357,8 +359,8 @@ Human_model(incr_solid).theta=[];
 Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
 Human_model(incr_solid).linear_constraint=[];
 Human_model(incr_solid).Visual=0;
-Human_model(incr_solid).FunctionalAngle='Scapulothoracic z displacement';
-Human_model(incr_solid).comment='Scapulothoracic z displacement';
+Human_model(incr_solid).FunctionalAngle=[FullSide 'Scapulothoracic z displacement'];
+Human_model(incr_solid).comment=[FullSide 'Scapulothoracic z displacement'];
 % Dependancy
 Human_model(incr_solid).kinematic_dependancy.active=1;
 Human_model(incr_solid).kinematic_dependancy.Joint=[incr_solid+1; incr_solid+2]; % Thoracicellips
@@ -389,13 +391,8 @@ Human_model(incr_solid).theta=[];
 Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
 Human_model(incr_solid).linear_constraint=[];
 Human_model(incr_solid).Visual=0;
-if Sign==1
-    Human_model(incr_solid).FunctionalAngle='Right Scapula elevation(-)/depression(+)';
-    Human_model(incr_solid).comment='Right Scapula elevation(-)/depression(+)';
-else
-    Human_model(incr_solid).FunctionalAngle='Left Scapula elevation(-)/depression(+)';
-    Human_model(incr_solid).comment='Left Scapula elevation(-)/depression(+)';
-end
+Human_model(incr_solid).FunctionalAngle=[FullSide 'Scapula elevation(-)/depression(+)'];
+Human_model(incr_solid).comment=[FullSide 'Scapula elevation(-)/depression(+)'];
 
 % ScapuloThoracic_J5
 num_solid=num_solid+1;                                      % solid number
@@ -452,13 +449,8 @@ Human_model(incr_solid).theta=[];
 Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
 Human_model(incr_solid).linear_constraint=[];
 Human_model(incr_solid).Visual=0;
-if Sign==1
-    Human_model(incr_solid).comment='Right Scapula rotation Upward(-)/Downward(+)';
-    Human_model(incr_solid).FunctionalAngle='Right Scapula rotation Upward(-)/Downward(+)';
-else
-    Human_model(incr_solid).comment='Left Scapula rotation Upward(-)/Downward(+)';
-    Human_model(incr_solid).FunctionalAngle='Left Scapula rotation Upward(-)/Downward(+)';
-end
+Human_model(incr_solid).comment=[FullSide 'Scapula rotation Upward(-)/Downward(+)'];
+Human_model(incr_solid).FunctionalAngle=[FullSide 'Scapula rotation Upward(-)/Downward(+)'];
 
 % Scapula
 num_solid=num_solid+1;                                      % solid number
@@ -485,13 +477,8 @@ Human_model(incr_solid).linear_constraint=[];
 Human_model(incr_solid).anat_position=Scapula_position_set;
 Human_model(incr_solid).Visual=1;
 Human_model(incr_solid).visual_file=['Holzbaur/Scapula_' lower(Side) '.mat'];
-if Sign==1
-    Human_model(incr_solid).comment='Right Scapula Internal rotation';
-    Human_model(incr_solid).FunctionalAngle='Right Scapula Internal rotation';
-else
-    Human_model(incr_solid).comment='Left Scapula Internal rotation';
-    Human_model(incr_solid).FunctionalAngle='Left Scapula Internal rotation';
-end
+Human_model(incr_solid).comment=[FullSide 'Scapula Internal rotation'];
+Human_model(incr_solid).FunctionalAngle=[FullSide 'Scapula Internal rotation'];
 Human_model(incr_solid).density=1.04; %kg.L-1
 Human_model(incr_solid).volume_constraints=2*[Thorax_Rx Thorax_Ry Thorax_Rz ; Thorax_Rx Thorax_Ry Thorax_Rz]/2; 
 end
