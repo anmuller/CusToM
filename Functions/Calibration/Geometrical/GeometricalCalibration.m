@@ -308,7 +308,7 @@ if size(GC.q_dep,1)>0
                 
                 syms theta real% latitude
                 
-                Human_model_calib(j).kinematic_dependancy.q=matlabFunction(-calib_parameters.radius(2)*sin(theta),'vars',{theta});
+                Human_model_calib(j).kinematic_dependancy.q=matlabFunction(calib_parameters.radius(2)*sin(theta),'vars',{theta});
                 
             case 'RScapuloThoracic_J3'
                 
@@ -327,13 +327,13 @@ if size(GC.q_dep,1)>0
                 
                 syms theta real% latitude
                 
-                Human_model_calib(j).kinematic_dependancy.q=matlabFunction(-calib_parameters.radius(5)*sin(theta),'vars',{theta});
+                Human_model_calib(j).kinematic_dependancy.q=matlabFunction(calib_parameters.radius(5)*sin(theta),'vars',{theta});
                 
             case 'LScapuloThoracic_J3'
                 
                 syms theta phi real % latitude longitude
                 
-                Human_model_calib(j).kinematic_dependancy.q=matlabFunction(calib_parameters.radius(6)*cos(theta)*sin(phi),'vars',{theta,phi});
+                Human_model_calib(j).kinematic_dependancy.q=matlabFunction(-calib_parameters.radius(6)*cos(theta)*sin(phi),'vars',{theta,phi});
                 
                 
             case 'RScapuloThoracic_J5'

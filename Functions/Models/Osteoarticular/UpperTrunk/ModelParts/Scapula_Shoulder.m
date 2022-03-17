@@ -96,8 +96,8 @@ Scapula_stJointNode         = Thorax_osim2antoine.*Mirror*[-0.05982; -0.03904; -
 Scapula_acJointNode         = Thorax_osim2antoine.*Mirror*[-0.01357; 0.00011; -0.01523] - Scapula_CoM;
 Scapula_acromion_plane      = Thorax_osim2antoine.*Mirror*[-0.0142761 0.0131922 -0.00563961]' - Scapula_CoM;
 Scapula_acromion            = Thorax_osim2antoine.*Mirror*[-0.0449693 -0.00324551 0.00460274]' - Scapula_CoM;
-Scapula_cluster_med         = Thorax_osim2antoine.*Mirror*[-0.0860033 0.0298369 -0.00786593]' - Scapula_CoM;
-Scapula_cluster_lat         = Thorax_osim2antoine.*Mirror*[-0.0956621 0.0398035 -0.0552027]' - Scapula_CoM;
+Scapula_cluster_lat         = Thorax_osim2antoine.*Mirror*[-0.0860033 0.0298369 -0.00786593]' - Scapula_CoM;
+Scapula_cluster_med         = Thorax_osim2antoine.*Mirror*[-0.0956621 0.0398035 -0.0552027]' - Scapula_CoM;
 Scapula_cluster_mid         = Thorax_osim2antoine.*Mirror*[-0.119492 0.0147336 -0.0385808]' - Scapula_CoM;
 Scapula_locator_AI          = Thorax_osim2antoine.*Mirror*[-0.109351 -0.1132 -0.0903848]' - Scapula_CoM;
 Scapula_locator_TS          = Thorax_osim2antoine.*Mirror*[-0.0874576 -0.0120416 -0.098654]' - Scapula_CoM;
@@ -265,12 +265,16 @@ num_solid=0;
 %% Scapulo-thoracic joint
 
 syms theta phi real% latitude longitude
+% x = -Thorax_Rx*cos(theta)*cos(phi);
+% 
+% y = -Thorax_Ry*sin(theta);
+% 
+% z = Thorax_Rz*cos(theta)*sin(phi);
 x = -Thorax_Rx*cos(theta)*cos(phi);
 
-y = -Thorax_Ry*sin(theta);
+y = Thorax_Ry*sin(theta);
 
-z = Thorax_Rz*cos(theta)*sin(phi);
-
+z = Sign*Thorax_Rz*cos(theta)*sin(phi);
 
 % ScapuloThoracic_J1
 num_solid=num_solid+1;                                      % solid number
@@ -376,7 +380,8 @@ Human_model(incr_solid).name=[Side name];          % solid name with side
 Human_model(incr_solid).sister=0;                   % Solid's sister
 Human_model(incr_solid).child=s_ScapuloThoracic_J5;         % Solid's child
 Human_model(incr_solid).mother=s_ScapuloThoracic_J3;            % Solid's mother
-Human_model(incr_solid).a=[0 0 1]';                          
+% Human_model(incr_solid).a=[0 0 1]'; 
+Human_model(incr_solid).a=[0 0 -1]'; 
 Human_model(incr_solid).joint=1;
 Human_model(incr_solid).limit_inf=-pi/4;
 Human_model(incr_solid).limit_sup=pi/4;
@@ -404,8 +409,8 @@ Human_model(incr_solid).child=s_ScapuloThoracic_J6;         % Solid's child
 Human_model(incr_solid).mother=s_ScapuloThoracic_J4;            % Solid's mother
 Human_model(incr_solid).a=[0 1 0]';
 Human_model(incr_solid).joint=1;
-Human_model(incr_solid).limit_inf=-pi/2;
-Human_model(incr_solid).limit_sup=pi/2;
+Human_model(incr_solid).limit_inf=-pi;
+Human_model(incr_solid).limit_sup=pi;
 Human_model(incr_solid).ActiveJoint=1;
 Human_model(incr_solid).m=0;                        % Reference mass
 Human_model(incr_solid).b=[0 0 0]';        % Attachment point position in mother's frame
