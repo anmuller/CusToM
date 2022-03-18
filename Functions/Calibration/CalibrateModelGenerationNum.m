@@ -42,7 +42,6 @@ disp('... Anthropometric Model Generation done')
 
 
 
-save('BiomechanicalModel','BiomechanicalModel');
 
 %% Geometrical calibration
 if AnalysisParameters.CalibIK.Active
