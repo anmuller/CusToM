@@ -67,4 +67,75 @@ for i=1:nmr
     end
 end
 
+[row,col] = find(C);
+for i=unique(col)'
+        
+    
+    liste = find(col==i);
+    
+    for k=liste'
+BiomechanicalModel.M_pos = M_pos;
+BiomechanicalModel.M_Bone = M_Bone;
+BiomechanicalModel.N_pos = N_pos;
+BiomechanicalModel.N_Bone = N_Bone;
+end
+        end
+            N_pos(j,i) = Muscles(idxm(j)).num_markers(num_p2);
+            
+    end
+
+            M_pos(j,i) = Muscles(idxm(j)).num_markers(num_p1); % number of the anatomical landmark in this solid
+            N_Bone(j,i) = Muscles(idxm(j)).num_solid(num_p2);
+                if sum(ismember(solid_1_path,i)) ||  sum(ismember(solid_2_path,i))
+                    num_p2 = kk+1;
+                    num_p1 = kk;
+                    break;
+            end
+                end
+            M_Bone(j,i) = Muscles(idxm(j)).num_solid(num_p1); % number of the solid which contains this position
+            
+                    Muscles(idxm(j)).num_solid(kk+1));
+                [solid_1_path,solid_2_path]=find_solid_path(Human_model,...
+            end
+                
+                    Muscles(idxm(j)).num_solid(kk),...
+            for kk=1:length(Muscles(idxm(j)).num_solid)-1
+        else
+               
+                N_Bone(j,i) = Muscles(idxm(j)).num_solid(num_p2);
+                N_pos(j,i) = Muscles(idxm(j)).num_markers(num_p2);
+                M_Bone(j,i) = Muscles(idxm(j)).num_solid(num_p1); % number of the solid which contains this position
+                
+                M_pos(j,i) = Muscles(idxm(j)).num_markers(num_p1); % number of the anatomical landmark in this solid
+                    end
+                        num_p1 = kk;
+                        Muscles(idxm(j)).num_solid(kk+1));
+                for kk=depk:length(Muscles(idxm(j)).num_solid)-1
+                else
+                end
+                        break;
+                    if sum(ismember(solid_1_path,i)) ||  sum(ismember(solid_2_path,i))
+                        num_p2 = kk+1;
+                        Muscles(idxm(j)).num_solid(kk),...
+                    [solid_1_path,solid_2_path]=find_solid_path(Human_model,...
+                    depk=1;
+                end
+                if Muscles(idxm(j)).num_solid(1) == Muscles(idxm(j)).num_solid(2)
+                N_pos(j,i) = Muscles(idxm(j)).num_markers(num_p2);
+                
+                num_p2  = num_p2(1);
+                    depk = 2;
+            else
+                
+                N_Bone(j,i) = Muscles(idxm(j)).num_solid(num_p2);
+                M_pos(j,i) = Muscles(idxm(j)).num_markers(num_p1); % number of the anatomical landmark in this solid
+                M_Bone(j,i) = Muscles(idxm(j)).num_solid(num_p1); % number of the solid which contains this position
+                
+                num_p1 = num_p2-1;
+            if  num_p2(1)~=1
+        % Find concerned points
+        if sum(ismember(Muscles(idxm(j)).num_solid,i))
+            num_p2 =find(Muscles(idxm(j)).num_solid==i);
+        
+        j = row(k);
 end

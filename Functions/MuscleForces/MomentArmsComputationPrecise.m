@@ -39,6 +39,11 @@ else
 end
 [row,col] = find(C);
 
+NBoneMat = BiomechanicalModel.N_Bone;
+NPosMat = BiomechanicalModel.N_pos;
+MBoneMat = BiomechanicalModel.M_Bone;
+MPosMat = BiomechanicalModel.M_pos;
+
 %% Computation of moment arms
 R=zeros(nmr,length(q));%init R
 
@@ -71,89 +76,19 @@ for i=unique(col)'
         
         j= row(k) ; % muscle indice
         
-        % Find concerned points
-        if sum(ismember(Muscles(idxm(j)).num_solid,i))
-            num_p2 =find(Muscles(idxm(j)).num_solid==i);
-            if  num_p2(1)~=1
-                num_p2  = num_p2(1);
-                num_p1 = num_p2-1;
-                
-                
-                M_Bone = Muscles(idxm(j)).num_solid(num_p1); % number of the solid which contains this position
-                M_pos = Muscles(idxm(j)).num_markers(num_p1); % number of the anatomical landmark in this solid
-                N_Bone = Muscles(idxm(j)).num_solid(num_p2);
-                N_pos = Muscles(idxm(j)).num_markers(num_p2);
-                P1 = Human_model(M_Bone).p + Human_model(M_Bone).R * (Human_model(M_Bone).c+  Human_model(M_Bone).anat_position{M_pos,2});
-                P2 = Human_model(N_Bone).p + Human_model(N_Bone).R * (Human_model(N_Bone).c + Human_model(N_Bone).anat_position{N_pos,2});
-                P3 = Human_model2(N_Bone).p + Human_model2(N_Bone).R*(Human_model(N_Bone).c + Human_model(N_Bone).anat_position{N_pos,2});
-                P4 = Human_model2(M_Bone).p + Human_model2(M_Bone).R*(Human_model(M_Bone).c + Human_model(M_Bone).anat_position{M_pos,2});
-                
-                
-                
-                R(j,i)= -1/norm(P1 - P2)*(P1 - P2)'*(P4 - P3);
-                
-                
-            else
-                if Muscles(idxm(j)).num_solid(1) == Muscles(idxm(j)).num_solid(2)
-                    depk = 2;
-                else
-                    depk=1;
-                end
-                for kk=depk:length(Muscles(idxm(j)).num_solid)-1
-                    [solid_1_path,solid_2_path]=find_solid_path(Human_model,...
-                        Muscles(idxm(j)).num_solid(kk),...
-                        Muscles(idxm(j)).num_solid(kk+1));
-                    if sum(ismember(solid_1_path,i)) ||  sum(ismember(solid_2_path,i))
-                        num_p2 = kk+1;
-                        num_p1 = kk;
-                        break;
-                    end
-                end
-                
-                
-                M_Bone = Muscles(idxm(j)).num_solid(num_p1); % number of the solid which contains this position
-                M_pos = Muscles(idxm(j)).num_markers(num_p1); % number of the anatomical landmark in this solid
-                N_Bone = Muscles(idxm(j)).num_solid(num_p2);
-                N_pos = Muscles(idxm(j)).num_markers(num_p2);
-                P1 = Human_model(M_Bone).p + Human_model(M_Bone).R * Human_model(M_Bone).c + Human_model(M_Bone).R * Human_model(M_Bone).anat_position{M_pos,2};
-                P2 = Human_model(N_Bone).p + Human_model(N_Bone).R * Human_model(N_Bone).c + Human_model(N_Bone).R * Human_model(N_Bone).anat_position{N_pos,2};
-                P3 = Human_model2(N_Bone).p + Human_model2(N_Bone).R*(Human_model(N_Bone).c + Human_model(N_Bone).anat_position{N_pos,2});
-                P4 = Human_model2(M_Bone).p + Human_model2(M_Bone).R*(Human_model(M_Bone).c + Human_model(M_Bone).anat_position{M_pos,2});
-                
-                R(j,i)= -1/norm(P1 - P2)*(P1 - P2)'*(P4 - P3);
-                
-                
-                
-            end
-        else
-            for kk=1:length(Muscles(idxm(j)).num_solid)-1
-                [solid_1_path,solid_2_path]=find_solid_path(Human_model,...
-                    Muscles(idxm(j)).num_solid(kk),...
-                    Muscles(idxm(j)).num_solid(kk+1));
-                if sum(ismember(solid_1_path,i)) ||  sum(ismember(solid_2_path,i))
-                    num_p2 = kk+1;
-                    num_p1 = kk;
-                    break;
-                end
-            end
-            
-            M_Bone = Muscles(idxm(j)).num_solid(num_p1); % number of the solid which contains this position
-            M_pos = Muscles(idxm(j)).num_markers(num_p1); % number of the anatomical landmark in this solid
-            N_Bone = Muscles(idxm(j)).num_solid(num_p2);
-            N_pos = Muscles(idxm(j)).num_markers(num_p2);
-            P1 = Human_model(M_Bone).p + Human_model(M_Bone).R * Human_model(M_Bone).c + Human_model(M_Bone).R * Human_model(M_Bone).anat_position{M_pos,2};
-            P2 = Human_model(N_Bone).p + Human_model(N_Bone).R * Human_model(N_Bone).c + Human_model(N_Bone).R * Human_model(N_Bone).anat_position{N_pos,2};
-            P3 = Human_model2(N_Bone).p + Human_model2(N_Bone).R*(Human_model(N_Bone).c + Human_model(N_Bone).anat_position{N_pos,2});
-            P4 = Human_model2(M_Bone).p + Human_model2(M_Bone).R*(Human_model(M_Bone).c + Human_model(M_Bone).anat_position{M_pos,2});
-            
-            
-            
-            R(j,i)= -1/norm(P1 - P2)*(P1 - P2)'*(P4 - P3);
-            
-            
-            
-        end
         
+        M_Bone = MBoneMat(j,i);
+        M_pos = MPosMat(j,i); % number of the anatomical landmark in this solid
+        N_Bone = NBoneMat(j,i);
+        N_pos = NPosMat(j,i);
+        P1 = Human_model(M_Bone).p + Human_model(M_Bone).R * (Human_model(M_Bone).c+  Human_model(M_Bone).anat_position{M_pos,2});
+        P2 = Human_model(N_Bone).p + Human_model(N_Bone).R * (Human_model(N_Bone).c + Human_model(N_Bone).anat_position{N_pos,2});
+        P3 = Human_model2(N_Bone).p + Human_model2(N_Bone).R*(Human_model(N_Bone).c + Human_model(N_Bone).anat_position{N_pos,2});
+        P4 = Human_model2(M_Bone).p + Human_model2(M_Bone).R*(Human_model(M_Bone).c + Human_model(M_Bone).anat_position{M_pos,2});
+        
+        
+        
+        R(j,i)= -1/norm(P1 - P2)*(P1 - P2)'*(P4 - P3);
     end
     
     

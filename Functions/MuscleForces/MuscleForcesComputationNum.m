@@ -32,7 +32,7 @@ if numel(AnalysisParameters.filename)==1
     SaveDataMuscles(filename,MuscleForcesComputationResults);
     
 else
-    parfor i = 1:numel(AnalysisParameters.filename)
+    for i = 1:numel(AnalysisParameters.filename)
         filename = AnalysisParameters.filename{i}(1:end-(numel(AnalysisParameters.General.Extension)-1));
         BiomechanicalModel = load('BiomechanicalModel.mat');
         BiomechanicalModel = BiomechanicalModel.BiomechanicalModel;
