@@ -105,7 +105,7 @@ dp=0.001;
 
  if numel(BiomechanicalModel.Muscles)
      disp('Muscular Coupling Computation ...')
-     [BiomechanicalModel.Coupling] =...
+     [BiomechanicalModel] =...
          MomentArmsComputationInit(BiomechanicalModel,q,dp);
      disp('... Muscular Coupling Computation done');
  end

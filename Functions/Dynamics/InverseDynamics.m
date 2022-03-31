@@ -114,6 +114,18 @@ parfor num_fil = 1:numel(AnalysisParameters.filename)
     % dw
     dw=derivee2(dt,w);
     
+    
+    func = functions(AnalysisParameters.ExternalForces.Method);
+    if AnalysisParameters.ID.InputData == 1 && strcmp(func.function , 'MassLoad')
+
+        for solid = 1:size(AnalysisParameters.ExternalForces.Mass,2)
+            idx = find(strcmp({BiomechanicalModel.OsteoArticularModel.name},AnalysisParameters.ExternalForces.Mass{2, solid}));  
+            Human_model(idx).m =  Human_model(idx).m  + AnalysisParameters.ExternalForces.Mass{1, solid};
+        end
+        
+    end
+    
+    
     %% Inverse dynamics
     torques=zeros(nbframe,numel(Human_model));
     f6dof=zeros(3,nbframe);
@@ -121,6 +133,7 @@ parfor num_fil = 1:numel(AnalysisParameters.filename)
     t6dof=t6dof0;
     FContactDyn=struct('F',[],'T',[]);
     h = waitbar(0,['Inverse Dynamics (' filename ')']);
+
     for i=1:nbframe
         % setting position/speed/acceleration for each joint
         Human_model(1).p=p_pelvis(i,:)';
