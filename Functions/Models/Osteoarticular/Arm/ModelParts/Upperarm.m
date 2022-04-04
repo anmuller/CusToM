@@ -24,7 +24,7 @@ function [OsteoArticularModel]= Upperarm(OsteoArticularModel,k,Signe,Mass,Attach
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
 % Georges Dumont
 %________________________________________________________
-list_solid={'Glenohumeral_J1' 'Glenohumeral_J2' 'Humerus'};
+list_solid={'Glenohumeral_J1' 'Glenohumeral_J2' 'Glenohumeral_J3' 'Humerus'};
 
 %% Choose right or left arm
 if Signe == 'R'
@@ -334,7 +334,7 @@ name=list_solid{num_solid}; % name of the solid
 eval(['incr_solid=s_' name ';'])  % number of the solid in the model
 OsteoArticularModel(incr_solid).name=[Signe name];
 OsteoArticularModel(incr_solid).sister=0;
-OsteoArticularModel(incr_solid).child=s_Humerus;
+OsteoArticularModel(incr_solid).child=s_Glenohumeral_J3;
 OsteoArticularModel(incr_solid).mother=s_Glenohumeral_J1;
 OsteoArticularModel(incr_solid).a=[1 0 0]';
 OsteoArticularModel(incr_solid).joint=1;
@@ -353,7 +353,33 @@ OsteoArticularModel(incr_solid).I=zeros(3,3);
 OsteoArticularModel(incr_solid).c=[0 0 0]';
 OsteoArticularModel(incr_solid).Visual=0;
 
-% OsteoArticularModel(incr_solid).anat_position=Scapula_position_set;
+% Glenohumeral_J3           % Negative GH elevation (ISB recommandations: Wu et al. 2005)
+num_solid=num_solid+1;        % number of the solid ...
+name=list_solid{num_solid}; % name of the solid
+eval(['incr_solid=s_' name ';'])  % number of the solid in the model
+OsteoArticularModel(incr_solid).name=[Signe name];
+OsteoArticularModel(incr_solid).sister=0;
+OsteoArticularModel(incr_solid).child=s_Humerus;
+OsteoArticularModel(incr_solid).mother=s_Glenohumeral_J2;
+OsteoArticularModel(incr_solid).a=[0 1 0]';
+OsteoArticularModel(incr_solid).joint=1;
+OsteoArticularModel(incr_solid).limit_inf=-pi;                     % inferior joint biomechanical stop
+OsteoArticularModel(incr_solid).limit_sup=pi;                    % superior joint biomechanical stop
+OsteoArticularModel(incr_solid).FunctionalAngle='Negative GH plane of elevation';
+OsteoArticularModel(incr_solid).comment='Negative GH plane of elevation';
+OsteoArticularModel(incr_solid).m=0;
+OsteoArticularModel(incr_solid).b=[0 0 0]';
+OsteoArticularModel(incr_solid).I=zeros(3,3);
+OsteoArticularModel(incr_solid).c=[0 0 0]';
+OsteoArticularModel(incr_solid).Visual=0;
+% Dependancy
+OsteoArticularModel(incr_solid).kinematic_dependancy.active=1;
+OsteoArticularModel(incr_solid).kinematic_dependancy.Joint=incr_solid-2; % Thoracicellips
+% Kinematic dependancy function
+syms alpha real
+shoulder_elev = -alpha;
+f_shoulder_elev = matlabFunction(shoulder_elev,'vars',{alpha});
+OsteoArticularModel(incr_solid).kinematic_dependancy.q=f_shoulder_elev;
 
 % Humerus                   % GH axial rotation (ISB recommandations: Wu et al. 2005)
 num_solid=num_solid+1;         % number of the solid ...
@@ -362,11 +388,11 @@ eval(['incr_solid=s_' name ';'])  % number of the solid in the model
 OsteoArticularModel(incr_solid).name=[Signe name];
 OsteoArticularModel(incr_solid).sister=0;
 OsteoArticularModel(incr_solid).child=0;
-OsteoArticularModel(incr_solid).mother=s_Glenohumeral_J2;
+OsteoArticularModel(incr_solid).mother=s_Glenohumeral_J3;
 OsteoArticularModel(incr_solid).a=[0 1 0]';
 OsteoArticularModel(incr_solid).joint=1;
-OsteoArticularModel(incr_solid).limit_inf=-pi;
-OsteoArticularModel(incr_solid).limit_sup=pi;
+OsteoArticularModel(incr_solid).limit_inf=-pi/2;
+OsteoArticularModel(incr_solid).limit_sup=pi/6;
 OsteoArticularModel(incr_solid).m=Mass.UpperArm_Mass;
 OsteoArticularModel(incr_solid).b=[0 0 0]';
 OsteoArticularModel(incr_solid).I=[I_Humerus(1) I_Humerus(4) I_Humerus(5); I_Humerus(4) I_Humerus(2) I_Humerus(6); I_Humerus(5) I_Humerus(6) I_Humerus(3)];
