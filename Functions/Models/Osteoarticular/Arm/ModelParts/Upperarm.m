@@ -101,7 +101,7 @@ Humerus_ECRL = (k*[-0.005 -0.260 -0.002])*Mirror; %in local frame gh Murray2001
 Humerus_Brachialis = (k*[0.0068 -0.1739 -0.0036])*Mirror; %in local frame OSIMarm26
 Humerus_PronatorTeres = (k*[0.003 -0.270 -0.051])*Mirror; %in local frame gh Murray2001
 
-% Humerus_Triceps = (k*[-0.004 -0.039 -0.006])*Mirror; %in local frame gh Murray2001
+Humerus_Triceps = (k*[-0.004 -0.039 -0.006])*Mirror; %in local frame gh Murray2001
 Humerus_TricepsLg_via1 = (osim2antoine.*[-0.02714 -0.11441 -0.00664])*Mirror;  %in local frame OSIMarm26
 Humerus_TricepsLat_o = (osim2antoine.*[-0.00599 -0.12646 0.00428])*Mirror;     %in local frame OSIMarm26
 Humerus_TricepsLat_via1 = (osim2antoine.*[-0.02344 -0.14528 0.00928])*Mirror;  %in local frame OSIMarm26
@@ -439,48 +439,4 @@ OsteoArticularModel(incr_solid).density=1.07; %kg.L-1
 % OsteoArticularModel(incr_solid).wrap(3).location=Mirror*osim2antoine'.*[-0.0016 0.0092 0.0052]'+Humerus_ghJointNode';
 % OsteoArticularModel(incr_solid).wrap(3).h=0;
 % OsteoArticularModel(incr_solid).wrap(3).num_solid=incr_solid;
-
-
-
-
-
-
-cell = varargin{1};
-
-if ~isempty(cell) && strcmp(func2str(cell{1}),'UpperTrunkClavicle')
-    
-    %% RScapula
-    % Scapula_J1
-    incr_solid = find(strcmp({OsteoArticularModel.name},[Signe 'Scapula_J1']));
-    
-    if ~isempty(incr_solid)
-        % Dependancy
-        OsteoArticularModel(incr_solid).kinematic_dependancy.active=1;
-        OsteoArticularModel(incr_solid).kinematic_dependancy.Joint=s_Glenohumeral_J2;
-        % Kinematic dependancy function
-        syms Hz
-        f_z = matlabFunction((1-2*Signe_bool)*(27.939*pi/180+0.088*Hz));
-        OsteoArticularModel(incr_solid).kinematic_dependancy.q=f_z;
-        
-        % Scapula_J2
-        incr_solid = find(strcmp({OsteoArticularModel.name},[Signe 'Scapula_J2']));
-        % Dependancy
-        OsteoArticularModel(incr_solid).kinematic_dependancy.active=1;
-        OsteoArticularModel(incr_solid).kinematic_dependancy.Joint=s_Glenohumeral_J2; % Thoracicellips
-        % Kinematic dependancy function
-        f_x = matlabFunction(-6.970*pi/180+0.220*Hz);
-        OsteoArticularModel(incr_solid).kinematic_dependancy.q=f_x;
-        %
-        % Scapula
-        incr_solid = find(strcmp({OsteoArticularModel.name},[Signe 'Scapula']));
-        % Dependancy
-        OsteoArticularModel(incr_solid).kinematic_dependancy.active=1;
-        OsteoArticularModel(incr_solid).kinematic_dependancy.Joint=s_Glenohumeral_J2; % Thoracicellips
-        % Kinematic dependancy function
-        f_y = matlabFunction(-4.884*pi/180+0.145*Hz);
-        OsteoArticularModel(incr_solid).kinematic_dependancy.q=f_y;
-    end
-    
-end
-
 end
