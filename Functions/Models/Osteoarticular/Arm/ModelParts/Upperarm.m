@@ -376,10 +376,10 @@ OsteoArticularModel(incr_solid).Visual=0;
 OsteoArticularModel(incr_solid).kinematic_dependancy.active=1;
 OsteoArticularModel(incr_solid).kinematic_dependancy.Joint=incr_solid-2; % Thoracicellips
 % Kinematic dependancy function
-syms alpha real
-shoulder_elev = -alpha;
-f_shoulder_elev = matlabFunction(shoulder_elev,'vars',{alpha});
-OsteoArticularModel(incr_solid).kinematic_dependancy.q=f_shoulder_elev;
+syms theta_plane real
+plane_elev = -theta_plane;
+f_plane_elev = matlabFunction(plane_elev,'vars',{theta_plane});
+OsteoArticularModel(incr_solid).kinematic_dependancy.q=f_plane_elev;
 
 % Humerus                   % GH axial rotation (ISB recommandations: Wu et al. 2005)
 num_solid=num_solid+1;         % number of the solid ...
@@ -391,8 +391,15 @@ OsteoArticularModel(incr_solid).child=0;
 OsteoArticularModel(incr_solid).mother=s_Glenohumeral_J3;
 OsteoArticularModel(incr_solid).a=[0 1 0]';
 OsteoArticularModel(incr_solid).joint=1;
-OsteoArticularModel(incr_solid).limit_inf=-pi/2;
-OsteoArticularModel(incr_solid).limit_sup=pi/6;
+if Signe == 'R'
+    OsteoArticularModel(incr_solid).limit_inf=-pi/2;
+    OsteoArticularModel(incr_solid).limit_sup=pi/6;                    % superior joint biomechanical stop
+    OsteoArticularModel(incr_solid).FunctionalAngle='Right GH Axial rotation Internal(+)/External(-)';
+else
+    OsteoArticularModel(incr_solid).limit_inf=-pi/6;
+    OsteoArticularModel(incr_solid).limit_sup=pi/2;                    % superior joint biomechanical stop
+    OsteoArticularModel(incr_solid).FunctionalAngle='Left GH Axial rotation Internal(-)/External(+)';
+end
 OsteoArticularModel(incr_solid).m=Mass.UpperArm_Mass;
 OsteoArticularModel(incr_solid).b=[0 0 0]';
 OsteoArticularModel(incr_solid).I=[I_Humerus(1) I_Humerus(4) I_Humerus(5); I_Humerus(4) I_Humerus(2) I_Humerus(6); I_Humerus(5) I_Humerus(6) I_Humerus(3)];
@@ -401,11 +408,6 @@ OsteoArticularModel(incr_solid).anat_position=Humerus_position_set;
 OsteoArticularModel(incr_solid).Visual=1;
 OsteoArticularModel(incr_solid).visual_file = ['Holzbaur/humerus_' Signe '.mat'];
 OsteoArticularModel(incr_solid).L={[Signe 'Humerus_ghJointNode'];[Signe 'Humerus_ElbowJointNode']};
-if Signe == 'R'
-    OsteoArticularModel(incr_solid).FunctionalAngle='Right GH Axial rotation Internal(+)/External(-)';
-else
-    OsteoArticularModel(incr_solid).FunctionalAngle='Left GH Axial rotation Internal(-)/External(+)';
-end
 OsteoArticularModel(incr_solid).density=1.07; %kg.L-1
 
 
