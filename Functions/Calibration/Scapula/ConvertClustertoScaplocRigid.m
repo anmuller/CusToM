@@ -15,14 +15,19 @@ function [new_name]=ConvertClustertoScaplocRigid(filename_trial, filename_ne, to
     names_trial = fieldnames(markers_trial);
     prefix_trial = names_trial{contains(names_trial,'MTACDB')};
     prefix_trial = prefix_trial(1:6);  
-    SCAPDB_trial=markers_trial.([prefix_trial '_MTACDB']);
+    if strcmp(prefix_trial,'MTACDB')
+        prefix_trial='';
+    else
+        prefix_trial = [prefix_trial '_'];
+    end
+    SCAPDB_trial=markers_trial.([prefix_trial 'MTACDB']);
     nb_frame = size(SCAPDB_trial,1);
     SCAPDB_trial = reshape(SCAPDB_trial, [nb_frame 1 3]);
     SCAPDB_trial = permute(SCAPDB_trial, [3,2,1]);
-    SCAPDH_trial = markers_trial.([prefix_trial '_MTACDM']);
+    SCAPDH_trial = markers_trial.([prefix_trial 'MTACDM']);
     SCAPDH_trial = reshape(SCAPDH_trial, [nb_frame 1 3]);
     SCAPDH_trial = permute(SCAPDH_trial, [3,2,1]);
-    SCAPDL_trial = markers_trial.([prefix_trial '_MTACDL']);
+    SCAPDL_trial = markers_trial.([prefix_trial 'MTACDL']);
     SCAPDL_trial = reshape(SCAPDL_trial, [nb_frame 1 3]);
     SCAPDL_trial = permute(SCAPDL_trial, [3,2,1]);
 
@@ -30,9 +35,14 @@ function [new_name]=ConvertClustertoScaplocRigid(filename_trial, filename_ne, to
     names_ne = fieldnames(markers_ne);
     prefix_ne = names_ne{contains(names_ne,'MTACDB')};
     prefix_ne = prefix_ne(1:6);
-    SCAPDB_ne=markers_ne.([prefix_ne '_MTACDB']);
-    SCAPDH_ne=markers_ne.([prefix_ne '_MTACDM']);
-    SCAPDL_ne=markers_ne.([prefix_ne '_MTACDL']);
+     if strcmp(prefix_ne,'MTACDB')
+        prefix_ne='';
+    else
+        prefix_ne = [prefix_ne '_'];
+    end
+    SCAPDB_ne=markers_ne.([prefix_ne 'MTACDB']);
+    SCAPDH_ne=markers_ne.([prefix_ne 'MTACDM']);
+    SCAPDL_ne=markers_ne.([prefix_ne 'MTACDL']);
     % Neutral scaploc
     SCAPLOCB_ne=markers_ne.('ScapLoc_SCLB');
     SCAPLOCMM_ne=markers_ne.('ScapLoc_SCLM');
