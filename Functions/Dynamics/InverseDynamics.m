@@ -67,11 +67,11 @@ parfor num_fil = 1:numel(AnalysisParameters.filename)
     %% articular speed and acceleration
     
     dt=1/freq;
-    dq=derivee2(dt,q);  % vitesses
-    ddq=derivee2(dt,dq);  % acc�l�rations
-    
+    dq=InverseKinematicsResults.JointCoordinatesFirstDerivative' ;  % vitesses
+   ddq=InverseKinematicsResults.JointCoordinatesSecondDerivative' ;  % acc�l�rations
     nbframe=size(q,1);
 
+    
     %% D�finition des donn�es cin�matiques du pelvis
     % (position / vitesse / acc�l�ration / orientation / vitesse angulaire / acc�l�ration angulaire)
     % Kinematical data for Pelvis (Position/speed/acceleration/angles/angular speed/angular acceleration)

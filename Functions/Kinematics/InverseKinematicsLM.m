@@ -242,6 +242,35 @@ end
 
 time=real_markers(1).time';
 
+freq=1/time(2);
+%% articular speed and acceleration
+
+dt=1/freq;
+dq=derivee2(dt,q')';  % vitesses
+ddq=derivee2(dt,dq')';  % acc�l�rations 
+
+[solid_path1,solid_path2,num_solid,num_markers]=Data_ClosedLoop(BiomechanicalModel.OsteoArticularModel);
+
+dependancies=KinematicDependancy(BiomechanicalModel.OsteoArticularModel);
+
+
+ % Closed-loop constraints
+ for f=1:nb_frame
+    K=ConstraintsJacobian(BiomechanicalModel,q(:,f),solid_path1,solid_path2,num_solid,num_markers,ones(size(q(:,f),1),1),0.0001,dependancies);
+    Kdev=ConstraintsJacobianDerivative(BiomechanicalModel,q(:,f),solid_path1,solid_path2,num_solid,num_markers,ones(size(q(:,f),1),1),0.0001,dependancies);
+    G = null(K);
+    nvdq(:,f) = sum(dq(:,f)'*G.*G,2);
+    
+    
+    A = [K zeros(size(K)) ; reshape(pagemtimes(Kdev,nvdq(:,f)),size(K))  K];
+    G2 = null(A);
+    xtilde =  sum([dq(:,f)  ; ddq(:,f)]'*G2.*G2,2);
+    
+    nvddq(:,f) = xtilde(length(nvdq(:,f))+1:end);
+    
+ end
+ 
+
 %% Save data
 ExperimentalData.FirstFrame = Firstframe;
 ExperimentalData.LastFrame = Lastframe;
@@ -249,6 +278,8 @@ ExperimentalData.MarkerPositions = real_markers;
 ExperimentalData.Time = time;
 
 InverseKinematicResults.JointCoordinates = q;
+InverseKinematicResults.JointCoordinatesFirstDerivative = nvdq;
+InverseKinematicResults.JointCoordinatesSecondDerivative = nvddq;
 InverseKinematicResults.FreeJointCoordinates = q6dof;
 InverseKinematicResults.ReconstructionError = KinematicsError;
 InverseKinematicResults.NonLinearConstraint = ceq;
