@@ -139,5 +139,7 @@ BiomechanicalModel.N_Bone = N_Bone;
 BiomechanicalModel.N_pos = N_pos;
 BiomechanicalModel.M_Bone = M_Bone;
 BiomechanicalModel.M_pos = M_pos;
+BiomechanicalModel.Coupling = C;
+
 end
 

@@ -1,4 +1,4 @@
-function J = IK_Jacobian(q,pcut,Rcut,l_inf1,l_sup1,Aeq_ik,gamma,zeta,J_marqueurs_handle)
+function J = IK_Jacobian(q,pcut,Rcut,l_inf1,l_sup1,Aeq_ik,gamma,zeta,J_marqueurs_handle,newweights)
 
 J_marqueurs = J_marqueurs_handle(q,pcut,Rcut);
 
@@ -14,7 +14,7 @@ J_handle = zeros(length(q));
 J_handle(diag(idxsup)) =2*(q(idxsup) - l_sup1(idxsup));
 J_handle(diag(idxinf)) =2*(q(idxinf) - l_inf1(idxinf));
 
-J = [-J_marqueurs ; gamma*J_closedloop ; gamma*J_Aek ; zeta*J_handle];
+J = [-newweights.*J_marqueurs ; gamma*J_closedloop ; gamma*J_Aek ; zeta*J_handle];
 
 end
 
