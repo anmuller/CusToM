@@ -43,26 +43,18 @@ end
 if ~isempty(dependancies)
     for pp=1:size(dependancies,2)
         K(size(K,1)+1,dependancies(pp).solid) = -1;
-        for j=1:size(dependancies(pp).Joint,1)
-            qchoix=dependancies(pp).Joint(j);
-            qp=q;
-            qm=q;
-            qp(qchoix)=qp(qchoix)+dq;
-            qm(qchoix)=qm(qchoix)-dq;
-            f=dependancies(pp).q;
-            if size(dependancies(pp).Joint,1)==1
-                dhp=f(qp(dependancies(pp).Joint(1)));
-                dhm=f(qm(dependancies(pp).Joint(1)));
+        
+        df = dependancies(pp).dq;
+         
+         if size(dependancies(pp).Joint,1)==1
+                K(size(K,1),dependancies(pp).Joint)= df(q(dependancies(pp).Joint));
                 
             else
                 if size(dependancies(pp).Joint,1)==2
-                    dhp=f(qp(dependancies(pp).Joint(1)),qp(dependancies(pp).Joint(2)));
-                    dhm=f(qm(dependancies(pp).Joint(1)),qm(dependancies(pp).Joint(2)));
+                    K(size(K,1),dependancies(pp).Joint)= df(q(dependancies(pp).Joint(1)),q(dependancies(pp).Joint(2)));
                 end
             end
-                K(size(K,1),qchoix)=(dhp-dhm)/(2*dq);
-            
-        end
+       
     end
 end
 
