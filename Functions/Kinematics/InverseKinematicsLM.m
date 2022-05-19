@@ -164,16 +164,32 @@ else
 %     [q(:,1),rmse] = run(ms,problem,tpoints);
 %     
    [q(:,1)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,nonlcon,options1);
-   hclosedloophandle = {BiomechanicalModel.ClosedLoopData.ConstraintEq;  @(x) Aeq_ik*x - beq_ik} ;
+   hclosedloophandle = {@(qvar) ClosedLoopceq(qvar) ;  @(x) Aeq_ik*x - beq_ik} ;
 end
 
 buteehandle = @(q)  Limits(q,l_inf1,l_sup1);
 gamma = 100;
 zeta = 20;
 
+Jfq = BiomechanicalModel.Jacob.Jfq;
+indexesNumericJfq = BiomechanicalModel.Jacob.indexesNumericJfq;
+nonNumericJfq = BiomechanicalModel.Jacob.nonNumericJfq;
+Jfcut = BiomechanicalModel.Jacob.Jfcut;
+indexesNumericJfcut = BiomechanicalModel.Jacob.indexesNumericJfcut;
+nonNumericJfcut = BiomechanicalModel.Jacob.nonNumericJfcut;
+Jcutq = BiomechanicalModel.Jacob.Jcutq;
+indexesNumericJcutq = BiomechanicalModel.Jacob.indexesNumericJcutq;
+nonNumericJcutq = BiomechanicalModel.Jacob.nonNumericJcutq;
+Jcutcut = BiomechanicalModel.Jacob.Jcutcut;
+indexesNumericJcutcut = BiomechanicalModel.Jacob.indexesNumericJcutcut;
+nonNumericJcutcut = BiomechanicalModel.Jacob.nonNumericJcutcut;
+
+J_marqueurs_handle = @(q,pcut,Rcut) JacobianMarker(q,pcut,Rcut,Jfq,indexesNumericJfq , nonNumericJfq ,Jfcut,indexesNumericJfcut,nonNumericJfcut ,Jcutq ,...
+                                                                   indexesNumericJcutq ,nonNumericJcutq, Jcutcut , indexesNumericJcutcut , nonNumericJcutcut);
+
 waitbar(1/nb_frame)
 
-optionsLM = optimset('Algorithm','Levenberg-Marquardt','Display','off','MaxIter',4e6,'MaxFunEval',5e6);
+optionsLM = optimset('Algorithm','Levenberg-Marquardt','Display','off','MaxIter',4e6,'MaxFunEval',5e6,'Jacobian','on','DerivativeCheck','off');
 positions = zeros(3, length(real_markers));
 for f = 2:nb_frame
     
@@ -182,13 +198,16 @@ for f = 2:nb_frame
         positions(:,m) = real_markers(m).position(f,:)';
     end
     
-    fun = @(q) CostFunctionLM(q,positions(:),gamma,hclosedloophandle,zeta,buteehandle,weights);
-    q(:,f)= lsqnonlin(fun,q(:,f-1),[],[],optionsLM);
+    fun = @(q) CostFunctionLM(q,positions(:),gamma,hclosedloophandle,zeta,buteehandle,weights,l_inf1,l_sup1,Aeq_ik,J_marqueurs_handle);
+    [q(:,f)] = lsqnonlin(fun,q(:,f-1),[],[],optionsLM);
     
     waitbar(f/nb_frame)
     
 end
 close(h)
+
+
+
 %% Data processing
 if AnalysisParameters.IK.FilterActive
     % data filtering
@@ -249,26 +268,29 @@ dt=1/freq;
 dq=derivee2(dt,q')';  % vitesses
 ddq=derivee2(dt,dq')';  % acc�l�rations 
 
+nvdq = dq;
+nvddq = ddq;
+
 [solid_path1,solid_path2,num_solid,num_markers]=Data_ClosedLoop(BiomechanicalModel.OsteoArticularModel);
 
 dependancies=KinematicDependancy(BiomechanicalModel.OsteoArticularModel);
 
 
- % Closed-loop constraints
- for f=1:nb_frame
-    K=ConstraintsJacobian(BiomechanicalModel,q(:,f),solid_path1,solid_path2,num_solid,num_markers,ones(size(q(:,f),1),1),0.0001,dependancies);
-    Kdev=ConstraintsJacobianDerivative(BiomechanicalModel,q(:,f),solid_path1,solid_path2,num_solid,num_markers,ones(size(q(:,f),1),1),0.0001,dependancies);
-    G = null(K);
-    nvdq(:,f) = sum(dq(:,f)'*G.*G,2);
-    
-    
-    A = [K zeros(size(K)) ; reshape(pagemtimes(Kdev,nvdq(:,f)),size(K))  K];
-    G2 = null(A);
-    xtilde =  sum([dq(:,f)  ; ddq(:,f)]'*G2.*G2,2);
-    
-    nvddq(:,f) = xtilde(length(nvdq(:,f))+1:end);
-    
- end
+%  % Closed-loop constraints
+%  for f=1:nb_frame
+%     K=ConstraintsJacobian(BiomechanicalModel,q(:,f),solid_path1,solid_path2,num_solid,num_markers,ones(size(q(:,f),1),1),0.0001,dependancies);
+%     Kdev=ConstraintsJacobianDerivative(BiomechanicalModel,q(:,f),solid_path1,solid_path2,num_solid,num_markers,ones(size(q(:,f),1),1),0.0001,dependancies);
+%     G = null(K);
+%     nvdq(:,f) = sum(dq(:,f)'*G.*G,2);
+%     
+%     
+%     A = [K zeros(size(K)) ; reshape(pagemtimes(Kdev,nvdq(:,f)),size(K))  K];
+%     G2 = null(A);
+%     xtilde =  sum([dq(:,f)  ; ddq(:,f)]'*G2.*G2,2);
+%     
+%     nvddq(:,f) = xtilde(length(nvdq(:,f))+1:end);
+%     
+%  end
  
 
 %% Save data

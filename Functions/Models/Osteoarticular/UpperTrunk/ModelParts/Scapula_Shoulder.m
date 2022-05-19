@@ -305,6 +305,8 @@ Human_model(incr_solid).kinematic_dependancy.Joint=[incr_solid+3; incr_solid+4];
 % Kinematic dependancy function
 f_tx = matlabFunction(x,'vars',{theta,phi});
 Human_model(incr_solid).kinematic_dependancy.q=f_tx;
+Human_model(incr_solid).kinematic_dependancy.dq={jacobian(f_tx,[theta,phi])};
+Human_model(incr_solid).kinematic_dependancy.ddq={jacobian(jacobian(f_tx,[theta,phi]),[theta,phi])};
 Human_model(incr_solid).comment=[FullSide 'Scapulothoracic x displacement'];
 Human_model(incr_solid).FunctionalAngle=[FullSide 'Scapulothoracic x displacement'];
 
@@ -339,6 +341,8 @@ Human_model(incr_solid).kinematic_dependancy.Joint=incr_solid+2; % Thoracicellip
 % Kinematic dependancy function
 f_ty = matlabFunction(y,'vars',{theta});
 Human_model(incr_solid).kinematic_dependancy.q=f_ty;
+Human_model(incr_solid).kinematic_dependancy.dq={jacobian(f_ty,[theta])};
+Human_model(incr_solid).kinematic_dependancy.ddq={jacobian(jacobian(f_ty,[theta]),[theta])};
 
 % ScapuloThoracic_J3
 num_solid=num_solid+1;                                      % solid number
@@ -371,6 +375,8 @@ Human_model(incr_solid).kinematic_dependancy.Joint=[incr_solid+1; incr_solid+2];
 % Kinematic dependancy function
 f_tz = matlabFunction(z,'vars',{theta,phi});
 Human_model(incr_solid).kinematic_dependancy.q=f_tz;
+Human_model(incr_solid).kinematic_dependancy.dq={jacobian(f_tz,[theta,phi])};
+Human_model(incr_solid).kinematic_dependancy.ddq={jacobian(jacobian(f_tz,[theta,phi]),[theta,phi])};
 
 % ScapuloThoracic_J4
 num_solid=num_solid+1;                                      % solid number

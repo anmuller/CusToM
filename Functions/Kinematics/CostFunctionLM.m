@@ -1,4 +1,4 @@
-function func=CostFunctionLM(q,positions,gamma,hclosedloophandle,zeta,hbutees,weights)
+function [func,J]=CostFunctionLM(q,positions,gamma,hclosedloophandle,zeta,hbutees,weights, l_inf1,l_sup1,Aeq_ik,J_marqueurs_handle)
 % Limit penalisation for LM algorithm
 %   
 %   INPUT
@@ -35,5 +35,9 @@ function func=CostFunctionLM(q,positions,gamma,hclosedloophandle,zeta,hbutees,we
     end
     
     func = [ dX ; gamma*constraints ; zeta*hbutees(q)];
+    
+    if nargout > 1   % Two output arguments
+        J = IK_Jacobian(q,pcut,Rcut, l_inf1,l_sup1,Aeq_ik,gamma,zeta, J_marqueurs_handle);   % Jacobian of the function evaluated at q
+    end
     
 end

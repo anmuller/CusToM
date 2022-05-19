@@ -380,6 +380,8 @@ syms theta_plane real
 plane_elev = -theta_plane;
 f_plane_elev = matlabFunction(plane_elev,'vars',{theta_plane});
 OsteoArticularModel(incr_solid).kinematic_dependancy.q=f_plane_elev;
+OsteoArticularModel(incr_solid).kinematic_dependancy.dq={jacobian(f_plane_elev,theta_plane)};
+OsteoArticularModel(incr_solid).kinematic_dependancy.ddq={jacobian(jacobian(f_plane_elev,theta_plane),theta_plane)};
 
 % Humerus                   % GH axial rotation (ISB recommandations: Wu et al. 2005)
 num_solid=num_solid+1;         % number of the solid ...
