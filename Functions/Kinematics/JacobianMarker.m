@@ -10,7 +10,7 @@ function J_marqueurs = JacobianMarker(q,pcut,Rcut,Jfq,indexesNumericJfq , nonNum
         % Jcutcut
         Jcutcut(indexesNumericJcutcut) = nonNumericJcutcut(q,pcut,Rcut);
         % J
-        J_marqueurs = Jfq + Jfcut*dJcutq(Jcutcut,Jcutq);                                 
+        J_marqueurs = sparse(Jfq + Jfcut*dJcutq(Jcutcut,Jcutq));                                 
 
                                                                
                                                                

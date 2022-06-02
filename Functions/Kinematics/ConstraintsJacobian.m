@@ -28,15 +28,85 @@ function K=ConstraintsJacobian(BiomechanicalModel,q,solid_path1,solid_path2,num_
 % Georges Dumont
 %________________________________________________________
 
+
+% for qchoix=1:length(q)
+% %     qp=q;
+% %     qm=q;
+% %     qp(qchoix)=qp(qchoix)+dq;
+% %     qm(qchoix)=qm(qchoix)-dq;
+% %     [~,dhp]=NonLinCon_ClosedLoop_Num(BiomechanicalModel.OsteoArticularModel,solid_path1,solid_path2,num_solid,num_markers,qp,k);
+% %     [~,dhm]=NonLinCon_ClosedLoop_Num(BiomechanicalModel.OsteoArticularModel,solid_path1,solid_path2,num_solid,num_markers,qm,k);
+% %     K(:,qchoix)=(dhp-dhm)/(2*dq);       
+%     K(:,qchoix) =  ConstraintProjection(BiomechanicalModel.OsteoArticularModel,solid_path1,solid_path2,num_solid,num_markers,q,k,qchoix,"one");
+% end
+
+Human_model = BiomechanicalModel.OsteoArticularModel;
+
 for qchoix=1:length(q)
-%     qp=q;
-%     qm=q;
-%     qp(qchoix)=qp(qchoix)+dq;
-%     qm(qchoix)=qm(qchoix)-dq;
-%     [~,dhp]=NonLinCon_ClosedLoop_Num(BiomechanicalModel.OsteoArticularModel,solid_path1,solid_path2,num_solid,num_markers,qp,k);
-%     [~,dhm]=NonLinCon_ClosedLoop_Num(BiomechanicalModel.OsteoArticularModel,solid_path1,solid_path2,num_solid,num_markers,qm,k);
-%     K(:,qchoix)=(dhp-dhm)/(2*dq);       
-    K(:,qchoix) =  ConstraintProjection(BiomechanicalModel.OsteoArticularModel,solid_path1,solid_path2,num_solid,num_markers,q,k,qchoix,"one");
+    Human_model(qchoix).q = q(qchoix);
+end
+
+for pp=1:numel(num_solid)
+    
+    path1 = solid_path1{pp};
+    path2 = solid_path2{pp};
+    ind1 = find(path1==qchoix);
+
+    
+    [Human_model.R] = deal(zeros(3));
+    [Human_model.Rproj] = deal(zeros(3));
+    [Human_model.p] = deal([0 0 0]');
+    [Human_model.pproj] = deal([0 0 0]');
+    
+   
+        if Human_model(path1(1)).joint == 1    % liaison pivot
+               Human_model(path1(1)).R = Rodrigues(Human_model(path1(1)).a,q(path1(1)))*Rodrigues(Human_model(path1(1)).u,Human_model(path1(1)).theta); % orientation du rep�re
+        end
+        if Human_model(path1(1)).joint == 2    % liaison glissi�re
+            Human_model(path1(1)).p=Human_model(path1(1)).b + angle*Human_model(path1(1)).a;
+        end
+   
+    Human_model=ForwardPositionsandProj(Human_model,2,path1);
+    
+     Human_model3 = Human_model;
+    [Human_model3.R] = deal(zeros(3));
+    [Human_model3.Rproj] = deal(zeros(3));
+    [Human_model3.p] = deal([0 0 0]');
+    [Human_model3.pproj] = deal([0 0 0]');
+    
+    if Human_model3(path2(1)).joint == 1    % liaison pivot
+               Human_model3(path2(1)).R = Rodrigues(Human_model3(path2(1)).a,q(path2(1)))*Rodrigues(Human_model3(path1(1)).u,Human_model(path1(1)).theta); % orientation du rep�re
+        end
+        if Human_model3(path2(1)).joint == 2    % liaison glissi�re
+            Human_model3(path2(1)).p=Human_model3(path2(1)).b + angle*Human_model3(path2(1)).a;
+        end
+
+        
+    Human_model3=ForwardPositionsandProj(Human_model3,2,path2);
+
+    s = Human_model(num_solid(pp)).c + Human_model(num_solid(pp)).anat_position{num_markers(pp),2}; % position with respects to the position of the mother solid joint of the closed loop
+
+    for kk=1:length(path1)
+         if Human_model(path1(kk)).joint ==1
+                     Ktest((1:3)+6*(pp-1),path1(kk)) = diag(Human_model(path1(kk)).Rproj*Human_model3(num_solid(pp)).R');
+                     Ktest((4:6)+6*(pp-1),path1(kk)) = ~isempty(ind1)*Human_model(path1(kk)).Rproj*s +...
+                                                                                                                     (-1)^(isempty(ind1))*(isempty(ind1))*isempty(ind1)*Human_model(path1(kk)).pproj;
+         else
+                    Ktest((4:6)+6*(pp-1),path1(kk)) = (-1)^(isempty(ind1))*Human_model(path1(kk)).R*Human_model(path1(kk)).a;
+         end
+    end
+    
+    
+    for kk=1:length(path2)
+         if Human_model(path2(kk)).joint ==1
+                     Ktest((1:3)+6*(pp-1),path2(kk)) = diag(Human_model3(path2(kk)).Rproj*Human_model(num_solid(pp)).R');
+                     Ktest((4:6)+6*(pp-1),path2(kk)) = isempty(ind1)*Human_model(path2(kk)).Rproj*s+...
+                                                                                                                    (-1)^(~isempty(ind1))*(~isempty(ind1))*Human_model3(path2(kk)).pproj;
+         else
+                    Ktest((4:6)+6*(pp-1),path2(kk)) = (-1)^(~isempty(ind1))*Human_model3(path2(kk)).R*Human_model(path1(kk)).a;
+         end
+    end
+
 end
 
 

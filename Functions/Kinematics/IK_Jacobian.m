@@ -14,7 +14,7 @@ J_handle = zeros(length(q));
 J_handle(diag(idxsup)) =2*(q(idxsup) - l_sup1(idxsup));
 J_handle(diag(idxinf)) =2*(q(idxinf) - l_inf1(idxinf));
 
-J = [-newweights.*J_marqueurs ; gamma*J_closedloop ; gamma*J_Aek ; zeta*J_handle];
+J = sparse([-newweights.*J_marqueurs ; gamma*J_closedloop ; gamma*J_Aek ; zeta*J_handle]);
 
 end
 

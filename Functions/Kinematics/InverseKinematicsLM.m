@@ -186,7 +186,7 @@ nonNumericJcutcut = BiomechanicalModel.Jacob.nonNumericJcutcut;
 
 J_marqueurs_handle = @(q,pcut,Rcut) JacobianMarker(q,pcut,Rcut,Jfq,indexesNumericJfq , nonNumericJfq ,Jfcut,indexesNumericJfcut,nonNumericJfcut ,Jcutq ,...
                                                                    indexesNumericJcutq ,nonNumericJcutq, Jcutcut , indexesNumericJcutcut , nonNumericJcutcut);
-
+                                             
 waitbar(1/nb_frame)
 
 optionsLM = optimset('Algorithm','Levenberg-Marquardt','Display','off','MaxIter',4e6,'MaxFunEval',5e6,'Jacobian','on','DerivativeCheck','off');
@@ -205,7 +205,6 @@ for f = 2:nb_frame
     
 end
 close(h)
-
 
 
 %% Data processing
@@ -277,20 +276,20 @@ dependancies=KinematicDependancy(BiomechanicalModel.OsteoArticularModel);
 
 
 %  % Closed-loop constraints
-%  for f=1:nb_frame
-%     K=ConstraintsJacobian(BiomechanicalModel,q(:,f),solid_path1,solid_path2,num_solid,num_markers,ones(size(q(:,f),1),1),0.0001,dependancies);
-%     Kdev=ConstraintsJacobianDerivative(BiomechanicalModel,q(:,f),solid_path1,solid_path2,num_solid,num_markers,ones(size(q(:,f),1),1),0.0001,dependancies);
-%     G = null(K);
-%     nvdq(:,f) = sum(dq(:,f)'*G.*G,2);
-%     
-%     
-%     A = [K zeros(size(K)) ; reshape(pagemtimes(Kdev,nvdq(:,f)),size(K))  K];
-%     G2 = null(A);
-%     xtilde =  sum([dq(:,f)  ; ddq(:,f)]'*G2.*G2,2);
-%     
-%     nvddq(:,f) = xtilde(length(nvdq(:,f))+1:end);
-%     
-%  end
+ for f=1:nb_frame
+    K=ConstraintsJacobian(BiomechanicalModel,q(:,f),solid_path1,solid_path2,num_solid,num_markers,ones(size(q(:,f),1),1),0.0001,dependancies);
+    Kdev=ConstraintsJacobianDerivative(BiomechanicalModel,q(:,f),solid_path1,solid_path2,num_solid,num_markers,ones(size(q(:,f),1),1),0.0001,dependancies);
+    G = null(K);
+    nvdq(:,f) = sum(dq(:,f)'*G.*G,2);
+    
+    
+    A = [K zeros(size(K)) ; reshape(pagemtimes(Kdev,nvdq(:,f)),size(K))  K];
+    G2 = null(A);
+    xtilde =  sum([dq(:,f)  ; ddq(:,f)]'*G2.*G2,2);
+    
+    nvddq(:,f) = xtilde(length(nvdq(:,f))+1:end);
+    
+ end
  
 
 %% Save data

@@ -9,7 +9,7 @@ function [solid_path1,solid_path2,num_solid,num_markers]=Data_ClosedLoop(Human_m
 %   - solid_path1 : vector of one of the two paths to close the loop
 %   - solid_path2 : vector of the other of the two paths to close the loop
 %   - num_solid : vector of the number of solid where the anatomical point must join the
-%   origin of another joint to close the loo
+%   origin of another joint to close the loop
 %   - num_markers : vector of the position in the list "anat_position" that
 %   corresponds to the point to close the loop
 
