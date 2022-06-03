@@ -92,18 +92,13 @@ options2 = optimoptions(@fmincon,'Algorithm','sqp','Display','final','GradObj','
 
 h = waitbar(0,['Forces Computation (' filename ')']);
 
-
-[solid_path1,solid_path2,num_solid,num_markers]=Data_ClosedLoop(BiomechanicalModel.OsteoArticularModel);
-
-dependancies=KinematicDependancy(BiomechanicalModel.OsteoArticularModel);
 % Closed-loop constraints
+KT = Jacobian_closedloop_fullq(q(:,1));
 
-KT=ConstraintsJacobian(BiomechanicalModel,q(:,1),solid_path1,solid_path2,num_solid,num_markers,ones(size(q,1),1),0.0001,dependancies)';
 
 % tic();
 % KT2 = FullConstraintsJacobian(BiomechanicalModel,q(:,1),solid_path1,solid_path2,num_solid,num_markers,ones(size(q,1),1),0.0000001,dependancies)';
 % toc();
-
 
 lambda = zeros(size(KT,2),1);
 
@@ -139,7 +134,7 @@ waitbar(1/Nb_frames)
 
 for i=2:Nb_frames % for following frames
     % Closed-loop constraints
-    KT=ConstraintsJacobian(BiomechanicalModel,q(:,i),solid_path1,solid_path2,num_solid,num_markers,ones(size(q,1),1),0.0001,dependancies)';
+    KT=Jacobian_closedloop_fullq(q(:,i));
     %G = null(KT(idxj,:)');
     %G=eye(size(KT));
 

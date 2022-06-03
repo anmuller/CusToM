@@ -290,7 +290,14 @@ Jclosed_loop = jacobian(Fullceq_ClosedLoop,q_red);
 
 matlabFunction(Jclosed_loop,'file',['Symbolic_function/Jacobian_closedloop'],'vars',{q_red,pcut,Rcut});
 
+[solid_path1,solid_path2,num_solid,num_markers]=Data_ClosedLoop(Human_model);
 
+dependancies=KinematicDependancy(Human_model);
+% Closed-loop constraints
+
+KT=ConstraintsJacobian(Human_model,q,solid_path1,solid_path2,num_solid,num_markers,ones(size(q,1),1),0.0001,dependancies)';
+
+matlabFunction(KT,'file',['Symbolic_function/Jacobian_closedloop_fullq'],'vars',{q});
 
 
 %We delete p and R fields

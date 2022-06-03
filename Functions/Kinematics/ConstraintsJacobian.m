@@ -1,4 +1,4 @@
-function K=ConstraintsJacobian(BiomechanicalModel,q,solid_path1,solid_path2,num_solid,num_markers,k,dq,dependancies)
+function K=ConstraintsJacobian(Human_model,q,solid_path1,solid_path2,num_solid,num_markers,k,dq,dependancies)
 % Return the constraint matrix K, which is the jacobian of the constraints
 % by q
 
@@ -34,13 +34,13 @@ function K=ConstraintsJacobian(BiomechanicalModel,q,solid_path1,solid_path2,num_
 % %     qm=q;
 % %     qp(qchoix)=qp(qchoix)+dq;
 % %     qm(qchoix)=qm(qchoix)-dq;
-% %     [~,dhp]=NonLinCon_ClosedLoop_Num(BiomechanicalModel.OsteoArticularModel,solid_path1,solid_path2,num_solid,num_markers,qp,k);
-% %     [~,dhm]=NonLinCon_ClosedLoop_Num(BiomechanicalModel.OsteoArticularModel,solid_path1,solid_path2,num_solid,num_markers,qm,k);
+% %     [~,dhp]=NonLinCon_ClosedLoop_Num(Human_model,solid_path1,solid_path2,num_solid,num_markers,qp,k);
+% %     [~,dhm]=NonLinCon_ClosedLoop_Num(Human_model,solid_path1,solid_path2,num_solid,num_markers,qm,k);
 % %     K(:,qchoix)=(dhp-dhm)/(2*dq);       
-%     K(:,qchoix) =  ConstraintProjection(BiomechanicalModel.OsteoArticularModel,solid_path1,solid_path2,num_solid,num_markers,q,k,qchoix,"one");
+%     Ktest(:,qchoix) =  ConstraintProjection(Human_model,solid_path1,solid_path2,num_solid,num_markers,q,k,qchoix,"one");
 % end
 
-Human_model = BiomechanicalModel.OsteoArticularModel;
+K = sym(zeros(1,length(q)));
 
 for qchoix=1:length(q)
     Human_model(qchoix).q = q(qchoix);
@@ -88,22 +88,22 @@ for pp=1:numel(num_solid)
 
     for kk=1:length(path1)
          if Human_model(path1(kk)).joint ==1
-                     Ktest((1:3)+6*(pp-1),path1(kk)) = diag(Human_model(path1(kk)).Rproj*Human_model3(num_solid(pp)).R');
-                     Ktest((4:6)+6*(pp-1),path1(kk)) = ~isempty(ind1)*Human_model(path1(kk)).Rproj*s +...
-                                                                                                                     (-1)^(isempty(ind1))*(isempty(ind1))*isempty(ind1)*Human_model(path1(kk)).pproj;
+                     K((1:3)+6*(pp-1),path1(kk)) = diag(Human_model(path1(kk)).Rproj*Human_model3(path2(end)).R');
+                     K((4:6)+6*(pp-1),path1(kk)) = ~isempty(ind1)*Human_model(path1(kk)).Rproj*s +...
+                                                                                                                     (-1)^(isempty(ind1))*(isempty(ind1))*Human_model(path1(kk)).pproj;
          else
-                    Ktest((4:6)+6*(pp-1),path1(kk)) = (-1)^(isempty(ind1))*Human_model(path1(kk)).R*Human_model(path1(kk)).a;
+                    K((4:6)+6*(pp-1),path1(kk)) = (-1)^(isempty(ind1))*Human_model(path1(kk)).R*Human_model(path1(kk)).a;
          end
     end
     
     
     for kk=1:length(path2)
          if Human_model(path2(kk)).joint ==1
-                     Ktest((1:3)+6*(pp-1),path2(kk)) = diag(Human_model3(path2(kk)).Rproj*Human_model(num_solid(pp)).R');
-                     Ktest((4:6)+6*(pp-1),path2(kk)) = isempty(ind1)*Human_model(path2(kk)).Rproj*s+...
+                     K((1:3)+6*(pp-1),path2(kk)) = diag(Human_model3(path2(kk)).Rproj*Human_model(path1(end)).R');
+                     K((4:6)+6*(pp-1),path2(kk)) = isempty(ind1)*Human_model3(path2(kk)).Rproj*s+...
                                                                                                                     (-1)^(~isempty(ind1))*(~isempty(ind1))*Human_model3(path2(kk)).pproj;
          else
-                    Ktest((4:6)+6*(pp-1),path2(kk)) = (-1)^(~isempty(ind1))*Human_model3(path2(kk)).R*Human_model(path1(kk)).a;
+                    K((4:6)+6*(pp-1),path2(kk)) = (-1)^(~isempty(ind1))*Human_model3(path2(kk)).R*Human_model3(path2(kk)).a;
          end
     end
 
