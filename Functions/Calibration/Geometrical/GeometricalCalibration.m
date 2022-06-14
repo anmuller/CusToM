@@ -302,59 +302,80 @@ if size(GC.q_dep,1)>0
                 
                 syms theta phi real % latitude longitude
                 
-                ft =matlabFunction(-calib_parameters.radius(1)*cos(theta)*cos(phi),'vars',[theta,phi]);
+                t1 = -calib_parameters.radius(1)*cos(theta)*cos(phi);
+                ft =matlabFunction(t1,'vars',[theta,phi]);
+                dft =matlabFunction(jacobian(t1,[theta,phi]),'vars',[theta,phi]);
+                ddft =matlabFunction(jacobian(jacobian(t1,[theta,phi]),[theta,phi]),'vars',[theta,phi]);
                 Human_model_calib(j).kinematic_dependancy.q=   ft;
-                Human_model_calib(j).kinematic_dependancy.dq={jacobian(ft,[theta,phi])};
-                Human_model_calib(j).kinematic_dependancy.ddq={jacobian(jacobian(ft,[theta,phi]),[theta,phi])};
+                Human_model_calib(j).kinematic_dependancy.dq={dft};
+                Human_model_calib(j).kinematic_dependancy.ddq={ddft};
                 
             case 'RScapuloThoracic_J2'
                 
                 syms theta real% latitude
                  
-                ft = matlabFunction(calib_parameters.radius(2)*sin(theta),'vars',[theta]);
-
-                Human_model_calib(j).kinematic_dependancy.q= ft;
-                Human_model_calib(j).kinematic_dependancy.dq={jacobian(ft,[theta])};
-                Human_model_calib(j).kinematic_dependancy.ddq={jacobian(jacobian(ft,[theta]),[theta])};
+                t1 = calib_parameters.radius(2)*sin(theta);
+                
+                ft =matlabFunction(t1,'vars',[theta]);
+                dft =matlabFunction(jacobian(t1,[theta,phi]),'vars',[theta]);
+                ddft =matlabFunction(jacobian(jacobian(t1,[theta,phi]),[theta]),'vars',[theta]);
+                Human_model_calib(j).kinematic_dependancy.q=   ft;
+                Human_model_calib(j).kinematic_dependancy.dq={dft};
+                Human_model_calib(j).kinematic_dependancy.ddq={ddft};
+                
             case 'RScapuloThoracic_J3'
                 
                 syms theta phi real % latitude longitude
                 
-                ft =matlabFunction(calib_parameters.radius(3)*cos(theta)*sin(phi),'vars',[theta,phi]);
+                t1 = calib_parameters.radius(3)*cos(theta)*sin(phi);
                 
+                ft =matlabFunction(t1,'vars',[theta,phi]);
+                dft =matlabFunction(jacobian(t1,[theta,phi]),'vars',[theta,phi]);
+                ddft =matlabFunction(jacobian(jacobian(t1,[theta,phi]),[theta,phi]),'vars',[theta,phi]);
                 Human_model_calib(j).kinematic_dependancy.q=   ft;
-                Human_model_calib(j).kinematic_dependancy.dq={jacobian(ft,[theta,phi])};
-                Human_model_calib(j).kinematic_dependancy.ddq={jacobian(jacobian(ft,[theta,phi]),[theta,phi])};
+                Human_model_calib(j).kinematic_dependancy.dq={dft};
+                Human_model_calib(j).kinematic_dependancy.ddq={ddft};
                 
             case 'LScapuloThoracic_J1'
                 
                 syms theta phi real % latitude longitude
                 
-                ft=matlabFunction(-calib_parameters.radius(4)*cos(theta)*cos(phi),'vars',[theta,phi]);
-                 Human_model_calib(j).kinematic_dependancy.q=   ft;
-                Human_model_calib(j).kinematic_dependancy.dq={jacobian(ft,[theta,phi])};
-                Human_model_calib(j).kinematic_dependancy.ddq={jacobian(jacobian(ft,[theta,phi]),[theta,phi])};
-              
+                t1=-calib_parameters.radius(4)*cos(theta)*cos(phi);
+                
+                ft =matlabFunction(t1,'vars',[theta,phi]);
+                dft =matlabFunction(jacobian(t1,[theta,phi]),'vars',[theta,phi]);
+                ddft =matlabFunction(jacobian(jacobian(t1,[theta,phi]),[theta,phi]),'vars',[theta,phi]);
+                Human_model_calib(j).kinematic_dependancy.q=   ft;
+                Human_model_calib(j).kinematic_dependancy.dq={dft};
+                Human_model_calib(j).kinematic_dependancy.ddq={ddft};
+                
                 
             case 'LScapuloThoracic_J2'
                 
                 syms theta real% latitude
                 
-                ft =matlabFunction(calib_parameters.radius(5)*sin(theta),'vars',[theta]);
+                t1 = calib_parameters.radius(5)*sin(theta);
+                ft =matlabFunction(t1,'vars',[theta]);
+                dft =matlabFunction(jacobian(t1,[theta]),'vars',[theta]);
+                ddft =matlabFunction(jacobian(jacobian(t1,[theta]),[theta]),'vars',[theta]);
                 Human_model_calib(j).kinematic_dependancy.q=   ft;
-                Human_model_calib(j).kinematic_dependancy.dq={jacobian(ft,[theta])};
-                Human_model_calib(j).kinematic_dependancy.ddq={jacobian(jacobian(ft,[theta]),[theta])};
-              
+                Human_model_calib(j).kinematic_dependancy.dq={dft};
+                Human_model_calib(j).kinematic_dependancy.ddq={ddft};
+                
                 
             case 'LScapuloThoracic_J3'
                 
                 syms theta phi real % latitude longitude
                 
-                 ft=matlabFunction(-calib_parameters.radius(6)*cos(theta)*sin(phi),'vars',[theta,phi]);
+                 t1=-calib_parameters.radius(6)*cos(theta)*sin(phi);
                 
-                 Human_model_calib(j).kinematic_dependancy.q=   ft;
-                Human_model_calib(j).kinematic_dependancy.dq={jacobian(ft,[theta,phi])};
-                Human_model_calib(j).kinematic_dependancy.ddq={jacobian(jacobian(ft,[theta,phi]),[theta,phi])};
+                ft =matlabFunction(t1,'vars',[theta,phi]);
+                dft =matlabFunction(jacobian(t1,[theta,phi]),'vars',[theta,phi]);
+                ddft =matlabFunction(jacobian(jacobian(t1,[theta,phi]),[theta,phi]),'vars',[theta,phi]);
+                Human_model_calib(j).kinematic_dependancy.q=   ft;
+                Human_model_calib(j).kinematic_dependancy.dq={dft};
+                Human_model_calib(j).kinematic_dependancy.ddq={ddft};
+                
                 
             case 'RScapuloThoracic_J5'
                 if sum(contains({Human_model_calib.name},'RScapuloThoracic_Jalpha'))

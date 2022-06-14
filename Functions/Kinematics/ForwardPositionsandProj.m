@@ -32,10 +32,9 @@ if n~=0
     if Human_model(j).joint == 1    
         Human_model(j).p=Human_model(i).R*Human_model(j).b+Human_model(i).p;
         Human_model(j).R=Human_model(i).R*Rodrigues(Human_model(j).a,Human_model(j).q)*Rodrigues(Human_model(j).u,Human_model(j).theta);
-        temporary = pagemtimes(reshape([Human_model(solid_path).Rproj],3,3,numel(solid_path)),Rodrigues(Human_model(j).a,Human_model(j).q)*Rodrigues(Human_model(j).u,Human_model(j).theta));
         
       for kk=1:numel(solid_path)
-            Human_model(solid_path(kk)).Rproj = temporary(:,:,kk);
+            Human_model(solid_path(kk)).Rproj = Human_model(solid_path(kk)).Rproj*Rodrigues(Human_model(j).a,Human_model(j).q)*Rodrigues(Human_model(j).u,Human_model(j).theta);
             Human_model(solid_path(kk)).pproj = Human_model(solid_path(kk)).pproj+Human_model(solid_path(kk)).Rproj *Human_model(j).b;
          end
         
@@ -46,10 +45,9 @@ if n~=0
     if Human_model(j).joint == 2    
         Human_model(j).p=Human_model(i).R*Human_model(j).b+Human_model(i).R*Human_model(j).a*Human_model(j).q+Human_model(i).p;
         Human_model(j).R=Human_model(i).R*Rodrigues(Human_model(j).u,Human_model(j).theta);
-        temporary = pagemtimes(reshape([Human_model(solid_path).Rproj],3,3,numel(solid_path)),Rodrigues(Human_model(j).u,Human_model(j).theta));
 
          for kk=1:numel(solid_path)
-            Human_model(solid_path(kk)).Rproj = temporary(:,:,kk);
+            Human_model(solid_path(kk)).Rproj =Human_model(solid_path(kk)).Rproj*Rodrigues(Human_model(j).u,Human_model(j).theta);
             Human_model(solid_path(kk)).pproj = Human_model(solid_path(kk)).pproj+Human_model(solid_path(kk)).Rproj *(Human_model(j).b+Human_model(j).a*Human_model(j).q);
          end
         
