@@ -27,8 +27,12 @@ idxm=find([Muscles.exist]);
 nmr=numel(idxm);
 
 %
-if length(q0)==numel(BiomechanicalModel.OsteoArticularModel(:)) && ~isempty(intersect({BiomechanicalModel.OsteoArticularModel.name},'root0'))
-    q=q0(1:end-6); %only degrees of freedom of the body, not the floating base.
+if ~isempty(intersect({BiomechanicalModel.OsteoArticularModel.name},'root0'))
+    if length(q0) == numel(BiomechanicalModel.OsteoArticularModel)
+        q=q0(1:end-6); %only degrees of freedom of the body, not the floating base.
+    else
+        q = q0;
+    end
 else
     q=q0;
 end
@@ -141,5 +145,28 @@ BiomechanicalModel.M_Bone = M_Bone;
 BiomechanicalModel.M_pos = M_pos;
 BiomechanicalModel.Coupling = C;
 
+if ~isempty(intersect({BiomechanicalModel.OsteoArticularModel.name},'root0'))
+    NvBiom = BiomechanicalModel;
+    NvBiom.OsteoArticularModel= BiomechanicalModel.OsteoArticularModel(1:end-6);
+end
+
+
+q = sym('q', [numel(NvBiom.OsteoArticularModel) 1]);  % joint coordinates initialization (number of solids - 1 (pelvis))
+assume(q,'real')
+
+tic()
+[P1P2,P4P3] = MomentArmsComputationPreciseSym(NvBiom,q);
+toc()
+
+ tic()
+ matlabFunction(P1P2,'file',['Symbolic_function/MomentArmP1P2'],'vars',{q});
+matlabFunction(P4P3,'file',['Symbolic_function/MomentArmP4P3'],'vars',{q});
+toc()
+
+% 
+% MomentArmMatrix  =   MomentArmsComputationPrecise(BiomechanicalModel,q); %depend on reduced set of q (q_red)
+% tic()
+% matlabFunction(MomentArmMatrix,'file',['Symbolic_function/MomentArmMatrix'],'vars',{q});
+% toc()
 end
 

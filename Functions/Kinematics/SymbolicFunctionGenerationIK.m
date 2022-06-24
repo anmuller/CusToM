@@ -159,7 +159,7 @@ Jfq(idx)=1;
 
 indexesNumericJfq = find(Jfq_sym~=0 & Jfq_sym~=1)';
 % nonNumericJfq = matlabFunction(Jfq_sym(indexesNumericJfq), 'Vars', {q,pcut,Rcut});
-nonNumericJfq = matlabFunction(Jfq_sym(indexesNumericJfq), 'Vars', {q_red,pcut,Rcut});
+nonNumericJfq = matlabFunction(Jfq_sym(indexesNumericJfq), 'Vars', {q_red,pcut,Rcut},'Optimize',false);
 
 % Jfcut
 Nb_cut = size(pcut,3);
@@ -295,9 +295,25 @@ matlabFunction(Jclosed_loop,'file',['Symbolic_function/Jacobian_closedloop'],'va
 dependancies=KinematicDependancy(Human_model);
 % Closed-loop constraints
 
-KT=ConstraintsJacobian(Human_model,q,solid_path1,solid_path2,num_solid,num_markers,ones(size(q,1),1),0.0001,dependancies)';
 
+if ~isempty(intersect({Human_model.name},'root0'))
+    NvHuman_model= Human_model(1:end-6);
+end
+
+
+KT=ConstraintsJacobian(NvHuman_model,q(1:end-6),solid_path1,solid_path2,num_solid,num_markers,dependancies)';
+% 
+% tic()
+% for indk=1:size(KT,1)
+%     KKT(:,:,indk) = jacobian(KT(indk,:)',q(1:end-6));
+% end
+% toc()
 matlabFunction(KT,'file',['Symbolic_function/Jacobian_closedloop_fullq'],'vars',{q});
+% tic()
+% matlabFunction(KKT,'file',['Symbolic_function/Jacobian_derivative_closedloop_fullq'],'vars',{q});
+% toc()
+
+
 
 
 %We delete p and R fields
