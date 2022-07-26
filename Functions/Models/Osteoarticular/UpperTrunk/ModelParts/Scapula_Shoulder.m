@@ -265,11 +265,6 @@ num_solid=0;
 %% Scapulo-thoracic joint
 
 syms theta phi real% latitude longitude
-% x = -Thorax_Rx*cos(theta)*cos(phi);
-% 
-% y = -Thorax_Ry*sin(theta);
-% 
-% z = Thorax_Rz*cos(theta)*sin(phi);
 x = -Thorax_Rx*cos(theta)*cos(phi);
 
 y = Thorax_Ry*sin(theta);
