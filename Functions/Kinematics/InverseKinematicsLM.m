@@ -69,7 +69,7 @@ end
 
 %% Inverse kinematics frame per frame
 
-options1 = optimoptions(@fmincon,'Algorithm','interior-point','Display','final','TolFun',1e-6,'TolCon',1e-6,'MaxFunEvals',2e5,'MaxIter',2e5,'TolX',1e-9);
+options1 = optimoptions(@fmincon,'Algorithm','interior-point','Display','final','TolFun',1e-6,'TolCon',1e-6,'MaxFunEvals',2e5,'MaxIter',2e5,'TolX',1e-9,'SpecifyObjectiveGradient',true,'DerivativeCheck','off');
 q=zeros(nb_solid,nb_frame);
 ceq=zeros(6*nbClosedLoop,nb_frame);
 addpath('Symbolic_function')
@@ -96,9 +96,26 @@ else
     l_sup1=[Human_model.limit_sup]';
 end
 
-weights = ones(1,length(real_markers));
-% AnalysisParameters.IK.weights';
+%weights = ones(1,length(real_markers));
+AnalysisParameters.IK.weights';
 
+
+Jfq = BiomechanicalModel.Jacob.Jfq;
+indexesNumericJfq = BiomechanicalModel.Jacob.indexesNumericJfq;
+nonNumericJfq = BiomechanicalModel.Jacob.nonNumericJfq;
+Jfcut = BiomechanicalModel.Jacob.Jfcut;
+indexesNumericJfcut = BiomechanicalModel.Jacob.indexesNumericJfcut;
+nonNumericJfcut = BiomechanicalModel.Jacob.nonNumericJfcut;
+Jcutq = BiomechanicalModel.Jacob.Jcutq;
+indexesNumericJcutq = BiomechanicalModel.Jacob.indexesNumericJcutq;
+nonNumericJcutq = BiomechanicalModel.Jacob.nonNumericJcutq;
+Jcutcut = BiomechanicalModel.Jacob.Jcutcut;
+indexesNumericJcutcut = BiomechanicalModel.Jacob.indexesNumericJcutcut;
+nonNumericJcutcut = BiomechanicalModel.Jacob.nonNumericJcutcut;
+
+J_marqueurs_handle = @(q,pcut,Rcut) JacobianMarker(q,pcut,Rcut,Jfq,indexesNumericJfq , nonNumericJfq ,Jfcut,indexesNumericJfcut,nonNumericJfcut ,Jcutq ,...
+                                                                  indexesNumericJcutq ,nonNumericJcutq, Jcutcut , indexesNumericJcutcut , nonNumericJcutcut);
+       
 
 h = waitbar(0,['Inverse Kinematics (' filename ')']);
 % 1st frame : classical optimization
@@ -115,7 +132,7 @@ if ~isfield(BiomechanicalModel,'ClosedLoopData')
         positions(:,m) = real_markers(m).position(1,:)';
     end
     
-    ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar,positions(:),weights);
+    ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar,positions(:),weights,J_marqueurs_handle);
     [q(:,1)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,[],options1);
     hclosedloophandle = {@(x) Aeq_ik*x - beq_ik}   ;
 else
@@ -129,40 +146,8 @@ else
         positions(:,m) = real_markers(m).position(1,:)';
     end
     
-    ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar, positions(:),weights);
+    ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar, positions(:),weights,J_marqueurs_handle);
     nonlcon=@(qvar)ClosedLoop(qvar);
-    
-%     rng(0) % For reproducibility
-%     
-%     q0 = l_inf1 + (-l_inf1+l_sup1).*rand(nb_solid,10);
-%     q0(isnan(q0)) = rand(1,1);
-%     tic()
-% %    for ii=1:10
-%     parfor ii=1:10
-%            [q1(:,ii)] = fmincon(ik_function_objective,q0(:,ii),[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,nonlcon,options1);
-%            rmse(ii) = ik_function_objective(q1(:,ii));
-%     end
-%     toc()
-    
-% 
-%     rng default % For reproducibility
-%     problem = createOptimProblem('fmincon','objective',...
-%     ik_function_objective,'x0',q0,'lb',l_inf1,'ub',l_sup1,'options',options1,'Aeq',Aeq_ik,'beq',beq_ik,'nonlcon',nonlcon);
-%     ms = MultiStart('UseParallel',true);
-%     [q0int,rmseint ] = run(ms,problem,10);
-% 
-%    %q0int = q0;
-%     
-%     ptmatrix = q0   + (-(-l_inf1+l_sup1)./2 +  (-l_inf1+l_sup1).*randn(nb_solid,10))*0.2;
-%     ptmatrix(isnan(ptmatrix)) = 0;
-%     ptmatrix(isinf(ptmatrix))= 0;
-%     tpoints = CustomStartPointSet(ptmatrix');
-%     options1 = optimoptions(@fmincon,'Algorithm','interior-point','Display','iter-detailed','TolFun',1e-6,'TolCon',1e-6,'MaxFunEvals',10000000,'MaxIter',10000,'TolX',1e-9);
-%     problem = createOptimProblem('fmincon','objective',...
-%     ik_function_objective,'x0',q0,'lb',l_inf1,'ub',l_sup1,'options',options1,'Aeq',Aeq_ik,'beq',beq_ik,'nonlcon',nonlcon);
-%     ms = MultiStart('UseParallel',true);
-%     [q(:,1),rmse] = run(ms,problem,tpoints);
-%     
    [q(:,1)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,nonlcon,options1);
    hclosedloophandle = {@(qvar) ClosedLoopceq(qvar) ;  @(x) Aeq_ik*x - beq_ik} ;
 end
@@ -170,27 +155,12 @@ end
 buteehandle = @(q)  Limits(q,l_inf1,l_sup1);
 gamma = 100;
 zeta = 20;
-
-Jfq = BiomechanicalModel.Jacob.Jfq;
-indexesNumericJfq = BiomechanicalModel.Jacob.indexesNumericJfq;
-nonNumericJfq = BiomechanicalModel.Jacob.nonNumericJfq;
-Jfcut = BiomechanicalModel.Jacob.Jfcut;
-indexesNumericJfcut = BiomechanicalModel.Jacob.indexesNumericJfcut;
-nonNumericJfcut = BiomechanicalModel.Jacob.nonNumericJfcut;
-Jcutq = BiomechanicalModel.Jacob.Jcutq;
-indexesNumericJcutq = BiomechanicalModel.Jacob.indexesNumericJcutq;
-nonNumericJcutq = BiomechanicalModel.Jacob.nonNumericJcutq;
-Jcutcut = BiomechanicalModel.Jacob.Jcutcut;
-indexesNumericJcutcut = BiomechanicalModel.Jacob.indexesNumericJcutcut;
-nonNumericJcutcut = BiomechanicalModel.Jacob.nonNumericJcutcut;
-
-J_marqueurs_handle = @(q,pcut,Rcut) JacobianMarker(q,pcut,Rcut,Jfq,indexesNumericJfq , nonNumericJfq ,Jfcut,indexesNumericJfcut,nonNumericJfcut ,Jcutq ,...
-                                                                   indexesNumericJcutq ,nonNumericJcutq, Jcutcut , indexesNumericJcutcut , nonNumericJcutcut);
-                                             
+                                      
 waitbar(1/nb_frame)
 
-optionsLM = optimset('Algorithm','Levenberg-Marquardt','Display','off','MaxIter',4e6,'MaxFunEval',5e6,'Jacobian','on','DerivativeCheck','off');
+optionsLM = optimset('Algorithm','Levenberg-Marquardt','Display','off','MaxIter',4e6,'MaxFunEval',5e6,'Jacobian','on','DerivativeCheck','off','TolFun',1e-3);
 positions = zeros(3, length(real_markers));
+
 for f = 2:nb_frame
     
     % Precomputation of markers positions at each frame
@@ -204,6 +174,7 @@ for f = 2:nb_frame
     waitbar(f/nb_frame)
     
 end
+
 close(h)
 
 
@@ -270,15 +241,13 @@ ddq=derivee2(dt,dq')';  % acc�l�rations
 nvdq = dq;
 nvddq = ddq;
 
-[solid_path1,solid_path2,num_solid,num_markers]=Data_ClosedLoop(BiomechanicalModel.OsteoArticularModel);
-
-dependancies=KinematicDependancy(BiomechanicalModel.OsteoArticularModel);
-
-
 %  % Closed-loop constraints
+if isfield(BiomechanicalModel,'ClosedLoopData')
  for f=1:nb_frame
-    K=ConstraintsJacobian(BiomechanicalModel,q(:,f),solid_path1,solid_path2,num_solid,num_markers,ones(size(q(:,f),1),1),0.0001,dependancies);
-    Kdev=ConstraintsJacobianDerivative(BiomechanicalModel,q(:,f),solid_path1,solid_path2,num_solid,num_markers,ones(size(q(:,f),1),1),0.0001,dependancies);
+     K = Jacobian_closedloop_fullq(q(:,f))';
+
+    Kdev=ConstraintsJacobianDerivative(q(:,f),0.0001);
+
     G = null(K);
     nvdq(:,f) = sum(dq(:,f)'*G.*G,2);
     
@@ -290,7 +259,7 @@ dependancies=KinematicDependancy(BiomechanicalModel.OsteoArticularModel);
     nvddq(:,f) = xtilde(length(nvdq(:,f))+1:end);
     
  end
- 
+end
 
 %% Save data
 ExperimentalData.FirstFrame = Firstframe;
