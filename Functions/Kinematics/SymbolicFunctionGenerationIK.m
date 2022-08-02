@@ -298,6 +298,8 @@ dependancies=KinematicDependancy(Human_model);
 
 if ~isempty(intersect({Human_model.name},'root0'))
     NvHuman_model= Human_model(1:end-6);
+else
+    NvHuman_model = Human_model;
 end
 
 

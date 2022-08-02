@@ -1,4 +1,4 @@
-function Kdev=ConstraintsJacobianDerivative(BiomechanicalModel,q,solid_path1,solid_path2,num_solid,num_markers,k,dq,dependancies)
+function Kdev=ConstraintsJacobianDerivative(q,dq)
 % Return the constraint matrix K, which is the jacobian of the constraints
 % by q
 
@@ -27,28 +27,46 @@ function Kdev=ConstraintsJacobianDerivative(BiomechanicalModel,q,solid_path1,sol
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
 % Georges Dumont
 %________________________________________________________
-
 for qchoix=1:length(q)
     qp=q;
     qm=q;
     qp(qchoix)=qp(qchoix)+dq;
     qm(qchoix)=qm(qchoix)-dq;
-    Kp =  ConstraintsJacobian(BiomechanicalModel,qp,solid_path1,solid_path2,num_solid,num_markers,k,dq,dependancies);
-    Km =  ConstraintsJacobian(BiomechanicalModel,qm,solid_path1,solid_path2,num_solid,num_markers,k,dq,dependancies);
+    Kp = Jacobian_closedloop_fullq(qp)';
+    Km = Jacobian_closedloop_fullq(qm)';
     Kdev(:,:,qchoix) =  (Kp - Km)/(2*dq);
     
-%    Kdev2(:,:,qchoix) = ConstraintProjectionDerivative(BiomechanicalModel.OsteoArticularModel,solid_path1,solid_path2,num_solid,num_markers,q,k,qchoix,"one");
-
 end
 
 
-
-
-
-
-
-
-
+% Closed loop constraints
+% for qchoix=1:length(q)
+% 
+% 
+% %    Kdev2(:,:,qchoix) = ConstraintProjectionDerivative(BiomechanicalModel.OsteoArticularModel,solid_path1,solid_path2,num_solid,num_markers,q,k,qchoix,"one");
+% end
+% 
+% 
+% K=[];
+% 
+% if ~isempty(dependancies)
+%     for pp=1:size(dependancies,2)
+%         K(size(K,1)+1,dependancies(pp).solid,dependancies(pp).solid) = 0;
+%         
+%         ddf = dependancies(pp).ddq;
+%         
+%         if size(dependancies(pp).Joint,1)==1
+%             K(size(K,1),dependancies(pp).Joint,dependancies(pp).Joint)= ddf(q(dependancies(pp).Joint));
+%             
+%         else
+%             if size(dependancies(pp).Joint,1)==2
+%                 K(size(K,1),[dependancies(pp).Joint],...
+%                     [dependancies(pp).Joint])= ddf(q(dependancies(pp).Joint(1)),q(dependancies(pp).Joint(2)));
+%             end
+%         end
+%         
+%     end
+% end
 
 
 end

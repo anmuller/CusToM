@@ -1,4 +1,4 @@
-function [error] = CostFunctionSymbolicIK2(q,positions,weights)
+function [error,J] = CostFunctionSymbolicIK2(q,positions,weights,J_marqueurs_handle)
 % Cost function used for the inverse kinematics step using an optimization method
 %   
 %   INPUT
@@ -21,5 +21,7 @@ function [error] = CostFunctionSymbolicIK2(q,positions,weights)
 newweights= repmat(weights,1,3)';
 a = sum(newweights(:).*(-X_markers(q,pcut,Rcut) + positions).^2);
 error = sum(a(~isnan(a)));
+
+J = -2*(-X_markers(q,pcut,Rcut) + positions)'* J_marqueurs_handle(q,pcut,Rcut);
 
 end
