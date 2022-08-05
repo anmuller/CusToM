@@ -96,7 +96,7 @@ else
     l_sup1=[Human_model.limit_sup]';
 end
 
-%weights = ones(1,length(real_markers));
+weights = ones(1,length(real_markers));
 AnalysisParameters.IK.weights';
 
 

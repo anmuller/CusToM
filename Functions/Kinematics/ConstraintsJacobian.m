@@ -114,7 +114,7 @@ if ~isempty(dependancies)
     for pp=1:size(dependancies,2)
         K(size(K,1)+1,dependancies(pp).solid) = -1;
         
-        df = dependancies(pp).dq;
+        df = dependancies(pp).dq{1};
          
          if size(dependancies(pp).Joint,1)==1
                 K(size(K,1),dependancies(pp).Joint)= df(q(dependancies(pp).Joint));
