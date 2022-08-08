@@ -97,10 +97,10 @@ else
                     q=q_complet(1:end-6);
                  end
          else
-                     if isfield(BiomechanicalModel,'ClosedLoopData')
-                        [~,q] = ForwardKinematicsConstrained(BiomechanicalModel,q);
-                        q = q(1:end-6);
-                     end
+%                      if isfield(BiomechanicalModel,'ClosedLoopData')
+%                         [~,q] = ForwardKinematicsConstrained(BiomechanicalModel,q);
+%                         q = q(1:end-6);
+%                      end
         end
         
         
