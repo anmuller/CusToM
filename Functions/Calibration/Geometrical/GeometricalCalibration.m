@@ -316,8 +316,8 @@ if size(GC.q_dep,1)>0
                     dft =matlabFunction(jacobian(t1,[theta,phi]),'vars',[theta,phi]);
                     ddft =matlabFunction(jacobian(jacobian(t1,[theta,phi]),[theta,phi]),'vars',[theta,phi]);
                     Human_model_calib(j).kinematic_dependancy.q=   ft;
-                    Human_model_calib(j).kinematic_dependancy.dq={dft};
-                    Human_model_calib(j).kinematic_dependancy.ddq={ddft};
+                    Human_model_calib(j).kinematic_dependancy.dq=dft;
+                    Human_model_calib(j).kinematic_dependancy.ddq=ddft;
                 end
             case 'RScapuloThoracic_J2'
                 if sum(contains({Human_model_calib.name},'RScapuloThoracic_Jalpha'))
@@ -335,11 +335,11 @@ if size(GC.q_dep,1)>0
                     t1 = calib_parameters.radius(2)*sin(theta);
                     
                     ft =matlabFunction(t1,'vars',[theta]);
-                    dft =matlabFunction(jacobian(t1,[theta,phi]),'vars',[theta]);
-                    ddft =matlabFunction(jacobian(jacobian(t1,[theta,phi]),[theta]),'vars',[theta]);
+                    dft =matlabFunction(jacobian(t1,[theta]),'vars',[theta]);
+                    ddft =matlabFunction(jacobian(jacobian(t1,[theta]),[theta]),'vars',[theta]);
                     Human_model_calib(j).kinematic_dependancy.q=   ft;
-                    Human_model_calib(j).kinematic_dependancy.dq={dft};
-                    Human_model_calib(j).kinematic_dependancy.ddq={ddft};
+                    Human_model_calib(j).kinematic_dependancy.dq=dft;
+                    Human_model_calib(j).kinematic_dependancy.ddq=ddft;
                 end
             case 'RScapuloThoracic_J3'
                 
@@ -362,8 +362,8 @@ if size(GC.q_dep,1)>0
                     dft =matlabFunction(jacobian(t1,[theta,phi]),'vars',[theta,phi]);
                     ddft =matlabFunction(jacobian(jacobian(t1,[theta,phi]),[theta,phi]),'vars',[theta,phi]);
                     Human_model_calib(j).kinematic_dependancy.q=   ft;
-                    Human_model_calib(j).kinematic_dependancy.dq={dft};
-                    Human_model_calib(j).kinematic_dependancy.ddq={ddft};
+                    Human_model_calib(j).kinematic_dependancy.dq=dft;
+                    Human_model_calib(j).kinematic_dependancy.ddq=ddft;
                 end
             case 'LScapuloThoracic_J1'
                 
@@ -385,8 +385,8 @@ if size(GC.q_dep,1)>0
                     dft =matlabFunction(jacobian(t1,[theta,phi]),'vars',[theta,phi]);
                     ddft =matlabFunction(jacobian(jacobian(t1,[theta,phi]),[theta,phi]),'vars',[theta,phi]);
                     Human_model_calib(j).kinematic_dependancy.q=   ft;
-                    Human_model_calib(j).kinematic_dependancy.dq={dft};
-                    Human_model_calib(j).kinematic_dependancy.ddq={ddft};
+                    Human_model_calib(j).kinematic_dependancy.dq=dft;
+                    Human_model_calib(j).kinematic_dependancy.ddq=ddft;
                     
                 end
             case 'LScapuloThoracic_J2'
@@ -408,8 +408,8 @@ if size(GC.q_dep,1)>0
                     dft =matlabFunction(jacobian(t1,[theta]),'vars',[theta]);
                     ddft =matlabFunction(jacobian(jacobian(t1,[theta]),[theta]),'vars',[theta]);
                     Human_model_calib(j).kinematic_dependancy.q=   ft;
-                    Human_model_calib(j).kinematic_dependancy.dq={dft};
-                    Human_model_calib(j).kinematic_dependancy.ddq={ddft};
+                    Human_model_calib(j).kinematic_dependancy.dq=dft;
+                    Human_model_calib(j).kinematic_dependancy.ddq=ddft;
                     
                 end
             case 'LScapuloThoracic_J3'
@@ -431,8 +431,8 @@ if size(GC.q_dep,1)>0
                     dft =matlabFunction(jacobian(t1,[theta,phi]),'vars',[theta,phi]);
                     ddft =matlabFunction(jacobian(jacobian(t1,[theta,phi]),[theta,phi]),'vars',[theta,phi]);
                     Human_model_calib(j).kinematic_dependancy.q=   ft;
-                    Human_model_calib(j).kinematic_dependancy.dq={dft};
-                    Human_model_calib(j).kinematic_dependancy.ddq={ddft};
+                    Human_model_calib(j).kinematic_dependancy.dq=dft;
+                    Human_model_calib(j).kinematic_dependancy.ddq=ddft;
                     
                 end
             case 'RScapuloThoracic_J4'
