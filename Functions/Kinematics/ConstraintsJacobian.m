@@ -1,4 +1,4 @@
-function K=ConstraintsJacobian(Human_model,q,solid_path1,solid_path2,num_solid,num_markers,k,dq,dependancies)
+function K=ConstraintsJacobian(Human_model,q,solid_path1,solid_path2,num_solid,num_markers,dependancies)
 % Return the constraint matrix K, which is the jacobian of the constraints
 % by q
 
@@ -114,7 +114,7 @@ if ~isempty(dependancies)
     for pp=1:size(dependancies,2)
         K(size(K,1)+1,dependancies(pp).solid) = -1;
         
-        df = dependancies(pp).dq{1};
+        df = dependancies(pp).dq;
          
          if size(dependancies(pp).Joint,1)==1
                 K(size(K,1),dependancies(pp).Joint)= df(q(dependancies(pp).Joint));

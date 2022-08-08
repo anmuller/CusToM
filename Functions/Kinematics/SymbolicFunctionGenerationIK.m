@@ -303,7 +303,7 @@ else
 end
 
 
-KT=ConstraintsJacobian(NvHuman_model,q(1:end-6),solid_path1,solid_path2,num_solid,num_markers,1,1,dependancies)';
+KT=ConstraintsJacobian(NvHuman_model,q(1:end-6),solid_path1,solid_path2,num_solid,num_markers,dependancies)';
 % 
 % tic()
 % for indk=1:size(KT,1)

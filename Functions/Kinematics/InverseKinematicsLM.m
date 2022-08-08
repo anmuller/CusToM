@@ -97,7 +97,7 @@ else
 end
 
 weights = ones(1,length(real_markers));
-AnalysisParameters.IK.weights';
+%weights = AnalysisParameters.IK.weights';
 
 
 Jfq = BiomechanicalModel.Jacob.Jfq;
