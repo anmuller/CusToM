@@ -23,7 +23,7 @@ function [Human_model]= Scapula_Shoulder_Tangent(Human_model,k,Mass,Side,Attachm
 
 %% Solid list
 
-list_solid={'ScapuloThoracic_J1' 'ScapuloThoracic_J2' 'ScapuloThoracic_J3' 'ScapuloThoracic_J4' 'ScapuloThoracic_J4bis' 'ScapuloThoracic_J5' 'ScapuloThoracic_Jalpha' 'ScapuloThoracic_J6' 'Scapula'};
+list_solid={'ScapuloThoracic_J1' 'ScapuloThoracic_J2' 'ScapuloThoracic_J3' 'ScapuloThoracic_J4' 'ScapuloThoracic_J5' 'ScapuloThoracic_J6' 'Scapula'};
 
 %% Choix jambe droite ou gauche
 if Side == 'R'
@@ -474,7 +474,7 @@ Human_model(incr_solid).b=[0 0 0]';        % Attachment point position in mother
 Human_model(incr_solid).I=[I_Scapula(1) I_Scapula(4) I_Scapula(5); I_Scapula(4) I_Scapula(2) I_Scapula(6); I_Scapula(5) I_Scapula(6) I_Scapula(3)];               % Reference inertia matrix
 Human_model(incr_solid).c=-Scapula_stJointNode;                 % Centre of mass position in local frame
 Human_model(incr_solid).calib_k_constraint=[];
-Human_model(incr_solid).u=[0 1 0];                       % fixed rotation with respect to u axis of theta1 angle
+Human_model(incr_solid).u=[0 1 0]';                       % fixed rotation with respect to u axis of theta1 angle
 Human_model(incr_solid).theta=-pi/2;
 Human_model(incr_solid).KinematicsCut=[];           % kinematic cut
 Human_model(incr_solid).linear_constraint=[];
