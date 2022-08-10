@@ -59,10 +59,9 @@ if Human_model(j).mother ~= 0
         case 'RScapuloThoracic_J1'
             
             if sum(contains({Human_model.name},'RScapuloThoracic_Jalpha'))
-                
-                [~,idx_theta2] = intersect({Human_model.name},'RScapuloThoracic_J4bis');
-                
-                q= radius(1)*sin(Q(idx_theta2));
+                [~,idx_theta1] = intersect({Human_model.name},'RScapuloThoracic_J4');
+                [~,idx_theta2] = intersect({Human_model.name},'RScapuloThoracic_J5bis');
+                q= radius(1)*cos(Q(idx_theta1))*cos(Q(idx_theta2));
             else
                 %theta elevation
                 [~,idx_theta] = intersect({Human_model.name},'RScapuloThoracic_J4');
@@ -76,9 +75,8 @@ if Human_model(j).mother ~= 0
         case 'RScapuloThoracic_J2'
             if sum(contains({Human_model.name},'RScapuloThoracic_Jalpha'))
                 
-                [~,idx_theta1] = intersect({Human_model.name},'RScapuloThoracic_J5');
-                [~,idx_theta2] = intersect({Human_model.name},'RScapuloThoracic_J4bis');
-                q= -radius(2)*sin(Q(idx_theta1))*cos(Q(idx_theta2));
+                [~,idx_theta2] = intersect({Human_model.name},'RScapuloThoracic_J5bis');
+                q= radius(2)*sin(Q(idx_theta2));
                 
             else
                 
@@ -86,16 +84,16 @@ if Human_model(j).mother ~= 0
                 [~,idx_theta] = intersect({Human_model.name},'RScapuloThoracic_J4');
                 
                 q= radius(2)*sin(Q(idx_theta));
-
+                
             end
         case 'RScapuloThoracic_J3'
             
             
             if sum(contains({Human_model.name},'RScapuloThoracic_Jalpha'))
                 
-                [~,idx_theta1] = intersect({Human_model.name},'RScapuloThoracic_J5');
-                [~,idx_theta2] = intersect({Human_model.name},'RScapuloThoracic_J4bis');
-                q= radius(3)*cos(Q(idx_theta1))*cos(Q(idx_theta2));
+                [~,idx_theta1] = intersect({Human_model.name},'RScapuloThoracic_J4');
+                [~,idx_theta2] = intersect({Human_model.name},'RScapuloThoracic_J5bis');
+                q= radius(3)*sin(Q(idx_theta1))*cos(Q(idx_theta2));
                 
             else
                 
@@ -111,9 +109,9 @@ if Human_model(j).mother ~= 0
             
             
             if sum(contains({Human_model.name},'LScapuloThoracic_Jalpha'))
-                
-                [~,idx_theta2] = intersect({Human_model.name},'LScapuloThoracic_J4bis');
-                q= radius(4)*sin(Q(idx_theta2));
+                [~,idx_theta1] = intersect({Human_model.name},'LScapuloThoracic_J4');
+                [~,idx_theta2] = intersect({Human_model.name},'LScapuloThoracic_J5bis');
+                q= radius(4)*cos(Q(idx_theta1))*cos(Q(idx_theta2));
                 
             else
                 
@@ -123,7 +121,7 @@ if Human_model(j).mother ~= 0
                 [~,idx_phi] = intersect({Human_model.name},'LScapuloThoracic_J5');
                 
                 q= -radius(4)*cos(Q(idx_theta))*cos(Q(idx_phi));
-
+                
                 
                 
             end
@@ -133,26 +131,25 @@ if Human_model(j).mother ~= 0
             
             if sum(contains({Human_model.name},'LScapuloThoracic_Jalpha'))
                 
-                [~,idx_theta1] = intersect({Human_model.name},'LScapuloThoracic_J5');
-                [~,idx_theta2] = intersect({Human_model.name},'LScapuloThoracic_J4bis');
-                q= -radius(5)*sin(Q(idx_theta1))*cos(Q(idx_theta2));
+                [~,idx_theta2] = intersect({Human_model.name},'LScapuloThoracic_J5bis');
+                q= radius(5)*sin(Q(idx_theta2));
                 
             else
                 
                 %theta elevation
                 [~,idx_theta] = intersect({Human_model.name},'LScapuloThoracic_J4');
-
+                
                 q=radius(5)*sin(Q(idx_theta));
-
+                
             end
             
         case 'LScapuloThoracic_J3'
             
             if sum(contains({Human_model.name},'LScapuloThoracic_Jalpha'))
                 
-                [~,idx_theta1] = intersect({Human_model.name},'LScapuloThoracic_J5');
-                [~,idx_theta2] = intersect({Human_model.name},'LScapuloThoracic_J4bis');
-                q= -radius(6)*cos(Q(idx_theta1))*cos(Q(idx_theta2));
+                [~,idx_theta1] = intersect({Human_model.name},'LScapuloThoracic_J4');
+                [~,idx_theta2] = intersect({Human_model.name},'LScapuloThoracic_J5bis');
+                q= -radius(6)*sin(Q(idx_theta1))*cos(Q(idx_theta2));
                 
             else
                 
@@ -162,39 +159,42 @@ if Human_model(j).mother ~= 0
                 [~,idx_phi] = intersect({Human_model.name},'LScapuloThoracic_J5');
                 
                 q=-radius(6)*cos(Q(idx_theta))*sin(Q(idx_phi));
-
+                
                 
             end
             
             
-        case 'RScapuloThoracic_J4'
+        case 'RScapuloThoracic_J5'
             if sum(contains({Human_model.name},'RScapuloThoracic_Jalpha'))
                 
-                [~,idx_theta1] = intersect({Human_model.name},'RScapuloThoracic_J5');
-                [~,idx_theta2] = intersect({Human_model.name},'RScapuloThoracic_J4bis');
-                q = atan((radius(3)*radius(2)*tan(Q(idx_theta2))*(1 - tan( Q(idx_theta1))^2))/(radius(1)*radius(2)-radius(1)*radius(3)*tan( Q(idx_theta1))^2));
+                [~,idx_theta1] = intersect({Human_model.name},'RScapuloThoracic_J4');
+                [~,idx_theta2] = intersect({Human_model.name},'RScapuloThoracic_J5bis');
+                q = atan(-(radius(1)*radius(3)*tan(Q(idx_theta2))*(1 + tan(Q(idx_theta1))^2))/(radius(3)*radius(2)+radius(1)*radius(2)*tan(Q(idx_theta1))^2));
                 
             end
             
         case 'RScapuloThoracic_Jalpha'
+            [~,idx_theta1] = intersect({Human_model.name},'RScapuloThoracic_J4');
+            [~,idx_theta2] = intersect({Human_model.name},'RScapuloThoracic_J5bis');
+            phi= atan(-(radius(1)*radius(3)*tan(Q(idx_theta2))*(1 + tan(Q(idx_theta1))^2))/(radius(3)*radius(2)+radius(1)*radius(2)*tan(Q(idx_theta1))^2));
+            q= atan(tan(Q(idx_theta1))*(-radius(2)/radius(3)*sin(phi)/tan(Q(idx_theta2))-cos(phi)));
             
-            [~,idx_theta1] = intersect({Human_model.name},'RScapuloThoracic_J5');
-            q= atan( tan(Q(idx_theta1))*(radius(3)*(1 - tan(Q(idx_theta1))^2)/(radius(2) - radius(3)*tan(Q(idx_theta1))^2) -1));
- 
             
-        case 'LScapuloThoracic_J4'
+        case 'LScapuloThoracic_J5'
             if sum(contains({Human_model.name},'LScapuloThoracic_Jalpha'))
                 
-                [~,idx_theta1] = intersect({Human_model.name},'LScapuloThoracic_J5');
-                [~,idx_theta2] = intersect({Human_model.name},'LScapuloThoracic_J4bis');
-                q = atan((radius(6)*radius(5)*tan(Q(idx_theta2))*(1 - tan( Q(idx_theta1))^2))/(radius(4)*radius(5)-radius(4)*radius(6)*tan( Q(idx_theta1))^2));
+                [~,idx_theta1] = intersect({Human_model.name},'LScapuloThoracic_J4');
+                [~,idx_theta2] = intersect({Human_model.name},'LScapuloThoracic_J5bis');
+                q = atan(-(radius(4)*radius(6)*tan(Q(idx_theta2))*(1 + tan(Q(idx_theta1))^2))/(radius(6)*radius(5)+radius(4)*radius(5)*tan(Q(idx_theta1))^2));
                 
             end
             
         case 'LScapuloThoracic_Jalpha'
             
-            [~,idx_theta1] = intersect({Human_model.name},'LScapuloThoracic_J5');
-            q= atan( tan(Q(idx_theta1))*(radius(3)*(1 - tan(Q(idx_theta1))^2)/(radius(2) - radius(3)*tan(Q(idx_theta1))^2) -1));
+            [~,idx_theta1] = intersect({Human_model.name},'LScapuloThoracic_J4');
+            [~,idx_theta2] = intersect({Human_model.name},'LScapuloThoracic_J5bis');
+            phi=atan(-(radius(4)*radius(6)*tan(Q(idx_theta2))*(1 + tan(Q(idx_theta1))^2))/(radius(6)*radius(5)+radius(4)*radius(5)*tan(Q(idx_theta1))^2));
+            q= atan(tan(Q(idx_theta1))*(-radius(5)/radius(6)*sin(phi)/tan(Q(idx_theta2))-cos(phi)));
             
             
     end
@@ -227,7 +227,7 @@ if Human_model(j).mother ~= 0
                 eval(['assume(R' num2str(num_cut) 'cut(' num2str(zz) ',' num2str(z) '),''real'');'])
             end
         end
-       
+        
         if Human_model(j).joint == 1    % liaison pivot (pin joint)
             %        Human_model(j).p=eval(['R' num2str(num_cut) 'cut'])*(k(i)*Human_model(j).b)+eval(['p' num2str(num_cut) 'cut']); % position du rep�re (reference frame position)
             Human_model(j).p=eval(['R' num2str(num_cut) 'cut'])*(k(i)*Human_model(j).b)+eval(['p' num2str(num_cut) 'cut']); % position du rep�re (reference frame position)
@@ -248,7 +248,6 @@ if Human_model(j).mother ~= 0
         end
         if Human_model(j).joint == 2    % liaison glissi�re (slide joint)
             %         Human_model(j).p = Human_model(i).R *( k(i)*Human_model(j).b + angle* Human_model(j).a) + Human_model(i).p;
-            
             Human_model(j).p = Human_model(i).R *( k(i)*Human_model(j).b + q* axe ) + Human_model(i).p;
             % l'orientation de l'axe de rotation d�pend de a, et d'une
             % variation d'orientation
