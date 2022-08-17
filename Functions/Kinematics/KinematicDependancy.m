@@ -21,11 +21,10 @@ function dependancies=KinematicDependancy(Human_model)
 
 
 
-dependancies=[];
 if isfield(Human_model,'kinematic_dependancy')
-    dependancies=[Human_model.kinematic_dependancy];
-    
-    if ~isempty(dependancies)
+       dependancies_struct=Human_model.kinematic_dependancy;
+    if ~isempty(dependancies_struct)
+        dependancies=[Human_model.kinematic_dependancy];
         ind_output=1;
         for k=1:size(Human_model,2)
             if ~isempty(Human_model(k).kinematic_dependancy)
@@ -33,7 +32,12 @@ if isfield(Human_model,'kinematic_dependancy')
                 ind_output=ind_output+1;
             end
         end
+    else
+       %most likely dependancies field is empty
+       dependancies=[]; 
     end
+else
+    dependancies=[];
 end
 
 
