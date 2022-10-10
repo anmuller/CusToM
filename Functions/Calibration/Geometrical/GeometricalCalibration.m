@@ -5,13 +5,13 @@ function [Human_model_calib, calib_parameters, Markers_set] = GeometricalCalibra
 %
 %   Associated publication:
 %	- Muller, A., Germain, C., Pontonnier, C., Dumont, G., 2015. 
-%	A Simple Method to Calibrate Kinematical Invariants: Application to Overhead Throwing. Int. Soc. Biomech. Sport. 2–5.
+%	A Simple Method to Calibrate Kinematical Invariants: Application to Overhead Throwing. Int. Soc. Biomech. Sport. 2â€“5.
 %
 %   Based on:
 %	- Reinbolt, J.A., Schutte, J.F., Fregly, B.J., Koh, B. Il, Haftka, R.T., George, A.D., Mitchell, K.H., 2005. 
-%	Determination of patient-specific multi-joint kinematic models through two-level optimization. J. Biomech. 38, 621–626.
+%	Determination of patient-specific multi-joint kinematic models through two-level optimization. J. Biomech. 38, 621â€“626.
 %	- Andersen, M.S., Damsgaard, M., MacWilliams, B., Rasmussen, J., 2010. 
-%	A computationally efficient optimisation-based method for parameter identification of kinematically determinate and over-determinate biomechanical systems. Comput. Methods Biomech. Biomed. Engin. 13, 171–183.
+%	A computationally efficient optimisation-based method for parameter identification of kinematically determinate and over-determinate biomechanical systems. Comput. Methods Biomech. Biomed. Engin. 13, 171â€“183.
 %
 %   INPUT
 %   - OsteoArticularModel: osteo-articular model (see the Documentation for
@@ -67,7 +67,7 @@ end
 
 %% Adding 6 DOF joint (pelvis to world)
 [OsteoArticularModel] = Add6dof(OsteoArticularModel);
-s_root=find([OsteoArticularModel.mother]==0); %#ok<NASGU> % numéro du solide root
+s_root=find([OsteoArticularModel.mother]==0); %#ok<NASGU> % numÃ©ro du solide root
 
 %% Symbolical function generation
 % Markers position according to the joint coordinates
@@ -288,9 +288,9 @@ calib_parameters.alpha_calib(2:2:length(calib_parameters.alpha_calib))];
 Human_model_calib=Human_model_save;
 % k_calib %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 for i=1:numel(Human_model_save)
-    Human_model_calib(i).b=Human_model_save(i).b*calib_parameters.k_calib(OsteoArticularModel(i).mother); % b (k de la mère)
+    Human_model_calib(i).b=Human_model_save(i).b*calib_parameters.k_calib(OsteoArticularModel(i).mother); % b (k de la mÃ¨re)
     Human_model_calib(i).c=Human_model_save(i).c*calib_parameters.k_calib(i); % c
-    Human_model_calib(i).I=Human_model_save(i).I*calib_parameters.k_calib(i); % I
+    Human_model_calib(i).I=Human_model_save(i).I*calib_parameters.k_calib(i)*calib_parameters.k_calib(i); % I
     for j=1:size(Human_model_save(i).anat_position,1)
         Human_model_calib(i).anat_position{j,2}=Human_model_save(i).anat_position{j,2}*calib_parameters.k_calib(i);
     end
