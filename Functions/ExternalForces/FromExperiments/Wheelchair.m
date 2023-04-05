@@ -63,12 +63,12 @@ end
 
 %% Handrim forces are added in variable external_forces
 % Wheelchair frame computation based on marker position
-A           = cell{nb_frame,1};
-pWheelchair = cell{nb_frame,1};
-xWheelchair = cell{nb_frame,1};
-yWheelchair = cell{nb_frame,1};
-zWheelchair = cell{nb_frame,1};
-RWheelchair = cell{nb_frame,1};
+A           = cell(nb_frame,1);
+pWheelchair = cell(nb_frame,1);
+xWheelchair = cell(nb_frame,1);
+yWheelchair = cell(nb_frame,1);
+zWheelchair = cell(nb_frame,1);
+RWheelchair = cell(nb_frame,1);
 for i=1:nbframe
     % Center of wheelchair frame (midpoint between right and left wheel)
     A{i}            =(real_markers(list_markers_wheelchair{2,2}).position(i,:)+real_markers(list_markers_wheelchair{3,2}).position(i,:))/2;
