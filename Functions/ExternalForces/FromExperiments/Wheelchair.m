@@ -23,11 +23,11 @@ Human_model = BiomechanicalModel.OsteoArticularModel;
 load([filename '/ExperimentalData.mat']); %#ok<LOAD>
 time = ExperimentalData.Time;
 real_markers = ExperimentalData.MarkerPositions;
-nbframe=numel(time);
+nb_frame=numel(time);
 f_mocap=1/time(2);
 
 % Initialisation
-for f=1:nbframe
+for f=1:nb_frame
     for n=1:numel(Human_model)
         external_forces(f).fext(n).fext=zeros(3,2); %#ok<AGROW,*SAGROW>
     end
@@ -43,16 +43,19 @@ Left_Handrim = resample(Left_Handrim,f_mocap,f_wheelchair);
 
 % Filtrage des données (data filtering)
 if AnalysisParameters.ExternalForces.FilterActive
-    for i=1:numel(Right_Handrim)
-        Right_Handrim(i)=filt_data(Right_Handrim(i),AnalysisParameters.ExternalForces.FilterCutOff,f_mocap);
+    for i=1:size(Right_Handrim,2)
+        Right_Handrim(:,i)=filt_data(Right_Handrim(:,i),AnalysisParameters.ExternalForces.FilterCutOff,f_mocap);
     end
-    for i=1:numel(Left_Handrim)
-        Left_Handrim(i)=filt_data(Left_Handrim(i),AnalysisParameters.ExternalForces.FilterCutOff,f_mocap);
+    for i=1:size(Left_Handrim,2)
+        Left_Handrim(:,i)=filt_data(Left_Handrim(:,i),AnalysisParameters.ExternalForces.FilterCutOff,f_mocap);
     end
 end
 
 % Wheelchair frame
-list_markers_wheelchair={'FRMA';'FRMRG';'FRMRD';'FRMAVG';'FRMAVD'};
+list_markers_wheelchair={'FRMA';'FRMRG';'FRMRD';'FRMAVG';'FRMAVD';'MC2G';'MC5G';'MC2D';'MC5D'};
+[real_markers]=C3dProcessedData(filename, list_markers_wheelchair);
+
+
 for i=1:numel(list_markers_wheelchair) % finding number of marker
     for j=1:numel(real_markers)
         if strcmp(list_markers_wheelchair{i},real_markers(j).name)
@@ -69,28 +72,32 @@ xWheelchair = cell(nb_frame,1);
 yWheelchair = cell(nb_frame,1);
 zWheelchair = cell(nb_frame,1);
 RWheelchair = cell(nb_frame,1);
-for i=1:nbframe
+for i=1:nb_frame
     % Center of wheelchair frame (midpoint between right and left wheel)
-    A{i}            =(real_markers(list_markers_wheelchair{2,2}).position(i,:)+real_markers(list_markers_wheelchair{3,2}).position(i,:))/2;
+    A{i}            =(real_markers(list_markers_wheelchair{2,2}).position_c3d(i,:)+real_markers(list_markers_wheelchair{3,2}).position_c3d(i,:))/2;
     pWheelchair{i}  =A{i}';
     % Wheelchair frame z-axis
-    zWheelchair_i   =(real_markers(list_markers_wheelchair{3,2}).position(i,:)-real_markers(list_markers_wheelchair{2,2}).position(i,:));
+    zWheelchair_i   =(real_markers(list_markers_wheelchair{3,2}).position_c3d(i,:)-real_markers(list_markers_wheelchair{2,2}).position_c3d(i,:));
     zWheelchair{i}  =zWheelchair_i/norm(zWheelchair_i);
     yWheelchair{i}  =[0 0 1];
     xWheelchair{i}  =cross(zWheelchair{i},yWheelchair{i});
     zWheelchair{i}   =cross(xWheelchair{i},yWheelchair{i});
     RWheelchair{i}  =[xWheelchair{i}' yWheelchair{i}' zWheelchair{i}'];
+    
+    COP_Right(i,:)    = (real_markers(list_markers_wheelchair{9,2}).position_c3d(i,:)+real_markers(list_markers_wheelchair{8,2}).position_c3d(i,:))/2;
+    COP_Left(i,:)     = (real_markers(list_markers_wheelchair{7,2}).position_c3d(i,:)+real_markers(list_markers_wheelchair{6,2}).position_c3d(i,:))/2;
+
 end
 
 % Right Handrim forces
 Solid_name='RHand';  
 Solid=find(strcmp({Human_model.name},Solid_name));
-[external_forces] = addPlatformForces(external_forces, Solid, pWheelchair, RWheelchair, -[Right_Handrim],COP);
+[external_forces] = addPlatformForces(external_forces, Solid, pWheelchair, RWheelchair, -[Right_Handrim],COP_Right);
 
 % Left Handrim forces
 Solid_name='LHand';  
 Solid=find(strcmp({Human_model.name},Solid_name));
-[external_forces] = addPlatformForces(external_forces, Solid, pWheelchair, RWheelchair, -[Left_Handrim(1:6)], COP);
+[external_forces] = addPlatformForces(external_forces, Solid, pWheelchair, RWheelchair, -[Left_Handrim], COP_Left);
 % Sauvegarde des données
 if exist([filename '/ExternalForcesComputationResults.mat'],'file')
     load([filename '/ExternalForcesComputationResults.mat']);

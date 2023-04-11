@@ -59,12 +59,14 @@ R=zeros(Nb_q,Nb_muscles,Nb_frames);
 
 
 for i=1:Nb_frames % for each frames
-    Lmt(:s,i)   =   MuscleLengthComputationNum(BiomechanicalModel,q(:,i)); %dependant of every q (q_complete)
+    Lmt(:,i)   =   MuscleLengthComputationNum(BiomechanicalModel,q(:,i)); %dependant of every q (q_complete)
     R(:,:,i)    =   MomentArmsComputationAnalytic(BiomechanicalModel,q(:,i)); %depend on reduced set of q (q_red)
 end
 
 
 idxj=find(sum(R(:,:,1),2)~=0)';
+
+idxj=41:68;
 
 %% Computation of muscle forces (optimization)
 % Optimisation parameters
@@ -77,7 +79,7 @@ Aopt = zeros(size(Fopt));
 
 % Solver parameters
 options1 = optimoptions(@fmincon,'Algorithm','sqp','Display','off','GradObj','off','GradConstr','off','TolFun',1e-6,'MaxIterations',100000,'MaxFunEvals',100000);
-options2 = optimoptions(@fmincon,'Algorithm','sqp','Display','off','GradObj','off','GradConstr','off','TolFun',1e-6,'MaxIterations',1000,'MaxFunEvals',2000000);
+options2 = optimoptions(@fmincon,'Algorithm','sqp','Display','final','GradObj','off','GradConstr','off','TolFun',1e-6,'MaxIterations',1000,'MaxFunEvals',2000000);
 
 h = waitbar(0,['Forces Computation (' filename ')']);
 

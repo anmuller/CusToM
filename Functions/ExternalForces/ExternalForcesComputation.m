@@ -30,7 +30,7 @@ else
     load('BiomechanicalModel.mat'); %#ok<LOAD>
 end
 
-parfor i = 1:numel(AnalysisParameters.filename)
+for i = 1:numel(AnalysisParameters.filename)
     filename = AnalysisParameters.filename{i}(1:end-(numel(AnalysisParameters.General.Extension)-1));
     if AnalysisParameters.ID.InputData == 0
         [ExternalForcesComputationResults] = ExternalForces_Zero(filename, BiomechanicalModel);

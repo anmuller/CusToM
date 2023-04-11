@@ -1,4 +1,4 @@
-function [Aopt] = PolynomialFunction(A0, Aeq, beq, Amin, Amax, fmincon_options, options, Fa, Fmax, varargin)
+function [Aopt,exitflag] = PolynomialFunction(A0, Aeq, beq, Amin, Amax, fmincon_options, options, Fa, Fmax, varargin)
 % Optimization used for the force sharing problem: polynomial function
 %   
 %	Based on :
@@ -39,5 +39,5 @@ else
     cost_function = @(A) (sum((Fa./Fmax(1:ind_act-1)).*A(1:ind_act-1)).^(options) + sum(A(ind_act:end).^2 ));
 end
 % Optimization
-Aopt = fmincon(cost_function,A0,[],[],Aeq,beq,Amin,Amax,[],fmincon_options);
+[Aopt,~,exitflag] = fmincon(cost_function,A0,[],[],Aeq,beq,Amin,Amax,[],fmincon_options);
 end

@@ -95,9 +95,8 @@ else
     l_inf1=[Human_model.limit_inf]';
     l_sup1=[Human_model.limit_sup]';
 end
-
-weights = ones(1,length(real_markers));
-%weights = AnalysisParameters.IK.weights';
+weights = ones(1,length(real_markers)).*[real_markers(:).weight];
+%weights = AnalysisParameters.IK.weights'.*real_markers.weights;
 
 
 Jfq = BiomechanicalModel.Jacob.Jfq;
