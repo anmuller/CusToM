@@ -340,10 +340,10 @@ OsteoArticularModel(incr_solid).a=[1 0 0]';
 OsteoArticularModel(incr_solid).joint=1;
 if Signe == 'R'
     OsteoArticularModel(incr_solid).limit_inf=-4*pi/5;                     % inferior joint biomechanical stop
-    OsteoArticularModel(incr_solid).limit_sup=pi/4;                    % superior joint biomechanical stop
+    OsteoArticularModel(incr_solid).limit_sup=pi/2;                    % superior joint biomechanical stop
     OsteoArticularModel(incr_solid).FunctionalAngle='Right GH Elevation(-)/Depression(+)';
 else
-    OsteoArticularModel(incr_solid).limit_inf=-pi/4;                   % inferior joint biomechanical stop
+    OsteoArticularModel(incr_solid).limit_inf=-pi/2;                   % inferior joint biomechanical stop
     OsteoArticularModel(incr_solid).limit_sup=4*pi/5;                      % superior joint biomechanical stop
     OsteoArticularModel(incr_solid).FunctionalAngle='Left GH Elevation(+)/Depression(-)';
 end
@@ -397,10 +397,10 @@ OsteoArticularModel(incr_solid).a=[0 1 0]';
 OsteoArticularModel(incr_solid).joint=1;
 if Signe == 'R'
     OsteoArticularModel(incr_solid).limit_inf=-pi/2;
-    OsteoArticularModel(incr_solid).limit_sup=pi/6;                    % superior joint biomechanical stop
+    OsteoArticularModel(incr_solid).limit_sup=pi;                    % superior joint biomechanical stop
     OsteoArticularModel(incr_solid).FunctionalAngle='Right GH Axial rotation Internal(+)/External(-)';
 else
-    OsteoArticularModel(incr_solid).limit_inf=-pi/6;
+    OsteoArticularModel(incr_solid).limit_inf=-pi;
     OsteoArticularModel(incr_solid).limit_sup=pi/2;                    % superior joint biomechanical stop
     OsteoArticularModel(incr_solid).FunctionalAngle='Left GH Axial rotation Internal(-)/External(+)';
 end
