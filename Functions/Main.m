@@ -40,9 +40,9 @@ end
 %%                               	External forces computation
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% if AnalysisParameters.ID.Active
-%     ExternalForcesComputation(AnalysisParameters, ModelParameters);
-% end
+if AnalysisParameters.ID.Active
+    ExternalForcesComputation(AnalysisParameters, ModelParameters);
+end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%                                 	   Inverse dynamics

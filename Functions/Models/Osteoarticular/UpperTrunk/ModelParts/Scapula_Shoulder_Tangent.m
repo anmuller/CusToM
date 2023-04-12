@@ -31,13 +31,11 @@ if Side == 'R'
     Sign=1;
     Cote='D';
     FullSide='Right';
-else
-    if Side == 'L'
-        Mirror=[1 0 0; 0 1 0; 0 0 -1];
-        Sign=-1;
-        Cote='G';
-        FullSide='Left';
-    end
+elseif Side == 'L'
+    Mirror=[1 0 0; 0 1 0; 0 0 -1];
+    Sign=-1;
+    Cote='G';
+    FullSide='Left';
 end
 
 %% Solid numbering incremation
@@ -416,8 +414,8 @@ Human_model(incr_solid).child=s_ScapuloThoracic_Jalpha;         % Solid's child
 Human_model(incr_solid).mother=s_ScapuloThoracic_J4;            % Solid's mother
 Human_model(incr_solid).a=[0 0 1]';                          
 Human_model(incr_solid).joint=1;
-Human_model(incr_solid).limit_inf=-pi/4;
-Human_model(incr_solid).limit_sup=pi/4;
+Human_model(incr_solid).limit_inf=-Inf;
+Human_model(incr_solid).limit_sup=Inf;
 Human_model(incr_solid).ActiveJoint=1;
 Human_model(incr_solid).m=0;                        % Reference mass
 Human_model(incr_solid).b=[0 0 0]';        % Attachment point position in mother's frame
@@ -450,8 +448,8 @@ Human_model(incr_solid).child=0;         % Solid's child
 Human_model(incr_solid).mother=s_ScapuloThoracic_J4;            % Solid's mother
 Human_model(incr_solid).a=[0 0 1]';                          
 Human_model(incr_solid).joint=1;
-Human_model(incr_solid).limit_inf=-Inf;
-Human_model(incr_solid).limit_sup=Inf;
+Human_model(incr_solid).limit_inf=-pi/4;
+Human_model(incr_solid).limit_sup=pi/4;
 Human_model(incr_solid).ActiveJoint=1;
 Human_model(incr_solid).m=0;                        % Reference mass
 Human_model(incr_solid).b=[0 0 0]';          % Attachment point position in mother's frame
@@ -477,8 +475,8 @@ Human_model(incr_solid).child=s_ScapuloThoracic_J6;         % Solid's child
 Human_model(incr_solid).mother=s_ScapuloThoracic_J5;            % Solid's mother
 Human_model(incr_solid).a=[0 1 0]';                          
 Human_model(incr_solid).joint=1;
-Human_model(incr_solid).limit_inf=-pi;
-Human_model(incr_solid).limit_sup=pi;
+Human_model(incr_solid).limit_inf=-Inf;
+Human_model(incr_solid).limit_sup=Inf;
 Human_model(incr_solid).ActiveJoint=1;
 Human_model(incr_solid).m=0;                        % Reference mass
 Human_model(incr_solid).b=[0 0 0]';        % Attachment point position in mother's frame
