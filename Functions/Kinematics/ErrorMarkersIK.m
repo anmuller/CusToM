@@ -1,4 +1,4 @@
-function [error] = ErrorMarkersIK(q,positions)
+function [error] = ErrorMarkersIK(q,positions,varargin)
 % Computation of reconstruction error for the inverse kinematics step
 %   Computation of the distance between the position of each experimental 
 %   marker and the position of the corresponded model marker
@@ -20,6 +20,13 @@ function [error] = ErrorMarkersIK(q,positions)
 %________________________________________________________
 [Rcut,pcut]=fcut(q);
 
-error =  sqrt(sum(reshape(-X_markers(q,pcut,Rcut) + positions,3,length(positions)/3).^2,1));
+if isempty(varargin)
+    error =  sqrt(sum(reshape(-X_markers(q,pcut,Rcut) + positions,3,length(positions)/3).^2,1));
+else
+    weights = varargin{1};
+    newweights= repmat(weights,1,3)';
+    error = sqrt(sum(reshape(newweights(:).*(-X_markers(q,pcut,Rcut) + positions),3,length(positions)/3).^2));
+
+  %  error =  sqrt(sum(reshape(-X_markers(q,pcut,Rcut) + positions,3,length(positions)/3).^2,1));
 
 end

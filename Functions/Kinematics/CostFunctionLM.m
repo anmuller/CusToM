@@ -37,7 +37,7 @@ function [func,J]=CostFunctionLM(q,positions,gamma,hclosedloophandle,zeta,hbutee
     func = [ dX ; gamma*constraints ; zeta*hbutees(q)];
     
     if nargout > 1   % Two output arguments
-        J = IK_Jacobian(q,pcut,Rcut, l_inf1,l_sup1,Aeq_ik,gamma,zeta, J_marqueurs_handle,newweights);   % Jacobian of the function evaluated at q
+        J = IK_Jacobian(q,pcut,Rcut, l_inf1,l_sup1,Aeq_ik,gamma,zeta, J_marqueurs_handle,newweights(:));   % Jacobian of the function evaluated at q
     end
     
 end

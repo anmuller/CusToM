@@ -154,14 +154,13 @@ end
 q = sym('q', [numel(NvBiom.OsteoArticularModel) 1]);  % joint coordinates initialization (number of solids - 1 (pelvis))
 assume(q,'real')
 
-tic()
-[P1P2,P4P3] = MomentArmsComputationPreciseSym(NvBiom,q);
-toc()
 
- tic()
- matlabFunction(P1P2,'file',['Symbolic_function/MomentArmP1P2'],'vars',{q});
+[P1P2,P4P3] = MomentArmsComputationPreciseSym(NvBiom,q);
+
+
+matlabFunction(P1P2,'file',['Symbolic_function/MomentArmP1P2'],'vars',{q});
 matlabFunction(P4P3,'file',['Symbolic_function/MomentArmP4P3'],'vars',{q});
-toc()
+
 
 % 
 % MomentArmMatrix  =   MomentArmsComputationPrecise(BiomechanicalModel,q); %depend on reduced set of q (q_red)
