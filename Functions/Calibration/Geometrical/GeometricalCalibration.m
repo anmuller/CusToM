@@ -234,7 +234,7 @@ if isfield(AnalysisParameters.CalibIK,'Scapactive') && AnalysisParameters.CalibI
     k_init = kp_opt_scap(:,end);
 end
 % weights=ones(length(list_markers),1);
-weights = ones(length(real_markers),1).*[real_markers(:).weight];
+weights = ones(length(real_markers),1).*[real_markers(:).weight]';
 [kp_opt,crit,errorm,q0]=GeomCalibOptimization(k_init,weights,Nb_qred,nb_frame_calib,Base_position,Base_rotation,list_function,Rcut,pcut,real_markers_calib,nbcut,list_function_markers,Aeq_ik,beq_ik,l_inf,l_sup,Aeq_calib,beq_calib);
 calib_parameters.crit = crit;
 calib_parameters.errorm = errorm;
@@ -260,7 +260,7 @@ Human_model_calib=Human_model_save;
 for i=1:numel(Human_model_save)
     Human_model_calib(i).b=Human_model_save(i).b*calib_parameters.k_calib(OsteoArticularModel(i).mother); % b (k de la m�re)
     Human_model_calib(i).c=Human_model_save(i).c*calib_parameters.k_calib(i); % c
-    Human_model_calib(i).I=Human_model_save(i).I*calib_parameters.k_calib(i); % I
+    Human_model_calib(i).I=Human_model_save(i).I*calib_parameters.k_calib(i)*calib_parameters.k_calib(i); % I
     for j=1:size(Human_model_save(i).anat_position,1)
         Human_model_calib(i).anat_position{j,2}=Human_model_save(i).anat_position{j,2}*calib_parameters.k_calib(i);
     end
