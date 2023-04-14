@@ -21,18 +21,18 @@ buteehandle = @(q)  Limits(q,l_inf,l_sup);
 gamma = 150;
 zeta = 20;
 
-q0 = q_value{1}(:,f);
-
-parfor f = 1:nb_frame_calib
-    
+q_inter = zeros(Nb_qred,nb_frame_calib);
+ik_function_objective=@(qvar) ErrorMarkersCalib(qvar,k_init,real_markers_calib,f,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut,nbcut,list_function);
+hclosedloophandle = {@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,k_init);  @(x) Aeq_ik*x - beq_ik} ;
+fun = @(q) CostFunctionLMCalib(q,ik_function_objective,gamma,hclosedloophandle,zeta,buteehandle,weights);
+[q_inter(:,f)] = lsqnonlin(fun,q_inter(:,f),[],[],optionsLM);
+for f = 2:nb_frame_calib
     ik_function_objective=@(qvar) ErrorMarkersCalib(qvar,k_init,real_markers_calib,f,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut,nbcut,list_function);
     hclosedloophandle = {@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,k_init);  @(x) Aeq_ik*x - beq_ik} ;
-    
     fun = @(q) CostFunctionLMCalib(q,ik_function_objective,gamma,hclosedloophandle,zeta,buteehandle,weights);
-    
-    [q_inter(:,f)] = lsqnonlin(fun,q0,[],[],optionsLM);
+    [q_inter(:,f)] = lsqnonlin(fun,q_inter(:,f-1),[],[],optionsLM);
 end
-q_value{1}(:,2:nb_frame_calib) = q_inter(:,2:nb_frame_calib);
+q_value{1}= q_inter;
 
 
 % Error computation
@@ -63,19 +63,17 @@ while crit(:,g) > 0.05
     [kp_opt(:,g+1)] = fmincon(pk_function_objective,kp_opt(:,g),[],[],Aeq_calib,beq_calib,limit_inf_calib,limit_sup_calib,[],options2);
     
     q_value{g+1}=zeros(size(q_value{g})); %#ok<AGROW>
-    
+    q_inter=q_value{g};
     % Articular coordinates optimisation
     
-    q0=q_value{g}(:,f);
     kp_g = kp_opt(:,g+1);
     parfor f =1:nb_frame_calib
-        
         ik_function_objective=@(qvar) ErrorMarkersCalib(qvar,kp_g,real_markers_calib,f,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut,nbcut,list_function);
         
         hclosedloophandle = {@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,kp_g);  @(x) Aeq_ik*x - beq_ik} ;
 
         fun = @(q) CostFunctionLMCalib(q,ik_function_objective,gamma,hclosedloophandle,zeta,buteehandle,weights);
-                [q_inter(:,f)] = lsqnonlin(fun,q0,[],[],optionsLM);
+                [q_inter(:,f)] = lsqnonlin(fun,q_inter(:,f),[],[],optionsLM);
         
         
     end
