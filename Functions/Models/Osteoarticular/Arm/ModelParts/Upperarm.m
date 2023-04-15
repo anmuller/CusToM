@@ -334,7 +334,6 @@ OsteoArticularModel(incr_solid).KinematicsCut=[];              % kinematic cut
 OsteoArticularModel(incr_solid).ClosedLoop=[];                 % if this solid close a closed-loop chain : {number of solid i on which is attached this solid ; attachement point (local frame of solid i}
 OsteoArticularModel(incr_solid).linear_constraint=[];
 OsteoArticularModel(incr_solid).Visual=0;
-OsteoArticularModel(incr_solid).FunctionalAngle=[FullSide 'GH plane of elevation'];
 
 % Glenohumeral_J2           % Negative GH elevation (ISB recommandations: Wu et al. 2005)
 num_solid=num_solid+1;        % number of the solid ...

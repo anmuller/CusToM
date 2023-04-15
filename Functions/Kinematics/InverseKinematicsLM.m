@@ -118,6 +118,11 @@ J_marqueurs_handle = @(q,pcut,Rcut) JacobianMarker(q,pcut,Rcut,Jfq,indexesNumeri
 
 h = waitbar(0,['Inverse Kinematics (' filename ')']);
 % 1st frame : classical optimization
+buteehandle = @(q)  Limits(q,l_inf1,l_sup1);
+gamma = 100;
+zeta = 20;
+
+optionsLM = optimset('Algorithm','Levenberg-Marquardt','Display','off','MaxIter',4e6,'MaxFunEval',5e6,'Jacobian','on','DerivativeCheck','off','TolFun',1e-3);
 
 if ~isfield(BiomechanicalModel,'ClosedLoopData')
     if isfield(BiomechanicalModel,'GeometricalCalibration') &&  isfield(BiomechanicalModel.GeometricalCalibration,'q0') 
@@ -147,21 +152,15 @@ else
     
     ik_function_objective=@(qvar)CostFunctionSymbolicIK2(qvar, positions(:),weights,J_marqueurs_handle);
     nonlcon=@(qvar)ClosedLoop(qvar);
-   [q(:,1)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,nonlcon,options1);
-   hclosedloophandle = {@(qvar) ClosedLoopceq(qvar) ;  @(x) Aeq_ik*x - beq_ik} ;
+    [q(:,1)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf1,l_sup1,nonlcon,options1);
+    hclosedloophandle = {@(qvar) ClosedLoopceq(qvar) ;  @(x) Aeq_ik*x - beq_ik} ;
+    fun = @(q) CostFunctionLM(q,positions(:),gamma,hclosedloophandle,zeta,buteehandle,weights,l_inf1,l_sup1,Aeq_ik,J_marqueurs_handle);
+    [q(:,1)] = lsqnonlin(fun,q(:,1),[],[],optionsLM);
 end
 
-buteehandle = @(q)  Limits(q,l_inf1,l_sup1);
-gamma = 100;
-zeta = 20;
-                                      
-waitbar(1/nb_frame)
-
-optionsLM = optimset('Algorithm','Levenberg-Marquardt','Display','off','MaxIter',4e6,'MaxFunEval',5e6,'Jacobian','on','DerivativeCheck','off','TolFun',1e-3);
 positions = zeros(3, length(real_markers));
 
 for f = 2:nb_frame
-    
     % Precomputation of markers positions at each frame
     for m=1:length(real_markers)
         positions(:,m) = real_markers(m).position(f,:)';
@@ -194,7 +193,7 @@ if nbClosedLoop == 0
             positions(:,m) = real_markers(m).position(f,:)';
         end
         
-        [KinematicsError(:,f)] = ErrorMarkersIK(q(:,f),positions(:));
+        [KinematicsError(:,f)] = ErrorMarkersIK(q(:,f),positions(:),weights);
     end
 else
     nonlcon=@(qvar)ClosedLoop(qvar);
@@ -205,7 +204,7 @@ else
         for m=1:length(real_markers)
             positions(:,m) = real_markers(m).position(f,:)';
         end
-        [KinematicsError(:,f)] = ErrorMarkersIK(q(:,f),positions(:));
+        [KinematicsError(:,f)] = ErrorMarkersIK(q(:,f),positions(:),weights);
         [~,ceq(:,f)]=nonlcon(q(:,f));
     end
 end
@@ -244,19 +243,13 @@ nvddq = ddq;
 if isfield(BiomechanicalModel,'ClosedLoopData')
  for f=1:nb_frame
      K = Jacobian_closedloop_fullq(q(:,f))';
-
     Kdev=ConstraintsJacobianDerivative(q(:,f),0.0001);
-
     G = null(K);
-    nvdq(:,f) = sum(dq(:,f)'*G.*G,2);
-    
-    
+    nvdq(:,f) = sum(dq(:,f)'*G.*G,2);  
     A = [K zeros(size(K)) ; reshape(pagemtimes(Kdev,nvdq(:,f)),size(K))  K];
     G2 = null(A);
     xtilde =  sum([dq(:,f)  ; ddq(:,f)]'*G2.*G2,2);
-    
-    nvddq(:,f) = xtilde(length(nvdq(:,f))+1:end);
-    
+    nvddq(:,f) = xtilde(length(nvdq(:,f))+1:end);  
  end
 end
 

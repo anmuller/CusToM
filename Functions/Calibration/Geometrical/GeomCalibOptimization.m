@@ -8,8 +8,9 @@ ik_function_objective=@(qvar)CostFunctionSymbolicCalib(qvar,k_init,Base_position
 
 nonlcon=@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,k_init); % testé!
 
-options1 = optimoptions(@fmincon,'Algorithm','interior-point','Display','off','TolFun',1e-2,'MaxFunEvals',2e5,'MaxIter',2e5);
+options1 = optimoptions(@fmincon,'Algorithm','interior-point','Display','off','TolFun',1e-4,'MaxFunEvals',2e5,'MaxIter',2e5);
 options2 = optimoptions(@fmincon,'Algorithm','interior-point','Display','off','TolFun',1e-6,'MaxFunEvals',2e9,'MaxIter',2e9);
+h = waitbar(0,['First iteration of Inverse Kinematics']);
 
 [q_value{1}(:,f)] = fmincon(ik_function_objective,q0,[],[],Aeq_ik,beq_ik,l_inf,l_sup,nonlcon,options1);
 
@@ -20,7 +21,7 @@ optionsLM = optimset('Algorithm','Levenberg-Marquardt','Display','off','MaxIter'
 buteehandle = @(q)  Limits(q,l_inf,l_sup);
 gamma = 150;
 zeta = 20;
-
+waitbar(f/nb_frame_calib)
 q_inter = zeros(Nb_qred,nb_frame_calib);
 ik_function_objective=@(qvar) ErrorMarkersCalib(qvar,k_init,real_markers_calib,f,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut,nbcut,list_function);
 hclosedloophandle = {@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,k_init);  @(x) Aeq_ik*x - beq_ik} ;
@@ -31,8 +32,10 @@ for f = 2:nb_frame_calib
     hclosedloophandle = {@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,k_init);  @(x) Aeq_ik*x - beq_ik} ;
     fun = @(q) CostFunctionLMCalib(q,ik_function_objective,gamma,hclosedloophandle,zeta,buteehandle,weights);
     [q_inter(:,f)] = lsqnonlin(fun,q_inter(:,f-1),[],[],optionsLM);
+    waitbar(f/nb_frame_calib)
 end
 q_value{1}= q_inter;
+close(h)
 
 
 % Error computation
@@ -73,9 +76,7 @@ while crit(:,g) > 0.05
         hclosedloophandle = {@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,kp_g);  @(x) Aeq_ik*x - beq_ik} ;
 
         fun = @(q) CostFunctionLMCalib(q,ik_function_objective,gamma,hclosedloophandle,zeta,buteehandle,weights);
-                [q_inter(:,f)] = lsqnonlin(fun,q_inter(:,f),[],[],optionsLM);
-        
-        
+        [q_inter(:,f)] = lsqnonlin(fun,q_inter(:,f),[],[],optionsLM);
     end
     q_value{g+1} = q_inter;
     

@@ -22,7 +22,6 @@ function [ExternalForcesComputationResults] = Wheelchair(filename, Biomechanical
 Human_model = BiomechanicalModel.OsteoArticularModel;
 load([filename '/ExperimentalData.mat']); %#ok<LOAD>
 time = ExperimentalData.Time;
-real_markers = ExperimentalData.MarkerPositions;
 nb_frame=numel(time);
 f_mocap=1/time(2);
 
@@ -72,21 +71,26 @@ xWheelchair = cell(nb_frame,1);
 yWheelchair = cell(nb_frame,1);
 zWheelchair = cell(nb_frame,1);
 RWheelchair = cell(nb_frame,1);
+RCapteur_fauteuil =[
+    0.9696    0.2444         0
+   -0.2444    0.9696         0
+         0    0.0122    1.0000];
 for i=1:nb_frame
     % Center of wheelchair frame (midpoint between right and left wheel)
     A{i}            =(real_markers(list_markers_wheelchair{2,2}).position_c3d(i,:)+real_markers(list_markers_wheelchair{3,2}).position_c3d(i,:))/2;
     pWheelchair{i}  =A{i}';
-    % Wheelchair frame z-axis
+    % Wheelchair frame z-axis : FRMRD-FRMRG
     zWheelchair_i   =(real_markers(list_markers_wheelchair{3,2}).position_c3d(i,:)-real_markers(list_markers_wheelchair{2,2}).position_c3d(i,:));
     zWheelchair{i}  =zWheelchair_i/norm(zWheelchair_i);
-    yWheelchair{i}  =[0 0 1];
-    xWheelchair{i}  =cross(zWheelchair{i},yWheelchair{i});
-    zWheelchair{i}   =cross(xWheelchair{i},yWheelchair{i});
-    RWheelchair{i}  =[xWheelchair{i}' yWheelchair{i}' zWheelchair{i}'];
-    
-    COP_Right(i,:)    = (real_markers(list_markers_wheelchair{9,2}).position_c3d(i,:)+real_markers(list_markers_wheelchair{8,2}).position_c3d(i,:))/2;
-    COP_Left(i,:)     = (real_markers(list_markers_wheelchair{7,2}).position_c3d(i,:)+real_markers(list_markers_wheelchair{6,2}).position_c3d(i,:))/2;
-
+    % FRMAVD - FRMRD
+    xWheelchair_i   = (real_markers(list_markers_wheelchair{5,2}).position_c3d(i,:)-real_markers(list_markers_wheelchair{3,2}).position_c3d(i,:));
+    xWheelchair{i}  = xWheelchair_i/norm(xWheelchair_i);
+    yWheelchair{i}  = cross(zWheelchair{i},xWheelchair{i})/norm(cross(zWheelchair{i},xWheelchair{i}));
+    xWheelchair{i}  = cross(yWheelchair{i},zWheelchair{i})/norm( cross(yWheelchair{i},zWheelchair{i}));
+    RWheelchair{i}  = [xWheelchair{i}' yWheelchair{i}' zWheelchair{i}'];
+    RWheelchair{i}  = RWheelchair{i}*RCapteur_fauteuil;
+    COP_Right(i,:)  = (RWheelchair{i}'*((real_markers(list_markers_wheelchair{9,2}).position_c3d(i,:)+real_markers(list_markers_wheelchair{8,2}).position_c3d(i,:))/2)')'-A{i};
+    COP_Left(i,:)   = (RWheelchair{i}'*((real_markers(list_markers_wheelchair{7,2}).position_c3d(i,:)+real_markers(list_markers_wheelchair{6,2}).position_c3d(i,:))/2)')'-A{i};
 end
 
 % Right Handrim forces
