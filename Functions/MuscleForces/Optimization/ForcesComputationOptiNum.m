@@ -64,22 +64,35 @@ for i=1:Nb_frames % for each frames
 end
 
 
+
+% mus_flexion = [1,9,13,12];
+% mus_pro = [7,8];
+% num_pro= 42;
+% num_flexion = 41;
+% R(num_pro,mus_flexion,:)= 0;
+% R(num_flexion,mus_pro,:)= 0;
+% mus_flexion=mus_flexion+17;
+% mus_pro = mus_pro+17;
+% num_pro= 49;
+% num_flexion = 48;
+% R(num_pro,mus_flexion,:)= 0;
+% R(num_flexion,mus_pro,:)= 0;
 idxj=find(sum(R(:,:,1),2)~=0)';
 
-idxj=41:68;
+% idxj=[38:51]; %GH jusque Main
 
 %% Computation of muscle forces (optimization)
 % Optimisation parameters
 Amin = zeros(Nb_muscles,1);
 A0  = 0.5*ones(Nb_muscles,1);
-Fmax = 3*[Muscles(idm).f0]';
+Fmax = 1*[Muscles(idm).f0]';
 Amax = ones(Nb_muscles,1);
 Fopt = zeros(Nb_muscles,Nb_frames);
 Aopt = zeros(size(Fopt));
 
 % Solver parameters
 options1 = optimoptions(@fmincon,'Algorithm','sqp','Display','off','GradObj','off','GradConstr','off','TolFun',1e-6,'MaxIterations',100000,'MaxFunEvals',100000);
-options2 = optimoptions(@fmincon,'Algorithm','sqp','Display','final','GradObj','off','GradConstr','off','TolFun',1e-6,'MaxIterations',1000,'MaxFunEvals',2000000);
+options2 = optimoptions(@fmincon,'Algorithm','sqp','Display','off','GradObj','off','GradConstr','off','TolFun',1e-6,'MaxIterations',1000,'MaxFunEvals',2000000);
 
 h = waitbar(0,['Forces Computation (' filename ')']);
 
@@ -107,7 +120,7 @@ waitbar(1/Nb_frames)
 
 for i=2:Nb_frames % for following frames
     % Closed-loop constraints
-      KT = Jacobian_closedloop_fullq(q(:,i));
+    KT = Jacobian_closedloop_fullq(q(:,i));
 
     % Moment arms and Active forces
     Aeq = [R(idxj,:,i).*Fmax' , KT(idxj,:)] ;

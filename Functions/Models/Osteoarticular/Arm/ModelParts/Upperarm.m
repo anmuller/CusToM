@@ -317,11 +317,11 @@ OsteoArticularModel(incr_solid).joint=1;
 if Signe == 'R'
     OsteoArticularModel(incr_solid).limit_inf=-4*pi/5;                     % inferior joint biomechanical stop
     OsteoArticularModel(incr_solid).limit_sup=pi/2;                    % superior joint biomechanical stop
-    OsteoArticularModel(incr_solid).FunctionalAngle='Right GH Elevation(-)/Depression(+)';
+    OsteoArticularModel(incr_solid).FunctionalAngle='Right GH Abduction(-)/Adduction(+)';
 else
     OsteoArticularModel(incr_solid).limit_inf=-pi/2;                   % inferior joint biomechanical stop
     OsteoArticularModel(incr_solid).limit_sup=4*pi/5;                      % superior joint biomechanical stop
-    OsteoArticularModel(incr_solid).FunctionalAngle='Left GH Elevation(+)/Depression(-)';
+    OsteoArticularModel(incr_solid).FunctionalAngle='Left GH Abduction(+)/Adduction(-)';
 end                   		% superior joint biomechanical stop
 OsteoArticularModel(incr_solid).m=0;                                 % reference mass
 OsteoArticularModel(incr_solid).b=pos_attachment_pt;                 % attachment point with respect to the parent's frame

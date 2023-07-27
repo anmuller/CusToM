@@ -23,12 +23,12 @@ gamma = 150;
 zeta = 20;
 waitbar(f/nb_frame_calib)
 q_inter = zeros(Nb_qred,nb_frame_calib);
-ik_function_objective=@(qvar) ErrorMarkersCalib(qvar,k_init,real_markers_calib,f,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut,nbcut,list_function);
+ik_function_objective=@(qvar) ErrorMarkersCalibLM(qvar,k_init,real_markers_calib,f,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut,nbcut,list_function);
 hclosedloophandle = {@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,k_init);  @(x) Aeq_ik*x - beq_ik} ;
 fun = @(q) CostFunctionLMCalib(q,ik_function_objective,gamma,hclosedloophandle,zeta,buteehandle,weights);
 [q_inter(:,f)] = lsqnonlin(fun,q_inter(:,f),[],[],optionsLM);
 for f = 2:nb_frame_calib
-    ik_function_objective=@(qvar) ErrorMarkersCalib(qvar,k_init,real_markers_calib,f,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut,nbcut,list_function);
+    ik_function_objective=@(qvar) ErrorMarkersCalibLM(qvar,k_init,real_markers_calib,f,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut,nbcut,list_function);
     hclosedloophandle = {@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,k_init);  @(x) Aeq_ik*x - beq_ik} ;
     fun = @(q) CostFunctionLMCalib(q,ik_function_objective,gamma,hclosedloophandle,zeta,buteehandle,weights);
     [q_inter(:,f)] = lsqnonlin(fun,q_inter(:,f-1),[],[],optionsLM);
@@ -71,7 +71,7 @@ while crit(:,g) > 0.05
     
     kp_g = kp_opt(:,g+1);
     parfor f =1:nb_frame_calib
-        ik_function_objective=@(qvar) ErrorMarkersCalib(qvar,kp_g,real_markers_calib,f,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut,nbcut,list_function);
+        ik_function_objective=@(qvar) ErrorMarkersCalibLM(qvar,kp_g,real_markers_calib,f,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut,nbcut,list_function);
         
         hclosedloophandle = {@(qvar)ClosedLoopCalib(Base_position{f},Base_rotation{f},qvar,kp_g);  @(x) Aeq_ik*x - beq_ik} ;
 

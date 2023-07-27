@@ -29,6 +29,7 @@ s=[s;{'TMPD' 'RFHD' {'Off';'Off';'On'}; 'TMPG' 'LFHD' {'Off';'Off';'On'}; 'OCCD'
 
 Side1={'D';'G'};
 Side2={'R';'L'};
+Side3={'';'1'};
 % Arm
 for i=1:2
     s=[s;{['EL' Side1{i}] [Side2{i} 'RAD'] {'On';'On';'Off'}; ['EM' Side1{i}] [Side2{i} 'HUM'] {'Off';'Off';'Off'}; ...
@@ -44,22 +45,14 @@ for i=1:2
         ['CAL' Side1{i}] [Side2{i} 'HEE'] {'Off';'On';'Off'}; ...
         ['MT1' Side1{i}] [Side2{i} 'TARI'] {'Off';'On';'On'}; ['MT5' Side1{i}] [Side2{i} 'TAR'] {'Off';'Off';'Off'}; ...
         }];
-end
-
-
-if length(varargin)>1
-    Scapulalocator = varargin{2};
-    if Scapulalocator.active
-        for idx=1:2
-            if ~isempty(find(strcmp(Scapulalocator.side,Side2{idx}),1))
-                s=[s;{'SCLL' ['ScapLoc_AA_',Side2{idx}] {'On';'On';'On'};...
-                    'SCLM' ['ScapLoc_TS_',Side2{idx}] {'On';'On';'On'};...
-                    'SCLB' ['ScapLoc_AI_',Side2{idx}] {'On';'On';'On'};...
+    
+    s=[s;{['SCAPLOCLM' Side3{i}] ['ScapLoc_AA_',Side2{i}] {'On';'On';'On'};...
+            ['SCAPLOCMM' Side3{i}] ['ScapLoc_TS_',Side2{i}] {'On';'On';'On'};...
+                   [ 'SCAPLOCB' Side3{i}] ['ScapLoc_AI_',Side2{i}] {'On';'On';'On'};...
                    }];
-            end
-        end
-    end
 end
+
+
 
 
 Markers=struct('name',{s{:,1}}','anat_position',{s{:,2}}','calib_dir',{s{:,3}}'); %#ok<CCAT1>

@@ -36,6 +36,8 @@ for m=1:nb_mk
         (Pelvis_position,Pelvis_rotation,q,k,...
         pcut,Rcut) - real_markers(m).position(f,:)') ;
 end
+
+
 W=diag(weights);
 error=e'*W*e;
 

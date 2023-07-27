@@ -147,6 +147,7 @@ end
 % Filtrage (Filtering)
 if AnalysisParameters.General.FilterActive
     for i=1:numel(real_markers)
+        real_markers(i).position_c3d(isnan(real_markers(i).position_c3d))=0;
         real_markers(i).position = filt_data(real_markers(i).position_c3d,AnalysisParameters.General.FilterCutOff,f);
     end
 else
