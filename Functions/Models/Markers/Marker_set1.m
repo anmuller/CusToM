@@ -45,13 +45,24 @@ for i=1:2
         ['CAL' Side1{i}] [Side2{i} 'HEE'] {'Off';'On';'Off'}; ...
         ['MT1' Side1{i}] [Side2{i} 'TARI'] {'Off';'On';'On'}; ['MT5' Side1{i}] [Side2{i} 'TAR'] {'Off';'Off';'Off'}; ...
         }];
-    
-    s=[s;{['SCAPLOCLM' Side3{i}] ['ScapLoc_AA_',Side2{i}] {'On';'On';'On'};...
-            ['SCAPLOCMM' Side3{i}] ['ScapLoc_TS_',Side2{i}] {'On';'On';'On'};...
-                   [ 'SCAPLOCB' Side3{i}] ['ScapLoc_AI_',Side2{i}] {'On';'On';'On'};...
-                   }];
+
 end
 
+Side={'R';'L'};
+if length(varargin)>=2
+    Scapulalocator = varargin{2};
+    if Scapulalocator.active
+        for idx=1:2
+            temp = strfind(Scapulalocator.side,Side{idx});
+            if ~isempty(temp{:})
+                s=[s;{['SCAPLOCLM',Side{idx}] ['ScapLoc_AA_',Side{idx}] {'On';'On';'On'};...
+                    ['SCAPLOCMM',Side{idx}] ['ScapLoc_TS_',Side{idx}] {'On';'On';'On'};...
+                    ['SCAPLOCB',Side{idx}] ['ScapLoc_AI_',Side{idx}] {'On';'On';'On'};...
+                   }];
+            end
+        end
+    end
+end
 
 
 
