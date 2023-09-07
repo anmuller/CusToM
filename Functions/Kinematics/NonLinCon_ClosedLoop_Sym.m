@@ -1,4 +1,4 @@
-function [c,ceq]=NonLinCon_ClosedLoop_Sym(Human_model,solid_path1,solid_path2,num_solid,num_markers,q,k)
+function [c,ceq]=NonLinCon_ClosedLoop_Sym(Human_model,solid_path1,solid_path2,num_solid,num_markers,q,k,radius)
 % Non-linear equation used in the inverse kinematics step for closed loops
 %
 %   INPUT
@@ -34,7 +34,7 @@ if isempty(solid_path2) % if the beginning coincides with the end of the loop
 
     % Computation on path
     s = Human_model(num_solid).c + Human_model(num_solid).anat_position{num_markers,2}; % position with respects to the position of the mother solid joint of the closed loop
-    [~,p_ClosedLoop,R_ClosedLoop] = ForwardKinematics_ClosedLoop(Human_model,1,s,solid_path1,[0 0 0]',eye(3),q,k);
+    [~,p_ClosedLoop,R_ClosedLoop] = ForwardKinematics_ClosedLoop(Human_model,1,s,solid_path1,[0 0 0]',eye(3),q,k,radius);
 
     % Rotation matrix and Position vector
   %  Rtemp=R_ClosedLoop;
@@ -68,7 +68,7 @@ else
 
         % Computation on path
         s = Human_model(num_solid).c + Human_model(num_solid).anat_position{num_markers,2}; % position with respects to the position of the mother solid joint of the closed loop
-        [~,p_ClosedLoop,R_ClosedLoop] = ForwardKinematics_ClosedLoop(Human_model,1,s,solid_path2,[0 0 0]',eye(3),q,k);
+        [~,p_ClosedLoop,R_ClosedLoop] = ForwardKinematics_ClosedLoop(Human_model,1,s,solid_path2,[0 0 0]',eye(3),q,k,radius);
 
         % Rotation matrix and Position vector
         %Rtemp=R_ClosedLoop;
@@ -100,8 +100,8 @@ else
     else% if the loop is cut elsewhere in the loop
 
         % Computation on path
-        [Human_model,p_ClosedLoop1,R_ClosedLoop1] = ForwardKinematics_ClosedLoop(Human_model,1,[0 0 0],solid_path1,[0 0 0]',eye(3),q,k);
-        [Human_model,p_ClosedLoop2,R_ClosedLoop2] = ForwardKinematics_ClosedLoop(Human_model,1,[0 0 0],solid_path2,[0 0 0]',eye(3),q,k);
+        [Human_model,p_ClosedLoop1,R_ClosedLoop1] = ForwardKinematics_ClosedLoop(Human_model,1,[0 0 0],solid_path1,[0 0 0]',eye(3),q,k,radius);
+        [Human_model,p_ClosedLoop2,R_ClosedLoop2] = ForwardKinematics_ClosedLoop(Human_model,1,[0 0 0],solid_path2,[0 0 0]',eye(3),q,k,radius);
         if ~isempty(intersect(solid_path1,num_solid)) % Finding the solid with the anatomical position to be respected
             p_ClosedLoop1 = p_ClosedLoop1 + R_ClosedLoop1*(Human_model(num_solid).c+Human_model(num_solid).anat_position{num_markers,2});
         else

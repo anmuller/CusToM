@@ -227,11 +227,12 @@ if ~isempty(varargin)
     Scapulalocator = varargin{1};
     Scapulalocator = Scapulalocator{1, 1};
     if Scapulalocator.active
-        if ~isempty(find(strcmp(Scapulalocator.side,Side),1))
+        temp = strfind(Scapulalocator.side,Side);
+        if ~isempty(temp{:})
             vec_1 = Scapula_locator_AA - Scapula_locator_AI;
             vec_2 = Scapula_locator_TS - Scapula_locator_AI;
             normal= Sign*cross(vec_1,vec_2)/norm(cross(vec_1,vec_2));
-            ind = find(strcmp(Scapulalocator.side,Side),1);
+            ind = 1;
             Scapula_locator_AA = Scapula_locator_AA + Scapulalocator.height(ind)*normal*1e-2;
             Scapula_locator_AI = Scapula_locator_AI + Scapulalocator.height(ind)*normal*1e-2;
             Scapula_locator_TS = Scapula_locator_TS + Scapulalocator.height(ind)*normal*1e-2;

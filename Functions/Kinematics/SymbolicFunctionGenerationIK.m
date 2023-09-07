@@ -1,4 +1,4 @@
-function [Human_model,Jacob,Generalized_Coordinates]=SymbolicFunctionGenerationIK(Human_model,Markers_set)
+function [Human_model,Jacob,Generalized_Coordinates]=SymbolicFunctionGenerationIK(Human_model,Markers_set,radius)
 % Computation of function used in the inverse kinematics step
 %   Generated functions contain the global position of each marker and its
 %   Jacobian matrix. All functions are evaluated according to the joint
@@ -99,7 +99,7 @@ Human_model(s_root).R=RPelvis;
 
 % Computation of the symbolic markers position
 %[Human_model,Markers_set,~,~,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure(Human_model,Markers_set,s_root,q,k,p_adapt,1,1);
-[Human_model,Markers_set,~,~,c_ClosedLoop,ceq_ClosedLoop]=Symbolic_ForwardKinematicsCoupure(Human_model,Markers_set,s_root,q_complete,k,p_adapt,1,1);
+[Human_model,Markers_set,~,~,c_ClosedLoop,ceq_ClosedLoop]=Symbolic_ForwardKinematicsCoupure(Human_model,Markers_set,s_root,q_complete,k,p_adapt,1,1,{},{},radius);
 
 % position and rotation of the solids used as cuts
 for ii=1:max([Human_model.KinematicsCut])

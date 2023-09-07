@@ -8,7 +8,7 @@ function BiomechanicalModel = AddClosedLoopEquations(BiomechanicalModel,varargin
 %
 %   OUTPUT
 %   - BiomechanicalModel: musculoskeletal model
-%________________________________________________________
+%_______________________________________________________
 %
 % Licence
 % Toolbox distributed under GPL 3.0 Licence
@@ -17,6 +17,10 @@ function BiomechanicalModel = AddClosedLoopEquations(BiomechanicalModel,varargin
 % Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
 % Georges Dumont
 %________________________________________________________
+
+if ~isempty(varargin)
+    radius=varargin{1};
+end
 
 HumanModel = BiomechanicalModel.OsteoArticularModel;
 
@@ -30,12 +34,12 @@ qred = BiomechanicalModel.Generalized_Coordinates.q_red;
 ConstraintEq =[];
 %% Find constraint equations for closing the loop
 if size(solid_path1)==[1 1]
-    [~,ConstraintEq]=NonLinCon_ClosedLoop_Sym(HumanModel,solid_path1{1},solid_path2{1},num_solid,num_markers,q,ones(1,length(q)));
+    [~,ConstraintEq]=NonLinCon_ClosedLoop_Sym(HumanModel,solid_path1{1},solid_path2{1},num_solid,num_markers,q,ones(1,length(q)),radius);
     ConstraintEq=ConstraintEq';
 else
     ConstraintEq =[];
     for idx= 1:length(num_solid)
-        [~,ConstraintEq1]=NonLinCon_ClosedLoop_Sym(HumanModel,solid_path1{idx},solid_path2{idx},num_solid(idx),num_markers(idx),q,ones(1,length(q)));
+        [~,ConstraintEq1]=NonLinCon_ClosedLoop_Sym(HumanModel,solid_path1{idx},solid_path2{idx},num_solid(idx),num_markers(idx),q,ones(1,length(q)),radius);
         ConstraintEq = [ConstraintEq ConstraintEq1'];
     end
 end
@@ -93,9 +97,9 @@ if ~isempty(ConstraintEq)
     Karti = Kartisym(oneqset);
     
     % User choice
-    if ~isempty(varargin)
-        qinddep = varargin{1};
-    end
+    % if ~isempty(varargin)
+    %     qinddep = varargin{1};
+    % end
     if length(qinddep) <  size(Karti,2) - rank(Karti)
         
         starting_columns = unique(col);
