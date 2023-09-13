@@ -48,16 +48,15 @@ for i=1:2
 
 end
 
-Side={'R';'L'};
 if length(varargin)>=2
     Scapulalocator = varargin{2};
     if Scapulalocator.active
         for idx=1:2
-            temp = strfind(Scapulalocator.side,Side{idx});
+            temp = strfind(Scapulalocator.side,Side2{idx});
             if ~isempty(temp{:})
-                s=[s;{['SCAPLOCLM',Side{idx}] ['ScapLoc_AA_',Side{idx}] {'On';'On';'On'};...
-                    ['SCAPLOCMM',Side{idx}] ['ScapLoc_TS_',Side{idx}] {'On';'On';'On'};...
-                    ['SCAPLOCB',Side{idx}] ['ScapLoc_AI_',Side{idx}] {'On';'On';'On'};...
+                s=[s;{['SCAPLOCLM',Side1{idx}] ['ScapLoc_AA_',Side2{idx}] {'On';'On';'On'};...
+                    ['SCAPLOCMM',Side1{idx}] ['ScapLoc_TS_',Side2{idx}] {'On';'On';'On'};...
+                    ['SCAPLOCB',Side1{idx}] ['ScapLoc_AI_',Side2{idx}] {'On';'On';'On'};...
                    }];
             end
         end

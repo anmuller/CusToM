@@ -69,7 +69,7 @@ end
 
 %% Inverse kinematics frame per frame
 
-options1 = optimoptions(@fmincon,'Algorithm','interior-point','Display','final','TolFun',1e-6,'TolCon',1e-6,'MaxFunEvals',2e5,'MaxIter',2e5,'TolX',1e-9,'SpecifyObjectiveGradient',true,'DerivativeCheck','off');
+options1 = optimoptions(@fmincon,'Algorithm','interior-point','Display','off','TolFun',1e-6,'TolCon',1e-6,'MaxFunEvals',2e5,'MaxIter',2e5,'TolX',1e-9,'SpecifyObjectiveGradient',true,'DerivativeCheck','off');
 q=zeros(nb_solid,nb_frame);
 ceq=zeros(6*nbClosedLoop,nb_frame);
 addpath('Symbolic_function')
@@ -122,7 +122,7 @@ buteehandle = @(q)  Limits(q,l_inf1,l_sup1);
 gamma = 100;
 zeta = 20;
 
-optionsLM = optimset('Algorithm','Levenberg-Marquardt','Display','final','MaxIter',4e6,'MaxFunEval',5e6,'Jacobian','on','DerivativeCheck','off','TolFun',1e-3);
+optionsLM = optimset('Algorithm','Levenberg-Marquardt','Display','off','MaxIter',4e6,'MaxFunEval',5e6,'Jacobian','on','DerivativeCheck','off','TolFun',1e-3);
 
 if ~isfield(BiomechanicalModel,'ClosedLoopData')
     if isfield(BiomechanicalModel,'GeometricalCalibration') &&  isfield(BiomechanicalModel.GeometricalCalibration,'q0') 

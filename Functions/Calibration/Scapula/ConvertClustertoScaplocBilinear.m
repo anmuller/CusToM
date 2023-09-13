@@ -1,4 +1,4 @@
-function [new_name,p_trial]=ConvertClustertoScaplocBilinear(filename_trial, filename_arr, filename_av, token_mean,droiteougauche)
+function [new_name,p_trial]=ConvertClustertoScaplocBilinear(filename_trial, filename_arr, filename_av, token_mean,side)
 %% Open files
 subject = char(filename_trial(1:6));
 % Open file of trial
@@ -15,29 +15,24 @@ markers_av=btkGetMarkers(h_av);
 %% Get positions of clusters and scaploc in filename arr and filename av
 % Trial cluster
 names_trial = fieldnames(markers_trial);
-%     prefix_trial = names_trial{contains(names_trial,'SCAPGB')};
-prefix_trial = '';%prefix_trial(1:6);
-try
-    SCAPDB_trial=markers_trial.([prefix_trial 'SCAPGB']);
-catch
-    SCAPDB_trial=markers_trial.([prefix_trial 'SCAPDB']);
+prefix_trial = names_trial{contains(names_trial,['SCAP' side 'B'])};
+prefix_trial=prefix_trial(1:end-6);
+if strcmp(prefix_trial,['SCAP' side 'B'])
+    prefix_trial='';
 end
+
+SCAPDB_trial=markers_trial.([prefix_trial 'SCAP' side 'B']);
+
 nb_frame = size(SCAPDB_trial,1);
 SCAPDB_trial = reshape(SCAPDB_trial, [nb_frame 1 3]);
 SCAPDB_trial = permute(SCAPDB_trial, [3,2,1]);
-try
-    SCAPDH_trial = markers_trial.([prefix_trial 'SCAPGH']);
-catch
-    SCAPDH_trial = markers_trial.([prefix_trial 'SCAPDH']);
-    
-end
+
+SCAPDH_trial = markers_trial.([prefix_trial 'SCAP' side 'H']);
 SCAPDH_trial = reshape(SCAPDH_trial, [nb_frame 1 3]);
 SCAPDH_trial = permute(SCAPDH_trial, [3,2,1]);
-try
-    SCAPDL_trial = markers_trial.([prefix_trial 'SCAPGL']);
-catch
-    SCAPDL_trial = markers_trial.([prefix_trial 'SCAPDL']);
-end
+
+SCAPDL_trial = markers_trial.([prefix_trial 'SCAP' side 'L']);
+
 SCAPDL_trial = reshape(SCAPDL_trial, [nb_frame 1 3]);
 SCAPDL_trial = permute(SCAPDL_trial, [3,2,1]);
 
@@ -54,12 +49,15 @@ T8_trial = permute(T8_trial, [3,2,1]);
 
 % Rear cluster
 names_arr = fieldnames(markers_arr);
-prefix_arr = names_arr{contains(names_arr,'SCAPGB')};
-prefix_arr =prefix_arr(1:end-6);
+prefix_arr = names_arr{contains(names_arr,['SCAP' side 'B'])};
+prefix_arr=prefix_arr(1:end-6);
+if strcmp(prefix_arr,['SCAP' side 'B'])
+    prefix_arr='';
+end
 %     prefix_arr = '';%prefix_arr(1:6);
-SCAPDB_arr=markers_arr.([prefix_arr 'SCAPGB']);
-SCAPDH_arr=markers_arr.([prefix_arr 'SCAPGH']);
-SCAPDL_arr=markers_arr.([prefix_arr 'SCAPGL']);
+SCAPDB_arr=markers_arr.([prefix_arr 'SCAP' side 'B']);
+SCAPDH_arr=markers_arr.([prefix_arr 'SCAP' side 'H']);
+SCAPDL_arr=markers_arr.([prefix_arr 'SCAP' side 'L']);
 %THORAX ARRIERE
 C7_arr=markers_arr.([prefix_arr 'C7']);
 MAN_arr=markers_arr.([prefix_arr 'MAN']);
@@ -68,7 +66,7 @@ T8_arr=markers_arr.([prefix_arr 'T8']);
 
 % Rear scaploc
 try
-    prefix_scaploc = names_arr{contains(names_arr,'Scaploc_B')};
+    prefix_scaploc = names_arr{contains(names_arr,['Scaploc_B' side])};
     prefix_scaploc = prefix_scaploc(1:end-9);
 catch
     prefix_scaploc='';
@@ -84,11 +82,14 @@ catch
 end
 % Advanced cluster
 names_av = fieldnames(markers_av);
-prefix_av = names_av{contains(names_av,'SCAPGB')};
-prefix_av = prefix_av(1:end-6);
-SCAPDB_av=markers_av.([prefix_av 'SCAPGB']);
-SCAPDH_av=markers_av.([prefix_av 'SCAPGH']);
-SCAPDL_av=markers_av.([prefix_av 'SCAPGL']);
+prefix_av = names_av{contains(names_av,['SCAP' side 'B'])};
+prefix_av=prefix_av(1:end-6);
+if strcmp(prefix_av,['SCAP' side 'B'])
+    prefix_av='';
+end
+SCAPDB_av=markers_av.([prefix_av 'SCAP' side 'B']);
+SCAPDH_av=markers_av.([prefix_av 'SCAP' side 'H']);
+SCAPDL_av=markers_av.([prefix_av 'SCAP' side 'L']);
 
 %THORAX AVANT
 C7_av=markers_av.([prefix_av 'C7']);
@@ -141,10 +142,6 @@ else
     SCAPLOCB_arr=SCAPLOCB_arr(1,:);
     SCAPLOCMM_arr=SCAPLOCMM_arr(1,:);
     SCAPLOCLM_arr=SCAPLOCLM_arr(1,:);
-    %Rear thorax
-    C7_arr=C7_arr(1,:);
-    MAN_arr=MAN_arr(1,:);
-    T8_arr=T8_arr(1,:);
     % Advanced scaploc
     SCAPDB_av=SCAPDB_av(1,:);
     SCAPDH_av=SCAPDH_av(1,:);
@@ -153,10 +150,6 @@ else
     SCAPLOCB_av=SCAPLOCB_av(1,:);
     SCAPLOCMM_av=SCAPLOCMM_av(1,:);
     SCAPLOCLM_av=SCAPLOCLM_av(1,:);
-    %Advanced thorax
-    C7_av=C7_av(1,:);
-    MAN_av=MAN_av(1,:);
-    T8_av=T8_av(1,:);
 end
 
 %% Find coefficients for quaternion interpolation
@@ -172,7 +165,7 @@ O_thorax_arr = C7_arr;
 X_thorax_arr = (MAN_arr - C7_arr)/norm(MAN_arr - C7_arr);
 yt_thorax_arr = T8_arr - C7_arr;
 Z_thorax_arr = (cross(X_thorax_arr,yt_thorax_arr))/norm(cross(X_thorax_arr,yt_thorax_arr));
-Y_thorax_arr = cross(Z_thorax_arr,X_thorax_arr)/norm(cross(Z_thorax_arr,X_thorax_arr));
+Y_thorax_arr = cross(Z_thorax_arr,X_thorax_arr);
 T_thorax_world_arr = [X_thorax_arr' Y_thorax_arr' Z_thorax_arr' O_thorax_arr'; 0 0 0 1];
 
 % Rear scaploc homogeneous matrix
@@ -212,7 +205,7 @@ O_thorax_av = C7_av;
 X_thorax_av = (MAN_av - C7_av)/norm(MAN_av - C7_av);
 yt_thorax_av = T8_av - C7_av;
 Z_thorax_av = (cross(X_thorax_av,yt_thorax_av))/norm(cross(X_thorax_av,yt_thorax_av));
-Y_thorax_av = cross(Z_thorax_av,X_thorax_av)/norm(cross(Z_thorax_av,X_thorax_av));
+Y_thorax_av = cross(Z_thorax_av,X_thorax_av);
 T_thorax_world_av = [X_thorax_av' Y_thorax_av' Z_thorax_av' O_thorax_av'; 0 0 0 1];
 
 % Advanced scaploc homogeneous matrix
@@ -247,7 +240,7 @@ O_thorax_trial = C7_trial;
 X_thorax_trial = (MAN_trial - C7_trial)./vecnorm(MAN_trial - C7_trial);
 yt_thorax_trial = T8_trial - C7_trial;
 Z_thorax_trial = (cross(X_thorax_trial,yt_thorax_trial))./vecnorm(cross(X_thorax_trial,yt_thorax_trial));
-Y_thorax_trial = cross(Z_thorax_trial,X_thorax_trial)./vecnorm(cross(Z_thorax_trial,X_thorax_trial));
+Y_thorax_trial = cross(Z_thorax_trial,X_thorax_trial);
 last_row = zeros(1,4,nb_frame);last_row(:,4,:)=1;
 T_thorax_world_trial = [X_thorax_trial Y_thorax_trial Z_thorax_trial O_thorax_trial];
 T_thorax_world_trial(4,:,:)=last_row;
@@ -289,11 +282,7 @@ SCAPLOCMM_trial=reshape(permute(SCAPLOCMM_trial(1:3,:,:),[3,1,2]),[nb_frame 3]);
 pn_trial=btkGetPointNumber(h_trial);
 % Adding virtual SCAPLOC markers to list of markers
 pn_new=pn_trial+3;
-if strcmp(droiteougauche,'D')
-labels=[ListMarkersName_trial; {'SCAPLOCB';'SCAPLOCMM';'SCAPLOCLM'}];
-else
-    labels=[ListMarkersName_trial; {'SCAPLOCB1';'SCAPLOCMM1';'SCAPLOCLM1'}];
-end
+labels=[ListMarkersName_trial; {['SCAPLOCB' side];['SCAPLOCMM' side];['SCAPLOCLM' side]}];
 % Number of frames in trial
 nb_frame_trial=btkGetLastFrame(h_trial)-btkGetFirstFrame(h_trial)+1;
 % Trial acquisition frequency
