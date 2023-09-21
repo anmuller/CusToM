@@ -83,9 +83,8 @@ while crit(:,g) > 0.05
     % Error computation
     errorm{g+1}=zeros(length(real_markers_calib),nb_frame_calib); %#ok<AGROW>
     for f=1:nb_frame_calib
-        
-        [errorm{g+1}(:,f)] = ErrorMarkersCalib(q_value{g+1}(:,f),kp_opt(:,g+1),real_markers_calib,f,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut,nbcut,list_function);
-        
+        temp = weights.*ErrorMarkersCalib(q_value{g+1}(:,f),kp_opt(:,g+1),real_markers_calib,f,list_function_markers,Base_position{f},Base_rotation{f},Rcut,pcut,nbcut,list_function);
+        [errorm{g+1}(:,f)] = temp(weights~=0);
     end
     
     % Stop criteria

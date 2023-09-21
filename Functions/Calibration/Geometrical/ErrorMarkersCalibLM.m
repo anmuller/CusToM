@@ -23,21 +23,19 @@ function [error] = ErrorMarkersCalibLM(q,k,real_markers,f,list_markers,Pelvis_po
 % Georges Dumont
 %________________________________________________________
 
- 
-    
-    for c=1:nbcut
-        if c==1          
-            [Rcut(:,:,c),pcut(:,:,c)]=list_function{c}(Pelvis_position,Pelvis_rotation,q,k,[],[]);
-        else
-            [Rcut(:,:,c),pcut(:,:,c)]=list_function{c}(Pelvis_position,Pelvis_rotation,q,k,pcut,Rcut);
-        end
+
+
+for c=1:nbcut
+    if c==1
+        [Rcut(:,:,c),pcut(:,:,c)]=list_function{c}(Pelvis_position,Pelvis_rotation,q,k,[],[]);
+    else
+        [Rcut(:,:,c),pcut(:,:,c)]=list_function{c}(Pelvis_position,Pelvis_rotation,q,k,pcut,Rcut);
     end
-    error=zeros(3*numel(list_markers),1);
-    for m=1:numel(list_markers)
-%         error(m,:) = norm(eval([list_markers{m} '_Position(Pelvis_position,Pelvis_rotation,q,k,pcut,Rcut)']) - real_markers(m).position(f,:)');
-        error(1+3*(m-1):3+3*(m-1),:) =    list_markers{m}...
-                (Pelvis_position,Pelvis_rotation,q,k,...
-                pcut,Rcut)  - real_markers(m).position(f,:)';
-    end
-    
+end
+error=zeros(3*numel(list_markers),1);
+for m=1:numel(list_markers)
+    error(1+3*(m-1):3+3*(m-1),:) =   ( list_markers{m}...
+        (Pelvis_position,Pelvis_rotation,q,k,...
+        pcut,Rcut)  - real_markers(m).position(f,:)');
+end
 end

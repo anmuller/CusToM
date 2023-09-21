@@ -1,6 +1,6 @@
 function [func,J]=CostFunctionLM(q,positions,gamma,hclosedloophandle,zeta,hbutees,weights, l_inf1,l_sup1,Aeq_ik,J_marqueurs_handle)
 % Limit penalisation for LM algorithm
-%   
+%
 %   INPUT
 %   - q: vector of joint coordinates at a given instant
 %   - positions : vector of experimental marker positions
@@ -21,23 +21,24 @@ function [func,J]=CostFunctionLM(q,positions,gamma,hclosedloophandle,zeta,hbutee
 %________________________________________________________
 
 
- % cut evaluation
-    [Rcut,pcut]=fcut(q);
+% cut evaluation
+[Rcut,pcut]=fcut(q);
 
-    newweights= repmat(weights,1,3)';
-    % dx
-    dX = newweights(:).*(-X_markers(q,pcut,Rcut) + positions);
-    
-    constraints=[];
-    for k=1:length(hclosedloophandle)
-        fonc = hclosedloophandle{k};
-        constraints = [constraints ; fonc(q)];
-    end
-    
-    func = [ dX ; gamma*constraints ; zeta*hbutees(q)];
-    
-    if nargout > 1   % Two output arguments
-        J = IK_Jacobian(q,pcut,Rcut, l_inf1,l_sup1,Aeq_ik,gamma,zeta, J_marqueurs_handle,newweights(:));   % Jacobian of the function evaluated at q
-    end
-    
+newweights= repmat(weights,3,1);
+
+% dx
+dX = newweights(:).*(-X_markers(q,pcut,Rcut) + positions);
+
+constraints=cell(length(hclosedloophandle),1);
+for k=1:length(hclosedloophandle)
+    fonc = hclosedloophandle{k};
+    constraints{k}= fonc(q);
+end
+constraints=[constraints{:}];
+func = [ dX ; gamma*constraints(:) ; zeta*hbutees(q)];
+
+if nargout > 1   % Two output arguments
+    J = IK_Jacobian(q,pcut,Rcut, l_inf1,l_sup1,Aeq_ik,gamma,zeta, J_marqueurs_handle,newweights(:));   % Jacobian of the function evaluated at q
+end
+
 end

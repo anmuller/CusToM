@@ -18,7 +18,7 @@ function [error,J] = CostFunctionSymbolicIK2(q,positions,weights,J_marqueurs_han
 [Rcut,pcut]=fcut(q);
 
 % Vectorial norm of marker distance 
-newweights= repmat(weights,1,3)';
+newweights= repmat(weights,3,1);
 a = sum(newweights(:).*(-X_markers(q,pcut,Rcut) + positions).^2);
 error = sum(a(~isnan(a)));
 
