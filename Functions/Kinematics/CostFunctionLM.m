@@ -29,12 +29,11 @@ newweights= repmat(weights,3,1);
 % dx
 dX = newweights(:).*(-X_markers(q,pcut,Rcut) + positions);
 
-constraints=cell(length(hclosedloophandle),1);
+constraints=[];
 for k=1:length(hclosedloophandle)
     fonc = hclosedloophandle{k};
-    constraints{k}= fonc(q);
+    constraints= [constraints; fonc(q)];
 end
-constraints=[constraints{:}];
 func = [ dX ; gamma*constraints(:) ; zeta*hbutees(q)];
 
 if nargout > 1   % Two output arguments

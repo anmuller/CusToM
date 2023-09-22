@@ -21,12 +21,11 @@ function func=CostFunctionLMCalib(q,ik_function_objective,gamma,hclosedloophandl
 %________________________________________________________
 
     
-    constraints=cell(length(hclosedloophandle),1);
+    constraints=[];
     for k=1:length(hclosedloophandle)
         fonc = hclosedloophandle{k};
-        constraints{k} = fonc(q);
+        constraints = [constraints ; fonc(q)];
     end
-    constraints=[constraints{:}];
     newweights= repmat(weights,3,1);
     dX = newweights(:).*ik_function_objective(q);
     func = [ dX ; gamma*constraints(:) ; zeta*hbutees(q)];
