@@ -19,7 +19,7 @@ function [ExperimentalData, InverseKinematicResults] = InverseKinematicsLM(filen
 %________________________________________________________
 
 %% Loading useful files
-if ~exist(filename,'dir')
+if ~isfolder(filename)
     mkdir(filename)
 end
 disp(['Inverse kinematics (' filename ') ...'])
