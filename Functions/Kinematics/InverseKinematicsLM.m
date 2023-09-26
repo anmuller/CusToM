@@ -100,7 +100,7 @@ end
 if isfield(AnalysisParameters.IK,'weights')
     weights = AnalysisParameters.IK.weights';
 else
-    weights = ones(1,length(real_markers));
+    weights = ones(length(real_markers),1);
 end
 
 h = waitbar(0,['Inverse Kinematics (' filename ')']);

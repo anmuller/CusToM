@@ -129,7 +129,7 @@ positions = zeros(3, length(real_markers));
 if isfield(AnalysisParameters.IK,'weights')
     weights = AnalysisParameters.IK.weights';
 else
-    weights = ones(1,length(real_markers));
+    weights = ones(length(real_markers),1);
 end
 
 
