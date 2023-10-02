@@ -1,4 +1,4 @@
-function [T_clean] = GetExternalMasses(table_path, OsteoSegName, NextJoint, SegEndPosition) 
+function [T_clean] = GetExternalMasses(table_path, OsteoSegName, NextJoint, SegEndPosition, C_coords) 
 
 %% Extract data related to the objects added to body segments, to compute the segments nex inertia matrix
 %
@@ -31,7 +31,7 @@ c=0;
 for i=1:size(T,1)
     nom = char(T.Segment_Name(i));                     % Rename the segment name to check
     if strcmp(T.Y_unit(i),'Percentage')==1             % Function which transform % to coord. (in meters) 
-        coordinate = Percent2coord(nom, T(i,:), OsteoSegName, NextJoint, SegEndPosition);
+        coordinate = Percent2coord(nom, T(i,:), OsteoSegName, NextJoint, SegEndPosition, C_coords);
         T.added_c_y(i) = coordinate;
     end 
     for j=1:size(OsteoSegName,2)

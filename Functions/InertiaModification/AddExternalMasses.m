@@ -40,7 +40,8 @@ load(model_path);
 OsteoSegName    = {BiomechanicalModel.OsteoArticularModel.name};
 NextJoint       = {BiomechanicalModel.OsteoArticularModel.b} ;
 SegEndPosition  = {BiomechanicalModel.OsteoArticularModel.anat_position} ;
-[T] = GetExternalMasses(table_path, OsteoSegName, NextJoint, SegEndPosition) ;    % T = table of objects (masses) to be added
+C_coords        = {BiomechanicalModel.OsteoArticularModel.c} ;
+[T] = GetExternalMasses(table_path, OsteoSegName, NextJoint, SegEndPosition, C_coords) ;    % T = table of objects (masses) to be added
 
 %% Extract the list of 'Biomechanical models' to be created, then creatte a structure to store them
 BiomechanicalModels_names = [unique(T.New_Model_Name) ; 'BiomechanicalModel_ARCHIVE'] ;
