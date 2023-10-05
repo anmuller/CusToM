@@ -32,7 +32,9 @@ for i=1:size(T,1)
     nom = char(T.Segment_Name(i));                     % Rename the segment name to check
     if strcmp(T.Y_unit(i),'Percentage')==1             % Function which transform % to coord. (in meters) 
         coordinate = Percent2coord(nom, T(i,:), OsteoSegName, NextJoint, SegEndPosition, C_coords);
-        T.added_c_y(i) = coordinate;
+        T.added_c_x(i) = coordinate(1);
+        T.added_c_y(i) = coordinate(2);
+        T.added_c_z(i) = coordinate(3);
     end 
     for j=1:size(OsteoSegName,2)
         tf = strcmp(T.Segment_Name(i),char(OsteoSegName(j)));

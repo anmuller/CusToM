@@ -57,7 +57,8 @@ List_BiomechanicalModels = struct('Names', [BiomechanicalModels_names], ...
 for T_ind_segment = 1:size (T, 1)    
     OsteoModel_ind_segment = find (strcmp (T.Segment_Name{T_ind_segment},   [{BiomechanicalModel.OsteoArticularModel.name}])) ;
     List_Model_ind         = find (strcmp (T.New_Model_Name{T_ind_segment}, [{List_BiomechanicalModels.Names}] )) ;
-    if ~isempty (OsteoModel_ind_segment) ;
+    T.Segment_Name{T_ind_segment}
+   if ~isempty (OsteoModel_ind_segment) ;
 
 
     % Compute the NEW BSIP (mass, center of mass, Inertia)
@@ -73,28 +74,27 @@ for T_ind_segment = 1:size (T, 1)
 
 
      % Compute new MARKERS and MUSCLES coordinates (related to NEW_c instead of *.c)
-    if ~isempty(BiomechanicalModel.Muscles)
+      if ~isempty(BiomechanicalModel.Muscles)
         list_model_muscles = cellfun(@char,sym2cell(unique(cell2sym({BiomechanicalModel.Muscles(:).path}'))),'UniformOutput',false);
         muscle_model_ind = find(ismember(BiomechanicalModel.OsteoArticularModel(OsteoModel_ind_segment).anat_position(:,1), list_model_muscles));
-    else
+      else
         muscle_model_ind = [];
-    end
+      end
     mk_model_ind = find (ismember (BiomechanicalModel.OsteoArticularModel(OsteoModel_ind_segment).anat_position(:,1), [{BiomechanicalModel.Markers.anat_position}])) ;
     list_ind = [mk_model_ind;muscle_model_ind];
 
-    if ~isempty ([BiomechanicalModel.OsteoArticularModel(OsteoModel_ind_segment).anat_position{list_ind, 2}] )
+      if ~isempty ([BiomechanicalModel.OsteoArticularModel(OsteoModel_ind_segment).anat_position{list_ind, 2}] )
         NEW_anat_position = [BiomechanicalModel.OsteoArticularModel(OsteoModel_ind_segment).anat_position{list_ind, 2}]...
         + BiomechanicalModel.OsteoArticularModel(OsteoModel_ind_segment).c - NEW_c ;
         NEW_anat_position_cells = mat2cell (NEW_anat_position, 3, repelem(1, size (list_ind,1) ))' ;
-       
+        List_BiomechanicalModels(List_Model_ind).BiomechanicalModel.OsteoArticularModel(OsteoModel_ind_segment).anat_position(list_ind,2) = NEW_anat_position_cells  ;
+      end  
      %% Store Biomechanical models
-     List_BiomechanicalModels(List_Model_ind).BiomechanicalModel.OsteoArticularModel(OsteoModel_ind_segment).m             = NEW_m ;
-     List_BiomechanicalModels(List_Model_ind).BiomechanicalModel.OsteoArticularModel(OsteoModel_ind_segment).c             = NEW_c ;
-     List_BiomechanicalModels(List_Model_ind).BiomechanicalModel.OsteoArticularModel(OsteoModel_ind_segment).I             = NEW_I ;
-     List_BiomechanicalModels(List_Model_ind).BiomechanicalModel.OsteoArticularModel(OsteoModel_ind_segment).anat_position(list_ind,2) = NEW_anat_position_cells  ;
-
-     end
-  end
+   List_BiomechanicalModels(List_Model_ind).BiomechanicalModel.OsteoArticularModel(OsteoModel_ind_segment).m             = NEW_m ;
+   List_BiomechanicalModels(List_Model_ind).BiomechanicalModel.OsteoArticularModel(OsteoModel_ind_segment).c             = NEW_c ;
+   List_BiomechanicalModels(List_Model_ind).BiomechanicalModel.OsteoArticularModel(OsteoModel_ind_segment).I             = NEW_I ;
+     
+   end
 end
 
 

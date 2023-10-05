@@ -51,12 +51,9 @@ listSegEnd =         [{'Skull_TopOfHead' }, {'RHand_EndNode'}, {'LHand_EndNode'}
         BiomechModel_row_joint  = strcmp (listDistalJoints{numSegm2Process}, OsteoSegName) ;
         % Compute the coordinates of the added mass center of mass, in the segment frame         
         length                  = norm (cell2mat(NextJoint(BiomechModel_row_joint))'); 
-        coordinate              = (temp_coordinate/100 * length) .*cell2mat(NextJoint(BiomechModel_row_joint))';
-        if ~(strcmp (SegName_Table, 'PelvisSacrum') | strcmp (SegName_Table, 'LowerTrunk') | strcmp (SegName_Table, 'Thorax')) ;
-            coordinate(:,2:3)     = -coordinate(:,2:3) ;
-        end
+        coordinate              = temp_coordinate/100 .*cell2mat(NextJoint(BiomechModel_row_joint))';
         
-    elseif sum (strcmp (SegName_Table, listExtr2Process)) > 0   % segment non terminé par un centre articulaire
+    elseif sum (strcmp (SegName_Table, listExtr2Process)) > 0   % segment à l'extrémité
         numExtr2Process        = find (strcmp (SegName_Table, listExtr2Process)) ; 
         BiomechModel_row_ext   = strcmp (listExtr2Process{numExtr2Process}, OsteoSegName) ;
         SegEndPosition_Row     = strcmp (listSegEnd{numExtr2Process}, SegEndPosition{BiomechModel_row_ext}(:,1) ) ;
@@ -64,6 +61,5 @@ listSegEnd =         [{'Skull_TopOfHead' }, {'RHand_EndNode'}, {'LHand_EndNode'}
         Pos_Dist_in_c          = cell2mat (SegEndPosition{BiomechModel_row_ext}(SegEndPosition_Row,2))' ;
         C_cord_unique          = C_coords{BiomechModel_row_ext}' ;
         length                 = norm (Pos_Dist_in_c  + C_cord_unique) ; 
-        coordinate             = (temp_coordinate/100 * length) .*(Pos_Dist_in_c  + C_cord_unique)  ;
-        coordinate(:,2)        = -coordinate(:,2:3) ;
+        coordinate             = temp_coordinate/100 .*(Pos_Dist_in_c  + C_cord_unique)  ;
     end
