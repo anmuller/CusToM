@@ -31,11 +31,14 @@ parfor num_fil = 1:numel(AnalysisParameters.filename)
     BiomechanicalModel = load('BiomechanicalModel.mat'); 
     BiomechanicalModel = BiomechanicalModel.BiomechanicalModel;
     Human_model = BiomechanicalModel.OsteoArticularModel;
-    ExperimentalData =  load([filename '/ExperimentalData.mat']);
-    ExperimentalData = ExperimentalData.ExperimentalData;
-    time = ExperimentalData.Time;
-    InverseKinematicsResults=load([filename '/InverseKinematicsResults.mat']); 
-    InverseKinematicsResults = InverseKinematicsResults.InverseKinematicsResults;
+    here = pwd ;                                                                   
+    cd(filename)
+        ExperimentalData =  load('ExperimentalData.mat');
+        ExperimentalData = ExperimentalData.ExperimentalData;
+        time = ExperimentalData.Time;
+        InverseKinematicsResults=load('InverseKinematicsResults.mat'); 
+        InverseKinematicsResults = InverseKinematicsResults.InverseKinematicsResults;
+    cd(here)  
     q = InverseKinematicsResults.JointCoordinates';
     if isfield(InverseKinematicsResults,'FreeJointCoordinates')
         q6dof = InverseKinematicsResults.FreeJointCoordinates';
@@ -43,7 +46,10 @@ parfor num_fil = 1:numel(AnalysisParameters.filename)
         PelvisPosition = InverseKinematicsResults.PelvisPosition;
         PelvisOrientation = InverseKinematicsResults.PelvisOrientation;
     end
-    ExternalForcesComputationResults= load([filename '/ExternalForcesComputationResults.mat']); 
+    here = pwd ;   
+    cd(filename)   
+        ExternalForcesComputationResults= load('ExternalForcesComputationResults.mat');    
+    cd (here) 
     ExternalForcesComputationResults = ExternalForcesComputationResults.ExternalForcesComputationResults;
     if AnalysisParameters.ID.InputData == 0
         external_forces = ExternalForcesComputationResults.NoExternalForce;
