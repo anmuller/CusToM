@@ -92,7 +92,7 @@ A user interface has been developed to facilitate the data management and the mo
 
 # Installation instructions <a name="Installationinstructions"></a>
 
-You need to create a copy on a local directory on your machine to use CusToM. Obtain a copy by downloading and unzipping the latest zip file or clone CusToM instead e.g. using: git clone https://github.com/anmuller/CusToM. You can place the CusToM folder anywhere on your machine.
+You need to create a copy on a local directory on your machine to use CusToM. Obtain a copy by downloading and unzipping the latest zip file or clone CusToM instead e.g. using: git clone https://github.com/anmuller/CusToM. You can place the CusToM folder anywhere on your machine. #####The most stable branch is the Dev_master one, please use it in priority !#####
 
 After downloading the main folder and placing it in a relevant location, the installation only consists in running the Installation file. It checks if you have a compatible version of Matlab, if the needed toolboxes are installed. The function will also add the Functions folder of CusToM to your current path.
  
