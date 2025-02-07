@@ -1,3 +1,4 @@
+
 ﻿## CusToM: a Matlab toolbox for musculoskeletal simulation
 
 **CusToM Status:** [![status](http://joss.theoj.org/papers/4b412d584fbfa911edfae882146e2cd3/status.svg)](http://joss.theoj.org/papers/4b412d584fbfa911edfae882146e2cd3)
@@ -227,3 +228,19 @@ Muller, A., C. Pontonnier, C. Germain, and G. Dumont. 2015. “Dealing with modu
 Muller, A.,  F. Demore, C. Pontonnier, and G. Dumont. 2017. “MusIC Makes the Muscles Work Together.” In XVI International Symposium on Computer Simulation in Biomechanics, 2.
 
 Muller, A., C. Pontonnier, and G. Dumont. 2018. “The Music Method: A Fast and Quasi-Optimal Solution to the Muscle Forces Estimation Problem.” Computer Methods in Biomechanics and Biomedical Engineering 21 (2). Taylor & Francis:149–60. https://doi.org/10.1080/10255842.2018.1429596
+
+Muller, A., Pontonnier, C., & Dumont, G. (2019). Motion-based prediction of hands and feet contact efforts during asymmetric handling tasks. IEEE Transactions on Biomedical Engineering, 67(2), 344-352.
+
+Puchaud, P., Sauret, C., Muller, A., Bideau, N., Dumont, G., Pillet, H., & Pontonnier, C. (2020). Accuracy and kinematics consistency of marker-based scaling approaches on a lower limb model: a comparative study with imagery data. Computer Methods in Biomechanics and Biomedical Engineering, 23(3), 114-125.
+
+Muller, A., Pontonnier, C., Robert-Lachaine, X., Dumont, G., & Plamondon, A. (2020). Motion-based prediction of external forces and moments and back loading during manual material handling tasks. Applied ergonomics, 82, 102935.
+
+Livet, C., Rouvier, T., Sauret, C., Pillet, H., Dumont, G., & Pontonnier, C. (2023). A penalty method for constrained multibody kinematics optimisation using a Levenberg–Marquardt algorithm. Computer Methods in Biomechanics and Biomedical Engineering, 26(7), 864-875.
+
+Livet, C., Rouvier, T., Dumont, G., & Pontonnier, C. (2022). An automatic and simplified approach to muscle path modeling. Journal of Biomechanical Engineering, 144(1), 014502.
+
+Morin, P., Muller, A., Dumont, G., & Pontonnier, C. (2024). Comparison of Two Contact Detection Methods for Ground Reaction Forces and Moment Estimation During Sidestep Cuts, Runs, and Walks. Journal of Biomechanical Engineering, 146(1).
+
+Pontonnier, C., Livet, C., Muller, A., Sorel, A., Dumont, G., & Bideau, N. (2019). Ground reaction forces and moments prediction of challenging motions: fencing lunges. Computer methods in biomechanics and biomedical engineering, 22(sup1), S523-S525.
+
+Demestre, L., Morin, P., May, F., Bideau, N., Nicolas, G., Pontonnier, C., & Dumont, G. (2022). Motion-based ground reaction forces and moments prediction method for interaction with a moving and/or non-horizontal structure. Journal of Biomechanical Engineering, 144(11), 114504.

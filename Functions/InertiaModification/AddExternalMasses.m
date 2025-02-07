@@ -1,7 +1,9 @@
 function [List_BiomechanicalModels] = AddExternalMasses (table_path, model_path)
 % Add point masses to an existing 'Biomechanical model', to account for or simulate the presence of objects (heavy cloth, bag) 
 % attached to body segments
+
 %   - Each segment of the 'Biomechanical model' can be assigned an additional point mass
+
 %   - Several 'Biomechanical models' can be created from the same source 'Biomechanical Model'
 %     to add various patterns of additional masses (e.g. light then heavy backpacks)
 %   The source 'Biomechanical model' and the new 'Biomechanical models' are stored in a single structure
@@ -16,7 +18,12 @@ function [List_BiomechanicalModels] = AddExternalMasses (table_path, model_path)
 %________________________________________________________
 %
 % INPUT
+
 %   BiomechanicalModel.m 
+
+%   Parh to : BiomechanicalModel.m 
+%   Path to an Excel file containing data for an external mass :
+
 %   List of masse(s) to be added to the 'Biomechanical model' (Excel file). Information needed (see template):
 %   - Name_model = name of the model(s) to be creates
 %   - Segment
@@ -57,7 +64,9 @@ List_BiomechanicalModels = struct('Names', [BiomechanicalModels_names], ...
 for T_ind_segment = 1:size (T, 1)    
     OsteoModel_ind_segment = find (strcmp (T.Segment_Name{T_ind_segment},   [{BiomechanicalModel.OsteoArticularModel.name}])) ;
     List_Model_ind         = find (strcmp (T.New_Model_Name{T_ind_segment}, [{List_BiomechanicalModels.Names}] )) ;
+
     T.Segment_Name{T_ind_segment}
+
    if ~isempty (OsteoModel_ind_segment) ;
 
 
@@ -67,10 +76,14 @@ for T_ind_segment = 1:size (T, 1)
     added_m = []; 
     added_m = T.added_m(T_ind_segment) ; 
 
+    added_I = str2num(cell2mat(T.added_I(T_ind_segment))) ;
+
     [NEW_m, NEW_c, NEW_I] = ComputeInertial (m, added_m, ...
                                     BiomechanicalModel.OsteoArticularModel(OsteoModel_ind_segment).c, ...
                                     T.added_c{T_ind_segment}, ...
                                     BiomechanicalModel.OsteoArticularModel(OsteoModel_ind_segment).I) ;
+                                    BiomechanicalModel.OsteoArticularModel(OsteoModel_ind_segment).I, ...
+                                    added_I);
 
 
      % Compute new MARKERS and MUSCLES coordinates (related to NEW_c instead of *.c)

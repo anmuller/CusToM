@@ -180,7 +180,9 @@ l_sup=q_map'*l_sup;
 l_inf(l_inf==1i)=-inf;
 l_sup(l_sup==1i)=+inf;
 
-
+if nb_frame < nb_frame_calib
+    error('Not enough frames to calibrate');
+end
 for f=1:nb_frame_calib
     if f == 1      % initial frame
         q0=zeros(Nb_qred,1);

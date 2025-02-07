@@ -86,7 +86,9 @@ for ind = 1:size(T,1)
     scatter3(coord_distale{ind}(1), coord_distale{ind}(2), coord_distale{ind}(3), 'b', 'filled');
     % Plot a sphere at coord_centre
     scatter3(coord_centre{ind}(1), coord_centre{ind}(2), coord_centre{ind}(3), 'g', 'filled');
+
     text(coord_centre{ind}(1), coord_centre{ind}(2), coord_centre{ind}(3), 'centre de masse du segment');
+
     % Plot a sphere at coord_barycenter and disp the text "barycenter"
     scatter3(coord_barycentre{ind}(1), coord_barycentre{ind}(2), coord_barycentre{ind}(3), 'b', 'filled');
     text(coord_barycentre{ind}(1), coord_barycentre{ind}(2), coord_barycentre{ind}(3), 'barycentre');
