@@ -71,7 +71,6 @@ end
 % To do
 
 %% Moment arms matrix et muscular coupling
-
 if numel(BiomechanicalModel.Muscles)
     disp('Moment Arms Computation ...')
     [BiomechanicalModel.MomentArms,BiomechanicalModel.MuscularCoupling] =...
@@ -80,7 +79,6 @@ if numel(BiomechanicalModel.Muscles)
 end
 
 %% Generation of the data base for computation of muscular forces by using MusIC method
-
 if numel(BiomechanicalModel.Muscles) && AnalysisParameters.Muscles.Method == 2
     disp('MusIC Database Generation ...')
     eval(['[BiomechanicalModel.MusICDatabase_' char(AnalysisParameters.Muscles.Costfunction) num2str(AnalysisParameters.Muscles.CostfunctionOptions) '_' num2str(AnalysisParameters.Muscles.DatabaseDensity(1)) '_' num2str(AnalysisParameters.Muscles.DatabaseDensity(2)) '] = MusICDatabaseGeneration(BiomechanicalModel, AnalysisParameters);']) 

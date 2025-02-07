@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of pdf2eps</title>
+  <meta name="keywords" content="pdf2eps">
+  <meta name="description" content="PDF2EPS  Convert a pdf file to eps format using pdftops">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- # ExternLibrary --><!-- menu.html export_fig -->
+<h1>pdf2eps
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>PDF2EPS  Convert a pdf file to eps format using pdftops</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function pdf2eps(source, dest) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">PDF2EPS  Convert a pdf file to eps format using pdftops
+
+ Examples:
+   pdf2eps source dest
+
+ This function converts a pdf file to eps format.
+
+ This function requires that you have pdftops, from the Xpdf suite of
+ functions, installed on your system. This can be downloaded from:
+ http://www.foolabs.com/xpdf  
+
+IN:
+   source - filename of the source pdf file to convert. The filename is
+            assumed to already have the extension &quot;.pdf&quot;.
+   dest - filename of the destination eps file. The filename is assumed to
+          already have the extension &quot;.eps&quot;.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="pdftops.html" class="code" title="function varargout = pdftops(cmd)">pdftops</a>	PDFTOPS  Calls a local pdftops executable with the input command</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="export_fig.html" class="code" title="function [imageData, alpha] = export_fig(varargin) %#ok<*STRCL1>">export_fig</a>	EXPORT_FIG  Exports figures in a publication-quality format</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%PDF2EPS  Convert a pdf file to eps format using pdftops</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% Examples:</span>
+0004 <span class="comment">%   pdf2eps source dest</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% This function converts a pdf file to eps format.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% This function requires that you have pdftops, from the Xpdf suite of</span>
+0009 <span class="comment">% functions, installed on your system. This can be downloaded from:</span>
+0010 <span class="comment">% http://www.foolabs.com/xpdf</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%IN:</span>
+0013 <span class="comment">%   source - filename of the source pdf file to convert. The filename is</span>
+0014 <span class="comment">%            assumed to already have the extension &quot;.pdf&quot;.</span>
+0015 <span class="comment">%   dest - filename of the destination eps file. The filename is assumed to</span>
+0016 <span class="comment">%          already have the extension &quot;.eps&quot;.</span>
+0017 
+0018 <span class="comment">% Copyright (C) Oliver Woodford 2009-2010</span>
+0019 
+0020 <span class="comment">% Thanks to Aldebaro Klautau for reporting a bug when saving to</span>
+0021 <span class="comment">% non-existant directories.</span>
+0022 
+0023 <a name="_sub0" href="#_subfunctions" class="code">function pdf2eps(source, dest)</a>
+0024 <span class="comment">% Construct the options string for pdftops</span>
+0025 options = [<span class="string">'-q -paper match -eps -level2 &quot;'</span> source <span class="string">'&quot; &quot;'</span> dest <span class="string">'&quot;'</span>];
+0026 <span class="comment">% Convert to eps using pdftops</span>
+0027 [status, message] = <a href="pdftops.html" class="code" title="function varargout = pdftops(cmd)">pdftops</a>(options);
+0028 <span class="comment">% Check for error</span>
+0029 <span class="keyword">if</span> status
+0030     <span class="comment">% Report error</span>
+0031     <span class="keyword">if</span> isempty(message)
+0032         error(<span class="string">'Unable to generate eps. Check destination directory is writable.'</span>);
+0033     <span class="keyword">else</span>
+0034         error(message);
+0035     <span class="keyword">end</span>
+0036 <span class="keyword">end</span>
+0037 <span class="comment">% Fix the DSC error created by pdftops</span>
+0038 fid = fopen(dest, <span class="string">'r+'</span>);
+0039 <span class="keyword">if</span> fid == -1
+0040     <span class="comment">% Cannot open the file</span>
+0041     <span class="keyword">return</span>
+0042 <span class="keyword">end</span>
+0043 fgetl(fid); <span class="comment">% Get the first line</span>
+0044 str = fgetl(fid); <span class="comment">% Get the second line</span>
+0045 <span class="keyword">if</span> strcmp(str(1:min(13, end)), <span class="string">'% Produced by'</span>)
+0046     fseek(fid, -numel(str)-1, <span class="string">'cof'</span>);
+0047     fwrite(fid, <span class="string">'%'</span>); <span class="comment">% Turn ' ' into '%'</span>
+0048 <span class="keyword">end</span>
+0049 fclose(fid);
+0050 <span class="keyword">end</span>
+0051</pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

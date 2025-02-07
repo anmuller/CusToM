@@ -36,7 +36,7 @@ k=ModelParameters.Size/1.80;
 
 % distribution of global subject mass in the different segments of the body
 [Mass.Trunk_Mass, Mass.Arm_Mass, Mass.Leg_Mass]= WholeBodySegMass(ModelParameters.Mass);
-[Mass.Pelvis_Mass, Mass.LowerTrunk_Mass, Mass.UpperTrunk_Mass, Mass.Skull_Mass]= TrunkSegMass(Mass.Trunk_Mass);
+[Mass.Pelvis_Mass, Mass.LowerTrunk_Mass, Mass.Thorax_Mass, Mass.Skull_Mass,Mass.Scapula_Mass,Mass.Clavicle_Mass]= TrunkSegMass(Mass.Trunk_Mass);
 [Mass.Thigh_Mass, Mass.Shank_Mass, Mass.Foot_Mass]= LegSegMass(Mass.Leg_Mass);
 [Mass.UpperArm_Mass, Mass.Forearm_Mass, Mass.Hand_Mass]= ArmSegMass(Mass.Arm_Mass);
 
@@ -104,7 +104,7 @@ end
 %% Muscles
 if numel(ModelParameters.Muscles)
     % Initialisation
-    Muscles = struct('name',[],'f0',[],'l0',[],'Kt',[],'ls',[],'alpha0',[],'path',[]);Muscles(1) = [];
+    Muscles = struct('name',[],'f0',[],'l0',[],'Kt',[],'ls',[],'alpha0',[],'path',[],'wrap',[]);Muscles(1) = [];
 
     % add muscle sets
     for i = 1:numel(ModelParameters.Muscles)

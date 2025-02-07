@@ -30,16 +30,16 @@ else
     load('BiomechanicalModel.mat'); %#ok<LOAD>
 end
 
-for i = 1:numel(AnalysisParameters.filename)
+parfor i = 1:numel(AnalysisParameters.filename)
     filename = AnalysisParameters.filename{i}(1:end-(numel(AnalysisParameters.General.Extension)-1));
     if AnalysisParameters.ID.InputData == 0
         [ExternalForcesComputationResults] = ExternalForces_Zero(filename, BiomechanicalModel);
     elseif AnalysisParameters.ID.InputData == 1
-        [ExternalForcesComputationResults] = AnalysisParameters.ExternalForces.Method(filename, BiomechanicalModel, AnalysisParameters); 
+         [ExternalForcesComputationResults] = AnalysisParameters.ExternalForces.Method(filename, BiomechanicalModel, AnalysisParameters); 
     elseif AnalysisParameters.ID.InputData == 2
         [ExternalForcesComputationResults] = ExternalForcesPrediction(filename, AnalysisParameters, BiomechanicalModel, ModelParameters);
     end
-    save([filename '/ExternalForcesComputationResults'],'ExternalForcesComputationResults');
+    SaveDataExternalForces(filename,ExternalForcesComputationResults);
 end
 
 end

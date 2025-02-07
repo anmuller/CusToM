@@ -52,7 +52,9 @@ for i=1:size(T,1)
         T_clean{i_clean,3}=T.Object_Name(i);           % Name of the object to add to the segment
         T_clean{i_clean,4}=added_c(i);                 % Coordinates of the object center of mass in the segment reference frame  
         T_clean{i_clean,5}=T.added_m(i);               % Mass of the object added
+
         T_clean{i_clean,6}=T.added_I(i);               % Inertia of the external object
+
     end
     c=0;
     if T.added_m(i) == 0                               %Even if the mass is equal to zero (3), the object will be written into T_clean.
@@ -65,15 +67,21 @@ T_clean = cell2table(T_clean);
 T_clean.Properties.VariableNames(1:3) = T.Properties.VariableNames(1:3);
 T_clean.Properties.VariableNames(5)   = T.Properties.VariableNames(7);
 T_clean.Properties.VariableNames(4)   = {'added_c'};     %Naming of the table
+
 T_clean.Properties.VariableNames(6)   = {'added_I'};
+
 
 % Are there empty cells ?
 [idx,idy] = find(cellfun('isempty',table2cell(T_clean)));
 if ~isempty([idx,idy])
+
+    w = ['The cell row n°', char(string(idx)), ' column n°', char(string(idy)), ' is empty.'];
+    warning(w)
+
     for i = 1:size(idx,1)
         w = ['The cell row n°', char(string(idx(i))), ' column n°', char(string(idy(i))), ' is empty.'];
         warning(w)
-    end
+  end
 end
 
 

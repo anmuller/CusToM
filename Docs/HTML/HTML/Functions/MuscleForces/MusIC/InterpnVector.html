@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of InterpnVector</title>
+  <meta name="keywords" content="InterpnVector">
+  <meta name="description" content="Linear interpolation of m-dimensions vector in n-dimensions database">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- ../menu.html MuscleForces --><!-- menu.html MusIC -->
+<h1>InterpnVector
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Linear interpolation of m-dimensions vector in n-dimensions database</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [Vq] = InterpnVector(X,V,Xq) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Linear interpolation of m-dimensions vector in n-dimensions database
+
+   INPUT
+   - X: available coordinates in the database:  X ={X1;X2;...;Xn}
+   - V: coordinates values: n-dimensions cells
+   - Xq: coordinates to interpolate: Xq=[Xq1;Xq2;...;Xqn]
+   OUTPUT
+   - Vq: interpolated values
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="cartprod.html" class="code" title="function X = cartprod(varargin)">cartprod</a>	CARTPROD Cartesian product of multiple sets.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="ForcesComputationMusIC.html" class="code" title="function [MuscleForcesComputationResults] = ForcesComputationMusIC(filename, BiomechanicalModel, AnalysisParameters)">ForcesComputationMusIC</a>	Computation of the muscle forces estimation step by using the MusIC method</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Vq] = InterpnVector(X,V,Xq)</a>
+0002 <span class="comment">% Linear interpolation of m-dimensions vector in n-dimensions database</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - X: available coordinates in the database:  X ={X1;X2;...;Xn}</span>
+0006 <span class="comment">%   - V: coordinates values: n-dimensions cells</span>
+0007 <span class="comment">%   - Xq: coordinates to interpolate: Xq=[Xq1;Xq2;...;Xqn]</span>
+0008 <span class="comment">%   OUTPUT</span>
+0009 <span class="comment">%   - Vq: interpolated values</span>
+0010 <span class="comment">%________________________________________________________</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Licence</span>
+0013 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0014 <span class="comment">%________________________________________________________</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0017 <span class="comment">% Georges Dumont</span>
+0018 <span class="comment">%________________________________________________________</span>
+0019 
+0020 <span class="comment">%% find the position in the table of data</span>
+0021 Xqn = numel(Xq);
+0022 Position = cell(Xqn,1);
+0023 Pourcent = cell(Xqn,1);
+0024 <span class="keyword">for</span> i=1:Xqn
+0025     DiffVec = X{i,1}-Xq(i,1);
+0026     pos_sup = max(find(DiffVec&gt;=0,1),2);
+0027     <span class="keyword">if</span> isempty(pos_sup)
+0028         pos_sup = numel(X{i,1});
+0029     <span class="keyword">end</span>
+0030     <span class="comment">% position</span>
+0031     Position{i,1} = [pos_sup-1 pos_sup];
+0032     <span class="comment">% percentage of placement with respect to their neighbors</span>
+0033     pourcent_inf = (Xq(i,1) - X{i,1}(pos_sup-1))/(DiffVec(pos_sup)-DiffVec(pos_sup-1));
+0034     Pourcent{i,1} = [1-pourcent_inf pourcent_inf];
+0035 <span class="keyword">end</span>
+0036 
+0037 <span class="comment">%% Linear interpolation computation</span>
+0038 
+0039 list_points = num2cell(<a href="cartprod.html" class="code" title="function X = cartprod(varargin)">cartprod</a>(Position{:})); <span class="comment">% points list</span>
+0040 list_pourcent = <a href="cartprod.html" class="code" title="function X = cartprod(varargin)">cartprod</a>(Pourcent{:});
+0041 
+0042 ZPoints = zeros(size(list_points,1),numel(V{1}));
+0043 <span class="keyword">for</span> i=1:size(ZPoints,1)
+0044     ZPoints(i,:) = V{list_points{i,:}}';
+0045 <span class="keyword">end</span>
+0046 Vq = ZPoints'*prod(list_pourcent,2);
+0047 
+0048 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

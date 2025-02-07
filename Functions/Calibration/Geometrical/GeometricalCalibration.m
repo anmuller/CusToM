@@ -53,7 +53,8 @@ end
 % v
 for i=1:size(AnalysisParameters.CalibIK.AxisDelete,1)
     [~,~,num_solid] = intersect(AnalysisParameters.CalibIK.AxisDelete{i,1},solid_names);
-    OsteoArticularModel(num_solid).v = setdiff(OsteoArticularModel(num_solid).v',AnalysisParameters.CalibIK.AxisDelete{i,2}','rows')';
+%     OsteoArticularModel(num_solid).v = setdiff(OsteoArticularModel(num_solid).v',AnalysisParameters.CalibIK.AxisDelete{i,2}','rows')';
+    OsteoArticularModel(num_solid).v=[];
 end
 for i=1:size(AnalysisParameters.CalibIK.AxisAdd,1)
     [~,~,num_solid] = intersect(AnalysisParameters.CalibIK.AxisAdd{i,1},solid_names);
@@ -84,8 +85,9 @@ nb_markers=size(list_markers,1);
 nb_solid=size(OsteoArticularModel,2);  % nb de solides (number of solids)
 
 %% Real markers position from C3D file
-filename = AnalysisParameters.CalibIK.filename(1:end-(numel(AnalysisParameters.General.Extension)-1));
+filename = AnalysisParameters.CalibIK.filename;
 [real_markers, nb_frame]=Get_real_markers_Calibration(filename,list_markers, AnalysisParameters);
+list_markers = [real_markers.name]';
 
 %% Selection/choice of frame sample
 nb_frame_calib = AnalysisParameters.CalibIK.Frames.NbFrames;
@@ -322,10 +324,10 @@ if size(GC.q_dep,1)>0
     for j=1:numel(Human_model_save)
         if isfield(Human_model_calib,'kinematic_dependancy') && ~isempty(Human_model_calib(j).kinematic_dependancy)
                  Human_model_calib(j).kinematic_dependancy.q=matlabFunction(vect_q_dep(j));
-                 if vect_k_dep(j)~=0
-                    Human_model_calib(j).kinematic_dependancy.numerical_estimates(:,2)=...
-                        calib_parameters.k_calib(vect_k_dep(j))*Human_model_calib(j).kinematic_dependancy.numerical_estimates(:,2);   
-                 end
+%                  if vect_k_dep(j)~=0
+%                     Human_model_calib(j).kinematic_dependancy.numerical_estimates(:,2)=...
+%                         calib_parameters.k_calib(vect_k_dep(j))*Human_model_calib(j).kinematic_dependancy.numerical_estimates(:,2);   
+%                  end
         end
     end
 end

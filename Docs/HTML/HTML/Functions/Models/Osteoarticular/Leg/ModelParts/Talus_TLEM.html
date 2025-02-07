@@ -1,0 +1,232 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Talus_TLEM</title>
+  <meta name="keywords" content="Talus_TLEM">
+  <meta name="description" content="Based on:">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../../menu.html Functions --><!-- ../../../menu.html Models --><!-- ../../menu.html Osteoarticular --><!-- ../menu.html Leg --><!-- menu.html ModelParts -->
+<h1>Talus_TLEM
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>Based on:</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function [Human_model]= Talus_TLEM(Human_model,k,Signe,Mass,AttachmentPoint) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">   Based on:
+    V. Carbone et al., �TLEM 2.0 - A comprehensive musculoskeletal geometry dataset for subject-specific modeling of lower extremity,� J. Biomech., vol. 48, no. 5, pp. 734�741, 2015.
+   INPUT
+   - OsteoArticularModel: osteo-articular model of an already existing
+   model (see the Documentation for the structure)
+   - k: homothety coefficient for the geometrical parameters (defined as
+   the subject size in cm divided by 180)
+   - Signe: side of the thigh model ('R' for right side or 'L' for left side)
+   - Mass: mass of the solids
+   - AttachmentPoint: name of the attachment point of the model on the
+   already existing model (character string)
+   OUTPUT
+   - OsteoArticularModel: new osteo-articular model (see the Documentation
+   for the structure) 
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="../../../../../Functions/AlgoMathsModel/Rodrigues_from_two_axes.html" class="code" title="function [R]=Rodrigues_from_two_axes(a1,a2)">Rodrigues_from_two_axes</a>	Computation of the Rodrigues equation</li><li><a href="../../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>	Addition of a sister to a solid</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="../../../../../Functions/Models/Osteoarticular/Leg/LegTLEM.html" class="code" title="function [OsteoArticularModel]= LegTLEM(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)">LegTLEM</a>	Addition of a leg model</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Human_model]= Talus_TLEM(Human_model,k,Signe,Mass,AttachmentPoint)</a>
+0002 <span class="comment">%   Based on:</span>
+0003 <span class="comment">%    V. Carbone et al., �TLEM 2.0 - A comprehensive musculoskeletal geometry dataset for subject-specific modeling of lower extremity,� J. Biomech., vol. 48, no. 5, pp. 734�741, 2015.</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - OsteoArticularModel: osteo-articular model of an already existing</span>
+0006 <span class="comment">%   model (see the Documentation for the structure)</span>
+0007 <span class="comment">%   - k: homothety coefficient for the geometrical parameters (defined as</span>
+0008 <span class="comment">%   the subject size in cm divided by 180)</span>
+0009 <span class="comment">%   - Signe: side of the thigh model ('R' for right side or 'L' for left side)</span>
+0010 <span class="comment">%   - Mass: mass of the solids</span>
+0011 <span class="comment">%   - AttachmentPoint: name of the attachment point of the model on the</span>
+0012 <span class="comment">%   already existing model (character string)</span>
+0013 <span class="comment">%   OUTPUT</span>
+0014 <span class="comment">%   - OsteoArticularModel: new osteo-articular model (see the Documentation</span>
+0015 <span class="comment">%   for the structure)</span>
+0016 <span class="comment">%________________________________________________________</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% Licence</span>
+0019 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0020 <span class="comment">%________________________________________________________</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0023 <span class="comment">% Georges Dumont</span>
+0024 <span class="comment">%________________________________________________________</span>
+0025 
+0026 
+0027 <span class="comment">%% Variables de sortie :</span>
+0028 <span class="comment">% &quot;enrichissement de la structure &quot;Human_model&quot;&quot;</span>
+0029 
+0030 <span class="comment">%% Liste des solides</span>
+0031 list_solid={<span class="string">'Talus'</span>};
+0032 
+0033 <span class="comment">%% Choix jambe droite ou gauche</span>
+0034 <span class="keyword">if</span> Signe == <span class="string">'R'</span>
+0035     Mirror=[1 0 0; 0 1 0; 0 0 1];
+0036 <span class="keyword">else</span>
+0037     <span class="keyword">if</span> Signe == <span class="string">'L'</span>
+0038         Mirror=[1 0 0; 0 1 0; 0 0 -1];
+0039     <span class="keyword">end</span>
+0040 <span class="keyword">end</span>
+0041 
+0042 <span class="comment">%% Incr�entation du num�o des groupes</span>
+0043 <span class="comment">% n_group=0;</span>
+0044 <span class="comment">% for i=1:numel(Human_model)</span>
+0045 <span class="comment">%     if size(Human_model(i).Group) ~= [0 0] %#ok&lt;BDSCA&gt;</span>
+0046 <span class="comment">%         n_group=max(n_group,Human_model(i).Group(1,1));</span>
+0047 <span class="comment">%     end</span>
+0048 <span class="comment">% end</span>
+0049 <span class="comment">% n_group=n_group+1;</span>
+0050 
+0051 <span class="comment">%% Incr�entation de la num�otation des solides</span>
+0052 
+0053 s=size(Human_model,2)+1;  <span class="comment">%#ok&lt;NASGU&gt; % num�o du premier solide</span>
+0054 <span class="keyword">for</span> i=1:size(list_solid,2)      <span class="comment">% num�otation de chaque solide : s_&quot;nom du solide&quot;</span>
+0055     <span class="keyword">if</span> i==1
+0056         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s;'</span>))
+0057     <span class="keyword">else</span>
+0058         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s_'</span>,list_solid{i-1},<span class="string">'+1;'</span>))
+0059     <span class="keyword">end</span>
+0060 <span class="keyword">end</span>
+0061 
+0062 <span class="comment">% trouver le num�o de la m�e �partir du nom du point d'attache : 'attachment_pt'</span>
+0063 <span class="keyword">if</span> numel(Human_model) == 0
+0064     s_mother=0;
+0065     pos_attachment_pt=[0 0 0]';
+0066 <span class="keyword">else</span>
+0067     test=0;
+0068     <span class="keyword">for</span> i=1:numel(Human_model)
+0069         <span class="keyword">for</span> j=1:size(Human_model(i).anat_position,1)
+0070             <span class="keyword">if</span> strcmp(AttachmentPoint,Human_model(i).anat_position{j,1})
+0071                 s_mother=i;
+0072                 pos_attachment_pt=Human_model(i).anat_position{j,2}+Human_model(s_mother).c;
+0073                 test=1;
+0074                 <span class="keyword">break</span>
+0075             <span class="keyword">end</span>
+0076         <span class="keyword">end</span>
+0077         <span class="keyword">if</span> i==numel(Human_model) &amp;&amp; test==0
+0078             error([AttachmentPoint <span class="string">' is no existent'</span>])
+0079         <span class="keyword">end</span>
+0080     <span class="keyword">end</span>
+0081     <span class="keyword">if</span> Human_model(s_mother).child == 0      <span class="comment">% si la m�e n'a pas d'enfant</span>
+0082         Human_model(s_mother).child = eval([<span class="string">'s_'</span> list_solid{1}]);    <span class="comment">% l'enfant de cette m�e est ce solide</span>
+0083     <span class="keyword">else</span>
+0084         [Human_model]=<a href="../../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>(Human_model,Human_model(s_mother).child,eval([<span class="string">'s_'</span> list_solid{1}]));   <span class="comment">% recherche de la derni�e soeur</span>
+0085     <span class="keyword">end</span>
+0086 <span class="keyword">end</span>
+0087 
+0088 <span class="comment">%%                      D�inition des noeuds (articulaires)</span>
+0089 <span class="comment">% TLEM 2.0 � A COMPREHENSIVE MUSCULOSKELETAL GEOMETRY DATASET FOR SUBJECT-SPECIFIC MODELING OF LOWER EXTREMITY</span>
+0090 <span class="comment">%</span>
+0091 <span class="comment">%  V. Carbonea*, R. Fluita*, P. Pellikaana, M.M. van der Krogta,b, D. Janssenc, M. Damsgaardd, L. Vignerone, T. Feilkasf, H.F.J.M. Koopmana, N. Verdonschota,c</span>
+0092 <span class="comment">%</span>
+0093 <span class="comment">%  aLaboratory of Biomechanical Engineering, MIRA Institute, University of Twente, Enschede, The Netherlands</span>
+0094 <span class="comment">%  bDepartment of Rehabilitation Medicine, Research Institute MOVE, VU University Medical Center, Amsterdam, The Netherlands</span>
+0095 <span class="comment">%  cOrthopaedic Research Laboratory, Radboud University Medical Centre, Nijmegen, The Netherlands</span>
+0096 <span class="comment">%  dAnyBody Technology A/S, Aalborg, Denmark</span>
+0097 <span class="comment">%  eMaterialise N.V., Leuven, Belgium</span>
+0098 <span class="comment">%  fBrainlab AG, Munich, Germany</span>
+0099 <span class="comment">% *The authors Carbone and Fluit contributed equally.</span>
+0100 <span class="comment">% Journal of Biomechanics, Available online 8 January 2015, http://dx.doi.org/10.1016/j.jbiomech.2014.12.034</span>
+0101 <span class="comment">%% Adjustement of k</span>
+0102 k=k*1.2063; <span class="comment">%to fit 50th percentile person of 1.80m height</span>
+0103 <span class="comment">% --------------------------- Talus----------------------------------------</span>
+0104 
+0105 <span class="comment">% Position du CoM par rapport au rep�e de r��ence</span>
+0106 CoM_Talus=k*Mirror*[0;    0    ;0];
+0107 
+0108 <span class="comment">% Position des noeuds</span>
+0109 Talus_SubtalarJointNode = (k*Mirror*[-0.0065    ;-0.0243;    0.0058])-CoM_Talus;
+0110 Talus_TalocruralJointNode = (k*Mirror*[-0.0013    ;-0.0113;    0.0014])-CoM_Talus;
+0111 
+0112 <span class="comment">%% D�inition des positions anatomiques</span>
+0113 
+0114 Talus_position_set= {<span class="keyword">...</span>
+0115     [Signe <span class="string">'Talus_SubtalarJointNode'</span>], Talus_SubtalarJointNode; <span class="keyword">...</span>
+0116      [Signe <span class="string">'Talus_TalocruralJointNode'</span>], Talus_TalocruralJointNode; <span class="keyword">...</span>
+0117     };
+0118 
+0119 <span class="comment">%%                     Mise �l'�helle des inerties</span>
+0120 I_princ_Talus = k*eye(3)*10e-4; <span class="comment">% directly from Carbone et al. 2015</span>
+0121 R_principal = [ 0.0155    -0.0246    -0.9996;<span class="keyword">...</span>
+0122                 0.0964    -0.9950     0.0260;<span class="keyword">...</span>
+0123                -0.9952    -0.0968    -0.0130];
+0124 I_Talus = R_principal\I_princ_Talus*R_principal;
+0125 I_Talus = round(I_Talus,6);
+0126 <span class="comment">%% Cr�tion de la structure &quot;Human_model&quot;</span>
+0127 
+0128 num_solid=0;
+0129 <span class="comment">%% Talus</span>
+0130 num_solid=num_solid+1;        <span class="comment">% solide num�o ...</span>
+0131 name=list_solid{num_solid}; <span class="comment">% nom du solide</span>
+0132 eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% num�o du solide dans le mod�e</span>
+0133 Human_model(incr_solid).name=[Signe name];
+0134 Human_model(incr_solid).sister=0;
+0135 Human_model(incr_solid).child=0;
+0136 Human_model(incr_solid).mother=s_mother;
+0137 Human_model(incr_solid).a=-[Mirror(3,3)*0.3628    Mirror(3,3)*0.1305    -0.9227]'; <span class="comment">% Carbone</span>
+0138 Human_model(incr_solid).joint=1;
+0139 Human_model(incr_solid).limit_inf=-pi/4;
+0140 Human_model(incr_solid).limit_sup=pi/2;
+0141 Human_model(incr_solid).ActiveJoint=1;
+0142 Human_model(incr_solid).Visual=1;
+0143 <span class="comment">% Human_model(incr_solid).Group=[n_group 3];</span>
+0144 <span class="comment">% Human_model(incr_solid).m=Mass;</span>
+0145 Human_model(incr_solid).m=k*0.045582; <span class="comment">% directly from Carbone et al. 2015</span>
+0146 Human_model(incr_solid).b=pos_attachment_pt;
+0147 Human_model(incr_solid).I=I_Talus;
+0148 Human_model(incr_solid).c=-Talus_TalocruralJointNode;
+0149 Human_model(incr_solid).anat_position=Talus_position_set;
+0150 Human_model(incr_solid).L={[Signe <span class="string">'Talus_TalocruralJointNode'</span>];[Signe <span class="string">'Talus_SubtalarJointNode'</span>]};
+0151 <span class="comment">%Calibration des axes de rotations</span>
+0152 a1=Human_model(incr_solid).a;
+0153 [~,Ind]=max(abs(a1));
+0154 a2=zeros(3,1);
+0155 a2(Ind)=1;
+0156 R=<a href="../../../../../Functions/AlgoMathsModel/Rodrigues_from_two_axes.html" class="code" title="function [R]=Rodrigues_from_two_axes(a1,a2)">Rodrigues_from_two_axes</a>(a2,a1); <span class="comment">% Recherche des axes orthogonaux �l'axes de rotation</span>
+0157 
+0158 Human_model(incr_solid).limit_alpha= [ 10 , -10;<span class="keyword">...</span><span class="comment"> limit sup premier axe, limit inf premier axe</span>
+0159                                       10, -10]; <span class="comment">%limit sup 2e axe, limit inf 2e axe</span>
+0160 Human_model(incr_solid).v= [ R(:,1) , R(:,2) ];
+0161 Human_model(incr_solid).calib_a=1;
+0162 Human_model(incr_solid).visual_file = [<span class="string">'TLEM/'</span> Signe <span class="string">'Talus.mat'</span>];
+0163 Human_model(incr_solid).comment=<span class="string">'Ankle Flexion(+)/Extension(-)'</span>;
+0164 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

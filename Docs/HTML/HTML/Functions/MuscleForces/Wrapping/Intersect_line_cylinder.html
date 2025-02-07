@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Intersect_line_cylinder</title>
+  <meta name="keywords" content="Intersect_line_cylinder">
+  <meta name="description" content="Verify if the line intersect the cylinder">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- ../menu.html MuscleForces --><!-- menu.html Wrapping -->
+<h1>Intersect_line_cylinder
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Verify if the line intersect the cylinder</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [bool]=Intersect_line_cylinder(P1,P2,R) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Verify if the line intersect the cylinder
+
+   INPUT
+   - P1: array 3x1 position of the first point
+   - P2: array 3x1 position of the second point
+   - R: radius of the cylinder
+   OUTPUT
+   - bool: logical 1 or 0
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Functions/AlgoMathsModel/distance_point_wrap.html" class="code" title="function [L,Typ,wrapside] = distance_point_wrap(Point1,Bone1,Point2,Bone2,Human_model,q,Wrap,wrapside,EnforcedWrap)">distance_point_wrap</a>	Computation of the distance between two points</li><li><a href="../../../Functions/Animation/AnimationFramebyFrame.html" class="code" title="function [animStruct]=AnimationFramebyFrame(ax,fig,filename,AnalysisParameters,ModelParameters,AnimateParameters,DataXSens,q,q6dof,PelvisPosition,PelvisOrientation,Markers_set,f_affich,Muscles,animStruct,real_markers,BiomechanicalModel,Human_model)">AnimationFramebyFrame</a>	Computation of animation structure for animation</li><li><a href="../../../Functions/Developments/WrappingScriptTests.html" class="code" title="">WrappingScriptTests</a>	Verification of the wrapping for sphere problems</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [bool]=Intersect_line_cylinder(P1,P2,R)</a>
+0002 <span class="comment">% Verify if the line intersect the cylinder</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - P1: array 3x1 position of the first point</span>
+0006 <span class="comment">%   - P2: array 3x1 position of the second point</span>
+0007 <span class="comment">%   - R: radius of the cylinder</span>
+0008 <span class="comment">%   OUTPUT</span>
+0009 <span class="comment">%   - bool: logical 1 or 0</span>
+0010 <span class="comment">%________________________________________________________</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Licence</span>
+0013 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0014 <span class="comment">%________________________________________________________</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0017 <span class="comment">% Georges Dumont</span>
+0018 <span class="comment">%________________________________________________________</span>
+0019 bool=0;
+0020 
+0021 <span class="comment">% %circle equation : x^2+y^2=R^2</span>
+0022 <span class="comment">% % equation of the line : y = a*x+b avec :</span>
+0023 <span class="comment">% a = (P2(2)-P1(2))/(P2(1)-P1(1));</span>
+0024 <span class="comment">% b = P1(2)-a*P1(1);</span>
+0025 <span class="comment">% % injecting in circle equation</span>
+0026 <span class="comment">% %x^2 + (a*x+b)^2=R^2</span>
+0027 <span class="comment">% %x^2 + a^2*x^2+ 2*a*b*x + b^2=R^2</span>
+0028 <span class="comment">% %  (a^2+1)*x^2+ 2*a*b*x + b^2-R^2 =0</span>
+0029 <span class="comment">% % compute determinant</span>
+0030 <span class="comment">% DD = (2*a*b)^2-4*(a^2+1)*(b^2-R^2);</span>
+0031 
+0032 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0033 <span class="comment">%circle equation : x^2+y^2=R^2</span>
+0034 <span class="comment">%parametric equation of the line:</span>
+0035 <span class="comment">%x = x0 +T*a_d</span>
+0036 <span class="comment">%y = y0 +T*b_d</span>
+0037 <span class="comment">%x = z0 +T*c_d</span>
+0038 <span class="comment">%N = S-P =PS</span>
+0039 <span class="comment">%P + T_Sol*N = [x;y;z]</span>
+0040 N = P2-P1;
+0041 <span class="comment">% injecting in circle equation x,y</span>
+0042 <span class="comment">%(x0 +T*a_d)^2 + (y0 +T*b_d)^2=R^2</span>
+0043 <span class="comment">%(a_d^2+b_d^2) * T^2 + 2*(x0*a_d+y0*b_d) * T + (y0^2 + x0^2) - R^2 = 0</span>
+0044 AlPha=N(1)^2+N(2)^2;
+0045 BeTa=2*(P1(1)*N(1)+P1(2)*N(2));
+0046 Gamma=(P1(1)^2+P1(2)^2-R^2);
+0047 DD = BeTa^2-4*AlPha*Gamma;
+0048 <span class="keyword">if</span> DD&gt;0
+0049     
+0050     <span class="comment">%solve the polynom</span>
+0051     p = [AlPha BeTa Gamma];
+0052     t_int = roots(p);
+0053     
+0054     <span class="comment">% get the points intersecting the circle</span>
+0055     pt_int(:,1)= P1(1:3) +N(1:3).*t_int(1);
+0056     pt_int(:,2)= P1(1:3) +N(1:3).*t_int(2);
+0057     
+0058     <span class="comment">% Find the closest to P1</span>
+0059     val(1)=norm(P1-pt_int(:,1));
+0060     val(2)=norm(P1-pt_int(:,2));
+0061     [~,ind]=min(val);
+0062     P1c = pt_int(:,ind);
+0063     
+0064     <span class="comment">% Find the closest to P2</span>
+0065     val(1)=norm(P2-pt_int(:,1));
+0066     val(2)=norm(P2-pt_int(:,2));
+0067     [~,ind]=min(val);
+0068     P2c = pt_int(:,ind);
+0069     <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0070     <span class="comment">% define more conditions on intersecting</span>
+0071     <span class="comment">% the line has to cross the circle between the two points</span>
+0072 <span class="comment">%     cdt1=(-0.5*h&lt;P2c(3) &amp;&amp; P2c(3)&lt;0.5*h);</span>
+0073 <span class="comment">%     cdt2=(-0.5*h&lt;P1c(3) &amp;&amp; P1c(3)&lt;0.5*h);</span>
+0074 <span class="comment">%     cdt3 = ~isequal( sign(P1(3)), sign(P2(3)) );</span>
+0075     
+0076     
+0077     bool1= ( (P1(1)&lt;P2c(1) &amp;&amp; P2c(1)&lt;P2(1))<span class="keyword">...</span>
+0078             || (P1(1)&gt;P2c(1) &amp;&amp; P2c(1)&gt;P2(1)) ) <span class="keyword">...</span>
+0079             ||<span class="keyword">...</span>
+0080         ( (P1(1)&lt;P1c(1) &amp;&amp; P1c(1)&lt;P2(1)) ||<span class="keyword">...</span>
+0081         (P1(1)&gt;P1c(1) &amp;&amp; P1c(1)&gt;P2(1)) ) || P1(1)==P2c(1);
+0082     
+0083     bool2= ( (P1(2)&lt;P2c(2) &amp;&amp; P2c(2)&lt;P2(2)) ||<span class="keyword">...</span>
+0084         (P1(2)&gt;P2c(2) &amp;&amp; P2c(2)&gt;P2(2)) )<span class="keyword">...</span>
+0085         ||<span class="keyword">...</span>
+0086         ( (P1(2)&lt;P1c(2) &amp;&amp; P1c(2)&lt;P2(2)) ||<span class="keyword">...</span>
+0087         (P1(2)&gt;P1c(2) &amp;&amp; P1c(2)&gt;P2(2)) ) || P1(2)==P2c(2);;
+0088     
+0089     bool3= ((P1(3)&lt;P2c(3) &amp;&amp; P2c(3)&lt;P2(3)) ||<span class="keyword">...</span>
+0090         (P1(3)&gt;P2c(3) &amp;&amp; P2c(3)&gt;P2(3)) )<span class="keyword">...</span>
+0091         ||<span class="keyword">...</span>
+0092         ((P1(3)&lt;P1c(3) &amp;&amp; P1c(3)&lt;P2(3)) ||<span class="keyword">...</span>
+0093         (P1(3)&gt;P1c(3) &amp;&amp; P1c(3)&gt;P2(3)) )|| P1(3)==P2c(3);;
+0094     
+0095     
+0096     <span class="keyword">if</span> (bool1 &amp;&amp; bool2 &amp;&amp; bool3)
+0097         
+0098         bool=1;
+0099     <span class="keyword">end</span>
+0100 
+0101 <span class="keyword">end</span>
+0102 
+0103 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

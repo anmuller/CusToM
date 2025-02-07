@@ -1,0 +1,177 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of user_string</title>
+  <meta name="keywords" content="user_string">
+  <meta name="description" content="USER_STRING  Get/set a user specific string">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- # ExternLibrary --><!-- menu.html export_fig -->
+<h1>user_string
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>USER_STRING  Get/set a user specific string</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function string = user_string(string_name, string) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">USER_STRING  Get/set a user specific string
+
+ Examples:
+   string  = user_string(string_name)
+   isSaved = user_string(string_name, new_string)
+
+ Function to get and set a string in a system or user specific file. This
+ enables, for example, system specific paths to binaries to be saved.
+
+ The specified string will be saved in a file named &lt;string_name&gt;.txt,
+ either in a subfolder named .ignore under this file's folder, or in the
+ user's prefdir folder (in case this file's folder is non-writable).
+
+ IN:
+   string_name - String containing the name of the string required, which
+                 sets the filename storing the string: &lt;string_name&gt;.txt
+   new_string  - The new string to be saved in the &lt;string_name&gt;.txt file
+
+ OUT:
+   string  - The currently saved string. Default: ''
+   isSaved - Boolean indicating whether the save was succesful</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="eps2pdf.html" class="code" title="function eps2pdf(source, dest, crop, append, gray, quality, gs_options)">eps2pdf</a>	EPS2PDF  Convert an eps file to pdf format using ghostscript</li><li><a href="ghostscript.html" class="code" title="function varargout = ghostscript(cmd)">ghostscript</a>	GHOSTSCRIPT  Calls a local GhostScript executable with the input command</li><li><a href="pdftops.html" class="code" title="function varargout = pdftops(cmd)">pdftops</a>	PDFTOPS  Calls a local pdftops executable with the input command</li><li><a href="print2array.html" class="code" title="function [A, bcol] = print2array(fig, res, renderer, gs_options)">print2array</a>	PRINT2ARRAY  Exports a figure to an image array</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function string = user_string(string_name, string)</a>
+0002 <span class="comment">%USER_STRING  Get/set a user specific string</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Examples:</span>
+0005 <span class="comment">%   string  = user_string(string_name)</span>
+0006 <span class="comment">%   isSaved = user_string(string_name, new_string)</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% Function to get and set a string in a system or user specific file. This</span>
+0009 <span class="comment">% enables, for example, system specific paths to binaries to be saved.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% The specified string will be saved in a file named &lt;string_name&gt;.txt,</span>
+0012 <span class="comment">% either in a subfolder named .ignore under this file's folder, or in the</span>
+0013 <span class="comment">% user's prefdir folder (in case this file's folder is non-writable).</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% IN:</span>
+0016 <span class="comment">%   string_name - String containing the name of the string required, which</span>
+0017 <span class="comment">%                 sets the filename storing the string: &lt;string_name&gt;.txt</span>
+0018 <span class="comment">%   new_string  - The new string to be saved in the &lt;string_name&gt;.txt file</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% OUT:</span>
+0021 <span class="comment">%   string  - The currently saved string. Default: ''</span>
+0022 <span class="comment">%   isSaved - Boolean indicating whether the save was succesful</span>
+0023 
+0024 <span class="comment">% Copyright (C) Oliver Woodford 2011-2014, Yair Altman 2015-</span>
+0025 
+0026 <span class="comment">% This method of saving paths avoids changing .m files which might be in a</span>
+0027 <span class="comment">% version control system. Instead it saves the user dependent paths in</span>
+0028 <span class="comment">% separate files with a .txt extension, which need not be checked in to</span>
+0029 <span class="comment">% the version control system. Thank you to Jonas Dorn for suggesting this</span>
+0030 <span class="comment">% approach.</span>
+0031 
+0032 <span class="comment">% 10/01/2013 - Access files in text, not binary mode, as latter can cause</span>
+0033 <span class="comment">%              errors. Thanks to Christian for pointing this out.</span>
+0034 <span class="comment">% 29/05/2015 - Save file in prefdir if current folder is non-writable (issue #74)</span>
+0035 <span class="comment">% 09/01/2018 - Fix issue #232: if the string looks like a file/folder path, ensure it actually exists</span>
+0036 
+0037     <span class="keyword">if</span> ~ischar(string_name)
+0038         error(<span class="string">'string_name must be a string.'</span>);
+0039     <span class="keyword">end</span>
+0040     <span class="comment">% Create the full filename</span>
+0041     fname = [string_name <span class="string">'.txt'</span>];
+0042     dname = fullfile(fileparts(mfilename(<span class="string">'fullpath'</span>)), <span class="string">'.ignore'</span>);
+0043     file_name = fullfile(dname, fname);
+0044     <span class="keyword">if</span> nargin &gt; 1
+0045         <span class="comment">% Set string</span>
+0046         <span class="keyword">if</span> ~ischar(string)
+0047             error(<span class="string">'new_string must be a string.'</span>);
+0048         <span class="keyword">end</span>
+0049         <span class="comment">% Make sure the save directory exists</span>
+0050         <span class="comment">%dname = fileparts(file_name);</span>
+0051         <span class="keyword">if</span> ~exist(dname, <span class="string">'dir'</span>)
+0052             <span class="comment">% Create the directory</span>
+0053             <span class="keyword">try</span>
+0054                 <span class="keyword">if</span> ~mkdir(dname)
+0055                     string = false;
+0056                     <span class="keyword">return</span>
+0057                 <span class="keyword">end</span>
+0058             <span class="keyword">catch</span>
+0059                 string = false;
+0060                 <span class="keyword">return</span>
+0061             <span class="keyword">end</span>
+0062             <span class="comment">% Make it hidden</span>
+0063             <span class="keyword">try</span>
+0064                 fileattrib(dname, <span class="string">'+h'</span>);
+0065             <span class="keyword">catch</span>
+0066             <span class="keyword">end</span>
+0067         <span class="keyword">end</span>
+0068         <span class="comment">% Write the file</span>
+0069         fid = fopen(file_name, <span class="string">'wt'</span>);
+0070         <span class="keyword">if</span> fid == -1
+0071             <span class="comment">% file cannot be created/updated - use prefdir if file does not already exist</span>
+0072             <span class="comment">% (if file exists but is simply not writable, don't create a duplicate in prefdir)</span>
+0073             <span class="keyword">if</span> ~exist(file_name,<span class="string">'file'</span>)
+0074                 file_name = fullfile(prefdir, fname);
+0075                 fid = fopen(file_name, <span class="string">'wt'</span>);
+0076             <span class="keyword">end</span>
+0077             <span class="keyword">if</span> fid == -1
+0078                 string = false;
+0079                 <span class="keyword">return</span>;
+0080             <span class="keyword">end</span>
+0081         <span class="keyword">end</span>
+0082         <span class="keyword">try</span>
+0083             fprintf(fid, <span class="string">'%s'</span>, string);
+0084         <span class="keyword">catch</span>
+0085             fclose(fid);
+0086             string = false;
+0087             <span class="keyword">return</span>
+0088         <span class="keyword">end</span>
+0089         fclose(fid);
+0090         string = true;
+0091     <span class="keyword">else</span>
+0092         <span class="comment">% Get string</span>
+0093         fid = fopen(file_name, <span class="string">'rt'</span>);
+0094         <span class="keyword">if</span> fid == -1
+0095             <span class="comment">% file cannot be read, try to read the file in prefdir</span>
+0096             file_name = fullfile(prefdir, fname);
+0097             fid = fopen(file_name, <span class="string">'rt'</span>);
+0098             <span class="keyword">if</span> fid == -1
+0099                 string = <span class="string">''</span>;
+0100                 <span class="keyword">return</span>
+0101             <span class="keyword">end</span>
+0102         <span class="keyword">end</span>
+0103         string = fgetl(fid);
+0104         fclose(fid);
+0105 
+0106         <span class="comment">% Fix issue #232: if the string looks like a file/folder path, ensure it actually exists</span>
+0107         <span class="keyword">if</span> ~isempty(string) &amp;&amp; any(string==<span class="string">'\'</span> | string==<span class="string">'/'</span>) &amp;&amp; ~exist(string) <span class="comment">%#ok&lt;EXIST&gt;</span>
+0108             string = <span class="string">''</span>;
+0109         <span class="keyword">end</span>
+0110     <span class="keyword">end</span>
+0111 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

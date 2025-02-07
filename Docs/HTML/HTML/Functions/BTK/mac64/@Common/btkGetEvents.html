@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of btkGetEvents</title>
+  <meta name="keywords" content="btkGetEvents">
+  <meta name="description" content="BTKGETEVENTS Extract events from a biomechanical acquisition">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html Functions --><!-- # BTK --><!-- ../menu.html mac64 --><!-- menu.html @Common -->
+<h1>btkGetEvents
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>BTKGETEVENTS Extract events from a biomechanical acquisition</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [events eventsInfo] = btkGetEvents(h) %#ok </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">BTKGETEVENTS Extract events from a biomechanical acquisition
+ 
+  EVENTS = BTKGETEVENTS(H) returns a structure of events.  Each 
+  fieldname in EVENTS corresponds to an event's label. The value of each 
+  field corresponds to the time(s) where this event occurred.  If the events
+  represent actions realized by more than one subject, each event starts 
+  by the name of the corresponding subject.  Time of each event are reordered. 
+  Events are also reordered based on their first time. 
+  Biomechanical acquisition handle H is represented as a double
+  and can be only used with the btk* functions.
+
+  Events' time are computed using the following formula:
+   t = (event_frame - first_frame) / sample_frequency
+  Hence, if an event is set at the first frame of the acquisition, the (relative)
+  time is then set to 0.0 second.
+
+  [EVENTS EVENTSINFO] = BTKGETEVENTS(H) returns events' informations  
+  in EVENTSINFO.  The structure EVENTSINFO has the followig fields:
+    - EVENTSINFO.SUBJECTS
+    - EVENTSINFO.UNITS
+  ANALYSISINFO.SUBJECTS contains the name of the subject related to each 
+  event.  EVENTSINFO.UNITS contains the unit of each event.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [events eventsInfo] = btkGetEvents(h) </a><span class="comment">%#ok</span>
+0002 <span class="comment">%BTKGETEVENTS Extract events from a biomechanical acquisition</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%  EVENTS = BTKGETEVENTS(H) returns a structure of events.  Each</span>
+0005 <span class="comment">%  fieldname in EVENTS corresponds to an event's label. The value of each</span>
+0006 <span class="comment">%  field corresponds to the time(s) where this event occurred.  If the events</span>
+0007 <span class="comment">%  represent actions realized by more than one subject, each event starts</span>
+0008 <span class="comment">%  by the name of the corresponding subject.  Time of each event are reordered.</span>
+0009 <span class="comment">%  Events are also reordered based on their first time.</span>
+0010 <span class="comment">%  Biomechanical acquisition handle H is represented as a double</span>
+0011 <span class="comment">%  and can be only used with the btk* functions.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%  Events' time are computed using the following formula:</span>
+0014 <span class="comment">%   t = (event_frame - first_frame) / sample_frequency</span>
+0015 <span class="comment">%  Hence, if an event is set at the first frame of the acquisition, the (relative)</span>
+0016 <span class="comment">%  time is then set to 0.0 second.</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%  [EVENTS EVENTSINFO] = BTKGETEVENTS(H) returns events' informations</span>
+0019 <span class="comment">%  in EVENTSINFO.  The structure EVENTSINFO has the followig fields:</span>
+0020 <span class="comment">%    - EVENTSINFO.SUBJECTS</span>
+0021 <span class="comment">%    - EVENTSINFO.UNITS</span>
+0022 <span class="comment">%  ANALYSISINFO.SUBJECTS contains the name of the subject related to each</span>
+0023 <span class="comment">%  event.  EVENTSINFO.UNITS contains the unit of each event.</span>
+0024 
+0025 <span class="comment">%  Author: A. Barré</span>
+0026 <span class="comment">%  Copyright 2009-2013 Biomechanical ToolKit (BTK).</span>
+0027 
+0028 <span class="comment">% The following comment, MATLAB compiler pragma, is necessary to avoid</span>
+0029 <span class="comment">% compiling this M-file instead of linking against the MEX-file.  Don't remove.</span>
+0030 <span class="comment">%# mex</span>
+0031 
+0032 error(generatemsgid(<span class="string">'NotSupported'</span>),<span class="string">'MEX file for BTKGETEVENTS not found'</span>);
+0033 
+0034 <span class="comment">% [EOF] btkGetEvents.m</span>
+0035 
+0036</pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,271 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Hand</title>
+  <meta name="keywords" content="Hand">
+  <meta name="description" content="Addition of a hand model">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../../menu.html Functions --><!-- ../../../menu.html Models --><!-- ../../menu.html Osteoarticular --><!-- ../menu.html Arm --><!-- menu.html ModelParts -->
+<h1>Hand
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>Addition of a hand model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function [OsteoArticularModel]= Hand(OsteoArticularModel,k,Signe,Mass,AttachmentPoint) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Addition of a hand model
+   This forearm model contains one solid (hand), exhibits 2 dof for the
+   wrist
+
+   INPUT
+   - OsteoArticularModel: osteo-articular model of an already existing
+   model (see the Documentation for the structure)
+   - k: homothety coefficient for the geometrical parameters (defined as
+   the subject size in cm divided by 180)
+   - Signe: side of the hand model ('R' for right side or 'L' for left side)
+   - Mass: mass of the solids
+   - AttachmentPoint: name of the attachment point of the model on the
+   already existing model (character string)
+   OUTPUT
+   - OsteoArticularModel: new osteo-articular model (see the Documentation
+   for the structure) 
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="../../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>	Computation of inertia matrix from radius of gyration</li><li><a href="../../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>	Addition of a sister to a solid</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="../../../../../Functions/Models/Osteoarticular/Arm/Arm.html" class="code" title="function [OsteoArticularModel]= Arm(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)">Arm</a>	Addition of an arm model</li><li><a href="../../../../../Functions/Models/Osteoarticular/Arm/ArmWithoutPronation.html" class="code" title="function [OsteoArticularModel]= ArmWithoutPronation(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)">ArmWithoutPronation</a>	Addition of an arm model</li><li><a href="../../../../../Functions/Models/Osteoarticular/Arm/Arm_model_Pennestri.html" class="code" title="function [Human_model] = Arm_model_Pennestri(Human_model,k,Signe,Mass,varargin)">Arm_model_Pennestri</a>	Addition of an arm model</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [OsteoArticularModel]= Hand(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)</a>
+0002 <span class="comment">% Addition of a hand model</span>
+0003 <span class="comment">%   This forearm model contains one solid (hand), exhibits 2 dof for the</span>
+0004 <span class="comment">%   wrist</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%   INPUT</span>
+0007 <span class="comment">%   - OsteoArticularModel: osteo-articular model of an already existing</span>
+0008 <span class="comment">%   model (see the Documentation for the structure)</span>
+0009 <span class="comment">%   - k: homothety coefficient for the geometrical parameters (defined as</span>
+0010 <span class="comment">%   the subject size in cm divided by 180)</span>
+0011 <span class="comment">%   - Signe: side of the hand model ('R' for right side or 'L' for left side)</span>
+0012 <span class="comment">%   - Mass: mass of the solids</span>
+0013 <span class="comment">%   - AttachmentPoint: name of the attachment point of the model on the</span>
+0014 <span class="comment">%   already existing model (character string)</span>
+0015 <span class="comment">%   OUTPUT</span>
+0016 <span class="comment">%   - OsteoArticularModel: new osteo-articular model (see the Documentation</span>
+0017 <span class="comment">%   for the structure)</span>
+0018 <span class="comment">%________________________________________________________</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% Licence</span>
+0021 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0022 <span class="comment">%________________________________________________________</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0025 <span class="comment">% Georges Dumont</span>
+0026 <span class="comment">%________________________________________________________</span>
+0027 list_solid={<span class="string">'Wrist_J1'</span> <span class="string">'Hand'</span>};
+0028 
+0029 <span class="comment">%% Choose right or left arm</span>
+0030 <span class="keyword">if</span> Signe == <span class="string">'R'</span>
+0031 Mirror=[1 0 0; 0 1 0; 0 0 1];
+0032 <span class="keyword">else</span>
+0033     <span class="keyword">if</span> Signe == <span class="string">'L'</span>
+0034     Mirror=[1 0 0; 0 1 0; 0 0 -1];
+0035     <span class="keyword">end</span>
+0036 <span class="keyword">end</span>
+0037 
+0038 <span class="comment">%% solid numbering incremation</span>
+0039 
+0040 s=size(OsteoArticularModel,2)+1;  <span class="comment">%#ok&lt;NASGU&gt; % number of the first solid</span>
+0041 <span class="keyword">for</span> i=1:size(list_solid,2)     <span class="comment">% each solid numbering: s_&quot;nom du solide&quot;</span>
+0042     <span class="keyword">if</span> i==1
+0043         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s;'</span>))
+0044     <span class="keyword">else</span>
+0045         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s_'</span>,list_solid{i-1},<span class="string">'+1;'</span>))
+0046     <span class="keyword">end</span>
+0047 <span class="keyword">end</span>
+0048 
+0049 <span class="comment">% find the number of the mother from the attachment point: 'attachment_pt'</span>
+0050 <span class="keyword">if</span> ~numel(AttachmentPoint)
+0051     s_mother=0;
+0052     pos_attachment_pt=[0 0 0]';
+0053 <span class="keyword">else</span>
+0054     test=0;
+0055     <span class="keyword">for</span> i=1:numel(OsteoArticularModel)
+0056         <span class="keyword">for</span> j=1:size(OsteoArticularModel(i).anat_position,1)
+0057             <span class="keyword">if</span> strcmp(AttachmentPoint,OsteoArticularModel(i).anat_position{j,1})
+0058                s_mother=i;
+0059                pos_attachment_pt=OsteoArticularModel(i).anat_position{j,2}+OsteoArticularModel(s_mother).c;
+0060                test=1;
+0061                <span class="keyword">break</span>
+0062             <span class="keyword">end</span>
+0063         <span class="keyword">end</span>
+0064         <span class="keyword">if</span> i==numel(OsteoArticularModel) &amp;&amp; test==0
+0065             error([AttachmentPoint <span class="string">' is no existent'</span>])        
+0066         <span class="keyword">end</span>       
+0067     <span class="keyword">end</span>
+0068     <span class="keyword">if</span> OsteoArticularModel(s_mother).child == 0      <span class="comment">% if the mother don't have any child</span>
+0069         OsteoArticularModel(s_mother).child = eval([<span class="string">'s_'</span> list_solid{1}]);    <span class="comment">% the child of this mother is this solid</span>
+0070     <span class="keyword">else</span>
+0071         [OsteoArticularModel]=<a href="../../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval([<span class="string">'s_'</span> list_solid{1}]));   <span class="comment">% recherche de la derni�re soeur</span>
+0072     <span class="keyword">end</span>
+0073 <span class="keyword">end</span>
+0074 
+0075 <span class="comment">%%                     Node Definition</span>
+0076 
+0077 <span class="comment">% ------------------------- Hand ------------------------------------------</span>
+0078 
+0079 <span class="comment">% Node positions</span>
+0080 Hand_WristJointNode = (k*[0 0.0528 0])*Mirror;
+0081 Hand_EndNode = (k*[0 -0.1416 0])*Mirror;
+0082 
+0083 <span class="comment">% Adaptation of Pennestri node positions</span>
+0084 dr = -0.159;
+0085 cr = 0.071;
+0086 L_forearm = 0.2628;
+0087 k_Pennestri2custom = L_forearm/(cr-dr)*k*Mirror; <span class="comment">% Forearm length homotethy</span>
+0088 Pennestri2custom = k_Pennestri2custom*[0 0 1;-1 0 0;0 -1 0];
+0089 
+0090 <span class="comment">%%              Definition of anatomical landmarks</span>
+0091 
+0092 Hand_position_set= {<span class="keyword">...</span>
+0093     [Signe <span class="string">'Hand_WristJointNode'</span>], Hand_WristJointNode'; <span class="keyword">...</span>
+0094     [Signe <span class="string">'Hand_EndNode'</span>], Hand_EndNode'; <span class="keyword">...</span>
+0095     <span class="comment">% 1 marker on the hand</span>
+0096     [Signe <span class="string">'CAR1'</span>], k*Mirror*[-0.02 -0.045 0]'; <span class="keyword">...</span>
+0097 
+0098     <span class="comment">%</span>
+0099         <span class="comment">% 2 markers on the hand</span>
+0100     [Signe <span class="string">'CAR2'</span>], k*Mirror*[-0.02 -0.045 0.025]'; <span class="keyword">...</span>
+0101     [Signe <span class="string">'OHAND'</span>], k*Mirror*[-0.02 -0.025 -0.035]'; <span class="keyword">...</span>
+0102     <span class="comment">% 3 markers on the hand</span>
+0103     [Signe <span class="string">'CAR3'</span>], k*Mirror*[-0.02 0 0]'; <span class="keyword">...</span>
+0104     [Signe <span class="string">'IDX3'</span>], k*Mirror*[-0.02 -0.09 0.025]'; <span class="keyword">...</span>
+0105     [Signe <span class="string">'PNK3'</span>], k*Mirror*[-0.02 -0.095 -0.02]'; <span class="keyword">...</span>
+0106     
+0107     <span class="comment">% wrist exoskeleton</span>
+0108 <span class="comment">%     'EXO4', k*Mirror*[-0.03 -0.045 0.05]'; ...</span>
+0109 <span class="comment">%     'EXO6', k*Mirror*[-0.03 -0.045 -0.05]'; ...</span>
+0110 <span class="comment">%     'EXO5', k*Mirror*([-0.03 -0.045 -0.05]'+[-0.0539   -0.0635   -0.0043]'); ...</span>
+0111     
+0112     
+0113     
+0114 <span class="comment">%     % for VR setup</span>
+0115 <span class="comment">%     [Signe '500G1'], k*Mirror*[-0.02+0.124 -0.045+0.067 0+0.066]'; ...</span>
+0116 <span class="comment">%     [Signe '500G2'], k*Mirror*[-0.02-0.030 -0.045-0.100 0+0.056]'; ...</span>
+0117 <span class="comment">%     [Signe '500G3'], k*Mirror*[-0.02+0.051 -0.045-0.093 0+0.041]'; ...</span>
+0118 <span class="comment">%     [Signe '500G4'], k*Mirror*[-0.02+0.124 -0.045-0.100 0+0.066]'; ...</span>
+0119 <span class="comment">%     [Signe '1000G1'], k*Mirror*[-0.02+0.114 -0.045-0.021 0+0.071]'; ...</span>
+0120 <span class="comment">%     [Signe '1000G2'], k*Mirror*[-0.02-0.013 -0.045+0.045 0+0.077]'; ...</span>
+0121 <span class="comment">%     [Signe '1000G3'], k*Mirror*[-0.02-0.014 -0.045-0.090 0+0.074]'; ...</span>
+0122 <span class="comment">%     [Signe '1000G4'], k*Mirror*[-0.02+0.051 -0.045-0.095 0+0.039]'; ...</span>
+0123     <span class="comment">% Force Prediction</span>
+0124     [Signe <span class="string">'HandPrediction1'</span>], k*Mirror*[0.015 0 0]';<span class="keyword">...</span>
+0125     [Signe <span class="string">'HandPrediction2'</span>], k*Mirror*[0.015 0.02 -0.02]';<span class="keyword">...</span>
+0126     [Signe <span class="string">'HandPrediction3'</span>], k*Mirror*[0.015 0.02 0.02]';<span class="keyword">...</span>
+0127     [Signe <span class="string">'HandPrediction4'</span>], k*Mirror*[0.015 0.04 0]';<span class="keyword">...</span>
+0128     [Signe <span class="string">'HandPrediction5'</span>], k*Mirror*[0.015 -0.02 -0.03]';<span class="keyword">...</span>
+0129     [Signe <span class="string">'HandPrediction6'</span>], k*Mirror*[0.015 -0.03 0]';<span class="keyword">...</span>
+0130     [Signe <span class="string">'HandPrediction7'</span>], k*Mirror*[0.015 -0.025 0.03]';<span class="keyword">...</span>
+0131     [Signe <span class="string">'HandPrediction8'</span>], k*Mirror*[0.015 -0.06 -0.04]';<span class="keyword">...</span>
+0132     [Signe <span class="string">'HandPrediction9'</span>], k*Mirror*[0.015 -0.07 0]';<span class="keyword">...</span>
+0133     [Signe <span class="string">'HandPrediction10'</span>], k*Mirror*[0.015 -0.06 0.03]';<span class="keyword">...</span>
+0134     [Signe <span class="string">'HandPrediction11'</span>], k*Mirror*[0.015 -0.01 0.05]';<span class="keyword">...</span>
+0135     <span class="comment">% Muscles extracted from (Pennestri et al., 2007)</span>
+0136     [Signe <span class="string">'Hand_CubitalisAnterior_i'</span>],Pennestri2custom*[0.006 0.0027 0.007]'+Hand_WristJointNode';
+0137     [Signe <span class="string">'Hand_FlexorCarpiUlnaris_i'</span>],Pennestri2custom*[0.005 0.03 0.007]'+Hand_WristJointNode';
+0138     [Signe <span class="string">'Hand_ExtensorCarpiUlnaris_i'</span>],Pennestri2custom*[0.005 0.03 -0.007]'+Hand_WristJointNode';
+0139     [Signe <span class="string">'Hand_ExtensorDigitorum_i'</span>],Pennestri2custom*[0.038 0 -0.01]'+Hand_WristJointNode';
+0140     [Signe <span class="string">'Hand_FlexorDigitorumSuperior_i'</span>],Pennestri2custom*[0.005 -0.018 -0.006]'+Hand_WristJointNode';
+0141     [Signe <span class="string">'Hand_FlexorCapriRadialis_i'</span>],Pennestri2custom*[0.003 0.012 0.005]'+Hand_WristJointNode';
+0142     [Signe <span class="string">'Hand_AbductorDigitiV_i'</span>],Pennestri2custom*[0.01 -0.018 -0.007]'+Hand_WristJointNode';
+0143     };
+0144 
+0145 
+0146 <span class="comment">%%                     Scaling inertial parameters</span>
+0147 
+0148     <span class="comment">%% [&quot;Adjustments to McConville et al. and Young et al. body segment inertial parameters&quot;] R. Dumas</span>
+0149     <span class="comment">% ------------------------- Hand ------------------------------------------</span>
+0150     Length_Hand=norm(Hand_WristJointNode-Hand_EndNode);
+0151     [I_Hand]=<a href="../../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>([61 38 56 22 15 20*1i], Mass.Hand_Mass, [0 0 0], Length_Hand, Signe);  
+0152 
+0153                 <span class="comment">%% &quot;Human_model&quot; structure generation</span>
+0154 
+0155 num_solid=0;
+0156 <span class="comment">%% Hand</span>
+0157     <span class="comment">% Wrist_J1</span>
+0158     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0159     name=list_solid{num_solid}; <span class="comment">% name of the solid</span>
+0160     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0161     OsteoArticularModel(incr_solid).name=[Signe name];
+0162     OsteoArticularModel(incr_solid).sister=0;                
+0163     OsteoArticularModel(incr_solid).child=s_Hand;                   
+0164     OsteoArticularModel(incr_solid).mother=s_mother;           
+0165     OsteoArticularModel(incr_solid).a=[0 0 1]';
+0166     OsteoArticularModel(incr_solid).joint=1;
+0167     OsteoArticularModel(incr_solid).limit_inf=-pi/2;
+0168     OsteoArticularModel(incr_solid).limit_sup=pi/2;
+0169     OsteoArticularModel(incr_solid).m=0;                 
+0170     OsteoArticularModel(incr_solid).b=pos_attachment_pt;  
+0171     OsteoArticularModel(incr_solid).I=zeros(3,3);
+0172     OsteoArticularModel(incr_solid).c=[0 0 0]';
+0173     OsteoArticularModel(incr_solid).Visual=0;
+0174     
+0175     <span class="comment">% Hand</span>
+0176     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0177     name=list_solid{num_solid}; <span class="comment">% name of the solid</span>
+0178     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0179     OsteoArticularModel(incr_solid).name=[Signe name];
+0180     OsteoArticularModel(incr_solid).sister=0;    
+0181     OsteoArticularModel(incr_solid).child=0;
+0182     OsteoArticularModel(incr_solid).mother=s_Wrist_J1;
+0183     OsteoArticularModel(incr_solid).a=[1 0 0]';
+0184     OsteoArticularModel(incr_solid).joint=1;
+0185     <span class="keyword">if</span> Signe == <span class="string">'R'</span>
+0186         OsteoArticularModel(incr_solid).limit_inf=-pi/4;
+0187         OsteoArticularModel(incr_solid).limit_sup=pi/2;
+0188     <span class="keyword">else</span>
+0189         OsteoArticularModel(incr_solid).limit_inf=-pi/2;
+0190         OsteoArticularModel(incr_solid).limit_sup=pi/4;
+0191     <span class="keyword">end</span>
+0192     OsteoArticularModel(incr_solid).m=Mass.Hand_Mass;
+0193     OsteoArticularModel(incr_solid).b=[0 0 0]';
+0194     OsteoArticularModel(incr_solid).I=[I_Hand(1) I_Hand(4) I_Hand(5); I_Hand(4) I_Hand(2) I_Hand(6); I_Hand(5) I_Hand(6) I_Hand(3)];
+0195     OsteoArticularModel(incr_solid).c=-Hand_WristJointNode';
+0196     OsteoArticularModel(incr_solid).anat_position=Hand_position_set;
+0197     OsteoArticularModel(incr_solid).Visual=1;
+0198     OsteoArticularModel(incr_solid).visual_file = [<span class="string">'Holzbaur/hand_'</span> Signe <span class="string">'.mat'</span>];
+0199     OsteoArticularModel(incr_solid).L={[Signe <span class="string">'Hand_WristJointNode'</span>];[Signe <span class="string">'Hand_EndNode'</span>]};
+0200 
+0201 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

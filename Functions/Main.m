@@ -17,12 +17,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%                              Model generation (only one per subject)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Initialization of pseudo-random seed for optimization
+rng('default');
 
 load('ModelParameters.mat');
 load('AnalysisParameters.mat');
 
 if ~exist(fullfile(pwd,'BiomechanicalModel.mat'),'file')
-    CalibrateModelGeneration(ModelParameters,AnalysisParameters);
+%     CalibrateModelGeneration(ModelParameters,AnalysisParameters);
+    CalibrateModelGenerationNum(ModelParameters,AnalysisParameters);
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -54,7 +57,8 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if AnalysisParameters.Muscles.Active
-    MuscleForcesComputation(AnalysisParameters);
+%     MuscleForcesComputation(AnalysisParameters);
+    MuscleForcesComputationNum(AnalysisParameters);
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -62,3 +66,9 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % GenerateAnimate;
+
+% if ~exist(fullfile(pwd,'AnimateParameters.mat'),'file')
+%     load('AnimateParameters.mat');
+%     PlotAnimation(ModelParameters, AnimateParameters);
+% end
+

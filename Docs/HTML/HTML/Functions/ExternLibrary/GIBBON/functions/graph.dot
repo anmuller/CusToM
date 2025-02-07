@@ -1,0 +1,23 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  anim8 -> efw;
+  anim8 -> exportGifAnim8;
+  anim8 -> vcw;
+  cFigure -> efw;
+  cFigure -> structComplete;
+  cFigure -> vcw;
+  exportGifAnim8 -> exportGif;
+  exportGifAnim8 -> structComplete;
+  structComplete -> structComplete;
+
+  anim8 [URL="anim8.html"];
+  axisGeom [URL="axisGeom.html"];
+  cFigure [URL="cFigure.html"];
+  efw [URL="efw.html"];
+  exportGif [URL="exportGif.html"];
+  exportGifAnim8 [URL="exportGifAnim8.html"];
+  gpatch [URL="gpatch.html"];
+  quiver3Dpatch [URL="quiver3Dpatch.html"];
+  structComplete [URL="structComplete.html"];
+  vcw [URL="vcw.html"];
+}

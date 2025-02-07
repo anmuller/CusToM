@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Muscle_length</title>
+  <meta name="keywords" content="Muscle_length">
+  <meta name="description" content="Computation of the muscle/tendon length">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html MuscleForces -->
+<h1>Muscle_length
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Computation of the muscle/tendon length</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Lmt] = Muscle_length(Human_model,Muscles,q) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Computation of the muscle/tendon length
+   
+   INPUT
+   - Human_model: osteo-articular model (see the Documentation for the
+   structure) 
+   - Muscles: set of muscles (see the Documentation for the structure)
+   - q: vector of joint coordinates at a given instant
+   - m: number of the muscle in the set
+   OUTPUT
+   - length of the muscle/tendon
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Functions/AlgoMathsModel/distance_point.html" class="code" title="function [L,Typ] = distance_point(Point1,Bone1,Point2,Bone2,Human_model,q)">distance_point</a>	Computation of the distance between two points</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="MomentArmsComputation.html" class="code" title="function [Moment_Arms_sub,C,L] = MomentArmsComputation(BiomechanicalModel)">MomentArmsComputation</a>	Computation of the moment arms matrix</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Lmt] = Muscle_length(Human_model,Muscles,q)</a>
+0002 <span class="comment">% Computation of the muscle/tendon length</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the</span>
+0006 <span class="comment">%   structure)</span>
+0007 <span class="comment">%   - Muscles: set of muscles (see the Documentation for the structure)</span>
+0008 <span class="comment">%   - q: vector of joint coordinates at a given instant</span>
+0009 <span class="comment">%   - m: number of the muscle in the set</span>
+0010 <span class="comment">%   OUTPUT</span>
+0011 <span class="comment">%   - length of the muscle/tendon</span>
+0012 <span class="comment">%________________________________________________________</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Licence</span>
+0015 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0016 <span class="comment">%________________________________________________________</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0019 <span class="comment">% Georges Dumont</span>
+0020 <span class="comment">%________________________________________________________</span>
+0021 
+0022 Lmt = 0;
+0023 <span class="keyword">for</span> p=1:(numel(Muscles.path)-1)
+0024     <span class="comment">% distance between p and p+1 point</span>
+0025     M_Bone = Muscles.num_solid(p); <span class="comment">% number of the solid which contains this position</span>
+0026     M_pos = Muscles.num_markers(p); <span class="comment">% number of the anatomical landmark in this solid</span>
+0027     N_Bone = Muscles.num_solid(p+1);
+0028     N_pos = Muscles.num_markers(p+1);
+0029     Lmt = Lmt + <a href="../../Functions/AlgoMathsModel/distance_point.html" class="code" title="function [L,Typ] = distance_point(Point1,Bone1,Point2,Bone2,Human_model,q)">distance_point</a>(M_pos,M_Bone,N_pos,N_Bone,Human_model,q);
+0030 <span class="keyword">end</span>
+0031 
+0032 <span class="keyword">end</span>
+0033</pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

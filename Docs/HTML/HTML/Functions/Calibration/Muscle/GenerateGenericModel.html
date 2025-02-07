@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of GenerateGenericModel</title>
+  <meta name="keywords" content="GenerateGenericModel">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- ../menu.html Calibration --><!-- menu.html Muscle -->
+<h1>GenerateGenericModel
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function BiomechanicalModel=GenerateGenericModel(ModelParameters) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Functions/Kinematics/Add6dof.html" class="code" title="function [Human_model] = Add6dof(Human_model)">Add6dof</a>	Addition of a 6 dof joint</li><li><a href="../../../Functions/Models/ModelGeneration.html" class="code" title="function [OsteoArticularModel, Markers, Muscles, EnableModel] = ModelGeneration(ModelParameters)">ModelGeneration</a>	Generation of the anthropometric model</li><li><a href="../../../Functions/MuscleForces/Wrapping/WrappingLocations.html" class="code" title="function [BiomechanicalModel]=WrappingLocations(BiomechanicalModel)">WrappingLocations</a>	Location of where are wraps</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="MuscleCalibrationAnthropo.html" class="code" title="function [BiomechanicalModelscaled]=MuscleCalibrationAnthropo(ModelParameters,AnalysisParameters,BiomechanicalModel)">MuscleCalibrationAnthropo</a>	% Model of reference</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function BiomechanicalModel=GenerateGenericModel(ModelParameters)</a>
+0002 
+0003 ModelParameters.Size=1.80;
+0004 
+0005 <span class="comment">%% Generation of Generic musculoskeletal model with homothetic factor 1</span>
+0006 [BiomechanicalModel.OsteoArticularModel, BiomechanicalModel.Markers, BiomechanicalModel.Muscles] = <a href="../../../Functions/Models/ModelGeneration.html" class="code" title="function [OsteoArticularModel, Markers, Muscles, EnableModel] = ModelGeneration(ModelParameters)">ModelGeneration</a>(ModelParameters);
+0007 
+0008 <span class="comment">% %% Symbolic functions</span>
+0009 <span class="comment">% disp('Preliminary Computations ...')</span>
+0010 <span class="comment">% [BiomechanicalModel.OsteoArticularModel] = Add6dof(BiomechanicalModel.OsteoArticularModel);</span>
+0011 <span class="comment">% [BiomechanicalModel.OsteoArticularModel, BiomechanicalModel.Jacob,~,...</span>
+0012 <span class="comment">%     BiomechanicalModel.Generalized_Coordinates] = SymbolicFunctionGenerationIK(BiomechanicalModel.OsteoArticularModel,BiomechanicalModel.Markers);</span>
+0013 <span class="comment">% disp('... Preliminary Computations done')</span>
+0014 
+0015 <span class="comment">%% Adding 6 DOF joint (pelvis to world)</span>
+0016 [BiomechanicalModel.OsteoArticularModel] = <a href="../../../Functions/Kinematics/Add6dof.html" class="code" title="function [Human_model] = Add6dof(Human_model)">Add6dof</a>(BiomechanicalModel.OsteoArticularModel);
+0017 s_root=find([BiomechanicalModel.OsteoArticularModel.mother]==0);
+0018 <span class="keyword">if</span> ~isempty([BiomechanicalModel.Muscles])
+0019     <span class="keyword">if</span> ~isempty([BiomechanicalModel.Muscles.wrap]')
+0020         BiomechanicalModel = <a href="../../../Functions/MuscleForces/Wrapping/WrappingLocations.html" class="code" title="function [BiomechanicalModel]=WrappingLocations(BiomechanicalModel)">WrappingLocations</a>(BiomechanicalModel);
+0021     <span class="keyword">end</span>
+0022 <span class="keyword">end</span>
+0023 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

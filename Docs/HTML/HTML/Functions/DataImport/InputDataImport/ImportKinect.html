@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ImportKinect</title>
+  <meta name="keywords" content="ImportKinect">
+  <meta name="description" content="Extraction of experimental data from a Kinect">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- ../menu.html DataImport --><!-- menu.html InputDataImport -->
+<h1>ImportKinect
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Extraction of experimental data from a Kinect</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [real_markers, nb_frame, Firstframe, Lastframe,f]=ImportKinect(filename, list_markers, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Extraction of experimental data from a Kinect
+   
+   INPUT
+   - filename: name of the file to process (character string)
+   - list_markers: list of the marker names
+   OUTPUT
+   - real_markers: 3D position of experimental markers
+   - nb_frame: number of frames
+   - Firstframe: number of the first frame
+   - Lastframe: number of the last frame
+   - f: acquisition frequency
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>	Computation of the Rodrigues equation</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [real_markers, nb_frame, Firstframe, Lastframe,f]=ImportKinect(filename, list_markers, varargin)</a>
+0002 <span class="comment">% Extraction of experimental data from a Kinect</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - filename: name of the file to process (character string)</span>
+0006 <span class="comment">%   - list_markers: list of the marker names</span>
+0007 <span class="comment">%   OUTPUT</span>
+0008 <span class="comment">%   - real_markers: 3D position of experimental markers</span>
+0009 <span class="comment">%   - nb_frame: number of frames</span>
+0010 <span class="comment">%   - Firstframe: number of the first frame</span>
+0011 <span class="comment">%   - Lastframe: number of the last frame</span>
+0012 <span class="comment">%   - f: acquisition frequency</span>
+0013 <span class="comment">%________________________________________________________</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Licence</span>
+0016 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0017 <span class="comment">%________________________________________________________</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0020 <span class="comment">% Georges Dumont</span>
+0021 <span class="comment">%________________________________________________________</span>
+0022 
+0023 <span class="comment">%% Liste des articulations dans la hi�archie de la Kinect</span>
+0024 
+0025 list_joint={<span class="string">'HIP_CENTER'</span>,<span class="string">'SPINE'</span>,<span class="string">'SHOULDER_CENTER'</span>,<span class="string">'HEAD'</span>,<span class="keyword">...</span>
+0026     <span class="string">'SHOULDER_LEFT'</span>,<span class="string">'ELBOW_LEFT'</span>,<span class="string">'WRIST_LEFT'</span>,<span class="string">'HAND_LEFT'</span>,<span class="keyword">...</span>
+0027     <span class="string">'SHOULDER_RIGHT'</span>,<span class="string">'ELBOW_RIGHT'</span>,<span class="string">'WRIST_RIGHT'</span>,<span class="string">'HAND_RIGHT'</span>,<span class="keyword">...</span>
+0028     <span class="string">'HIP_LEFT'</span>,<span class="string">'KNEE_LEFT'</span>,<span class="string">'ANKLE_LEFT'</span>,<span class="string">'FOOT_LEFT'</span>,<span class="keyword">...</span>
+0029     <span class="string">'HIP_RIGHT'</span>,<span class="string">'KNEE_RIGHT'</span>,<span class="string">'ANKLE_RIGHT'</span>,<span class="string">'FOOT_RIGHT'</span>};
+0030 
+0031 <span class="comment">%% Extraction des donn�s du fichier txt</span>
+0032 filename = [filename <span class="string">'.txt'</span>];
+0033 delimiter = <span class="string">'\t'</span>;
+0034 formatSpec = <span class="string">'%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%[^\n\r]'</span>;
+0035 fileID = fopen(filename,<span class="string">'r'</span>);
+0036 dataArray = textscan(fileID, formatSpec, <span class="string">'Delimiter'</span>, delimiter,  <span class="string">'ReturnOnError'</span>, false);
+0037 fclose(fileID);
+0038 
+0039 Data = [dataArray{1:end-1}];
+0040 
+0041 <span class="comment">%% Cr�tion de la structure 'real_markers'</span>
+0042 
+0043 real_markers=struct;
+0044 <span class="keyword">for</span> j=1:size(list_markers,1)
+0045 i=1;
+0046     <span class="keyword">while</span> strcmp(list_joint(i),list_markers(j)) == 0  <span class="comment">% on cherche la position du ji�e marqueur de la liste dans le C3d (looking for position of j-iest marker of the list within C3D)</span>
+0047     i=i+1;
+0048     <span class="keyword">end</span>
+0049 <span class="comment">% lorsqu'on la trouv� on cr� une structure avec son nom et sa position (matrice nbframe x 3)</span>
+0050 real_markers(j).name=list_markers(j);
+0051 real_markers(j).position=Data(:,(3*(i-1)+3):(3*i+2))*<a href="../../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([1 0 0]',-pi/2); <span class="comment">% on remet l'axe z suivant la verticale (z is the vertical axis)</span>
+0052 <span class="keyword">end</span>
+0053 
+0054 nb_frame=numel(Data(:,1));
+0055 
+0056 <span class="comment">%% R�up�ation du temps (dealing with time)</span>
+0057 
+0058 Time=Data(:,2);
+0059 
+0060 <span class="keyword">for</span> i=1:numel(real_markers)
+0061     real_markers(i).time=(Time-Time(1));
+0062 <span class="keyword">end</span>
+0063 
+0064 f=1/(Time(2)-Time(1));
+0065 Firstframe=1;
+0066 Lastframe=nb_frame;
+0067 
+0068 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ForwardKinematicsR</title>
+  <meta name="keywords" content="ForwardKinematicsR">
+  <meta name="description" content="Computation of a forward kinematics step to obtained all matrix rotation">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html MuscleForces -->
+<h1>ForwardKinematicsR
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Computation of a forward kinematics step to obtained all matrix rotation</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Human_model]=ForwardKinematicsR(Human_model,j,q) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Computation of a forward kinematics step to obtained all matrix rotation
+   
+   INPUT
+   - Human_model: osteo-articular model (see the Documentation for the
+   structure) 
+   - j: current solid
+   - q: vector of joint coordinates
+   OUTPUT
+   - Human_model: osteo-articular model with additional computations
+   (see the Documentation for the structure) 
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>	Computation of the Rodrigues equation</li><li><a href="ForwardKinematicsR.html" class="code" title="function [Human_model]=ForwardKinematicsR(Human_model,j,q)">ForwardKinematicsR</a>	Computation of a forward kinematics step to obtained all matrix rotation</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="ForwardKinematicsR.html" class="code" title="function [Human_model]=ForwardKinematicsR(Human_model,j,q)">ForwardKinematicsR</a>	Computation of a forward kinematics step to obtained all matrix rotation</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Human_model]=ForwardKinematicsR(Human_model,j,q)</a>
+0002 <span class="comment">% Computation of a forward kinematics step to obtained all matrix rotation</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - Human_model: osteo-articular model (see the Documentation for the</span>
+0006 <span class="comment">%   structure)</span>
+0007 <span class="comment">%   - j: current solid</span>
+0008 <span class="comment">%   - q: vector of joint coordinates</span>
+0009 <span class="comment">%   OUTPUT</span>
+0010 <span class="comment">%   - Human_model: osteo-articular model with additional computations</span>
+0011 <span class="comment">%   (see the Documentation for the structure)</span>
+0012 <span class="comment">%________________________________________________________</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Licence</span>
+0015 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0016 <span class="comment">%________________________________________________________</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0019 <span class="comment">% Georges Dumont</span>
+0020 <span class="comment">%________________________________________________________</span>
+0021 <span class="keyword">if</span> j == 0 
+0022     <span class="keyword">return</span>;
+0023 <span class="keyword">end</span>
+0024 
+0025 <span class="keyword">if</span> Human_model(j).mother ~= 0
+0026     i=Human_model(j).mother; <span class="comment">% number of mother</span>
+0027     <span class="keyword">if</span> Human_model(j).joint == 1    <span class="comment">% pin joint</span>
+0028         Human_model(j).R = Human_model(i).R * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).a,q(j)) * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).u,Human_model(j).theta);
+0029     <span class="keyword">end</span>
+0030     <span class="keyword">if</span> Human_model(j).joint == 2    <span class="comment">% sliding joint</span>
+0031         Human_model(j).R = Human_model(i).R * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>(Human_model(j).u,Human_model(j).theta);
+0032     <span class="keyword">end</span>
+0033 <span class="keyword">end</span>
+0034 
+0035 Human_model=<a href="ForwardKinematicsR.html" class="code" title="function [Human_model]=ForwardKinematicsR(Human_model,j,q)">ForwardKinematicsR</a>(Human_model,Human_model(j).sister,q);
+0036 Human_model=<a href="ForwardKinematicsR.html" class="code" title="function [Human_model]=ForwardKinematicsR(Human_model,j,q)">ForwardKinematicsR</a>(Human_model,Human_model(j).child,q);
+0037 
+0038 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

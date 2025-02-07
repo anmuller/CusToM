@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of btkCropAcquisition</title>
+  <meta name="keywords" content="btkCropAcquisition">
+  <meta name="description" content="BTKCROPACQUISITION Crop the acquisition and adapt the events' frame/time.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- # BTK --><!-- menu.html mac64 -->
+<h1>btkCropAcquisition
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>BTKCROPACQUISITION Crop the acquisition and adapt the events' frame/time.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function btkCropAcquisition(h, startAt, numFrames) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">BTKCROPACQUISITION Crop the acquisition and adapt the events' frame/time.
+ 
+  BTKCROPACQUISITION(H, STARTAT) keeps all the frames from the frame STARTAT.
+  The function shifts also the events' frame/time by adding the difference 
+  between the new first frame and the old one. For this adaptation, the sample
+  frequency must be non-null.
+  The acquisition is represented by the handle H, obtained by the use of a 
+  btk* function.
+
+  BTKCROPACQUISITION(H, STARTAT, NUMFRAMES) keeps NUMFRAMES frames starting
+  from the frame STARTAT.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Functions/BTK/linux64/@Common/btkGetAnalogSampleNumberPerFrame.html" class="code" title="function ratio = btkGetAnalogSampleNumberPerFrame(h) %#ok">btkGetAnalogSampleNumberPerFrame</a>	BTKGETANALOGSAMPLENUMBERPERFRAME Return the number of analog samples per video frame.</li><li><a href="../../../Functions/BTK/linux64/@Common/btkGetAnalogsValues.html" class="code" title="function av = btkGetAnalogsValues(h) %#ok">btkGetAnalogsValues</a>	BTKGETANALOGSVALUES Extract analog channels' values and store them in a matrix</li><li><a href="../../../Functions/BTK/linux64/@Common/btkGetFirstFrame.html" class="code" title="function ff = btkGetFirstFrame(h) %#ok">btkGetFirstFrame</a>	BTKGETFIRSTFRAME Returns acquisition's first frame index.</li><li><a href="../../../Functions/BTK/linux64/@Common/btkGetPointsResiduals.html" class="code" title="function r = btkGetPointsResiduals(h) %#ok">btkGetPointsResiduals</a>	BTKGETPOINTSRESIDUALS Extract points' residuals and store them in a matrix</li><li><a href="../../../Functions/BTK/linux64/@Common/btkGetPointsValues.html" class="code" title="function v = btkGetPointsValues(h) %#ok">btkGetPointsValues</a>	BTKGETPOINTSVALUES Extract points' components and store them in a matrix</li><li><a href="../../../Functions/BTK/linux64/@Common/btkSetAnalogsValues.html" class="code" title="function btkSetAnalogsValues(h, v) %#ok">btkSetAnalogsValues</a>	BTKSETANALOGSVALUES Sets analog channels' values from a matrix</li><li><a href="../../../Functions/BTK/linux64/@Common/btkSetFirstFrame.html" class="code" title="function btkSetFirstFrame(h, ff, adaptEvents) %#ok">btkSetFirstFrame</a>	BTKSETFIRSTFRAME Set acquisition's first frame index (and optionally adapt events' frame/time).</li><li><a href="../../../Functions/BTK/linux64/@Common/btkSetFrameNumber.html" class="code" title="function btkSetFrameNumber(h, num) %#ok">btkSetFrameNumber</a>	BTKSETFRAMENUMBER Set points and analogs frames number.</li><li><a href="../../../Functions/BTK/linux64/@Common/btkSetPointsResiduals.html" class="code" title="function btkSetPointsResiduals(h. r) %#ok">btkSetPointsResiduals</a>	BTKSETPOINTSRESIDUALS Sets points' residuals from a matrix</li><li><a href="../../../Functions/BTK/linux64/@Common/btkSetPointsValues.html" class="code" title="function btkSetPointsValues(h. v) %#ok">btkSetPointsValues</a>	BTKSETPOINTSVALUES Sets points' components from a matrix</li><li><a href="../../../Functions/BTK/linux64/btkGetLastFrame.html" class="code" title="function lf = btkGetLastFrame(h) %#ok">btkGetLastFrame</a>	BTKGETLASTFRAME Returns acquisition's last frame index.</li><li><a href="../../../Functions/BTK/mac64/@Common/btkGetAnalogSampleNumberPerFrame.html" class="code" title="function ratio = btkGetAnalogSampleNumberPerFrame(h) %#ok">btkGetAnalogSampleNumberPerFrame</a>	BTKGETANALOGSAMPLENUMBERPERFRAME Return the number of analog samples per video frame.</li><li><a href="../../../Functions/BTK/mac64/@Common/btkGetAnalogsValues.html" class="code" title="function av = btkGetAnalogsValues(h) %#ok">btkGetAnalogsValues</a>	BTKGETANALOGSVALUES Extract analog channels' values and store them in a matrix</li><li><a href="../../../Functions/BTK/mac64/@Common/btkGetFirstFrame.html" class="code" title="function ff = btkGetFirstFrame(h) %#ok">btkGetFirstFrame</a>	BTKGETFIRSTFRAME Returns acquisition's first frame index.</li><li><a href="../../../Functions/BTK/mac64/@Common/btkGetPointsResiduals.html" class="code" title="function r = btkGetPointsResiduals(h) %#ok">btkGetPointsResiduals</a>	BTKGETPOINTSRESIDUALS Extract points' residuals and store them in a matrix</li><li><a href="../../../Functions/BTK/mac64/@Common/btkGetPointsValues.html" class="code" title="function v = btkGetPointsValues(h) %#ok">btkGetPointsValues</a>	BTKGETPOINTSVALUES Extract points' components and store them in a matrix</li><li><a href="../../../Functions/BTK/mac64/@Common/btkSetAnalogsValues.html" class="code" title="function btkSetAnalogsValues(h, v) %#ok">btkSetAnalogsValues</a>	BTKSETANALOGSVALUES Sets analog channels' values from a matrix</li><li><a href="../../../Functions/BTK/mac64/@Common/btkSetFirstFrame.html" class="code" title="function btkSetFirstFrame(h, ff, adaptEvents) %#ok">btkSetFirstFrame</a>	BTKSETFIRSTFRAME Set acquisition's first frame index (and optionally adapt events' frame/time).</li><li><a href="../../../Functions/BTK/mac64/@Common/btkSetFrameNumber.html" class="code" title="function btkSetFrameNumber(h, num) %#ok">btkSetFrameNumber</a>	BTKSETFRAMENUMBER Set points and analogs frames number.</li><li><a href="../../../Functions/BTK/mac64/@Common/btkSetPointsResiduals.html" class="code" title="function btkSetPointsResiduals(h. r) %#ok">btkSetPointsResiduals</a>	BTKSETPOINTSRESIDUALS Sets points' residuals from a matrix</li><li><a href="../../../Functions/BTK/mac64/@Common/btkSetPointsValues.html" class="code" title="function btkSetPointsValues(h. v) %#ok">btkSetPointsValues</a>	BTKSETPOINTSVALUES Sets points' components from a matrix</li><li><a href="btkGetLastFrame.html" class="code" title="function lf = btkGetLastFrame(h) %#ok">btkGetLastFrame</a>	BTKGETLASTFRAME Returns acquisition's last frame index.</li><li><a href="../../../Functions/BTK/win64/@Common/btkGetAnalogSampleNumberPerFrame.html" class="code" title="function ratio = btkGetAnalogSampleNumberPerFrame(h) %#ok">btkGetAnalogSampleNumberPerFrame</a>	BTKGETANALOGSAMPLENUMBERPERFRAME Return the number of analog samples per video frame.</li><li><a href="../../../Functions/BTK/win64/@Common/btkGetAnalogsValues.html" class="code" title="function av = btkGetAnalogsValues(h) %#ok">btkGetAnalogsValues</a>	BTKGETANALOGSVALUES Extract analog channels' values and store them in a matrix</li><li><a href="../../../Functions/BTK/win64/@Common/btkGetFirstFrame.html" class="code" title="function ff = btkGetFirstFrame(h) %#ok">btkGetFirstFrame</a>	BTKGETFIRSTFRAME Returns acquisition's first frame index.</li><li><a href="../../../Functions/BTK/win64/@Common/btkGetPointsResiduals.html" class="code" title="function r = btkGetPointsResiduals(h) %#ok">btkGetPointsResiduals</a>	BTKGETPOINTSRESIDUALS Extract points' residuals and store them in a matrix</li><li><a href="../../../Functions/BTK/win64/@Common/btkGetPointsValues.html" class="code" title="function v = btkGetPointsValues(h) %#ok">btkGetPointsValues</a>	BTKGETPOINTSVALUES Extract points' components and store them in a matrix</li><li><a href="../../../Functions/BTK/win64/@Common/btkSetAnalogsValues.html" class="code" title="function btkSetAnalogsValues(h, v) %#ok">btkSetAnalogsValues</a>	BTKSETANALOGSVALUES Sets analog channels' values from a matrix</li><li><a href="../../../Functions/BTK/win64/@Common/btkSetFirstFrame.html" class="code" title="function btkSetFirstFrame(h, ff, adaptEvents) %#ok">btkSetFirstFrame</a>	BTKSETFIRSTFRAME Set acquisition's first frame index (and optionally adapt events' frame/time).</li><li><a href="../../../Functions/BTK/win64/@Common/btkSetFrameNumber.html" class="code" title="function btkSetFrameNumber(h, num) %#ok">btkSetFrameNumber</a>	BTKSETFRAMENUMBER Set points and analogs frames number.</li><li><a href="../../../Functions/BTK/win64/@Common/btkSetPointsResiduals.html" class="code" title="function btkSetPointsResiduals(h. r) %#ok">btkSetPointsResiduals</a>	BTKSETPOINTSRESIDUALS Sets points' residuals from a matrix</li><li><a href="../../../Functions/BTK/win64/@Common/btkSetPointsValues.html" class="code" title="function btkSetPointsValues(h. v) %#ok">btkSetPointsValues</a>	BTKSETPOINTSVALUES Sets points' components from a matrix</li><li><a href="../../../Functions/BTK/win64/btkGetLastFrame.html" class="code" title="function lf = btkGetLastFrame(h) %#ok">btkGetLastFrame</a>	BTKGETLASTFRAME Returns acquisition's last frame index.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function btkCropAcquisition(h, startAt, numFrames)</a>
+0002 <span class="comment">%BTKCROPACQUISITION Crop the acquisition and adapt the events' frame/time.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%  BTKCROPACQUISITION(H, STARTAT) keeps all the frames from the frame STARTAT.</span>
+0005 <span class="comment">%  The function shifts also the events' frame/time by adding the difference</span>
+0006 <span class="comment">%  between the new first frame and the old one. For this adaptation, the sample</span>
+0007 <span class="comment">%  frequency must be non-null.</span>
+0008 <span class="comment">%  The acquisition is represented by the handle H, obtained by the use of a</span>
+0009 <span class="comment">%  btk* function.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%  BTKCROPACQUISITION(H, STARTAT, NUMFRAMES) keeps NUMFRAMES frames starting</span>
+0012 <span class="comment">%  from the frame STARTAT.</span>
+0013 
+0014 <span class="comment">%  Author: A. Barré</span>
+0015 <span class="comment">%  Copyright 2009-2013 Biomechanical ToolKit (BTK).</span>
+0016 
+0017 ff = <a href="../../../Functions/BTK/linux64/@Common/btkGetFirstFrame.html" class="code" title="function ff = btkGetFirstFrame(h) %#ok">btkGetFirstFrame</a>(h);
+0018 lf = <a href="btkGetLastFrame.html" class="code" title="function lf = btkGetLastFrame(h) %#ok">btkGetLastFrame</a>(h);
+0019 <span class="keyword">if</span> (nargin == 2)
+0020     numFrames = lf - ff + 1 - startAt + 1;
+0021 <span class="keyword">end</span>
+0022 <span class="keyword">if</span> ((startAt &lt; ff) || startAt &gt; lf)
+0023     error(<span class="string">'btk:CropAcquisiton'</span>,<span class="string">'Invalid index.'</span>);
+0024 <span class="keyword">elseif</span> (numFrames &gt; lf - startAt + 1)
+0025     error(<span class="string">'btk:CropAcquisiton'</span>,<span class="string">'Incorrect number of frames specified.'</span>)
+0026 <span class="keyword">elseif</span> (numFrames == 0) <span class="comment">% Clear all</span>
+0027     error(<span class="string">'btk:CropAcquisiton'</span>,<span class="string">'Due to the mechanism used in BTK, it is not possible to remove all the frames. Contact the developers if you really need it.'</span>)
+0028 <span class="keyword">end</span>
+0029 <span class="comment">% Data to keep</span>
+0030 <span class="comment">% - Point</span>
+0031 pidx = (startAt:startAt+numFrames-1)-ff+1;
+0032 pv = <a href="../../../Functions/BTK/linux64/@Common/btkGetPointsValues.html" class="code" title="function v = btkGetPointsValues(h) %#ok">btkGetPointsValues</a>(h);
+0033 pv = pv(pidx,:);
+0034 rv = <a href="../../../Functions/BTK/linux64/@Common/btkGetPointsResiduals.html" class="code" title="function r = btkGetPointsResiduals(h) %#ok">btkGetPointsResiduals</a>(h);
+0035 rv = rv(pidx,:);
+0036 <span class="comment">% - Analog</span>
+0037 snpf = <a href="../../../Functions/BTK/linux64/@Common/btkGetAnalogSampleNumberPerFrame.html" class="code" title="function ratio = btkGetAnalogSampleNumberPerFrame(h) %#ok">btkGetAnalogSampleNumberPerFrame</a>(h);
+0038 aidx = (((startAt-ff)*snpf):(startAt-ff+numFrames)*snpf-1)+1;
+0039 av = <a href="../../../Functions/BTK/linux64/@Common/btkGetAnalogsValues.html" class="code" title="function av = btkGetAnalogsValues(h) %#ok">btkGetAnalogsValues</a>(h);
+0040 av = av(aidx,:);
+0041 <span class="comment">% Resizing</span>
+0042 <a href="../../../Functions/BTK/linux64/@Common/btkSetFrameNumber.html" class="code" title="function btkSetFrameNumber(h, num) %#ok">btkSetFrameNumber</a>(h, numFrames);
+0043 <span class="comment">% Storing modifications</span>
+0044 <a href="../../../Functions/BTK/linux64/@Common/btkSetPointsValues.html" class="code" title="function btkSetPointsValues(h. v) %#ok">btkSetPointsValues</a>(h, pv);
+0045 <a href="../../../Functions/BTK/linux64/@Common/btkSetPointsResiduals.html" class="code" title="function btkSetPointsResiduals(h. r) %#ok">btkSetPointsResiduals</a>(h, rv);
+0046 <a href="../../../Functions/BTK/linux64/@Common/btkSetAnalogsValues.html" class="code" title="function btkSetAnalogsValues(h, v) %#ok">btkSetAnalogsValues</a>(h, av);
+0047 <span class="comment">% Set the first frame.</span>
+0048 <a href="../../../Functions/BTK/linux64/@Common/btkSetFirstFrame.html" class="code" title="function btkSetFirstFrame(h, ff, adaptEvents) %#ok">btkSetFirstFrame</a>(h, startAt, 1); <span class="comment">% 1: Modify also the events' frame/time</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -121,6 +121,7 @@ num_solid=0;
     OsteoArticularModel(incr_solid).b=pos_attachment_pt;  
     OsteoArticularModel(incr_solid).I=zeros(3,3);
     OsteoArticularModel(incr_solid).c=[0 0 0]';
+    OsteoArticularModel(incr_solid).comment = 'Neck Flexion(-)/Extension(+)';
 
     num_solid=num_solid+1;        % number of the solid ...
     name=list_solid{num_solid}; % nom du solide
@@ -138,6 +139,7 @@ num_solid=0;
     OsteoArticularModel(incr_solid).b=[0 0 0]';  
     OsteoArticularModel(incr_solid).I=zeros(3,3);
     OsteoArticularModel(incr_solid).c=[0 0 0]';
+    OsteoArticularModel(incr_solid).comment = 'Neck Axial Rotation Right(+)/Left(-)';
 
     num_solid=num_solid+1;        % number of the solid ...
     name=list_solid{num_solid}; % nom du solide
@@ -157,5 +159,7 @@ num_solid=0;
     OsteoArticularModel(incr_solid).c=-Skull_NeckNode';
     OsteoArticularModel(incr_solid).anat_position=Skull_position_set;
     OsteoArticularModel(incr_solid).L={'Skull_TopOfHead';'Thorax_T1C5'};
-
+    OsteoArticularModel(incr_solid).visual_file = ['Holzbaur/skull.mat'];
+    OsteoArticularModel(incr_solid).comment = 'Neck Lateral Bending Right(+)/Left(-)';
+    
 end

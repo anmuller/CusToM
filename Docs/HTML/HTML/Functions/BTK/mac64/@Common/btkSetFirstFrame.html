@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of btkSetFirstFrame</title>
+  <meta name="keywords" content="btkSetFirstFrame">
+  <meta name="description" content="BTKSETFIRSTFRAME Set acquisition's first frame index (and optionally adapt events' frame/time).">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html Functions --><!-- # BTK --><!-- ../menu.html mac64 --><!-- menu.html @Common -->
+<h1>btkSetFirstFrame
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>BTKSETFIRSTFRAME Set acquisition's first frame index (and optionally adapt events' frame/time).</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function btkSetFirstFrame(h, ff, adaptEvents) %#ok </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">BTKSETFIRSTFRAME Set acquisition's first frame index (and optionally adapt events' frame/time).
+ 
+  BTKSETFIRSTFRAME(H, FF) replace the first frame index by the content of 
+  FF for a given biomechanical acquistion represented by the handle H.  
+  This handle must be obtained by the use of a btk* function.
+
+  BTKSETFIRSTFRAME(H, FF, ADAPTEVENTS) adapt also event's frame/time if 
+  the option ADAPTEVENTS is set to a non-null value.  The event's frame 
+  is shifted by the difference between the new first frame and the old 
+  one.  The event's time is recomputed using the new frame and the current
+  point's frequency.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Functions/BTK/linux64/btkCropAcquisition.html" class="code" title="function btkCropAcquisition(h, startAt, numFrames)">btkCropAcquisition</a>	BTKCROPACQUISITION Crop the acquisition and adapt the events' frame/time.</li><li><a href="../../../../Functions/BTK/mac64/btkCropAcquisition.html" class="code" title="function btkCropAcquisition(h, startAt, numFrames)">btkCropAcquisition</a>	BTKCROPACQUISITION Crop the acquisition and adapt the events' frame/time.</li><li><a href="../../../../Functions/BTK/win64/btkCropAcquisition.html" class="code" title="function btkCropAcquisition(h, startAt, numFrames)">btkCropAcquisition</a>	BTKCROPACQUISITION Crop the acquisition and adapt the events' frame/time.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function btkSetFirstFrame(h, ff, adaptEvents) </a><span class="comment">%#ok</span>
+0002 <span class="comment">%BTKSETFIRSTFRAME Set acquisition's first frame index (and optionally adapt events' frame/time).</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%  BTKSETFIRSTFRAME(H, FF) replace the first frame index by the content of</span>
+0005 <span class="comment">%  FF for a given biomechanical acquistion represented by the handle H.</span>
+0006 <span class="comment">%  This handle must be obtained by the use of a btk* function.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%  BTKSETFIRSTFRAME(H, FF, ADAPTEVENTS) adapt also event's frame/time if</span>
+0009 <span class="comment">%  the option ADAPTEVENTS is set to a non-null value.  The event's frame</span>
+0010 <span class="comment">%  is shifted by the difference between the new first frame and the old</span>
+0011 <span class="comment">%  one.  The event's time is recomputed using the new frame and the current</span>
+0012 <span class="comment">%  point's frequency.</span>
+0013 
+0014 <span class="comment">%  Author: A. Barré</span>
+0015 <span class="comment">%  Copyright 2009-2013 Biomechanical ToolKit (BTK).</span>
+0016 
+0017 <span class="comment">% The following comment, MATLAB compiler pragma, is necessary to avoid</span>
+0018 <span class="comment">% compiling this M-file instead of linking against the MEX-file.  Don't remove.</span>
+0019 <span class="comment">%# mex</span>
+0020 
+0021 error(generatemsgid(<span class="string">'NotSupported'</span>),<span class="string">'MEX file for BTKSETFIRSTFRAME not found'</span>);
+0022 
+0023 <span class="comment">% [EOF] btkSetFirstFrame.m</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

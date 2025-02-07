@@ -1,0 +1,457 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Thigh_TLEM</title>
+  <meta name="keywords" content="Thigh_TLEM">
+  <meta name="description" content="Addition of a thigh model">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../../menu.html Functions --><!-- ../../../menu.html Models --><!-- ../../menu.html Osteoarticular --><!-- ../menu.html Leg --><!-- menu.html ModelParts -->
+<h1>Thigh_TLEM
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>Addition of a thigh model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function [Human_model]= Thigh_TLEM(Human_model,k,Signe,Mass,AttachmentPoint) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Addition of a thigh model
+   This thigh model contains one solid (thigh), exhibits 3 dof for the hip
+   Based on:
+    V. Carbone et al., �TLEM 2.0 - A comprehensive musculoskeletal geometry dataset for subject-specific modeling of lower extremity,� J. Biomech., vol. 48, no. 5, pp. 734�741, 2015.
+   INPUT
+   - Human_model: osteo-articular model of an already existing
+   model (see the Documentation for the structure)
+   - k: homothety coefficient for the geometrical parameters (defined as
+   the subject size in cm divided by 180)
+   - Signe: side of the thigh model ('R' for right side or 'L' for left side)
+   - Mass: mass of the solids
+   - AttachmentPoint: name of the attachment point of the model on the
+   already existing model (character string)
+   OUTPUT
+   - Human_model: new osteo-articular model (see the Documentation
+   for the structure) 
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="../../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>	Computation of inertia matrix from radius of gyration</li><li><a href="../../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>	Addition of a sister to a solid</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="../../../../../Functions/Models/Osteoarticular/Leg/LegTLEM.html" class="code" title="function [OsteoArticularModel]= LegTLEM(OsteoArticularModel,k,Signe,Mass,AttachmentPoint)">LegTLEM</a>	Addition of a leg model</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Human_model]= Thigh_TLEM(Human_model,k,Signe,Mass,AttachmentPoint)</a>
+0002 <span class="comment">% Addition of a thigh model</span>
+0003 <span class="comment">%   This thigh model contains one solid (thigh), exhibits 3 dof for the hip</span>
+0004 <span class="comment">%   Based on:</span>
+0005 <span class="comment">%    V. Carbone et al., �TLEM 2.0 - A comprehensive musculoskeletal geometry dataset for subject-specific modeling of lower extremity,� J. Biomech., vol. 48, no. 5, pp. 734�741, 2015.</span>
+0006 <span class="comment">%   INPUT</span>
+0007 <span class="comment">%   - Human_model: osteo-articular model of an already existing</span>
+0008 <span class="comment">%   model (see the Documentation for the structure)</span>
+0009 <span class="comment">%   - k: homothety coefficient for the geometrical parameters (defined as</span>
+0010 <span class="comment">%   the subject size in cm divided by 180)</span>
+0011 <span class="comment">%   - Signe: side of the thigh model ('R' for right side or 'L' for left side)</span>
+0012 <span class="comment">%   - Mass: mass of the solids</span>
+0013 <span class="comment">%   - AttachmentPoint: name of the attachment point of the model on the</span>
+0014 <span class="comment">%   already existing model (character string)</span>
+0015 <span class="comment">%   OUTPUT</span>
+0016 <span class="comment">%   - Human_model: new osteo-articular model (see the Documentation</span>
+0017 <span class="comment">%   for the structure)</span>
+0018 <span class="comment">%________________________________________________________</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% Licence</span>
+0021 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0022 <span class="comment">%________________________________________________________</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0025 <span class="comment">% Georges Dumont</span>
+0026 <span class="comment">%________________________________________________________</span>
+0027 
+0028 <span class="comment">%% Variables de sortie :</span>
+0029 <span class="comment">% &quot;enrichissement de la structure &quot;Human_model&quot;&quot;</span>
+0030 
+0031 <span class="comment">%% Liste des solides</span>
+0032 list_solid={<span class="string">'Hip_J1'</span> <span class="string">'Hip_J2'</span> <span class="string">'Thigh'</span>};
+0033 
+0034 <span class="comment">%% Choix jambe droite ou gauche</span>
+0035 <span class="keyword">if</span> Signe == <span class="string">'R'</span>
+0036     Mirror=[1 0 0; 0 1 0; 0 0 1];
+0037 <span class="keyword">else</span>
+0038     <span class="keyword">if</span> Signe == <span class="string">'L'</span>
+0039         Mirror=[1 0 0; 0 1 0; 0 0 -1];
+0040     <span class="keyword">end</span>
+0041 <span class="keyword">end</span>
+0042 
+0043 <span class="comment">%% Incr�entation de la num�otation des solides</span>
+0044 
+0045 s=size(Human_model,2)+1;  <span class="comment">%#ok&lt;NASGU&gt; % num�o du premier solide</span>
+0046 <span class="keyword">for</span> i=1:size(list_solid,2)      <span class="comment">% num�otation de chaque solide : s_&quot;nom du solide&quot;</span>
+0047     <span class="keyword">if</span> i==1
+0048         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s;'</span>))
+0049     <span class="keyword">else</span>
+0050         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s_'</span>,list_solid{i-1},<span class="string">'+1;'</span>))
+0051     <span class="keyword">end</span>
+0052 <span class="keyword">end</span>
+0053 
+0054 <span class="comment">% trouver le num�o de la m�e �partir du nom du point d'attache : 'attachment_pt'</span>
+0055 <span class="keyword">if</span> numel(Human_model) == 0
+0056     s_mother=0;
+0057     pos_attachment_pt=[0 0 0]';
+0058 <span class="keyword">else</span>
+0059     test=0;
+0060     <span class="keyword">for</span> i=1:numel(Human_model)
+0061         <span class="keyword">for</span> j=1:size(Human_model(i).anat_position,1)
+0062             <span class="keyword">if</span> strcmp(AttachmentPoint,Human_model(i).anat_position{j,1})
+0063                 s_mother=i;
+0064                 pos_attachment_pt=Human_model(i).anat_position{j,2}+Human_model(s_mother).c;
+0065                 test=1;
+0066                 <span class="keyword">break</span>
+0067             <span class="keyword">end</span>
+0068         <span class="keyword">end</span>
+0069         <span class="keyword">if</span> i==numel(Human_model) &amp;&amp; test==0
+0070             error([AttachmentPoint <span class="string">' is no existent'</span>])
+0071         <span class="keyword">end</span>
+0072     <span class="keyword">end</span>
+0073     <span class="keyword">if</span> Human_model(s_mother).child == 0      <span class="comment">% si la m�e n'a pas d'enfant</span>
+0074         Human_model(s_mother).child = eval([<span class="string">'s_'</span> list_solid{1}]);    <span class="comment">% l'enfant de cette m�e est ce solide</span>
+0075     <span class="keyword">else</span>
+0076         [Human_model]=<a href="../../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>(Human_model,Human_model(s_mother).child,eval([<span class="string">'s_'</span> list_solid{1}]));   <span class="comment">% recherche de la derni�e soeur</span>
+0077     <span class="keyword">end</span>
+0078 <span class="keyword">end</span>
+0079 
+0080 <span class="comment">%%                      D�inition des noeuds (articulaires)</span>
+0081 <span class="comment">%</span>
+0082 <span class="comment">% TLEM 2.0 � A COMPREHENSIVE MUSCULOSKELETAL GEOMETRY DATASET FOR SUBJECT-SPECIFIC MODELING OF LOWER EXTREMITY</span>
+0083 <span class="comment">%</span>
+0084 <span class="comment">%  V. Carbonea*, R. Fluita*, P. Pellikaana, M.M. van der Krogta,b, D. Janssenc, M. Damsgaardd, L. Vignerone, T. Feilkasf, H.F.J.M. Koopmana, N. Verdonschota,c</span>
+0085 <span class="comment">%</span>
+0086 <span class="comment">%  aLaboratory of Biomechanical Engineering, MIRA Institute, University of Twente, Enschede, The Netherlands</span>
+0087 <span class="comment">%  bDepartment of Rehabilitation Medicine, Research Institute MOVE, VU University Medical Center, Amsterdam, The Netherlands</span>
+0088 <span class="comment">%  cOrthopaedic Research Laboratory, Radboud University Medical Centre, Nijmegen, The Netherlands</span>
+0089 <span class="comment">%  dAnyBody Technology A/S, Aalborg, Denmark</span>
+0090 <span class="comment">%  eMaterialise N.V., Leuven, Belgium</span>
+0091 <span class="comment">%  fBrainlab AG, Munich, Germany</span>
+0092 <span class="comment">% *The authors Carbone and Fluit contributed equally.</span>
+0093 <span class="comment">% Journal of Biomechanics, Available online 8 January 2015, http://dx.doi.org/10.1016/j.jbiomech.2014.12.034</span>
+0094 <span class="comment">%% Adjustement of k</span>
+0095 k=k*1.2063; <span class="comment">%to fit 50th percentile person of 1.80m height</span>
+0096 <span class="comment">% ---------------------------- Thigh --------------------------------------</span>
+0097 
+0098 <span class="comment">%Centre de masse</span>
+0099 CoM_Thigh=(k*Mirror*[-0.0088    ;0.2217;    0.0208]); <span class="comment">% dans le rep�e femur</span>
+0100 
+0101 <span class="comment">% Position des noeuds (-CoM pour placer dans un rep�e centr�en son centre</span>
+0102 <span class="comment">% de masse)</span>
+0103 
+0104 MedialEpicondyle    = k*Mirror*[0 ; 0.00431040; -0.0408280]         -CoM_Thigh; <span class="comment">% Condyle femoral medial</span>
+0105 LateralEpicondyle   = k*Mirror*[0 ; -0.00431040 ; 0.0408280]        -CoM_Thigh; <span class="comment">% Condyle femoral lateral</span>
+0106 KNE                 = k*Mirror*[0 ; -0.00431040 ; 0.06]             -CoM_Thigh; <span class="comment">% Condyle femoral lateral</span>
+0107 LesserTrochanter    = k*Mirror*[-0.0199070 ; 0.30260 ; 0.0139990]   -CoM_Thigh;
+0108 GreaterTrochanter   = k*Mirror*[0.00316290 ; 0.329220 ; 0.0695830]  -CoM_Thigh;
+0109 
+0110 Thigh_HipJointNode = (k*Mirror*[0 ; 0.3591 ;    0])             -CoM_Thigh;
+0111 Thigh_KneeJointNode = (k*Mirror*[-0.0022    ;0.0067;    0])     -CoM_Thigh;
+0112 Thigh_PatellaFemurJointNode = (k*Mirror*[0.0055;    0.0057;    0]) -CoM_Thigh;
+0113 
+0114 <span class="comment">%% D�inition des positions anatomiques</span>
+0115 
+0116 Thigh_position_set = {<span class="keyword">...</span>
+0117     [Signe <span class="string">'KNE'</span>]                                       , KNE; <span class="keyword">...</span>
+0118     [Signe <span class="string">'LateralEpicondyle'</span>]                         , LateralEpicondyle;<span class="keyword">...</span>
+0119     [Signe <span class="string">'MedialEpicondyle'</span>]                          , MedialEpicondyle; <span class="keyword">...</span>
+0120     [Signe <span class="string">'LesserTrochanter'</span>]                          , LesserTrochanter; <span class="keyword">...</span>
+0121     [Signe <span class="string">'GreaterTrochanter'</span>]                         , GreaterTrochanter; <span class="keyword">...</span>
+0122     [Signe <span class="string">'Thigh_KneeJointNode'</span>]                       , Thigh_KneeJointNode; <span class="keyword">...</span>
+0123     [Signe <span class="string">'Thigh_HipJointNode'</span>]                        , Thigh_HipJointNode; <span class="keyword">...</span>
+0124     [Signe <span class="string">'Thigh_PatellaFemurJointNode'</span>]               , Thigh_PatellaFemurJointNode; <span class="keyword">...</span>
+0125     [<span class="string">'AdductorBrevisDistal1Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00172;0.22554;0.02503])     -CoM_Thigh);<span class="keyword">...</span>
+0126     [<span class="string">'AdductorBrevisDistal2Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00071;0.21485;0.02402])     -CoM_Thigh);<span class="keyword">...</span>
+0127     [<span class="string">'AdductorBrevisMid1Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00364;0.24702;0.02712])        -CoM_Thigh);<span class="keyword">...</span>
+0128     [<span class="string">'AdductorBrevisMid2Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00246;0.23627;0.02623])        -CoM_Thigh);<span class="keyword">...</span>
+0129     [<span class="string">'AdductorBrevisProximal1Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00679;0.26827;0.02838])   -CoM_Thigh);<span class="keyword">...</span>
+0130     [<span class="string">'AdductorBrevisProximal2Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.0051;0.25768;0.02783])    -CoM_Thigh);<span class="keyword">...</span>
+0131     [<span class="string">'AdductorLongus1Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.00986;0.22586;0.01398])            -CoM_Thigh);<span class="keyword">...</span>
+0132     [<span class="string">'AdductorLongus2Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.01069;0.20896;0.01208])            -CoM_Thigh);<span class="keyword">...</span>
+0133     [<span class="string">'AdductorLongus3Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.01148;0.19249;0.0103])             -CoM_Thigh);<span class="keyword">...</span>
+0134     [<span class="string">'AdductorLongus4Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.01219;0.17648;0.00845])            -CoM_Thigh);<span class="keyword">...</span>
+0135     [<span class="string">'AdductorLongus5Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.01288;0.1609;0.00672])             -CoM_Thigh);<span class="keyword">...</span>
+0136     [<span class="string">'AdductorLongus6Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.01351;0.14576;0.00506])            -CoM_Thigh);<span class="keyword">...</span>
+0137     [<span class="string">'AdductorMagnusDistal1Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01093;0.01454;-0.02939])    -CoM_Thigh);<span class="keyword">...</span>
+0138     [<span class="string">'AdductorMagnusDistal2Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01093;0.01454;-0.02939])    -CoM_Thigh);<span class="keyword">...</span>
+0139     [<span class="string">'AdductorMagnusDistal3Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01093;0.01454;-0.02939])    -CoM_Thigh);<span class="keyword">...</span>
+0140     [<span class="string">'AdductorMagnusMid1Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00577;0.24412;0.03348])        -CoM_Thigh);<span class="keyword">...</span>
+0141     [<span class="string">'AdductorMagnusMid2Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00293;0.22074;0.02864])        -CoM_Thigh);<span class="keyword">...</span>
+0142     [<span class="string">'AdductorMagnusMid3Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.0012;0.19532;0.02397])         -CoM_Thigh);<span class="keyword">...</span>
+0143     [<span class="string">'AdductorMagnusMid4Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.0006;0.16799;0.0198])          -CoM_Thigh);<span class="keyword">...</span>
+0144     [<span class="string">'AdductorMagnusMid5Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.0004;0.13867;0.01578])         -CoM_Thigh);<span class="keyword">...</span>
+0145     [<span class="string">'AdductorMagnusMid6Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.00135;0.10782;0.01234])         -CoM_Thigh);<span class="keyword">...</span>
+0146     [<span class="string">'AdductorMagnusProximal1Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01439;0.29772;0.04405])   -CoM_Thigh);<span class="keyword">...</span>
+0147     [<span class="string">'AdductorMagnusProximal2Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01179;0.28741;0.04097])   -CoM_Thigh);<span class="keyword">...</span>
+0148     [<span class="string">'AdductorMagnusProximal3Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01019;0.2771;0.03801])    -CoM_Thigh);<span class="keyword">...</span>
+0149     [<span class="string">'AdductorMagnusProximal4Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00811;0.26684;0.03512])   -CoM_Thigh);<span class="keyword">...</span>
+0150     [<span class="string">'BicepsFemorisCaputBreve1Origin1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00172;0.21961;0.02546])     -CoM_Thigh);<span class="keyword">...</span>
+0151     [<span class="string">'BicepsFemorisCaputBreve2Origin1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00067;0.16753;0.01767])     -CoM_Thigh);<span class="keyword">...</span>
+0152     [<span class="string">'BicepsFemorisCaputBreve3Origin1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.00122;0.10762;0.01337])      -CoM_Thigh);<span class="keyword">...</span>
+0153     [<span class="string">'GastrocnemiusLateralis1Origin1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00866;0.00994;0.03635])      -CoM_Thigh);<span class="keyword">...</span>
+0154     [<span class="string">'GastrocnemiusMedialis1Origin1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00851;0.0158;-0.02853])       -CoM_Thigh);<span class="keyword">...</span>
+0155     [<span class="string">'GastrocnemiusMedialis1Via2'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01276;0.01103;-0.0167])          -CoM_Thigh);<span class="keyword">...</span>
+0156     [<span class="string">'GemellusInferior1Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00752;0.34984;0.03214])         -CoM_Thigh);<span class="keyword">...</span>
+0157     [<span class="string">'GemellusSuperior1Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.00321;0.35505;0.03253])          -CoM_Thigh);<span class="keyword">...</span>
+0158     [<span class="string">'GluteusMaximusInferior1Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00843;0.25911;0.0379])    -CoM_Thigh);<span class="keyword">...</span>
+0159     [<span class="string">'GluteusMaximusInferior2Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00843;0.25911;0.0379])    -CoM_Thigh);<span class="keyword">...</span>
+0160     [<span class="string">'GluteusMaximusInferior3Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00403;0.23844;0.0359])    -CoM_Thigh);<span class="keyword">...</span>
+0161     [<span class="string">'GluteusMaximusInferior4Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00403;0.23844;0.0359])    -CoM_Thigh);<span class="keyword">...</span>
+0162     [<span class="string">'GluteusMaximusInferior5Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.00015;0.21838;0.03321])    -CoM_Thigh);<span class="keyword">...</span>
+0163     [<span class="string">'GluteusMaximusInferior6Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.00015;0.21838;0.03321])    -CoM_Thigh);<span class="keyword">...</span>
+0164     [<span class="string">'GluteusMaximusSuperior1Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.0117;0.28838;0.04548])    -CoM_Thigh);<span class="keyword">...</span>
+0165     [<span class="string">'GluteusMaximusSuperior2Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.0117;0.28838;0.04548])    -CoM_Thigh);<span class="keyword">...</span>
+0166     [<span class="string">'GluteusMaximusSuperior3Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01046;0.28094;0.04338])   -CoM_Thigh);<span class="keyword">...</span>
+0167     [<span class="string">'GluteusMaximusSuperior4Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01046;0.28094;0.04338])   -CoM_Thigh);<span class="keyword">...</span>
+0168     [<span class="string">'GluteusMaximusSuperior5Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00953;0.27348;0.04108])   -CoM_Thigh);<span class="keyword">...</span>
+0169     [<span class="string">'GluteusMaximusSuperior6Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00953;0.27348;0.04108])   -CoM_Thigh);<span class="keyword">...</span>
+0170     [<span class="string">'GluteusMediusAnterior1Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00379;0.34932;0.06574])    -CoM_Thigh);<span class="keyword">...</span>
+0171     [<span class="string">'GluteusMediusAnterior2Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.00213;0.34856;0.06489])     -CoM_Thigh);<span class="keyword">...</span>
+0172     [<span class="string">'GluteusMediusAnterior3Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.00048;0.3539;0.06414])      -CoM_Thigh);<span class="keyword">...</span>
+0173     [<span class="string">'GluteusMediusAnterior4Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.00879;0.35158;0.06124])     -CoM_Thigh);<span class="keyword">...</span>
+0174     [<span class="string">'GluteusMediusAnterior5Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.00838;0.35579;0.05972])     -CoM_Thigh);<span class="keyword">...</span>
+0175     [<span class="string">'GluteusMediusAnterior6Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.01537;0.35358;0.05599])     -CoM_Thigh);<span class="keyword">...</span>
+0176     [<span class="string">'GluteusMediusPosterior1Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01014;0.34942;0.06367])   -CoM_Thigh);<span class="keyword">...</span>
+0177     [<span class="string">'GluteusMediusPosterior2Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00718;0.35174;0.06344])   -CoM_Thigh);<span class="keyword">...</span>
+0178     [<span class="string">'GluteusMediusPosterior3Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01579;0.35539;0.05894])   -CoM_Thigh);<span class="keyword">...</span>
+0179     [<span class="string">'GluteusMediusPosterior4Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01142;0.35907;0.05855])   -CoM_Thigh);<span class="keyword">...</span>
+0180     [<span class="string">'GluteusMediusPosterior5Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01977;0.35915;0.05206])   -CoM_Thigh);<span class="keyword">...</span>
+0181     [<span class="string">'GluteusMediusPosterior6Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01664;0.36185;0.05178])   -CoM_Thigh);<span class="keyword">...</span>
+0182     [<span class="string">'GluteusMinimusAnterior1Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.01716;0.32615;0.0516])     -CoM_Thigh);<span class="keyword">...</span>
+0183     [<span class="string">'GluteusMinimusAnterior2Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.01716;0.32615;0.0516])     -CoM_Thigh);<span class="keyword">...</span>
+0184     [<span class="string">'GluteusMinimusMid1Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.01735;0.33517;0.05215])         -CoM_Thigh);<span class="keyword">...</span>
+0185     [<span class="string">'GluteusMinimusMid2Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.01735;0.33517;0.05215])         -CoM_Thigh);<span class="keyword">...</span>
+0186     [<span class="string">'GluteusMinimusPosterior1Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.01593;0.34569;0.0523])    -CoM_Thigh);<span class="keyword">...</span>
+0187     [<span class="string">'GluteusMinimusPosterior2Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.01593;0.34569;0.0523])    -CoM_Thigh);<span class="keyword">...</span>
+0188     [<span class="string">'IliacusLateralis1Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01139;0.30134;0.0169])          -CoM_Thigh);<span class="keyword">...</span>
+0189     [<span class="string">'IliacusLateralis2Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00963;0.29515;0.0222])          -CoM_Thigh);<span class="keyword">...</span>
+0190     [<span class="string">'IliacusMedialis1Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01139;0.30134;0.0169])           -CoM_Thigh);<span class="keyword">...</span>
+0191     [<span class="string">'IliacusMedialis2Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00963;0.29515;0.0222])           -CoM_Thigh);<span class="keyword">...</span>
+0192     [<span class="string">'IliacusMid1Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01139;0.30134;0.0169])                -CoM_Thigh);<span class="keyword">...</span>
+0193     [<span class="string">'IliacusMid2Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00963;0.29515;0.0222])                -CoM_Thigh);<span class="keyword">...</span>
+0194     [<span class="string">'ObturatorExternusInferior1Via1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.015;0.338;0.01])             -CoM_Thigh);<span class="keyword">...</span>
+0195     [<span class="string">'ObturatorExternusInferior1Insertion2'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01228;0.34359;0.03067])-CoM_Thigh);<span class="keyword">...</span>
+0196     [<span class="string">'ObturatorExternusInferior2Via1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.015;0.338;0.01])             -CoM_Thigh);<span class="keyword">...</span>
+0197     [<span class="string">'ObturatorExternusInferior2Insertion2'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01228;0.34359;0.03067])-CoM_Thigh);<span class="keyword">...</span>
+0198     [<span class="string">'ObturatorExternusSuperior1Via1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.015;0.338;0.01])             -CoM_Thigh);<span class="keyword">...</span>
+0199     [<span class="string">'ObturatorExternusSuperior1Insertion2'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01228;0.34359;0.03067])-CoM_Thigh);<span class="keyword">...</span>
+0200     [<span class="string">'ObturatorExternusSuperior2Via1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.015;0.338;0.01])             -CoM_Thigh);<span class="keyword">...</span>
+0201     [<span class="string">'ObturatorExternusSuperior2Insertion2'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01228;0.34359;0.03067])-CoM_Thigh);<span class="keyword">...</span>
+0202     [<span class="string">'ObturatorExternusSuperior3Via1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.015;0.338;0.01])             -CoM_Thigh);<span class="keyword">...</span>
+0203     [<span class="string">'ObturatorExternusSuperior3Insertion2'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01228;0.34359;0.03067])-CoM_Thigh);<span class="keyword">...</span>
+0204     [<span class="string">'ObturatorInternus1Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-1e-05;0.35651;0.04529])          -CoM_Thigh);<span class="keyword">...</span>
+0205     [<span class="string">'ObturatorInternus2Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-1e-05;0.35651;0.04529])          -CoM_Thigh);<span class="keyword">...</span>
+0206     [<span class="string">'ObturatorInternus3Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-1e-05;0.35651;0.04529])          -CoM_Thigh);<span class="keyword">...</span>
+0207     [<span class="string">'ObturatorInternus4Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-1e-05;0.35651;0.04529])          -CoM_Thigh);<span class="keyword">...</span>
+0208     [<span class="string">'ObturatorInternus5Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-1e-05;0.35651;0.04529])          -CoM_Thigh);<span class="keyword">...</span>
+0209     [<span class="string">'ObturatorInternus6Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-1e-05;0.35651;0.04529])          -CoM_Thigh);<span class="keyword">...</span>
+0210     [<span class="string">'Pectineus1Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01239;0.28657;0.03165])                -CoM_Thigh);<span class="keyword">...</span>
+0211     [<span class="string">'Pectineus2Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01002;0.27797;0.03517])                -CoM_Thigh);<span class="keyword">...</span>
+0212     [<span class="string">'Pectineus3Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00821;0.26952;0.03433])                -CoM_Thigh);<span class="keyword">...</span>
+0213     [<span class="string">'Pectineus4Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00708;0.26132;0.0334])                 -CoM_Thigh);<span class="keyword">...</span>
+0214     [<span class="string">'Piriformis1Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.00153;0.36326;0.05249])                -CoM_Thigh);<span class="keyword">...</span>
+0215     [<span class="string">'Plantaris1Origin1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00776;0.0122;0.03011])                    -CoM_Thigh);<span class="keyword">...</span>
+0216     [<span class="string">'Popliteus1Origin1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01623;-0.02194;0.02249])                  -CoM_Thigh);<span class="keyword">...</span>
+0217     [<span class="string">'Popliteus2Origin1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01477;-0.02348;0.02828])                  -CoM_Thigh);<span class="keyword">...</span>
+0218     [<span class="string">'Popliteus3Origin1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01219;-0.02455;0.03346])                  -CoM_Thigh);<span class="keyword">...</span>
+0219     [<span class="string">'PsoasMajor1Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01551;0.30733;0.01332])               -CoM_Thigh);<span class="keyword">...</span>
+0220     [<span class="string">'PsoasMajor2Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01551;0.30733;0.01332])               -CoM_Thigh);<span class="keyword">...</span>
+0221     [<span class="string">'PsoasMajor3Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01551;0.30733;0.01332])               -CoM_Thigh);<span class="keyword">...</span>
+0222     [<span class="string">'PsoasMajor4Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01551;0.30733;0.01332])               -CoM_Thigh);<span class="keyword">...</span>
+0223     [<span class="string">'PsoasMajor5Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01551;0.30733;0.01332])               -CoM_Thigh);<span class="keyword">...</span>
+0224     [<span class="string">'QuadratusFemoris1Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.02018;0.34341;0.04217])         -CoM_Thigh);<span class="keyword">...</span>
+0225     [<span class="string">'QuadratusFemoris2Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.02468;0.33712;0.04391])         -CoM_Thigh);<span class="keyword">...</span>
+0226     [<span class="string">'QuadratusFemoris3Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.02434;0.32528;0.0464])          -CoM_Thigh);<span class="keyword">...</span>
+0227     [<span class="string">'QuadratusFemoris4Insertion1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.01767;0.3109;0.0468])           -CoM_Thigh);<span class="keyword">...</span>
+0228     [<span class="string">'Sartorius1Via1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.042187;0.34;0.0017475])                       -CoM_Thigh);<span class="keyword">...</span>
+0229     [<span class="string">'Sartorius1Via2'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.034481;0.2375;-0.017538])                     -CoM_Thigh);<span class="keyword">...</span>
+0230     [<span class="string">'Sartorius1Via3'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.0085826;0.14503;-0.025708])                   -CoM_Thigh);<span class="keyword">...</span>
+0231     [<span class="string">'Sartorius1Via4'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.005957;0.078864;-0.032495])                  -CoM_Thigh);<span class="keyword">...</span>
+0232     [<span class="string">'Sartorius1Via5'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.025196;0.010221;-0.040041])                  -CoM_Thigh);<span class="keyword">...</span>
+0233     [<span class="string">'VastusIntermedius1Origin1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.01612;0.2768;0.03078])             -CoM_Thigh);<span class="keyword">...</span>
+0234     [<span class="string">'VastusIntermedius2Origin1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.00307;0.27226;0.04922])            -CoM_Thigh);<span class="keyword">...</span>
+0235     [<span class="string">'VastusIntermedius3Origin1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.01259;0.20295;0.01122])            -CoM_Thigh);<span class="keyword">...</span>
+0236     [<span class="string">'VastusIntermedius4Origin1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.00202;0.19948;0.02964])            -CoM_Thigh);<span class="keyword">...</span>
+0237     [<span class="string">'VastusIntermedius5Origin1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.029;0.1196;0.01242])               -CoM_Thigh);<span class="keyword">...</span>
+0238     [<span class="string">'VastusIntermedius6Origin1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.02021;0.11731;0.02719])            -CoM_Thigh);<span class="keyword">...</span>
+0239     [<span class="string">'VastusLateralisInferior1Origin1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00799;0.28089;0.04663])     -CoM_Thigh);<span class="keyword">...</span>
+0240     [<span class="string">'VastusLateralisInferior2Origin1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00211;0.23091;0.0352])      -CoM_Thigh);<span class="keyword">...</span>
+0241     [<span class="string">'VastusLateralisInferior3Origin1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.00249;0.18389;0.02637])      -CoM_Thigh);<span class="keyword">...</span>
+0242     [<span class="string">'VastusLateralisInferior4Origin1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.0043;0.13948;0.02228])       -CoM_Thigh);<span class="keyword">...</span>
+0243     [<span class="string">'VastusLateralisInferior5Origin1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.00403;0.09823;0.02102])      -CoM_Thigh);<span class="keyword">...</span>
+0244     [<span class="string">'VastusLateralisInferior6Origin1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.00391;0.06017;0.02207])      -CoM_Thigh);<span class="keyword">...</span>
+0245     [<span class="string">'VastusLateralisSuperior1Origin1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.01584;0.33503;0.04286])      -CoM_Thigh);<span class="keyword">...</span>
+0246     [<span class="string">'VastusLateralisSuperior2Origin1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00461;0.3114;0.05643])      -CoM_Thigh);<span class="keyword">...</span>
+0247     [<span class="string">'VastusMedialisInferior1Origin1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.00254;0.13959;0.01141])       -CoM_Thigh);<span class="keyword">...</span>
+0248     [<span class="string">'VastusMedialisInferior2Origin1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.00133;0.10576;0.0115])        -CoM_Thigh);<span class="keyword">...</span>
+0249     [<span class="string">'VastusMedialisMid1Origin1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.00086;0.20011;0.02082])            -CoM_Thigh);<span class="keyword">...</span>
+0250     [<span class="string">'VastusMedialisMid2Origin1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.00195;0.17032;0.0145])             -CoM_Thigh);<span class="keyword">...</span>
+0251     [<span class="string">'VastusMedialisSuperior1Origin1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([0.00951;0.31153;0.02639])       -CoM_Thigh);<span class="keyword">...</span>
+0252     [<span class="string">'VastusMedialisSuperior2Origin1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00162;0.30299;0.02059])      -CoM_Thigh);<span class="keyword">...</span>
+0253     [<span class="string">'VastusMedialisSuperior3Origin1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00459;0.28775;0.02312])      -CoM_Thigh);<span class="keyword">...</span>
+0254     [<span class="string">'VastusMedialisSuperior4Origin1'</span> Signe <span class="string">'Thigh'</span>],(k*Mirror*([-0.00349;0.26498;0.02467])      -CoM_Thigh);<span class="keyword">...</span>
+0255     [<span class="string">'Wrap'</span> Signe <span class="string">'Thigh'</span> <span class="string">'Illiopsoas'</span>]             ,k*Mirror*([-0.0149;    0.3890;-0.0350]) -   CoM_Thigh;<span class="keyword">...</span>
+0256     [<span class="string">'Wrap'</span> Signe <span class="string">'Thigh'</span> <span class="string">'QuadricepsFemoris'</span>]      ,k*Mirror*([0.0022;    -0.0067;    -0.0589]) -   CoM_Thigh;<span class="keyword">...</span>
+0257     [<span class="string">'Wrap'</span> Signe <span class="string">'Thigh'</span> <span class="string">'Gastrocnemius'</span>]          ,k*Mirror*([-0.0030;    -0.0068;    0.0586]) -   CoM_Thigh;<span class="keyword">...</span>
+0258     };
+0259 
+0260 
+0261 <span class="comment">%%                     Mise �l'�helle des inerties</span>
+0262     <span class="comment">%% [&quot;Adjustments to McConville et al. and Young et al. body segment inertial parameters&quot;] R. Dumas</span>
+0263     <span class="comment">% ---------------------------- Thigh --------------------------------------</span>
+0264     Length_Thigh=norm(Thigh_KneeJointNode-Thigh_HipJointNode);
+0265     [I_Thigh]=<a href="../../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>([29 15 30 7 2*1i 7*1i], Mass.Thigh_Mass, [0 0 0], Length_Thigh, Signe);
+0266 
+0267 
+0268 <span class="comment">%% Cr�tion de la structure &quot;Human_model&quot;</span>
+0269 
+0270 num_solid=0;
+0271 <span class="comment">%% Thigh</span>
+0272 <span class="comment">% Hip_J1</span>
+0273 num_solid=num_solid+1;        <span class="comment">% solide num�o ...</span>
+0274 name=list_solid{num_solid}; <span class="comment">% nom du solide</span>
+0275 eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% num�o du solide dans le mod�e</span>
+0276 Human_model(incr_solid).name=[Signe name];   <span class="comment">% nom du solide ('R' ou 'L' en suffixe)</span>
+0277 Human_model(incr_solid).sister=0;                 <span class="comment">% sister : d�init en entr� de la fonction</span>
+0278 Human_model(incr_solid).child=s_Hip_J2;                <span class="comment">% child : Shank</span>
+0279 Human_model(incr_solid).mother=s_mother;                 <span class="comment">% mother : d�init en fonction du pt d'attache</span>
+0280 Human_model(incr_solid).a=[0 0 1]';                    <span class="comment">% rotation /z</span>
+0281 Human_model(incr_solid).joint=1;                        <span class="comment">% liaison pivot</span>
+0282 Human_model(incr_solid).limit_inf=-pi/4;               <span class="comment">% but� articulaire inf�ieure</span>
+0283 Human_model(incr_solid).limit_sup=2*pi/3;                <span class="comment">% but� articulaire sup�ieure</span>
+0284 Human_model(incr_solid).ActiveJoint=1;
+0285 Human_model(incr_solid).Visual=0;
+0286 Human_model(incr_solid).m=0;                           <span class="comment">% masse de r��ence</span>
+0287 Human_model(incr_solid).b=pos_attachment_pt;              <span class="comment">% position du point d'attache par rapport au rep�e parent                     A MODIFIER</span>
+0288 Human_model(incr_solid).I=zeros(3,3);                  <span class="comment">% matrice d'inertie de r��ence</span>
+0289 Human_model(incr_solid).c=[0 0 0]';                    <span class="comment">% position du centre de masse dans le rep�e local</span>
+0290 Human_model(incr_solid).calib_k_constraint=[];
+0291 Human_model(incr_solid).u=[];                          <span class="comment">% rotation fixe selon l'axe u d'un angle theta (apr� la rotation q)</span>
+0292 Human_model(incr_solid).theta=[];
+0293 Human_model(incr_solid).KinematicsCut=[];              <span class="comment">% coupure cin�atique</span>
+0294 Human_model(incr_solid).ClosedLoop=[];                 <span class="comment">% si solide de fermeture de boucle : {num�o du solide i sur lequel est attach�ce solide ; point d'attache (rep�e du solide i)}</span>
+0295 Human_model(incr_solid).linear_constraint=[];
+0296 OsteoArticularModel(incr_solid).comment=<span class="string">'Hip Flexion(+)/Extension(-) - Z-Rotation'</span>;
+0297 
+0298 <span class="comment">% Hip_J2</span>
+0299 num_solid=num_solid+1;        <span class="comment">% solide num�o ...</span>
+0300 name=list_solid{num_solid}; <span class="comment">% nom du solide</span>
+0301 eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% num�o du solide dans le mod�e</span>
+0302 Human_model(incr_solid).name=[Signe name];
+0303 Human_model(incr_solid).sister=0;
+0304 Human_model(incr_solid).child=s_Thigh;
+0305 Human_model(incr_solid).mother=s_Hip_J1;
+0306 Human_model(incr_solid).a=[1 0 0]';
+0307 Human_model(incr_solid).joint=1;
+0308 Human_model(incr_solid).limit_inf=-pi/4;
+0309 Human_model(incr_solid).limit_sup=pi/4;
+0310 Human_model(incr_solid).ActiveJoint=1;
+0311 Human_model(incr_solid).Visual=0;
+0312 Human_model(incr_solid).m=0;
+0313 Human_model(incr_solid).b=[0 0 0]';
+0314 Human_model(incr_solid).I=zeros(3,3);
+0315 Human_model(incr_solid).c=[0 0 0]';
+0316 <span class="keyword">if</span> Signe==<span class="string">'R'</span>
+0317     Human_model(incr_solid).comment=<span class="string">'Hip Abduction(-)/Adduction(+) - X-Rotation'</span>;
+0318 <span class="keyword">else</span>
+0319     Human_model(incr_solid).comment=<span class="string">'Hip Abduction(+)/Adduction(-) - X-Rotation'</span>;
+0320 <span class="keyword">end</span>
+0321 
+0322 <span class="comment">% Thigh</span>
+0323 num_solid=num_solid+1;        <span class="comment">% solide num�o ...</span>
+0324 name=list_solid{num_solid}; <span class="comment">% nom du solide</span>
+0325 eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% num�o du solide dans le mod�e</span>
+0326 Human_model(incr_solid).name=[Signe name];
+0327 Human_model(incr_solid).sister=0;
+0328 Human_model(incr_solid).child=0;
+0329 Human_model(incr_solid).mother=s_Hip_J2;
+0330 Human_model(incr_solid).a=[0 1 0]';
+0331 Human_model(incr_solid).joint=1;
+0332 Human_model(incr_solid).limit_inf=-pi/2;
+0333 Human_model(incr_solid).limit_sup=pi/2;
+0334 Human_model(incr_solid).ActiveJoint=1;
+0335 Human_model(incr_solid).Visual=1;
+0336 Human_model(incr_solid).m=Mass.Thigh_Mass;
+0337 Human_model(incr_solid).b=[0 0 0]';
+0338 Human_model(incr_solid).I=[I_Thigh(1) I_Thigh(4) I_Thigh(5); I_Thigh(4) I_Thigh(2) I_Thigh(6); I_Thigh(5) I_Thigh(6) I_Thigh(3)];
+0339 Human_model(incr_solid).c=-Thigh_HipJointNode;
+0340 Human_model(incr_solid).anat_position=Thigh_position_set;
+0341 Human_model(incr_solid).L={[Signe <span class="string">'Thigh_HipJointNode'</span>];[Signe <span class="string">'Thigh_KneeJointNode'</span>];[Signe <span class="string">'Thigh_PatellaFemurJointNode'</span>]};
+0342 Human_model(incr_solid).visual_file = [<span class="string">'TLEM/'</span> Signe <span class="string">'Thigh.mat'</span>];
+0343 <span class="keyword">if</span> Signe==<span class="string">'R'</span>
+0344     Human_model(incr_solid).comment=<span class="string">'Hip Internal(+)/External(-) Rotation'</span>;
+0345 <span class="keyword">else</span>
+0346     Human_model(incr_solid).comment=<span class="string">'Hip Internal(-)/External(+) Rotation'</span>;
+0347 <span class="keyword">end</span>
+0348 
+0349 
+0350 <span class="comment">% Wrapping 1</span>
+0351 Human_model(incr_solid).wrap(1).name=[<span class="string">'Wrap'</span> Signe <span class="string">'Thigh'</span> <span class="string">'Illiopsoas'</span>];
+0352 Human_model(incr_solid).wrap(1).anat_position=[<span class="string">'Wrap'</span> Signe <span class="string">'Thigh'</span> <span class="string">'Illiopsoas'</span>];
+0353 Human_model(incr_solid).wrap(1).type=<span class="string">'C'</span>; <span class="comment">% C: Cylinder or S: Sphere</span>
+0354 Human_model(incr_solid).wrap(1).R=0.0275;
+0355 Human_model(incr_solid).wrap(1).orientation=[   -0.928070502539686  ,Mirror(end)*0.284251353681878,     Mirror(end)*0.2406;<span class="keyword">...</span>
+0356                                                         -0.372404541212556  ,Mirror(end)*-0.708383672766642,    -0.5996           ;<span class="keyword">...</span>
+0357                                                         0                   ,-0.646060167544528,                Mirror(end)*0.7633];
+0358 Human_model(incr_solid).wrap(1).location=k*[-0.0149;    0.3890;    Mirror(end)*-0.0350] -   CoM_Thigh;
+0359 Human_model(incr_solid).wrap(1).h=0.35;
+0360 Human_model(incr_solid).wrap(1).num_solid=incr_solid;
+0361 
+0362 <span class="comment">% Wrapping 2</span>
+0363 Human_model(incr_solid).wrap(2).name=[<span class="string">'Wrap'</span> Signe <span class="string">'Thigh'</span> <span class="string">'QuadricepsFemoris'</span>];
+0364 Human_model(incr_solid).wrap(2).anat_position=[<span class="string">'Wrap'</span> Signe <span class="string">'Thigh'</span> <span class="string">'QuadricepsFemoris'</span>];
+0365 Human_model(incr_solid).wrap(2).type=<span class="string">'C'</span>; <span class="comment">% C: Cylinder or S: Sphere</span>
+0366 Human_model(incr_solid).wrap(2).R=0.0250;
+0367 Human_model(incr_solid).wrap(2).orientation=[0.404154809628085, Mirror(end)*0.893248353115711,  Mirror(end)*0.1969;<span class="keyword">...</span>
+0368                                                     -0.914690597882413, Mirror(end)*0.394680582636195,  0.087;<span class="keyword">...</span>
+0369                                                      0              ,   -0.215254773108573,             Mirror(end)*0.9766];
+0370 Human_model(incr_solid).wrap(2).location=k*[0.0022;    -0.0067;    Mirror(end)*-0.0589] -   CoM_Thigh;
+0371 Human_model(incr_solid).wrap(2).h=0.35;
+0372 Human_model(incr_solid).wrap(2).num_solid=incr_solid;
+0373 
+0374 <span class="comment">% Wrapping 3</span>
+0375 Human_model(incr_solid).wrap(3).name=[<span class="string">'Wrap'</span> Signe <span class="string">'Thigh'</span> <span class="string">'Gastrocnemius'</span>];
+0376 Human_model(incr_solid).wrap(3).anat_position=[<span class="string">'Wrap'</span> Signe <span class="string">'Thigh'</span> <span class="string">'Gastrocnemius'</span>];
+0377 Human_model(incr_solid).wrap(3).type=<span class="string">'C'</span>; <span class="comment">% C: Cylinder or S: Sphere</span>
+0378 Human_model(incr_solid).wrap(3).R=0.0175;
+0379 Human_model(incr_solid).wrap(3).orientation=[-0.0648854012091891,   Mirror(end)*0.988882451668858,  Mirror(end)*-0.1338;<span class="keyword">...</span>
+0380                                                         0.997892722044771,  Mirror(end)*0.0642995316107553, -0.0087;<span class="keyword">...</span>
+0381                                                         0,                  -0.134078585225335, Mirror(end)*-0.991];
+0382 Human_model(incr_solid).wrap(3).location=k*[-0.0030;    -0.0068;    Mirror(end)*0.0586]    -   CoM_Thigh;
+0383 Human_model(incr_solid).wrap(3).h=0.35;
+0384 Human_model(incr_solid).wrap(3).num_solid=incr_solid;
+0385 
+0386 
+0387 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

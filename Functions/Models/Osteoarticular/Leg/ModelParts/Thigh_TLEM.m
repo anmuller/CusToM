@@ -4,7 +4,7 @@ function [Human_model]= Thigh_TLEM(Human_model,k,Signe,Mass,AttachmentPoint)
 %   Based on:
 %	V. Carbone et al., “TLEM 2.0 - A comprehensive musculoskeletal geometry dataset for subject-specific modeling of lower extremity,” J. Biomech., vol. 48, no. 5, pp. 734–741, 2015.
 %   INPUT
-%   - OsteoArticularModel: osteo-articular model of an already existing
+%   - Human_model: osteo-articular model of an already existing
 %   model (see the Documentation for the structure)
 %   - k: homothety coefficient for the geometrical parameters (defined as
 %   the subject size in cm divided by 180)
@@ -13,7 +13,7 @@ function [Human_model]= Thigh_TLEM(Human_model,k,Signe,Mass,AttachmentPoint)
 %   - AttachmentPoint: name of the attachment point of the model on the
 %   already existing model (character string)
 %   OUTPUT
-%   - OsteoArticularModel: new osteo-articular model (see the Documentation
+%   - Human_model: new osteo-articular model (see the Documentation
 %   for the structure) 
 %________________________________________________________
 %
@@ -101,11 +101,11 @@ CoM_Thigh=(k*Mirror*[-0.0088	;0.2217;	0.0208]); % dans le repère femur
 % Position des noeuds (-CoM pour placer dans un repère centré en son centre
 % de masse)
 
-MedialEpicondyle = k*Mirror*[0 ; 0.00431040; -0.0408280]        -CoM_Thigh; % Condyle femoral medial
-LateralEpicondyle = k*Mirror*[0 ; -0.00431040 ; 0.0408280]      -CoM_Thigh; % Condyle femoral lateral
-KNE = k*Mirror*[0 ; -0.00431040 ; 0.06]      -CoM_Thigh; % Condyle femoral lateral
-LesserTrochanter = k*Mirror*[-0.0199070 ; 0.30260 ; 0.0139990]  -CoM_Thigh;
-GreaterTrochanter = k*Mirror*[0.00316290 ; 0.329220 ; 0.0695830]-CoM_Thigh;
+MedialEpicondyle    = k*Mirror*[0 ; 0.00431040; -0.0408280]         -CoM_Thigh; % Condyle femoral medial
+LateralEpicondyle   = k*Mirror*[0 ; -0.00431040 ; 0.0408280]        -CoM_Thigh; % Condyle femoral lateral
+KNE                 = k*Mirror*[0 ; -0.00431040 ; 0.06]             -CoM_Thigh; % Condyle femoral lateral
+LesserTrochanter    = k*Mirror*[-0.0199070 ; 0.30260 ; 0.0139990]   -CoM_Thigh;
+GreaterTrochanter   = k*Mirror*[0.00316290 ; 0.329220 ; 0.0695830]  -CoM_Thigh;
 
 Thigh_HipJointNode = (k*Mirror*[0 ; 0.3591 ;	0])             -CoM_Thigh;
 Thigh_KneeJointNode = (k*Mirror*[-0.0022	;0.0067;	0])     -CoM_Thigh;
@@ -252,6 +252,9 @@ Thigh_position_set = {...
     ['VastusMedialisSuperior2Origin1' Signe 'Thigh'],(k*Mirror*([-0.00162;0.30299;0.02059])      -CoM_Thigh);...
     ['VastusMedialisSuperior3Origin1' Signe 'Thigh'],(k*Mirror*([-0.00459;0.28775;0.02312])      -CoM_Thigh);...
     ['VastusMedialisSuperior4Origin1' Signe 'Thigh'],(k*Mirror*([-0.00349;0.26498;0.02467])      -CoM_Thigh);...
+    ['Wrap' Signe 'Thigh' 'Illiopsoas']             ,k*Mirror*([-0.0149;	0.3890;-0.0350]) -   CoM_Thigh;...
+    ['Wrap' Signe 'Thigh' 'QuadricepsFemoris']      ,k*Mirror*([0.0022;	-0.0067;	-0.0589]) -   CoM_Thigh;...
+    ['Wrap' Signe 'Thigh' 'Gastrocnemius']          ,k*Mirror*([-0.0030;	-0.0068;	0.0586]) -   CoM_Thigh;...
     };
 
 
@@ -290,6 +293,7 @@ Human_model(incr_solid).theta=[];
 Human_model(incr_solid).KinematicsCut=[];              % coupure cinématique
 Human_model(incr_solid).ClosedLoop=[];                 % si solide de fermeture de boucle : {numéro du solide i sur lequel est attaché ce solide ; point d'attache (repère du solide i)}
 Human_model(incr_solid).linear_constraint=[];
+OsteoArticularModel(incr_solid).comment='Hip Flexion(+)/Extension(-) - Z-Rotation';
 
 % Hip_J2
 num_solid=num_solid+1;        % solide numéro ...
@@ -309,6 +313,11 @@ Human_model(incr_solid).m=0;
 Human_model(incr_solid).b=[0 0 0]';
 Human_model(incr_solid).I=zeros(3,3);
 Human_model(incr_solid).c=[0 0 0]';
+if Signe=='R'
+    Human_model(incr_solid).comment='Hip Abduction(-)/Adduction(+) - X-Rotation';
+else
+    Human_model(incr_solid).comment='Hip Abduction(+)/Adduction(-) - X-Rotation';
+end
 
 % Thigh
 num_solid=num_solid+1;        % solide numéro ...
@@ -331,5 +340,48 @@ Human_model(incr_solid).c=-Thigh_HipJointNode;
 Human_model(incr_solid).anat_position=Thigh_position_set;
 Human_model(incr_solid).L={[Signe 'Thigh_HipJointNode'];[Signe 'Thigh_KneeJointNode'];[Signe 'Thigh_PatellaFemurJointNode']};
 Human_model(incr_solid).visual_file = ['TLEM/' Signe 'Thigh.mat'];
+if Signe=='R'
+    Human_model(incr_solid).comment='Hip Internal(+)/External(-) Rotation';
+else
+    Human_model(incr_solid).comment='Hip Internal(-)/External(+) Rotation';
+end
+
+
+% Wrapping 1
+Human_model(incr_solid).wrap(1).name=['Wrap' Signe 'Thigh' 'Illiopsoas'];
+Human_model(incr_solid).wrap(1).anat_position=['Wrap' Signe 'Thigh' 'Illiopsoas'];
+Human_model(incr_solid).wrap(1).type='C'; % C: Cylinder or S: Sphere
+Human_model(incr_solid).wrap(1).R=0.0275;
+Human_model(incr_solid).wrap(1).orientation=[   -0.928070502539686  ,Mirror(end)*0.284251353681878,     Mirror(end)*0.2406;...
+                                                        -0.372404541212556  ,Mirror(end)*-0.708383672766642,    -0.5996           ;...
+                                                        0                   ,-0.646060167544528,                Mirror(end)*0.7633];
+Human_model(incr_solid).wrap(1).location=k*[-0.0149;	0.3890;	Mirror(end)*-0.0350] -   CoM_Thigh;
+Human_model(incr_solid).wrap(1).h=0.35;
+Human_model(incr_solid).wrap(1).num_solid=incr_solid;
+
+% Wrapping 2
+Human_model(incr_solid).wrap(2).name=['Wrap' Signe 'Thigh' 'QuadricepsFemoris'];
+Human_model(incr_solid).wrap(2).anat_position=['Wrap' Signe 'Thigh' 'QuadricepsFemoris'];
+Human_model(incr_solid).wrap(2).type='C'; % C: Cylinder or S: Sphere
+Human_model(incr_solid).wrap(2).R=0.0250;
+Human_model(incr_solid).wrap(2).orientation=[0.404154809628085, Mirror(end)*0.893248353115711,  Mirror(end)*0.1969;...
+                                                    -0.914690597882413, Mirror(end)*0.394680582636195,  0.087;...
+                                                     0              ,   -0.215254773108573,             Mirror(end)*0.9766];
+Human_model(incr_solid).wrap(2).location=k*[0.0022;	-0.0067;	Mirror(end)*-0.0589] -   CoM_Thigh;
+Human_model(incr_solid).wrap(2).h=0.35;
+Human_model(incr_solid).wrap(2).num_solid=incr_solid;
+
+% Wrapping 3
+Human_model(incr_solid).wrap(3).name=['Wrap' Signe 'Thigh' 'Gastrocnemius'];
+Human_model(incr_solid).wrap(3).anat_position=['Wrap' Signe 'Thigh' 'Gastrocnemius'];
+Human_model(incr_solid).wrap(3).type='C'; % C: Cylinder or S: Sphere
+Human_model(incr_solid).wrap(3).R=0.0175;
+Human_model(incr_solid).wrap(3).orientation=[-0.0648854012091891,   Mirror(end)*0.988882451668858,  Mirror(end)*-0.1338;...
+                                                        0.997892722044771,  Mirror(end)*0.0642995316107553, -0.0087;...
+                                                        0,                  -0.134078585225335, Mirror(end)*-0.991];
+Human_model(incr_solid).wrap(3).location=k*[-0.0030;	-0.0068;	Mirror(end)*0.0586]	-   CoM_Thigh;
+Human_model(incr_solid).wrap(3).h=0.35;
+Human_model(incr_solid).wrap(3).num_solid=incr_solid;
+
 
 end

@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of btkMetaDataInfo</title>
+  <meta name="keywords" content="btkMetaDataInfo">
+  <meta name="description" content="BTKMETADATAINFO Create a structure containing the required fields for the informations of a metadata.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- # BTK --><!-- menu.html mac64 -->
+<h1>btkMetaDataInfo
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>BTKMETADATAINFO Create a structure containing the required fields for the informations of a metadata.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function info = btkMetaDataInfo(format, values, numdims) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">BTKMETADATAINFO Create a structure containing the required fields for the informations of a metadata.
+
+  INFO = BTKMETADATAINFO(FORMAT, VALUES) creates the structure INFO which embed FORMAT and VALUES 
+  in the field 'format' and 'values' respectively.
+
+  INFO = BTKMETADATAINFO(FORMAT, VALUES, NUMDIMS) sets the desired number of dimensions.
+
+  This function simplify the construction of the information used in &lt;a href=&quot;matlab:help btkAppendMetaData&quot;&gt;btkAppendMetaData&lt;/a&gt;.
+  To be used with &lt;a href=&quot;matlab:help btkAppendMetaData&quot;&gt;btkAppendMetaData&lt;/a&gt;, the structure INFO must be set
+  with the following values:
+   - INFO.FORMAT:  contains a string (Char, Byte, Integer or Real) with the format of the information
+   - INFO.VALUES:  contains an array of numerical values or a cell of strings.
+                   - The array is used for information with the format Byte, Integer or Real.
+                   - The cell of strings is only use for information with the format Char.
+   - INFO.NUMDIMS: (desired) number of dimensions. All the dimension missing in the value are set to 1. 
+                   Note: The maximum number of dimensions is set to 7.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Functions/BTK/linux64/btkAppendForcePlatformType2.html" class="code" title="function btkAppendForcePlatformType2(h, forces, moments, corners, origin, localFrame)">btkAppendForcePlatformType2</a>	BTKAPPENDFORCEPLATFORMTYPE2 Append a virtual force platform of type 2.</li><li><a href="../../../Functions/BTK/linux64/btkEmulateC3Dserver.html" class="code" title="function itf = btkEmulateC3Dserver()">btkEmulateC3Dserver</a>	BTKEMULATEC3DSERVER Creates an emulated COM object for C3Dserver.</li><li><a href="../../../Functions/BTK/linux64/btkTransformTDFToViconC3DFile.html" class="code" title="function btkTransformTDFToViconC3DFile(TDF_INPUT, C3D_OUTPUT)">btkTransformTDFToViconC3DFile</a>	BTKTRANSFORMTDFTOVICONC3DFILE transforms a TDF file (BTS Bioengineering) to a compatible Vicon C3D file.</li><li><a href="btkAppendForcePlatformType2.html" class="code" title="function btkAppendForcePlatformType2(h, forces, moments, corners, origin, localFrame)">btkAppendForcePlatformType2</a>	BTKAPPENDFORCEPLATFORMTYPE2 Append a virtual force platform of type 2.</li><li><a href="btkEmulateC3Dserver.html" class="code" title="function itf = btkEmulateC3Dserver()">btkEmulateC3Dserver</a>	BTKEMULATEC3DSERVER Creates an emulated COM object for C3Dserver.</li><li><a href="btkTransformTDFToViconC3DFile.html" class="code" title="function btkTransformTDFToViconC3DFile(TDF_INPUT, C3D_OUTPUT)">btkTransformTDFToViconC3DFile</a>	BTKTRANSFORMTDFTOVICONC3DFILE transforms a TDF file (BTS Bioengineering) to a compatible Vicon C3D file.</li><li><a href="../../../Functions/BTK/win64/btkAppendForcePlatformType2.html" class="code" title="function btkAppendForcePlatformType2(h, forces, moments, corners, origin, localFrame)">btkAppendForcePlatformType2</a>	BTKAPPENDFORCEPLATFORMTYPE2 Append a virtual force platform of type 2.</li><li><a href="../../../Functions/BTK/win64/btkEmulateC3Dserver.html" class="code" title="function itf = btkEmulateC3Dserver()">btkEmulateC3Dserver</a>	BTKEMULATEC3DSERVER Creates an emulated COM object for C3Dserver.</li><li><a href="../../../Functions/BTK/win64/btkTransformTDFToViconC3DFile.html" class="code" title="function btkTransformTDFToViconC3DFile(TDF_INPUT, C3D_OUTPUT)">btkTransformTDFToViconC3DFile</a>	BTKTRANSFORMTDFTOVICONC3DFILE transforms a TDF file (BTS Bioengineering) to a compatible Vicon C3D file.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function info = btkMetaDataInfo(format, values, numdims)</a>
+0002 <span class="comment">%BTKMETADATAINFO Create a structure containing the required fields for the informations of a metadata.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%  INFO = BTKMETADATAINFO(FORMAT, VALUES) creates the structure INFO which embed FORMAT and VALUES</span>
+0005 <span class="comment">%  in the field 'format' and 'values' respectively.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%  INFO = BTKMETADATAINFO(FORMAT, VALUES, NUMDIMS) sets the desired number of dimensions.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%  This function simplify the construction of the information used in &lt;a href=&quot;matlab:help btkAppendMetaData&quot;&gt;btkAppendMetaData&lt;/a&gt;.</span>
+0010 <span class="comment">%  To be used with &lt;a href=&quot;matlab:help btkAppendMetaData&quot;&gt;btkAppendMetaData&lt;/a&gt;, the structure INFO must be set</span>
+0011 <span class="comment">%  with the following values:</span>
+0012 <span class="comment">%   - INFO.FORMAT:  contains a string (Char, Byte, Integer or Real) with the format of the information</span>
+0013 <span class="comment">%   - INFO.VALUES:  contains an array of numerical values or a cell of strings.</span>
+0014 <span class="comment">%                   - The array is used for information with the format Byte, Integer or Real.</span>
+0015 <span class="comment">%                   - The cell of strings is only use for information with the format Char.</span>
+0016 <span class="comment">%   - INFO.NUMDIMS: (desired) number of dimensions. All the dimension missing in the value are set to 1.</span>
+0017 <span class="comment">%                   Note: The maximum number of dimensions is set to 7.</span>
+0018 
+0019 <span class="comment">%  Author: A. Barré</span>
+0020 <span class="comment">%  Copyright 2009-2013 Biomechanical ToolKit (BTK).</span>
+0021 
+0022 nd = numel(size(values));
+0023 <span class="keyword">if</span> (nargin &lt; 3)
+0024     numdims = nd;
+0025 <span class="keyword">elseif</span> (numdims &lt; nd)
+0026     error(<span class="string">'btk:MetaDataInfo'</span>, <span class="string">'The given number of dimensions is lower than the number of dimensions for the given values.'</span>);
+0027 <span class="keyword">end</span>
+0028 
+0029 info.format = format;
+0030 info.values = values;
+0031 info.numdims = numdims;</pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,334 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of print2array</title>
+  <meta name="keywords" content="print2array">
+  <meta name="description" content="PRINT2ARRAY  Exports a figure to an image array">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- # ExternLibrary --><!-- menu.html export_fig -->
+<h1>print2array
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>PRINT2ARRAY  Exports a figure to an image array</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [A, bcol] = print2array(fig, res, renderer, gs_options) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">PRINT2ARRAY  Exports a figure to an image array
+
+ Examples:
+   A = print2array
+   A = print2array(figure_handle)
+   A = print2array(figure_handle, resolution)
+   A = print2array(figure_handle, resolution, renderer)
+   A = print2array(figure_handle, resolution, renderer, gs_options)
+   [A bcol] = print2array(...)
+
+ This function outputs a bitmap image of the given figure, at the desired
+ resolution.
+
+ If renderer is '-painters' then ghostcript needs to be installed. This
+ can be downloaded from: http://www.ghostscript.com
+
+ IN:
+   figure_handle - The handle of the figure to be exported. Default: gcf.
+   resolution - Resolution of the output, as a factor of screen
+                resolution. Default: 1.
+   renderer - string containing the renderer paramater to be passed to
+              print. Default: '-opengl'.
+   gs_options - optional ghostscript options (e.g.: '-dNoOutputFonts'). If
+                multiple options are needed, enclose in call array: {'-a','-b'}
+
+ OUT:
+   A - MxNx3 uint8 image of the figure.
+   bcol - 1x3 uint8 vector of the background color</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="ghostscript.html" class="code" title="function varargout = ghostscript(cmd)">ghostscript</a>	GHOSTSCRIPT  Calls a local GhostScript executable with the input command</li><li><a href="print2eps.html" class="code" title="function print2eps(name, fig, export_options, varargin)">print2eps</a>	PRINT2EPS  Prints figures to eps with improved line styles</li><li><a href="user_string.html" class="code" title="function string = user_string(string_name, string)">user_string</a>	USER_STRING  Get/set a user specific string</li><li><a href="using_hg2.html" class="code" title="function tf = using_hg2(fig)">using_hg2</a>	USING_HG2 Determine if the HG2 graphics engine is used</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="export_fig.html" class="code" title="function [imageData, alpha] = export_fig(varargin) %#ok<*STRCL1>">export_fig</a>	EXPORT_FIG  Exports figures in a publication-quality format</li><li><a href="print2eps.html" class="code" title="function print2eps(name, fig, export_options, varargin)">print2eps</a>	PRINT2EPS  Prints figures to eps with improved line styles</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [A, err, ex] = read_tif_img(fig, res_str, renderer, tmp_nam)</a></li><li><a href="#_sub2" class="code">function fp = font_path()</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [A, bcol] = print2array(fig, res, renderer, gs_options)</a>
+0002 <span class="comment">%PRINT2ARRAY  Exports a figure to an image array</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Examples:</span>
+0005 <span class="comment">%   A = print2array</span>
+0006 <span class="comment">%   A = print2array(figure_handle)</span>
+0007 <span class="comment">%   A = print2array(figure_handle, resolution)</span>
+0008 <span class="comment">%   A = print2array(figure_handle, resolution, renderer)</span>
+0009 <span class="comment">%   A = print2array(figure_handle, resolution, renderer, gs_options)</span>
+0010 <span class="comment">%   [A bcol] = print2array(...)</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% This function outputs a bitmap image of the given figure, at the desired</span>
+0013 <span class="comment">% resolution.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% If renderer is '-painters' then ghostcript needs to be installed. This</span>
+0016 <span class="comment">% can be downloaded from: http://www.ghostscript.com</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% IN:</span>
+0019 <span class="comment">%   figure_handle - The handle of the figure to be exported. Default: gcf.</span>
+0020 <span class="comment">%   resolution - Resolution of the output, as a factor of screen</span>
+0021 <span class="comment">%                resolution. Default: 1.</span>
+0022 <span class="comment">%   renderer - string containing the renderer paramater to be passed to</span>
+0023 <span class="comment">%              print. Default: '-opengl'.</span>
+0024 <span class="comment">%   gs_options - optional ghostscript options (e.g.: '-dNoOutputFonts'). If</span>
+0025 <span class="comment">%                multiple options are needed, enclose in call array: {'-a','-b'}</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% OUT:</span>
+0028 <span class="comment">%   A - MxNx3 uint8 image of the figure.</span>
+0029 <span class="comment">%   bcol - 1x3 uint8 vector of the background color</span>
+0030 
+0031 <span class="comment">% Copyright (C) Oliver Woodford 2008-2014, Yair Altman 2015-</span>
+0032 <span class="comment">%{</span>
+0033 <span class="comment">% 05/09/11: Set EraseModes to normal when using opengl or zbuffer</span>
+0034 <span class="comment">%           renderers. Thanks to Pawel Kocieniewski for reporting the issue.</span>
+0035 <span class="comment">% 21/09/11: Bug fix: unit8 -&gt; uint8! Thanks to Tobias Lamour for reporting it.</span>
+0036 <span class="comment">% 14/11/11: Bug fix: stop using hardcopy(), as it interfered with figure size</span>
+0037 <span class="comment">%           and erasemode settings. Makes it a bit slower, but more reliable.</span>
+0038 <span class="comment">%           Thanks to Phil Trinh and Meelis Lootus for reporting the issues.</span>
+0039 <span class="comment">% 09/12/11: Pass font path to ghostscript.</span>
+0040 <span class="comment">% 27/01/12: Bug fix affecting painters rendering tall figures. Thanks to</span>
+0041 <span class="comment">%           Ken Campbell for reporting it.</span>
+0042 <span class="comment">% 03/04/12: Bug fix to median input. Thanks to Andy Matthews for reporting it.</span>
+0043 <span class="comment">% 26/10/12: Set PaperOrientation to portrait. Thanks to Michael Watts for</span>
+0044 <span class="comment">%           reporting the issue.</span>
+0045 <span class="comment">% 26/02/15: If temp dir is not writable, use the current folder for temp</span>
+0046 <span class="comment">%           EPS/TIF files (Javier Paredes)</span>
+0047 <span class="comment">% 27/02/15: Display suggested workarounds to internal print() error (issue #16)</span>
+0048 <span class="comment">% 28/02/15: Enable users to specify optional ghostscript options (issue #36)</span>
+0049 <span class="comment">% 10/03/15: Fixed minor warning reported by Paul Soderlind; fixed code indentation</span>
+0050 <span class="comment">% 28/05/15: Fixed issue #69: patches with LineWidth==0.75 appear wide (internal bug in Matlab's print() func)</span>
+0051 <span class="comment">% 07/07/15: Fixed issue #83: use numeric handles in HG1</span>
+0052 <span class="comment">% 11/12/16: Fixed cropping issue reported by Harry D.</span>
+0053 <span class="comment">%}</span>
+0054 
+0055     <span class="comment">% Generate default input arguments, if needed</span>
+0056     <span class="keyword">if</span> nargin &lt; 2
+0057         res = 1;
+0058         <span class="keyword">if</span> nargin &lt; 1
+0059             fig = gcf;
+0060         <span class="keyword">end</span>
+0061     <span class="keyword">end</span>
+0062     <span class="comment">% Warn if output is large</span>
+0063     old_mode = get(fig, <span class="string">'Units'</span>);
+0064     set(fig, <span class="string">'Units'</span>, <span class="string">'pixels'</span>);
+0065     px = get(fig, <span class="string">'Position'</span>);
+0066     set(fig, <span class="string">'Units'</span>, old_mode);
+0067     npx = prod(px(3:4)*res)/1e6;
+0068     <span class="keyword">if</span> npx &gt; 30
+0069         <span class="comment">% 30M pixels or larger!</span>
+0070         warning(<span class="string">'MATLAB:LargeImage'</span>, <span class="string">'print2array generating a %.1fM pixel image. This could be slow and might also cause memory problems.'</span>, npx);
+0071     <span class="keyword">end</span>
+0072     <span class="comment">% Retrieve the background colour</span>
+0073     bcol = get(fig, <span class="string">'Color'</span>);
+0074     <span class="comment">% Set the resolution parameter</span>
+0075     res_str = [<span class="string">'-r'</span> num2str(ceil(get(0, <span class="string">'ScreenPixelsPerInch'</span>)*res))];
+0076     <span class="comment">% Generate temporary file name</span>
+0077     tmp_nam = [tempname <span class="string">'.tif'</span>];
+0078     <span class="keyword">try</span>
+0079         <span class="comment">% Ensure that the temp dir is writable (Javier Paredes 26/2/15)</span>
+0080         fid = fopen(tmp_nam,<span class="string">'w'</span>);
+0081         fwrite(fid,1);
+0082         fclose(fid);
+0083         delete(tmp_nam);  <span class="comment">% cleanup</span>
+0084         isTempDirOk = true;
+0085     <span class="keyword">catch</span>
+0086         <span class="comment">% Temp dir is not writable, so use the current folder</span>
+0087         [dummy,fname,fext] = fileparts(tmp_nam); <span class="comment">%#ok&lt;ASGLU&gt;</span>
+0088         fpath = pwd;
+0089         tmp_nam = fullfile(fpath,[fname fext]);
+0090         isTempDirOk = false;
+0091     <span class="keyword">end</span>
+0092     <span class="comment">% Enable users to specify optional ghostscript options (issue #36)</span>
+0093     <span class="keyword">if</span> nargin &gt; 3 &amp;&amp; ~isempty(gs_options)
+0094         <span class="keyword">if</span> iscell(gs_options)
+0095             gs_options = sprintf(<span class="string">' %s'</span>,gs_options{:});
+0096         <span class="keyword">elseif</span> ~ischar(gs_options)
+0097             error(<span class="string">'gs_options input argument must be a string or cell-array of strings'</span>);
+0098         <span class="keyword">else</span>
+0099             gs_options = [<span class="string">' '</span> gs_options];
+0100         <span class="keyword">end</span>
+0101     <span class="keyword">else</span>
+0102         gs_options = <span class="string">''</span>;
+0103     <span class="keyword">end</span>
+0104     <span class="keyword">if</span> nargin &gt; 2 &amp;&amp; strcmp(renderer, <span class="string">'-painters'</span>)
+0105         <span class="comment">% First try to print directly to tif file</span>
+0106         <span class="keyword">try</span>
+0107             <span class="comment">% Print the file into a temporary TIF file and read it into array A</span>
+0108             [A, err, ex] = <a href="#_sub1" class="code" title="subfunction [A, err, ex] = read_tif_img(fig, res_str, renderer, tmp_nam)">read_tif_img</a>(fig, res_str, renderer, tmp_nam);
+0109             <span class="keyword">if</span> err, rethrow(ex); <span class="keyword">end</span>
+0110         <span class="keyword">catch</span>  <span class="comment">% error - try to print to EPS and then using Ghostscript to TIF</span>
+0111             <span class="comment">% Print to eps file</span>
+0112             <span class="keyword">if</span> isTempDirOk
+0113                 tmp_eps = [tempname <span class="string">'.eps'</span>];
+0114             <span class="keyword">else</span>
+0115                 tmp_eps = fullfile(fpath,[fname <span class="string">'.eps'</span>]);
+0116             <span class="keyword">end</span>
+0117             <a href="print2eps.html" class="code" title="function print2eps(name, fig, export_options, varargin)">print2eps</a>(tmp_eps, fig, 0, renderer, <span class="string">'-loose'</span>);
+0118             <span class="keyword">try</span>
+0119                 <span class="comment">% Initialize the command to export to tiff using ghostscript</span>
+0120                 cmd_str = [<span class="string">'-dEPSCrop -q -dNOPAUSE -dBATCH '</span> res_str <span class="string">' -sDEVICE=tiff24nc'</span>];
+0121                 <span class="comment">% Set the font path</span>
+0122                 fp = <a href="#_sub2" class="code" title="subfunction fp = font_path()">font_path</a>();
+0123                 <span class="keyword">if</span> ~isempty(fp)
+0124                     cmd_str = [cmd_str <span class="string">' -sFONTPATH=&quot;'</span> fp <span class="string">'&quot;'</span>];
+0125                 <span class="keyword">end</span>
+0126                 <span class="comment">% Add the filenames</span>
+0127                 cmd_str = [cmd_str <span class="string">' -sOutputFile=&quot;'</span> tmp_nam <span class="string">'&quot; &quot;'</span> tmp_eps <span class="string">'&quot;'</span> gs_options];
+0128                 <span class="comment">% Execute the ghostscript command</span>
+0129                 <a href="ghostscript.html" class="code" title="function varargout = ghostscript(cmd)">ghostscript</a>(cmd_str);
+0130             <span class="keyword">catch</span> me
+0131                 <span class="comment">% Delete the intermediate file</span>
+0132                 delete(tmp_eps);
+0133                 rethrow(me);
+0134             <span class="keyword">end</span>
+0135             <span class="comment">% Delete the intermediate file</span>
+0136             delete(tmp_eps);
+0137             <span class="comment">% Read in the generated bitmap</span>
+0138             A = imread(tmp_nam);
+0139             <span class="comment">% Delete the temporary bitmap file</span>
+0140             delete(tmp_nam);
+0141         <span class="keyword">end</span>
+0142         <span class="comment">% Set border pixels to the correct colour</span>
+0143         <span class="keyword">if</span> isequal(bcol, <span class="string">'none'</span>)
+0144             bcol = [];
+0145         <span class="keyword">elseif</span> isequal(bcol, [1 1 1])
+0146             bcol = uint8([255 255 255]);
+0147         <span class="keyword">else</span>
+0148             <span class="keyword">for</span> l = 1:size(A, 2)
+0149                 <span class="keyword">if</span> ~all(reshape(A(:,l,:) == 255, [], 1))
+0150                     <span class="keyword">break</span>;
+0151                 <span class="keyword">end</span>
+0152             <span class="keyword">end</span>
+0153             <span class="keyword">for</span> r = size(A, 2):-1:l
+0154                 <span class="keyword">if</span> ~all(reshape(A(:,r,:) == 255, [], 1))
+0155                     <span class="keyword">break</span>;
+0156                 <span class="keyword">end</span>
+0157             <span class="keyword">end</span>
+0158             <span class="keyword">for</span> t = 1:size(A, 1)
+0159                 <span class="keyword">if</span> ~all(reshape(A(t,:,:) == 255, [], 1))
+0160                     <span class="keyword">break</span>;
+0161                 <span class="keyword">end</span>
+0162             <span class="keyword">end</span>
+0163             <span class="keyword">for</span> b = size(A, 1):-1:t
+0164                 <span class="keyword">if</span> ~all(reshape(A(b,:,:) == 255, [], 1))
+0165                     <span class="keyword">break</span>;
+0166                 <span class="keyword">end</span>
+0167             <span class="keyword">end</span>
+0168             bcol = uint8(median(single([reshape(A(:,[l r],:), [], size(A, 3)); reshape(A([t b],:,:), [], size(A, 3))]), 1));
+0169             <span class="keyword">for</span> c = 1:size(A, 3)
+0170                 A(:,[1:l-1, r+1:end],c) = bcol(c);
+0171                 A([1:t-1, b+1:end],:,c) = bcol(c);
+0172             <span class="keyword">end</span>
+0173         <span class="keyword">end</span>
+0174     <span class="keyword">else</span>
+0175         <span class="keyword">if</span> nargin &lt; 3
+0176             renderer = <span class="string">'-opengl'</span>;
+0177         <span class="keyword">end</span>
+0178         <span class="comment">% Print the file into a temporary TIF file and read it into array A</span>
+0179         [A, err, ex] = <a href="#_sub1" class="code" title="subfunction [A, err, ex] = read_tif_img(fig, res_str, renderer, tmp_nam)">read_tif_img</a>(fig, res_str, renderer, tmp_nam);
+0180         <span class="comment">% Throw any error that occurred</span>
+0181         <span class="keyword">if</span> err
+0182             <span class="comment">% Display suggested workarounds to internal print() error (issue #16)</span>
+0183             fprintf(2, <span class="string">'An error occured with Matlab''s builtin print function.\nTry setting the figure Renderer to ''painters'' or use opengl(''software'').\n\n'</span>);
+0184             rethrow(ex);
+0185         <span class="keyword">end</span>
+0186         <span class="comment">% Set the background color</span>
+0187         <span class="keyword">if</span> isequal(bcol, <span class="string">'none'</span>)
+0188             bcol = [];
+0189         <span class="keyword">else</span>
+0190             bcol = bcol * 255;
+0191             <span class="keyword">if</span> isequal(bcol, round(bcol))
+0192                 bcol = uint8(bcol);
+0193             <span class="keyword">else</span>
+0194                 bcol = squeeze(A(1,1,:));
+0195             <span class="keyword">end</span>
+0196         <span class="keyword">end</span>
+0197     <span class="keyword">end</span>
+0198     <span class="comment">% Check the output size is correct</span>
+0199     <span class="keyword">if</span> isequal(res, round(res))
+0200         px = round([px([4 3])*res 3]);  <span class="comment">% round() to avoid an indexing warning below</span>
+0201         <span class="keyword">if</span> ~isequal(size(A), px)
+0202             <span class="comment">% Correct the output size</span>
+0203             A = A(1:min(<span class="keyword">end</span>,px(1)),1:min(<span class="keyword">end</span>,px(2)),:);
+0204         <span class="keyword">end</span>
+0205     <span class="keyword">end</span>
+0206 <span class="keyword">end</span>
+0207 
+0208 <span class="comment">% Function to create a TIF image of the figure and read it into an array</span>
+0209 <a name="_sub1" href="#_subfunctions" class="code">function [A, err, ex] = read_tif_img(fig, res_str, renderer, tmp_nam)</a>
+0210     err = false;
+0211     ex = [];
+0212     <span class="comment">% Temporarily set the paper size</span>
+0213     old_pos_mode    = get(fig, <span class="string">'PaperPositionMode'</span>);
+0214     old_orientation = get(fig, <span class="string">'PaperOrientation'</span>);
+0215     set(fig, <span class="string">'PaperPositionMode'</span>,<span class="string">'auto'</span>, <span class="string">'PaperOrientation'</span>,<span class="string">'portrait'</span>);
+0216     <span class="keyword">try</span>
+0217         <span class="comment">% Workaround for issue #69: patches with LineWidth==0.75 appear wide (internal bug in Matlab's print() function)</span>
+0218         fp = [];  <span class="comment">% in case we get an error below</span>
+0219         fp = findall(fig, <span class="string">'Type'</span>,<span class="string">'patch'</span>, <span class="string">'LineWidth'</span>,0.75);
+0220         set(fp, <span class="string">'LineWidth'</span>,0.5);
+0221         <span class="comment">% Fix issue #83: use numeric handles in HG1</span>
+0222         <span class="keyword">if</span> ~<a href="using_hg2.html" class="code" title="function tf = using_hg2(fig)">using_hg2</a>(fig),  fig = double(fig);  <span class="keyword">end</span>
+0223         <span class="comment">% Print to tiff file</span>
+0224         print(fig, renderer, res_str, <span class="string">'-dtiff'</span>, tmp_nam);
+0225         <span class="comment">% Read in the printed file</span>
+0226         A = imread(tmp_nam);
+0227         <span class="comment">% Delete the temporary file</span>
+0228         delete(tmp_nam);
+0229     <span class="keyword">catch</span> ex
+0230         err = true;
+0231     <span class="keyword">end</span>
+0232     set(fp, <span class="string">'LineWidth'</span>,0.75);  <span class="comment">% restore original figure appearance</span>
+0233     <span class="comment">% Reset the paper size</span>
+0234     set(fig, <span class="string">'PaperPositionMode'</span>,old_pos_mode, <span class="string">'PaperOrientation'</span>,old_orientation);
+0235 <span class="keyword">end</span>
+0236 
+0237 <span class="comment">% Function to return (and create, where necessary) the font path</span>
+0238 <a name="_sub2" href="#_subfunctions" class="code">function fp = font_path()</a>
+0239     fp = <a href="user_string.html" class="code" title="function string = user_string(string_name, string)">user_string</a>(<span class="string">'gs_font_path'</span>);
+0240     <span class="keyword">if</span> ~isempty(fp)
+0241         <span class="keyword">return</span>
+0242     <span class="keyword">end</span>
+0243     <span class="comment">% Create the path</span>
+0244     <span class="comment">% Start with the default path</span>
+0245     fp = getenv(<span class="string">'GS_FONTPATH'</span>);
+0246     <span class="comment">% Add on the typical directories for a given OS</span>
+0247     <span class="keyword">if</span> ispc
+0248         <span class="keyword">if</span> ~isempty(fp)
+0249             fp = [fp <span class="string">';'</span>];
+0250         <span class="keyword">end</span>
+0251         fp = [fp getenv(<span class="string">'WINDIR'</span>) filesep <span class="string">'Fonts'</span>];
+0252     <span class="keyword">else</span>
+0253         <span class="keyword">if</span> ~isempty(fp)
+0254             fp = [fp <span class="string">':'</span>];
+0255         <span class="keyword">end</span>
+0256         fp = [fp <span class="string">'/usr/share/fonts:/usr/local/share/fonts:/usr/share/fonts/X11:/usr/local/share/fonts/X11:/usr/share/fonts/truetype:/usr/local/share/fonts/truetype'</span>];
+0257     <span class="keyword">end</span>
+0258     <a href="user_string.html" class="code" title="function string = user_string(string_name, string)">user_string</a>(<span class="string">'gs_font_path'</span>, fp);
+0259 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

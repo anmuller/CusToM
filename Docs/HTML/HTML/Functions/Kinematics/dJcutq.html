@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of dJcutq</title>
+  <meta name="keywords" content="dJcutq">
+  <meta name="description" content="Computation of the Jacobian matrix Jcutq">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html Kinematics -->
+<h1>dJcutq
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Computation of the Jacobian matrix Jcutq</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Jcutq] = dJcutq(Jcutcut,Jcutq) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Computation of the Jacobian matrix Jcutq
+
+   INPUT
+   - Jcutcut: evaluation of the partial Jacobian matrix Jcutcut
+   - Jcutq: evaluation of the partial Jacobian matrix Jcutq
+   OUTPUT
+   - Jcutq: evaluation of the Jacobian matrix Jcutq
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="InverseKinematicsLM.html" class="code" title="function [ExperimentalData, InverseKinematicResults] = InverseKinematicsLM(filename,AnalysisParameters,BiomechanicalModel)">InverseKinematicsLM</a>	Computation of the inverse kinematics step thanks to a Jacobian matrix</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Jcutq] = dJcutq(Jcutcut,Jcutq)</a>
+0002 <span class="comment">% Computation of the Jacobian matrix Jcutq</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - Jcutcut: evaluation of the partial Jacobian matrix Jcutcut</span>
+0006 <span class="comment">%   - Jcutq: evaluation of the partial Jacobian matrix Jcutq</span>
+0007 <span class="comment">%   OUTPUT</span>
+0008 <span class="comment">%   - Jcutq: evaluation of the Jacobian matrix Jcutq</span>
+0009 <span class="comment">%________________________________________________________</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% Licence</span>
+0012 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0013 <span class="comment">%________________________________________________________</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0016 <span class="comment">% Georges Dumont</span>
+0017 <span class="comment">%________________________________________________________</span>
+0018 
+0019 <span class="keyword">for</span> i=2:size(Jcutcut,1)
+0020     Jcutq(i,:) = Jcutq(i,:) + Jcutcut(i,1:i-1)*Jcutq(1:i-1,:);
+0021 <span class="keyword">end</span>
+0022 
+0023 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

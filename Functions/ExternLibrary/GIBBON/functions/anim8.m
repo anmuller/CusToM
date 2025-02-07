@@ -83,7 +83,7 @@ if numel(animStruct.Time)==1
 end
 
 animTime=animStruct.Time(:);
-sliceIndexI=numel(animTime); %Initial index at end
+sliceIndexI=1;%Initial index at end
 sliderStep=[1/(numel(animTime)-1) 1/(numel(animTime)-1)]; %Slider step sizes
 
 %Initialize slider

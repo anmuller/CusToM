@@ -22,17 +22,23 @@ function []=InverseDynamics(AnalysisParameters)
 % Georges Dumont
 %________________________________________________________
 
-for num_fil = 1:numel(AnalysisParameters.filename)
+parfor num_fil = 1:numel(AnalysisParameters.filename)
     filename = AnalysisParameters.filename{num_fil}(1:end-(numel(AnalysisParameters.General.Extension)-1));
 
     disp(['Inverse dynamics (' filename ') ...'])
 
     %% Chargement des variables
-    load('BiomechanicalModel.mat'); %#ok<LOAD>
+    BiomechanicalModel = load('BiomechanicalModel.mat'); 
+    BiomechanicalModel = BiomechanicalModel.BiomechanicalModel;
     Human_model = BiomechanicalModel.OsteoArticularModel;
-    load([filename '/ExperimentalData.mat']); %#ok<LOAD>
-    time = ExperimentalData.Time;
-    load([filename '/InverseKinematicsResults.mat']); %#ok<LOAD>
+    here = pwd ;                                                                   
+    cd(filename)
+        ExperimentalData =  load('ExperimentalData.mat');
+        ExperimentalData = ExperimentalData.ExperimentalData;
+        time = ExperimentalData.Time;
+        InverseKinematicsResults=load('InverseKinematicsResults.mat'); 
+        InverseKinematicsResults = InverseKinematicsResults.InverseKinematicsResults;
+    cd(here)  
     q = InverseKinematicsResults.JointCoordinates';
     if isfield(InverseKinematicsResults,'FreeJointCoordinates')
         q6dof = InverseKinematicsResults.FreeJointCoordinates';
@@ -40,7 +46,11 @@ for num_fil = 1:numel(AnalysisParameters.filename)
         PelvisPosition = InverseKinematicsResults.PelvisPosition;
         PelvisOrientation = InverseKinematicsResults.PelvisOrientation;
     end
-    load([filename '/ExternalForcesComputationResults.mat']); %#ok<LOAD>
+    here = pwd ;   
+    cd(filename)   
+        ExternalForcesComputationResults= load('ExternalForcesComputationResults.mat');    
+    cd (here) 
+    ExternalForcesComputationResults = ExternalForcesComputationResults.ExternalForcesComputationResults;
     if AnalysisParameters.ID.InputData == 0
         external_forces = ExternalForcesComputationResults.NoExternalForce;
     elseif AnalysisParameters.ID.InputData == 1
@@ -142,13 +152,9 @@ for num_fil = 1:numel(AnalysisParameters.filename)
     end
     close(h)
     torques=torques';
+    InverseDynamicsResults=[];
+    SaveDataID(filename,InverseDynamicsResults,f6dof,t6dof,torques,FContactDyn);
 
-    InverseDynamicsResults.DynamicResiduals.f6dof = f6dof;
-    InverseDynamicsResults.DynamicResiduals.t6dof = t6dof; 
-    InverseDynamicsResults.JointTorques = torques; 
-    InverseDynamicsResults.ForceContactDynamics = FContactDyn;
-    
-    save([filename '/InverseDynamicsResults'],'InverseDynamicsResults');
     
     disp(['... Inverse dynamics (' filename ') done'])
     

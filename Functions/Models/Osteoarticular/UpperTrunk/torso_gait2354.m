@@ -131,7 +131,7 @@ Lenght_Skull = norm(Skull_TopOfHead - Skull_NeckNode);
 
     %% ["Adjustments to McConville et al. and Young et al. body segment inertial parameters"] R. Dumas
     % ------------------------- Thorax ----------------------------------------
-    [I_Thorax]=rgyration2inertia([27 25 28 18 2 4*1i], Mass.UpperTrunk_Mass, [0 0 0], Lenght_Thorax);
+    [I_Thorax]=rgyration2inertia([27 25 28 18 2 4*1i], Mass.Thorax_Mass, [0 0 0], Lenght_Thorax);
     % ------------------------- Skull ----------------------------------------
     [I_Skull]=rgyration2inertia([31 25 33 9*1i 2*1i 3],Mass.Skull_Mass, [0 0 0], Lenght_Skull); 
 
@@ -139,7 +139,7 @@ Ihead=[I_Skull(1) I_Skull(4) I_Skull(5); I_Skull(4) I_Skull(2) I_Skull(6); I_Sku
 Ithorax=[I_Thorax(1) I_Thorax(4) I_Thorax(5); I_Thorax(4) I_Thorax(2) I_Thorax(6); I_Thorax(5) I_Thorax(6) I_Thorax(3)];
 
 Ihead_dep=Huygens(Skull_NeckNode-CoM_bary,Ihead,Mass.Skull_Mass);
-Ithorax_dep=Huygens(Thorax_T12L1JointNode-CoM_bary,Ithorax,Mass.UpperTrunk_Mass);
+Ithorax_dep=Huygens(Thorax_T12L1JointNode-CoM_bary,Ithorax,Mass.Thorax_Mass);
 Iglob=Ihead_dep+Ithorax_dep;
                     %% %% "Human_model" structure generation
  
@@ -163,6 +163,7 @@ num_solid=0;
     OsteoArticularModel(incr_solid).c=[0 0 0]';
     OsteoArticularModel(incr_solid).m=0;                 
     OsteoArticularModel(incr_solid).I=zeros(3,3);
+    OsteoArticularModel(incr_solid).comment='Trunk Flexion(-)/Extension(+)';
 
     % UpperTrunk_J2
     num_solid=num_solid+1;        % number of the solid ...
@@ -182,6 +183,7 @@ num_solid=0;
     OsteoArticularModel(incr_solid).c=[0 0 0]';
     OsteoArticularModel(incr_solid).m=0;                 
     OsteoArticularModel(incr_solid).I=zeros(3,3);
+    OsteoArticularModel(incr_solid).comment='Trunk Axial Rotation Right(+)/Left(-)';
 
     % Thorax
     num_solid=num_solid+1;        % number of the solid ...
@@ -199,10 +201,11 @@ num_solid=0;
     OsteoArticularModel(incr_solid).calib_k_constraint=[];
     OsteoArticularModel(incr_solid).b=[0 0 0]';  
     OsteoArticularModel(incr_solid).c=CoM_bary;
-    OsteoArticularModel(incr_solid).m=Mass.UpperTrunk_Mass+Mass.Skull_Mass;
+    OsteoArticularModel(incr_solid).m=Mass.Thorax_Mass+Mass.Skull_Mass;
     OsteoArticularModel(incr_solid).I=Iglob;
     OsteoArticularModel(incr_solid).anat_position=Thorax_position_set;
     OsteoArticularModel(incr_solid).L={'Pelvis_L5JointNode';'Thorax_T1C5'};
     OsteoArticularModel(incr_solid).visual_file = ['gait2354/torso.mat'];
+    OsteoArticularModel(incr_solid).comment='Trunk Lateral Bending Right(+)/Left(-)';
 
 end

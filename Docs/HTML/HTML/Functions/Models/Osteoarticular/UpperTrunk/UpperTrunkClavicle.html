@@ -1,0 +1,669 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of UpperTrunkClavicle</title>
+  <meta name="keywords" content="UpperTrunkClavicle">
+  <meta name="description" content="Addition of an upper trunk model">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html Functions --><!-- ../../menu.html Models --><!-- ../menu.html Osteoarticular --><!-- menu.html UpperTrunk -->
+<h1>UpperTrunkClavicle
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>Addition of an upper trunk model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [OsteoArticularModel]= UpperTrunkClavicle(OsteoArticularModel,k,Mass,AttachmentPoint) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Addition of an upper trunk model
+   This upper trunk model contains 3 solids (thorax, right clavicle and
+   left clavicle), exhibits 3 dof for lower trunk / upper trunk joint, 3
+   dof for each upper trunk / clavicle joint
+
+    Based on:
+    - Damsgaard, M., Rasmussen, J., Christensen, S. T., Surma, E., &amp; De Zee, M., 2006.
+     Analysis of musculoskeletal systems in the AnyBody Modeling System. Simulation Modelling Practice and Theory, 14(8), 1100-1111.
+
+   INPUT
+   - OsteoArticularModel: osteo-articular model of an already existing
+   model (see the Documentation for the structure)
+   - k: homothety coefficient for the geometrical parameters (defined as
+   the subject size in cm divided by 180)
+   - Mass: mass of the solids
+   - AttachmentPoint: name of the attachment point of the model on the
+   already existing model (character string)
+   OUTPUT
+   - OsteoArticularModel: new osteo-articular model (see the Documentation
+   for the structure) 
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Functions/AlgoMathsModel/distance_point.html" class="code" title="function [L,Typ] = distance_point(Point1,Bone1,Point2,Bone2,Human_model,q)">distance_point</a>	Computation of the distance between two points</li><li><a href="../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>	Computation of inertia matrix from radius of gyration</li><li><a href="../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>	Addition of a sister to a solid</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [OsteoArticularModel]= UpperTrunkClavicle(OsteoArticularModel,k,Mass,AttachmentPoint)</a>
+0002 <span class="comment">% Addition of an upper trunk model</span>
+0003 <span class="comment">%   This upper trunk model contains 3 solids (thorax, right clavicle and</span>
+0004 <span class="comment">%   left clavicle), exhibits 3 dof for lower trunk / upper trunk joint, 3</span>
+0005 <span class="comment">%   dof for each upper trunk / clavicle joint</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%    Based on:</span>
+0008 <span class="comment">%    - Damsgaard, M., Rasmussen, J., Christensen, S. T., Surma, E., &amp; De Zee, M., 2006.</span>
+0009 <span class="comment">%     Analysis of musculoskeletal systems in the AnyBody Modeling System. Simulation Modelling Practice and Theory, 14(8), 1100-1111.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%   INPUT</span>
+0012 <span class="comment">%   - OsteoArticularModel: osteo-articular model of an already existing</span>
+0013 <span class="comment">%   model (see the Documentation for the structure)</span>
+0014 <span class="comment">%   - k: homothety coefficient for the geometrical parameters (defined as</span>
+0015 <span class="comment">%   the subject size in cm divided by 180)</span>
+0016 <span class="comment">%   - Mass: mass of the solids</span>
+0017 <span class="comment">%   - AttachmentPoint: name of the attachment point of the model on the</span>
+0018 <span class="comment">%   already existing model (character string)</span>
+0019 <span class="comment">%   OUTPUT</span>
+0020 <span class="comment">%   - OsteoArticularModel: new osteo-articular model (see the Documentation</span>
+0021 <span class="comment">%   for the structure)</span>
+0022 <span class="comment">%________________________________________________________</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% Licence</span>
+0025 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0026 <span class="comment">%________________________________________________________</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0029 <span class="comment">% Georges Dumont</span>
+0030 <span class="comment">%________________________________________________________</span>
+0031 list_solid={<span class="string">'UpperTrunk_J1'</span> <span class="string">'UpperTrunk_J2'</span> <span class="string">'Thorax'</span> <span class="keyword">...</span>
+0032         <span class="string">'RClavicle_J1'</span> <span class="string">'RClavicle_J2'</span> <span class="string">'RClavicle'</span> <span class="keyword">...</span>
+0033         <span class="string">'LClavicle_J1'</span> <span class="string">'LClavicle_J2'</span> <span class="string">'LClavicle'</span>};
+0034  
+0035 <span class="comment">%% solid numbering incremation</span>
+0036 
+0037 s=size(OsteoArticularModel,2)+1;  <span class="comment">%#ok&lt;NASGU&gt; % number of the first solid</span>
+0038 <span class="keyword">for</span> i=1:size(list_solid,2)      <span class="comment">% each solid numbering: s_&quot;nom du solide&quot;</span>
+0039     <span class="keyword">if</span> i==1
+0040         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s;'</span>))
+0041     <span class="keyword">else</span>
+0042         eval(strcat(<span class="string">'s_'</span>,list_solid{i},<span class="string">'=s_'</span>,list_solid{i-1},<span class="string">'+1;'</span>))
+0043     <span class="keyword">end</span>
+0044 <span class="keyword">end</span>  
+0045     
+0046 <span class="comment">% find the number of the mother from the attachment point: 'attachment_pt'</span>
+0047 <span class="keyword">if</span> ~numel(AttachmentPoint)
+0048     s_mother=0;
+0049     pos_attachment_pt=[0 0 0]';
+0050 <span class="keyword">else</span>
+0051     test=0;
+0052     <span class="keyword">for</span> i=1:numel(OsteoArticularModel)
+0053         <span class="keyword">for</span> j=1:size(OsteoArticularModel(i).anat_position,1)
+0054             <span class="keyword">if</span> strcmp(AttachmentPoint,OsteoArticularModel(i).anat_position{j,1})
+0055                s_mother=i;
+0056                pos_attachment_pt=OsteoArticularModel(i).anat_position{j,2}+OsteoArticularModel(s_mother).c;
+0057                test=1;
+0058                <span class="keyword">break</span>
+0059             <span class="keyword">end</span>
+0060         <span class="keyword">end</span>
+0061         <span class="keyword">if</span> i==numel(OsteoArticularModel) &amp;&amp; test==0
+0062             error([AttachmentPoint <span class="string">' is no existent'</span>])        
+0063         <span class="keyword">end</span>       
+0064     <span class="keyword">end</span>
+0065     <span class="keyword">if</span> OsteoArticularModel(s_mother).child == 0      <span class="comment">% if the mother don't have any child</span>
+0066         OsteoArticularModel(s_mother).child = eval([<span class="string">'s_'</span> list_solid{1}]);    <span class="comment">% the child of this mother is this solid</span>
+0067     <span class="keyword">else</span>
+0068         [OsteoArticularModel]=<a href="../../../../Functions/AlgoMathsModel/sister_actualize.html" class="code" title="function [Human_model]=sister_actualize(Human_model,j,i)">sister_actualize</a>(OsteoArticularModel,OsteoArticularModel(s_mother).child,eval([<span class="string">'s_'</span> list_solid{1}]));   <span class="comment">% recherche de la derni�re soeur</span>
+0069     <span class="keyword">end</span>
+0070 <span class="keyword">end</span>    
+0071 
+0072 
+0073 <span class="comment">%%                     Definition of anatomical landmarks</span>
+0074 
+0075 <span class="comment">% ------------------------- Thorax ----------------------------------------</span>
+0076 
+0077 <span class="comment">% Center of mass location with respect to the reference frame</span>
+0078 CoM_Thorax = k*[0.060 0.303 0];
+0079 
+0080 <span class="comment">% Node locations</span>
+0081 Thorax_T12L1JointNode = k*[0.022 0.154 0] - CoM_Thorax;
+0082 Thorax_C1HatNode = k*[0.026 0.6 0] - CoM_Thorax;
+0083 Thorax_T1C5 = k*[0.013 0.462 0] - CoM_Thorax;
+0084 Thorax_scjJointRightNode = k*[0.0010 0.1240 0.0207]-Thorax_T12L1JointNode;
+0085 Thorax_scjJointLeftNode = k*[0.0010 0.1240 -0.0207]-Thorax_T12L1JointNode;
+0086 Thorax_ShoulderRightNode=k*[-0.0408 0.1099 0.1929]-Thorax_T12L1JointNode;
+0087 Thorax_ShoulderLeftNode=k*[-0.0408 0.1099 -0.1929]-Thorax_T12L1JointNode;
+0088 Thorax_scjJointCenter=k*[0 0.1240 0]-Thorax_T12L1JointNode;
+0089 NeckNode=Thorax_C1HatNode;
+0090 
+0091 Thorax_osim2antoine     = [k k Thorax_ShoulderRightNode(3)/0.17]; <span class="comment">% scaling coef based on shoulder width</span>
+0092 CoM_Thorax_osim         = Thorax_osim2antoine.*[-0.0591 -0.1486 0];
+0093 CoM_Clavicle_osim       = Thorax_osim2antoine.*[-0.011096 0.0063723 0.054168];
+0094 Scapula_CoM_osim        = Thorax_osim2antoine.*[-0.054694 -0.035032 -0.043734];
+0095 Clavicle_acJointNode    = Thorax_osim2antoine.*[-0.02924 0.02024 0.12005] - CoM_Clavicle_osim;
+0096 Scapula_acJointNode     = Thorax_osim2antoine.*[-0.01357 0.00011 -0.01523] - Scapula_CoM_osim;
+0097 Clavicle2Scapula        = Scapula_acJointNode - Clavicle_acJointNode;
+0098 
+0099 RThorax_Triceps = ([-0.05365 -0.01373 0.14723]).*Thorax_osim2antoine; <span class="comment">% in the frame osimarm26</span>
+0100 LThorax_Triceps = ([-0.05365 -0.01373 -0.14723]).*Thorax_osim2antoine; <span class="comment">% in the frame osimarm26</span>
+0101 RThorax_BicepsL_o = ([-0.039235 0.00347 0.14795]).*Thorax_osim2antoine; <span class="comment">% in the frame osimarm26</span>
+0102 LThorax_BicepsL_o = ([-0.039235 0.00347 -0.14795]).*Thorax_osim2antoine; <span class="comment">% in the frame osimarm26</span>
+0103 RThorax_BicepsL_via1 = ([-0.028945 0.01391 0.15639]).*Thorax_osim2antoine; <span class="comment">% in the frame osimarm26;</span>
+0104 LThorax_BicepsL_via1 = ([-0.028945 0.01391 -0.15639]).*Thorax_osim2antoine; <span class="comment">% in the frame osimarm26;</span>
+0105 RThorax_BicepsS_o = ([0.004675 -0.01231 0.13475]).*Thorax_osim2antoine; <span class="comment">% in the frame osimarm26</span>
+0106 LThorax_BicepsS_o = ([0.004675 -0.01231 -0.13475]).*Thorax_osim2antoine; <span class="comment">% in the frame osimarm26</span>
+0107 RThorax_BicepsS_via1 = ([-0.007075 -0.04004 0.14507]).*Thorax_osim2antoine; <span class="comment">% in the frame osimarm26;</span>
+0108 LThorax_BicepsS_via1 = ([-0.007075 -0.04004 -0.14507]).*Thorax_osim2antoine; <span class="comment">% in the frame osimarm26;</span>
+0109 
+0110 
+0111 <span class="comment">% Pennestri to Custom vector transformation</span>
+0112 dh = -0.140;
+0113 eh = 0.140;
+0114 L_humerus = 2*0.1674;
+0115 k_Pennestri2custom = L_humerus/(eh-dh)*k; <span class="comment">% Humerus length equality</span>
+0116 Pennestri2custom = k_Pennestri2custom*[0 0 1;-1 0 0;0 -1 0];
+0117 
+0118 <span class="comment">%% Definition of anatomical landmarks (with respect to the center of mass of the solid)</span>
+0119 
+0120 Thorax_position_set= {<span class="keyword">...</span>
+0121     <span class="string">'STRN'</span>, k*[0.095 -0.055 0]'; <span class="keyword">...</span>
+0122     <span class="string">'CLAV'</span>, k*[0.01 0.13 0]'; <span class="keyword">...</span>
+0123     <span class="string">'T10'</span>, k*[-0.12 -0.115 0]'; <span class="keyword">...</span>
+0124     <span class="string">'T8'</span>, k*[-0.13 -0.05 0]'; <span class="keyword">...</span>
+0125     <span class="string">'T12'</span>, k*[-0.10 -0.175 0]'; <span class="keyword">...</span>
+0126     <span class="string">'C7'</span>, k*[-0.105 0.165 0]'; <span class="keyword">...</span>
+0127     <span class="string">'NeckNode'</span>, NeckNode'; <span class="keyword">...</span>
+0128     <span class="string">'Thorax_T1C5'</span>, Thorax_T1C5'; <span class="keyword">...</span>
+0129     <span class="string">'Thorax_scjJointRightNode'</span>, Thorax_scjJointRightNode'; <span class="keyword">...</span>
+0130     <span class="string">'Thorax_scjJointLeftNode'</span>, Thorax_scjJointLeftNode'; <span class="keyword">...</span>
+0131     <span class="string">'Thorax_T12L1JointNode'</span>, Thorax_T12L1JointNode'; <span class="keyword">...</span>
+0132     
+0133     <span class="comment">% Muscles adapted from (Puchaud et al., 2019)</span>
+0134     [<span class="string">'R_Thorax_PECM1-P3'</span>],Thorax_osim2antoine'.*[0.0063633;-0.0073233;0.11927]- CoM_Thorax_osim';<span class="keyword">...</span>
+0135     [<span class="string">'R_Thorax_PECM2-P3'</span>],Thorax_osim2antoine'.*([0.020397;-0.03445;0.12312])- CoM_Thorax_osim';<span class="keyword">...</span>
+0136     [<span class="string">'R_Thorax_PECM2-P4'</span>],Thorax_osim2antoine'.*([0.03091;-0.03922;0.09705])- CoM_Thorax_osim';<span class="keyword">...</span>
+0137     [<span class="string">'R_Thorax_PECM2-P5'</span>],Thorax_osim2antoine'.*([0.02769;-0.04498;0.02271])- CoM_Thorax_osim';<span class="keyword">...</span>
+0138     [<span class="string">'R_Thorax_PECM3-P3'</span>],Thorax_osim2antoine'.*([0.02984;-0.069739;0.1151])- CoM_Thorax_osim';<span class="keyword">...</span>
+0139     [<span class="string">'R_Thorax_PECM3-P4'</span>],Thorax_osim2antoine'.*([0.0525;-0.08417;0.08935])- CoM_Thorax_osim';<span class="keyword">...</span>
+0140     [<span class="string">'R_Thorax_PECM3-P5'</span>],Thorax_osim2antoine'.*([0.05724;-0.11654;0.03787])- CoM_Thorax_osim';<span class="keyword">...</span>
+0141     [<span class="string">'R_Thorax_LAT1-P4'</span>],Thorax_osim2antoine'.*([-0.11828;-0.10118;0.03316])- CoM_Thorax_osim';<span class="keyword">...</span>
+0142     [<span class="string">'R_Thorax_LAT1-P5'</span>],Thorax_osim2antoine'.*([-0.09578;-0.11724;0.00882])- CoM_Thorax_osim';<span class="keyword">...</span>
+0143     [<span class="string">'R_Thorax_LAT2-P4'</span>],Thorax_osim2antoine'.*([-0.10992;-0.16908;0.02878])- CoM_Thorax_osim';<span class="keyword">...</span>
+0144     [<span class="string">'R_Thorax_LAT2-P5'</span>],Thorax_osim2antoine'.*([-0.07186;-0.18818;0.00815])- CoM_Thorax_osim';<span class="keyword">...</span>
+0145     [<span class="string">'R_Thorax_LAT3-P4'</span>],Thorax_osim2antoine'.*([-0.11157;-0.19387;0.05532])- CoM_Thorax_osim';<span class="keyword">...</span>
+0146     [<span class="string">'R_Thorax_LAT3-P5'</span>],Thorax_osim2antoine'.*([-0.07117;-0.24858;0.00907])- CoM_Thorax_osim';<span class="keyword">...</span>
+0147     [<span class="string">'L_Thorax_PECM1-P3'</span>],Thorax_osim2antoine'.*([0.0063633;-0.0073233;-0.11927])- CoM_Thorax_osim';<span class="keyword">...</span>
+0148     [<span class="string">'L_Thorax_PECM2-P3'</span>],Thorax_osim2antoine'.*([0.020397;-0.03445;-0.12312])- CoM_Thorax_osim';<span class="keyword">...</span>
+0149     [<span class="string">'L_Thorax_PECM2-P4'</span>],Thorax_osim2antoine'.*([0.03091;-0.03922;-0.09705])- CoM_Thorax_osim';<span class="keyword">...</span>
+0150     [<span class="string">'L_Thorax_PECM2-P5'</span>],Thorax_osim2antoine'.*([0.02769;-0.04498;-0.02271])- CoM_Thorax_osim';<span class="keyword">...</span>
+0151     [<span class="string">'L_Thorax_PECM3-P3'</span>],Thorax_osim2antoine'.*([0.02984;-0.069739;-0.1151])- CoM_Thorax_osim';<span class="keyword">...</span>
+0152     [<span class="string">'L_Thorax_PECM3-P4'</span>],Thorax_osim2antoine'.*([0.0525;-0.08417;-0.08935])- CoM_Thorax_osim';<span class="keyword">...</span>
+0153     [<span class="string">'L_Thorax_PECM3-P5'</span>],Thorax_osim2antoine'.*([0.05724;-0.11654;-0.03787])- CoM_Thorax_osim';<span class="keyword">...</span>
+0154     [<span class="string">'L_Thorax_LAT1-P4'</span>],Thorax_osim2antoine'.*([-0.11828;-0.10118;-0.03316])- CoM_Thorax_osim';<span class="keyword">...</span>
+0155     [<span class="string">'L_Thorax_LAT1-P5'</span>],Thorax_osim2antoine'.*([-0.09578;-0.11724;-0.00882])- CoM_Thorax_osim';<span class="keyword">...</span>
+0156     [<span class="string">'L_Thorax_LAT2-P4'</span>],Thorax_osim2antoine'.*([-0.10992;-0.16908;-0.02878])- CoM_Thorax_osim';<span class="keyword">...</span>
+0157     [<span class="string">'L_Thorax_LAT2-P5'</span>],Thorax_osim2antoine'.*([-0.07186;-0.18818;-0.00815])- CoM_Thorax_osim';<span class="keyword">...</span>
+0158     [<span class="string">'L_Thorax_LAT3-P4'</span>],Thorax_osim2antoine'.*([-0.11157;-0.19387;-0.05532])- CoM_Thorax_osim';<span class="keyword">...</span>
+0159     [<span class="string">'L_Thorax_LAT3-P5'</span>],Thorax_osim2antoine'.*([-0.07117;-0.24858;-0.00907])- CoM_Thorax_osim';<span class="keyword">...</span>
+0160     [<span class="string">'R_Thorax_stern_mast-P1'</span>],Thorax_osim2antoine'.*([-0.002;-0.0005;0.0087])- CoM_Thorax_osim';<span class="keyword">...</span>
+0161     [<span class="string">'L_Thorax_stern_mast-P1'</span>],Thorax_osim2antoine'.*([-0.002;-0.0005;-0.0087])- CoM_Thorax_osim';<span class="keyword">...</span>
+0162     [<span class="string">'R_Thorax_rhomboid_min-P1'</span>],Thorax_osim2antoine'.*([-0.078;0.03;0])- CoM_Thorax_osim';<span class="keyword">...</span>
+0163     [<span class="string">'R_Thorax_rhomboid_maj-P1'</span>],Thorax_osim2antoine'.*([-0.1;-0.038;0])- CoM_Thorax_osim';<span class="keyword">...</span>
+0164     [<span class="string">'L_Thorax_rhomboid_min-P1'</span>],Thorax_osim2antoine'.*([-0.078;0.03;0])- CoM_Thorax_osim';<span class="keyword">...</span>
+0165     [<span class="string">'L_Thorax_rhomboid_maj-P1'</span>],Thorax_osim2antoine'.*([-0.1;-0.038;0])- CoM_Thorax_osim';<span class="keyword">...</span>
+0166     [<span class="string">'R_Thorax_serr_ant_1-P2'</span>],Thorax_osim2antoine'.*([-0.0353;-0.2;0.125])- CoM_Thorax_osim';<span class="keyword">...</span>
+0167     [<span class="string">'R_Thorax_serr_ant_2-P2'</span>],Thorax_osim2antoine'.*([-0.0149;-0.175;0.1327])- CoM_Thorax_osim';<span class="keyword">...</span>
+0168     [<span class="string">'R_Thorax_serr_ant_3-P2'</span>],Thorax_osim2antoine'.*([-0.0024;-0.15;0.135])- CoM_Thorax_osim';<span class="keyword">...</span>
+0169     [<span class="string">'R_Thorax_serr_ant_4-P2'</span>],Thorax_osim2antoine'.*([0.0031;-0.129;0.135])- CoM_Thorax_osim';<span class="keyword">...</span>
+0170     [<span class="string">'R_Thorax_serr_ant_5-P2'</span>],Thorax_osim2antoine'.*([-0.0041;-0.09;0.14])- CoM_Thorax_osim';<span class="keyword">...</span>
+0171     [<span class="string">'R_Thorax_serr_ant_6-P2'</span>],Thorax_osim2antoine'.*([-0.019;-0.07;0.126])- CoM_Thorax_osim';<span class="keyword">...</span>
+0172     [<span class="string">'R_Thorax_serr_ant_7-P2'</span>],Thorax_osim2antoine'.*([-0.033;-0.04;0.12])- CoM_Thorax_osim';<span class="keyword">...</span>
+0173     [<span class="string">'R_Thorax_serr_ant_8-P2'</span>],Thorax_osim2antoine'.*([-0.0552;-0.02;0.101])- CoM_Thorax_osim';<span class="keyword">...</span>
+0174     [<span class="string">'R_Thorax_serr_ant_9-P2'</span>],Thorax_osim2antoine'.*([-0.0546;0.0062;0.098])- CoM_Thorax_osim';<span class="keyword">...</span>
+0175     [<span class="string">'R_Thorax_serr_ant_10-P2'</span>],Thorax_osim2antoine'.*([-0.0595;0.0109;0.0944])- CoM_Thorax_osim';<span class="keyword">...</span>
+0176     [<span class="string">'R_Thorax_serr_ant_11-P2'</span>],Thorax_osim2antoine'.*([-0.0546;0.0062;0.098])- CoM_Thorax_osim';<span class="keyword">...</span>
+0177     [<span class="string">'R_Thorax_serr_ant_12-P2'</span>],Thorax_osim2antoine'.*([-0.047;0.0009;0.1005])- CoM_Thorax_osim';<span class="keyword">...</span>
+0178     [<span class="string">'L_Thorax_serr_ant_1-P2'</span>],Thorax_osim2antoine'.*([-0.0353;-0.2;-0.125])- CoM_Thorax_osim';<span class="keyword">...</span>
+0179     [<span class="string">'L_Thorax_serr_ant_2-P2'</span>],Thorax_osim2antoine'.*([-0.0149;-0.175;-0.1327])- CoM_Thorax_osim';<span class="keyword">...</span>
+0180     [<span class="string">'L_Thorax_serr_ant_3-P2'</span>],Thorax_osim2antoine'.*([-0.0024;-0.15;-0.135])- CoM_Thorax_osim';<span class="keyword">...</span>
+0181     [<span class="string">'L_Thorax_serr_ant_4-P2'</span>],Thorax_osim2antoine'.*([0.0031;-0.129;-0.135])- CoM_Thorax_osim';<span class="keyword">...</span>
+0182     [<span class="string">'L_Thorax_serr_ant_5-P2'</span>],Thorax_osim2antoine'.*([-0.0041;-0.09;-0.14])- CoM_Thorax_osim';<span class="keyword">...</span>
+0183     [<span class="string">'L_Thorax_serr_ant_6-P2'</span>],Thorax_osim2antoine'.*([-0.019;-0.07;-0.126])- CoM_Thorax_osim';<span class="keyword">...</span>
+0184     [<span class="string">'L_Thorax_serr_ant_7-P2'</span>],Thorax_osim2antoine'.*([-0.033;-0.04;-0.12])- CoM_Thorax_osim';<span class="keyword">...</span>
+0185     [<span class="string">'L_Thorax_serr_ant_8-P2'</span>],Thorax_osim2antoine'.*([-0.0552;-0.02;-0.101])- CoM_Thorax_osim';<span class="keyword">...</span>
+0186     [<span class="string">'L_Thorax_serr_ant_9-P2'</span>],Thorax_osim2antoine'.*([-0.0546;0.0062;-0.098])- CoM_Thorax_osim';<span class="keyword">...</span>
+0187     [<span class="string">'L_Thorax_serr_ant_10-P2'</span>],Thorax_osim2antoine'.*([-0.0595;0.0109;-0.0944])- CoM_Thorax_osim';<span class="keyword">...</span>
+0188     [<span class="string">'L_Thorax_serr_ant_11-P2'</span>],Thorax_osim2antoine'.*([-0.0546;0.0062;-0.098])- CoM_Thorax_osim';<span class="keyword">...</span>
+0189     [<span class="string">'L_Thorax_serr_ant_12-P2'</span>],Thorax_osim2antoine'.*([-0.047;0.0009;-0.1005])- CoM_Thorax_osim';<span class="keyword">...</span>
+0190     
+0191         <span class="comment">% Muscles extracted from (Pennestri et al., 2007)</span>
+0192 <span class="comment">%     ['RThorax_TricepsBrachii2_i'],Pennestri2custom*[0.038 0.027 -0.02]'+Thorax_ShoulderRightNode'+Thorax_T12L1JointNode';...</span>
+0193     [<span class="string">'RRadius_TricepsBrachii2_o'</span>], Pennestri2custom*[-0.025 0.02 -0.02]'+Thorax_ShoulderRightNode'+Thorax_T12L1JointNode';<span class="keyword">...</span>
+0194 <span class="comment">%     ['RThorax_BicepsBrachii1_i'],Pennestri2custom*[0.038 0 0.01]'+Thorax_ShoulderRightNode'+Thorax_T12L1JointNode';...</span>
+0195     [<span class="string">'RUlna_BicepsBrachii1_o'</span>], Pennestri2custom*[0 -0.015 0.01]'+Thorax_ShoulderRightNode'+Thorax_T12L1JointNode';<span class="keyword">...</span>
+0196     [<span class="string">'RHumerus_Coracobrachialis_o'</span>],Pennestri2custom*[0.02 0.03 0.035]'+Thorax_ShoulderRightNode'+Thorax_T12L1JointNode';<span class="keyword">...</span>
+0197     [<span class="string">'RHumerus_Deltoid_o'</span>],Pennestri2custom*[ -0.03 0.04 0.015]'+Thorax_ShoulderRightNode'+Thorax_T12L1JointNode';<span class="keyword">...</span>
+0198     [<span class="string">'RHumerus_LatissimusDorsi_o'</span>],Pennestri2custom*[ -0.035 0.09 -0.125]'+Thorax_ShoulderRightNode'+Thorax_T12L1JointNode';<span class="keyword">...</span>
+0199     [<span class="string">'RHumerus_PectoralisMajor_o'</span>],Pennestri2custom*[ 0.045 0.095 -0.125]'+Thorax_ShoulderRightNode'+Thorax_T12L1JointNode';<span class="keyword">...</span>
+0200     [<span class="string">'RHumerus_Supraspinatus_o'</span>],Pennestri2custom*[ -0.02 0.09 0.035]'+Thorax_ShoulderRightNode'+Thorax_T12L1JointNode';<span class="keyword">...</span>
+0201     [<span class="string">'RHumerus_Infraspinatus_o'</span>],Pennestri2custom*[ -0.015 0.08 -0.04]'+Thorax_ShoulderRightNode'+Thorax_T12L1JointNode';<span class="keyword">...</span>
+0202     [<span class="string">'RHumerus_Trapezius_o'</span>],Pennestri2custom*[0 0.08 0.01]'+Thorax_ShoulderRightNode'+Thorax_T12L1JointNode';<span class="keyword">...</span>
+0203     [<span class="string">'RHumerus_BicepsBrachii2_o'</span>],Pennestri2custom*[0 -0.015 0.01]'+Thorax_ShoulderRightNode'+Thorax_T12L1JointNode';<span class="keyword">...</span>
+0204     
+0205 <span class="comment">%     ['LThorax_TricepsBrachii2_i'],[1 0 0;0 1 0;0 0 -1]*Pennestri2custom*[0.038 0.027 -0.02]'+Thorax_ShoulderLeftNode'+Thorax_T12L1JointNode';...</span>
+0206     [<span class="string">'LRadius_TricepsBrachii2_o'</span>], Pennestri2custom*[-0.025 0.02 -0.02]'+Thorax_ShoulderLeftNode'+Thorax_T12L1JointNode';<span class="keyword">...</span>
+0207 <span class="comment">%     ['LThorax_BicepsBrachii1_i'],[1 0 0;0 1 0;0 0 -1]*Pennestri2custom*[0.038 0 0.01]'+Thorax_ShoulderLeftNode'+Thorax_T12L1JointNode';...</span>
+0208     [<span class="string">'LUlna_BicepsBrachii1_o'</span>], [1 0 0;0 1 0;0 0 -1]*Pennestri2custom*[0 -0.015 0.01]'+Thorax_ShoulderLeftNode'+Thorax_T12L1JointNode';<span class="keyword">...</span><span class="comment">    </span>
+0209     [<span class="string">'LHumerus_Coracobrachialis_o'</span>],[1 0 0;0 1 0;0 0 -1]*Pennestri2custom*[0.02 0.03 0.035]'+Thorax_ShoulderLeftNode'+Thorax_T12L1JointNode';<span class="keyword">...</span>
+0210     [<span class="string">'LHumerus_Deltoid_o'</span>],[1 0 0;0 1 0;0 0 -1]*Pennestri2custom*[ -0.03 0.04 0.015]'+Thorax_ShoulderLeftNode'+Thorax_T12L1JointNode';<span class="keyword">...</span>
+0211     [<span class="string">'LHumerus_LatissimusDorsi_o'</span>],[1 0 0;0 1 0;0 0 -1]*Pennestri2custom*[ -0.035 0.09 -0.125]'+Thorax_ShoulderLeftNode'+Thorax_T12L1JointNode';<span class="keyword">...</span>
+0212     [<span class="string">'LHumerus_PectoralisMajor_o'</span>],[1 0 0;0 1 0;0 0 -1]*Pennestri2custom*[ 0.045 0.095 -0.125]'+Thorax_ShoulderLeftNode'+Thorax_T12L1JointNode';<span class="keyword">...</span>
+0213     [<span class="string">'LHumerus_Supraspinatus_o'</span>],[1 0 0;0 1 0;0 0 -1]*Pennestri2custom*[ -0.02 0.09 0.035]'+Thorax_ShoulderLeftNode'+Thorax_T12L1JointNode';<span class="keyword">...</span>
+0214     [<span class="string">'LHumerus_Infraspinatus_o'</span>],[1 0 0;0 1 0;0 0 -1]*Pennestri2custom*[ -0.015 0.08 -0.04]'+Thorax_ShoulderLeftNode'+Thorax_T12L1JointNode';<span class="keyword">...</span>
+0215     [<span class="string">'LHumerus_Trapezius_o'</span>],[1 0 0;0 1 0;0 0 -1]*Pennestri2custom*[0 0.08 0.01]'+Thorax_ShoulderLeftNode'+Thorax_T12L1JointNode';<span class="keyword">...</span>
+0216     [<span class="string">'LHumerus_BicepsBrachii2_o'</span>],[1 0 0;0 1 0;0 0 -1]*Pennestri2custom*[0 -0.015 0.01]'+Thorax_ShoulderLeftNode'+Thorax_T12L1JointNode';<span class="keyword">...</span>
+0217     };
+0218     
+0219 RClavicle_position_set= {<span class="keyword">...</span><span class="comment">    </span>
+0220     <span class="string">'RSHO'</span>, k*[-0.0416 0.1707 0.1853]'-Thorax_T12L1JointNode'-Thorax_scjJointRightNode'; <span class="keyword">...</span>
+0221     <span class="string">'CLAVD'</span>, k*[0.005 0.02 0.07]'; <span class="keyword">...</span>
+0222     <span class="string">'Thorax_ShoulderRightNode'</span>, Thorax_ShoulderRightNode'-Thorax_scjJointRightNode'; <span class="keyword">...</span>
+0223     <span class="comment">% Muscle paths from arm26</span>
+0224     <span class="string">'RThorax_Triceps_o'</span>,RThorax_Triceps'-Thorax_scjJointRightNode'+Thorax_scjJointCenter';<span class="keyword">...</span>
+0225     <span class="string">'RThorax_BicepsL_o'</span>,RThorax_BicepsL_o'-Thorax_scjJointRightNode'+Thorax_scjJointCenter';<span class="keyword">...</span>
+0226     <span class="string">'RThorax_BicepsL_via1'</span>,RThorax_BicepsL_via1'-Thorax_scjJointRightNode'+Thorax_scjJointCenter';<span class="keyword">...</span>
+0227     <span class="string">'RThorax_BicepsS_o'</span>,RThorax_BicepsS_o'-Thorax_scjJointRightNode'+Thorax_scjJointCenter';<span class="keyword">...</span>
+0228     <span class="string">'RThorax_BicepsS_via1'</span>,RThorax_BicepsS_via1'-Thorax_scjJointRightNode'+Thorax_scjJointCenter';<span class="keyword">...</span>
+0229     <span class="comment">% Muscle paths from (Puchaud et al., 2019)</span>
+0230     <span class="string">'R_clavicle_r_DELT1_r-P4'</span>,Thorax_osim2antoine'.*([-0.014;0.01106;0.08021])-CoM_Clavicle_osim';<span class="keyword">...</span>
+0231     <span class="string">'R_clavicle_r_PECM1_r-P4'</span>,Thorax_osim2antoine'.*([0.00321;-0.00013;0.05113])-CoM_Clavicle_osim';<span class="keyword">...</span>
+0232     <span class="string">'R_clavicle_r_cleid_mast_r-P1'</span>,Thorax_osim2antoine'.*([0.0022;0.0043;0.0257])-CoM_Clavicle_osim';<span class="keyword">...</span>
+0233     <span class="string">'R_clavicle_r_cleid_occ_r-P1'</span>,Thorax_osim2antoine'.*([0.0022;0.0043;0.0257])-CoM_Clavicle_osim';<span class="keyword">...</span>
+0234     <span class="string">'R_clavicle_r_trap_cl_r-P1'</span>,Thorax_osim2antoine'.*([-0.0171;0.019;0.0727])-CoM_Clavicle_osim';<span class="keyword">...</span>
+0235     <span class="comment">% Scapula Muscle paths from (Puchaud et al., 2019)</span>
+0236     <span class="string">'R_Scapula_DELT1-P3'</span>,Thorax_osim2antoine'.*([0.04347;-0.03252;0.00099])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0237     <span class="string">'R_Scapula_DELT2-P3'</span>,Thorax_osim2antoine'.*([5e-05;0.00294;0.02233])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0238     <span class="string">'R_Scapula_DELT2-P4'</span>,Thorax_osim2antoine'.*([-0.01078;-0.00034;0.0062])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0239     <span class="string">'R_Scapula_DELT3-P1'</span>,Thorax_osim2antoine'.*([-0.05573;0.00122;-0.02512])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0240     <span class="string">'R_Scapula_DELT3-P2'</span>,Thorax_osim2antoine'.*([-0.07247;-0.03285;0.01233])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0241     <span class="string">'R_Scapula_SUPSP-P2'</span>,Thorax_osim2antoine'.*([-0.01918;0.00127;-0.01271])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0242     <span class="string">'R_Scapula_SUPSP-P3'</span>,Thorax_osim2antoine'.*([-0.044;-0.01512;-0.05855])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0243     <span class="string">'R_Scapula_INFSP-P2'</span>,Thorax_osim2antoine'.*([-0.07382;-0.05476;-0.04781])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0244     <span class="string">'R_Scapula_SUBSC-P2'</span>,Thorax_osim2antoine'.*([-0.01831;-0.05223;-0.02457])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0245     <span class="string">'R_Scapula_SUBSC-P3'</span>,Thorax_osim2antoine'.*([-0.07246;-0.03943;-0.06475])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0246     <span class="string">'R_Scapula_TMIN-P2'</span>,Thorax_osim2antoine'.*([-0.09473;-0.07991;-0.04737])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0247     <span class="string">'R_Scapula_TMIN-P3'</span>,Thorax_osim2antoine'.*([-0.09643;-0.08121;-0.05298])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0248     <span class="string">'R_Scapula_TMAJ-P2'</span>,Thorax_osim2antoine'.*([-0.10264;-0.10319;-0.05829])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0249     <span class="string">'R_Scapula_TMAJ-P3'</span>,Thorax_osim2antoine'.*([-0.10489;-0.10895;-0.07117])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0250     <span class="string">'R_Scapula_LAT1-P2'</span>,Thorax_osim2antoine'.*([-0.07982;-0.079943;-0.02428])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0251     <span class="string">'R_Scapula_LAT1-P3'</span>,Thorax_osim2antoine'.*([-0.11118;-0.089323;-0.06022])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0252     <span class="string">'R_Scapula_LAT2-P2'</span>,Thorax_osim2antoine'.*([-0.07875;-0.097117;-0.02023])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0253     <span class="string">'R_Scapula_LAT2-P3'</span>,Thorax_osim2antoine'.*([-0.10544;-0.12896;-0.064597])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0254     <span class="string">'R_Scapula_LAT3-P2'</span>,Thorax_osim2antoine'.*([-0.06598;-0.12735;-0.024183])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0255     <span class="string">'R_Scapula_LAT3-P3'</span>,Thorax_osim2antoine'.*([-0.10059;-0.16313;-0.059077])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0256     <span class="string">'R_Scapula_CORB-P1'</span>,Thorax_osim2antoine'.*([0.0125;-0.04127;-0.02652])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0257     <span class="string">'R_Scapula_CORB-P2'</span>,Thorax_osim2antoine'.*([0.00483;-0.06958;-0.01563])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0258     <span class="string">'R_Scapula_trap_acr-P1'</span>,Thorax_osim2antoine'.*([-0.02;0.0004;-0.0125])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0259     <span class="string">'R_Scapula_levator_scap-P1'</span>,Thorax_osim2antoine'.*([-0.069;0.0062;-0.0938])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0260     <span class="string">'R_Scapula_trap_acr-P1'</span>,Thorax_osim2antoine'.*([-0.02;0.0004;-0.0125])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0261     <span class="string">'R_Scapula_rhomboid_min-P2'</span>,Thorax_osim2antoine'.*([-0.0798;-0.009;-0.095])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0262     <span class="string">'R_Scapula_rhomboid_maj-P2'</span>,Thorax_osim2antoine'.*([-0.1052;-0.085;-0.095])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0263     <span class="string">'R_Scapula_serr_ant_1-P1'</span>,Thorax_osim2antoine'.*([-0.1;-0.1061;-0.0852])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0264     <span class="string">'R_Scapula_serr_ant_2-P1'</span>,Thorax_osim2antoine'.*([-0.1;-0.1059;-0.0839])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0265     <span class="string">'R_Scapula_serr_ant_3-P1'</span>,Thorax_osim2antoine'.*([-0.1;-0.1038;-0.0808])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0266     <span class="string">'R_Scapula_serr_ant_4-P1'</span>,Thorax_osim2antoine'.*([-0.098;-0.1005;-0.0795])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0267     <span class="string">'R_Scapula_serr_ant_5-P1'</span>,Thorax_osim2antoine'.*([-0.088;-0.065;-0.0805])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0268     <span class="string">'R_Scapula_serr_ant_6-P1'</span>,Thorax_osim2antoine'.*([-0.08;-0.05;-0.079])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0269     <span class="string">'R_Scapula_serr_ant_7-P1'</span>,Thorax_osim2antoine'.*([-0.074;-0.03;-0.085])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0270     <span class="string">'R_Scapula_serr_ant_8-P1'</span>,Thorax_osim2antoine'.*([-0.076;-0.0295;-0.0891])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0271     <span class="string">'R_Scapula_serr_ant_9-P1'</span>,Thorax_osim2antoine'.*([-0.07;-0.0074;-0.0927])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0272     <span class="string">'R_Scapula_serr_ant_10-P1'</span>,Thorax_osim2antoine'.*([-0.0594;0.0017;-0.0897])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0273     <span class="string">'R_Scapula_serr_ant_11-P1'</span>,Thorax_osim2antoine'.*([-0.0513;0.0068;-0.0877])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0274     <span class="string">'R_Scapula_serr_ant_12-P1'</span>,Thorax_osim2antoine'.*([-0.036;0;-0.082])-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0275     
+0276     <span class="comment">% Wraps</span>
+0277     <span class="string">'WrapRThoraxGH'</span>,Thorax_osim2antoine'.*([-0.0058 -0.0378 0.0096]')-Scapula_CoM_osim'-Clavicle2Scapula';<span class="keyword">...</span>
+0278     };
+0279 
+0280 LClavicle_position_set= {<span class="keyword">...</span>
+0281     <span class="string">'LSHO'</span>, k*[-0.0416 0.1707 -0.1853]'-Thorax_T12L1JointNode'-Thorax_scjJointLeftNode'; <span class="keyword">...</span>
+0282     <span class="string">'CLAVG'</span>, k*[0.005 0.02 -0.07]'; <span class="keyword">...</span>
+0283     <span class="string">'Thorax_ShoulderLeftNode'</span>, Thorax_ShoulderLeftNode'-Thorax_scjJointLeftNode'; <span class="keyword">...</span>
+0284     <span class="comment">% Muscle paths from arm26</span>
+0285     <span class="string">'LThorax_Triceps_o'</span>,LThorax_Triceps'-Thorax_scjJointLeftNode'+Thorax_scjJointCenter';<span class="keyword">...</span>
+0286     <span class="string">'LThorax_BicepsL_o'</span>,LThorax_BicepsL_o'-Thorax_scjJointLeftNode'+Thorax_scjJointCenter';<span class="keyword">...</span>
+0287     <span class="string">'LThorax_BicepsL_via1'</span>,LThorax_BicepsL_via1'-Thorax_scjJointLeftNode'+Thorax_scjJointCenter';<span class="keyword">...</span>
+0288     <span class="string">'LThorax_BicepsS_o'</span>,LThorax_BicepsS_o'-Thorax_scjJointLeftNode'+Thorax_scjJointCenter';<span class="keyword">...</span>
+0289     <span class="string">'LThorax_BicepsS_via1'</span>,LThorax_BicepsS_via1'-Thorax_scjJointLeftNode'+Thorax_scjJointCenter';<span class="keyword">...</span>
+0290     <span class="comment">% Muscle paths from (Puchaud et al., 2019)</span>
+0291     <span class="string">'L_clavicle_r_DELT1_r-P4'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.014;0.01106;0.08021])-CoM_Clavicle_osim');<span class="keyword">...</span>
+0292     <span class="string">'L_clavicle_r_PECM1_r-P4'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([0.00321;-0.00013;0.05113])-CoM_Clavicle_osim');<span class="keyword">...</span>
+0293     <span class="string">'L_clavicle_r_cleid_mast_r-P1'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([0.0022;0.0043;0.0257])-CoM_Clavicle_osim');<span class="keyword">...</span>
+0294     <span class="string">'L_clavicle_r_cleid_occ_r-P1'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([0.0022;0.0043;0.0257])-CoM_Clavicle_osim');<span class="keyword">...</span>
+0295     <span class="string">'L_clavicle_r_trap_cl_r-P1'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.0171;0.019;0.0727])-CoM_Clavicle_osim');<span class="keyword">...</span>
+0296     <span class="comment">% Scapula Muscle paths from (Puchaud et al., 2019)</span>
+0297     <span class="string">'L_Scapula_DELT1-P3'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([0.04347;-0.03252;0.00099])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0298     <span class="string">'L_Scapula_DELT2-P3'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([5e-05;0.00294;0.02233])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0299     <span class="string">'L_Scapula_DELT2-P4'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.01078;-0.00034;0.0062])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0300     <span class="string">'L_Scapula_DELT3-P1'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.05573;0.00122;-0.02512])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0301     <span class="string">'L_Scapula_DELT3-P2'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.07247;-0.03285;0.01233])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0302     <span class="string">'L_Scapula_SUPSP-P2'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.01918;0.00127;-0.01271])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0303     <span class="string">'L_Scapula_SUPSP-P3'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.044;-0.01512;-0.05855])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0304     <span class="string">'L_Scapula_INFSP-P2'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.07382;-0.05476;-0.04781])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0305     <span class="string">'L_Scapula_SUBSC-P2'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.01831;-0.05223;-0.02457])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0306     <span class="string">'L_Scapula_SUBSC-P3'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.07246;-0.03943;-0.06475])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0307     <span class="string">'L_Scapula_TMIN-P2'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.09473;-0.07991;-0.04737])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0308     <span class="string">'L_Scapula_TMIN-P3'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.09643;-0.08121;-0.05298])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0309     <span class="string">'L_Scapula_TMAJ-P2'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.10264;-0.10319;-0.05829])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0310     <span class="string">'L_Scapula_TMAJ-P3'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.10489;-0.10895;-0.07117])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0311     <span class="string">'L_Scapula_LAT1-P2'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.07982;-0.079943;-0.02428])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0312     <span class="string">'L_Scapula_LAT1-P3'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.11118;-0.089323;-0.06022])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0313     <span class="string">'L_Scapula_LAT2-P2'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.07875;-0.097117;-0.02023])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0314     <span class="string">'L_Scapula_LAT2-P3'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.10544;-0.12896;-0.064597])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0315     <span class="string">'L_Scapula_LAT3-P2'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.06598;-0.12735;-0.024183])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0316     <span class="string">'L_Scapula_LAT3-P3'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.10059;-0.16313;-0.059077])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0317     <span class="string">'L_Scapula_CORB-P1'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([0.0125;-0.04127;-0.02652])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0318     <span class="string">'L_Scapula_CORB-P2'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([0.00483;-0.06958;-0.01563])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0319     <span class="string">'L_Scapula_trap_acr-P1'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.02;0.0004;-0.0125])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0320     <span class="string">'L_Scapula_levator_scap-P1'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.069;0.0062;-0.0938])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0321     <span class="string">'L_Scapula_trap_acr-P1'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.02;0.0004;-0.0125])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0322     <span class="string">'L_Scapula_rhomboid_min-P2'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.0798;-0.009;-0.095])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0323     <span class="string">'L_Scapula_rhomboid_maj-P2'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.1052;-0.085;-0.095])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0324     <span class="string">'L_Scapula_serr_ant_1-P1'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.1;-0.1061;-0.0852])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0325     <span class="string">'L_Scapula_serr_ant_2-P1'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.1;-0.1059;-0.0839])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0326     <span class="string">'L_Scapula_serr_ant_3-P1'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.1;-0.1038;-0.0808])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0327     <span class="string">'L_Scapula_serr_ant_4-P1'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.098;-0.1005;-0.0795])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0328     <span class="string">'L_Scapula_serr_ant_5-P1'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.088;-0.065;-0.0805])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0329     <span class="string">'L_Scapula_serr_ant_6-P1'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.08;-0.05;-0.079])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0330     <span class="string">'L_Scapula_serr_ant_7-P1'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.074;-0.03;-0.085])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0331     <span class="string">'L_Scapula_serr_ant_8-P1'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.076;-0.0295;-0.0891])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0332     <span class="string">'L_Scapula_serr_ant_9-P1'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.07;-0.0074;-0.0927])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0333     <span class="string">'L_Scapula_serr_ant_10-P1'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.0594;0.0017;-0.0897])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0334     <span class="string">'L_Scapula_serr_ant_11-P1'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.0513;0.0068;-0.0877])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0335     <span class="string">'L_Scapula_serr_ant_12-P1'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.036;0;-0.082])-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0336     
+0337     <span class="comment">% Wraps</span>
+0338     <span class="string">'WrapLThoraxGH'</span>,[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.0058 -0.0378 0.0096]')-Scapula_CoM_osim'-Clavicle2Scapula');<span class="keyword">...</span>
+0339     };
+0340 
+0341 <span class="comment">%%                     Scaling inertial parameters</span>
+0342 
+0343 <span class="comment">% Rigid upper trunk segments mass</span>
+0344 UpperTrunk_Mass = Mass.Thorax_Mass;
+0345 
+0346 Shoulder_Mass = Mass.Clavicle_Mass + Mass.Scapula_Mass;
+0347 
+0348 <span class="comment">% longueur entre 'Pelvis_L5JointNode' et 'Thorax_T1C5'</span>
+0349 Lpts={<span class="string">'Pelvis_LowerTrunkNode'</span>;<span class="string">'LowerTrunk_UpperTrunkNode'</span>};
+0350 <span class="keyword">for</span> pp=1:2
+0351     test=0;
+0352     <span class="keyword">for</span> i=1:numel(OsteoArticularModel)
+0353         <span class="keyword">for</span> j=1:size(OsteoArticularModel(i).anat_position,1)
+0354             <span class="keyword">if</span> strcmp(Lpts{pp},OsteoArticularModel(i).anat_position{j,1})
+0355                Lpts{pp,2}=i; <span class="comment">% solid number</span>
+0356                Lpts{pp,3}=j; <span class="comment">% number of the anatomical landmarks</span>
+0357                test=1;
+0358                <span class="keyword">break</span>
+0359             <span class="keyword">end</span>
+0360         <span class="keyword">end</span>
+0361         <span class="keyword">if</span> i==numel(OsteoArticularModel) &amp;&amp; test==0
+0362             error([Lpts{pp} <span class="string">' is no existent'</span>])        
+0363         <span class="keyword">end</span>       
+0364     <span class="keyword">end</span>
+0365 <span class="keyword">end</span>
+0366 Length_Thorax = <a href="../../../../Functions/AlgoMathsModel/distance_point.html" class="code" title="function [L,Typ] = distance_point(Point1,Bone1,Point2,Bone2,Human_model,q)">distance_point</a>(Lpts{1,3},Lpts{1,2},Lpts{2,3},Lpts{2,2},OsteoArticularModel,zeros(numel(OsteoArticularModel),1)) <span class="keyword">...</span>
+0367     +norm(Thorax_T12L1JointNode-Thorax_T1C5);
+0368 
+0369     <span class="comment">%% [&quot;Adjustments to McConville et al. and Young et al. body segment inertial parameters&quot;] R. Dumas</span>
+0370     <span class="comment">% ------------------------- Thorax ----------------------------------------</span>
+0371     [I_Thorax]=<a href="../../../../Functions/AlgoMathsModel/rgyration2inertia.html" class="code" title="function [I]=rgyration2inertia(r_gyration, Mass, coord_point, length, Signe)">rgyration2inertia</a>([27 25 28 18 2 4*1i], UpperTrunk_Mass, [0 0 0], Length_Thorax);
+0372 
+0373     <span class="comment">% Generic Inertia extraced from (Klein Breteler et al. 1999)</span>
+0374     Clavicle_Mass_generic=0.156;
+0375     I_Clavicle_generic=[0.00024259 0.00025526 0.00004442 -0.00001898 -0.00006994 0.00005371];
+0376     I_Clavicle=(norm(Thorax_osim2antoine)^2*Mass.Clavicle_Mass/Clavicle_Mass_generic).*I_Clavicle_generic;
+0377     Scapula_Mass_generic=0.70396;
+0378     I_Scapula_generic=[0.0012429 0.0011504 0.0013651 0.0004494 0.00040922 0.0002411];
+0379     I_Scapula=(norm(Thorax_osim2antoine)^2*Mass.Scapula_Mass/Scapula_Mass_generic)*I_Scapula_generic;
+0380     I_Shoulder=I_Clavicle+I_Scapula;
+0381     
+0382                     <span class="comment">%% %% &quot;Human_model&quot; structure generation</span>
+0383  
+0384 num_solid=0;
+0385 <span class="comment">%% Thorax</span>
+0386     <span class="comment">% UpperTrunk_J1</span>
+0387     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0388     name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0389     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0390     OsteoArticularModel(incr_solid).name=name;               <span class="comment">% solid name</span>
+0391     OsteoArticularModel(incr_solid).sister=0;                
+0392     OsteoArticularModel(incr_solid).child=s_UpperTrunk_J2;                   
+0393     OsteoArticularModel(incr_solid).mother=s_mother;           
+0394     OsteoArticularModel(incr_solid).a=[0 0 1]'; 
+0395     OsteoArticularModel(incr_solid).joint=1;  
+0396     OsteoArticularModel(incr_solid).limit_inf=-0.2;
+0397     OsteoArticularModel(incr_solid).limit_sup=0.2;
+0398     OsteoArticularModel(incr_solid).linear_constraint=[];
+0399     OsteoArticularModel(incr_solid).Visual=0;
+0400     OsteoArticularModel(incr_solid).b=pos_attachment_pt;
+0401     OsteoArticularModel(incr_solid).c=[0 0 0]';
+0402     OsteoArticularModel(incr_solid).m=0;                 
+0403     OsteoArticularModel(incr_solid).I=zeros(3,3);
+0404     OsteoArticularModel(incr_solid).comment=<span class="string">'Trunk Flexion(-)/Extension(+)'</span>;
+0405 
+0406     <span class="comment">% UpperTrunk_J2</span>
+0407     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0408     name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0409     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0410     OsteoArticularModel(incr_solid).name=name;               <span class="comment">% solid name</span>
+0411     OsteoArticularModel(incr_solid).sister=0;                
+0412     OsteoArticularModel(incr_solid).child=s_Thorax;                   
+0413     OsteoArticularModel(incr_solid).mother=s_UpperTrunk_J1;           
+0414     OsteoArticularModel(incr_solid).a=[1 0 0]';
+0415     OsteoArticularModel(incr_solid).joint=1;
+0416     OsteoArticularModel(incr_solid).limit_inf=-0.2;
+0417     OsteoArticularModel(incr_solid).limit_sup=0.2;
+0418     OsteoArticularModel(incr_solid).linear_constraint=[];
+0419     OsteoArticularModel(incr_solid).Visual=0;
+0420     OsteoArticularModel(incr_solid).b=[0 0 0]';  
+0421     OsteoArticularModel(incr_solid).c=[0 0 0]';
+0422     OsteoArticularModel(incr_solid).m=0;                 
+0423     OsteoArticularModel(incr_solid).I=zeros(3,3);
+0424     OsteoArticularModel(incr_solid).comment=<span class="string">'Trunk Axial Rotation Right(+)/Left(-)'</span>;
+0425 
+0426     <span class="comment">% Thorax</span>
+0427     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0428     name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0429     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0430     OsteoArticularModel(incr_solid).name=name;               <span class="comment">% solid name</span>
+0431     OsteoArticularModel(incr_solid).sister=0;                
+0432     OsteoArticularModel(incr_solid).child=s_RClavicle_J1;                   
+0433     OsteoArticularModel(incr_solid).mother=s_UpperTrunk_J2;           
+0434     OsteoArticularModel(incr_solid).a=[0 1 0]';    
+0435     OsteoArticularModel(incr_solid).joint=1;
+0436     OsteoArticularModel(incr_solid).limit_inf=-0.2;
+0437     OsteoArticularModel(incr_solid).limit_sup=0.2;
+0438     OsteoArticularModel(incr_solid).Visual=1;
+0439     OsteoArticularModel(incr_solid).calib_k_constraint=[];
+0440     OsteoArticularModel(incr_solid).b=[0 0 0]';  
+0441     OsteoArticularModel(incr_solid).c=-Thorax_T12L1JointNode';
+0442     OsteoArticularModel(incr_solid).m=UpperTrunk_Mass;                 
+0443     OsteoArticularModel(incr_solid).I=[I_Thorax(1) I_Thorax(4) I_Thorax(5); I_Thorax(4) I_Thorax(2) I_Thorax(6); I_Thorax(5) I_Thorax(6) I_Thorax(3)];
+0444     OsteoArticularModel(incr_solid).anat_position=Thorax_position_set;
+0445     OsteoArticularModel(incr_solid).visual_file = [<span class="string">'Holzbaur/thorax.mat'</span>];
+0446     OsteoArticularModel(incr_solid).L={<span class="string">'Pelvis_LowerTrunkNode'</span>;<span class="string">'Thorax_T1C5'</span>};
+0447     OsteoArticularModel(incr_solid).comment=<span class="string">'Trunk Lateral Bending Right(+)/Left(-)'</span>;
+0448 
+0449     
+0450     <span class="comment">%% Rclavicle</span>
+0451     <span class="comment">% RClavicle_J1</span>
+0452     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0453     name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0454     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0455     OsteoArticularModel(incr_solid).name=name;               <span class="comment">% solid name</span>
+0456     OsteoArticularModel(incr_solid).sister=s_LClavicle_J1;              
+0457     OsteoArticularModel(incr_solid).child=s_RClavicle_J2;                   
+0458     OsteoArticularModel(incr_solid).mother=s_Thorax;           
+0459     OsteoArticularModel(incr_solid).a=[0 0 1]';
+0460     OsteoArticularModel(incr_solid).joint=1;
+0461     OsteoArticularModel(incr_solid).limit_inf=-pi/2;
+0462     OsteoArticularModel(incr_solid).limit_sup=pi/2;
+0463     OsteoArticularModel(incr_solid).Visual=0;
+0464     OsteoArticularModel(incr_solid).m=0;                 
+0465     OsteoArticularModel(incr_solid).b=Thorax_scjJointRightNode';  
+0466     OsteoArticularModel(incr_solid).I=zeros(3,3);
+0467     OsteoArticularModel(incr_solid).c=[0 0 0]';
+0468     OsteoArticularModel(incr_solid).comment=<span class="string">'Clavicle Axial Rotation Forward(-)/Backward(+)'</span>;
+0469     
+0470     <span class="comment">% RClavicle_J2</span>
+0471     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0472     name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0473     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0474     OsteoArticularModel(incr_solid).name=name;               <span class="comment">% solid name</span>
+0475     OsteoArticularModel(incr_solid).sister=0;              
+0476     OsteoArticularModel(incr_solid).child=s_RClavicle;                   
+0477     OsteoArticularModel(incr_solid).mother=s_RClavicle_J1;           
+0478     OsteoArticularModel(incr_solid).a=[1 0 0]';
+0479     OsteoArticularModel(incr_solid).joint=1;
+0480     OsteoArticularModel(incr_solid).limit_inf=-pi/2;
+0481     OsteoArticularModel(incr_solid).limit_sup=pi/2;
+0482     OsteoArticularModel(incr_solid).Visual=0;
+0483     OsteoArticularModel(incr_solid).m=0;                 
+0484     OsteoArticularModel(incr_solid).b=[0 0 0]';  
+0485     OsteoArticularModel(incr_solid).I=zeros(3,3);
+0486     OsteoArticularModel(incr_solid).c=[0 0 0]';
+0487     OsteoArticularModel(incr_solid).comment=<span class="string">'Clavivle Depression(+)/Elevation(-)'</span>;
+0488     
+0489     <span class="comment">% RClavicle</span>
+0490     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0491     name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0492     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0493     OsteoArticularModel(incr_solid).name=name;               <span class="comment">% solid name</span>
+0494     OsteoArticularModel(incr_solid).sister=0;                
+0495     OsteoArticularModel(incr_solid).child=0;                   
+0496     OsteoArticularModel(incr_solid).mother=s_RClavicle_J2;           
+0497     OsteoArticularModel(incr_solid).a=[0 1 0]';    
+0498     OsteoArticularModel(incr_solid).joint=1;
+0499     OsteoArticularModel(incr_solid).limit_inf=-pi/2;
+0500     OsteoArticularModel(incr_solid).limit_sup=pi/2;
+0501     OsteoArticularModel(incr_solid).Visual=1;
+0502     OsteoArticularModel(incr_solid).calib_k_constraint=s_Thorax;
+0503     OsteoArticularModel(incr_solid).m=Shoulder_Mass;                 
+0504     OsteoArticularModel(incr_solid).b=[0 0 0]';  
+0505     OsteoArticularModel(incr_solid).I=[I_Shoulder(1) I_Shoulder(4) I_Shoulder(5); I_Shoulder(4) I_Shoulder(2) I_Shoulder(6); I_Shoulder(5) I_Shoulder(6) I_Shoulder(3)];
+0506     OsteoArticularModel(incr_solid).c=[0 0 0]';
+0507     OsteoArticularModel(incr_solid).anat_position=RClavicle_position_set;
+0508     OsteoArticularModel(incr_solid).visual_file = [<span class="string">'Holzbaur/clavicle_r.mat'</span>];
+0509     OsteoArticularModel(incr_solid).comment=<span class="string">'Clavivle Protraction(-)/Retraction(+)'</span>;
+0510 
+0511     
+0512     <span class="comment">% Wrapping 1</span>
+0513     OsteoArticularModel(incr_solid).wrap(1).name=<span class="string">'WrapRThoraxGH'</span>;
+0514     OsteoArticularModel(incr_solid).wrap(1).anat_position=<span class="string">'WrapRThoraxGH'</span>;
+0515     OsteoArticularModel(incr_solid).wrap(1).type=<span class="string">'S'</span>; <span class="comment">% C: Cylinder or S: Sphere</span>
+0516     OsteoArticularModel(incr_solid).wrap(1).R=k*0.035;
+0517     OsteoArticularModel(incr_solid).wrap(1).orientation=eye(3);
+0518     OsteoArticularModel(incr_solid).wrap(1).location=Thorax_osim2antoine'.*([-0.0058 -0.0378 0.0096]')-Scapula_CoM_osim'-Clavicle2Scapula';
+0519     OsteoArticularModel(incr_solid).wrap(1).h=0;
+0520     OsteoArticularModel(incr_solid).wrap(1).num_solid=incr_solid;
+0521     
+0522     
+0523 
+0524     <span class="comment">%% Lclavicle</span>
+0525     <span class="comment">% LClavicle_J1</span>
+0526     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0527     name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0528     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0529     OsteoArticularModel(incr_solid).name=name;               <span class="comment">% solid name</span>
+0530     OsteoArticularModel(incr_solid).sister=0;              
+0531     OsteoArticularModel(incr_solid).child=s_LClavicle_J2;                   
+0532     OsteoArticularModel(incr_solid).mother=s_Thorax;           
+0533     OsteoArticularModel(incr_solid).a=[0 0 1]';
+0534     OsteoArticularModel(incr_solid).joint=1;
+0535     OsteoArticularModel(incr_solid).limit_inf=-pi/2;
+0536     OsteoArticularModel(incr_solid).limit_sup=pi/2;
+0537     OsteoArticularModel(incr_solid).Visual=0;
+0538     OsteoArticularModel(incr_solid).m=0;                 
+0539     OsteoArticularModel(incr_solid).b=Thorax_scjJointLeftNode';  
+0540     OsteoArticularModel(incr_solid).I=zeros(3,3);
+0541     OsteoArticularModel(incr_solid).c=[0 0 0]';
+0542     OsteoArticularModel(incr_solid).comment=<span class="string">'Clavicle Axial Rotation Forward(-)/Backward(+)'</span>;
+0543     
+0544     <span class="comment">% LClavicle_J2</span>
+0545     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0546     name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0547     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0548     OsteoArticularModel(incr_solid).name=name;               <span class="comment">% solid name</span>
+0549     OsteoArticularModel(incr_solid).sister=0;              
+0550     OsteoArticularModel(incr_solid).child=s_LClavicle;                   
+0551     OsteoArticularModel(incr_solid).mother=s_LClavicle_J1;           
+0552     OsteoArticularModel(incr_solid).a=[1 0 0]';
+0553     OsteoArticularModel(incr_solid).joint=1;
+0554     OsteoArticularModel(incr_solid).limit_inf=-pi/2;
+0555     OsteoArticularModel(incr_solid).limit_sup=pi/2;
+0556     OsteoArticularModel(incr_solid).Visual=0;
+0557     OsteoArticularModel(incr_solid).m=0;                 
+0558     OsteoArticularModel(incr_solid).b=[0 0 0]';  
+0559     OsteoArticularModel(incr_solid).I=zeros(3,3);
+0560     OsteoArticularModel(incr_solid).c=[0 0 0]';
+0561     OsteoArticularModel(incr_solid).comment=<span class="string">'Clavivle Depression(-)/Elevation(+)'</span>;
+0562     
+0563     <span class="comment">% LClavicle</span>
+0564     num_solid=num_solid+1;        <span class="comment">% number of the solid ...</span>
+0565     name=list_solid{num_solid}; <span class="comment">% solid name</span>
+0566     eval([<span class="string">'incr_solid=s_'</span> name <span class="string">';'</span>])  <span class="comment">% number of the solid in the model</span>
+0567     OsteoArticularModel(incr_solid).name=name;               <span class="comment">% solid name</span>
+0568     OsteoArticularModel(incr_solid).sister=0;                
+0569     OsteoArticularModel(incr_solid).child=0;                   
+0570     OsteoArticularModel(incr_solid).mother=s_LClavicle_J2;           
+0571     OsteoArticularModel(incr_solid).a=[0 1 0]';    
+0572     OsteoArticularModel(incr_solid).joint=1;
+0573     OsteoArticularModel(incr_solid).limit_inf=-pi/2;
+0574     OsteoArticularModel(incr_solid).limit_sup=pi/2;
+0575     OsteoArticularModel(incr_solid).Visual=1;
+0576     OsteoArticularModel(incr_solid).calib_k_constraint=s_Thorax;
+0577     OsteoArticularModel(incr_solid).m=Shoulder_Mass;                 
+0578     OsteoArticularModel(incr_solid).b=[0 0 0]';  
+0579     OsteoArticularModel(incr_solid).I=[1 1 -1; 1 1 -1; -1 -1 1].*[I_Shoulder(1) I_Shoulder(4) I_Shoulder(5); I_Shoulder(4) I_Shoulder(2) I_Shoulder(6); I_Shoulder(5) I_Shoulder(6) I_Shoulder(3)];
+0580     OsteoArticularModel(incr_solid).c=[0 0 0]';
+0581     OsteoArticularModel(incr_solid).anat_position=LClavicle_position_set;
+0582     OsteoArticularModel(incr_solid).visual_file = [<span class="string">'Holzbaur/clavicle_l.mat'</span>];
+0583     OsteoArticularModel(incr_solid).comment=<span class="string">'Clavivle Protraction(+)/Retraction(-)'</span>;
+0584 
+0585     
+0586     <span class="comment">% Wrapping 2</span>
+0587     OsteoArticularModel(incr_solid).wrap(1).name=<span class="string">'WrapLThoraxGH'</span>;
+0588     OsteoArticularModel(incr_solid).wrap(1).anat_position=<span class="string">'WrapLThoraxGH'</span>;
+0589     OsteoArticularModel(incr_solid).wrap(1).type=<span class="string">'S'</span>; <span class="comment">% C: Cylinder or S: Sphere</span>
+0590     OsteoArticularModel(incr_solid).wrap(1).R=k*0.035;
+0591     OsteoArticularModel(incr_solid).wrap(1).orientation=eye(3);
+0592     OsteoArticularModel(incr_solid).wrap(1).location=[1 0 0; 0 1 0; 0 0 -1]*(Thorax_osim2antoine'.*([-0.0058 -0.0378 0.0096]')-Scapula_CoM_osim'-Clavicle2Scapula');
+0593     OsteoArticularModel(incr_solid).wrap(1).h=0;
+0594     OsteoArticularModel(incr_solid).wrap(1).num_solid=incr_solid;
+0595 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

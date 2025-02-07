@@ -107,11 +107,18 @@ end
 
 %% Which markers are present within all the combination ?
 [list_marker_c3d,Ia,~]=intersect(list_m_bis,ListMarkersName,'stable');
-
+cpt=1;
 for ii=1:length(list_marker_c3d)
-    real_markers(ii).name=list_m_table(Ia(ii));
-    real_markers(ii).position_c3d=markers.(list_marker_c3d{ii})/1000;
+    if isempty(find(markers.(list_marker_c3d{ii})==0,1))
+        real_markers(cpt).name=list_m_table(Ia(ii));
+        real_markers(cpt).position_c3d=markers.(list_marker_c3d{ii})/1000;
+        cpt = cpt+1;
+    else
+       warning(['A least one marker is occluded in ' filename ', occluded markers :'])
+       disp(list_m_table(Ia(ii)));
+    end
 end
+
 
 [list_missing_markers_in_c3d]=setdiff(list_markers,[real_markers.name]');
 

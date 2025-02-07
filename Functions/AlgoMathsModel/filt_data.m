@@ -23,7 +23,7 @@ end
 end
 
 function [datafilt]=filtrage_data(data,f,f_mocap)
-%% filtre
+%% filter generation
 % data : vector
 init=data(1);
 data_inter=data-init;
@@ -33,10 +33,10 @@ datafilt=datafilt+init;
 end
 
 function [y]=filtre(data,f,f_mocap)
-%% fonction filtre
+%% fonction filter
 
-Wn=f/(f_mocap/2); % f=100Hz (/2) et fréquence d'échantillonnage : 5Hz
-% Wn=2/50; % f=100Hz (/2) et fréquence d'échantillonnage : 5Hz
+Wn=f/(f_mocap/2); % f=100Hz (/2) and sampling frequency : 5Hz
+% Wn=2/50; % f=100Hz (/2) and sampling frequency : 5Hz
 
 [b,a] = butter(4,Wn,'low');
 y=filtfilt(b,a,data);

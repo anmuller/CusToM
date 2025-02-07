@@ -14,7 +14,7 @@ function [OsteoArticularJoint]= ShankBallJoint(OsteoArticularJoint,k,Signe,Mass,
 %   already existing model (character string)
 %   OUTPUT
 %   - OsteoArticularModel: new osteo-articular model (see the Documentation
-%   for the structure) 
+%   for the structure)
 %________________________________________________________
 %
 % Licence
@@ -28,10 +28,10 @@ list_solid={'Knee_J1', 'Knee_J2' ,'Shank'};
 
 %% Choose leg right or left
 if Signe == 'R'
-Mirror=[1 0 0; 0 1 0; 0 0 1];
+    Mirror=[1 0 0; 0 1 0; 0 0 1];
 else
     if Signe == 'L'
-    Mirror=[1 0 0; 0 1 0; 0 0 -1];
+        Mirror=[1 0 0; 0 1 0; 0 0 -1];
     end
 end
 
@@ -55,15 +55,15 @@ else
     for i=1:numel(OsteoArticularJoint)
         for j=1:size(OsteoArticularJoint(i).anat_position,1)
             if strcmp(AttachmentPoint,OsteoArticularJoint(i).anat_position{j,1})
-               s_mother=i;
-               pos_attachment_pt=OsteoArticularJoint(i).anat_position{j,2}+OsteoArticularJoint(s_mother).c;
-               test=1;
-               break
+                s_mother=i;
+                pos_attachment_pt=OsteoArticularJoint(i).anat_position{j,2}+OsteoArticularJoint(s_mother).c;
+                test=1;
+                break
             end
         end
         if i==numel(OsteoArticularJoint) && test==0
-            error([AttachmentPoint ' is no existent'])        
-        end       
+            error([AttachmentPoint ' is no existent'])
+        end
     end
     if OsteoArticularJoint(s_mother).child == 0      % if the mother don't have any child
         OsteoArticularJoint(s_mother).child = eval(['s_' list_solid{1}]);    % the child of this mother is this solid
@@ -119,70 +119,80 @@ Shank_position_set= {...
 
 %%                     Scaling inertial parameters
 
-    %% ["Adjustments to McConville et al. and Young et al. body segment inertial parameters"] R. Dumas
-    % --------------------------- Shank ---------------------------------------
-    Length_Shank=norm(Shank_AnkleJointNode-Shank_KneeJointNode);
-    [I_Shank]=rgyration2inertia([28 10 28 4*1i 2*1i 5], Mass.Shank_Mass, [0 0 0], Length_Shank, Signe);
+%% ["Adjustments to McConville et al. and Young et al. body segment inertial parameters"] R. Dumas
+% --------------------------- Shank ---------------------------------------
+Length_Shank=norm(Shank_AnkleJointNode-Shank_KneeJointNode);
+[I_Shank]=rgyration2inertia([28 10 28 4*1i 2*1i 5], Mass.Shank_Mass, [0 0 0], Length_Shank, Signe);
 
-            %% %% "Human_model" structure generation
-    
+%% %% "Human_model" structure generation
+
 num_solid=0;
 %% Knee_J1
-    num_solid=num_solid+1;        % number of the solid ...
-    name=list_solid{num_solid}; % solid name
-    eval(['incr_solid=s_' name ';'])  % number of the solid in the model
-    OsteoArticularJoint(incr_solid).name=[Signe name];
-    OsteoArticularJoint(incr_solid).sister=0;    
-    OsteoArticularJoint(incr_solid).child=s_Knee_J2;
-    OsteoArticularJoint(incr_solid).mother=s_mother;
-    OsteoArticularJoint(incr_solid).a=[0 0 1]';
-    OsteoArticularJoint(incr_solid).joint=1;
-    OsteoArticularJoint(incr_solid).limit_inf=-pi;
-    OsteoArticularJoint(incr_solid).limit_sup=0;
-    OsteoArticularJoint(incr_solid).Visual=0;
-    OsteoArticularJoint(incr_solid).m=0;
-    OsteoArticularJoint(incr_solid).b=pos_attachment_pt;
-    OsteoArticularJoint(incr_solid).I=zeros(3,3);
-    OsteoArticularJoint(incr_solid).c=[0 0 0]';
-    
-%% Knee_J2
-    num_solid=num_solid+1;        % number of the solid ...
-    name=list_solid{num_solid}; % solid name
-    eval(['incr_solid=s_' name ';'])  % number of the solid in the model
-    OsteoArticularJoint(incr_solid).name=[Signe name];
-    OsteoArticularJoint(incr_solid).sister=0;    
-    OsteoArticularJoint(incr_solid).child=s_Shank;
-    OsteoArticularJoint(incr_solid).mother=s_Knee_J1;
-    OsteoArticularJoint(incr_solid).a=[1 0 0]';
-    OsteoArticularJoint(incr_solid).joint=1;
-    OsteoArticularJoint(incr_solid).joint=1;
-    OsteoArticularJoint(incr_solid).limit_inf=-pi/4;
-    OsteoArticularJoint(incr_solid).limit_sup=pi/4;
-    OsteoArticularJoint(incr_solid).Visual=0;
-    OsteoArticularJoint(incr_solid).m=0;
-    OsteoArticularJoint(incr_solid).b=[0 0 0]';
-    OsteoArticularJoint(incr_solid).I=zeros(3,3);
-    OsteoArticularJoint(incr_solid).c=[0 0 0]';
-    
-%% Shank
-    num_solid=num_solid+1;        % number of the solid ...
-    name=list_solid{num_solid}; % solid name
-    eval(['incr_solid=s_' name ';'])  % number of the solid in the model
-    OsteoArticularJoint(incr_solid).name=[Signe name];
-    OsteoArticularJoint(incr_solid).sister=0;    
-    OsteoArticularJoint(incr_solid).child=0;
-    OsteoArticularJoint(incr_solid).mother=s_Knee_J2;
-    OsteoArticularJoint(incr_solid).a=[0 1 0]';
-    OsteoArticularJoint(incr_solid).joint=1;
-    OsteoArticularJoint(incr_solid).limit_inf=-pi/4;
-    OsteoArticularJoint(incr_solid).limit_sup=pi/4;
-    OsteoArticularJoint(incr_solid).Visual=1;
-    OsteoArticularJoint(incr_solid).m=Mass.Shank_Mass;
-    OsteoArticularJoint(incr_solid).b=[0 0 0]';
-    OsteoArticularJoint(incr_solid).I=[I_Shank(1) I_Shank(4) I_Shank(5); I_Shank(4) I_Shank(2) I_Shank(6); I_Shank(5) I_Shank(6) I_Shank(3)];
-    OsteoArticularJoint(incr_solid).c=-Shank_KneeJointNode';
-    OsteoArticularJoint(incr_solid).anat_position=Shank_position_set;
-    OsteoArticularJoint(incr_solid).L={[Signe 'Shank_KneeJointNode'];[Signe 'Shank_AnkleJointNode']};
+num_solid=num_solid+1;        % number of the solid ...
+name=list_solid{num_solid}; % solid name
+eval(['incr_solid=s_' name ';'])  % number of the solid in the model
+OsteoArticularJoint(incr_solid).name=[Signe name];
+OsteoArticularJoint(incr_solid).sister=0;
+OsteoArticularJoint(incr_solid).child=s_Knee_J2;
+OsteoArticularJoint(incr_solid).mother=s_mother;
+OsteoArticularJoint(incr_solid).a=[0 0 1]';
+OsteoArticularJoint(incr_solid).joint=1;
+OsteoArticularJoint(incr_solid).limit_inf=-pi;
+OsteoArticularJoint(incr_solid).limit_sup=0;
+OsteoArticularJoint(incr_solid).Visual=0;
+OsteoArticularJoint(incr_solid).m=0;
+OsteoArticularJoint(incr_solid).b=pos_attachment_pt;
+OsteoArticularJoint(incr_solid).I=zeros(3,3);
+OsteoArticularJoint(incr_solid).c=[0 0 0]';
+OsteoArticularJoint(incr_solid).comment='Knee Flexion(-)/Extension(-)';
 
+%% Knee_J2
+num_solid=num_solid+1;        % number of the solid ...
+name=list_solid{num_solid}; % solid name
+eval(['incr_solid=s_' name ';'])  % number of the solid in the model
+OsteoArticularJoint(incr_solid).name=[Signe name];
+OsteoArticularJoint(incr_solid).sister=0;
+OsteoArticularJoint(incr_solid).child=s_Shank;
+OsteoArticularJoint(incr_solid).mother=s_Knee_J1;
+OsteoArticularJoint(incr_solid).a=[1 0 0]';
+OsteoArticularJoint(incr_solid).joint=1;
+OsteoArticularJoint(incr_solid).joint=1;
+OsteoArticularJoint(incr_solid).limit_inf=-pi/4;
+OsteoArticularJoint(incr_solid).limit_sup=pi/4;
+OsteoArticularJoint(incr_solid).Visual=0;
+OsteoArticularJoint(incr_solid).m=0;
+OsteoArticularJoint(incr_solid).b=[0 0 0]';
+OsteoArticularJoint(incr_solid).I=zeros(3,3);
+OsteoArticularJoint(incr_solid).c=[0 0 0]';
+if Signe=='R'
+    OsteoArticularJoint(incr_solid).comment='Knee Abduction(-)/Adduction(+) - X-Rotation';
+else
+    OsteoArticularJoint(incr_solid).comment='Knee Abduction(+)/Adduction(-) - X-Rotation';
+end
+
+%% Shank
+num_solid=num_solid+1;        % number of the solid ...
+name=list_solid{num_solid}; % solid name
+eval(['incr_solid=s_' name ';'])  % number of the solid in the model
+OsteoArticularJoint(incr_solid).name=[Signe name];
+OsteoArticularJoint(incr_solid).sister=0;
+OsteoArticularJoint(incr_solid).child=0;
+OsteoArticularJoint(incr_solid).mother=s_Knee_J2;
+OsteoArticularJoint(incr_solid).a=[0 1 0]';
+OsteoArticularJoint(incr_solid).joint=1;
+OsteoArticularJoint(incr_solid).limit_inf=-pi/4;
+OsteoArticularJoint(incr_solid).limit_sup=pi/4;
+OsteoArticularJoint(incr_solid).Visual=1;
+OsteoArticularJoint(incr_solid).m=Mass.Shank_Mass;
+OsteoArticularJoint(incr_solid).b=[0 0 0]';
+OsteoArticularJoint(incr_solid).I=[I_Shank(1) I_Shank(4) I_Shank(5); I_Shank(4) I_Shank(2) I_Shank(6); I_Shank(5) I_Shank(6) I_Shank(3)];
+OsteoArticularJoint(incr_solid).c=-Shank_KneeJointNode';
+OsteoArticularJoint(incr_solid).anat_position=Shank_position_set;
+OsteoArticularJoint(incr_solid).L={[Signe 'Shank_KneeJointNode'];[Signe 'Shank_AnkleJointNode']};
+if Signe=='R'
+    OsteoArticularJoint(incr_solid).comment='Knee Internal(+)/External(-) Rotation';
+else
+    OsteoArticularJoint(incr_solid).comment='Knee Internal(-)/External(+) Rotation';
+end
 
 end

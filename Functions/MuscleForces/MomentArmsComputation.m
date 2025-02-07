@@ -1,4 +1,4 @@
-function [Moment_Arms_sub,C] = MomentArmsComputation(BiomechanicalModel)
+function [Moment_Arms_sub,C,L] = MomentArmsComputation(BiomechanicalModel)
 % Computation of the moment arms matrix
 %
 %   INPUT
@@ -20,12 +20,14 @@ function [Moment_Arms_sub,C] = MomentArmsComputation(BiomechanicalModel)
 Human_model=BiomechanicalModel.OsteoArticularModel;
 Muscles=BiomechanicalModel.Muscles;
 
-if isfield(BiomechanicalModel,'Generalized_Coordinates')
-    q=BiomechanicalModel.Generalized_Coordinates.q_complete;
+%
+if  ~isempty(intersect({BiomechanicalModel.OsteoArticularModel.name},'root0')) %&& length(q0)==numel(BiomechanicalModel.OsteoArticularModel(:))
+    Nb_q = numel(Human_model)-6 ;%only degrees of freedom of the body, not the floating base.
 else
-    Nb_q = numel(Human_model)-6;
-    q = sym('q',[Nb_q,1],'real'); % nb de degrees of freedom
+     Nb_q= numel(Human_model);
 end
+
+q = sym('q',[Nb_q,1],'real'); % nb de degrees of freedom
 Nb_m = numel(Muscles);
 
 %% Compute muscle lengths
@@ -39,11 +41,7 @@ for i_m=1:Nb_m % for each muscle
 end
 
 %% Computation of moment arms
-if isfield(BiomechanicalModel,'Generalized_Coordinates')
-    q_map_unsix=BiomechanicalModel.Generalized_Coordinates.q_map_unsix;
-    q=q_map_unsix'*q;
-    Nb_q=length(q);
-end
+
 R=-jacobian(L,q)';
 R=R(:);
 sizeMA_Lin=Nb_q*Nb_m; % Last 6 degrees of freedom are not taken into account after the jacobian

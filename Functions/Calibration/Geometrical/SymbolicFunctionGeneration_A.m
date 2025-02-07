@@ -3,7 +3,7 @@ A_norm,b_norm]=SymbolicFunctionGeneration_A(Human_model, Markers_set)
 % Generation of symbolic function containing the position of markers according to joint coordinates and geometrical parameters
 %
 %   INPUT
-%   - Human_model: osteo-articular model (see the Documentation for the
+%   - Human_model: osteo-articular model (see the Documentation for the²
 %   structure) 
 %   - Markers_set: set of markers (see the Documentation for the structure)
 %   OUTPUT
@@ -73,12 +73,19 @@ q_map_unsix=q_map;[~,col]=find(q_map_unsix(end-5:end,:));
 
 q_red=q_map'*q;
 q_dep=q_dep_map'*q;
-ind_q_dependancy=zeros(size(q_dep_map,2),1);
 q_dep_scaled=zeros(size(q_dep_map,2),1);
+ind_q_dependancy=cell(size(q_dep_map,2),1);
+
 for ii=1:size(q_dep_map,2)
-    ind_q_dependancy(ii)=Human_model(logical(q_dep_map(:,ii))).kinematic_dependancy.Joint;
+    ind_q_dependancy_current=Human_model(logical(q_dep_map(:,ii))).kinematic_dependancy.Joint;
+    ind_q_dependancy{ii}=ind_q_dependancy_current';
+    q_dependancy = q(ind_q_dependancy_current);
+    q_handle_input = cell(length(q_dependancy),1);
+    for jj=1:size(q_handle_input,1)
+        q_handle_input{jj} = q_dependancy(jj);
+    end
     q_handle=Human_model(logical(q_dep_map(:,ii))).kinematic_dependancy.q;
-    q_dep(ii)=q_handle(q(ind_q_dependancy(ii)));
+    q_dep(ii)=q_handle(q_handle_input{:});
     if Human_model(logical(q_dep_map(:,ii))).joint ==2 % scaling the kinematic constraints if its a translation
         q_dep_scaled(ii)=1;
     end
@@ -128,16 +135,19 @@ k_sym_tot=k_map*[k_sym,;1];
 % only for sliders
 vect=ones(size(k_sym));
 k_test_tot=k_map*[vect,;0];
-ind_k_dep =zeros(size(ind_q_dependancy));
-k_dep=sym(zeros(size(ind_q_dependancy)));
+ind_k_dep=zeros(size(ind_q_dependancy,1),1);
+k_dep=sym(zeros(size(ind_q_dependancy,1),1));
 for ii=1:length(ind_q_dependancy)
     if q_dep_scaled(ii) % if it is a slider
-        ij = Human_model(ind_q_dependancy(ii)).mother;
-        while k_test_tot(ij)==0
-            ij = Human_model(ij).mother;
-        end 
-        ind_k_dep(ii)=ij;
-        k_dep(ii)=k_sym_tot(ij);
+        ind_q_dependancy_holder=ind_q_dependancy{ii};
+        for jj=1:length(ind_q_dependancy_holder)
+            ij = Human_model(ind_q_dependancy_holder(jj)).mother;
+            while k_test_tot(ij)==0
+                ij = Human_model(ij).mother;
+            end 
+            ind_k_dep(ii)=ij;
+            k_dep(ii)=k_sym_tot(ij);
+        end
     else % if it is a hinge
         ind_k_dep(ii)=0;
         k_dep(ii)=1;
@@ -284,7 +294,7 @@ Human_model(s_root).p=pPelvis;
 Human_model(s_root).R=RPelvis;
 
 % Calcul de la position de chaque marqueurs de façon symbolique (computation of markers position under a symbolic form)
-[Human_model,Markers_set,~,~,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,s_root,q_complete_k,k,p_adapt_mat,alpha,1,1);
+[Human_model,Markers_set,~,~,c_ClosedLoop,ceq_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,s_root,q_complete_k,k,p_adapt_mat,alpha,1,1);
 % [Human_model,Markers_set,~,~,p_ClosedLoop,R_ClosedLoop]=Symbolic_ForwardKinematicsCoupure_A(Human_model,Markers_set,s_root,q,k,p_adapt_mat,alpha,1,1);
 
 % position et rotation des solides servant de coupure (position and rotation of solids defining the cuts)
@@ -334,12 +344,13 @@ for i=1:numel(Human_model)  % solide i
             'vars',{pPelvis,RPelvis,q_red,var_sym,pcut,Rcut});
     end
 end
+
 % boucle(s) fermée(s) (Closed loops)
-for i=1:numel(p_ClosedLoop)
-    matlabFunction(R_ClosedLoop{i},p_ClosedLoop{i},'File',['Symbolic_function/fCL' num2str(i) '.m'],...
-            'Outputs',{'R','p'},'vars',{pPelvis,RPelvis,q_red,var_sym,pcut,Rcut});   
+for i=1:numel(c_ClosedLoop)
+    matlabFunction(c_ClosedLoop{i},ceq_ClosedLoop{i},'File',['Symbolic_function/fCL' num2str(i) '.m'],...
+            'Outputs',{'c','ceq'},'vars',{pPelvis,RPelvis,q_red,var_sym,pcut,Rcut});   
 end
-nbClosedLoop=numel(p_ClosedLoop);
+nbClosedLoop=numel(c_ClosedLoop);
 
 end
 

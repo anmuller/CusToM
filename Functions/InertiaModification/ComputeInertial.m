@@ -1,8 +1,9 @@
-function [NEW_m, NEW_c, NEW_I] = ComputeInertial(m, added_m, c, added_c, I, added_I)
+
+function [NEW_m, NEW_c, NEW_I] = ComputeInertial(m, added_m, c, added_c, I)
 % INPUT
 %   masses (m1 and m2) of 2 points
 %   coordinates of 2 points (c, added_c)
-%   added mass inertia
+
 % OUTPUT
 %   total mass 
 %   new mass center
@@ -33,6 +34,7 @@ end
 
 added_Inertia = added_I ; % Inertia of a ponctual mass
 [NEW_I1] = HuygensExtm(added_Inertia, added_m, added_c, NEW_c) ;
+
 [NEW_I2] = HuygensExtm(      I,       m,       c, NEW_c) ;
  NEW_I   = NEW_I1 + NEW_I2 ;
 

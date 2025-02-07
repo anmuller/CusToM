@@ -1,0 +1,446 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of XSens_Visual</title>
+  <meta name="keywords" content="XSens_Visual">
+  <meta name="description" content="Visual generation for XSens data">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html Functions --><!-- menu.html XSens -->
+<h1>XSens_Visual
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Visual generation for XSens data</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [] = XSens_Visual(OsteoArticularModel, tree) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Visual generation for XSens data
+
+   INPUT
+   - OsteoArticularModel: osteo-articular model of an already existing
+   model (see the Documentation for the structure)
+   - tree: data extracted from a MVNX file
+   OUTPUT
+   Results are automatically saved on a folder 'Visual'
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>	Computation of the Rodrigues equation</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="MVNXModelGeneration.html" class="code" title="function [OsteoArticularModel] = MVNXModelGeneration(ModelParameters, AnalysisParameters)">MVNXModelGeneration</a>	Generation of the osteo-articular model from a MVNX file</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [] = XSens_Visual(OsteoArticularModel, tree)</a>
+0002 <span class="comment">% Visual generation for XSens data</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   INPUT</span>
+0005 <span class="comment">%   - OsteoArticularModel: osteo-articular model of an already existing</span>
+0006 <span class="comment">%   model (see the Documentation for the structure)</span>
+0007 <span class="comment">%   - tree: data extracted from a MVNX file</span>
+0008 <span class="comment">%   OUTPUT</span>
+0009 <span class="comment">%   Results are automatically saved on a folder 'Visual'</span>
+0010 <span class="comment">%________________________________________________________</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Licence</span>
+0013 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0014 <span class="comment">%________________________________________________________</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0017 <span class="comment">% Georges Dumont</span>
+0018 <span class="comment">%________________________________________________________</span>
+0019 
+0020 <span class="comment">%% Joints position in t-pose</span>
+0021 
+0022 pose = <span class="string">'tpose'</span>;
+0023 [~,num_pose] = intersect({tree.subject.frames.frame.type},pose);
+0024 
+0025 <span class="comment">% position</span>
+0026 PelvisPos = tree.subject.frames.frame(num_pose).position((1-1)*3+1:(1-1)*3+3);
+0027 L5Pos = tree.subject.frames.frame(num_pose).position((2-1)*3+1:(2-1)*3+3);
+0028 L3Pos = tree.subject.frames.frame(num_pose).position((3-1)*3+1:(3-1)*3+3);
+0029 T12Pos = tree.subject.frames.frame(num_pose).position((4-1)*3+1:(4-1)*3+3);
+0030 T8Pos = tree.subject.frames.frame(num_pose).position((5-1)*3+1:(5-1)*3+3);
+0031 NeckPos = tree.subject.frames.frame(num_pose).position((6-1)*3+1:(6-1)*3+3);
+0032 HeadPos = tree.subject.frames.frame(num_pose).position((7-1)*3+1:(7-1)*3+3);
+0033 RightShoulderPos = tree.subject.frames.frame(num_pose).position((8-1)*3+1:(8-1)*3+3);
+0034 RightUpperArmPos = tree.subject.frames.frame(num_pose).position((9-1)*3+1:(9-1)*3+3);
+0035 RightForeArmPos = tree.subject.frames.frame(num_pose).position((10-1)*3+1:(10-1)*3+3);
+0036 RightHandPos = tree.subject.frames.frame(num_pose).position((11-1)*3+1:(11-1)*3+3);
+0037 LeftShoulderPos = tree.subject.frames.frame(num_pose).position((12-1)*3+1:(12-1)*3+3);
+0038 LeftUpperArmPos = tree.subject.frames.frame(num_pose).position((13-1)*3+1:(13-1)*3+3);
+0039 LeftForeArmPos = tree.subject.frames.frame(num_pose).position((14-1)*3+1:(14-1)*3+3);
+0040 LeftHandPos = tree.subject.frames.frame(num_pose).position((15-1)*3+1:(15-1)*3+3);
+0041 RightUpperLegPos = tree.subject.frames.frame(num_pose).position((16-1)*3+1:(16-1)*3+3);
+0042 RightLowerLegPos = tree.subject.frames.frame(num_pose).position((17-1)*3+1:(17-1)*3+3);
+0043 RightFootPos = tree.subject.frames.frame(num_pose).position((18-1)*3+1:(18-1)*3+3);
+0044 RightToePos = tree.subject.frames.frame(num_pose).position((19-1)*3+1:(19-1)*3+3);
+0045 LeftUpperLegPos = tree.subject.frames.frame(num_pose).position((20-1)*3+1:(20-1)*3+3);
+0046 LeftLowerLegPos = tree.subject.frames.frame(num_pose).position((21-1)*3+1:(21-1)*3+3);
+0047 LeftFootPos = tree.subject.frames.frame(num_pose).position((22-1)*3+1:(22-1)*3+3);
+0048 LeftToePos = tree.subject.frames.frame(num_pose).position((23-1)*3+1:(23-1)*3+3);
+0049 
+0050 <span class="comment">% orientation</span>
+0051 PelvisRot = quat2rotm(tree.subject.frames.frame(num_pose).orientation((1-1)*4+1:(1-1)*4+4));
+0052 L5Rot = quat2rotm(tree.subject.frames.frame(num_pose).orientation((2-1)*4+1:(2-1)*4+4));
+0053 L3Rot = quat2rotm(tree.subject.frames.frame(num_pose).orientation((3-1)*4+1:(3-1)*4+4));
+0054 T12Rot = quat2rotm(tree.subject.frames.frame(num_pose).orientation((4-1)*4+1:(4-1)*4+4));
+0055 T8Rot = quat2rotm(tree.subject.frames.frame(num_pose).orientation((5-1)*4+1:(5-1)*4+4));
+0056 NeckRot = quat2rotm(tree.subject.frames.frame(num_pose).orientation((6-1)*4+1:(6-1)*4+4));
+0057 HeadRot = quat2rotm(tree.subject.frames.frame(num_pose).orientation((7-1)*4+1:(7-1)*4+4));
+0058 RightShoulderRot = quat2rotm(tree.subject.frames.frame(num_pose).orientation((8-1)*4+1:(8-1)*4+4));
+0059 RightUpperArmRot = quat2rotm(tree.subject.frames.frame(num_pose).orientation((9-1)*4+1:(9-1)*4+4));
+0060 RightForeArmRot = quat2rotm(tree.subject.frames.frame(num_pose).orientation((10-1)*4+1:(10-1)*4+4));
+0061 RightHandRot = quat2rotm(tree.subject.frames.frame(num_pose).orientation((11-1)*4+1:(11-1)*4+4));
+0062 LeftShoulderRot = quat2rotm(tree.subject.frames.frame(num_pose).orientation((12-1)*4+1:(12-1)*4+4));
+0063 LeftUpperArmRot = quat2rotm(tree.subject.frames.frame(num_pose).orientation((13-1)*4+1:(13-1)*4+4));
+0064 LeftForeArmRot = quat2rotm(tree.subject.frames.frame(num_pose).orientation((14-1)*4+1:(14-1)*4+4));
+0065 LeftHandRot = quat2rotm(tree.subject.frames.frame(num_pose).orientation((15-1)*4+1:(15-1)*4+4));
+0066 RightUpperLegRot = quat2rotm(tree.subject.frames.frame(num_pose).orientation((16-1)*4+1:(16-1)*4+4));
+0067 RightLowerLegRot = quat2rotm(tree.subject.frames.frame(num_pose).orientation((17-1)*4+1:(17-1)*4+4));
+0068 RightFootRot = quat2rotm(tree.subject.frames.frame(num_pose).orientation((18-1)*4+1:(18-1)*4+4));
+0069 RightToeRot = quat2rotm(tree.subject.frames.frame(num_pose).orientation((19-1)*4+1:(19-1)*4+4));
+0070 LeftUpperLegRot = quat2rotm(tree.subject.frames.frame(num_pose).orientation((20-1)*4+1:(20-1)*4+4));
+0071 LeftLowerLegRot = quat2rotm(tree.subject.frames.frame(num_pose).orientation((21-1)*4+1:(21-1)*4+4));
+0072 LeftFootRot = quat2rotm(tree.subject.frames.frame(num_pose).orientation((22-1)*4+1:(22-1)*4+4));
+0073 LeftToeRot = quat2rotm(tree.subject.frames.frame(num_pose).orientation((23-1)*4+1:(23-1)*4+4));
+0074 
+0075 <span class="comment">% Length (to scale)</span>
+0076 bonespath=which(<span class="string">'ModelGeneration.m'</span>);
+0077 bonespath = fileparts(bonespath);
+0078 bonepath=fullfile(bonespath,<span class="string">'Visual\XSens'</span>);
+0079 
+0080 load([bonepath <span class="string">'/XSensSTLLength.mat'</span>]); <span class="comment">%#ok&lt;LOAD&gt;</span>
+0081 
+0082 <span class="comment">% if ~exist('Visual','dir')</span>
+0083     mkdir(<span class="string">'Visual'</span>)
+0084 <span class="comment">% end</span>
+0085 
+0086 <span class="comment">%% Pelvis</span>
+0087 load([bonepath <span class="string">'/Pelvis.mat'</span>]); <span class="comment">%#ok&lt;LOAD&gt;</span>
+0088 coef = norm(PelvisPos-L5Pos)/Length.Pelvis;
+0089 p=p*coef; <span class="comment">%#ok&lt;NODEF&gt;</span>
+0090 Point = L5Pos - PelvisPos;
+0091 q2 = atan(-Point(1)/Point(3));
+0092 q1 = atan(-Point(2)/-Point(3)*cos(q2) + Point(1)*sin(q2));
+0093 R = (<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([1 0 0],q1) * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([0 1 0], q2));
+0094 <span class="keyword">for</span> i=1:size(p,1)
+0095     p(i,:) = (PelvisRot' * (R' * p(i,:)'))';
+0096 <span class="keyword">end</span>
+0097 p = p - OsteoArticularModel(1).c';
+0098 save(<span class="string">'Visual/Pelvis'</span>,<span class="string">'p'</span>,<span class="string">'t'</span>); <span class="comment">%#ok&lt;USENS&gt;</span>
+0099 
+0100 <span class="comment">%% Right upper leg</span>
+0101 load([bonepath <span class="string">'/RightUpperLeg.mat'</span>]); <span class="comment">%#ok&lt;LOAD&gt;</span>
+0102 coef = norm(RightUpperLegPos-RightLowerLegPos)/Length.RightUpperLeg;
+0103 p=p*coef;
+0104 Point = RightLowerLegPos - RightUpperLegPos;
+0105 q2 = atan(-Point(1)/Point(3));
+0106 q1 = atan(-Point(2)/-Point(3)*cos(q2) + Point(1)*sin(q2));
+0107 R = (<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([1 0 0],q1) * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([0 1 0], q2));
+0108 <span class="keyword">for</span> i=1:size(p,1)
+0109     p(i,:) = (RightUpperLegRot' * (R' * p(i,:)'))';
+0110 <span class="keyword">end</span>
+0111 p = p - OsteoArticularModel(46).c';
+0112 save(<span class="string">'Visual/RightUpperLeg'</span>,<span class="string">'p'</span>,<span class="string">'t'</span>);
+0113 
+0114 <span class="comment">%% Right lower leg</span>
+0115 load([bonepath <span class="string">'/RightLowerLeg.mat'</span>]); <span class="comment">%#ok&lt;LOAD&gt;</span>
+0116 coef = norm(RightLowerLegPos-RightFootPos)/Length.RightLowerLeg;
+0117 p=p*coef;
+0118 Point = RightFootPos - RightLowerLegPos;
+0119 q2 = atan(-Point(1)/Point(3));
+0120 q1 = atan(-Point(2)/-Point(3)*cos(q2) + Point(1)*sin(q2));
+0121 R = (<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([1 0 0],q1) * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([0 1 0], q2));
+0122 <span class="keyword">for</span> i=1:size(p,1)
+0123     p(i,:) = (RightLowerLegRot' * (R' * p(i,:)'))';
+0124 <span class="keyword">end</span>
+0125 p = p - OsteoArticularModel(49).c';
+0126 save(<span class="string">'Visual/RightLowerLeg'</span>,<span class="string">'p'</span>,<span class="string">'t'</span>);
+0127 
+0128 <span class="comment">%% Right foot</span>
+0129 load([bonepath <span class="string">'/RightFoot.mat'</span>]); <span class="comment">%#ok&lt;LOAD&gt;</span>
+0130 coef = norm(RightFootPos-RightToePos)/Length.RightFoot;
+0131 p=p*coef;
+0132 Point = RightToePos - RightFootPos;
+0133 q2 = atan(-Point(1)/Point(3));
+0134 q1 = atan(-Point(2)/-Point(3)*cos(q2) + Point(1)*sin(q2));
+0135 R = (<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([1 0 0],q1) * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([0 1 0], q2));
+0136 <span class="keyword">for</span> i=1:size(p,1)
+0137     p(i,:) = (RightFootRot' * (R' * p(i,:)'))';
+0138 <span class="keyword">end</span>
+0139 p = p - OsteoArticularModel(52).c';
+0140 save(<span class="string">'Visual/RightFoot'</span>,<span class="string">'p'</span>,<span class="string">'t'</span>);
+0141 
+0142 <span class="comment">%% Right toe</span>
+0143 load([bonepath <span class="string">'/RightToe.mat'</span>]); <span class="comment">%#ok&lt;LOAD&gt;</span>
+0144 p=p*coef;
+0145 <span class="keyword">for</span> i=1:size(p,1)
+0146     p(i,:) = (RightToeRot' * p(i,:)')';
+0147 <span class="keyword">end</span>
+0148 p = p - OsteoArticularModel(55).c';
+0149 save(<span class="string">'Visual/RightToe'</span>,<span class="string">'p'</span>,<span class="string">'t'</span>);
+0150 
+0151 <span class="comment">%% Left upper leg</span>
+0152 load([bonepath <span class="string">'/LeftUpperLeg.mat'</span>]); <span class="comment">%#ok&lt;LOAD&gt;</span>
+0153 coef = norm(LeftUpperLegPos-LeftLowerLegPos)/Length.LeftUpperLeg;
+0154 p=p*coef;
+0155 Point = LeftLowerLegPos - LeftUpperLegPos;
+0156 q2 = atan(-Point(1)/Point(3));
+0157 q1 = atan(-Point(2)/-Point(3)*cos(q2) + Point(1)*sin(q2));
+0158 R = (<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([1 0 0],q1) * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([0 1 0], q2));
+0159 <span class="keyword">for</span> i=1:size(p,1)
+0160     p(i,:) = (LeftUpperLegRot' * (R' * p(i,:)'))';
+0161 <span class="keyword">end</span>
+0162 p = p - OsteoArticularModel(58).c';
+0163 save(<span class="string">'Visual/LeftUpperLeg'</span>,<span class="string">'p'</span>,<span class="string">'t'</span>);
+0164 
+0165 <span class="comment">%% Left lower leg</span>
+0166 load([bonepath <span class="string">'/LeftLowerLeg.mat'</span>]); <span class="comment">%#ok&lt;LOAD&gt;</span>
+0167 coef = norm(LeftLowerLegPos-LeftFootPos)/Length.LeftLowerLeg;
+0168 p=p*coef;
+0169 Point = LeftFootPos - LeftLowerLegPos;
+0170 q2 = atan(-Point(1)/Point(3));
+0171 q1 = atan(-Point(2)/-Point(3)*cos(q2) + Point(1)*sin(q2));
+0172 R = (<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([1 0 0],q1) * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([0 1 0], q2));
+0173 <span class="keyword">for</span> i=1:size(p,1)
+0174     p(i,:) = (LeftLowerLegRot' * (R' * p(i,:)'))';
+0175 <span class="keyword">end</span>
+0176 p = p - OsteoArticularModel(61).c';
+0177 save(<span class="string">'Visual/LeftLowerLeg'</span>,<span class="string">'p'</span>,<span class="string">'t'</span>);
+0178 
+0179 <span class="comment">%% Left foot</span>
+0180 load([bonepath <span class="string">'/LeftFoot.mat'</span>]); <span class="comment">%#ok&lt;LOAD&gt;</span>
+0181 coef = norm(LeftFootPos-LeftToePos)/Length.LeftFoot;
+0182 p=p*coef;
+0183 Point = LeftToePos - LeftFootPos;
+0184 q2 = atan(-Point(1)/Point(3));
+0185 q1 = atan(-Point(2)/-Point(3)*cos(q2) + Point(1)*sin(q2));
+0186 R = (<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([1 0 0],q1) * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([0 1 0], q2));
+0187 <span class="keyword">for</span> i=1:size(p,1)
+0188     p(i,:) = (LeftFootRot' * (R' * p(i,:)'))';
+0189 <span class="keyword">end</span>
+0190 p = p - OsteoArticularModel(64).c';
+0191 save(<span class="string">'Visual/LeftFoot'</span>,<span class="string">'p'</span>,<span class="string">'t'</span>);
+0192 
+0193 <span class="comment">%% Left toe</span>
+0194 load([bonepath <span class="string">'/LeftToe.mat'</span>]); <span class="comment">%#ok&lt;LOAD&gt;</span>
+0195 p=p*coef;
+0196 <span class="keyword">for</span> i=1:size(p,1)
+0197     p(i,:) = (LeftToeRot' * p(i,:)')';
+0198 <span class="keyword">end</span>
+0199 p = p - OsteoArticularModel(67).c';
+0200 save(<span class="string">'Visual/LeftToe'</span>,<span class="string">'p'</span>,<span class="string">'t'</span>);
+0201 
+0202 <span class="comment">%% L5</span>
+0203 load([bonepath <span class="string">'/L5.mat'</span>]); <span class="comment">%#ok&lt;LOAD&gt;</span>
+0204 coef = norm(L5Pos-L3Pos)/Length.L5;
+0205 p=p*coef;
+0206 Point = L3Pos - L5Pos;
+0207 q2 = atan(-Point(1)/Point(3));
+0208 q1 = atan(-Point(2)/-Point(3)*cos(q2) + Point(1)*sin(q2));
+0209 R = (<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([1 0 0],q1) * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([0 1 0], q2));
+0210 <span class="keyword">for</span> i=1:size(p,1)
+0211     p(i,:) = (L5Rot' * (R' * p(i,:)'))';
+0212 <span class="keyword">end</span>
+0213 p = p - OsteoArticularModel(4).c';
+0214 save(<span class="string">'Visual/L5'</span>,<span class="string">'p'</span>,<span class="string">'t'</span>);
+0215 
+0216 <span class="comment">%% L3</span>
+0217 load([bonepath <span class="string">'/L3.mat'</span>]); <span class="comment">%#ok&lt;LOAD&gt;</span>
+0218 coef = norm(L3Pos-T12Pos)/Length.L3;
+0219 p=p*coef;
+0220 Point = T12Pos - L3Pos;
+0221 q2 = atan(-Point(1)/Point(3));
+0222 q1 = atan(-Point(2)/-Point(3)*cos(q2) + Point(1)*sin(q2));
+0223 R = (<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([1 0 0],q1) * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([0 1 0], q2));
+0224 <span class="keyword">for</span> i=1:size(p,1)
+0225     p(i,:) = (L3Rot' * (R' * p(i,:)'))';
+0226 <span class="keyword">end</span>
+0227 p = p - OsteoArticularModel(7).c';
+0228 save(<span class="string">'Visual/L3'</span>,<span class="string">'p'</span>,<span class="string">'t'</span>);
+0229 
+0230 <span class="comment">%% T12</span>
+0231 load([bonepath <span class="string">'/T12.mat'</span>]); <span class="comment">%#ok&lt;LOAD&gt;</span>
+0232 coef = norm(T12Pos-T8Pos)/Length.T12;
+0233 p=p*coef;
+0234 Point = T8Pos - T12Pos;
+0235 q2 = atan(-Point(1)/Point(3));
+0236 q1 = atan(-Point(2)/-Point(3)*cos(q2) + Point(1)*sin(q2));
+0237 R = (<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([1 0 0],q1) * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([0 1 0], q2));
+0238 <span class="keyword">for</span> i=1:size(p,1)
+0239     p(i,:) = (T12Rot' * (R' * p(i,:)'))';
+0240 <span class="keyword">end</span>
+0241 p = p - OsteoArticularModel(10).c';
+0242 save(<span class="string">'Visual/T12'</span>,<span class="string">'p'</span>,<span class="string">'t'</span>);
+0243 
+0244 <span class="comment">%% T8</span>
+0245 load([bonepath <span class="string">'/T8.mat'</span>]);  <span class="comment">%#ok&lt;LOAD&gt;</span>
+0246 coef = norm(T8Pos-NeckPos)/Length.T8;
+0247 p=p*coef;
+0248 Point = NeckPos - T8Pos;
+0249 q2 = atan(-Point(1)/Point(3));
+0250 q1 = atan(-Point(2)/-Point(3)*cos(q2) + Point(1)*sin(q2));
+0251 R = (<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([1 0 0],q1) * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([0 1 0], q2));
+0252 <span class="keyword">for</span> i=1:size(p,1)
+0253     p(i,:) = (T8Rot' * (R' * p(i,:)'))';
+0254 <span class="keyword">end</span>
+0255 p = p - OsteoArticularModel(13).c';
+0256 save(<span class="string">'Visual/T8'</span>,<span class="string">'p'</span>,<span class="string">'t'</span>);
+0257 
+0258 <span class="comment">%% Neck</span>
+0259 load([bonepath <span class="string">'/Neck.mat'</span>]); <span class="comment">%#ok&lt;LOAD&gt;</span>
+0260 coef = norm(NeckPos-HeadPos)/Length.Neck;
+0261 p=p*coef;
+0262 Point = HeadPos - NeckPos;
+0263 q2 = atan(-Point(1)/Point(3));
+0264 q1 = atan(-Point(2)/-Point(3)*cos(q2) + Point(1)*sin(q2));
+0265 R = (<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([1 0 0],q1) * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([0 1 0], q2));
+0266 <span class="keyword">for</span> i=1:size(p,1)
+0267     p(i,:) = (NeckRot' * (R' * p(i,:)'))';
+0268 <span class="keyword">end</span>
+0269 p = p - OsteoArticularModel(16).c';
+0270 save(<span class="string">'Visual/Neck'</span>,<span class="string">'p'</span>,<span class="string">'t'</span>);
+0271 
+0272 <span class="comment">%% Head</span>
+0273 load([bonepath <span class="string">'/Head.mat'</span>]); <span class="comment">%#ok&lt;LOAD&gt;</span>
+0274 p=p*coef;
+0275 <span class="keyword">for</span> i=1:size(p,1)
+0276     p(i,:) = (HeadRot' * p(i,:)')';
+0277 <span class="keyword">end</span>
+0278 p = p - OsteoArticularModel(19).c';
+0279 save(<span class="string">'Visual/Head'</span>,<span class="string">'p'</span>,<span class="string">'t'</span>);
+0280 
+0281 <span class="comment">%% Right shoulder</span>
+0282 load([bonepath <span class="string">'/RightShoulder.mat'</span>]); <span class="comment">%#ok&lt;LOAD&gt;</span>
+0283 coef = norm(RightShoulderPos-RightUpperArmPos)/Length.RightShoulder;
+0284 p=p*coef;
+0285 q2 = 0;
+0286 q1 = -pi/2;
+0287 R = (<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([1 0 0],q1) * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([0 1 0], q2));
+0288 <span class="keyword">for</span> i=1:size(p,1)
+0289     p(i,:) = (RightShoulderRot' * (R' * p(i,:)'))';
+0290 <span class="keyword">end</span>
+0291 p = p - OsteoArticularModel(22).c';
+0292 save(<span class="string">'Visual/RightShoulder'</span>,<span class="string">'p'</span>,<span class="string">'t'</span>);
+0293 
+0294 <span class="comment">%% Right upper arm</span>
+0295 load([bonepath <span class="string">'/RightUpperArm.mat'</span>]);  <span class="comment">%#ok&lt;LOAD&gt;</span>
+0296 coef = norm(RightUpperArmPos-RightForeArmPos)/Length.RightUpperArm;
+0297 p=p*coef;
+0298 q2 = 0;
+0299 q1 = -pi/2;
+0300 R = <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([0 0 1], -pi/2) * (<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([1 0 0],q1) * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([0 1 0], q2));
+0301 <span class="keyword">for</span> i=1:size(p,1)
+0302     p(i,:) = (RightUpperArmRot' * (R' * p(i,:)'))';
+0303 <span class="keyword">end</span>
+0304 p = p - OsteoArticularModel(25).c';
+0305 save(<span class="string">'Visual/RightUpperArm'</span>,<span class="string">'p'</span>,<span class="string">'t'</span>);
+0306 
+0307 <span class="comment">%% Right forearm</span>
+0308 load([bonepath <span class="string">'/RightForeArm.mat'</span>]); <span class="comment">%#ok&lt;LOAD&gt;</span>
+0309 coef = norm(RightForeArmPos-RightHandPos)/Length.RightForeArm;
+0310 p=p*coef;
+0311 q2 = 0;
+0312 q1 = -pi/2;
+0313 R = (<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([1 0 0],q1) * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([0 1 0], q2));
+0314 <span class="keyword">for</span> i=1:size(p,1)
+0315     p(i,:) = (RightForeArmRot' * (R' * p(i,:)'))';
+0316 <span class="keyword">end</span>
+0317 p = p - OsteoArticularModel(28).c';
+0318 save(<span class="string">'Visual/RightForeArm'</span>,<span class="string">'p'</span>,<span class="string">'t'</span>);
+0319 
+0320 <span class="comment">%% Right hand</span>
+0321 load([bonepath <span class="string">'/RightHand.mat'</span>]); <span class="comment">%#ok&lt;LOAD&gt;</span>
+0322 p=p*coef;
+0323 q2 = 0;
+0324 q1 = -pi/2;
+0325 R = <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([0 0 1], pi) * (<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([1 0 0],q1) * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([0 1 0], q2));
+0326 <span class="keyword">for</span> i=1:size(p,1)
+0327     p(i,:) = (RightHandRot' * (R' * p(i,:)'))';
+0328 <span class="keyword">end</span>
+0329 p = p - OsteoArticularModel(31).c';
+0330 save(<span class="string">'Visual/RightHand'</span>,<span class="string">'p'</span>,<span class="string">'t'</span>);
+0331 
+0332 <span class="comment">%% Left shoulder</span>
+0333 load([bonepath <span class="string">'/LeftShoulder.mat'</span>]); <span class="comment">%#ok&lt;LOAD&gt;</span>
+0334 coef = norm(LeftShoulderPos-LeftUpperArmPos)/Length.LeftShoulder;
+0335 p=p*coef;
+0336 q2 = 0;
+0337 q1 = pi/2;
+0338 R = (<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([1 0 0],q1) * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([0 1 0], q2));
+0339 <span class="keyword">for</span> i=1:size(p,1)
+0340     p(i,:) = (LeftShoulderRot' * (R' * p(i,:)'))';
+0341 <span class="keyword">end</span>
+0342 p = p - OsteoArticularModel(34).c';
+0343 save(<span class="string">'Visual/LeftShoulder'</span>,<span class="string">'p'</span>,<span class="string">'t'</span>);
+0344 
+0345 <span class="comment">%% Left upper arm</span>
+0346 load([bonepath <span class="string">'/LeftUpperArm.mat'</span>]); <span class="comment">%#ok&lt;LOAD&gt;</span>
+0347 coef = norm(LeftUpperArmPos-LeftForeArmPos)/Length.LeftUpperArm;
+0348 p=p*coef;
+0349 q2 = 0;
+0350 q1 = -pi/2;
+0351 R = (<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([1 0 0],q1) * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([0 1 0], q2));
+0352 <span class="keyword">for</span> i=1:size(p,1)
+0353     p(i,:) = (LeftUpperArmRot' * (R' * p(i,:)'))';
+0354 <span class="keyword">end</span>
+0355 p = p - OsteoArticularModel(37).c';
+0356 save(<span class="string">'Visual/LeftUpperArm'</span>,<span class="string">'p'</span>,<span class="string">'t'</span>);
+0357 
+0358 <span class="comment">%% Left forearm</span>
+0359 load([bonepath <span class="string">'/LeftForeArm.mat'</span>]); <span class="comment">%#ok&lt;LOAD&gt;</span>
+0360 coef = norm(LeftForeArmPos-LeftHandPos)/Length.LeftForeArm;
+0361 p=p*coef;
+0362 q2 = 0;
+0363 q1 = -pi/2;
+0364 R = <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([0 0 1], pi) * (<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([1 0 0],q1) * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([0 1 0], q2));
+0365 <span class="keyword">for</span> i=1:size(p,1)
+0366     p(i,:) = (LeftForeArmRot' * (R' * p(i,:)'))';
+0367 <span class="keyword">end</span>
+0368 p = p - OsteoArticularModel(40).c';
+0369 save(<span class="string">'Visual/LeftForeArm'</span>,<span class="string">'p'</span>,<span class="string">'t'</span>);
+0370 
+0371 <span class="comment">%% Left hand</span>
+0372 load([bonepath <span class="string">'/LeftHand.mat'</span>]); <span class="comment">%#ok&lt;LOAD&gt;</span>
+0373 p=p*coef;
+0374 q2 = 0;
+0375 q1 = pi/2;
+0376 R = <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([0 0 1], pi/2) * (<a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([1 0 0],q1) * <a href="../../Functions/AlgoMathsModel/Rodrigues.html" class="code" title="function R = Rodrigues(a,q)">Rodrigues</a>([0 1 0], q2));
+0377 <span class="keyword">for</span> i=1:size(p,1)
+0378     p(i,:) = (LeftHandRot' * (R' * p(i,:)'))';
+0379 <span class="keyword">end</span>
+0380 p = p - OsteoArticularModel(43).c';
+0381 save(<span class="string">'Visual/LeftHand'</span>,<span class="string">'p'</span>,<span class="string">'t'</span>);
+0382 
+0383 
+0384 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

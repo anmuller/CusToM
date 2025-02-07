@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of btkGetAnalogsResolution</title>
+  <meta name="keywords" content="btkGetAnalogsResolution">
+  <meta name="description" content="BTKGETANALOGSRESOLUTION Returns the ADC resolution.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- # BTK --><!-- menu.html linux64 -->
+<h1>btkGetAnalogsResolution
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>BTKGETANALOGSRESOLUTION Returns the ADC resolution.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function ar = btkGetAnalogsResolution(h) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">BTKGETANALOGSRESOLUTION Returns the ADC resolution.
+ 
+  AR = BTKGETANALOGSRESOLUTION(H) returns the resolution of the analog to
+  digital converter. The acquisition is represented by the handle H.  
+  This handle is obtained by the use of a btk* function.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Functions/BTK/linux64/@Common/btkGetAnalogResolution.html" class="code" title="function ar = btkGetAnalogResolution(h) %#ok">btkGetAnalogResolution</a>	BTKGETANALOGRESOLUTION Returns the ADC resolution.</li><li><a href="../../../Functions/BTK/mac64/@Common/btkGetAnalogResolution.html" class="code" title="function ar = btkGetAnalogResolution(h) %#ok">btkGetAnalogResolution</a>	BTKGETANALOGRESOLUTION Returns the ADC resolution.</li><li><a href="../../../Functions/BTK/win64/@Common/btkGetAnalogResolution.html" class="code" title="function ar = btkGetAnalogResolution(h) %#ok">btkGetAnalogResolution</a>	BTKGETANALOGRESOLUTION Returns the ADC resolution.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function ar = btkGetAnalogsResolution(h)</a>
+0002 <span class="comment">%BTKGETANALOGSRESOLUTION Returns the ADC resolution.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%  AR = BTKGETANALOGSRESOLUTION(H) returns the resolution of the analog to</span>
+0005 <span class="comment">%  digital converter. The acquisition is represented by the handle H.</span>
+0006 <span class="comment">%  This handle is obtained by the use of a btk* function.</span>
+0007 
+0008 <span class="comment">%  Author: A. Barré</span>
+0009 <span class="comment">%  Copyright 2009-2013 Biomechanical ToolKit (BTK).</span>
+0010 
+0011 warning(<span class="string">'This function is deprecated and will be removed in a next release. Use btkGetAnalogResolution instead.'</span>);
+0012 <span class="keyword">return</span> <a href="../../../Functions/BTK/linux64/@Common/btkGetAnalogResolution.html" class="code" title="function ar = btkGetAnalogResolution(h) %#ok">btkGetAnalogResolution</a>(h);</pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

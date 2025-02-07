@@ -1,0 +1,9 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  MuscleCalibrationAnthropo -> GenerateGenericModel;
+  MuscleCalibrationAnthropo -> Maximal_Isometric_Force_Scaling_Steele;
+
+  GenerateGenericModel [URL="GenerateGenericModel.html"];
+  Maximal_Isometric_Force_Scaling_Steele [URL="Maximal_Isometric_Force_Scaling_Steele.html"];
+  MuscleCalibrationAnthropo [URL="MuscleCalibrationAnthropo.html"];
+}

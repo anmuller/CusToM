@@ -1,6 +1,5 @@
+
 ﻿## CusToM: a Matlab toolbox for musculoskeletal simulation
- 
-![alt text](https://github.com/anmuller/CusToM/blob/master/logo_custom.png)
 
 **CusToM Status:** [![status](http://joss.theoj.org/papers/4b412d584fbfa911edfae882146e2cd3/status.svg)](http://joss.theoj.org/papers/4b412d584fbfa911edfae882146e2cd3)
 
@@ -56,7 +55,8 @@ Finally the subject-specific model is used to understand recorded motions of the
 However, musculoskeletal simulation requires high computational cost. Editing and assembling features to modify generic models. 
 Subject-specific calibrations and multiple simulations are required to compute subject-specific quantities on recorded trials. 
 And current available musculoskeletal softwares are heavy and requires expertise like SIMM (MusculoGraphics, Inc., Santa Rosa, CA), Anybody (Anybody Technology, Aalborg, Denmark) and OpenSim OpenSim (Simtk, Stanford, CA). 
-Moreover, SIMM and Anybody are commercial softwares. OpenSim is open source and available at https://github.com/opensim-org. Core simulation elements are however difficult to handle and modify for research purposes, therefore we thought necessary to build our own musculoskeletal simulation code.
+Moreover, SIMM and Anybody are commercial softwares and, OpenSim is a freely available software but main algorithms source codes are not available. 
+That's why, there was a need in developping a complete open-source software for musculoskeletal simulation. 
 The source code was developped with Matlab to allow many researchers to understand and contribute to the code.
 
 # Summary <a name="Summary"></a>
@@ -93,7 +93,7 @@ A user interface has been developed to facilitate the data management and the mo
 
 # Installation instructions <a name="Installationinstructions"></a>
 
-You need to create a copy on a local directory on your machine to use CusToM. Obtain a copy by downloading and unzipping the latest zip file or clone CusToM instead e.g. using: git clone https://github.com/anmuller/CusToM. You can place the CusToM folder anywhere on your machine.
+You need to create a copy on a local directory on your machine to use CusToM. Obtain a copy by downloading and unzipping the latest zip file or clone CusToM instead e.g. using: git clone https://github.com/anmuller/CusToM. You can place the CusToM folder anywhere on your machine. #####The most stable branch is the Dev_master one, please use it in priority !#####
 
 After downloading the main folder and placing it in a relevant location, the installation only consists in running the Installation file. It checks if you have a compatible version of Matlab, if the needed toolboxes are installed. The function will also add the Functions folder of CusToM to your current path.
  
@@ -108,6 +108,8 @@ CusToM was not developped on MacosX and Linux. For MacosX, it could be necessary
 
 For Ubuntu, the content of lib folder in btk must be moved in /usr/local/lib. For Fedora, the content of lib folder in btk must be moved in /usr/lib64.
 Then, use the command **sudo ldconfig** in the new location. 
+
+For MacosX, CMake is required to build the binaries from the download BTK source code with the "BTK_WRAP_MATLAB" option. Then use the command make in the binaries location. If need be, check the documentation "btk_files_installation_on_MacOS".
 
 To check that your installation of btk is correct, go whitin any folder of "Examples". Write "GenerateParameters" in the Matlab command, click on "GenerateParameters" in the new window. Then, in the window "Analysis" which will open, desactivate all the boxes except the InverseKinematics box. Click on "Run", and check that there is no error in Matlab prompt due to unreadable .c3d file. If there is no error, the installation is complete. If not, feel free to open an issue in github.
 
@@ -226,3 +228,19 @@ Muller, A., C. Pontonnier, C. Germain, and G. Dumont. 2015. “Dealing with modu
 Muller, A.,  F. Demore, C. Pontonnier, and G. Dumont. 2017. “MusIC Makes the Muscles Work Together.” In XVI International Symposium on Computer Simulation in Biomechanics, 2.
 
 Muller, A., C. Pontonnier, and G. Dumont. 2018. “The Music Method: A Fast and Quasi-Optimal Solution to the Muscle Forces Estimation Problem.” Computer Methods in Biomechanics and Biomedical Engineering 21 (2). Taylor & Francis:149–60. https://doi.org/10.1080/10255842.2018.1429596
+
+Muller, A., Pontonnier, C., & Dumont, G. (2019). Motion-based prediction of hands and feet contact efforts during asymmetric handling tasks. IEEE Transactions on Biomedical Engineering, 67(2), 344-352.
+
+Puchaud, P., Sauret, C., Muller, A., Bideau, N., Dumont, G., Pillet, H., & Pontonnier, C. (2020). Accuracy and kinematics consistency of marker-based scaling approaches on a lower limb model: a comparative study with imagery data. Computer Methods in Biomechanics and Biomedical Engineering, 23(3), 114-125.
+
+Muller, A., Pontonnier, C., Robert-Lachaine, X., Dumont, G., & Plamondon, A. (2020). Motion-based prediction of external forces and moments and back loading during manual material handling tasks. Applied ergonomics, 82, 102935.
+
+Livet, C., Rouvier, T., Sauret, C., Pillet, H., Dumont, G., & Pontonnier, C. (2023). A penalty method for constrained multibody kinematics optimisation using a Levenberg–Marquardt algorithm. Computer Methods in Biomechanics and Biomedical Engineering, 26(7), 864-875.
+
+Livet, C., Rouvier, T., Dumont, G., & Pontonnier, C. (2022). An automatic and simplified approach to muscle path modeling. Journal of Biomechanical Engineering, 144(1), 014502.
+
+Morin, P., Muller, A., Dumont, G., & Pontonnier, C. (2024). Comparison of Two Contact Detection Methods for Ground Reaction Forces and Moment Estimation During Sidestep Cuts, Runs, and Walks. Journal of Biomechanical Engineering, 146(1).
+
+Pontonnier, C., Livet, C., Muller, A., Sorel, A., Dumont, G., & Bideau, N. (2019). Ground reaction forces and moments prediction of challenging motions: fencing lunges. Computer methods in biomechanics and biomedical engineering, 22(sup1), S523-S525.
+
+Demestre, L., Morin, P., May, F., Bideau, N., Nicolas, G., Pontonnier, C., & Dumont, G. (2022). Motion-based ground reaction forces and moments prediction method for interaction with a moving and/or non-horizontal structure. Journal of Biomechanical Engineering, 144(11), 114504.

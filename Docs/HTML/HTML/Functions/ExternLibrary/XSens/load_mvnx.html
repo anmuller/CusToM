@@ -1,0 +1,406 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of load_mvnx</title>
+  <meta name="keywords" content="load_mvnx">
+  <meta name="description" content="mvnx = load_mvnx(filename)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- # ExternLibrary --><!-- menu.html XSens -->
+<h1>load_mvnx
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>mvnx = load_mvnx(filename)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function mvnx = load_mvnx(filename) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> mvnx = load_mvnx(filename)
+ loads a mvnx file
+ filename is name of file (including path)
+ mvnx is result struct containing all data of the mvnx file
+ Xsens Technologies BV 28-05-2015</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Functions/XSens/MVNXInverseKinematics.html" class="code" title="function MVNXInverseKinematics(filename, AnalysisParameters)">MVNXInverseKinematics</a>	Recovery of joint coordinates in a MVNX file</li><li><a href="../../../Functions/XSens/MVNXModelGeneration.html" class="code" title="function [OsteoArticularModel] = MVNXModelGeneration(ModelParameters, AnalysisParameters)">MVNXModelGeneration</a>	Generation of the osteo-articular model from a MVNX file</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function superstruct = setvalue(superstruct,index,value,name,fields,namecounter)</a></li><li><a href="#_sub2" class="code">function word = checkText(word)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function mvnx = load_mvnx(filename)</a>
+0002 <span class="comment">% mvnx = load_mvnx(filename)</span>
+0003 <span class="comment">% loads a mvnx file</span>
+0004 <span class="comment">% filename is name of file (including path)</span>
+0005 <span class="comment">% mvnx is result struct containing all data of the mvnx file</span>
+0006 <span class="comment">% Xsens Technologies BV 28-05-2015</span>
+0007 
+0008 <span class="comment">%% check filename</span>
+0009 <span class="keyword">if</span> isempty(strfind(filename,<span class="string">'mvnx'</span>))
+0010     filename = [filename <span class="string">'.mvnx'</span>];
+0011 <span class="keyword">end</span>
+0012 <span class="keyword">if</span> ~exist(filename,<span class="string">'file'</span>)
+0013     error([mfilename <span class="string">':xsens:filename'</span>],[<span class="string">'No file with filename: '</span> filename <span class="string">', file is not present or file has wrong format (function only reads .mvnx)'</span>])
+0014 <span class="keyword">end</span>
+0015 <span class="comment">%% read data</span>
+0016 fid = fopen(filename, <span class="string">'r'</span>, <span class="string">'n'</span>, <span class="string">'UTF-8'</span>);
+0017 content = char(fread(fid,<span class="string">'char'</span>)');
+0018 fclose(fid);
+0019 <span class="comment">%% get data into a cell array, one cell per line</span>
+0020 lines = find(content == 10);
+0021 cellContent = cell(1,length(lines));
+0022 
+0023 hWaitbar = waitbar(0, <span class="string">'MVNX import: importing data...'</span>);
+0024 <span class="keyword">for</span> n=1:length(lines)
+0025     <span class="keyword">if</span> n==1
+0026         cellContent{n} = content(1:lines(n)-1);
+0027     <span class="keyword">else</span>
+0028         cellContent{n} = content(lines(n-1)+1:lines(n)-1);
+0029     <span class="keyword">end</span>
+0030 <span class="keyword">end</span>
+0031 <span class="comment">% look for comment lines and remove them</span>
+0032 cellContent(cellfun(@(x) x(1)==<span class="string">'-'</span> || (x(1)==<span class="string">'&lt;'</span> &amp;&amp; (x(2)==<span class="string">'?'</span> || x(2)==<span class="string">'!'</span>)),cellContent)) = [];
+0033 
+0034 <span class="comment">% get start of text and clean up some</span>
+0035 index = cellfun(@(x) find(x==60,1),cellContent);
+0036 openandclose = cellfun(@(x) sum(x==60)==2,cellContent); <span class="comment">% lines with have an opening and closing statement in one line</span>
+0037 cellContent = cellfun(@(x) x(find(x==60):end), cellContent,<span class="string">'UniformOutput'</span>,false);
+0038 
+0039 <span class="comment">%% get start and end words</span>
+0040 n = 0;clear value name
+0041 iWord = 0;
+0042 word = cell(1,length(cellContent));
+0043 wordindex = cell(1,length(cellContent));
+0044 wordvalue = cell(1,length(cellContent));
+0045 wordfields = cell(1,length(cellContent));
+0046 <span class="keyword">while</span> n &lt; length(cellContent)
+0047     n=n+1;
+0048     line = cellContent{n};oneword = false;
+0049     hooks = find(line == 62);
+0050     iWord = iWord+1;
+0051     wordindex{iWord} = index(n);
+0052     <span class="keyword">if</span> any(line == 32) &amp;&amp; ~openandclose(n)
+0053         <span class="keyword">if</span> ~isempty(hooks) &amp;&amp; hooks(1) &lt; find(line==32,1)
+0054             word{iWord} = line(2:hooks(1)-1);
+0055             iLine = hooks(1)+1;
+0056         <span class="keyword">else</span>
+0057             word{iWord} = line(2:find(line==32,1)-1);
+0058             iLine = find(line==32,1)+1;
+0059         <span class="keyword">end</span>
+0060     <span class="keyword">elseif</span> ~isempty(hooks) &amp;&amp; length(line)&gt;=8 &amp;&amp; strcmp(<span class="string">'comment'</span>,line(2:8))
+0061         <span class="comment">% add exception for comment</span>
+0062         word{iWord} = line(2:hooks(1)-1);
+0063         iLine = hooks(1)+1;
+0064     <span class="keyword">elseif</span> openandclose(n)
+0065         word{iWord} = line(2:find(line==62,1)-1);
+0066         iLine = find(line==62,1)+1;
+0067     <span class="keyword">else</span>
+0068         word{iWord} = line(2:end-1);
+0069         oneword = true;
+0070     <span class="keyword">end</span>
+0071     <span class="keyword">if</span> word{iWord}(1) ~= <span class="string">'/'</span>
+0072         <span class="keyword">if</span> ~oneword &amp;&amp; ~openandclose(n)
+0073             k = find(line == 34);
+0074             k = reshape(k,2,length(k)/2)';
+0075             l = [iLine find(line(iLine:end) == 61)+iLine-2];
+0076             fieldname = cell(1,length(l)-1); value = cell(1,length(l)-1);
+0077             <span class="keyword">if</span> ~isempty(k)
+0078                 <span class="keyword">for</span> il=1:size(k,1)
+0079                     fieldname{il} = line(iLine:find(line(iLine:end) == 61,1)+iLine-2);
+0080                     <span class="keyword">if</span> size(k,1) &gt; 1 &amp;&amp; il &lt; size(k,1)
+0081                         a = strfind(line(iLine:end),<span class="string">'&quot; '</span>)+iLine+1;
+0082                         iLine = a(1);
+0083                     <span class="keyword">end</span>
+0084                     value{il} = line(k(il,1)+1:k(il,2)-1);
+0085                 <span class="keyword">end</span>
+0086             <span class="keyword">else</span>
+0087                 value = []; fieldname =[];
+0088                 value = line(find(line == 62,1)+1:end);
+0089             <span class="keyword">end</span>
+0090         <span class="keyword">elseif</span> ~oneword &amp;&amp; openandclose(n)
+0091             value = []; fieldname =[];
+0092             value = line(find(line == 62,1)+1:find(line==60,1,<span class="string">'last'</span>)-1);
+0093         <span class="keyword">else</span>
+0094             value = NaN;fieldname = [];
+0095         <span class="keyword">end</span>
+0096         wordvalue{iWord} = value;
+0097         wordfields{iWord} = fieldname;
+0098     <span class="keyword">end</span>
+0099 <span class="keyword">end</span>
+0100 isendword = cellfun(@(x) x(1) == <span class="string">'/'</span>,word);
+0101 endwords = cellfun(@(x) x(2:end),word(isendword),<span class="string">'UniformOutput'</span>,false);
+0102 kindofendwords = unique(endwords);
+0103 placeoffirststartword = zeros(1,length(kindofendwords));
+0104 placeofallendwords = cell(1,length(kindofendwords));
+0105 placeofallstartwords = cell(1,length(kindofendwords));
+0106 <span class="keyword">for</span> n=1:length(kindofendwords)
+0107     lengthWord = length(cell2mat(kindofendwords(n)));
+0108     placeoffirststartword(n) = find(strncmp(word,kindofendwords(n),lengthWord),1);
+0109     placeofallstartwords{n} = find(strncmp(word,kindofendwords(n),lengthWord));
+0110     placeofallendwords{n} = find(strncmp(word,[<span class="string">'/'</span> kindofendwords{n}],lengthWord+1));
+0111 <span class="keyword">end</span>
+0112 [a b] = sort(placeoffirststartword);
+0113 startwords = kindofendwords(b);
+0114 <span class="keyword">for</span> n=1:length(startwords)
+0115     obj.(startwords{n}).number = length(placeofallstartwords{n});
+0116     obj.(startwords{n}).index = index(a(n));
+0117     obj.(startwords{n}).count = 0;
+0118 <span class="keyword">end</span>
+0119 
+0120 <span class="comment">%% get values</span>
+0121 <span class="keyword">for</span> n=1:length(wordvalue)
+0122     <span class="keyword">if</span> mod(n,5000) == 0
+0123         waitbar((n/length(wordvalue))/2, hWaitbar);
+0124     <span class="keyword">end</span>
+0125     
+0126     <span class="keyword">if</span> iscell(wordvalue{n})
+0127         <span class="keyword">if</span> length(wordvalue{n}) == 1
+0128             B = [];
+0129             <span class="keyword">try</span>
+0130                 B = str2num(wordvalue{n}{1});
+0131             <span class="keyword">end</span>
+0132             <span class="keyword">if</span> ~isempty(B)
+0133                 wordvalue{n} = B;
+0134             <span class="keyword">else</span>
+0135                 wordvalue{n} = wordvalue{n}{1};
+0136             <span class="keyword">end</span>
+0137         <span class="keyword">else</span>
+0138             <span class="keyword">for</span> m=1:length(wordvalue{n})
+0139                 <span class="keyword">try</span>
+0140                     B = str2num(wordvalue{n}{m});
+0141                     <span class="keyword">if</span> ~isempty(B)
+0142                         wordvalue{n}{m} = B;
+0143                     <span class="keyword">end</span>
+0144                 <span class="keyword">end</span>
+0145             <span class="keyword">end</span>
+0146         <span class="keyword">end</span>
+0147     <span class="keyword">else</span>
+0148         <span class="keyword">try</span>
+0149             B = str2num(wordvalue{n});
+0150             <span class="keyword">if</span> ~isempty(B)
+0151                 wordvalue{n} = B;
+0152             <span class="keyword">end</span>
+0153         <span class="keyword">end</span>
+0154     <span class="keyword">end</span>
+0155 <span class="keyword">end</span>
+0156 <span class="comment">%% put everything in struct</span>
+0157 firstFramesFound = false;
+0158 nFramesToBeFound = 5;
+0159 nFramesFound = 0;
+0160 nFrames = length(cell2mat(placeofallendwords(strcmp(kindofendwords,<span class="string">'frame'</span>))));
+0161 lastwordisendword = false;lastendword = <span class="string">''</span>;
+0162 superstruct = struct;name = cell(1,max(index)+1);namecounter = ones(1,max(index));endplace = inf(1,max(index));
+0163 <span class="keyword">for</span> iWord=1:length(word)
+0164     <span class="keyword">if</span> mod(iWord,5000) == 0
+0165         waitbar(iWord/length(word) + 0.5, hWaitbar);
+0166     <span class="keyword">end</span>
+0167     <span class="keyword">if</span> word{iWord}(1)==<span class="string">'/'</span>
+0168         startword = word{iWord}(2:end);
+0169         <span class="keyword">if</span> any(strcmp(startword,name))
+0170             name(find(strcmp(startword,name),1):end) = [];
+0171         <span class="keyword">end</span>
+0172         <span class="keyword">if</span> lastwordisendword
+0173             obj.(lastendword).count = 0;
+0174         <span class="keyword">end</span>
+0175         lastendword = startword;
+0176         lastwordisendword = true;
+0177     <span class="keyword">else</span>
+0178         lastwordisendword = false;
+0179         <span class="keyword">try</span>
+0180             <span class="keyword">if</span> ~isempty(wordfields{iWord})
+0181                 wordfields{iWord} = cellfun(@(x) x(x~=32), wordfields{iWord},<span class="string">'UniformOutput'</span>,false);
+0182             <span class="keyword">end</span>
+0183             word(iWord) = <a href="#_sub2" class="code" title="subfunction word = checkText(word)">checkText</a>(word(iWord));
+0184             wordfields{iWord} = <a href="#_sub2" class="code" title="subfunction word = checkText(word)">checkText</a>(wordfields{iWord});
+0185             
+0186             <span class="keyword">if</span> any(strncmp(startwords,word{iWord},length(startwords)))
+0187                 <span class="keyword">if</span> strcmp(word{iWord},<span class="string">'frame'</span>)
+0188                     nFramesFound = nFramesFound + 1;
+0189                     <span class="keyword">if</span> ~firstFramesFound &amp;&amp; nFramesFound &gt;= nFramesToBeFound
+0190                         firstFramesFound = true;
+0191                         <span class="comment">% preallocate frames in superstruct</span>
+0192                         <span class="comment">% Assume remainder of the file contains frames,</span>
+0193                         <span class="comment">% with exception of security code at the end</span>
+0194                         frames(1:nFrames,1) = superstruct.mvnx.subject.frames.frame(end);
+0195                         frames(1:nFramesFound-1) = superstruct.mvnx.subject.frames.frame(1:nFramesFound-1);
+0196                     <span class="keyword">end</span>
+0197                     <span class="keyword">if</span> firstFramesFound
+0198                         fields = wordfields{iWord};
+0199                         <span class="keyword">for</span> il = 1:length(fields)
+0200                             frames(nFramesFound).(fields{il}) = wordvalue{iWord}{il};
+0201                         <span class="keyword">end</span>
+0202                     <span class="keyword">end</span>
+0203                 <span class="keyword">end</span>
+0204                 obj.(word{iWord}).count = obj.(word{iWord}).count +1;
+0205                 name{index(iWord)} = word{iWord};
+0206                 namecounter(index(iWord)) = obj.(word{iWord}).count;
+0207                 <span class="keyword">if</span> ~firstFramesFound &amp;&amp; (iscell(wordvalue{iWord}) || ~isempty(wordvalue{iWord}) &amp;&amp; all(~isnan(wordvalue{iWord})))
+0208                     superstruct = <a href="#_sub1" class="code" title="subfunction superstruct = setvalue(superstruct,index,value,name,fields,namecounter)">setvalue</a>(superstruct,index(iWord),wordvalue{iWord},name(1:index(iWord)),wordfields{iWord},namecounter);
+0209                 <span class="keyword">end</span>
+0210             <span class="keyword">elseif</span> iWord &gt; 1 &amp;&amp; strcmp(word{iWord},word{iWord-1})
+0211                 name{index(iWord)} = word{iWord};
+0212                 namecounter(index(iWord)) = namecounter(index(iWord))+1;
+0213                 superstruct = <a href="#_sub1" class="code" title="subfunction superstruct = setvalue(superstruct,index,value,name,fields,namecounter)">setvalue</a>(superstruct,index(iWord),wordvalue{iWord},name(1:index(iWord)),wordfields{iWord},namecounter);
+0214             <span class="keyword">else</span>
+0215                 name{index(iWord)} = word{iWord};
+0216                 namecounter(index(iWord)) = 1;
+0217                 <span class="keyword">if</span> firstFramesFound &amp;&amp; ~strcmp(word{iWord},<span class="string">'securityCode'</span>)
+0218                     frames(nFramesFound).(word{iWord}) = wordvalue{iWord};
+0219                 <span class="keyword">else</span>
+0220                     superstruct = <a href="#_sub1" class="code" title="subfunction superstruct = setvalue(superstruct,index,value,name,fields,namecounter)">setvalue</a>(superstruct,index(iWord),wordvalue{iWord},name(1:index(iWord)),wordfields{iWord},namecounter);
+0221                 <span class="keyword">end</span>
+0222             <span class="keyword">end</span>
+0223         <span class="keyword">catch</span> e
+0224             disp(getReport(e))
+0225         <span class="keyword">end</span>
+0226     <span class="keyword">end</span>
+0227 <span class="keyword">end</span>
+0228 <span class="keyword">if</span> firstFramesFound
+0229     superstruct.mvnx.subject.frames.frame = frames';
+0230     <span class="keyword">if</span> obj.mvnx.number &gt; nFramesFound
+0231         superstruct.mvnx.subject.frames.frame(nFramesFound+1:end) = [];
+0232     <span class="keyword">end</span>
+0233 <span class="keyword">end</span>
+0234 
+0235 <span class="comment">%% get output</span>
+0236 mvnx = superstruct.mvnx;
+0237 
+0238 delete(hWaitbar);
+0239 <span class="keyword">end</span>
+0240 <a name="_sub1" href="#_subfunctions" class="code">function superstruct = setvalue(superstruct,index,value,name,fields,namecounter)</a>
+0241 <span class="comment">%superstruct = setvalue(superstruct,index,value,name,fields,namecounter)</span>
+0242 <span class="comment">% add values to a very big struct</span>
+0243 <span class="keyword">if</span> ~isempty(fields) &amp;&amp; (~iscell(fields) || ~isempty(fields{1}))
+0244     <span class="keyword">if</span> length(fields) == 1
+0245         name(end+1) = fields;
+0246     <span class="keyword">else</span>
+0247         name{end+1} = fields;
+0248     <span class="keyword">end</span>
+0249     index = index+1;
+0250 <span class="keyword">end</span>
+0251 <span class="keyword">switch</span> index
+0252     <span class="keyword">case</span> 1
+0253         <span class="keyword">if</span> ~iscell(name{1})
+0254             superstruct.(name{1}) = value;
+0255         <span class="keyword">else</span>
+0256             <span class="keyword">for</span> il = 1:length(name{1})
+0257                 superstruct.(name{1}{il}) = value{il};
+0258             <span class="keyword">end</span>
+0259         <span class="keyword">end</span>
+0260     <span class="keyword">case</span> 2
+0261         <span class="keyword">if</span> ~iscell(name{2})
+0262             superstruct.(name{1})(namecounter(1)).(name{2}) = value;
+0263         <span class="keyword">else</span>
+0264             <span class="keyword">for</span> il = 1:length(name{2})
+0265                 superstruct.(name{1})(namecounter(1)).(name{2}{il}) = value{il};
+0266             <span class="keyword">end</span>
+0267         <span class="keyword">end</span>
+0268     <span class="keyword">case</span> 3
+0269         <span class="keyword">if</span> ~iscell(name{3})
+0270             superstruct.(name{1})(namecounter(1)).(name{2})(namecounter(2)).(name{3})<span class="keyword">...</span>
+0271                 = value;
+0272         <span class="keyword">else</span>
+0273             <span class="keyword">for</span> il = 1:length(name{3})
+0274                 superstruct.(name{1})(namecounter(1)).(name{2})(namecounter(2)).(name{3}{il}) = value{il};
+0275             <span class="keyword">end</span>
+0276         <span class="keyword">end</span>
+0277     <span class="keyword">case</span> 4
+0278         <span class="keyword">if</span> ~iscell(name{4})
+0279             superstruct.(name{1})(namecounter(1)).(name{2})(namecounter(2)).(name{3})(namecounter(3))<span class="keyword">...</span><span class="comment">.</span>
+0280                 .(name{4}) = value;
+0281         <span class="keyword">else</span>
+0282             <span class="keyword">for</span> il = 1:length(name{4})
+0283                 superstruct.(name{1})(namecounter(1)).(name{2})(namecounter(2)).(name{3})(namecounter(3))<span class="keyword">...</span>
+0284                     .(name{4}{il}) = value{il};
+0285             <span class="keyword">end</span>
+0286         <span class="keyword">end</span>
+0287     <span class="keyword">case</span> 5
+0288         <span class="keyword">if</span> ~iscell(name{5})
+0289             superstruct.(name{1})(namecounter(1)).(name{2})(namecounter(2)).(name{3})(namecounter(3))<span class="keyword">...</span><span class="comment">.</span>
+0290                 .(name{4})(namecounter(4)).(name{5}) = value;
+0291         <span class="keyword">else</span>
+0292             <span class="keyword">for</span> il = 1:length(name{5})
+0293                 superstruct.(name{1})(namecounter(1)).(name{2})(namecounter(2)).(name{3})(namecounter(3))<span class="keyword">...</span><span class="comment">.</span>
+0294                     .(name{4})(namecounter(4)).(name{5}{il}) = value{il};
+0295             <span class="keyword">end</span>
+0296         <span class="keyword">end</span>
+0297     <span class="keyword">case</span> 6
+0298         <span class="keyword">if</span> ~iscell(name{6})
+0299             superstruct.(name{1})(namecounter(1)).(name{2})(namecounter(2)).(name{3})(namecounter(3))<span class="keyword">...</span><span class="comment">.</span>
+0300                 .(name{4})(namecounter(4)).(name{5})(namecounter(5)).(name{6}) = value;
+0301         <span class="keyword">else</span>
+0302             <span class="keyword">for</span> il = 1:length(name{6})
+0303                 superstruct.(name{1})(namecounter(1)).(name{2})(namecounter(2)).(name{3})(namecounter(3))<span class="keyword">...</span><span class="comment">.</span>
+0304                     .(name{4})(namecounter(4)).(name{5})(namecounter(5)).(name{6}{il}) = value{il};
+0305             <span class="keyword">end</span>
+0306         <span class="keyword">end</span>
+0307     <span class="keyword">case</span> 7
+0308         <span class="keyword">if</span> ~iscell(name{7})
+0309             superstruct.(name{1})(namecounter(1)).(name{2})(namecounter(2)).(name{3})(namecounter(3))<span class="keyword">...</span><span class="comment">.</span>
+0310                 .(name{4})(namecounter(4)).(name{5})(namecounter(5)).(name{6})(namecounter(6))<span class="keyword">...</span>
+0311                 .(name{7}) = value;
+0312         <span class="keyword">else</span>
+0313             <span class="keyword">for</span> il = 1:length(name{7})
+0314                 superstruct.(name{1})(namecounter(1)).(name{2})(namecounter(2)).(name{3})(namecounter(3))<span class="keyword">...</span><span class="comment">.</span>
+0315                     .(name{4})(namecounter(4)).(name{5})(namecounter(5)).(name{6})(namecounter(6))<span class="keyword">...</span>
+0316                     .(name{7}{il}) = value{il};
+0317             <span class="keyword">end</span>
+0318         <span class="keyword">end</span>
+0319     <span class="keyword">case</span> 8
+0320         <span class="keyword">if</span> ~iscell(name{8})
+0321             superstruct.(name{1})(namecounter(1)).(name{2})(namecounter(2)).(name{3})(namecounter(3))<span class="keyword">...</span><span class="comment">.</span>
+0322                 .(name{4})(namecounter(4)).(name{5})(namecounter(5)).(name{6})(namecounter(6))<span class="keyword">...</span>
+0323                 .(name{7})(namecounter(7)).(name{8}) = value;
+0324         <span class="keyword">else</span>
+0325             <span class="keyword">for</span> il = 1:length(name{7})
+0326                 superstruct.(name{1})(namecounter(1)).(name{2})(namecounter(2)).(name{3})(namecounter(3))<span class="keyword">...</span><span class="comment">.</span>
+0327                     .(name{4})(namecounter(4)).(name{5})(namecounter(5)).(name{6})(namecounter(6))<span class="keyword">...</span>
+0328                     .(name{7})(namecounter(7)).(name{8}{il}) = value{il};
+0329             <span class="keyword">end</span>
+0330         <span class="keyword">end</span>
+0331 <span class="keyword">end</span>
+0332 <span class="keyword">end</span>
+0333 
+0334 <a name="_sub2" href="#_subfunctions" class="code">function word = checkText(word)</a>
+0335 <span class="comment">%word = checkText(word)</span>
+0336 <span class="comment">% make sure the field name is just text and allowed symbols.</span>
+0337 <span class="keyword">if</span> ~isempty(word)
+0338     <span class="keyword">if</span> ~iscell(word)
+0339         error(<span class="string">'should get cells'</span>)
+0340     <span class="keyword">end</span>
+0341     <span class="keyword">for</span> i=1:length(word)
+0342         <span class="keyword">if</span> length(word{i})&gt;1
+0343             word{i}(word{i}==<span class="string">'!'</span>) = [];
+0344             word{i}(word{i}==<span class="string">':'</span>) = <span class="string">'_'</span>;
+0345             <span class="keyword">if</span> word{i}(end) == <span class="string">'/'</span>
+0346                 word{i}(end) = [];
+0347             <span class="keyword">end</span>
+0348             <span class="keyword">while</span> (word{i}(1) &lt; 65 || word{i}(1) &gt; 122 || (word{i}(1)&gt; 90 &amp;&amp; word{i}(1) &lt; 97))
+0349                 word{i}(1)=[];
+0350             <span class="keyword">end</span>
+0351         <span class="keyword">end</span>
+0352     <span class="keyword">end</span>
+0353 <span class="keyword">end</span>
+0354 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

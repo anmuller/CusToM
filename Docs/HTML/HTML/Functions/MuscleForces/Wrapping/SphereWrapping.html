@@ -1,0 +1,232 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of SphereWrapping</title>
+  <meta name="keywords" content="SphereWrapping">
+  <meta name="description" content="Provide the length wrapping around a shere">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- ../menu.html MuscleForces --><!-- menu.html Wrapping -->
+<h1>SphereWrapping
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Provide the length wrapping around a shere</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [L, Q, T, AnimPt_in_Rw, ind] = SphereWrapping(P, S, R,ind) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Provide the length wrapping around a shere
+   Based on:
+   -B.A. Garner and M.G. Pandy, The obstacle-set method for
+   representing muscle paths in musculoskeletal models,
+   Comput. Methods Biomech. Biomed. Engin. 3 (2000), pp. 1�30.
+
+   INPUT
+   - P1: array 3x1 position of the first point
+   - P2: array 3x1 position of the second point
+   - R: radius of the sphere
+   - ind : side of the wrapping.
+   OUTPUT
+   - L: minimal Length between P and S wrapping around the cylinder.
+   - Q: Position of point Q on the sphere.
+   - T: Position of point T on the sphere.
+   - AnimPt_in_Rw: 20 points on the cylinder for displaying purpose.
+   - ind : side of the wrapping.
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../Functions/AlgoMathsModel/distance_point_wrap.html" class="code" title="function [L,Typ,wrapside] = distance_point_wrap(Point1,Bone1,Point2,Bone2,Human_model,q,Wrap,wrapside,EnforcedWrap)">distance_point_wrap</a>	Computation of the distance between two points</li><li><a href="../../../Functions/Developments/WrappingScriptTests.html" class="code" title="">WrappingScriptTests</a>	Verification of the wrapping for sphere problems</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [L, Q, T, AnimPt_in_Rw, ind] = SphereWrapping(P, S, R,ind)</a>
+0002 <span class="comment">% Provide the length wrapping around a shere</span>
+0003 <span class="comment">%   Based on:</span>
+0004 <span class="comment">%   -B.A. Garner and M.G. Pandy, The obstacle-set method for</span>
+0005 <span class="comment">%   representing muscle paths in musculoskeletal models,</span>
+0006 <span class="comment">%   Comput. Methods Biomech. Biomed. Engin. 3 (2000), pp. 1�30.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%   INPUT</span>
+0009 <span class="comment">%   - P1: array 3x1 position of the first point</span>
+0010 <span class="comment">%   - P2: array 3x1 position of the second point</span>
+0011 <span class="comment">%   - R: radius of the sphere</span>
+0012 <span class="comment">%   - ind : side of the wrapping.</span>
+0013 <span class="comment">%   OUTPUT</span>
+0014 <span class="comment">%   - L: minimal Length between P and S wrapping around the cylinder.</span>
+0015 <span class="comment">%   - Q: Position of point Q on the sphere.</span>
+0016 <span class="comment">%   - T: Position of point T on the sphere.</span>
+0017 <span class="comment">%   - AnimPt_in_Rw: 20 points on the cylinder for displaying purpose.</span>
+0018 <span class="comment">%   - ind : side of the wrapping.</span>
+0019 <span class="comment">%________________________________________________________</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% Licence</span>
+0022 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0023 <span class="comment">%________________________________________________________</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0026 <span class="comment">% Georges Dumont</span>
+0027 <span class="comment">%________________________________________________________</span>
+0028 <span class="keyword">if</span> size(P,1)&lt;3 || size(S,1)&lt;3
+0029     error(<span class="string">'P or S need to 3x1 arrays'</span>);
+0030 <span class="keyword">end</span>
+0031 
+0032 L = 0;
+0033 
+0034 <span class="comment">%%%_Rotation matrix M</span>
+0035 OS_barre = S/norm(S);
+0036 OP_barre = P/norm(P);
+0037 N_chapeau = cross(OP_barre, OS_barre);
+0038 N_chapeau = N_chapeau/norm(N_chapeau);
+0039 M = [transpose(OS_barre); transpose(cross(N_chapeau, OS_barre)); transpose(N_chapeau)];
+0040 
+0041 <span class="comment">%%%_ P ans S in a plan XY</span>
+0042 p = M*P;
+0043 s = M*S;
+0044 
+0045 <span class="comment">%%%_coordonnates of q and t dans the plan</span>
+0046 qx1 = (p(1)*R^2-R*p(2)*sqrt(p(1)^2+p(2)^2-R^2))/(p(1)^2+p(2)^2);
+0047 qy1 = (p(2)*R^2+R*p(1)*sqrt(p(1)^2+p(2)^2-R^2))/(p(1)^2+p(2)^2);
+0048 qx2 = (p(1)*R^2+R*p(2)*sqrt(p(1)^2+p(2)^2-R^2))/(p(1)^2+p(2)^2);
+0049 qy2 = (p(2)*R^2-R*p(1)*sqrt(p(1)^2+p(2)^2-R^2))/(p(1)^2+p(2)^2);
+0050 qz = 0;
+0051 
+0052 q1 = [qx1; qy1; qz];q(:,1)=q1;
+0053 q2 = [qx2; qy2; qz];q(:,2)=q2;
+0054 
+0055 tx1 = (s(1)*R^2-R*s(2)*sqrt(s(1)^2+s(2)^2-R^2))/(s(1)^2+s(2)^2);
+0056 ty1 = (s(2)*R^2+R*s(1)*sqrt(s(1)^2+s(2)^2-R^2))/(s(1)^2+s(2)^2);
+0057 tx2 = (s(1)*R^2+R*s(2)*sqrt(s(1)^2+s(2)^2-R^2))/(s(1)^2+s(2)^2);
+0058 ty2 = (s(2)*R^2-R*s(1)*sqrt(s(1)^2+s(2)^2-R^2))/(s(1)^2+s(2)^2);
+0059 tz = 0;
+0060 
+0061 t1 = [tx1; ty1; tz];t(:,2)=t1;
+0062 t2 = [tx2; ty2; tz];t(:,1)=t2;
+0063 
+0064 <span class="comment">% figure(1)</span>
+0065 <span class="comment">% plot3(t1(1),t1(2),t1(3),'o'); hold on</span>
+0066 <span class="comment">% plot3(t2(1),t2(2),t2(3),'o');</span>
+0067 <span class="comment">%</span>
+0068 <span class="comment">% plot3(q1(1),q1(2),q1(3),'o'); hold on</span>
+0069 <span class="comment">% plot3(q2(1),q2(2),q2(3),'o');</span>
+0070 <span class="comment">%</span>
+0071 <span class="comment">% plot(R*cosd(0:360),R*sind(0:360),'--'); axis equal</span>
+0072 <span class="comment">%</span>
+0073 <span class="comment">% plot3(p(1),p(2),p(3),'o'); hold on</span>
+0074 <span class="comment">% plot3(s(1),s(2),s(3),'o');</span>
+0075 <span class="comment">%</span>
+0076 <span class="comment">% Pt1=p;</span>
+0077 <span class="comment">% Pt2=q1;</span>
+0078 <span class="comment">% h=plot3([Pt1(1) Pt2(1)],[Pt1(2) Pt2(2)],[Pt1(3) Pt2(3)],'r');</span>
+0079 <span class="comment">% Pt1=s;</span>
+0080 <span class="comment">% Pt2=t2;</span>
+0081 <span class="comment">% h=plot3([Pt1(1) Pt2(1)],[Pt1(2) Pt2(2)],[Pt1(3) Pt2(3)],'r');</span>
+0082 <span class="comment">%</span>
+0083 <span class="comment">% Pt1=p;</span>
+0084 <span class="comment">% Pt2=q2;</span>
+0085 <span class="comment">% h=plot3([Pt1(1) Pt2(1)],[Pt1(2) Pt2(2)],[Pt1(3) Pt2(3)],'b');</span>
+0086 <span class="comment">% Pt1=s;</span>
+0087 <span class="comment">% Pt2=t1;</span>
+0088 <span class="comment">% h=plot3([Pt1(1) Pt2(1)],[Pt1(2) Pt2(2)],[Pt1(3) Pt2(3)],'b');</span>
+0089 
+0090 <span class="comment">%%%_distance btw q - p and t - s</span>
+0091 PQ1 = norm(q1-p);
+0092 ST1 = norm(t2-s);
+0093 
+0094 PQ2 = norm(q2-p);
+0095 ST2 = norm(t1-s);
+0096 
+0097 Q(:,1) = M'*q1;
+0098 T(:,1) = M'*t2;
+0099 l_arc1 = R*acos(1-((qx1-tx2)^2+(qy1-ty2)^2)/(2*R^2));
+0100 
+0101 Q(:,2) = M'*q2;
+0102 T(:,2) = M'*t1;
+0103 l_arc2 = R*acos(1-((qx2-tx1)^2+(qy2-ty1)^2)/(2*R^2));
+0104 
+0105 L = [PQ1+l_arc1+ST1, PQ2+l_arc2+ST2];
+0106 
+0107 <span class="comment">% figure(2)</span>
+0108 <span class="comment">% [x,y,z]=sphere();</span>
+0109 <span class="comment">% s=surf(R*x,R*y,R*z); hold on; axis equal</span>
+0110 <span class="comment">% s.EdgeColor = 'none';</span>
+0111 <span class="comment">% fastscatter3(Q(:,1)); hold on; fastscatter3(Q(:,2))</span>
+0112 <span class="comment">% fastscatter3(T(:,1)); hold on; fastscatter3(T(:,2))</span>
+0113 <span class="comment">% fastscatter3(P); fastscatter3(S);</span>
+0114 <span class="comment">% Pt1=P;</span>
+0115 <span class="comment">% Pt2=Q(:,1);</span>
+0116 <span class="comment">% h=plot3([Pt1(1) Pt2(1)],[Pt1(2) Pt2(2)],[Pt1(3) Pt2(3)],'b');</span>
+0117 <span class="comment">% Pt1=S;</span>
+0118 <span class="comment">% Pt2=T(:,1);</span>
+0119 <span class="comment">% h=plot3([Pt1(1) Pt2(1)],[Pt1(2) Pt2(2)],[Pt1(3) Pt2(3)],'b');</span>
+0120 <span class="comment">%</span>
+0121 <span class="comment">% Pt1=P;</span>
+0122 <span class="comment">% Pt2=Q(:,2);</span>
+0123 <span class="comment">% h=plot3([Pt1(1) Pt2(1)],[Pt1(2) Pt2(2)],[Pt1(3) Pt2(3)],'r');</span>
+0124 <span class="comment">% Pt1=S;</span>
+0125 <span class="comment">% Pt2=T(:,2);</span>
+0126 <span class="comment">% h=plot3([Pt1(1) Pt2(1)],[Pt1(2) Pt2(2)],[Pt1(3) Pt2(3)],'r');</span>
+0127 
+0128 
+0129 <span class="comment">%Choose the minimal one or the previous one</span>
+0130 <span class="keyword">if</span> nargin&gt;3 &amp;&amp; ~isempty(ind)
+0131 <span class="keyword">else</span>
+0132     [~,ind]=min(L);
+0133 <span class="keyword">end</span>
+0134 L=L(ind);Q=Q(:,ind);T=T(:,ind);
+0135 q=q(:,ind);t=t(:,ind);
+0136 
+0137 <span class="keyword">if</span> nargout&gt;3
+0138     
+0139     theta1 = 2*atand(q(2)/ (q(1) + sqrt( q(1)^2 + q(2)^2 ) ));
+0140     theta2 = 2*atand(t(2)/ (t(1) + sqrt( t(1)^2 + t(2)^2 ) ));
+0141     n=20;
+0142     theta = linspace(theta1,theta2,n);
+0143     z_T(1:n) = 0;
+0144     
+0145     x = R*cosd(theta);
+0146     y = R*sind(theta);
+0147     z = z_T;
+0148     
+0149     <span class="comment">% figure(1)</span>
+0150     <span class="comment">% plot(R*cosd(theta1),R*sind(theta1),'bo')</span>
+0151     <span class="comment">% plot(R*cosd(theta2),R*sind(theta2),'ro')</span>
+0152     <span class="comment">% plot(R*cosd(theta),R*sind(theta),'k-')</span>
+0153     
+0154     AnimPt_in_Rw = ( M'*[x;y;z] )';
+0155     
+0156     <span class="comment">% figure(2)</span>
+0157     <span class="comment">% plot3(AnimPt_in_Rw(:,1),AnimPt_in_Rw(:,2),AnimPt_in_Rw(:,3),'o')</span>
+0158     
+0159 <span class="keyword">end</span>
+0160 
+0161 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

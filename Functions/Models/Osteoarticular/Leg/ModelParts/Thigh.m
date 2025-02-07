@@ -152,7 +152,8 @@ num_solid=0;
     OsteoArticularModel(incr_solid).KinematicsCut=[];              % kinematic cut
     OsteoArticularModel(incr_solid).ClosedLoop=[];                 % if this solid close a closed-loop chain : {number of solid i on which is attached this solid ; attachement point (local frame of solid i}
     OsteoArticularModel(incr_solid).linear_constraint=[];
-
+    OsteoArticularModel(incr_solid).comment='Hip Flexion(+)/Extension(-) - Z-Rotation';
+    
     % Hip_J2
     num_solid=num_solid+1;        % number of the solid ...
     name=list_solid{num_solid}; % nom du solide
@@ -170,7 +171,11 @@ num_solid=0;
     OsteoArticularModel(incr_solid).b=[0 0 0]';  
     OsteoArticularModel(incr_solid).I=zeros(3,3);
     OsteoArticularModel(incr_solid).c=[0 0 0]';
-    
+    if Signe=='R'
+        OsteoArticularModel(incr_solid).comment='Hip Abduction(-)/Adduction(+) - X-Rotation';
+    else
+        OsteoArticularModel(incr_solid).comment='Hip Abduction(+)/Adduction(-) - X-Rotation';
+    end
     % Thigh
     num_solid=num_solid+1;        % number of the solid ...
     name=list_solid{num_solid}; % nom du solide
@@ -190,5 +195,10 @@ num_solid=0;
     OsteoArticularModel(incr_solid).c=-Thigh_HipJointNode';
     OsteoArticularModel(incr_solid).anat_position=Thigh_position_set;
     OsteoArticularModel(incr_solid).L={[Signe 'Thigh_HipJointNode'];[Signe 'Thigh_KneeJointNode']};
+    if Signe=='R'
+        OsteoArticularModel(incr_solid).comment='Hip Internal(+)/External(-) Rotation';
+    else
+        OsteoArticularModel(incr_solid).comment='Hip Internal(-)/External(+) Rotation';
+    end
 
 end

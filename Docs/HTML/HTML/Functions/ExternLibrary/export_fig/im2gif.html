@@ -1,0 +1,288 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of im2gif</title>
+  <meta name="keywords" content="im2gif">
+  <meta name="description" content="IM2GIF Convert a multiframe image to an animated GIF file">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html Functions --><!-- # ExternLibrary --><!-- menu.html export_fig -->
+<h1>im2gif
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>IM2GIF Convert a multiframe image to an animated GIF file</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function im2gif(A, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">IM2GIF Convert a multiframe image to an animated GIF file
+
+ Examples:
+   im2gif infile
+   im2gif infile outfile
+   im2gif(A, outfile)
+   im2gif(..., '-nocrop')
+   im2gif(..., '-nodither')
+   im2gif(..., '-ncolors', n)
+   im2gif(..., '-loops', n)
+   im2gif(..., '-delay', n) 
+   
+ This function converts a multiframe image to an animated GIF.
+
+ To create an animation from a series of figures, export to a multiframe
+ TIFF file using export_fig, then convert to a GIF, as follows:
+
+    for a = 2 .^ (3:6)
+       peaks(a);
+       export_fig test.tif -nocrop -append
+    end
+    im2gif('test.tif', '-delay', 0.5);
+
+IN:
+   infile - string containing the name of the input image.
+   outfile - string containing the name of the output image (must have the
+             .gif extension). Default: infile, with .gif extension.
+   A - HxWxCxN array of input images, stacked along fourth dimension, to
+       be converted to gif.
+   -nocrop - option indicating that the borders of the output are not to
+             be cropped.
+   -nodither - option indicating that dithering is not to be used when
+               converting the image.
+   -ncolors - option pair, the value of which indicates the maximum number
+              of colors the GIF can have. This can also be a quantization
+              tolerance, between 0 and 1. Default/maximum: 256.
+   -loops - option pair, the value of which gives the number of times the
+            animation is to be looped. Default: 65535.
+   -delay - option pair, the value of which gives the time, in seconds,
+            between frames. Default: 1/15.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="crop_borders.html" class="code" title="function [A, vA, vB, bb_rel] = crop_borders(A, bcol, padding, crop_amounts)">crop_borders</a>	CROP_BORDERS Crop the borders of an image or stack of images</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [A, options] = parse_args(A, varargin)</a></li><li><a href="#_sub2" class="code">function [A, alpha] = imread_rgb(name)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%IM2GIF Convert a multiframe image to an animated GIF file</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% Examples:</span>
+0004 <span class="comment">%   im2gif infile</span>
+0005 <span class="comment">%   im2gif infile outfile</span>
+0006 <span class="comment">%   im2gif(A, outfile)</span>
+0007 <span class="comment">%   im2gif(..., '-nocrop')</span>
+0008 <span class="comment">%   im2gif(..., '-nodither')</span>
+0009 <span class="comment">%   im2gif(..., '-ncolors', n)</span>
+0010 <span class="comment">%   im2gif(..., '-loops', n)</span>
+0011 <span class="comment">%   im2gif(..., '-delay', n)</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% This function converts a multiframe image to an animated GIF.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% To create an animation from a series of figures, export to a multiframe</span>
+0016 <span class="comment">% TIFF file using export_fig, then convert to a GIF, as follows:</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%    for a = 2 .^ (3:6)</span>
+0019 <span class="comment">%       peaks(a);</span>
+0020 <span class="comment">%       export_fig test.tif -nocrop -append</span>
+0021 <span class="comment">%    end</span>
+0022 <span class="comment">%    im2gif('test.tif', '-delay', 0.5);</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%IN:</span>
+0025 <span class="comment">%   infile - string containing the name of the input image.</span>
+0026 <span class="comment">%   outfile - string containing the name of the output image (must have the</span>
+0027 <span class="comment">%             .gif extension). Default: infile, with .gif extension.</span>
+0028 <span class="comment">%   A - HxWxCxN array of input images, stacked along fourth dimension, to</span>
+0029 <span class="comment">%       be converted to gif.</span>
+0030 <span class="comment">%   -nocrop - option indicating that the borders of the output are not to</span>
+0031 <span class="comment">%             be cropped.</span>
+0032 <span class="comment">%   -nodither - option indicating that dithering is not to be used when</span>
+0033 <span class="comment">%               converting the image.</span>
+0034 <span class="comment">%   -ncolors - option pair, the value of which indicates the maximum number</span>
+0035 <span class="comment">%              of colors the GIF can have. This can also be a quantization</span>
+0036 <span class="comment">%              tolerance, between 0 and 1. Default/maximum: 256.</span>
+0037 <span class="comment">%   -loops - option pair, the value of which gives the number of times the</span>
+0038 <span class="comment">%            animation is to be looped. Default: 65535.</span>
+0039 <span class="comment">%   -delay - option pair, the value of which gives the time, in seconds,</span>
+0040 <span class="comment">%            between frames. Default: 1/15.</span>
+0041 
+0042 <span class="comment">% Copyright (C) Oliver Woodford 2011</span>
+0043 
+0044 <span class="comment">%{</span>
+0045 <span class="comment">% 14/02/18: Merged issue #235: reduced memory usage, improved performance (thanks to @numb7rs)</span>
+0046 <span class="comment">%}</span>
+0047 
+0048 <a name="_sub0" href="#_subfunctions" class="code">function im2gif(A, varargin)</a>
+0049 
+0050 <span class="comment">% Parse the input arguments</span>
+0051 [A, options] = <a href="#_sub1" class="code" title="subfunction [A, options] = parse_args(A, varargin)">parse_args</a>(A, varargin{:});
+0052 
+0053 <span class="keyword">if</span> options.crop ~= 0
+0054     <span class="comment">% Crop</span>
+0055     A = <a href="crop_borders.html" class="code" title="function [A, vA, vB, bb_rel] = crop_borders(A, bcol, padding, crop_amounts)">crop_borders</a>(A, A(ceil(end/2),1,:,1));
+0056 <span class="keyword">end</span>
+0057 
+0058 <span class="comment">% Convert to indexed image</span>
+0059 [h, w, c, n] = size(A);
+0060 
+0061 <span class="comment">% Issue #235: Using unique(A,'rows') on the whole image stack at once causes</span>
+0062 <span class="comment">% massive memory usage when dealing with large images (at least on Matlab 2017b).</span>
+0063 <span class="comment">% Running unique(...) on individual frames, then again on the results drastically</span>
+0064 <span class="comment">% reduces the memory usage &amp; slightly improves the execution time (@numb7rs).</span>
+0065 uns = cell(1,size(A,4));
+0066 <span class="keyword">for</span> nn=1:size(A,4)
+0067     uns{nn}=unique(reshape(A(:,:,:,nn), h*w, c),<span class="string">'rows'</span>);
+0068 <span class="keyword">end</span>
+0069 map=unique(cell2mat(uns'),<span class="string">'rows'</span>);
+0070 
+0071 A = reshape(permute(A, [1 2 4 3]), h, w*n, c);
+0072 
+0073 <span class="keyword">if</span> size(map, 1) &gt; 256
+0074     dither_str = {<span class="string">'dither'</span>, <span class="string">'nodither'</span>};
+0075     dither_str = dither_str{1+(options.dither==0)};
+0076     <span class="keyword">if</span> options.ncolors &lt;= 1
+0077         [B, map] = rgb2ind(A, options.ncolors, dither_str);
+0078         <span class="keyword">if</span> size(map, 1) &gt; 256
+0079             [B, map] = rgb2ind(A, 256, dither_str);
+0080         <span class="keyword">end</span>
+0081     <span class="keyword">else</span>
+0082         [B, map] = rgb2ind(A, min(round(options.ncolors), 256), dither_str);
+0083     <span class="keyword">end</span>
+0084 <span class="keyword">else</span>
+0085     <span class="keyword">if</span> max(map(:)) &gt; 1
+0086         map = double(map) / 255;
+0087         A = double(A) / 255;
+0088     <span class="keyword">end</span>
+0089     B = rgb2ind(im2double(A), map);
+0090 <span class="keyword">end</span>
+0091 B = reshape(B, h, w, 1, n);
+0092 
+0093 <span class="comment">% Bug fix to rgb2ind</span>
+0094 map(B(1)+1,:) = im2double(A(1,1,:));
+0095 
+0096 <span class="comment">% Save as a gif</span>
+0097 imwrite(B, map, options.outfile, <span class="string">'LoopCount'</span>, round(options.loops(1)), <span class="string">'DelayTime'</span>, options.delay);
+0098 <span class="keyword">end</span>
+0099 
+0100 <span class="comment">%% Parse the input arguments</span>
+0101 <a name="_sub1" href="#_subfunctions" class="code">function [A, options] = parse_args(A, varargin)</a>
+0102 <span class="comment">% Set the defaults</span>
+0103 options = struct(<span class="string">'outfile'</span>, <span class="string">''</span>, <span class="keyword">...</span>
+0104                  <span class="string">'dither'</span>, true, <span class="keyword">...</span>
+0105                  <span class="string">'crop'</span>, true, <span class="keyword">...</span>
+0106                  <span class="string">'ncolors'</span>, 256, <span class="keyword">...</span>
+0107                  <span class="string">'loops'</span>, 65535, <span class="keyword">...</span>
+0108                  <span class="string">'delay'</span>, 1/15);
+0109 
+0110 <span class="comment">% Go through the arguments</span>
+0111 a = 0;
+0112 n = numel(varargin);
+0113 <span class="keyword">while</span> a &lt; n
+0114     a = a + 1;
+0115     <span class="keyword">if</span> ischar(varargin{a}) &amp;&amp; ~isempty(varargin{a})
+0116         <span class="keyword">if</span> varargin{a}(1) == <span class="string">'-'</span>
+0117             opt = lower(varargin{a}(2:end));
+0118             <span class="keyword">switch</span> opt
+0119                 <span class="keyword">case</span> <span class="string">'nocrop'</span>
+0120                     options.crop = false;
+0121                 <span class="keyword">case</span> <span class="string">'nodither'</span>
+0122                     options.dither = false;
+0123                 <span class="keyword">otherwise</span>
+0124                     <span class="keyword">if</span> ~isfield(options, opt)
+0125                         error(<span class="string">'Option %s not recognized'</span>, varargin{a});
+0126                     <span class="keyword">end</span>
+0127                     a = a + 1;
+0128                     <span class="keyword">if</span> ischar(varargin{a}) &amp;&amp; ~ischar(options.(opt))
+0129                         options.(opt) = str2double(varargin{a});
+0130                     <span class="keyword">else</span>
+0131                         options.(opt) = varargin{a};
+0132                     <span class="keyword">end</span>
+0133             <span class="keyword">end</span>
+0134         <span class="keyword">else</span>
+0135             options.outfile = varargin{a};
+0136         <span class="keyword">end</span>
+0137     <span class="keyword">end</span>
+0138 <span class="keyword">end</span>
+0139 
+0140 <span class="keyword">if</span> isempty(options.outfile)
+0141     <span class="keyword">if</span> ~ischar(A)
+0142         error(<span class="string">'No output filename given.'</span>);
+0143     <span class="keyword">end</span>
+0144     <span class="comment">% Generate the output filename from the input filename</span>
+0145     [path, outfile] = fileparts(A);
+0146     options.outfile = fullfile(path, [outfile <span class="string">'.gif'</span>]);
+0147 <span class="keyword">end</span>
+0148 
+0149 <span class="keyword">if</span> ischar(A)
+0150     <span class="comment">% Read in the image</span>
+0151     A = <a href="#_sub2" class="code" title="subfunction [A, alpha] = imread_rgb(name)">imread_rgb</a>(A);
+0152 <span class="keyword">end</span>
+0153 <span class="keyword">end</span>
+0154 
+0155 <span class="comment">%% Read image to uint8 rgb array</span>
+0156 <a name="_sub2" href="#_subfunctions" class="code">function [A, alpha] = imread_rgb(name)</a>
+0157 <span class="comment">% Get file info</span>
+0158 info = imfinfo(name);
+0159 <span class="comment">% Special case formats</span>
+0160 <span class="keyword">switch</span> lower(info(1).Format)
+0161     <span class="keyword">case</span> <span class="string">'gif'</span>
+0162         [A, map] = imread(name, <span class="string">'frames'</span>, <span class="string">'all'</span>);
+0163         <span class="keyword">if</span> ~isempty(map)
+0164             map = uint8(map * 256 - 0.5); <span class="comment">% Convert to uint8 for storage</span>
+0165             A = reshape(map(uint32(A)+1,:), [size(A) size(map, 2)]); <span class="comment">% Assume indexed from 0</span>
+0166             A = permute(A, [1 2 5 4 3]);
+0167         <span class="keyword">end</span>
+0168     <span class="keyword">case</span> {<span class="string">'tif'</span>, <span class="string">'tiff'</span>}
+0169         A = cell(numel(info), 1);
+0170         <span class="keyword">for</span> a = 1:numel(A)
+0171             [A{a}, map] = imread(name, <span class="string">'Index'</span>, a, <span class="string">'Info'</span>, info);
+0172             <span class="keyword">if</span> ~isempty(map)
+0173                 map = uint8(map * 256 - 0.5); <span class="comment">% Convert to uint8 for storage</span>
+0174                 A{a} = reshape(map(uint32(A{a})+1,:), [size(A) size(map, 2)]); <span class="comment">% Assume indexed from 0</span>
+0175             <span class="keyword">end</span>
+0176             <span class="keyword">if</span> size(A{a}, 3) == 4
+0177                 <span class="comment">% TIFF in CMYK colourspace - convert to RGB</span>
+0178                 <span class="keyword">if</span> isfloat(A{a})
+0179                     A{a} = A{a} * 255;
+0180                 <span class="keyword">else</span>
+0181                     A{a} = single(A{a});
+0182                 <span class="keyword">end</span>
+0183                 A{a} = 255 - A{a};
+0184                 A{a}(:,:,4) = A{a}(:,:,4) / 255;
+0185                 A{a} = uint8(A(:,:,1:3) .* A{a}(:,:,[4 4 4]));
+0186             <span class="keyword">end</span>
+0187         <span class="keyword">end</span>
+0188         A = cat(4, A{:});
+0189     <span class="keyword">otherwise</span>
+0190         [A, map, alpha] = imread(name);
+0191         A = A(:,:,:,1); <span class="comment">% Keep only first frame of multi-frame files</span>
+0192         <span class="keyword">if</span> ~isempty(map)
+0193             map = uint8(map * 256 - 0.5); <span class="comment">% Convert to uint8 for storage</span>
+0194             A = reshape(map(uint32(A)+1,:), [size(A) size(map, 2)]); <span class="comment">% Assume indexed from 0</span>
+0195         <span class="keyword">elseif</span> size(A, 3) == 4
+0196             <span class="comment">% Assume 4th channel is an alpha matte</span>
+0197             alpha = A(:,:,4);
+0198             A = A(:,:,1:3);
+0199         <span class="keyword">end</span>
+0200 <span class="keyword">end</span>
+0201 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

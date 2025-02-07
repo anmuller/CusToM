@@ -1,0 +1,9 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+
+  ArmSegMass [URL="ArmSegMass.html"];
+  LegSegMass [URL="LegSegMass.html"];
+  NoModel [URL="NoModel.html"];
+  TrunkSegMass [URL="TrunkSegMass.html"];
+  WholeBodySegMass [URL="WholeBodySegMass.html"];
+}

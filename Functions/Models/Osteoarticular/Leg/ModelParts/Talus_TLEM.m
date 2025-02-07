@@ -160,5 +160,5 @@ Human_model(incr_solid).limit_alpha= [ 10 , -10;... limit sup premier axe, limit
 Human_model(incr_solid).v= [ R(:,1) , R(:,2) ];
 Human_model(incr_solid).calib_a=1;
 Human_model(incr_solid).visual_file = ['TLEM/' Signe 'Talus.mat'];
-
+Human_model(incr_solid).comment='Ankle Flexion(+)/Extension(-)';
 end

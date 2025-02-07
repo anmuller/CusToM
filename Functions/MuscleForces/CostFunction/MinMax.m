@@ -1,4 +1,4 @@
-function [Fopt] = MinMax(F0, Aeq, beq, Fmin, Fmax, fmincon_options, ~, Fmaxbis, varargin)
+function [Aopt] = MinMax(A0, Aeq, beq, Amin, Amax, fmincon_options, ~, ~, ~, varargin)
 % Optimization used for the force sharing problem: min/max criteria
 %
 %	Based on:
@@ -25,16 +25,15 @@ function [Fopt] = MinMax(F0, Aeq, beq, Fmin, Fmax, fmincon_options, ~, Fmaxbis, 
 %________________________________________________________
 
 % cost fucntion
-cost_function = @(F) F(1);
+cost_function = @(A) A(1);
 % optimization
 Aeqbis=[zeros(size(Aeq,1),1) Aeq];
-Fopt_inter = fmincon(cost_function,[1;F0],[],[],Aeqbis,beq,[0;Fmin],[Inf;Fmax],@(F) constraint_minmax(F,Fmaxbis),fmincon_options);
-Fopt=Fopt_inter(2:end,:);
-        
+Aopt_inter = fmincon(cost_function,[1;A0],[],[],Aeqbis,beq,[0;Amin],[Inf;Amax],@(A) constraint_minmax(A),fmincon_options);
+Aopt=Aopt_inter(2:end,:);
 end
 
-function [g,h] = constraint_minmax(F,Fmax)
+function [g,h] = constraint_minmax(A)
     % Constraint for min/max optimization
-    g=F(2:end)./Fmax-F(1);
+    g=A(2:end)-A(1);
     h=[];
 end

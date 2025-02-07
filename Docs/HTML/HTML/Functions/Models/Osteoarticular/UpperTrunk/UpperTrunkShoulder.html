@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of UpperTrunkShoulder</title>
+  <meta name="keywords" content="UpperTrunkShoulder">
+  <meta name="description" content="Addition of an upper trunk model">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../menu.html Functions --><!-- ../../menu.html Models --><!-- ../menu.html Osteoarticular --><!-- menu.html UpperTrunk -->
+<h1>UpperTrunkShoulder
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>Addition of an upper trunk model</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [OsteoArticularModel]= UpperTrunkShoulder(OsteoArticularModel,k,Mass,AttachmentPoint) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Addition of an upper trunk model
+   This upper trunk model contains 5 solids (thorax, clavicles, and
+   scapulae), exhibits 3 dof for lower trunk / upper trunk joint, 3
+   dof for each upper trunk / clavicle joint. It shall be used with the
+   shoulder model of upper limbs
+
+    Based on:
+    - Damsgaard, M., Rasmussen, J., Christensen, S. T., Surma, E., &amp; De Zee, M., 2006.
+     Analysis of musculoskeletal systems in the AnyBody Modeling System. Simulation Modelling Practice and Theory, 14(8), 1100-1111.
+   - Puchaud et al. 2019
+
+   INPUT
+   - OsteoArticularModel: osteo-articular model of an already existing
+   model (see the Documentation for the structure)
+   - k: homothety coefficient for the geometrical parameters (defined as
+   the subject size in cm divided by 180)
+   - Mass: mass of the solids
+   - AttachmentPoint: name of the attachment point of the model on the
+   already existing model (character string)
+   OUTPUT
+   - OsteoArticularModel: new osteo-articular model (see the Documentation
+   for the structure) 
+________________________________________________________
+
+ Licence
+ Toolbox distributed under GPL 3.0 Licence
+________________________________________________________
+
+ Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and
+ Georges Dumont
+________________________________________________________</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../Functions/Models/Osteoarticular/UpperTrunk/ModelParts/Clavicle_Shoulder.html" class="code" title="function [Human_model]= Clavicle_Shoulder(Human_model,k,Mass,Side,AttachmentPoint)">Clavicle_Shoulder</a>	Addition of a thorax model</li><li><a href="../../../../Functions/Models/Osteoarticular/UpperTrunk/ModelParts/Scapula_Shoulder.html" class="code" title="function [Human_model]= Scapula_Shoulder(Human_model,k,Mass,Side,AttachmentPoint)">Scapula_Shoulder</a>	Addition of a thorax model</li><li><a href="../../../../Functions/Models/Osteoarticular/UpperTrunk/ModelParts/Thorax_Shoulder.html" class="code" title="function [Human_model]= Thorax_Shoulder(Human_model,k,Mass,AttachmentPoint)">Thorax_Shoulder</a>	Addition of a thorax model</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [OsteoArticularModel]= UpperTrunkShoulder(OsteoArticularModel,k,Mass,AttachmentPoint)</a>
+0002 <span class="comment">% Addition of an upper trunk model</span>
+0003 <span class="comment">%   This upper trunk model contains 5 solids (thorax, clavicles, and</span>
+0004 <span class="comment">%   scapulae), exhibits 3 dof for lower trunk / upper trunk joint, 3</span>
+0005 <span class="comment">%   dof for each upper trunk / clavicle joint. It shall be used with the</span>
+0006 <span class="comment">%   shoulder model of upper limbs</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%    Based on:</span>
+0009 <span class="comment">%    - Damsgaard, M., Rasmussen, J., Christensen, S. T., Surma, E., &amp; De Zee, M., 2006.</span>
+0010 <span class="comment">%     Analysis of musculoskeletal systems in the AnyBody Modeling System. Simulation Modelling Practice and Theory, 14(8), 1100-1111.</span>
+0011 <span class="comment">%   - Puchaud et al. 2019</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%   INPUT</span>
+0014 <span class="comment">%   - OsteoArticularModel: osteo-articular model of an already existing</span>
+0015 <span class="comment">%   model (see the Documentation for the structure)</span>
+0016 <span class="comment">%   - k: homothety coefficient for the geometrical parameters (defined as</span>
+0017 <span class="comment">%   the subject size in cm divided by 180)</span>
+0018 <span class="comment">%   - Mass: mass of the solids</span>
+0019 <span class="comment">%   - AttachmentPoint: name of the attachment point of the model on the</span>
+0020 <span class="comment">%   already existing model (character string)</span>
+0021 <span class="comment">%   OUTPUT</span>
+0022 <span class="comment">%   - OsteoArticularModel: new osteo-articular model (see the Documentation</span>
+0023 <span class="comment">%   for the structure)</span>
+0024 <span class="comment">%________________________________________________________</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% Licence</span>
+0027 <span class="comment">% Toolbox distributed under GPL 3.0 Licence</span>
+0028 <span class="comment">%________________________________________________________</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">% Authors : Antoine Muller, Charles Pontonnier, Pierre Puchaud and</span>
+0031 <span class="comment">% Georges Dumont</span>
+0032 <span class="comment">%________________________________________________________</span>
+0033 
+0034 <span class="comment">% Thorax solid</span>
+0035 [OsteoArticularModel] = <a href="../../../../Functions/Models/Osteoarticular/UpperTrunk/ModelParts/Thorax_Shoulder.html" class="code" title="function [Human_model]= Thorax_Shoulder(Human_model,k,Mass,AttachmentPoint)">Thorax_Shoulder</a>(OsteoArticularModel,k,Mass,AttachmentPoint);
+0036 
+0037 <span class="comment">% Right-sided shoulder solids</span>
+0038 [OsteoArticularModel] = <a href="../../../../Functions/Models/Osteoarticular/UpperTrunk/ModelParts/Clavicle_Shoulder.html" class="code" title="function [Human_model]= Clavicle_Shoulder(Human_model,k,Mass,Side,AttachmentPoint)">Clavicle_Shoulder</a>(OsteoArticularModel,k,Mass,<span class="string">'R'</span>,<span class="string">'Thorax_scjJointRightNode'</span>);
+0039 [OsteoArticularModel] = <a href="../../../../Functions/Models/Osteoarticular/UpperTrunk/ModelParts/Scapula_Shoulder.html" class="code" title="function [Human_model]= Scapula_Shoulder(Human_model,k,Mass,Side,AttachmentPoint)">Scapula_Shoulder</a>(OsteoArticularModel,k,Mass,<span class="string">'R'</span>,<span class="string">'R_Thorax_EllipsoidNode'</span>);
+0040 
+0041 <span class="comment">% Left-sided shoulder solids</span>
+0042 [OsteoArticularModel] = <a href="../../../../Functions/Models/Osteoarticular/UpperTrunk/ModelParts/Clavicle_Shoulder.html" class="code" title="function [Human_model]= Clavicle_Shoulder(Human_model,k,Mass,Side,AttachmentPoint)">Clavicle_Shoulder</a>(OsteoArticularModel,k,Mass,<span class="string">'L'</span>,<span class="string">'Thorax_scjJointLeftNode'</span>);
+0043 [OsteoArticularModel] = <a href="../../../../Functions/Models/Osteoarticular/UpperTrunk/ModelParts/Scapula_Shoulder.html" class="code" title="function [Human_model]= Scapula_Shoulder(Human_model,k,Mass,Side,AttachmentPoint)">Scapula_Shoulder</a>(OsteoArticularModel,k,Mass,<span class="string">'L'</span>,<span class="string">'L_Thorax_EllipsoidNode'</span>);</pre></div>
+<hr><address>Generated on Wed 28-Apr-2021 14:02:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>
