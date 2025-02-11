@@ -73,20 +73,28 @@ parfor num_fil = 1:numel(AnalysisParameters.filename)
     %% articular speed and acceleration
     
     dt=1/freq;
-    dq=derivee2(dt,q);  % vitesses
-    ddq=derivee2(dt,dq);  % accélérations
-    
+
+    dq=derivee2(dt,q);  % velocities
+    ddq=derivee2(dt,dq);  % accelerations
     nbframe=size(q,1);
 
-    %% Définition des données cinématiques du pelvis
-    % (position / vitesse / accélération / orientation / vitesse angulaire / accélération angulaire)
+        %somehow this should be filtered in a similar manner as the forces
+        %and the joint positions
+    if AnalysisParameters.IK.FilterActive
+    % data filtering
+    dq=filt_data(dq',AnalysisParameters.IK.FilterCutOff,freq)';
+    ddq=filt_data(ddq',AnalysisParameters.IK.FilterCutOff,freq)';
+    end
+
+%% Pelvis kinematics
+
     % Kinematical data for Pelvis (Position/speed/acceleration/angles/angular speed/angular acceleration)
 
     if isfield(InverseKinematicsResults,'FreeJointCoordinates')
         p_pelvis=q6dof(:,1:3);  % frame i : p_pelvis(i,:)
         r_pelvis=cell(size(q6dof,1),1);
         for i=1:size(q6dof,1)
-            r_pelvis{i}=Rodrigues([1 0 0]',q6dof(i,4))*Rodrigues([0 1 0]',q6dof(i,5))*Rodrigues([0 0 1]',q6dof(i,6)); % matrice de rotation en fonction des rotations successives (x,y,z) : frame i : r_pelvis{i}
+            r_pelvis{i}=Rodrigues([1 0 0]',q6dof(i,4))*Rodrigues([0 1 0]',q6dof(i,5))*Rodrigues([0 0 1]',q6dof(i,6)); %(x,y,z) : frame i : r_pelvis{i}
         end
     else
         p_pelvis = cell2mat(PelvisPosition)';
