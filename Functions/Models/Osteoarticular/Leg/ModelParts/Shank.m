@@ -147,10 +147,17 @@ OsteoArticularModel(incr_solid).c=-Shank_KneeJointNode';
 OsteoArticularModel(incr_solid).anat_position=Shank_position_set;
 OsteoArticularModel(incr_solid).L={[Signe 'Shank_KneeJointNode'];[Signe 'Shank_AnkleJointNode']};
 % To optimize knee axis of rotation
-OsteoArticularModel(incr_solid).limit_alpha= [ 20 , 30;...
-    -20, -30]*pi/180 ;
-%     OsteoArticularModel(incr_solid).v= [ [1; 0; 0] , [0 ;1;0] ] ;
-OsteoArticularModel(incr_solid).v= [] ;
+
+a1=OsteoArticularModel(incr_solid).a;
+[~,Ind]=max(abs(a1));
+a2=zeros(3,1);
+a2(Ind)=1;
+R=Rodrigues_from_two_axes(a2,a1);% two orthogonal axes from the a1 axis
+OsteoArticularModel(incr_solid).limit_alpha= [-10 , 10;...
+                                        -10, 10];
+%OsteoArticularModel(incr_solid).v= [ R(:,1) , R(:,2) ];
+ OsteoArticularModel(incr_solid).v= [ [1; 0; 0] , [0 ;1;0] ] ;
+OsteoArticularModel(incr_solid).calib_a=1;
 
 OsteoArticularModel(incr_solid).comment='Knee Flexion(-)/Extension(-)';
 
