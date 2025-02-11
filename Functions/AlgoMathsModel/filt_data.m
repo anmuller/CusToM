@@ -27,8 +27,12 @@ function [datafilt]=filtrage_data(data,f,f_mocap)
 % data : vector
 init=data(1);
 data_inter=data-init;
-datafilt=filtre(data_inter,f,f_mocap);
-datafilt=datafilt+init;
+%datafilt=filtre(data_inter,f,f_mocap);
+%datafilt=datafilt+init;
+
+data_inter_flip=[flip(data_inter,1);data_inter;flip(data_inter,1)];
+datafilt2=filtre(data_inter_flip,f,f_mocap);
+datafilt=datafilt2(numel(data)+1:2*numel(data))+init;
 
 end
 

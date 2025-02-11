@@ -250,10 +250,7 @@ end
 %% toutes les variables
 var_sym = [k_sym;p_adapt_sym;alpha_sym];
 %% Normalisation des variables
-% limites : 0.8<k<1.2 et déplacement max de 5 cm pour chaque marqueur dans chaque direction
-% et limites angulaire pour alpha
-% On veut faire varier toutes les variables seulement entre -1 et 1 lors de
-% l'optimisation
+
 %% variable normalization within boundaries (0.8<k<1.2) and max displacement of 5cm for each marker in each direction and angular limits for alpha
 % all variables should vary only between-1 and +1 during optimisation process
 
