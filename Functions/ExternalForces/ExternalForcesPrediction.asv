@@ -109,40 +109,34 @@ if AnalysisParameters.IK.FilterActive
        wmat=dR(:,:,i)*r_pelvis{i}';
        w(i,:)=[wmat(3,2),wmat(1,3),wmat(2,1)];
     end
-    % if AnalysisParameters.IK.FilterActive
-    %          % data filtering
-    %   w=filt_data(w,AnalysisParameters.IK.FilterCutOff,freq);
-    % end
-    % if AnalysisParameters.IK.FilterActive
-    %          % data filtering
-    %  p_pelvis=filt_data(p_pelvis,AnalysisParameters.IK.FilterCutOff,freq);
-    %  end
+    if AnalysisParameters.IK.FilterActive
+             % data filtering
+      w=filt_data(w,AnalysisParameters.IK.FilterCutOff,freq);
+     end
     v=derivee2(dt,p_pelvis);
-
-
     vw=zeros(nbframe,3);
     for i=1:nbframe
         vw(i,:)=cross(p_pelvis(i,:),w(i,:));
     end
     v0=v+vw;
-    % if AnalysisParameters.IK.FilterActive
-    %          % data filtering
-    %   v0=filt_data(v0,AnalysisParameters.IK.FilterCutOff,freq);
-    %  end
+    if AnalysisParameters.IK.FilterActive
+             % data filtering
+      v0=filt_data(v0,AnalysisParameters.IK.FilterCutOff,freq);
+     end
     % dv0
     dv0=derivee2(dt,v0);
-    % if AnalysisParameters.IK.FilterActive
-    %          % data filtering
-    %   dv0=filt_data(dv0,AnalysisParameters.IK.FilterCutOff,freq);
-    %  end
+    if AnalysisParameters.IK.FilterActive
+             % data filtering
+      dv0=filt_data(dv0,AnalysisParameters.IK.FilterCutOff,freq);
+     end
 
     dw=derivee2(dt,w);
-    % if AnalysisParameters.IK.FilterActive
-    %          % data filtering
-    %   dw=filt_data(dw,AnalysisParameters.IK.FilterCutOff,freq);
-    %  end
+    if AnalysisParameters.IK.FilterActive
+             % data filtering
+      dv0=filt_data(dv0,AnalysisParameters.IK.FilterCutOff,freq);
+     end
 
-%% Initialisations des différents efforts et leur stockage
+%% Initialisations des diffÃ©rents efforts et leur stockage
 for f=1:nbframe
     for n=1:numel(Human_model)
         external_forces_pred(f).fext(n).fext=zeros(3,2); %#ok<AGROW>
@@ -157,7 +151,7 @@ Fx=zeros(NbPointsPrediction,nbframe);
 Fy=zeros(NbPointsPrediction,nbframe);
 Fz=zeros(NbPointsPrediction,nbframe);
 
-%% Paramètres de l'optimisation fmincon pour probleme lineaire
+%% ParamÃ¨tres de l'optimisation fmincon pour probleme lineaire
 X0= 1*zeros(3*NbPointsPrediction,1);
 lb=-ones(3*NbPointsPrediction,1);
 lb(2*NbPointsPrediction+1:3*NbPointsPrediction)=0;
@@ -172,7 +166,7 @@ Mass = ModelParameters.Mass;
 PositionThreshold = AnalysisParameters.Prediction.PositionThreshold;
 VelocityThreshold = AnalysisParameters.Prediction.VelocityThreshold;
 for i=1:nbframe
-    %attribution à chaque articulation de la position/vitesse/accélération (position/speed/acceleration for each joint)
+    %attribution Ã  chaque articulation de la position/vitesse/accÃ©lÃ©ration (position/speed/acceleration for each joint)
     Human_model(1).p=p_pelvis(i,:)';
     Human_model(1).R=r_pelvis{i};
     Human_model(1).v0=v0(i,:)';
@@ -184,14 +178,14 @@ for i=1:nbframe
         Human_model(j).dq=dq(i,j);
         Human_model(j).ddq=ddq(i,j);
     end
-    % Calcul positions / vitesses / accélération de chaque solide (computation of position/speed/acceleration for each solid)
+    % Calcul positions / vitesses / accÃ©lÃ©ration de chaque solide (computation of position/speed/acceleration for each solid)
     [Human_model,Prediction] = ForwardAllKinematicsPrediction(Human_model,Prediction,1); 
     %% Calcul des efforts maximaux disponibles (computation of maximum available effort)
     for pred = 1:numel(Prediction)
         Prediction(pred).px(i)=Prediction(pred).pos_anim(1);
         Prediction(pred).py(i)=Prediction(pred).pos_anim(2);
         Prediction(pred).pz(i)=Prediction(pred).pos_anim(3);
-        Prediction(pred).vitesse_temps(i)=sqrt(Prediction(pred).vitesse(1,:)^2+Prediction(pred).vitesse(2,:)^2+Prediction(pred).vitesse(3,:)^2); % Recuperation de la norme de la vitesse (repère monde)
+        Prediction(pred).vitesse_temps(i)=sqrt(Prediction(pred).vitesse(1,:)^2+Prediction(pred).vitesse(2,:)^2+Prediction(pred).vitesse(3,:)^2); % Recuperation de la norme de la vitesse (repÃ¨re monde)
             Cpi = Force_max_TOR(Prediction(pred).pz(i),Prediction(pred).vitesse_temps(i),Mass,PositionThreshold,VelocityThreshold);
             Fx(pred,i)=Cpi;
             Fy(pred,i)=Cpi;
@@ -248,19 +242,19 @@ for i=1:nbframe
     X = fmincon(@(X) sum(X.^2),X0,Afric,bfric,A,b,lb,ub,[],options);
     
     %% Optimisation de la prochaine minimisation
-    lb=max(X-0.45,lb_init); %expérimentalement, les bornes ne varient pas de plus ou moins 0.45 (experimentaly, boundaries vary not more than 0.45)
+    lb=max(X-0.45,lb_init); %expÃ©rimentalement, les bornes ne varient pas de plus ou moins 0.45 (experimentaly, boundaries vary not more than 0.45)
     ub=min(X+0.45,ub_init);
 
-    X0=X; %d'une frame à l'autre, on change très peu de position, donc de valeur d'effort (
+    X0=X; %d'une frame Ã  l'autre, on change trÃ¨s peu de position, donc de valeur d'effort (
     
-    %% Récupération des forces finales, stockées d'abord dans Prediction (Final forces storage without prediction)
+    %% RÃ©cupÃ©ration des forces finales, stockÃ©es d'abord dans Prediction (Final forces storage without prediction)
     for k = 1:numel(Prediction)
         Prediction(k).efforts(i,1)=X(k)*Prediction(k).efforts_max(i,1);
         Prediction(k).efforts(i,2)=X(k+numel(Prediction))*Prediction(k).efforts_max(i,2);
         Prediction(k).efforts(i,3)=X(k+2*numel(Prediction))*Prediction(k).efforts_max(i,3);
     end
     
-    %% Calcul des efforts extérieurs tels qu’utilisés par la suite pour la dynamique
+    %% Calcul des efforts extÃ©rieurs tels quâ€™utilisÃ©s par la suite pour la dynamique
     %% Computation of external forces for use with dynamics
     external_forces_pred=addForces_Prediction_frame_par_frame(X,external_forces_pred,Prediction,Fmax,i);
     
@@ -270,7 +264,7 @@ end
 close(h)
 disp(['... External Forces Prediction (' filename ') done'])
 
-%% Filtrage des données
+%% Filtrage des donnÃ©es
 
 if AnalysisParameters.Prediction.FilterActive
     f_cut = AnalysisParameters.Prediction.FilterCutOff;
@@ -292,7 +286,7 @@ if AnalysisParameters.Prediction.FilterActive
     PredictionFiltMx = filt_data(PredictionMx,f_cut,freq);
     PredictionFiltMy = filt_data(PredictionMy,f_cut,freq);
     PredictionFiltMz = filt_data(PredictionMz,f_cut,freq);
-    % Remise sous la forme d'une structure (utilisée pour la dynamique inverse) (definition of a structure used for inverse dynamics)
+    % Remise sous la forme d'une structure (utilisÃ©e pour la dynamique inverse) (definition of a structure used for inverse dynamics)
     for i=1:numel(external_forces_pred)
         for j=1:numel(external_forces_pred(i).fext)
             external_forces_pred(i).fext(j).fext(1,1)=PredictionFiltFx(i,j);
@@ -363,7 +357,7 @@ else
     end
 end
 
-%% Sauvegarde des données (data saving)
+%% Sauvegarde des donnÃ©es (data saving)
 
 if exist([filename '/ExternalForcesComputationResults.mat'],'file')
     load([filename '/ExternalForcesComputationResults.mat']); %#ok<LOAD>

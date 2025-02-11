@@ -68,23 +68,28 @@ parfor num_fil = 1:numel(AnalysisParameters.filename)
     if isfield(InverseKinematicsResults,'FreeJointCoordinates')
         Human_model(Human_model(end).child).mother = 0;
         Human_model=Human_model(1:(numel(Human_model)-6));
-    end
+   end
 
-    %% articular speed and acceleration
-    
     dt=1/freq;
-
-    dq=derivee2(dt,q);  % velocities
-    ddq=derivee2(dt,dq);  % accelerations
-    nbframe=size(q,1);
 
         %somehow this should be filtered in a similar manner as the forces
         %and the joint positions
-    if AnalysisParameters.IK.FilterActive
-    % data filtering
-    dq=filt_data(dq',AnalysisParameters.IK.FilterCutOff,freq)';
-    ddq=filt_data(ddq',AnalysisParameters.IK.FilterCutOff,freq)';
-    end
+
+    dq=derivee2(dt,q);  % velocities
+ if AnalysisParameters.IK.FilterActive
+             % data filtering
+      dq=filt_data(dq,AnalysisParameters.IK.FilterCutOff,freq);
+ end
+
+    
+    
+    ddq=derivee2(dt,dq);  % accelerations
+    nbframe=size(q,1);
+if AnalysisParameters.IK.FilterActive
+             % data filtering
+      ddq=filt_data(ddq,AnalysisParameters.IK.FilterCutOff,freq);
+ end
+
 
 %% Pelvis kinematics
 
@@ -113,21 +118,40 @@ parfor num_fil = 1:numel(AnalysisParameters.filename)
        wmat=dR(:,:,i)*r_pelvis{i}';
        w(i,:)=[wmat(3,2),wmat(1,3),wmat(2,1)];
     end
-
-    % v0
+    % if AnalysisParameters.IK.FilterActive
+    %          % data filtering
+    %   w=filt_data(w,AnalysisParameters.IK.FilterCutOff,freq);
+    % end
+    % if AnalysisParameters.IK.FilterActive
+    %          % data filtering
+    %  p_pelvis=filt_data(p_pelvis,AnalysisParameters.IK.FilterCutOff,freq);
+    %  end
     v=derivee2(dt,p_pelvis);
+
+
     vw=zeros(nbframe,3);
     for i=1:nbframe
         vw(i,:)=cross(p_pelvis(i,:),w(i,:));
     end
     v0=v+vw;
-
+    % if AnalysisParameters.IK.FilterActive
+    %          % data filtering
+    %   v0=filt_data(v0,AnalysisParameters.IK.FilterCutOff,freq);
+    %  end
     % dv0
     dv0=derivee2(dt,v0);
+    % if AnalysisParameters.IK.FilterActive
+    %          % data filtering
+    %   dv0=filt_data(dv0,AnalysisParameters.IK.FilterCutOff,freq);
+    %  end
 
-    % dw
     dw=derivee2(dt,w);
-    
+    % if AnalysisParameters.IK.FilterActive
+    %          % data filtering
+    %   dw=filt_data(dw,AnalysisParameters.IK.FilterCutOff,freq);
+    %  end
+
+    %somehow filtering the pelvis motion is suppressing too much info
     %% Inverse dynamics
     torques=zeros(nbframe,numel(Human_model));
     f6dof=zeros(3,nbframe);
