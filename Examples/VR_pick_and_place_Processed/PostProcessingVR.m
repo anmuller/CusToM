@@ -19,7 +19,7 @@ load('BiomechanicalModel.mat')
 Solid_list = {BiomechanicalModel.OsteoArticularModel.name}';
 
 % Get the numbers of solids of interests
-Solids = {'RShoulder_J1';'RShoulder_J2';'RHumerus';'RElbow_J1';'RForearm'};
+Solids = {'RGlenohumeral_J2';'RGlenohumeral_J3';'RHumerus';'RElbow_J1';'RForearm'};
 [~,num_s]=intersect(Solid_list,Solids,'stable');
 
 %RShoulder_J1 rotates around Y-axis
