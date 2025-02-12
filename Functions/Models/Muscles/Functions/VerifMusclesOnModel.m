@@ -23,7 +23,7 @@ function [Muscles]=VerifMusclesOnModel(Human_model,Muscles)
 muscles_ex=cell(0);
 for i=1:numel(Muscles) % for each muscle
     test=zeros(size(Muscles(i).path,1),1);
-    for p=1:size(Muscles(i).path,1) % for each points used by the muscle
+    for p=1:size(Muscles(i).path,1) % for each point used by the muscle
         name=Muscles(i).path{p,1};
         for j=1:numel(Human_model)
             for k=1:size(Human_model(j).anat_position,1)
@@ -37,6 +37,9 @@ for i=1:numel(Muscles) % for each muscle
                 Muscles(i).exist=1;
                 break
             end
+        end
+        if test(p,1)==0
+            disp({'Undefined path point:',Muscles(i).name,'-->',name});
         end
     end
     if min(test) == 0
