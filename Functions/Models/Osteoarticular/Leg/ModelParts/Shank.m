@@ -154,7 +154,7 @@ a2=zeros(3,1);
 a2(Ind)=1;
 R=Rodrigues_from_two_axes(a2,a1);% two orthogonal axes from the a1 axis
 OsteoArticularModel(incr_solid).limit_alpha= [-10 , 10;...
-                                        -10, 10];
+                                        -10, 10]*pi/180; %10° max
 %OsteoArticularModel(incr_solid).v= [ R(:,1) , R(:,2) ];
  OsteoArticularModel(incr_solid).v= [ [1; 0; 0] , [0 ;1;0] ] ;
 OsteoArticularModel(incr_solid).calib_a=1;
